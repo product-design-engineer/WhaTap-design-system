@@ -12,16 +12,20 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 ## 이 Storybook 이 다루는 것
 
-- ✅ **WDS 토큰** — `src/tokens.css` 의 `@theme` (색·타이포·간격·라인하이트·트래킹). Tailwind v4 가 자동 utility 생성, `@theme` 1 값 = 전 컴포넌트 자동 반영.
+- ✅ **WDS 토큰** — `src/tokens.css` 의 `@theme static` (색·타이포·간격·라인하이트·트래킹). Tailwind v4 가 자동 utility 생성, 값 1 개 = 전 컴포넌트 자동 반영. `static` 이라 사용 여부와 무관하게 모든 토큰이 `:root` 에 emit → 외부 소비 앱이 `tokens.css` 만 import 해도 인라인 `var(--color-X)` 보장.
 - ✅ **Primitives 14 종** — Checkbox · Tooltip · Chip · FilterChip · TextField · Select · Tabs · Modal · FilterDropdown + AI 카드 빌딩 블록 5 (AiCard 외).
 - ✅ **Chrome 19 종** — DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · DataTable · FilterBar · MiniLineChart · EventWeekTimeMatrix · Button · Toast · …
 - ✅ **AI 진입점 4 종** — AiAssistantButton · AiSendButton · AiInlinePrompt · AiPromptInput.
 - ✅ **Widget Cards 20 종** — AI 응답 메시지 카드 (Reasoning · CostTable · ClassificationTable · MigPlan · …)
 - ✅ **Foundation** — WhaTap Symbol (4-bar 브랜드 마크) + Horizon 워드마크.
 
-## 관련 (별개 호스팅)
+## 이 카탈로그 호스팅 (동일 빌드)
 
-- [whatap-design-system-storybook](https://whatap-design-system-storybook.vercel.app/) — `@whatap/wds` (shadcn/ui 기반) 별도 저장소의 컴포넌트 스펙. 향후 WDS 본 카탈로그로 통합 검토.
+- [whatap-design-system-storybook](https://whatap-design-system-storybook.vercel.app/) — 본 WDS 카탈로그 (2026-05-31 부터, 이전 shadcn 스펙 교체)
+- [whatap-ai-prototype-storybook](https://whatap-ai-prototype-storybook.vercel.app/) — 동일 빌드 미러
+
+## 관련 (별개 제품)
+
 - [vircaai-storybook](https://vircaai-storybook.vercel.app/) — VircaAI 전용 (별개 제품).
 
 ---
@@ -39,7 +43,7 @@ Tokens   ←   Primitives   ←   Chrome / AI 진입 / Widget Cards
 - Primitives 는 Tokens 만 import — 형태 + 외관의 base
 - Chrome · AI 진입 · Widget Cards 는 Primitives + Tokens import
 
-자세한 규칙은 [`docs/patterns.md`](https://github.com/interfacedesigner/WhaTap-AI-Assistant/blob/main/packages/design-system/docs/patterns.md).
+자세한 규칙은 [`docs/patterns.md`](https://github.com/interfacedesigner/WhaTap-design-system/blob/main/docs/patterns.md).
 
 ---
 
@@ -92,7 +96,7 @@ AI 응답 메시지 카드.
 
 ## 5 핵심 규칙
 
-이 5가지만 지키면 디자인 시스템의 80%를 따른 것입니다. 자세한 근거는 [`docs/patterns.md`](https://github.com/interfacedesigner/WhaTap-AI-Assistant/blob/main/packages/design-system/docs/patterns.md).
+이 5가지만 지키면 디자인 시스템의 80%를 따른 것입니다. 자세한 근거는 [`docs/patterns.md`](https://github.com/interfacedesigner/WhaTap-design-system/blob/main/docs/patterns.md).
 
 1. **인라인 색상 리터럴 금지** — `#E53935` 같은 hex 를 컴포넌트에 직접 쓰지 마세요. `tokens.css` 의 `@theme` 변수나 `TONE_*` 토큰 참조. 새 톤은 토큰에 먼저 추가.
 2. **위젯 카드는 `<AiCard>` 로 감싼다** — 흰 배경 + `#eaeaea` 보더 + 8px 라운드 + 12px 패딩 + 진입 애니메이션은 `AiCard` 가 책임. div 를 새로 짜면 톤이 어긋남.
@@ -182,10 +186,10 @@ function CriticalFinding({ intent, title, bullets }: {
 
 ## 동기화 정책
 
-이 카탈로그의 모든 컴포넌트 docstring·prop 설명은 [`packages/design-system/src/`](https://github.com/interfacedesigner/WhaTap-AI-Assistant/tree/main/packages/design-system/src) 의 실제 소스에서 추출됩니다.
+이 카탈로그의 모든 컴포넌트 docstring·prop 설명은 [`src/`](https://github.com/interfacedesigner/WhaTap-design-system/tree/main/src) 의 실제 소스에서 추출됩니다.
 
 - 컴포넌트의 prop·signature 를 변경하면 같은 PR 에서 JSDoc 동시 업데이트.
-- 토큰의 value · description 을 변경하면 `packages/design-system/docs/tokens.md` 와 token catalog story 양쪽 동시 갱신.
+- 토큰의 value · description 을 변경하면 `docs/tokens.md` 와 token catalog story 양쪽 동시 갱신.
 - Storybook autodocs 는 `reactDocgen: 'react-docgen-typescript'` 로 TS 타입에서 자동 추출 — **prop 타입 + JSDoc 이 곧 문서**.
 
 ---
@@ -199,8 +203,8 @@ function CriticalFinding({ intent, title, bullets }: {
 | Storybook | 10.4 (`@storybook/react-vite`) |
 | 타입 | TypeScript 5.6 — strict mode |
 | Story 자동 문서 | `react-docgen-typescript` |
-| 모노레포 | pnpm workspaces — `@whatap/design-system` 워크스페이스 패키지 |
-| 소비자 | `prototypes/Product-SaaS/` (`workspace:*`), 향후 다른 prototypes |
+| 배포 | 별도 git repo (`interfacedesigner/WhaTap-design-system`) — `@whatap/design-system` 패키지 |
+| 소비자 | `WhaTap-AI-Assistant/prototypes/Product-SaaS/` (`file:` hard link 의존), 향후 다른 prototypes |
 
 ---
 
@@ -228,7 +232,7 @@ function CriticalFinding({ intent, title, bullets }: {
 
 ```bash
 # Claude / Cursor / 다른 agent 에 카탈로그 한 번에 주입
-curl https://whatap-ai-prototype-storybook.vercel.app/design-system/DESIGN.md > whatap-ds.md
+curl https://whatap-design-system-storybook.vercel.app/design-system/DESIGN.md > whatap-ds.md
 # agent 의 컨텍스트에 첨부하거나 system prompt 에 포함
 ```
 
@@ -236,7 +240,7 @@ curl https://whatap-ai-prototype-storybook.vercel.app/design-system/DESIGN.md > 
 
 ## 외부 링크
 
-- 소스 코드: [`packages/design-system/src/`](https://github.com/interfacedesigner/WhaTap-AI-Assistant/tree/main/packages/design-system/src) (private)
-- 카탈로그 md: [`packages/design-system/docs/`](https://github.com/interfacedesigner/WhaTap-AI-Assistant/tree/main/packages/design-system/docs)
-- 라이브 dogfooding: [`prototypes/Product-SaaS/`](https://github.com/interfacedesigner/WhaTap-AI-Assistant/tree/main/prototypes/Product-SaaS) (Vercel 배포)
-- WhaTap 제품 디자인 시스템 (별개): [whatap-design-system-storybook.vercel.app](https://whatap-design-system-storybook.vercel.app/)
+- 소스 코드: [`WhaTap-design-system/src/`](https://github.com/interfacedesigner/WhaTap-design-system/tree/main/src) (private)
+- 카탈로그 md: [`WhaTap-design-system/docs/`](https://github.com/interfacedesigner/WhaTap-design-system/tree/main/docs)
+- 라이브 dogfooding: [`WhaTap-AI-Assistant/prototypes/Product-SaaS/`](https://github.com/interfacedesigner/WhaTap-AI-Assistant/tree/main/prototypes/Product-SaaS) (Vercel 배포)
+- 라이브 카탈로그: [whatap-design-system-storybook.vercel.app](https://whatap-design-system-storybook.vercel.app/)
