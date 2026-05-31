@@ -6,17 +6,15 @@ import type { StorybookConfig } from '@storybook/react-vite';
  * stories glob (패키지 root 기준 — `../`):
  *   - stories/**\/*.mdx              — 디자인 시스템 메타 문서 (Introduction, Token 카탈로그)
  *   - stories/**\/*.stories.{ts,tsx} — 카탈로그 stories (Tokens / Primitives / Chrome / Widget Cards)
- *   - src/**\/*.stories.{ts,tsx}     — 컴포넌트 co-located stories (옵션)
  *
  * Vite 통합:
  *   - 패키지의 vite.config.ts 가 자동 inherit 되어 react + @tailwindcss/vite 적용.
- *   - 소비자(Product-SaaS 등) 의 vite alias 불필요 — exports map 으로 해석.
+ *   - 소비자(Product-SaaS 등) 가 file: hard link 로 import — vite alias 불필요.
  */
 const config: StorybookConfig = {
   stories: [
     '../stories/**/*.mdx',
     '../stories/**/*.stories.@(ts|tsx)',
-    '../src/**/*.stories.@(ts|tsx)',
   ],
   addons: [
     '@chromatic-com/storybook',
