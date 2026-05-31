@@ -102,6 +102,10 @@ AI 위젯 영역의 모든 컴포넌트는 다음 primitive 를 **반드시 comp
 - 새 페이지는 prop 으로 조합. inline 복사·재정의 금지.
 - 페이지 dogfooding 중 발견된 gap 은 본 패키지에 새 컴포넌트로 추가 (페이지 안에서 해결 X)
 
+### 소비자(프로토타입·시나리오)는 수정 권한 없음
+
+본 패키지는 **단일 출처**. 소비 측 — 정책 추가·시나리오·프로토타입 작업 (`WhaTap-AI-Assistant/prototypes/*`, `WhaTap_Scenarios/`) — 은 등록된 컴포넌트·위젯·토큰을 **prop 조합으로만 소비**하며 **소스를 수정할 권한이 없다.** 컴포넌트/위젯/토큰 자체의 추가·변경은 **본 repo 작업으로만** 수행. (소비 측 CLAUDE.md 에도 동일 명시)
+
 ## SVG 텍스트 — font-size 단위 필수
 
 `<text fontSize="9">` (unitless = user-space units, viewBox 와 함께 scale) **금지**.
