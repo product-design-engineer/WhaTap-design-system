@@ -1,0 +1,125 @@
+# @whatap/design-system — 컴포넌트·디자인 시스템 정책
+
+본 패키지는 WhaTap-AI-Assistant 의 단일 컴포넌트 출처. Storybook 카탈로그 + tokens.css 단일 출처 + `exports` 로 `.` (Chrome) · `./widget` (AI 위젯) 분리.
+
+## 디렉토리 구성
+
+- `src/` — 컴포넌트 소스 + `tokens.css` + `widget/` (AI 카테고리)
+- `stories/` — Storybook 카탈로그 (Primitives / Chrome / Widget 폴더 분리)
+- `docs/` — markdown 카탈로그 (단일 출처 문서)
+  - `SKILL.md` — 본 디자인 시스템 사용 절차
+  - `primitives.md` / `chrome-components.md` / `widget-components.md` — 컴포넌트 카탈로그 (텍스트 형태)
+  - `tokens.md` — 토큰 정의 (CSS 변수 ↔ 디자인 의미)
+  - `patterns.md` — 합성 패턴 (페이지 레벨 컴포지션)
+  - `STORIES_ROADMAP.md` — Storybook 카탈로그 추가 작업 목록
+
+## 카테고리 분리 — Primitives · Chrome · Widget · AI 입력
+
+| 카테고리 | 폴더 | 예 |
+|---|---|---|
+| Primitives | `src/` 루트 | Button, TextField, Select, Chip, FilterChip, Tabs, Modal, Tooltip, Checkbox |
+| Chrome | `src/` 루트 | DashboardLayout, PageHeader, PageHeaderAiInline, Sidebar, FilterBar, DataTable, FilterDropdown |
+| Widget (AI) | `src/widget/` | AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList, AiChatExchange, AiReasoning, WhaTapAiWidget, AiInlinePrompt, AiSendButton, AiAssistantButton |
+| Tokens | `src/tokens.css` | `@theme` 컬러·폰트·spacing 변수 |
+
+**AI 영역 ↔ 일반 영역 분리 원칙**
+
+- AI 진입점·AI 응답 UI 는 **`Ai...` 카테고리만** 사용 (AiInlinePrompt / AiSendButton / AiAssistantButton)
+- 일반 폼/검색은 TextField·Button
+- 페이지의 AI 진입점은 **버튼 대신 AiInlinePrompt 직접 주입 (2-step → 1-step)**
+
+## 타이포그래피 위계 — `font-weight` 평탄화 금지
+
+| 사이즈 | weight 기준 | 용도 |
+|---|---|---|
+| `text-lg+` (14px+) | `font-bold` | 페이지 타이틀·섹션 헤더 |
+| `text-md` (13px) | `font-bold` / 강조 시 medium | 카드 헤더·테이블 row 강조 |
+| `text-base` (12px) | `font-medium` | 라벨·메타·dropdown 항목 |
+| `text-sm` (11px) | `font-medium` 또는 regular | 보조 메타·캡션 |
+| `text-xs` (10px) | regular | 마이크로 캡션·인디케이터 |
+
+본문 (running text) 만 regular. 같은 사이즈에서 weight 만 평탄화하면 위계 손실 — 사이즈 + weight 둘 다 조합.
+
+## DataTable 종합 정책
+
+### Density — 기본 `default`
+
+- **`default`** (모든 새 페이지 채택) — header `text-base` 12px bold · row `text-md` 13px regular · padding 12/10
+- **`compact`** — header `text-xs` 10px bold · row `text-sm` 11px regular · padding 8/6. 100+ 행 raw log 등 극단적 dense 데이터 전용. 채택 시 별도 근거 필요.
+
+### 정렬 (alignment)
+
+- 문자 → **left**
+- 숫자 (`numeric: true`) → **right** (자릿수 세로 정렬)
+- header `"No"` 컬럼 → **center** (별도 align 없이 자동)
+- 명시 `align` prop 이 최우선 override.
+
+### 너비 (width)
+
+- 정형 컬럼 (No 52 · 시각 150 · 상태 96 · 액션) → **`width`(px 고정)**
+- 가변 컬럼 (이름 · 메시지) → **`flex`(fr)**, 정보량 많은 쪽에 더 큰 비율
+
+### 셀 내 inline 폰트 — DataTable tokens 와 정합
+
+DataTable wrapping span 이 `tokens.rowText` 자동 적용. 셀 안 `<span>` override 시:
+
+| 컨텐츠 | className |
+|---|---|
+| 주 텍스트 (강조 없음) | **override 안 함** (자동 `text-md text-primary`) |
+| 메인 식별자 강조 | `text-md font-medium text-primary` 또는 `font-bold` |
+| 보조/부 텍스트 (이메일·라벨) | `text-base text-tertiary` |
+| 수치 | `text-md font-numeric tabular-nums` |
+
+**금지:** default density 셀 안에 `text-sm`/`text-xs` — compact 시절 잔재. 한 단계 작은 부 텍스트는 `text-base` (12px).
+
+### 셀 내 컴포넌트 사이즈
+
+row height ≈ 33-36px 기준:
+
+| 컴포넌트 | size |
+|---|---|
+| `<Chip>` | `md` (20px) |
+| `<FilterChip>` | `md` (24px) |
+| `<Button>` | `sm` (~24px) |
+| inline pill (span) | `text-sm h-[20-24px] px-[8px]` |
+| status dot | 6-8px |
+| `<Checkbox>` | `sm` (14-16px) |
+
+lg(28-32px) 는 row 를 압도하므로 금지.
+
+## Widget primitives + Tone 토큰
+
+AI 위젯 영역의 모든 컴포넌트는 다음 primitive 를 **반드시 composition**:
+
+- `<AiCard>` / `<AiCaption>` / `<AiSectionHeading>` / `<AiToneBadge>` / `<AiBulletList>`
+- `Tone` 토큰 (`_tokens.ts`, `_primitives.tsx`) — info / success / warning / critical / neutral
+
+**금지:** inline 색 리터럴 (`#FF...`, `style={{ background: ... }}`), inline card 스타일링. 모두 primitive 의 `tone` prop 으로 표현.
+
+## 공통 컴포넌트 카탈로그
+
+- Chrome·Widget·Primitives **재사용 가능 컴포넌트는 본 패키지에만 거주**
+- 새 페이지는 prop 으로 조합. inline 복사·재정의 금지.
+- 페이지 dogfooding 중 발견된 gap 은 본 패키지에 새 컴포넌트로 추가 (페이지 안에서 해결 X)
+
+## SVG 텍스트 — font-size 단위 필수
+
+`<text fontSize="9">` (unitless = user-space units, viewBox 와 함께 scale) **금지**.
+
+→ 항상 `fontSize="9px"` 또는 `fontSize="9pt"` 명시. 일관된 렌더링 보장.
+
+## 차트 peak / ▼ 라벨 — line max 픽셀 1:1 매칭
+
+SVG 차트의 peak 라벨/마커는 **plot 영역 absolute 배치 + HTML overlay 가 같은 plot 좌표계 사용**. line max 픽셀 좌표와 1:1 매칭되도록 좌표 계산.
+
+→ 별개 좌표계로 그리면 시각 위치 어긋남.
+
+## 라이브 디자인시스템 CSS 소스
+
+`.ai-assistant-btn` 등 라이브 디자인시스템 클래스를 dogfooding 할 때:
+
+1. `curl https://service.whatap.io/.../design-system.css` 로 live 번들 fetch
+2. 해당 규칙 grep
+3. **그대로 paste**. 즉흥 작성 금지.
+
+라이브와의 픽셀 일치 보장이 본 정책의 핵심.

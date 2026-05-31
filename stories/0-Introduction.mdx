@@ -1,0 +1,242 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introduction" />
+
+# WDS — WhaTap Design System
+
+> AI Assistant prototype 에서 시작 → **WhaTap Design System (WDS) 전체 범위로 확장 중**.
+
+토큰부터 chrome · widget · AI 진입 · AI 메시지 카드까지 — WhaTap 제품 전체의 디자인 시스템 단일 출처. 현재 카탈로그는 `@whatap/design-system` 워크스페이스 패키지로 패키징된 **56+ 컴포넌트** + Storybook + tokens.css.
+
+---
+
+## 이 Storybook 이 다루는 것
+
+- ✅ **WDS 토큰** — `src/tokens.css` 의 `@theme` (색·타이포·간격·라인하이트·트래킹). Tailwind v4 가 자동 utility 생성, `@theme` 1 값 = 전 컴포넌트 자동 반영.
+- ✅ **Primitives 14 종** — Checkbox · Tooltip · Chip · FilterChip · TextField · Select · Tabs · Modal · FilterDropdown + AI 카드 빌딩 블록 5 (AiCard 외).
+- ✅ **Chrome 19 종** — DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · DataTable · FilterBar · MiniLineChart · EventWeekTimeMatrix · Button · Toast · …
+- ✅ **AI 진입점 4 종** — AiAssistantButton · AiSendButton · AiInlinePrompt · AiPromptInput.
+- ✅ **Widget Cards 20 종** — AI 응답 메시지 카드 (Reasoning · CostTable · ClassificationTable · MigPlan · …)
+- ✅ **Foundation** — WhaTap Symbol (4-bar 브랜드 마크) + Horizon 워드마크.
+
+## 관련 (별개 호스팅)
+
+- [whatap-design-system-storybook](https://whatap-design-system-storybook.vercel.app/) — `@whatap/wds` (shadcn/ui 기반) 별도 저장소의 컴포넌트 스펙. 향후 WDS 본 카탈로그로 통합 검토.
+- [vircaai-storybook](https://vircaai-storybook.vercel.app/) — VircaAI 전용 (별개 제품).
+
+---
+
+## 디자인 시스템 구조
+
+```
+Tokens   ←   Primitives   ←   Chrome / AI 진입 / Widget Cards
+                                       ↑
+                          (사용 — 역방향 import 금지)
+```
+
+**의존 방향은 한쪽**입니다 (← 화살표 방향). 역방향 import 금지:
+- Tokens 는 누구도 import 하지 않는 leaf
+- Primitives 는 Tokens 만 import — 형태 + 외관의 base
+- Chrome · AI 진입 · Widget Cards 는 Primitives + Tokens import
+
+자세한 규칙은 [`docs/patterns.md`](https://github.com/interfacedesigner/WhaTap-AI-Assistant/blob/main/packages/design-system/docs/patterns.md).
+
+---
+
+## 카탈로그 (좌측 트리)
+
+### 🎨 Foundation
+WhaTap 4-bar 핀휠 브랜드 마크 + Horizon 워드마크 스펙.
+
+### 🎨 Tokens — 색·타입 스케일·웨이트·라인하이트·트래킹
+색·타이포·의미 신호의 단일 출처.
+- **Color** — `tokens.color.surface.<intent>`, `tokens.color.indicator.<intent>`
+- **Typography** — `tokens.font.family.korean` (본문), `tokens.font.family.numeric` (숫자)
+- **Type Scale** — 11 단계 (`text-xs` 10px ~ `text-5xl` 48px)
+- **Weight** — regular(400) / medium(500) / bold(700)
+- **Line-Height** — 6 단계 (none / tight / snug / normal / relaxed / loose)
+- **Tracking** — 4 단계 (display / metric / default / caps)
+- **Tones (Semantic)** — `critical / warning / info / muted / neutral` 의 의미 매핑
+
+### 🧱 Primitives — 14 컴포넌트
+- **일반 폼 (9)** — Checkbox · Tooltip · Chip · FilterChip · TextField · Select · Tabs · Modal · FilterDropdown
+- **AI 카드 빌딩 블록 (5)** — AiCard · AiCaption · AiSectionHeading · AiToneBadge · AiBulletList
+
+### 🖼️ Chrome — 19 컴포넌트
+- **레이아웃** — DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · WhaTapAiContext · WhaTapAiWidget
+- **옵션바** — OptionbarPage · OptionbarInstanceSelector · PresetSelect · TimeRangeSelector · LiveTimerCompact
+- **데이터** — DataTable · FilterBar · MiniLineChart · EventWeekTimeMatrix
+- **액션·진입** — Button · AiSymbol
+- **알림·상태** — Toast · Stage · DashboardBuildingProgress
+
+### 🤖 WhaTap AI Buttons — 2 컴포넌트
+페이지에서 AI 위젯을 호출하는 진입 버튼.
+- **AiAssistantButton** — 위젯 열기/닫기 토글 (32px 둥근 알약 + 그라데이션)
+- **AiSendButton** — 송신 ⬆ (24px 정사각, 활성 시 파랑)
+
+### 🤖 WhaTap AI Input — 2 컴포넌트
+페이지/위젯의 AI 프롬프트 입력.
+- **AiInlinePrompt** — 페이지 헤더 inline (1-step UX). `PageHeaderAiInline` 안에 자동 마운트
+- **AiPromptInput** — 위젯 본체 메인 prompt (멀티라인 + 토큰 카운트 + 첨부)
+
+### 💬 Widget Cards — 20 컴포넌트
+AI 응답 메시지 카드.
+- **대화 구조** — AiChatExchange · AiUserBubble · AiMessageActions
+- **분석/추론** — AiReasoning · AiInsightSection · AiToolCallStep · AiStepsTimeline · AiLoadingMessage
+- **데이터/표** — AiCostTable · AiCostBreakdown · AiClassificationTable · AiUsageChart · AiEventList
+- **제안/선택** — AiDashboardProposal · AiMigPlan · AiCriteriaSelection · AiChoiceButtons
+- **실행/결과** — AiAlertRulePreview · AiExecutionResult · AiReceiverChannels
+- **인터랙션 데모** — AiClickCursor
+
+---
+
+## 5 핵심 규칙
+
+이 5가지만 지키면 디자인 시스템의 80%를 따른 것입니다. 자세한 근거는 [`docs/patterns.md`](https://github.com/interfacedesigner/WhaTap-AI-Assistant/blob/main/packages/design-system/docs/patterns.md).
+
+1. **인라인 색상 리터럴 금지** — `#E53935` 같은 hex 를 컴포넌트에 직접 쓰지 마세요. `tokens.css` 의 `@theme` 변수나 `TONE_*` 토큰 참조. 새 톤은 토큰에 먼저 추가.
+2. **위젯 카드는 `<AiCard>` 로 감싼다** — 흰 배경 + `#eaeaea` 보더 + 8px 라운드 + 12px 패딩 + 진입 애니메이션은 `AiCard` 가 책임. div 를 새로 짜면 톤이 어긋남.
+3. **AI 위젯이 열려도 페이지 헤더는 그대로** — 사이드바는 240→40px 로 축소되지만, 헤더의 title / AI / Docs / 고객지원 / bell / avatar 는 절대 사라지지 않음.
+4. **차트 텍스트는 단위까지** — SVG 안의 `<text fontSize>` 는 반드시 `"9px"` 처럼 단위를 붙임. 단위 없는 숫자는 viewBox 좌표로 계산되어 화면마다 크기가 달라짐.
+5. **DataTable density 기본 `default`** — header 12px / row 13px. compact (10/11) 는 100+ 행 raw log 한정. 셀 내 inline 폰트는 `text-md`(주) / `text-base`(부) 만 사용.
+
+---
+
+## AI Agent 가 이 카탈로그를 읽을 때
+
+각 컴포넌트의 docstring 은 **4 섹션 표준**:
+
+1. **Purpose** — 무엇을 보여주기 위한 컴포넌트인가
+2. **When to use** — 어떤 시나리오에서 선택해야 하는가
+3. **When NOT to use** — 어떤 경우 다른 컴포넌트가 더 적합한가
+4. **Composition rules** — 함께 사용되어야 하는 primitive · token
+
+또한:
+
+- 각 prop 에 `argTypes.description` 풍부화 — Storybook autodocs 의 Args 표 노출
+- 토큰은 `{ value, description }` 구조 — `tokens.color.surface.critical.description` runtime 조회 가능
+- `@example` 코드 블록 포함 — 즉시 복붙 패턴
+
+---
+
+## 빠른 시작
+
+### 신규 페이지 작성
+
+```tsx
+import {
+  DashboardLayout, PageHeaderAiInline, OptionbarPage,
+  WhaTapAiWidget, useWhaTapAi,
+  type AiPromptSuggestion,
+} from "@whatap/design-system";
+
+const PAGE_AI_SUGGESTIONS: AiPromptSuggestion[] = [
+  { label: "DB 시간대별 사용량", query: "Oracle DB 24시간 사용량 분석" },
+  { label: "병목 조회 분석",     query: "느린 쿼리 TOP 5 분석" },
+];
+
+export default function MyPage() {
+  const { aiActive, setAiActive } = useWhaTapAi();
+  return (
+    <DashboardLayout
+      activeProduct="db"
+      widgetOpen={aiActive}
+      header={<PageHeaderAiInline
+        title="DB / oracle_dnx"
+        promptSuggestions={PAGE_AI_SUGGESTIONS}
+        onPromptSubmit={(q) => { setAiActive(true); /* 핸들 */ }}
+      />}
+      main={<MyContent />}
+    >
+      <WhaTapAiWidget open={aiActive} onClose={() => setAiActive(false)} />
+    </DashboardLayout>
+  );
+}
+```
+
+### 신규 AI 응답 메시지
+
+```tsx
+import {
+  AiCard, AiSectionHeading, AiBulletList,
+  type SemanticIntent,
+} from "@whatap/design-system/widget";
+
+function CriticalFinding({ intent, title, bullets }: {
+  intent: SemanticIntent;
+  title: string;
+  bullets: string[];
+}) {
+  return (
+    <AiCard delay={0}>
+      <AiSectionHeading tone={intent}>{title}</AiSectionHeading>
+      <AiBulletList items={bullets} />
+    </AiCard>
+  );
+}
+```
+
+**짧음에 주목**하세요. 새 색이 필요 없고, 새 폰트도 없고, 새 카드 chrome 도 없습니다. 디자인 시스템이 잘 작동하면 이렇게 짧아집니다.
+
+---
+
+## 동기화 정책
+
+이 카탈로그의 모든 컴포넌트 docstring·prop 설명은 [`packages/design-system/src/`](https://github.com/interfacedesigner/WhaTap-AI-Assistant/tree/main/packages/design-system/src) 의 실제 소스에서 추출됩니다.
+
+- 컴포넌트의 prop·signature 를 변경하면 같은 PR 에서 JSDoc 동시 업데이트.
+- 토큰의 value · description 을 변경하면 `packages/design-system/docs/tokens.md` 와 token catalog story 양쪽 동시 갱신.
+- Storybook autodocs 는 `reactDocgen: 'react-docgen-typescript'` 로 TS 타입에서 자동 추출 — **prop 타입 + JSDoc 이 곧 문서**.
+
+---
+
+## 기술 스택
+
+| 영역 | 도구 |
+|---|---|
+| Framework | React 19 |
+| Bundler | Vite 6 + Tailwind 4 (`@tailwindcss/vite`) |
+| Storybook | 10.4 (`@storybook/react-vite`) |
+| 타입 | TypeScript 5.6 — strict mode |
+| Story 자동 문서 | `react-docgen-typescript` |
+| 모노레포 | pnpm workspaces — `@whatap/design-system` 워크스페이스 패키지 |
+| 소비자 | `prototypes/Product-SaaS/` (`workspace:*`), 향후 다른 prototypes |
+
+---
+
+## 📥 카탈로그 다운로드
+
+마크다운 카탈로그를 직접 받아 **AI agent context 주입** / **오프라인 공유** / **시점 freeze** 에 사용. 모든 파일은 빌드 시 Storybook static 에 포함.
+
+### 합본 (권장 — AI agent 한 번에 주입용)
+
+- **[📦 DESIGN.md (전체 합본)](/design-system/DESIGN.md)** — 7 개 카탈로그를 논리 순서 (SKILL → tokens → primitives → chrome → ai-entry → widget → patterns) 로 묶은 단일 파일
+
+### 개별 파일
+
+| 파일 | 내용 |
+|---|---|
+| [SKILL.md](/design-system/SKILL.md) | 디자인 시스템 진입점 — 사용법·5 핵심 규칙·빠른 시작 |
+| [tokens.md](/design-system/tokens.md) | Tone 토큰 · TONE_BG/DOT/LABEL · 폰트 패밀리 · 11 type scale |
+| [primitives.md](/design-system/primitives.md) | 14 컴포넌트 (9 일반 폼 + 5 AI 카드 빌딩 블록) |
+| [chrome-components.md](/design-system/chrome-components.md) | 19 컴포넌트 (DashboardLayout · DataTable · FilterBar · Button …) |
+| [ai-entry.md](/design-system/ai-entry.md) | AI 진입 4 (AiAssistantButton · AiSendButton · AiInlinePrompt · AiPromptInput) |
+| [widget-components.md](/design-system/widget-components.md) | WhaTapAiWidget + 20 종 Ai* 메시지 카드 |
+| [patterns.md](/design-system/patterns.md) | 12 패턴 + Do/Don't (사이드바 collapse · 헤더 invariant · DataTable density · 타이포 위계 · AI 카테고리 분리 · 차트 정렬 등) |
+
+### AI agent 사용 예시
+
+```bash
+# Claude / Cursor / 다른 agent 에 카탈로그 한 번에 주입
+curl https://whatap-ai-prototype-storybook.vercel.app/design-system/DESIGN.md > whatap-ds.md
+# agent 의 컨텍스트에 첨부하거나 system prompt 에 포함
+```
+
+---
+
+## 외부 링크
+
+- 소스 코드: [`packages/design-system/src/`](https://github.com/interfacedesigner/WhaTap-AI-Assistant/tree/main/packages/design-system/src) (private)
+- 카탈로그 md: [`packages/design-system/docs/`](https://github.com/interfacedesigner/WhaTap-AI-Assistant/tree/main/packages/design-system/docs)
+- 라이브 dogfooding: [`prototypes/Product-SaaS/`](https://github.com/interfacedesigner/WhaTap-AI-Assistant/tree/main/prototypes/Product-SaaS) (Vercel 배포)
+- WhaTap 제품 디자인 시스템 (별개): [whatap-design-system-storybook.vercel.app](https://whatap-design-system-storybook.vercel.app/)

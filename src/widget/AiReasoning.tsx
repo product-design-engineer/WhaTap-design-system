@@ -1,0 +1,61 @@
+/**
+ * AI 위젯 — 추론 과정 표시.
+ *
+ * 진행 단계의 회색 칩(완료된 단계)과 현재 활성 단계(점 애니메이션)를 보여줍니다.
+ * 마지막 단계는 진행 중이면 `running: true`로 전달.
+ */
+export type ReasoningStep = {
+  label: string;
+  /** true면 점 애니메이션 진행 중, false면 완료(체크) */
+  running?: boolean;
+};
+
+export default function AiReasoning({
+  steps,
+  delay = 0,
+}: {
+  steps: ReasoningStep[];
+  delay?: number;
+}) {
+  return (
+    <div
+      className="ai-anim-in flex flex-col gap-[6px] bg-white border border-[#eaeaea] rounded-[8px] px-[12px] py-[10px]"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <div
+        className="text-sm font-bold text-tertiary tracking-caps uppercase leading-none"
+        style={{ fontFamily: "var(--font-family-korean)" }}
+      >
+        Reasoning
+      </div>
+      {steps.map((s, i) => (
+        <div key={i} className="flex items-center gap-[8px]">
+          {s.running ? (
+            <span
+              className="size-[10px] rounded-full border-[1.5px] border-[#296CF2] border-t-transparent"
+              style={{ animation: "aiSymbolRotateSlow 0.9s linear infinite" }}
+            />
+          ) : (
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="shrink-0">
+              <circle cx="6" cy="6" r="5.4" fill="#296CF2" />
+              <path
+                d="M3.5 6.1l1.8 1.8L8.5 4.5"
+                stroke="#fff"
+                strokeWidth="1.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
+          <span
+            className="text-base text-secondary tracking-default leading-normal"
+            style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
+          >
+            {s.label}
+            {s.running && <span className="ai-reasoning-dots" />}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}

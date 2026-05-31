@@ -1,0 +1,220 @@
+/**
+ * 시간 범위 셀렉터 (OptionbarPage 공용 컴포넌트).
+ *
+ * 라이브 페이지의 OptionbarPage 우측 옵션 패널에서 사용되는 시간 범위 입력기.
+ * 마크업 구조는 라이브 SPA의 ic-live-time + ic-left/ic-right + ic-start-date
+ * 아이콘 + 듀얼 datetime 입력 + duration 태그.
+ *
+ * ## 표시 형식
+ * 모든 datetime 은 `YYYY-MM-DD HH:MM` 으로 정규화 표시. 단일 자리 값은 `padStart(2, "0")`
+ * 으로 자동 padding (year 는 4자리). 자리수 정렬은 numeric 폰트 (tabular-nums 효과)로 보장.
+ *
+ * 공용 정책 — feedback-decision-priorities (재활용), feedback-design-system-css-source
+ * (라이브 마크업 그대로 옮김). 색·아이콘은 라이브 토큰(#00C853, #757575, #ADADAD)
+ * 유지.
+ *
+ * Props로 외부화:
+ *   - `start`/`end` ISO-ish date parts (year/month/day/hour/min) — 입력값은 padding 무관, 표시 시 자동 padding
+ *   - `durationLabel` — "10분" 같은 태그
+ *   - `onLive`/`onPrev`/`onNext`/`onPickDate` 콜백
+ */
+type DateParts = {
+  year: string;
+  month: string;
+  day: string;
+  hour: string;
+  minute: string;
+};
+
+const pad2 = (v: string) => v.padStart(2, "0");
+const pad4 = (v: string) => v.padStart(4, "0");
+
+export default function TimeRangeSelector({
+  title = "시간",
+  start = { year: "2026", month: "05", day: "15", hour: "13", minute: "27" },
+  end = { year: "2026", month: "05", day: "15", hour: "13", minute: "37" },
+  durationLabel = "10분",
+  onLive,
+  onPrev,
+  onNext,
+  onPickDate,
+}: {
+  title?: string;
+  start?: DateParts;
+  end?: DateParts;
+  durationLabel?: string;
+  onLive?: () => void;
+  onPrev?: () => void;
+  onNext?: () => void;
+  onPickDate?: () => void;
+}) {
+  return (
+    <div className="flex flex-col gap-[6px]">
+      {title && (
+        <div
+          className="text-base font-bold text-primary tracking-default leading-none"
+          style={{ fontFamily: "var(--font-family-korean)" }}
+        >
+          {title}
+        </div>
+      )}
+      <div className="flex items-stretch border border-[#adadad] rounded-[4px] bg-white overflow-hidden">
+        {/* Live 토글 */}
+        <button
+          type="button"
+          onClick={onLive}
+          aria-label="LIVE"
+          className="flex items-center justify-center px-[6px] cursor-pointer hover:bg-gray-50"
+        >
+          <IcLiveTime />
+        </button>
+        <div className="w-[1px] bg-[#adadad]" />
+
+        {/* 듀얼 datetime + 컨트롤 */}
+        <div className="flex items-center gap-[6px] px-[6px] py-[6px]">
+          <button
+            type="button"
+            onClick={onPrev}
+            aria-label="이전"
+            className="flex items-center justify-center cursor-pointer hover:opacity-70"
+          >
+            <IcLeft />
+          </button>
+
+          <DateTimeBlock parts={start} side="start" />
+          <span className="text-base text-tertiary">~</span>
+          <DateTimeBlock parts={end} side="end" />
+
+          <span
+            className="flex items-center px-[4px] h-[16px] rounded-[2px] text-base font-bold text-white leading-none"
+            style={{
+              background: "#00B543",
+              fontFamily: "var(--font-family-numeric)",
+            }}
+          >
+            {durationLabel}
+          </span>
+
+          <button
+            type="button"
+            onClick={onPickDate}
+            aria-label="달력"
+            className="flex items-center justify-center cursor-pointer hover:opacity-70"
+          >
+            <IcStartDate />
+          </button>
+          <button
+            type="button"
+            onClick={onNext}
+            aria-label="다음"
+            className="flex items-center justify-center cursor-pointer hover:opacity-70"
+          >
+            <IcRight />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * DateTimeBlock — 듀얼 datetime 입력의 단일 측 (start / end).
+ *
+ * 표시: `YYYY-MM-DD HH:MM` — year 4자리, month/day/hour/minute 2자리 padding 자동.
+ * 자리수 정렬을 위해 `--font-family-numeric` (tabular-nums 효과) 사용.
+ */
+function DateTimeBlock({ parts, side }: { parts: DateParts; side: "start" | "end" }) {
+  const inputCls =
+    "outline-none border-none bg-transparent text-base text-primary text-center";
+  const inputStyle = {
+    fontFamily: "var(--font-family-numeric)",
+    fontVariantNumeric: "tabular-nums" as const,
+  };
+  const sepCls = "text-base text-tertiary";
+  const tabBase = side === "start" ? -100000000 : -200000000;
+  return (
+    <div className="flex items-center" style={{ height: "100%" }}>
+      <input
+        className={inputCls}
+        style={{ ...inputStyle, width: 28 }}
+        defaultValue={pad4(parts.year)}
+        tabIndex={tabBase}
+        aria-label={`${side === "start" ? "시작" : "종료"} 년도`}
+      />
+      <span className={sepCls} aria-hidden>-</span>
+      <input
+        className={inputCls}
+        style={{ ...inputStyle, width: 16 }}
+        defaultValue={pad2(parts.month)}
+        tabIndex={tabBase - 1}
+        aria-label={`${side === "start" ? "시작" : "종료"} 월`}
+      />
+      <span className={sepCls} aria-hidden>-</span>
+      <input
+        className={inputCls}
+        style={{ ...inputStyle, width: 16 }}
+        defaultValue={pad2(parts.day)}
+        tabIndex={tabBase - 2}
+        aria-label={`${side === "start" ? "시작" : "종료"} 일`}
+      />
+      {/* YYYY-MM-DD 와 HH:MM 사이의 단일 space — 가시 폭 일관화 (margin 대신 명시적 span) */}
+      <span className={sepCls} style={{ ...inputStyle, width: 6, display: "inline-block" }} aria-hidden> </span>
+      <input
+        className={inputCls}
+        style={{ ...inputStyle, width: 16 }}
+        defaultValue={pad2(parts.hour)}
+        tabIndex={tabBase - 3}
+        aria-label={`${side === "start" ? "시작" : "종료"} 시`}
+      />
+      <span className={sepCls} aria-hidden>:</span>
+      <input
+        className={inputCls}
+        style={{ ...inputStyle, width: 16 }}
+        defaultValue={pad2(parts.minute)}
+        tabIndex={tabBase - 4}
+        aria-label={`${side === "start" ? "시작" : "종료"} 분`}
+      />
+    </div>
+  );
+}
+
+/* ─── icons (라이브 SVG 그대로) ─── */
+function IcLiveTime() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <g transform="translate(2,2)" fill="#00C853">
+        <path d="M10,0 C15.5228475,0 20,4.4771525 20,10 C20,15.5228475 15.5228475,20 10,20 C4.4771525,20 0,15.5228475 0,10 C0,4.4771525 4.4771525,0 10,0 Z M10,2 C5.581722,2 2,5.581722 2,10 C2,14.418278 5.581722,18 10,18 C14.418278,18 18,14.418278 18,10 C18,5.581722 14.418278,2 10,2 Z M8,6 L14,10 L8,14 L8,6 Z" />
+      </g>
+    </svg>
+  );
+}
+function IcLeft() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 25" fill="none" aria-hidden="true">
+      <g fill="#757575" transform="translate(6,3)">
+        <path
+          d="M1.5573935,17.4635366 L0.14317994,16.049323 L7.21417994,8.97797383 L0.14317994,1.9071874 L1.5573935,0.492973834 L10.0426749,8.97825521 L1.5573935,17.4635366 Z"
+          transform="translate(5.092927, 8.978255) scale(-1, 1) translate(-5.092927, -8.978255)"
+        />
+      </g>
+    </svg>
+  );
+}
+function IcRight() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <g fill="#757575" transform="translate(7,3)">
+        <path d="M1.5573935,17.4635366 L0.14317994,16.049323 L7.21417994,8.97797383 L0.14317994,1.9071874 L1.5573935,0.492973834 L10.0426749,8.97825521 L1.5573935,17.4635366 Z" />
+      </g>
+    </svg>
+  );
+}
+function IcStartDate() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <g fill="#757575" transform="translate(2,2)">
+        <path d="M2.66666667,0 C1.18666667,0 0.0133333333,0 0.0133333333,0 L0,20 C0,20 1.18666667,20 2.66666667,20 L20,20 C20,20 20,18.8 20,17.3333333 L20,2.66666667 C20,1.2 20,0 20,0 L2.66666667,0 Z M3.00087166,18 C2.4481055,18 2,17.5500512 2,16.9931545 L2,5.00684547 C2,4.45078007 2.44463086,4 3.00087166,4 L16.9991283,4 C17.5518945,4 18,4.44994876 18,5.00684547 L18,16.9931545 C18,17.5492199 17.5553691,18 16.9991283,18 L3.00087166,18 Z M4,7 L8,7 L8,11 L4,11 L4,7 Z" />
+      </g>
+    </svg>
+  );
+}
