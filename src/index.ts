@@ -56,6 +56,8 @@ export { default as PresetSelect } from "./PresetSelect";
 export { default as Sidebar, K8S_GPU_MENU } from "./Sidebar";
 export type { MenuItem, ProjectContext } from "./Sidebar";
 export { default as Stage } from "./Stage";
+export { default as SubHeaderBar } from "./SubHeaderBar";
+export type { SubHeaderBarProps } from "./SubHeaderBar";
 export { default as TimeRangeSelector } from "./TimeRangeSelector";
 export { default as Toast } from "./Toast";
 

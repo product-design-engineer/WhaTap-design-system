@@ -72,6 +72,20 @@ export type OrgContext = { label: string; icon?: string };
 
 ---
 
+## SubHeaderBar
+
+페이지 헤더(48px) 아래 **고정 40px** 보조 네비 행. 뒤로가기·브레드크럼·보조 액션 컨테이너. 사이드바 조직 스위처(40px)와 동일 높이라 좌/우 컬럼 2행이 정렬됩니다(헤더 48 → 보조 40 chrome 스케일).
+
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `children` | `ReactNode` | — | 좌측 내용 — 백 버튼(`<Button variant="basic" size="md">`) + 브레드크럼 |
+| `right` | `ReactNode` | — | 우측 정렬 보조 액션(선택) |
+| `className` | `string` | `""` | 루트 바 className 병합 |
+
+**높이 정책:** `h-[40px] box-border` 고정 — padding/border 가 높이를 부풀리지 않음. 페이지에서 `px py border-b` inline `<div>` 로 보조 행을 **재구현 금지**, 본 컴포넌트로 조립. (조직 스위처 40px 와 행 정렬 보장)
+
+---
+
 ## PageHeader
 
 48px 우측 컬럼 헤더. **AI 위젯 토글의 단일 진입점**입니다. 위젯이 열려도 이 헤더의 구성요소는 **하나도 사라지지 않습니다** ([patterns.md](./patterns.md#1-page-header-invariant)).

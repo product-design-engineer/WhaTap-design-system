@@ -51,6 +51,8 @@ export type MenuItem = {
   expanded?: boolean;
   /** 단일 항목(child 없음) 일 때 active 강조 (라이트 블루 배경 + bold). */
   active?: boolean;
+  /** 단일 항목 클릭 핸들러(네비게이션). 미지정 시 정적. */
+  onClick?: () => void;
 };
 
 export type ProjectContext = {
@@ -293,6 +295,7 @@ export default function Sidebar({
                 return (
                   <div
                     key={item.label}
+                    onClick={item.onClick}
                     className="flex h-[32px] items-center overflow-clip p-[8px] shrink-0 w-full cursor-pointer hover:bg-gray-50"
                     style={item.active ? { backgroundColor: "#D6E1FF" } : undefined}
                   >
