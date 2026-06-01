@@ -20,6 +20,8 @@ export default function DashboardLayout({
   menu,
   hideProjectSwitcher = false,
   org,
+  onOrgClick,
+  hideProductRail = false,
 }: {
   children?: ReactNode;
   /** 우측 컬럼 최상단(48px PageHeader 자리). 위젯과 같은 행이 아니라 그 위 →
@@ -39,6 +41,10 @@ export default function DashboardLayout({
   hideProjectSwitcher?: boolean;
   /** Sidebar 상단 조직 스위처 — Sidebar 로 passthrough. `null`이면 숨김, 미지정이면 기본값. */
   org?: OrgContext | null;
+  /** 조직 스위처 클릭 핸들러 — Sidebar 로 passthrough. */
+  onOrgClick?: () => void;
+  /** 좌측 제품 레일 숨김 — Sidebar 로 passthrough. 관리 콘솔 등 제품 네비 불필요 화면용. */
+  hideProductRail?: boolean;
 }) {
   // 공통 정책 (feedback-widget-sidebar-collapse): 위젯이 열리면 사이드바 최소화
   // 공통 정책 (feedback-page-header-invariant): 헤더는 widget 행과 분리 → 영향 없음
@@ -49,6 +55,8 @@ export default function DashboardLayout({
         project={project}
         hideProjectSwitcher={hideProjectSwitcher}
         org={org}
+        onOrgClick={onOrgClick}
+        hideProductRail={hideProductRail}
         menu={menu}
         collapsed={widgetOpen}
       />

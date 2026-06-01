@@ -25,7 +25,7 @@ export default function PageHeader({
   onAiToggle?: () => void;
 }) {
   return (
-    <div className="flex items-center justify-between h-[48px] px-[8px] bg-white border-b border-[#e6e6e6] shrink-0">
+    <div className="flex items-center justify-between h-[48px] box-border px-[8px] bg-white border-b border-[#e6e6e6] shrink-0">
       {/* 좌측: 타이틀 + AI/Docs */}
       <div className="flex items-center gap-[24px] shrink-0">
         <p

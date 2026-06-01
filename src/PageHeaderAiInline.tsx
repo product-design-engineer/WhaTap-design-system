@@ -60,7 +60,7 @@ export default function PageHeaderAiInline({
   promptDefaultOpen = false,
 }: PageHeaderAiInlineProps) {
   return (
-    <div className="flex items-center h-[48px] px-[8px] gap-[16px] bg-white border-b border-[#e6e6e6] shrink-0">
+    <div className="flex items-center h-[48px] box-border px-[8px] gap-[16px] bg-white border-b border-[#e6e6e6] shrink-0">
       {/* 좌측: 타이틀 + Docs */}
       <div className="flex items-center gap-[24px] shrink-0">
         <p

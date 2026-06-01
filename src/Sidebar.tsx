@@ -2,7 +2,7 @@
  * WhaTap SaaS 좌측 240px 사이드바.
  *
  * 구조(위→아래, 모두 shrink-0 — 가운데 본문(메뉴) 영역만 flex-1로 늘어남):
- *   1. 47px 로고 헤더 (WhaTap 로고 · 검색 · 접기)
+ *   1. 48px 로고 헤더 (WhaTap 로고 · 검색 · 접기) — PageHeader(48px) 와 동일 높이
  *   2. 40px 조직 스위처
  *   3. 44px 프로젝트 스위처
  *   4. 본문 (flex-1) — 40px 제품 레일 + 우측 메뉴 목록(+ 즐겨찾기 바)
@@ -54,8 +54,8 @@ export type MenuItem = {
 };
 
 export type ProjectContext = {
-  /** 사이드바 상단 프로젝트 스위처에 표시할 아이콘 파일명 */
-  productIcon: string;
+  /** 사이드바 상단 프로젝트 스위처에 표시할 아이콘 파일명. 생략 시 아이콘 미표시 + 라벨 좌측 여백. */
+  productIcon?: string;
   /** [그룹] 라벨 (회색 라인) */
   groupLabel: string;
   /** [프로젝트] 라벨 (굵은 라인) */
@@ -126,6 +126,8 @@ export default function Sidebar({
   collapsed = false,
   hideProjectSwitcher = false,
   org = DEFAULT_ORG,
+  onOrgClick,
+  hideProductRail = false,
 }: {
   activeProduct?: string;
   project?: ProjectContext;
@@ -139,6 +141,10 @@ export default function Sidebar({
   hideProjectSwitcher?: boolean;
   /** 상단 조직 스위처. `null`이면 숨김, `icon` 생략 시 심볼 미표시. 컨텍스트에 맞는 라벨로 교체. */
   org?: OrgContext | null;
+  /** 조직 스위처 클릭 핸들러(조직 목록/관리 진입). 미지정 시 비활성(정적). */
+  onOrgClick?: () => void;
+  /** 좌측 40px 제품 레일(제품 아이콘 + 하단 유틸) 숨김. 모니터링 제품이 아닌 관리 콘솔 화면용. 기본 false. */
+  hideProductRail?: boolean;
 }) {
   const width = collapsed ? 40 : 240;
   return (
@@ -148,11 +154,11 @@ export default function Sidebar({
     >
       {/* 48px 로고 헤더 — 페이지 헤더(48px) 표준과 정렬. collapsed면 심볼만, 아니면 풀 로고 + 검색/접기 */}
       <div
-        className="flex items-center h-[48px] shrink-0 bg-white border-r border-[#eaeaea]"
+        className="flex items-center h-[48px] box-border shrink-0 bg-white border-r border-b border-[#eaeaea]"
         style={{
           width,
           justifyContent: collapsed ? "center" : "space-between",
-          padding: collapsed ? 0 : 8,
+          paddingInline: collapsed ? 0 : 8,
         }}
       >
         {collapsed ? (
@@ -187,8 +193,8 @@ export default function Sidebar({
 
       {/* 40px 조직 스위처 — collapsed 또는 org=null이면 숨김. 라벨/심볼은 org prop으로 제어. */}
       {!collapsed && org && (
-      <button className="flex h-[40px] items-start w-full shrink-0 cursor-pointer">
-        <div className="flex flex-col h-full items-start justify-center pr-[8px] w-[240px] bg-white border-r border-t border-[#eaeaea]">
+      <button onClick={onOrgClick} className="flex h-[40px] items-start w-full shrink-0 cursor-pointer">
+        <div className="flex flex-col h-full items-start justify-center pr-[8px] w-[240px] bg-white border-r border-b border-[#eaeaea]">
           <div className="flex items-center justify-between w-full">
             <div className="flex gap-[10px] items-center justify-center shrink-0 size-[40px]">
               {org.icon && <img alt="" className="size-[24px]" src={icon(org.icon)} />}
@@ -210,10 +216,14 @@ export default function Sidebar({
       {/* 44px 프로젝트 스위처 — collapsed 또는 hideProjectSwitcher면 숨김 */}
       {!collapsed && !hideProjectSwitcher && (
       <button className="flex items-start shrink-0 cursor-pointer">
-        <div className="flex h-[44px] items-center justify-between pr-[8px] w-[240px] bg-white border-b border-r border-t border-[#eaeaea]">
-          <div className="flex items-center justify-center shrink-0 size-[40px]">
-            <img alt="" className="size-[24px]" src={icon(project.productIcon)} />
-          </div>
+        <div className="flex h-[44px] items-center justify-between pr-[8px] w-[240px] bg-white border-b border-r border-[#eaeaea]">
+          {project.productIcon ? (
+            <div className="flex items-center justify-center shrink-0 size-[40px]">
+              <img alt="" className="size-[24px]" src={icon(project.productIcon)} />
+            </div>
+          ) : (
+            <div className="w-[12px] shrink-0" />
+          )}
           <div className="flex flex-1 flex-col gap-[4px] items-start justify-center min-w-0 leading-none text-left whitespace-nowrap">
             <p
               className="text-base text-secondary overflow-hidden text-ellipsis w-full tracking-normal"
@@ -237,7 +247,8 @@ export default function Sidebar({
 
       {/* 본문 (flex-1): 좌 40px 제품 레일 + (collapsed가 아닐 때만) 우 메뉴 목록 */}
       <div className="flex flex-1 items-start min-h-0 w-full">
-        {/* 좌측 40px 제품 레일 */}
+        {/* 좌측 40px 제품 레일 — hideProductRail이면 숨김(관리 콘솔 등 제품 네비 불필요 화면) */}
+        {!hideProductRail && (
         <div className="flex flex-col h-full items-start shrink-0 w-[40px] bg-white border-r border-[#eaeaea]">
           <div className="flex flex-1 flex-col items-start min-h-0">
             {PRODUCT_ICONS.map((name) => {
@@ -269,6 +280,7 @@ export default function Sidebar({
             ))}
           </div>
         </div>
+        )}
 
         {/* 우측 메뉴 목록 — collapsed면 통째로 숨김 */}
         {!collapsed && (
