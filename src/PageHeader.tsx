@@ -13,17 +13,24 @@
  *   - `aiActive`     — WhaTap AI 버튼의 active 상태
  *   - `onAiToggle`   — 버튼 클릭 핸들러
  */
+import { useState } from "react";
 import AiAssistantButton from "./widget/AiAssistantButton";
+
+export type ProfileMenuItem = { label: string; onClick?: () => void };
 
 export default function PageHeader({
   title,
   aiActive = false,
   onAiToggle,
+  profileMenu,
 }: {
   title: string;
   aiActive?: boolean;
   onAiToggle?: () => void;
+  /** 우상단 아바타 클릭 시 드롭다운 메뉴(예: 엔터프라이즈 관리). 미지정이면 정적 아바타. */
+  profileMenu?: ProfileMenuItem[];
 }) {
+  const [profileOpen, setProfileOpen] = useState(false);
   return (
     <div className="flex items-center justify-between h-[48px] box-border px-[8px] bg-white border-b border-[#e6e6e6] shrink-0">
       {/* 좌측: 타이틀 + AI/Docs */}
@@ -85,27 +92,41 @@ export default function PageHeader({
               />
             </svg>
           </div>
-          <div className="shrink-0 size-[24px] cursor-pointer">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <defs>
-                <linearGradient id="avatar-grad" x1="0" y1="0" x2="24" y2="24">
-                  <stop stopColor="#4fc3f7" />
-                  <stop offset="1" stopColor="#296cf2" />
-                </linearGradient>
-              </defs>
-              <circle cx="12" cy="12" r="12" fill="url(#avatar-grad)" />
-              <text
-                x="12"
-                y="17"
-                textAnchor="middle"
-                fontSize="13px"
-                fontWeight="700"
-                fill="#fff"
-                fontFamily="Roboto, sans-serif"
-              >
-                S
-              </text>
-            </svg>
+          <div className="relative shrink-0 size-[24px]">
+            <button
+              type="button"
+              className="size-[24px] cursor-pointer block"
+              onClick={() => profileMenu && profileMenu.length > 0 && setProfileOpen((o) => !o)}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <defs>
+                  <linearGradient id="avatar-grad" x1="0" y1="0" x2="24" y2="24">
+                    <stop stopColor="#4fc3f7" />
+                    <stop offset="1" stopColor="#296cf2" />
+                  </linearGradient>
+                </defs>
+                <circle cx="12" cy="12" r="12" fill="url(#avatar-grad)" />
+                <text x="12" y="17" textAnchor="middle" fontSize="13px" fontWeight="700" fill="#fff" fontFamily="Roboto, sans-serif">S</text>
+              </svg>
+            </button>
+            {profileMenu && profileMenu.length > 0 && profileOpen && (
+              <>
+                <div className="fixed inset-0 z-[40]" onClick={() => setProfileOpen(false)} />
+                <div className="absolute right-0 top-[32px] z-[50] min-w-[180px] rounded-[8px] border border-[#eaeaea] bg-white py-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
+                  {profileMenu.map((it) => (
+                    <button
+                      key={it.label}
+                      type="button"
+                      onClick={() => { setProfileOpen(false); it.onClick?.(); }}
+                      className="block w-full text-left px-[14px] py-[8px] text-md text-primary tracking-default cursor-pointer hover:bg-gray-50 whitespace-nowrap"
+                      style={{ fontFamily: "var(--font-family-korean)" }}
+                    >
+                      {it.label}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
