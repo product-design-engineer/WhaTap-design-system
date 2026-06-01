@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import Sidebar, { MenuItem, ProjectContext } from "./Sidebar";
+import Sidebar, { MenuItem, ProjectContext, OrgContext } from "./Sidebar";
 
 /**
  * Dashboard chrome — WhaTap 좌측 240px Sidebar + 우측 컨텐츠.
@@ -18,6 +18,8 @@ export default function DashboardLayout({
   activeProduct,
   project,
   menu,
+  hideProjectSwitcher = false,
+  org,
 }: {
   children?: ReactNode;
   /** 우측 컬럼 최상단(48px PageHeader 자리). 위젯과 같은 행이 아니라 그 위 →
@@ -30,6 +32,13 @@ export default function DashboardLayout({
   activeProduct?: string;
   project?: ProjectContext;
   menu?: MenuItem[];
+  /**
+   * Sidebar 상단 프로젝트 스위처 숨김 — Sidebar 로 passthrough.
+   * 프로젝트 컨텍스트가 없는 화면(엔터프라이즈 설정 전, 계정/관리 영역)용. 기본 false.
+   */
+  hideProjectSwitcher?: boolean;
+  /** Sidebar 상단 조직 스위처 — Sidebar 로 passthrough. `null`이면 숨김, 미지정이면 기본값. */
+  org?: OrgContext | null;
 }) {
   // 공통 정책 (feedback-widget-sidebar-collapse): 위젯이 열리면 사이드바 최소화
   // 공통 정책 (feedback-page-header-invariant): 헤더는 widget 행과 분리 → 영향 없음
@@ -38,6 +47,8 @@ export default function DashboardLayout({
       <Sidebar
         activeProduct={activeProduct}
         project={project}
+        hideProjectSwitcher={hideProjectSwitcher}
+        org={org}
         menu={menu}
         collapsed={widgetOpen}
       />

@@ -106,6 +106,14 @@ AI 위젯 영역의 모든 컴포넌트는 다음 primitive 를 **반드시 comp
 
 본 패키지는 **단일 출처**. 소비 측 — 정책 추가·시나리오·프로토타입 작업 (`WhaTap-AI-Assistant/prototypes/*`, `WhaTap_Scenarios/`) — 은 등록된 컴포넌트·위젯·토큰을 **prop 조합으로만 소비**하며 **소스를 수정할 권한이 없다.** 컴포넌트/위젯/토큰 자체의 추가·변경은 **본 repo 작업으로만** 수행. (소비 측 CLAUDE.md 에도 동일 명시)
 
+## Sidebar — 프로젝트 스위처 노출 규칙
+
+상단 프로젝트/조직 스위처(`productIcon` + `groupLabel` + `projectLabel` + chevron)는 **프로젝트 컨텍스트가 있을 때만 노출**한다.
+
+- 컨텍스트가 없는 화면(엔터프라이즈 활성화 전 — 표시 이름 미설정, 계정/관리 영역 등)은 `hideProjectSwitcher`(프로젝트 스위처)·`org={null}`(조직 스위처)로 숨긴다.
+- **빈 라벨/기본값(default 프로젝트·조직명) 노출 금지** — 잘못된 정보 노출 방지.
+- 비파괴 원칙: 기본값 `hideProjectSwitcher=false` / `org=DEFAULT_ORG` 이므로 기존 호출처 동작 불변. `DashboardLayout` 이 두 prop 을 Sidebar 로 passthrough.
+
 ## SVG 텍스트 — font-size 단위 필수
 
 `<text fontSize="9">` (unitless = user-space units, viewBox 와 함께 scale) **금지**.

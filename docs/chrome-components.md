@@ -53,16 +53,22 @@ export type ProjectContext = {
   groupLabel: string;
   projectLabel: string;
 };
+
+export type OrgContext = { label: string; icon?: string };
 ```
 
-| Prop | Type | Default |
-|---|---|---|
-| `activeProduct` | `string` | `"gpu"` |
-| `project` | `ProjectContext` | `DEFAULT_PROJECT` |
-| `menu` | `MenuItem[]` | `K8S_GPU_MENU` |
-| `collapsed` | `boolean` | `false` |
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `activeProduct` | `string` | `"gpu"` | 제품 레일 강조 |
+| `project` | `ProjectContext` | `DEFAULT_PROJECT` | 프로젝트 스위처 컨텍스트 |
+| `menu` | `MenuItem[]` | `K8S_GPU_MENU` | 메뉴 트리 |
+| `collapsed` | `boolean` | `false` | 제품 레일만 남기고 축소 |
+| `hideProjectSwitcher` | `boolean` | `false` | 상단 프로젝트 스위처(productIcon + group/project 라벨 + chevron) 숨김 |
+| `org` | `OrgContext \| null` | `DEFAULT_ORG` | 상단 조직 스위처. `null`이면 숨김 |
 
 `collapsed=true`일 때 사이드바는 제품 레일만 남기고 다 숨깁니다. AI 위젯이 열렸을 때의 표준 동작 — 보통 `DashboardLayout`이 자동으로 이 prop을 전달합니다.
+
+**프로젝트 스위처 노출 규칙:** 상단 프로젝트/조직 스위처는 **프로젝트 컨텍스트가 있을 때만** 노출합니다. 컨텍스트가 없는 화면(엔터프라이즈 활성화 전, 계정/관리 영역 등)은 `hideProjectSwitcher`(프로젝트)·`org={null}`(조직)로 숨겨 **빈 라벨/기본값 노출을 금지**합니다. 기본값(`false` / `DEFAULT_ORG`)이라 기존 호출처 동작은 불변. `DashboardLayout`도 두 prop을 passthrough 합니다.
 
 ---
 

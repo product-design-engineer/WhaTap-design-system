@@ -12,8 +12,9 @@
  * 그대로 렌더되도록 합니다. (절대 URL → no VPN 필요)
  */
 /**
- * 아이콘은 라이브 디자인 시스템의 표준 경로(`/icons/*`)를 그대로 사용합니다.
- * 로컬 dev 서버에서는 `vite.config.ts`의 `/icons` proxy가 라이브 배포로 포워딩.
+ * 아이콘은 표준 경로(`/icons/*`)를 그대로 참조합니다. 호스트별로 자산 제공 경로가 다름:
+ *   - Storybook(이 패키지): `.storybook` 의 `staticDirs` 가 `static/icons` 를 `/icons` 로 번들.
+ *   - 소비자(Product-SaaS 등): 자체 `public/icons/` 정적 서빙 + dev proxy.
  */
 const icon = (name: string) => `/icons/${name}`;
 
@@ -101,6 +102,10 @@ const DEFAULT_PROJECT: ProjectContext = {
   projectLabel: "[프로젝트] K8s-GPU",
 };
 
+/** 상단 조직 스위처 컨텍스트. `org={null}`이면 조직 스위처 숨김. `icon` 생략 시 심볼 미표시. */
+export type OrgContext = { label: string; icon?: string };
+const DEFAULT_ORG: OrgContext = { label: "[조직] 와탭랩스 대관", icon: "whatap-symbol.svg" };
+
 /**
  * 사이드바 컴포넌트.
  *
@@ -119,11 +124,21 @@ export default function Sidebar({
   project = DEFAULT_PROJECT,
   menu = K8S_GPU_MENU,
   collapsed = false,
+  hideProjectSwitcher = false,
+  org = DEFAULT_ORG,
 }: {
   activeProduct?: string;
   project?: ProjectContext;
   menu?: MenuItem[];
   collapsed?: boolean;
+  /**
+   * 상단 프로젝트 스위처(productIcon + groupLabel + projectLabel + chevron) 영역 숨김.
+   * 프로젝트 컨텍스트가 없는 화면(엔터프라이즈 설정 전, 계정/관리 영역)에서 상단 스위처를 숨김.
+   * 기본 false → 기존 호출처 동작 유지.
+   */
+  hideProjectSwitcher?: boolean;
+  /** 상단 조직 스위처. `null`이면 숨김, `icon` 생략 시 심볼 미표시. 컨텍스트에 맞는 라벨로 교체. */
+  org?: OrgContext | null;
 }) {
   const width = collapsed ? 40 : 240;
   return (
@@ -170,19 +185,19 @@ export default function Sidebar({
         )}
       </div>
 
-      {/* 40px 조직 스위처 — collapsed면 숨김 */}
-      {!collapsed && (
+      {/* 40px 조직 스위처 — collapsed 또는 org=null이면 숨김. 라벨/심볼은 org prop으로 제어. */}
+      {!collapsed && org && (
       <button className="flex h-[40px] items-start w-full shrink-0 cursor-pointer">
         <div className="flex flex-col h-full items-start justify-center pr-[8px] w-[240px] bg-white border-r border-t border-[#eaeaea]">
           <div className="flex items-center justify-between w-full">
             <div className="flex gap-[10px] items-center justify-center shrink-0 size-[40px]">
-              <img alt="" className="size-[24px]" src={icon("whatap-symbol.svg")} />
+              {org.icon && <img alt="" className="size-[24px]" src={icon(org.icon)} />}
             </div>
             <p
               className="flex-1 min-w-0 overflow-hidden text-md font-bold text-secondary text-left tracking-default whitespace-nowrap text-ellipsis leading-none"
               style={{ fontFamily: NOTO_SANS }}
             >
-              [조직] 와탭랩스 대관
+              {org.label}
             </p>
             <div className="shrink-0 size-[16px] flex items-center justify-center">
               <img alt="" className="size-[16px]" src={icon("chevron-right.svg")} />
@@ -192,8 +207,8 @@ export default function Sidebar({
       </button>
       )}
 
-      {/* 44px 프로젝트 스위처 — collapsed면 숨김 */}
-      {!collapsed && (
+      {/* 44px 프로젝트 스위처 — collapsed 또는 hideProjectSwitcher면 숨김 */}
+      {!collapsed && !hideProjectSwitcher && (
       <button className="flex items-start shrink-0 cursor-pointer">
         <div className="flex h-[44px] items-center justify-between pr-[8px] w-[240px] bg-white border-b border-r border-t border-[#eaeaea]">
           <div className="flex items-center justify-center shrink-0 size-[40px]">

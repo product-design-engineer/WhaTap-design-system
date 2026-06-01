@@ -16,6 +16,7 @@ const meta: Meta<typeof Sidebar> = {
         component:
           "**좌측 240px 사이드바.** 로고 헤더 + 조직 스위처 + 프로젝트 스위처 + 본문(제품 레일 + 메뉴) + 푸터. " +
           "위젯이 열리면 (`collapsed=true`) 40px 제품 레일만 남기고 minimize (feedback-widget-sidebar-collapse). " +
+          "상단 프로젝트 스위처는 **프로젝트 컨텍스트가 있을 때만 노출**하며, 컨텍스트가 없는 화면(엔터프라이즈 설정 전, 계정/관리 영역)에서는 `hideProjectSwitcher` 로 숨긴다(빈 라벨/기본값 노출 금지). " +
           "아이콘은 라이브 배포 `/icons/*` 경로 — dev 서버는 vite proxy 로 라이브 포워딩.",
       },
     },
@@ -27,6 +28,7 @@ const meta: Meta<typeof Sidebar> = {
       options: ["application", "server", "k8s", "db", "log", "url", "cloud", "rum", "nms", "gpu", "metrics"],
     },
     collapsed: { description: "위젯 열림 시 true — 메뉴 숨김, 제품 레일만 노출.", control: "boolean" },
+    hideProjectSwitcher: { description: "상단 프로젝트/조직 스위처 숨김.", control: "boolean" },
   },
   decorators: [(Story) => (<div style={{ height: 720, display: "flex" }}><Story /></div>)],
 };
@@ -56,3 +58,12 @@ export const DbContext: Story = {
 
 /** Collapsed — 위젯 열림 상태 (40px 제품 레일만). */
 export const Collapsed: Story = { args: { activeProduct: "db", project: DB_PROJECT, menu: DB_MENU, collapsed: true } };
+
+/**
+ * HiddenProjectSwitcher — 프로젝트 컨텍스트가 없는 화면.
+ * 상단 프로젝트 스위처(productIcon + group/project 라벨 + chevron)를 숨김
+ * (엔터프라이즈 설정 전, 계정/관리 영역 등 — 빈 라벨/기본값 노출 방지).
+ */
+export const HiddenProjectSwitcher: Story = {
+  args: { activeProduct: "db", menu: DB_MENU, hideProjectSwitcher: true },
+};

@@ -10,12 +10,17 @@ import type { StorybookConfig } from '@storybook/react-vite';
  * Vite 통합:
  *   - 패키지의 vite.config.ts 가 자동 inherit 되어 react + @tailwindcss/vite 적용.
  *   - 소비자(Product-SaaS 등) 가 file: hard link 로 import — vite alias 불필요.
+ *
+ * 정적 자산(staticDirs):
+ *   - `static/icons` → `/icons` 매핑. 컴포넌트가 참조하는 `/icons/*.svg` 를 빌드에 번들.
+ *     (배포된 Storybook 에는 dev proxy 가 없으므로 자산을 직접 포함해야 깨지지 않음)
  */
 const config: StorybookConfig = {
   stories: [
     '../stories/**/*.mdx',
     '../stories/**/*.stories.@(ts|tsx)',
   ],
+  staticDirs: [{ from: '../static/icons', to: '/icons' }],
   addons: [
     '@chromatic-com/storybook',
     '@storybook/addon-vitest',
