@@ -46,7 +46,7 @@ export type MenuItem = {
   icon: string;
   label: string;
   /** 펼침/접힘이 있는 항목. 비어 있으면 단일 항목. */
-  children?: { label: string; active?: boolean }[];
+  children?: { label: string; active?: boolean; onClick?: () => void }[];
   /** 기본 펼침 여부. false면 chevron-down(접힘) 상태로 렌더. */
   expanded?: boolean;
   /** 단일 항목(child 없음) 일 때 active 강조 (라이트 블루 배경 + bold). */
@@ -105,7 +105,7 @@ const DEFAULT_PROJECT: ProjectContext = {
 };
 
 /** 상단 조직 스위처 컨텍스트. `org={null}`이면 조직 스위처 숨김. `icon` 생략 시 심볼 미표시. */
-export type OrgContext = { label: string; icon?: string };
+export type OrgContext = { label: string; icon?: string; badge?: string };
 const DEFAULT_ORG: OrgContext = { label: "[조직] 와탭랩스 대관", icon: "whatap-symbol.svg" };
 
 /**
@@ -198,15 +198,27 @@ export default function Sidebar({
       <button onClick={onOrgClick} className="flex h-[40px] items-start w-full shrink-0 cursor-pointer">
         <div className="flex flex-col h-full items-start justify-center pr-[8px] w-[240px] bg-white border-r border-b border-[#eaeaea]">
           <div className="flex items-center justify-between w-full">
-            <div className="flex gap-[10px] items-center justify-center shrink-0 size-[40px]">
-              {org.icon && <img alt="" className="size-[24px]" src={icon(org.icon)} />}
-            </div>
+            {org.icon ? (
+              <div className="flex items-center justify-center shrink-0 size-[40px]">
+                <img alt="" className="size-[24px]" src={icon(org.icon)} />
+              </div>
+            ) : (
+              <div className="w-[12px] shrink-0" />
+            )}
             <p
               className="flex-1 min-w-0 overflow-hidden text-md font-bold text-secondary text-left tracking-default whitespace-nowrap text-ellipsis leading-none"
               style={{ fontFamily: NOTO_SANS }}
             >
               {org.label}
             </p>
+            {org.badge && (
+              <span
+                className="shrink-0 inline-flex items-center h-[18px] px-[6px] mr-[6px] rounded-[4px] text-xs font-bold whitespace-nowrap bg-[var(--color-brand-blue-bg)] text-[color:var(--color-brand-blue)]"
+                style={{ fontFamily: NOTO_SANS }}
+              >
+                {org.badge}
+              </span>
+            )}
             <div className="shrink-0 size-[16px] flex items-center justify-center">
               <img alt="" className="size-[16px]" src={icon("chevron-right.svg")} />
             </div>
@@ -347,6 +359,7 @@ export default function Sidebar({
                       {item.children!.map((c) => (
                         <div
                           key={c.label}
+                          onClick={c.onClick}
                           className={
                             c.active
                               ? "flex gap-[4px] h-[28px] items-center overflow-clip pl-[28px] pr-[8px] py-[4px] shrink-0 w-full cursor-pointer hover:bg-gray-50"

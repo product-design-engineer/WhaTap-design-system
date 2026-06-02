@@ -17,20 +17,29 @@ import { useState } from "react";
 import AiAssistantButton from "./widget/AiAssistantButton";
 
 export type ProfileMenuItem = { label: string; onClick?: () => void };
+export type NotificationItem = { label: string; onClick?: () => void };
 
 export default function PageHeader({
   title,
   aiActive = false,
   onAiToggle,
   profileMenu,
+  roleBadge,
+  notifications,
 }: {
   title: string;
   aiActive?: boolean;
   onAiToggle?: () => void;
   /** 우상단 아바타 클릭 시 드롭다운 메뉴(예: 엔터프라이즈 관리). 미지정이면 정적 아바타. */
   profileMenu?: ProfileMenuItem[];
+  /** 프로필(아바타) 드롭다운 헤더에 표시할 역할(예: "OWNER"). 미지정이면 헤더 숨김. */
+  roleBadge?: string;
+  /** 알림(벨) 드롭다운. 1건 이상이면 벨에 빨간 점 표시 + 클릭 시 목록. */
+  notifications?: NotificationItem[];
 }) {
   const [profileOpen, setProfileOpen] = useState(false);
+  const [notifyOpen, setNotifyOpen] = useState(false);
+  const hasNotify = !!notifications && notifications.length > 0;
   return (
     <div className="flex items-center justify-between h-[48px] box-border px-[8px] bg-white border-b border-[#e6e6e6] shrink-0">
       {/* 좌측: 타이틀 + AI/Docs */}
@@ -76,21 +85,50 @@ export default function PageHeader({
           고객지원
         </button>
         <div className="flex items-center gap-[16px]">
-          <div className="shrink-0 size-[24px] flex items-center justify-center cursor-pointer">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M6 10C6 6.69 8.69 4 12 4C15.31 4 18 6.69 18 10V14L20 16V17H4V16L6 14V10Z"
-                stroke="#4c4c4c"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M10 19.5C10 20.6 10.9 21.5 12 21.5C13.1 21.5 14 20.6 14 19.5"
-                stroke="#4c4c4c"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
+          <div className="relative shrink-0 size-[24px]">
+            <button
+              type="button"
+              className="size-[24px] flex items-center justify-center cursor-pointer relative"
+              onClick={() => hasNotify && setNotifyOpen((o) => !o)}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M6 10C6 6.69 8.69 4 12 4C15.31 4 18 6.69 18 10V14L20 16V17H4V16L6 14V10Z"
+                  stroke="#4c4c4c"
+                  strokeWidth="1.5"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M10 19.5C10 20.6 10.9 21.5 12 21.5C13.1 21.5 14 20.6 14 19.5"
+                  stroke="#4c4c4c"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+              {hasNotify && (
+                <span className="absolute top-[1px] right-[1px] size-[7px] rounded-full bg-[#e5484d] border border-white" />
+              )}
+            </button>
+            {hasNotify && notifyOpen && (
+              <>
+                <div className="fixed inset-0 z-[40]" onClick={() => setNotifyOpen(false)} />
+                <div className="absolute right-0 top-[32px] z-[50] min-w-[260px] rounded-[8px] border border-[#eaeaea] bg-white py-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
+                  <div className="px-[14px] py-[6px] text-xs text-tertiary" style={{ fontFamily: "var(--font-family-korean)" }}>알림</div>
+                  {notifications!.map((n) => (
+                    <button
+                      key={n.label}
+                      type="button"
+                      onClick={() => { setNotifyOpen(false); n.onClick?.(); }}
+                      className="flex items-start gap-[8px] w-full text-left px-[14px] py-[8px] text-md text-primary tracking-default cursor-pointer hover:bg-gray-50 whitespace-nowrap"
+                      style={{ fontFamily: "var(--font-family-korean)" }}
+                    >
+                      <span className="mt-[6px] size-[6px] rounded-full bg-[#e5484d] shrink-0" />
+                      {n.label}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
           <div className="relative shrink-0 size-[24px]">
             <button
@@ -112,7 +150,13 @@ export default function PageHeader({
             {profileMenu && profileMenu.length > 0 && profileOpen && (
               <>
                 <div className="fixed inset-0 z-[40]" onClick={() => setProfileOpen(false)} />
-                <div className="absolute right-0 top-[32px] z-[50] min-w-[180px] rounded-[8px] border border-[#eaeaea] bg-white py-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
+                <div className="absolute right-0 top-[32px] z-[50] min-w-[200px] rounded-[8px] border border-[#eaeaea] bg-white py-[4px] shadow-[0_4px_16px_rgba(0,0,0,0.12)]">
+                  {roleBadge && (
+                    <div className="flex items-center gap-[6px] px-[14px] pt-[8px] pb-[8px] mb-[2px] border-b border-[#f0f0f0]">
+                      <span className="inline-flex items-center h-[18px] px-[6px] rounded-[4px] text-xs font-bold bg-[var(--color-brand-blue-bg)] text-[color:var(--color-brand-blue)]" style={{ fontFamily: "var(--font-family-korean)" }}>{roleBadge}</span>
+                      <span className="text-sm text-tertiary" style={{ fontFamily: "var(--font-family-korean)" }}>내 계정</span>
+                    </div>
+                  )}
                   {profileMenu.map((it) => (
                     <button
                       key={it.label}

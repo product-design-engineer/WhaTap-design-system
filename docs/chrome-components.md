@@ -4,6 +4,8 @@
 
 페이지 단위 레이아웃·도구·표시 컴포넌트. 위젯(AI Assistant) 외부의 모든 SaaS 화면 골격이 이 카탈로그 안에 있습니다.
 
+> **Enterprise 시나리오 신규 정책/prop**(2026-06): `Sidebar`(`MenuItem.children[].onClick`, `OrgContext.badge`, 아이콘-없음 12px 스페이서) · `PageHeader`(`profileMenu`, `roleBadge`=드롭다운 헤더, `notifications` 벨 인디케이터) · `SubHeaderBar` · 토큰 색상/48px 헤더/사용자 메뉴 일원화/컨텍스트 정합성 정책 → **[`enterprise-changes.md`](./enterprise-changes.md)** 참조.
+
 **조립 순서:** `DashboardLayout` → `Sidebar` + `header` 슬롯 (`PageHeader` 또는 `PageHeaderAiInline` + 옵션으로 `OptionbarPage` 또는 `FilterBar`) + `main` 슬롯 + 자식으로 `WhaTapAiWidget`
 
 ## 카탈로그 (19)
@@ -43,18 +45,19 @@
 export type MenuItem = {
   icon: string;
   label: string;
-  children?: { label: string; active?: boolean }[];
+  children?: { label: string; active?: boolean; onClick?: () => void }[]; // onClick: 하위 항목 네비게이션
   expanded?: boolean;
-  active?: boolean;
+  active?: boolean;        // 단일 항목 active 강조
+  onClick?: () => void;    // 단일 항목 클릭
 };
 
 export type ProjectContext = {
-  productIcon: string;
+  productIcon?: string;    // 미지정 시 12px 스페이서(빈 영역 금지)
   groupLabel: string;
   projectLabel: string;
 };
 
-export type OrgContext = { label: string; icon?: string };
+export type OrgContext = { label: string; icon?: string; badge?: string }; // badge: 컨텍스트 칩(예: "엔터프라이즈")
 ```
 
 | Prop | Type | Default | 설명 |
@@ -64,7 +67,12 @@ export type OrgContext = { label: string; icon?: string };
 | `menu` | `MenuItem[]` | `K8S_GPU_MENU` | 메뉴 트리 |
 | `collapsed` | `boolean` | `false` | 제품 레일만 남기고 축소 |
 | `hideProjectSwitcher` | `boolean` | `false` | 상단 프로젝트 스위처(productIcon + group/project 라벨 + chevron) 숨김 |
-| `org` | `OrgContext \| null` | `DEFAULT_ORG` | 상단 조직 스위처. `null`이면 숨김 |
+| `org` | `OrgContext \| null` | `DEFAULT_ORG` | 상단 조직 스위처. `null`이면 숨김. `badge`로 컨텍스트 칩(예: "엔터프라이즈") |
+| `onOrgClick` | `() => void` | — | 조직 스위처 클릭(엔터프라이즈 선택/전환 등) |
+| `hideProductRail` | `boolean` | `false` | 우측 제품 레일 숨김(테넌트 상위·계정 영역) |
+
+**메뉴 하위 항목 네비게이션:** `MenuItem.children[].onClick`으로 그룹(예: "관리 ▾") 하위 항목도 라우팅 진입점이 된다(`expanded: true` + 각 child `onClick`).
+**스위처 컨텍스트 뱃지:** `org.badge`는 **토큰** 칩으로 렌더 — `bg-[var(--color-brand-blue-bg)] text-[color:var(--color-brand-blue)]`(하드코딩 hex 금지). `org.icon` 미지정 시 라벨 좌측은 **12px 스페이서**(빈 40px 박스 금지).
 
 `collapsed=true`일 때 사이드바는 제품 레일만 남기고 다 숨깁니다. AI 위젯이 열렸을 때의 표준 동작 — 보통 `DashboardLayout`이 자동으로 이 prop을 전달합니다.
 
@@ -95,8 +103,18 @@ export type OrgContext = { label: string; icon?: string };
 | `title` | `string` | — | 좌측 페이지 타이틀 |
 | `aiActive` | `boolean` | `false` | AI 위젯 활성 상태 (버튼 시각적 강조용) |
 | `onAiToggle` | `() => void` | — | AI 버튼 클릭 콜백 |
+| `profileMenu` | `ProfileMenuItem[]` | — | 우상단 **아바타 클릭 드롭다운**(계정 정보·엔터프라이즈 관리·전환·로그아웃 등). 미지정 시 정적 아바타 |
+| `roleBadge` | `string` | — | 프로필 드롭다운 **헤더**에 표시할 역할(예: `"OWNER"`) → "OWNER · 내 계정". **아바타 옆 독립 칩 아님** |
+| `notifications` | `NotificationItem[]` | — | **벨 빨간 점 + 드롭다운**. 1건↑일 때만 인디케이터 |
 
-타이틀 + AI 버튼 + Docs + 고객지원 + bell + avatar 가 항상 한 줄에 모두 표시됩니다.
+```ts
+export type ProfileMenuItem = { label: string; onClick?: () => void };
+export type NotificationItem = { label: string; onClick?: () => void };
+```
+
+타이틀 + AI 버튼 + Docs + 고객지원 + **bell(notifications 시 빨간 점)** + **avatar(profileMenu 드롭다운 · roleBadge 헤더)** 가 항상 한 줄에 모두 표시됩니다.
+
+**사용자 메뉴 정책:** 우상단 사용자 영역은 **아바타 드롭다운 1개**로 일원화. 역할(`roleBadge`)은 **드롭다운 헤더**로 표시하고, 아바타 옆에 별도 역할 칩(2번째 트리거)을 두지 않는다.
 
 ---
 
