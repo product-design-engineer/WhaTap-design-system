@@ -41,13 +41,16 @@ const meta: Meta<typeof PageHeaderAiInline> = {
           "- 우측 chrome: 고객지원 / 🔔 / Avatar — Docs 제외, 유지\n\n" +
           "**언제 사용:** inline prompt 가 AI 위젯 호출 entry 인 페이지 (위젯 토글 별도 entry 불필요).\n\n" +
           "**Composition rules:** inline prompt 는 `max-w-[480px]` cap, w-full 100% 강제 금지 ([[feedback_page_header_invariant]] 우측 chrome 잠식 방지). " +
-          "48px height invariant 유지.",
+          "48px height invariant 유지.\n\n" +
+          "**롤링 placeholder (옵션):** `promptPlaceholders` (제품별 핵심 prompt 배열) 주입 시 입력이 비어 있을 때 placeholder 가 세로 순환. 송신 버튼은 비활성 유지(placeholder ≠ value). 미주입이면 `promptPlaceholder` 정적.",
       },
     },
   },
   argTypes: {
     title:               { description: "페이지 타이틀.", control: "text" },
-    promptPlaceholder:   { description: "inline prompt placeholder (정적 1개).", control: "text" },
+    promptPlaceholder:   { description: "inline prompt placeholder (promptPlaceholders 미주입 시 정적 1개).", control: "text" },
+    promptPlaceholders:  { description: "롤링 placeholder — 제품별 핵심 prompt 배열(옵션).", control: false },
+    promptRollingIntervalMs: { description: "롤링 dwell 간격(ms). 기본 2800.", control: "number" },
     promptDefaultOpen:   { description: "Storybook/시연용 dropdown 강제 펼침.", control: "boolean" },
   },
 };
@@ -57,6 +60,24 @@ type Story = StoryObj<typeof PageHeaderAiInline>;
 /** 기본 — GPU 트렌드 페이지, suggestions 없음. */
 export const Default: Story = {
   args: { title: "K8s-GPU / GPU 트렌드", promptPlaceholder: "GPU 트렌드에 대해 질문..." },
+};
+
+/** 제품별 핵심 prompt — 롤링 placeholder 데모용. */
+const GPU_PLACEHOLDERS = [
+  "지난 24시간 GPU 사용률을 요약해줘",
+  "GPU 이상 사용 패턴을 진단해줘",
+  "유휴 GPU 워크로드 정리를 제안해줘",
+  "GPU 스케줄링 최적화 방안을 알려줘",
+];
+
+/** Rolling Placeholder — 입력이 비어 있을 때 제품별 핵심 prompt 가 세로로 롤링(옵션). 송신은 비활성 유지. */
+export const RollingPlaceholder: Story = {
+  args: {
+    title: "K8s-GPU / GPU 트렌드",
+    promptPlaceholders: GPU_PLACEHOLDERS,
+    promptRollingIntervalMs: 2600,
+    promptSuggestions: GPU_SUGGESTIONS,
+  },
 };
 
 /** With Suggestions — GPU 페이지 컨텍스트 chip 4개, 마운트 시 dropdown 펼침. */

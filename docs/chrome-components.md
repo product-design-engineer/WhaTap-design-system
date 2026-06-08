@@ -125,7 +125,8 @@ export type NotificationItem = { label: string; onClick?: () => void };
 | Prop | Type | Default | 설명 |
 |---|---|---|---|
 | `title` | `string` | — | 좌측 페이지 타이틀 |
-| `promptPlaceholder` | `string` | `"어떤 작업을 함께 할까요?"` | inline prompt placeholder (정적 1개) |
+| `promptPlaceholder` | `string` | `"어떤 작업을 함께 할까요?"` | inline prompt placeholder (`promptPlaceholders` 미주입 시 정적 1개) |
+| `promptPlaceholders` | `string[]` | — | **옵션** — 제품별 핵심 prompt 배열. 입력 비어 있을 때 세로 롤링(`AiInlinePrompt.rollingPlaceholders` passthrough) |
 | `promptSuggestions` | `AiPromptSuggestion[]` | — | chip suggestions — 페이지 컨텍스트별 카탈로그 |
 | `onPromptSubmit` | `(v: string) => void` | — | Enter/⬆ 송신 콜백 |
 | `onPromptSelectSuggestion` | `(s: AiPromptSuggestion) => void` | — | suggestion chip 선택 콜백 |

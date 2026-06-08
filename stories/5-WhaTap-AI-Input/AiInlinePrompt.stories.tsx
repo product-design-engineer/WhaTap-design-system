@@ -26,7 +26,8 @@ const meta: Meta<typeof AiInlinePrompt> = {
         component:
           "**한 줄 inline 자연어 입력창 — `<AiPromptInput>` 의 single-row 변형 (Figma 27087:3416).**\n\n" +
           "모든 구성요소(첨부 chip · input · 첨부 버튼 · 송신)가 단일 행에 배열, height 고정 (~32px).\n\n" +
-          "**제외:** TokenUsageBadge · 하단 caption · 첨부 chip 별도 행 · multi-line textarea · placeholder 회전.\n\n" +
+          "**제외:** TokenUsageBadge · 하단 caption · 첨부 chip 별도 행 · multi-line textarea.\n\n" +
+          "**롤링 placeholder (옵션):** `rollingPlaceholders` (제품별 핵심 prompt 배열) 주입 시 입력이 비어 있을 때 placeholder 가 세로 순환. 미주입이면 정적 1개(`placeholder`).\n\n" +
           "**Suggestions 채널:** `suggestions` prop 으로 페이지 컨텍스트별 chip 제안을 input focus 시 floating dropdown 으로 펼침. " +
           "한 줄 invariant 는 보존 — chip 들은 별도 floating panel 에 위치. chip 클릭 → input value 자동 채우기, 송신은 사용자 액션 (⬆ 또는 Enter).\n\n" +
           "**사용처:** PageHeader 우측 inline prompt, 카드 / 모달 / sub-section 의 빠른 질문 입력. (PageHeader 적용은 예정 — 아직 wiring 되지 않음.)",
@@ -47,6 +48,23 @@ type Story = StoryObj<typeof AiInlinePrompt>;
 /** Empty — placeholder 노출, border 연한 파랑. height ~32px. */
 export const Empty: Story = {
   args: { value: "" },
+};
+
+/** 제품별 핵심 prompt — 롤링 placeholder 데모용. */
+const PRODUCT_PLACEHOLDERS = [
+  "APM — 가장 느린 트랜잭션 5개를 분석해줘",
+  "DB — 지금 spike 의 원인을 분석해줘",
+  "K8s — GPU 노드 사용률 추세를 보여줘",
+  "Server — CPU/메모리 이상 호스트를 찾아줘",
+  "로그 — 최근 에러 급증 원인을 요약해줘",
+];
+
+/** Rolling Placeholder — 입력이 비어 있을 때 제품별 핵심 prompt 가 세로로 롤링(옵션). */
+export const RollingPlaceholder: Story = {
+  args: {
+    rollingPlaceholders: PRODUCT_PLACEHOLDERS,
+    rollingIntervalMs: 2200,
+  },
 };
 
 /** Typing — controlled value, border 진한 파랑 + 송신 활성. */

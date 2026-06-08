@@ -57,13 +57,31 @@
 |---|---|---|---|
 | `value` / `onChange` | `string` / `(v: string) => void` | — | controlled (undefined → internal state) |
 | `onSubmit` | `(v: string) => void` | — | Enter 또는 ⬆ 클릭. trim 비어있으면 호출 안 됨 |
-| `placeholder` | `string` | `"어떤 작업을 함께 할까요?"` | **정적 1개** — 회전 미적용 |
+| `placeholder` | `string` | `"어떤 작업을 함께 할까요?"` | 기본 정적 1개 (`rollingPlaceholders` 미주입 시) |
+| `rollingPlaceholders` | `string[]` | — | **옵션** — 제품별 핵심 prompt 배열. 입력 비어 있을 때 세로 롤링(순환). 미주입이면 정적 |
+| `rollingIntervalMs` | `number` | `2800` | 롤링 전환 간격(ms) |
 | `attachments` | `AiInlineAttachment[]` | — | 같은 행 inline 첨부 chip |
 | `suggestions` | `AiPromptSuggestion[]` | — | focus 시 floating dropdown chip |
 | `onSelectSuggestion` | `(s) => void` | — | chip 선택 (input 채우기 자동, 송신은 사용자 액션) |
 | `defaultOpen` | `boolean` | `false` | Storybook/시연용 강제 펼침 |
 | `showSendCursor` | `boolean` | `false` | 송신 ripple |
 | `onSendClick` | `() => void` | — | 송신 핸들러 (없으면 onSubmit) |
+
+### 롤링 placeholder (옵션) — 정책 갱신 (2026-06)
+
+기존 "placeholder 회전 미적용(정적 1개)" 정책은 **opt-in 롤링 지원으로 확장**됨. 기본은 여전히 정적 — `rollingPlaceholders` 를 주입한 화면에서만 입력이 비어 있을 때 제품별 핵심 prompt 가 세로로 순환한다 (입력 시 자동 정지). 미주입 호출처는 기존과 100% 동일.
+
+**송신 버튼은 롤링 중에도 비활성 유지.** 근거: 롤링 텍스트는 placeholder(힌트)이지 입력값이 아니므로(`placeholder ≠ value`), 빈 입력에서 활성화하면 사용자가 입력하지 않은 prompt 가 전송되는 오발송이 된다. 빠른 진입(클릭→입력)은 `suggestions` chip 채널이 담당하고 placeholder 는 예시/영감 역할로 분리한다. a11y 상으로도 placeholder 를 값으로 취급하지 않는다.
+
+```tsx
+const GPU_AI_PLACEHOLDERS = [
+  "GPU 사용률이 급증한 노드를 찾아줘",
+  "최근 1시간 GPU 메모리 추세를 분석해줘",
+  "유휴 GPU 워크로드를 정리 제안해줘",
+];
+
+<AiInlinePrompt rollingPlaceholders={GPU_AI_PLACEHOLDERS} onSubmit={(q) => askAi(q)} />
+```
 
 ### suggestions 사양
 

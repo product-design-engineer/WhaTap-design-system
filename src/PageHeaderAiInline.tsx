@@ -39,8 +39,14 @@ import AiInlinePrompt, {
 export type PageHeaderAiInlineProps = {
   /** "K8s-GPU / GPU 트렌드"와 같은 페이지 제목. */
   title: string;
-  /** inline prompt placeholder. 정적 1개 (회전 미적용). */
+  /** inline prompt placeholder. `promptPlaceholders` 미주입 시 정적 1개. */
   promptPlaceholder?: string;
+  /** 롤링 placeholder (옵션) — 제품별 핵심 prompt 배열. 입력 비어 있을 때 세로 순환. 미주입이면 `promptPlaceholder` 정적. */
+  promptPlaceholders?: string[];
+  /** 롤링 dwell 간격(ms) — 한 항목 머무는 시간. 미지정 시 AiInlinePrompt 기본(2800). */
+  promptRollingIntervalMs?: number;
+  /** 롤링 슬라이드(transition) 시간(ms). 미지정 시 기본(450). */
+  promptRollingTransitionMs?: number;
   /** inline prompt chip suggestions — 페이지 컨텍스트별 카탈로그. */
   promptSuggestions?: AiPromptSuggestion[];
   /** prompt 송신 콜백 (Enter 또는 ⬆ 클릭). */
@@ -54,6 +60,9 @@ export type PageHeaderAiInlineProps = {
 export default function PageHeaderAiInline({
   title,
   promptPlaceholder = "어떤 작업을 함께 할까요?",
+  promptPlaceholders,
+  promptRollingIntervalMs,
+  promptRollingTransitionMs,
   promptSuggestions,
   onPromptSubmit,
   onPromptSelectSuggestion,
@@ -92,6 +101,9 @@ export default function PageHeaderAiInline({
         <div className="w-full max-w-[480px]">
           <AiInlinePrompt
             placeholder={promptPlaceholder}
+            rollingPlaceholders={promptPlaceholders}
+            rollingIntervalMs={promptRollingIntervalMs}
+            rollingTransitionMs={promptRollingTransitionMs}
             suggestions={promptSuggestions}
             onSubmit={onPromptSubmit}
             onSelectSuggestion={onPromptSelectSuggestion}
