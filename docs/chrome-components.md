@@ -1,6 +1,6 @@
-# Chrome Components — 19 컴포넌트
+# Chrome Components — 20 컴포넌트
 
-> 원본: `packages/design-system/src/`
+> 원본: `src/` (interfacedesigner/WhaTap-design-system)
 
 페이지 단위 레이아웃·도구·표시 컴포넌트. 위젯(AI Assistant) 외부의 모든 SaaS 화면 골격이 이 카탈로그 안에 있습니다.
 
@@ -8,11 +8,11 @@
 
 **조립 순서:** `DashboardLayout` → `Sidebar` + `header` 슬롯 (`PageHeader` 또는 `PageHeaderAiInline` + 옵션으로 `OptionbarPage` 또는 `FilterBar`) + `main` 슬롯 + 자식으로 `WhaTapAiWidget`
 
-## 카탈로그 (19)
+## 카탈로그 (20)
 
 | 영역 | 컴포넌트 |
 |---|---|
-| 레이아웃 | DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline |
+| 레이아웃 | DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · SubHeaderBar |
 | 옵션바 (시간/인스턴스/프리셋) | OptionbarPage · OptionbarInstanceSelector · LiveTimerCompact · TimeRangeSelector · PresetSelect |
 | 데이터 표시 | DataTable · FilterBar · MiniLineChart · EventWeekTimeMatrix |
 | 액션·진입 | Button · AiSymbol |

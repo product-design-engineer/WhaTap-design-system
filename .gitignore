@@ -13,3 +13,4 @@ build/
 coverage/
 .pnpm-store/
 storybook-static/
+docs/DESIGN.md

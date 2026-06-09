@@ -20,7 +20,12 @@ const config: StorybookConfig = {
     '../stories/**/*.mdx',
     '../stories/**/*.stories.@(ts|tsx)',
   ],
-  staticDirs: [{ from: '../static/icons', to: '/icons' }],
+  staticDirs: [
+    { from: '../static/icons', to: '/icons' },
+    // 카탈로그 .md (DESIGN.md 합본 포함) 를 /design-system/ 로 서빙 — AI 에이전트 컨텍스트 주입용.
+    // DESIGN.md 는 build:design (build-storybook 직전) 가 생성.
+    { from: '../docs', to: '/design-system' },
+  ],
   addons: [
     '@chromatic-com/storybook',
     '@storybook/addon-vitest',

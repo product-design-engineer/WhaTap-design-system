@@ -21,8 +21,9 @@
     ".storybook"
   ],
   "scripts": {
-    "storybook": "storybook dev -p 5181 --no-open",
-    "build-storybook": "storybook build",
+    "build:design": "node scripts/build-design.mjs",
+    "storybook": "node scripts/build-design.mjs && storybook dev -p 5181 --no-open",
+    "build-storybook": "node scripts/build-design.mjs && storybook build",
     "test": "vitest run"
   },
   "peerDependencies": {
