@@ -19,7 +19,7 @@ export default function AiReasoning({
 }) {
   return (
     <div
-      className="ai-anim-in flex flex-col gap-[6px] bg-white border border-[#eaeaea] rounded-[8px] px-[12px] py-[10px]"
+      className="ai-anim-in flex flex-col gap-[6px] bg-white border border-[color:var(--color-border-default)] rounded-[8px] px-[12px] py-[10px]"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div
@@ -32,12 +32,12 @@ export default function AiReasoning({
         <div key={i} className="flex items-center gap-[8px]">
           {s.running ? (
             <span
-              className="size-[10px] rounded-full border-[1.5px] border-[#296CF2] border-t-transparent"
+              className="size-[10px] rounded-full border-[1.5px] border-[color:var(--color-brand-blue)] border-t-transparent"
               style={{ animation: "aiSymbolRotateSlow 0.9s linear infinite" }}
             />
           ) : (
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="shrink-0">
-              <circle cx="6" cy="6" r="5.4" fill="#296CF2" />
+              <circle cx="6" cy="6" r="5.4" fill="var(--color-brand-blue)" />
               <path
                 d="M3.5 6.1l1.8 1.8L8.5 4.5"
                 stroke="#fff"

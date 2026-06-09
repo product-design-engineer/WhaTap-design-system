@@ -19,7 +19,7 @@ import { TONE_BG, TONE_DOT, TONE_LABEL, type Tone } from "./_tokens";
  * AiCard — AI 위젯 메시지의 표준 컨테이너.
  *
  * ## Purpose
- * AI 가 사용자에게 보내는 메시지의 단위 카드. 흰 배경 + `#eaeaea` 보더 + 8px 라운드 + 기본 12px 패딩 +
+ * AI 가 사용자에게 보내는 메시지의 단위 카드. 흰 배경 + `var(--color-border-default)` 보더 + 8px 라운드 + 기본 12px 패딩 +
  * `ai-anim-in` 진입 애니메이션. WhaTap AI 위젯 전체에서 일관된 메시지 표현을 보장합니다.
  *
  * ## When to use
@@ -66,7 +66,7 @@ export function AiCard({
 }) {
   return (
     <div
-      className={`ai-anim-in flex flex-col w-full bg-white border border-[#eaeaea] rounded-[8px] ${className}`}
+      className={`ai-anim-in flex flex-col w-full bg-white border border-[color:var(--color-border-default)] rounded-[8px] ${className}`}
       style={{ animationDelay: `${delay}ms`, padding, gap }}
     >
       {children}

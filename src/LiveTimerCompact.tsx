@@ -101,12 +101,12 @@ export default function LiveTimerCompact({
       >
         {paused ? (
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M6 4l10 6-10 6V4z" fill="#00B442" />
+            <path d="M6 4l10 6-10 6V4z" fill="var(--color-status-success)" />
           </svg>
         ) : (
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <rect x="6" y="3" width="2.5" height="14" rx="0.5" fill="#00B442" />
-            <rect x="11.5" y="3" width="2.5" height="14" rx="0.5" fill="#00B442" />
+            <rect x="6" y="3" width="2.5" height="14" rx="0.5" fill="var(--color-status-success)" />
+            <rect x="11.5" y="3" width="2.5" height="14" rx="0.5" fill="var(--color-status-success)" />
           </svg>
         )}
       </div>
@@ -168,10 +168,10 @@ export default function LiveTimerCompact({
               className="shrink-0 cursor-pointer"
               onClick={onOpenCalendar}
             >
-              <rect x="2.5" y="3" width="11" height="11" rx="1" stroke="#757575" strokeWidth="1.2" />
-              <line x1="5.5" y1="2" x2="5.5" y2="4" stroke="#757575" strokeWidth="1.2" strokeLinecap="round" />
-              <line x1="10.5" y1="2" x2="10.5" y2="4" stroke="#757575" strokeWidth="1.2" strokeLinecap="round" />
-              <line x1="2.5" y1="6.5" x2="13.5" y2="6.5" stroke="#757575" strokeWidth="1" />
+              <rect x="2.5" y="3" width="11" height="11" rx="1" stroke="var(--color-text-tertiary)" strokeWidth="1.2" />
+              <line x1="5.5" y1="2" x2="5.5" y2="4" stroke="var(--color-text-tertiary)" strokeWidth="1.2" strokeLinecap="round" />
+              <line x1="10.5" y1="2" x2="10.5" y2="4" stroke="var(--color-text-tertiary)" strokeWidth="1.2" strokeLinecap="round" />
+              <line x1="2.5" y1="6.5" x2="13.5" y2="6.5" stroke="var(--color-text-tertiary)" strokeWidth="1" />
             </svg>
           )}
         </div>

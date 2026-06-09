@@ -8,11 +8,11 @@
 export type ClassificationTone = "high" | "mid" | "low" | "idle" | "neutral";
 
 const TONE_BADGE: Record<ClassificationTone, { bg: string; dot: string; label: string }> = {
-  high:    { bg: "#ffe8e8", dot: "#E53935", label: "고활용" },
-  mid:     { bg: "#fff7e0", dot: "#F0B400", label: "활용" },
-  low:     { bg: "#e8f4ff", dot: "#296CF2", label: "저활용" },
-  idle:    { bg: "#f1f2f4", dot: "#757575", label: "완전 유휴" },
-  neutral: { bg: "#f1f2f4", dot: "#757575", label: "" },
+  high:    { bg: "#ffe8e8", dot: "var(--color-indicator-critical)", label: "고활용" },
+  mid:     { bg: "#fff7e0", dot: "var(--color-indicator-warning)", label: "활용" },
+  low:     { bg: "#e8f4ff", dot: "var(--color-brand-blue)", label: "저활용" },
+  idle:    { bg: "var(--color-surface-100)", dot: "var(--color-text-tertiary)", label: "완전 유휴" },
+  neutral: { bg: "var(--color-surface-100)", dot: "var(--color-text-tertiary)", label: "" },
 };
 
 export type ClassificationRow = {
@@ -75,10 +75,10 @@ export default function AiClassificationTable({
           📊 {caption}
         </div>
       )}
-      <div className="rounded-[6px] overflow-hidden border border-[#eaeaea]">
+      <div className="rounded-[6px] overflow-hidden border border-[color:var(--color-border-default)]">
         {/* 헤더 */}
         <div
-          className="grid items-center px-[6px] py-[6px] bg-[#f5f5f5] gap-[4px]"
+          className="grid items-center px-[6px] py-[6px] bg-[color:var(--color-surface-50)] gap-[4px]"
           style={{ gridTemplateColumns: "28px 1.4fr 0.7fr 0.6fr 0.6fr 1.3fr 0.8fr" }}
         >
           {["GPU", "모델명", "평균", "최대", "최소", "Pod", "분류"].map((h) => (
@@ -97,7 +97,7 @@ export default function AiClassificationTable({
           return (
             <div
               key={i}
-              className="grid items-center px-[6px] py-[6px] gap-[4px] border-t border-[#eaeaea]"
+              className="grid items-center px-[6px] py-[6px] gap-[4px] border-t border-[color:var(--color-border-default)]"
               style={{ gridTemplateColumns: "28px 1.4fr 0.7fr 0.6fr 0.6fr 1.3fr 0.8fr" }}
             >
               <span

@@ -10,7 +10,7 @@
  * 으로 자동 padding (year 는 4자리). 자리수 정렬은 numeric 폰트 (tabular-nums 효과)로 보장.
  *
  * 공용 정책 — feedback-decision-priorities (재활용), feedback-design-system-css-source
- * (라이브 마크업 그대로 옮김). 색·아이콘은 라이브 토큰(#00C853, #757575, #ADADAD)
+ * (라이브 마크업 그대로 옮김). 색·아이콘은 라이브 토큰(#00C853, var(--color-text-tertiary), var(--color-border-divider))
  * 유지.
  *
  * Props로 외부화:
@@ -58,7 +58,7 @@ export default function TimeRangeSelector({
           {title}
         </div>
       )}
-      <div className="flex items-stretch border border-[#adadad] rounded-[4px] bg-white overflow-hidden">
+      <div className="flex items-stretch border border-[color:var(--color-border-divider)] rounded-[4px] bg-white overflow-hidden">
         {/* Live 토글 */}
         <button
           type="button"
@@ -68,7 +68,7 @@ export default function TimeRangeSelector({
         >
           <IcLiveTime />
         </button>
-        <div className="w-[1px] bg-[#adadad]" />
+        <div className="w-[1px] bg-[color:var(--color-border-divider)]" />
 
         {/* 듀얼 datetime + 컨트롤 */}
         <div className="flex items-center gap-[6px] px-[6px] py-[6px]">
@@ -191,7 +191,7 @@ function IcLiveTime() {
 function IcLeft() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 25" fill="none" aria-hidden="true">
-      <g fill="#757575" transform="translate(6,3)">
+      <g fill="var(--color-text-tertiary)" transform="translate(6,3)">
         <path
           d="M1.5573935,17.4635366 L0.14317994,16.049323 L7.21417994,8.97797383 L0.14317994,1.9071874 L1.5573935,0.492973834 L10.0426749,8.97825521 L1.5573935,17.4635366 Z"
           transform="translate(5.092927, 8.978255) scale(-1, 1) translate(-5.092927, -8.978255)"
@@ -203,7 +203,7 @@ function IcLeft() {
 function IcRight() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <g fill="#757575" transform="translate(7,3)">
+      <g fill="var(--color-text-tertiary)" transform="translate(7,3)">
         <path d="M1.5573935,17.4635366 L0.14317994,16.049323 L7.21417994,8.97797383 L0.14317994,1.9071874 L1.5573935,0.492973834 L10.0426749,8.97825521 L1.5573935,17.4635366 Z" />
       </g>
     </svg>
@@ -212,7 +212,7 @@ function IcRight() {
 function IcStartDate() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <g fill="#757575" transform="translate(2,2)">
+      <g fill="var(--color-text-tertiary)" transform="translate(2,2)">
         <path d="M2.66666667,0 C1.18666667,0 0.0133333333,0 0.0133333333,0 L0,20 C0,20 1.18666667,20 2.66666667,20 L20,20 C20,20 20,18.8 20,17.3333333 L20,2.66666667 C20,1.2 20,0 20,0 L2.66666667,0 Z M3.00087166,18 C2.4481055,18 2,17.5500512 2,16.9931545 L2,5.00684547 C2,4.45078007 2.44463086,4 3.00087166,4 L16.9991283,4 C17.5518945,4 18,4.44994876 18,5.00684547 L18,16.9931545 C18,17.5492199 17.5553691,18 16.9991283,18 L3.00087166,18 Z M4,7 L8,7 L8,11 L4,11 L4,7 Z" />
       </g>
     </svg>

@@ -4,7 +4,7 @@
  * Figma source: Common file `ttJ3slHi0F7Hp8NE02c6nZ`, node `27110:53409`.
  *
  * Exact-design verbatim:
- *   - 배경: #f5f5f5 (sementic_background_page)
+ *   - 배경: var(--color-surface-50) (sementic_background_page)
  *   - 라운드: 4px (radius_sm)
  *   - 패딩: 8px (spacing_xs)
  *   - 텍스트: 14px / line-height 1.4 / letter-spacing -0.1px / color #222
@@ -31,7 +31,7 @@ export default function AiUserBubble({ children, className }: AiUserBubbleProps)
       <div
         className="rounded-[4px] px-[8px] py-[8px]"
         style={{
-          background: "#f5f5f5",
+          background: "var(--color-surface-50)",
           maxWidth: "85%",
         }}
       >

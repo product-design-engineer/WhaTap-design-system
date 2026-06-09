@@ -54,23 +54,23 @@ export default function AiAlertRulePreview({
         }}
       >
         {/* 헤더 행 */}
-        <div className="text-base font-bold text-tertiary tracking-default leading-none px-[2px] py-[6px] border-b border-[#eaeaea]">
+        <div className="text-base font-bold text-tertiary tracking-default leading-none px-[2px] py-[6px] border-b border-[color:var(--color-border-default)]">
           항목
         </div>
-        <div className="text-base font-bold text-tertiary tracking-default leading-none px-[2px] py-[6px] border-b border-[#eaeaea]">
+        <div className="text-base font-bold text-tertiary tracking-default leading-none px-[2px] py-[6px] border-b border-[color:var(--color-border-default)]">
           내용
         </div>
         {/* 데이터 행 */}
         {fields.map((f, i) => (
           <Fragment key={i}>
             <div
-              className="text-base text-secondary tracking-default leading-normal px-[2px] py-[6px] border-b border-[#f5f5f5]"
+              className="text-base text-secondary tracking-default leading-normal px-[2px] py-[6px] border-b border-[color:var(--color-surface-50)]"
               style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
             >
               {f.label}
             </div>
             <div
-              className="text-md text-primary tracking-default leading-normal px-[2px] py-[6px] border-b border-[#f5f5f5]"
+              className="text-md text-primary tracking-default leading-normal px-[2px] py-[6px] border-b border-[color:var(--color-surface-50)]"
               style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
             >
               {f.value}

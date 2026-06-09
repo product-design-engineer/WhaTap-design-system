@@ -84,10 +84,10 @@ export default function DataTable<T>({
         };
 
   return (
-    <div className="flex flex-col rounded-[4px] border border-[#eaeaea] bg-white overflow-hidden">
+    <div className="flex flex-col rounded-[4px] border border-[color:var(--color-border-default)] bg-white overflow-hidden">
       {/* 헤더 행 */}
       <div
-        className={`grid items-center bg-[#f5f5f5] ${tokens.rowPadding}`}
+        className={`grid items-center bg-[color:var(--color-surface-50)] ${tokens.rowPadding}`}
         style={{ gridTemplateColumns: gridTemplate }}
       >
         {columns.map((c, ci) => (
@@ -108,7 +108,7 @@ export default function DataTable<T>({
       {rows.map((row, ri) => (
         <div
           key={ri}
-          className={`grid items-center border-t border-[#eaeaea] ${tokens.rowPadding} ${onRowClick ? "cursor-pointer" : ""} hover:bg-gray-50`}
+          className={`grid items-center border-t border-[color:var(--color-border-default)] ${tokens.rowPadding} ${onRowClick ? "cursor-pointer" : ""} hover:bg-gray-50`}
           style={{ gridTemplateColumns: gridTemplate }}
           onClick={onRowClick ? () => onRowClick(row, ri) : undefined}
         >

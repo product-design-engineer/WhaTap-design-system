@@ -28,7 +28,7 @@ export default function AiCostTable({
 }) {
   return (
     <div
-      className="ai-anim-in flex flex-col gap-[8px] w-full bg-white border border-[#eaeaea] rounded-[8px] p-[12px]"
+      className="ai-anim-in flex flex-col gap-[8px] w-full bg-white border border-[color:var(--color-border-default)] rounded-[8px] p-[12px]"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="flex items-center justify-between">
@@ -40,12 +40,12 @@ export default function AiCostTable({
         </span>
       </div>
 
-      <div className="flex flex-col rounded-[6px] overflow-hidden border border-[#eaeaea]">
+      <div className="flex flex-col rounded-[6px] overflow-hidden border border-[color:var(--color-border-default)]">
         {rows.map((r, i) => (
           <div
             key={r.label}
             className={`flex items-center justify-between px-[10px] py-[8px] ${
-              i > 0 ? "border-t border-[#eaeaea]" : ""
+              i > 0 ? "border-t border-[color:var(--color-border-default)]" : ""
             }`}
             style={{
               background: r.highlight ? "#eef4ff" : "#fff",
@@ -69,7 +69,7 @@ export default function AiCostTable({
               className="text-lg text-primary font-bold tracking-default leading-none"
               style={{
                 fontFamily: "var(--font-family-numeric)",
-                color: r.highlight ? "#296CF2" : "#222",
+                color: r.highlight ? "var(--color-brand-blue)" : "#222",
               }}
             >
               {r.cost}

@@ -115,7 +115,7 @@ export default function WhaTapAiWidget({
       </div>
 
       <div
-        className="flex flex-col h-full bg-white border-l border-[#eaeaea]"
+        className="flex flex-col h-full bg-white border-l border-[color:var(--color-border-default)]"
         style={{ width: WIDGET_WIDTH }}
       >
         {/* 헤더 (40px, 그라데이션) */}
@@ -227,7 +227,7 @@ export default function WhaTapAiWidget({
                   {actions.map((label, i) => (
                     <button
                       key={label}
-                      className="ai-anim-in ai-landing-action border border-[#296cf2] flex h-[32px] items-center justify-center px-[16px] rounded-[4px] cursor-pointer text-brand-blue hover:bg-[#d6e1ff] hover:border-[#d6e1ff] relative overflow-hidden w-fit whitespace-nowrap text-md bg-white"
+                      className="ai-anim-in ai-landing-action border border-[color:var(--color-brand-blue)] flex h-[32px] items-center justify-center px-[16px] rounded-[4px] cursor-pointer text-brand-blue hover:bg-[color:var(--color-brand-blue-bg)] hover:border-[color:var(--color-brand-blue-bg)] relative overflow-hidden w-fit whitespace-nowrap text-md bg-white"
                       style={{
                         fontFamily: "var(--font-family-korean)",
                         fontWeight: "var(--font-weight-medium)",
@@ -254,7 +254,7 @@ export default function WhaTapAiWidget({
         <div className="flex flex-col items-center justify-center px-[16px] shrink-0 w-full">
           <div
             className="ai-input-wrapper relative bg-white flex flex-col gap-[4px] items-center justify-center p-[12px] shrink-0 rounded-[8px] transition-all duration-200 w-full"
-            style={{ border: hasInput ? "2px solid #296CF2" : "2px solid #c2d5fc" }}
+            style={{ border: hasInput ? "2px solid var(--color-brand-blue)" : "2px solid var(--color-brand-blue-bg-2)" }}
           >
             {/* 첨부 파일 칩 행 (Figma 27087:3416) */}
             {attachments && attachments.length > 0 && (
@@ -313,8 +313,8 @@ export default function WhaTapAiWidget({
                   className="group/plus flex items-center justify-center p-[2px] rounded-[4px] shrink-0 size-[20px] cursor-pointer border-0 bg-white hover:bg-black transition-colors"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-colors">
-                    <line x1="8" y1="3.33" x2="8" y2="12.67" className="stroke-[#4c4c4c] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
-                    <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-[#4c4c4c] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
+                    <line x1="8" y1="3.33" x2="8" y2="12.67" className="stroke-[color:var(--color-text-secondary)] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
+                    <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-[color:var(--color-text-secondary)] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>
                 </button>
                 {/* 토큰 입출력 정보 (Figma 29424:19317) — plus 버튼 옆 pill */}
@@ -329,15 +329,15 @@ export default function WhaTapAiWidget({
                   onClick={handleSubmit}
                   className="ai-send-btn flex items-center justify-center rounded-[4px] shrink-0 size-[24px] cursor-pointer transition-colors disabled:cursor-not-allowed"
                   style={{
-                    backgroundColor: hasInput ? "#296CF2" : "#f5f5f5",
-                    border: hasInput ? "1px solid #296CF2" : "1px solid #d3d3d3",
+                    backgroundColor: hasInput ? "var(--color-brand-blue)" : "var(--color-surface-50)",
+                    border: hasInput ? "1px solid var(--color-brand-blue)" : "1px solid #d3d3d3",
                   }}
                   aria-label="전송"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path
                       d="M8 12V4M8 4L4 8M8 4L12 8"
-                      stroke={hasInput ? "#fff" : "#adadad"}
+                      stroke={hasInput ? "#fff" : "var(--color-border-divider)"}
                       strokeWidth="1.6"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -368,7 +368,7 @@ export default function WhaTapAiWidget({
 /**
  * TokenUsageBadge — AI 입출력 토큰 사용량 pill (Figma 29424:19317).
  *
- * "토큰 입력 3,395 · 출력 181" 형태. bg #f5f5f5 / radius 24px / px 8 / py 4 / 10px text,
+ * "토큰 입력 3,395 · 출력 181" 형태. bg var(--color-surface-50) / radius 24px / px 8 / py 4 / 10px text,
  * 숫자만 bold. 모델 선택기 (Claude Opus 4) 자리에 대체 표시.
  */
 function TokenUsageBadge({ inputTokens, outputTokens }: { inputTokens: number; outputTokens: number }) {
@@ -376,7 +376,7 @@ function TokenUsageBadge({ inputTokens, outputTokens }: { inputTokens: number; o
   return (
     <div
       className="inline-flex items-center px-[8px] py-[4px] rounded-[24px] shrink-0"
-      style={{ backgroundColor: "#f5f5f5" }}
+      style={{ backgroundColor: "var(--color-surface-50)" }}
       data-node-id="29424:19317"
     >
       <span

@@ -15,7 +15,7 @@
  *   [선택: 상세 블록 (KV 라인들)]
  *   [선택: 후속 안내 텍스트]
  *
- * 컬러는 #222(본문), #4c4c4c(보조), #757575(timestamp).
+ * 컬러는 #222(본문), var(--color-text-secondary)(보조), var(--color-text-tertiary)(timestamp).
  */
 
 export type ExecutionResultVariant = "success" | "failure" | "unknown";

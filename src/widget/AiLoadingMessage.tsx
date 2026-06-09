@@ -1,7 +1,7 @@
 /**
  * AI 위젯 — "데이터 수집 중" 등 로딩/진행 메시지 (Figma 27110:60783).
  *
- * 좌측 그라데이션 차트 아이콘 + 안내 텍스트. 보더는 #eaeaea, 라운드 8px,
+ * 좌측 그라데이션 차트 아이콘 + 안내 텍스트. 보더는 var(--color-border-default), 라운드 8px,
  * 배경 흰색. 텍스트는 Noto Sans 13px 400 lineHeight 1.2 letterSpacing -0.1.
  */
 export default function AiLoadingMessage({
@@ -11,7 +11,7 @@ export default function AiLoadingMessage({
 }) {
   return (
     <div
-      className="flex items-center gap-[8px] w-full bg-white rounded-[8px] border border-[#eaeaea] px-[12px] py-[10px]"
+      className="flex items-center gap-[8px] w-full bg-white rounded-[8px] border border-[color:var(--color-border-default)] px-[12px] py-[10px]"
     >
       <LoadingIcon />
       <span
@@ -29,8 +29,8 @@ function LoadingIcon() {
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="shrink-0">
       <defs>
         <linearGradient id="ai-loading-grad" x1="0" y1="0" x2="16" y2="16" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#004BE0" />
-          <stop offset="1" stopColor="#8B52FF" />
+          <stop stopColor="var(--color-whatap-blue)" />
+          <stop offset="1" stopColor="var(--color-whatap-purple)" />
         </linearGradient>
       </defs>
       <path

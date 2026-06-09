@@ -3,21 +3,21 @@
  *
  * 라이브 SaaS-PG OptionbarPage의 "인스턴스" 항목 마크업 그대로:
  *   - 폭 180px
- *   - 1px solid #adadad 보더 + rounded 2
+ *   - 1px solid var(--color-border-divider) 보더 + rounded 2
  *   - 좌측 상태 dot (status: ok/warn/error/idle) + 인스턴스 라벨 (Roboto 13px)
  *   - 우측 16×16 chevron-down 토글 (20×20 hit-area)
  *
  * 정책: feedback-decision-priorities (재활용), feedback-design-system-css-source
- * (라이브 마크업·아이콘 그대로). 색은 라이브 토큰(#adadad/#222/#00C853/#F0B400/
- * #E53935/#757575) 유지.
+ * (라이브 마크업·아이콘 그대로). 색은 라이브 토큰(var(--color-border-divider)/#222/#00C853/var(--color-indicator-warning)/
+ * var(--color-indicator-critical)/var(--color-text-tertiary)) 유지.
  */
 export type InstanceStatus = "ok" | "warn" | "error" | "idle";
 
 const STATUS_COLOR: Record<InstanceStatus, string> = {
   ok: "#00C853",
-  warn: "#F0B400",
-  error: "#E53935",
-  idle: "#adadad",
+  warn: "var(--color-indicator-warning)",
+  error: "var(--color-indicator-critical)",
+  idle: "var(--color-border-divider)",
 };
 
 export default function OptionbarInstanceSelector({
@@ -50,7 +50,7 @@ export default function OptionbarInstanceSelector({
         <button
           type="button"
           onClick={onToggle}
-          className="flex items-center justify-between w-full bg-white border border-[#adadad] rounded-[2px] cursor-pointer hover:opacity-70 transition-shadow"
+          className="flex items-center justify-between w-full bg-white border border-[color:var(--color-border-divider)] rounded-[2px] cursor-pointer hover:opacity-70 transition-shadow"
           style={{
             minHeight: 32,
             padding: "5px 4px 5px 8px",

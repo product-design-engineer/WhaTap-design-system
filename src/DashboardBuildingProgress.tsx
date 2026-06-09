@@ -49,7 +49,7 @@ export default function DashboardBuildingProgress({
   }, [steps.length, intervalMs]);
 
   const cardStyles = card
-    ? { background: background ?? "#fff", border: "1px solid #eaeaea", borderRadius: 6 }
+    ? { background: background ?? "#fff", border: "1px solid var(--color-border-default)", borderRadius: 6 }
     : background
       ? { background }
       : {};
@@ -65,7 +65,7 @@ export default function DashboardBuildingProgress({
       <div
         className="size-[36px] rounded-full"
         style={{
-          background: "conic-gradient(from 90deg, #004BE0, #8B52FF, #004BE0)",
+          background: "conic-gradient(from 90deg, var(--color-whatap-blue), var(--color-whatap-purple), var(--color-whatap-blue))",
           mask: "radial-gradient(circle 15px at center, transparent 98%, #000 100%)",
           WebkitMask: "radial-gradient(circle 15px at center, transparent 98%, #000 100%)",
           animation: "aiSymbolRotateSlow 1s linear infinite",
@@ -94,14 +94,14 @@ export default function DashboardBuildingProgress({
             className="flex items-center gap-[8px] text-base"
             style={{
               fontFamily: "var(--font-family-korean)",
-              color: i < stepIdx ? "#4c4c4c" : "#adadad",
+              color: i < stepIdx ? "var(--color-text-secondary)" : "var(--color-border-divider)",
               opacity: i <= stepIdx ? 1 : 0.5,
               transition: "opacity 200ms, color 200ms",
             }}
           >
             {i < stepIdx ? (
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <circle cx="7" cy="7" r="6.5" fill="#00B442" />
+                <circle cx="7" cy="7" r="6.5" fill="var(--color-status-success)" />
                 <path
                   d="M4 7l2 2 4-4"
                   stroke="#fff"
@@ -112,7 +112,7 @@ export default function DashboardBuildingProgress({
               </svg>
             ) : i === stepIdx ? (
               <span
-                className="size-[12px] rounded-full border-[1.5px] border-[#296CF2] border-t-transparent"
+                className="size-[12px] rounded-full border-[1.5px] border-[color:var(--color-brand-blue)] border-t-transparent"
                 style={{ animation: "aiSymbolRotateSlow 0.9s linear infinite" }}
               />
             ) : (

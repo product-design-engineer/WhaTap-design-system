@@ -20,7 +20,7 @@ export default function AiUsageChart({
   const HEIGHT = 96;
   return (
     <div
-      className="ai-anim-in flex flex-col gap-[8px] w-full bg-white border border-[#eaeaea] rounded-[8px] p-[12px]"
+      className="ai-anim-in flex flex-col gap-[8px] w-full bg-white border border-[color:var(--color-border-default)] rounded-[8px] p-[12px]"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="flex items-center justify-between">
@@ -52,9 +52,9 @@ export default function AiUsageChart({
               style={{
                 height: h,
                 background: v === null
-                  ? "#f1f2f4"
+                  ? "var(--color-surface-100)"
                   : isHigh
-                    ? "#3DA9FF"
+                    ? "var(--color-brand-blue-soft)"
                     : "#b7dbff",
                 animationDelay: `${barDelay}ms`,
               }}

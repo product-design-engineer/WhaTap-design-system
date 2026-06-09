@@ -64,7 +64,7 @@ export default function AiEventList({
           return (
             <li
               key={i}
-              className="flex items-start gap-[8px] py-[6px] border-b border-[#f5f5f5] last:border-b-0"
+              className="flex items-start gap-[8px] py-[6px] border-b border-[color:var(--color-surface-50)] last:border-b-0"
             >
               {/* 시간 (고정폭) */}
               <span

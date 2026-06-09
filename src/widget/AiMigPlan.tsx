@@ -45,7 +45,7 @@ export default function AiMigPlan({
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="flex items-center gap-[6px]">
-        <span className="size-[10px] rounded-full" style={{ background: "#296CF2" }} />
+        <span className="size-[10px] rounded-full" style={{ background: "var(--color-brand-blue)" }} />
         <span
           className="text-md font-bold text-primary tracking-default leading-normal"
           style={{ fontFamily: "var(--font-family-korean)" }}
@@ -69,9 +69,9 @@ export default function AiMigPlan({
       )}
 
       {rows && rows.length > 0 && (
-        <div className="rounded-[6px] overflow-hidden border border-[#eaeaea]">
+        <div className="rounded-[6px] overflow-hidden border border-[color:var(--color-border-default)]">
           <div
-            className="grid items-center px-[8px] py-[6px] bg-[#f5f5f5] gap-[4px]"
+            className="grid items-center px-[8px] py-[6px] bg-[color:var(--color-surface-50)] gap-[4px]"
             style={{ gridTemplateColumns: "1.4fr 1.4fr 1fr" }}
           >
             {["구성", "분할/Pod", "월 환산"].map((h) => (
@@ -87,7 +87,7 @@ export default function AiMigPlan({
           {rows.map((r, i) => (
             <div
               key={i}
-              className="grid items-center px-[8px] py-[6px] gap-[4px] border-t border-[#eaeaea]"
+              className="grid items-center px-[8px] py-[6px] gap-[4px] border-t border-[color:var(--color-border-default)]"
               style={{
                 gridTemplateColumns: "1.4fr 1.4fr 1fr",
                 background: r.highlight ? "#eef4ff" : "#fff",
@@ -144,7 +144,7 @@ export default function AiMigPlan({
       {actions && actions.length > 0 && (
         <>
           <div className="flex items-center gap-[6px] mt-[4px]">
-            <span className="size-[10px] rounded-full" style={{ background: "#E53935" }} />
+            <span className="size-[10px] rounded-full" style={{ background: "var(--color-indicator-critical)" }} />
             <span
               className="text-md font-bold text-primary tracking-default leading-normal"
               style={{ fontFamily: "var(--font-family-korean)" }}

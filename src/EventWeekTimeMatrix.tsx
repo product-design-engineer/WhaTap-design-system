@@ -6,8 +6,8 @@
  *  - 향후 다른 알림류 페이지(예: 보고서 전송 시간대)에서도 재사용 가능
  *
  * 디자인 정책:
- *  - 셀 ON = Tone "low" 의 배경(#e8f4ff) + 도트(#296CF2)
- *  - 셀 OFF = 회색 격자 (#f1f2f4)
+ *  - 셀 ON = Tone "low" 의 배경(#e8f4ff) + 도트(var(--color-brand-blue))
+ *  - 셀 OFF = 회색 격자 (var(--color-surface-100))
  *  - 시간 헤더는 6시간 간격(0/6/12/18)만 표시 — 24개 다 쓰면 비좁음
  *  - 요일 헤더는 한국어 약어 (월/화/수/목/금/토/일)
  *
@@ -79,7 +79,7 @@ export default function EventWeekTimeMatrix({
                 interactive ? "cursor-pointer hover:brightness-95" : "cursor-default"
               }`}
               style={{
-                background: on ? "#296CF2" : "#f1f2f4",
+                background: on ? "var(--color-brand-blue)" : "var(--color-surface-100)",
                 border: on ? "1px solid #1f57c8" : "1px solid #e0e1e3",
               }}
               aria-label={`${dayLabels[d]} ${String(h).padStart(2, "0")}시 ${on ? "수신" : "미수신"}`}
@@ -92,11 +92,11 @@ export default function EventWeekTimeMatrix({
       {/* 범례 */}
       <div className="flex items-center gap-[10px] mt-[4px]">
         <span className="flex items-center gap-[4px]">
-          <span className="inline-block w-[12px] h-[10px] rounded-[2px]" style={{ background: "#296CF2", border: "1px solid #1f57c8" }} />
+          <span className="inline-block w-[12px] h-[10px] rounded-[2px]" style={{ background: "var(--color-brand-blue)", border: "1px solid #1f57c8" }} />
           <span className="text-xs text-secondary">수신</span>
         </span>
         <span className="flex items-center gap-[4px]">
-          <span className="inline-block w-[12px] h-[10px] rounded-[2px]" style={{ background: "#f1f2f4", border: "1px solid #e0e1e3" }} />
+          <span className="inline-block w-[12px] h-[10px] rounded-[2px]" style={{ background: "var(--color-surface-100)", border: "1px solid #e0e1e3" }} />
           <span className="text-xs text-secondary">미수신</span>
         </span>
       </div>

@@ -53,7 +53,7 @@ export default function AiToolCallStep({
         >
           <path
             d="M3 4.5l3 3 3-3"
-            stroke="#4c4c4c"
+            stroke="var(--color-text-secondary)"
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -68,7 +68,7 @@ export default function AiToolCallStep({
         </span>
         {running && (
           <span
-            className="size-[12px] rounded-full border-[1.5px] border-[#296CF2] border-t-transparent shrink-0"
+            className="size-[12px] rounded-full border-[1.5px] border-[color:var(--color-brand-blue)] border-t-transparent shrink-0"
             style={{ animation: "aiSymbolRotateSlow 0.9s linear infinite" }}
           />
         )}
@@ -76,7 +76,7 @@ export default function AiToolCallStep({
 
       {open && toolName && (
         <code
-          className="self-start text-base text-secondary bg-[#f5f5f5] border border-[#eaeaea] rounded-[4px] px-[8px] py-[3px]"
+          className="self-start text-base text-secondary bg-[color:var(--color-surface-50)] border border-[color:var(--color-border-default)] rounded-[4px] px-[8px] py-[3px]"
           style={{
             fontFamily:
               "'JetBrains Mono', 'SF Mono', 'Roboto Mono', Menlo, Consolas, monospace",

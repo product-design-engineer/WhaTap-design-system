@@ -4,8 +4,8 @@
  * 우측 정렬 3개 outline 아이콘: 👍 like / 👎 dislike / 📋 copy.
  * 사용자가 AI 응답에 대해 좋아요/싫어요/복사 동작을 할 수 있는 toolbar.
  *
- * 컬러 토큰: stroke #757575 (sementic_background_secondary), gap 8px (spacing_xs).
- * 상단에 #eaeaea 1px divider (옵션) — 응답 카드와 시각적으로 분리.
+ * 컬러 토큰: stroke var(--color-text-tertiary) (sementic_background_secondary), gap 8px (spacing_xs).
+ * 상단에 var(--color-border-default) 1px divider (옵션) — 응답 카드와 시각적으로 분리.
  */
 import { useState } from "react";
 
@@ -17,7 +17,7 @@ export default function AiMessageActions({
   onDislike,
   onCopy,
 }: {
-  /** 위쪽 #eaeaea 디바이더 표시 여부 */
+  /** 위쪽 var(--color-border-default) 디바이더 표시 여부 */
   divider?: boolean;
   onLike?: () => void;
   onDislike?: () => void;
@@ -45,7 +45,7 @@ export default function AiMessageActions({
       className="flex items-center justify-end gap-[8px] w-full"
       style={{
         paddingTop: divider ? 8 : 0,
-        borderTop: divider ? "1px solid #eaeaea" : "none",
+        borderTop: divider ? "1px solid var(--color-border-default)" : "none",
       }}
     >
       <ActionBtn ariaLabel="도움이 됐어요" active={reaction === "like"} onClick={handleLike}>
@@ -95,8 +95,8 @@ function ActionBtn({
 
 /* ─── icons ─────────────────────────────────────────────── */
 function ThumbUpIcon({ filled }: { filled?: boolean }) {
-  const stroke = filled ? "#296CF2" : "#757575";
-  const fill = filled ? "#296CF2" : "none";
+  const stroke = filled ? "var(--color-brand-blue)" : "var(--color-text-tertiary)";
+  const fill = filled ? "var(--color-brand-blue)" : "none";
   return (
     <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
       <path
@@ -120,8 +120,8 @@ function ThumbUpIcon({ filled }: { filled?: boolean }) {
   );
 }
 function ThumbDownIcon({ filled }: { filled?: boolean }) {
-  const stroke = filled ? "#E53935" : "#757575";
-  const fill = filled ? "#E53935" : "none";
+  const stroke = filled ? "var(--color-indicator-critical)" : "var(--color-text-tertiary)";
+  const fill = filled ? "var(--color-indicator-critical)" : "none";
   return (
     <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
       <path
@@ -147,8 +147,8 @@ function ThumbDownIcon({ filled }: { filled?: boolean }) {
 function CopyIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-      <rect x="3" y="3" width="8" height="8" rx="1.2" stroke="#757575" strokeWidth="1.2" />
-      <path d="M5.5 1.5h7c.55 0 1 .45 1 1v7" stroke="#757575" strokeWidth="1.2" strokeLinecap="round" />
+      <rect x="3" y="3" width="8" height="8" rx="1.2" stroke="var(--color-text-tertiary)" strokeWidth="1.2" />
+      <path d="M5.5 1.5h7c.55 0 1 .45 1 1v7" stroke="var(--color-text-tertiary)" strokeWidth="1.2" strokeLinecap="round" />
     </svg>
   );
 }
@@ -157,7 +157,7 @@ function CopiedCheckIcon() {
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
       <path
         d="M2.5 7l3 3 6-6.5"
-        stroke="#00B442"
+        stroke="var(--color-status-success)"
         strokeWidth="1.6"
         strokeLinecap="round"
         strokeLinejoin="round"

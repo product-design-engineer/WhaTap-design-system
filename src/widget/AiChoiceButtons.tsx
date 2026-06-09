@@ -27,7 +27,7 @@ export default function AiChoiceButtons({
     >
       <button
         onClick={primary.onClick}
-        className="flex items-center justify-center h-[36px] px-[16px] rounded-[6px] bg-[#296CF2] text-white text-md tracking-default cursor-pointer transition-colors hover:bg-[#1B5CD9]"
+        className="flex items-center justify-center h-[36px] px-[16px] rounded-[6px] bg-[color:var(--color-brand-blue)] text-white text-md tracking-default cursor-pointer transition-colors hover:bg-[color:var(--color-brand-blue-deep)]"
         style={{
           fontFamily: "var(--font-family-korean)",
           fontWeight: "var(--font-weight-medium)",
@@ -38,7 +38,7 @@ export default function AiChoiceButtons({
       </button>
       <button
         onClick={secondary.onClick}
-        className="flex items-center justify-center h-[36px] px-[16px] rounded-[6px] bg-white text-brand-blue text-md tracking-default border border-[#296CF2] cursor-pointer transition-colors hover:bg-[#d6e1ff]"
+        className="flex items-center justify-center h-[36px] px-[16px] rounded-[6px] bg-white text-brand-blue text-md tracking-default border border-[color:var(--color-brand-blue)] cursor-pointer transition-colors hover:bg-[color:var(--color-brand-blue-bg)]"
         style={{
           fontFamily: "var(--font-family-korean)",
           fontWeight: "var(--font-weight-medium)",

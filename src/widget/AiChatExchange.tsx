@@ -40,7 +40,7 @@ export default function AiChatExchange({
         <div className="flex flex-col items-start gap-[4px] w-full">
           <div
             className="w-full rounded-[8px] px-[12px] py-[12px]"
-            style={{ background: "#f5f5f5" }}
+            style={{ background: "var(--color-surface-50)" }}
           >
             <p
               className="text-md text-primary tracking-default leading-normal whitespace-pre-wrap"
@@ -74,14 +74,14 @@ function MessageTools() {
     <div className="flex items-center gap-[6px]">
       <ToolBtn ariaLabel="복사">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <rect x="3" y="3" width="8" height="8" rx="1.2" stroke="#757575" strokeWidth="1.2" />
-          <path d="M5.5 1.5h7c.55 0 1 .45 1 1v7" stroke="#757575" strokeWidth="1.2" strokeLinecap="round" />
+          <rect x="3" y="3" width="8" height="8" rx="1.2" stroke="var(--color-text-tertiary)" strokeWidth="1.2" />
+          <path d="M5.5 1.5h7c.55 0 1 .45 1 1v7" stroke="var(--color-text-tertiary)" strokeWidth="1.2" strokeLinecap="round" />
         </svg>
       </ToolBtn>
       <ToolBtn ariaLabel="다시 시도">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path d="M2 7a5 5 0 1 0 1.5-3.55" stroke="#757575" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M2 2v3h3" stroke="#757575" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M2 7a5 5 0 1 0 1.5-3.55" stroke="var(--color-text-tertiary)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M2 2v3h3" stroke="var(--color-text-tertiary)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </ToolBtn>
     </div>

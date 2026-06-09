@@ -15,7 +15,7 @@ import type { CSSProperties } from "react";
 
 export default function SettingsIcon({
   size = 16,
-  color = "#757575",
+  color = "var(--color-text-tertiary)",
   className,
   style,
 }: {

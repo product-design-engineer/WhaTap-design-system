@@ -7,7 +7,7 @@
  *     수평 확장, stroke는 `vectorEffect="non-scaling-stroke"`로 1px 유지
  *   - 모든 텍스트(Y축 / X축 / peak 값)는 SVG 밖 HTML overlay로 절대 위치
  *     → 카드 폭이 변해도 글자 크기가 고정 (정책: feedback-svg-text-units)
- *   - X·Y 1px 축 보더(#adadad)
+ *   - X·Y 1px 축 보더(var(--color-border-divider))
  *   - 헤더: 타이틀 + ⓘ info icon + (옵션) Top Stat 칩 + ⋮ menu
  *   - peak 위치: ▼ + 값 라벨 정확한 좌표에 매칭
  */
@@ -27,7 +27,7 @@ export default function MiniLineChart({
   markerAt = 0.08,
   showTopStat = false,
   /** line/area 색상 (기본 라이브 토큰 blue) */
-  color = "#3DA9FF",
+  color = "var(--color-brand-blue-soft)",
   /** Y축 및 peak 라벨에 붙는 단위 (예: "%", "K") */
   unit = "",
   /** stagger 진입 애니메이션 delay(ms). undefined면 애니메이션 없음 */
@@ -76,7 +76,7 @@ export default function MiniLineChart({
 
   return (
     <div
-      className={`flex flex-col bg-white border border-[#eaeaea] rounded-[4px] px-[8px] py-[6px] gap-[2px] min-w-0${delay !== undefined ? " ai-anim-in" : ""}`}
+      className={`flex flex-col bg-white border border-[color:var(--color-border-default)] rounded-[4px] px-[8px] py-[6px] gap-[2px] min-w-0${delay !== undefined ? " ai-anim-in" : ""}`}
       style={delay !== undefined ? { animationDelay: `${delay}ms` } : undefined}
     >
       {/* 헤더 */}
@@ -94,7 +94,7 @@ export default function MiniLineChart({
         <div className="flex items-center gap-[4px] shrink-0">
           {showTopStat && (
             <button
-              className="flex items-center h-[18px] px-[6px] rounded-[3px] bg-white border border-[#eaeaea] text-xs text-secondary cursor-pointer hover:bg-gray-50 whitespace-nowrap"
+              className="flex items-center h-[18px] px-[6px] rounded-[3px] bg-white border border-[color:var(--color-border-default)] text-xs text-secondary cursor-pointer hover:bg-gray-50 whitespace-nowrap"
               style={{ fontFamily: "var(--font-family-korean)" }}
             >
               Top Stat
@@ -108,17 +108,17 @@ export default function MiniLineChart({
       <div className="relative w-full" style={{ height: CHART_HEIGHT }}>
         {/* X-axis (plot 하단) */}
         <div
-          className="absolute h-[1px] bg-[#adadad]"
+          className="absolute h-[1px] bg-[color:var(--color-border-divider)]"
           style={{ left: PAD_LEFT, right: PAD_RIGHT, top: PAD_TOP_PX + PLOT_H_PX }}
         />
         {/* Y-axis (plot 좌측) */}
         <div
-          className="absolute w-[1px] bg-[#adadad]"
+          className="absolute w-[1px] bg-[color:var(--color-border-divider)]"
           style={{ left: PAD_LEFT, top: PAD_TOP_PX, height: PLOT_H_PX }}
         />
         {/* 중간 horizontal grid line */}
         <div
-          className="absolute h-[1px] bg-[#f0f0f0]"
+          className="absolute h-[1px] bg-[color:var(--color-border-soft)]"
           style={{ left: PAD_LEFT, right: PAD_RIGHT, top: PAD_TOP_PX + PLOT_H_PX * 0.5 }}
         />
         {/* 좌측 검정 점선 reference */}
@@ -260,9 +260,9 @@ function formatPeak(v: number): string {
 function InfoIcon() {
   return (
     <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-      <circle cx="6" cy="6" r="5.2" stroke="#adadad" strokeWidth="1" fill="none" />
-      <line x1="6" y1="5.4" x2="6" y2="8.4" stroke="#adadad" strokeWidth="1.2" strokeLinecap="round" />
-      <circle cx="6" cy="3.6" r="0.6" fill="#adadad" />
+      <circle cx="6" cy="6" r="5.2" stroke="var(--color-border-divider)" strokeWidth="1" fill="none" />
+      <line x1="6" y1="5.4" x2="6" y2="8.4" stroke="var(--color-border-divider)" strokeWidth="1.2" strokeLinecap="round" />
+      <circle cx="6" cy="3.6" r="0.6" fill="var(--color-border-divider)" />
     </svg>
   );
 }
@@ -274,9 +274,9 @@ function MenuDots() {
       className="flex items-center justify-center size-[16px] rounded-[2px] cursor-pointer hover:bg-[rgba(0,0,0,0.05)] shrink-0"
     >
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-        <circle cx="7" cy="3" r="1" fill="#757575" />
-        <circle cx="7" cy="7" r="1" fill="#757575" />
-        <circle cx="7" cy="11" r="1" fill="#757575" />
+        <circle cx="7" cy="3" r="1" fill="var(--color-text-tertiary)" />
+        <circle cx="7" cy="7" r="1" fill="var(--color-text-tertiary)" />
+        <circle cx="7" cy="11" r="1" fill="var(--color-text-tertiary)" />
       </svg>
     </button>
   );

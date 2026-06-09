@@ -27,19 +27,19 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
 
   const containerStyle: React.CSSProperties =
     variant === "slide"
-      ? { borderLeft: "1px solid #eaeaea", boxShadow: "-10px 0 30px rgba(0,0,0,0.06)" }
-      : { border: "1px solid #eaeaea", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" };
+      ? { borderLeft: "1px solid var(--color-border-default)", boxShadow: "-10px 0 30px rgba(0,0,0,0.06)" }
+      : { border: "1px solid var(--color-border-default)", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" };
 
   return (
     <div className={containerClass} style={containerStyle}>
       {/* Header */}
-      <div className="flex items-center justify-between h-[47px] px-2 shrink-0 bg-white border-b" style={{ borderColor: "#eaeaea" }}>
+      <div className="flex items-center justify-between h-[47px] px-2 shrink-0 bg-white border-b" style={{ borderColor: "var(--color-border-default)" }}>
         <div className="flex items-center gap-2 pl-1.5">
-          <div className="ai-symbol-anim flex items-center justify-center w-6 h-6 rounded-md" style={{ background: "linear-gradient(135deg, #296CF2, #1B5CD9)" }}>
+          <div className="ai-symbol-anim flex items-center justify-center w-6 h-6 rounded-md" style={{ background: "linear-gradient(135deg, var(--color-brand-blue), var(--color-brand-blue-deep))" }}>
             <AiSymbol size={14} />
           </div>
           <span className="text-md font-bold" style={{ color: "var(--color-text-primary)" }}>WhaTap AI</span>
-          <span className="px-1.5 py-0.5 rounded text-chart font-semibold tracking-wider" style={{ background: "#D6E1FF", color: "var(--color-brand-blue-deep)" }}>
+          <span className="px-1.5 py-0.5 rounded text-chart font-semibold tracking-wider" style={{ background: "var(--color-brand-blue-bg)", color: "var(--color-brand-blue-deep)" }}>
             Beta
           </span>
         </div>
@@ -66,7 +66,7 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
       <div className="flex-1 overflow-auto p-4 bg-white">
         {/* AI welcome message */}
         <div className="flex gap-2.5 mb-4">
-          <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 shadow-[0_2px_8px_rgba(41,108,242,0.25)]" style={{ background: "linear-gradient(135deg, #296CF2, #1B5CD9)" }}>
+          <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 shadow-[0_2px_8px_rgba(41,108,242,0.25)]" style={{ background: "linear-gradient(135deg, var(--color-brand-blue), var(--color-brand-blue-deep))" }}>
             <AiSymbol size={14} />
           </div>
           <div className="flex-1 text-md leading-loose" style={{ color: "var(--color-text-body)" }}>
@@ -84,10 +84,10 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
               style={{
                 background: "#fff",
                 color: "var(--color-brand-blue-deep)",
-                borderColor: "#D6E1FF",
+                borderColor: "var(--color-brand-blue-bg)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#D6E1FF";
+                e.currentTarget.style.background = "var(--color-brand-blue-bg)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = "#fff";
@@ -100,10 +100,10 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
       </div>
 
       {/* Footer — input area */}
-      <div className="px-3 pt-2 pb-2.5 bg-white border-t" style={{ borderColor: "#f0f0f0" }}>
+      <div className="px-3 pt-2 pb-2.5 bg-white border-t" style={{ borderColor: "var(--color-border-soft)" }}>
         <div
           className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white mb-2"
-          style={{ border: "1px solid #adadad" }}
+          style={{ border: "1px solid var(--color-border-divider)" }}
         >
           <button className="size-5 flex items-center justify-center cursor-pointer" style={{ color: "var(--color-text-tertiary)" }} aria-label="파일 또는 이미지 추가">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -124,7 +124,7 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
           </div>
           <button
             className="size-7 rounded-md flex items-center justify-center text-white cursor-pointer"
-            style={{ background: "#296CF2" }}
+            style={{ background: "var(--color-brand-blue)" }}
             aria-label="보내기"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

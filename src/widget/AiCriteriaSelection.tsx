@@ -27,13 +27,13 @@ const TONE_BG: Record<CriterionGroup["tone"], string> = {
   low: "#e8f4ff",
   mid: "#fff7e0",
   high: "#ffe8e8",
-  neutral: "#f1f2f4",
+  neutral: "var(--color-surface-100)",
 };
 const TONE_DOT: Record<CriterionGroup["tone"], string> = {
-  low: "#296CF2",
-  mid: "#F0B400",
-  high: "#E53935",
-  neutral: "#757575",
+  low: "var(--color-brand-blue)",
+  mid: "var(--color-indicator-warning)",
+  high: "var(--color-indicator-critical)",
+  neutral: "var(--color-text-tertiary)",
 };
 
 export default function AiCriteriaSelection({
@@ -83,7 +83,7 @@ export default function AiCriteriaSelection({
   }, []);
   return (
     <div
-      className="ai-anim-in flex flex-col gap-[12px] w-full bg-white border border-[#eaeaea] rounded-[8px] p-[12px]"
+      className="ai-anim-in flex flex-col gap-[12px] w-full bg-white border border-[color:var(--color-border-default)] rounded-[8px] p-[12px]"
       style={{ animationDelay: `${delay}ms` }}
     >
       <span
@@ -181,9 +181,9 @@ export default function AiCriteriaSelection({
                 style={{
                   fontFamily: "var(--font-family-korean)",
                   fontWeight: "var(--font-weight-medium)",
-                  background: isSelected ? "#296CF2" : "#fff",
-                  color: isSelected ? "#fff" : "#296CF2",
-                  borderColor: isSelected ? "#296CF2" : "#296CF2",
+                  background: isSelected ? "var(--color-brand-blue)" : "#fff",
+                  color: isSelected ? "#fff" : "var(--color-brand-blue)",
+                  borderColor: isSelected ? "var(--color-brand-blue)" : "var(--color-brand-blue)",
                   opacity: isDimmed ? 0.4 : 1,
                   pointerEvents: selectedKey ? "none" : "auto",
                   transition: "background 180ms, color 180ms, opacity 180ms, transform 120ms",

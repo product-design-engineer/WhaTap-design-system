@@ -10,7 +10,7 @@
  *
  * ## Composition (Figma 27087:3416 verbatim)
  * ```
- * ┌─ ai-input-wrapper (2px border, conditional #c2d5fc / #296CF2) ─┐
+ * ┌─ ai-input-wrapper (2px border, conditional var(--color-brand-blue-bg-2) / var(--color-brand-blue)) ─┐
  * │ [첨부 chips 행 — attachments prop 있을 때만]                    │
  * │                                                                  │
  * │ <textarea>  placeholder 또는 입력 텍스트                         │
@@ -197,8 +197,8 @@ export default function AiPromptInput({
               className="group/plus flex items-center justify-center p-[2px] rounded-[4px] shrink-0 size-[20px] cursor-pointer border-0 bg-white hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-colors">
-                <line x1="8" y1="3.33" x2="8" y2="12.67" className="stroke-[#4c4c4c] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
-                <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-[#4c4c4c] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="8" y1="3.33" x2="8" y2="12.67" className="stroke-[color:var(--color-text-secondary)] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-[color:var(--color-text-secondary)] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
             </button>
             <TokenUsageBadge inputTokens={tokenInput} outputTokens={tokenOutput} />
@@ -231,7 +231,7 @@ export default function AiPromptInput({
 /**
  * TokenUsageBadge — AI 입출력 토큰 사용량 pill (Figma 29424:19317).
  *
- * "토큰 입력 N · 출력 M" 형태. bg #f5f5f5 / radius 24px / px 8 / py 4 / 10px text, 숫자 bold.
+ * "토큰 입력 N · 출력 M" 형태. bg var(--color-surface-50) / radius 24px / px 8 / py 4 / 10px text, 숫자 bold.
  * AiPromptInput 의 내부 sub-component.
  */
 function TokenUsageBadge({ inputTokens, outputTokens }: { inputTokens: number; outputTokens: number }) {

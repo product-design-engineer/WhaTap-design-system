@@ -51,7 +51,7 @@ export default function AiReceiverChannels({
           return (
             <li
               key={c.key}
-              className={`flex items-center gap-[10px] py-[6px] border-b border-[#f5f5f5] last:border-b-0 ${
+              className={`flex items-center gap-[10px] py-[6px] border-b border-[color:var(--color-surface-50)] last:border-b-0 ${
                 interactive ? "cursor-pointer hover:bg-[#fafafa]" : ""
               }`}
               onClick={() => interactive && onToggle!(c.key, !c.enabled)}
@@ -76,7 +76,7 @@ export default function AiReceiverChannels({
                       style={{
                         fontFamily: "var(--font-family-korean)",
                         fontWeight: "var(--font-weight-medium)",
-                        background: "#f1f2f4",
+                        background: "var(--color-surface-100)",
                         color: "var(--color-text-tertiary)",
                       }}
                     >

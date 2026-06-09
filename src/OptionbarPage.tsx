@@ -47,7 +47,7 @@ export default function OptionbarPage({
   presetLabel?: string;
 }) {
   return (
-    <div className="flex flex-row items-end gap-[12px] flex-wrap p-[8px] bg-white border-b border-[#eaeaea]">
+    <div className="flex flex-row items-end gap-[12px] flex-wrap p-[8px] bg-white border-b border-[color:var(--color-border-default)]">
       <OptionbarItem title="시간">
         <LiveTimerCompact
           time={liveTime}
@@ -122,22 +122,22 @@ function NewVersionButton({ href, label }: { href: string; label: string }) {
     <a href={href}>
       <button
         type="button"
-        className="flex items-center justify-center gap-[6px] h-[32px] w-full px-[12px] rounded-[4px] bg-white border border-[#296CF2] text-md text-brand-blue cursor-pointer hover:bg-[#d6e1ff] transition-colors"
+        className="flex items-center justify-center gap-[6px] h-[32px] w-full px-[12px] rounded-[4px] bg-white border border-[color:var(--color-brand-blue)] text-md text-brand-blue cursor-pointer hover:bg-[color:var(--color-brand-blue-bg)] transition-colors"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
           <path
             d="M9.5 2C8.5 9.68 2 10.5 2 10.5s6.5.82 7.5 8.5C10.5 11.32 17 10.5 17 10.5s-6.5-.82-7.5-8.5z"
-            fill="#296CF2"
+            fill="var(--color-brand-blue)"
           />
           <path
             d="M18 13c-.5 4.06-4 4.5-4 4.5s3.5.44 4 4.5c.5-4.06 4-4.5 4-4.5s-3.5-.44-4-4.5z"
-            fill="#296CF2"
+            fill="var(--color-brand-blue)"
           />
         </svg>
         <span className="flex-1 text-center">{label}</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-          <path d="M9 6l6 6-6 6" stroke="#757575" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M9 6l6 6-6 6" stroke="var(--color-text-tertiary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </button>
     </a>

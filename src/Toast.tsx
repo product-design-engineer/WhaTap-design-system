@@ -13,8 +13,8 @@ import { createPortal } from "react-dom";
 export type ToastVariant = "success" | "info" | "warning" | "error";
 
 const VARIANT_COLOR: Record<ToastVariant, { dot: string; bg: string }> = {
-  success: { dot: "#00B442", bg: "#E8F8EE" },
-  info:    { dot: "#296CF2", bg: "#E8F0FE" },
+  success: { dot: "var(--color-status-success)", bg: "#E8F8EE" },
+  info:    { dot: "var(--color-brand-blue)", bg: "#E8F0FE" },
   warning: { dot: "#FF8800", bg: "#FFF4E5" },
   error:   { dot: "#F34747", bg: "#FDECEC" },
 };
@@ -58,7 +58,7 @@ export default function Toast({
       aria-live="polite"
     >
       <div
-        className="flex items-center gap-[12px] bg-white border border-[#eaeaea] rounded-[8px] px-[16px] py-[10px]"
+        className="flex items-center gap-[12px] bg-white border border-[color:var(--color-border-default)] rounded-[8px] px-[16px] py-[10px]"
         style={{
           boxShadow: "0 8px 24px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04)",
           fontFamily: "var(--font-family-korean)",
@@ -98,7 +98,7 @@ export default function Toast({
           className="flex items-center justify-center size-[16px] cursor-pointer hover:opacity-70 shrink-0"
         >
           <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-            <path d="M1 1l8 8M9 1l-8 8" stroke="#757575" strokeWidth="1.4" strokeLinecap="round" />
+            <path d="M1 1l8 8M9 1l-8 8" stroke="var(--color-text-tertiary)" strokeWidth="1.4" strokeLinecap="round" />
           </svg>
         </button>
       </div>

@@ -318,8 +318,8 @@ export default function AiInlinePrompt({
           className="group/plus flex items-center justify-center p-[2px] rounded-[4px] shrink-0 size-[20px] cursor-pointer border-0 bg-white hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
-            <line x1="8" y1="3.33" x2="8" y2="12.67" className="stroke-[#4c4c4c] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
-            <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-[#4c4c4c] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
+            <line x1="8" y1="3.33" x2="8" y2="12.67" className="stroke-[color:var(--color-text-secondary)] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
+            <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-[color:var(--color-text-secondary)] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
         </button>
 
