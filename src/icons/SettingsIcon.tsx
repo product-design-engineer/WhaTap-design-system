@@ -1,15 +1,26 @@
 /**
- * SettingsIcon — 모든 시나리오 공용 톱니바퀴 (gear/cog) 아이콘.
+ * SettingsIcon — 모든 시나리오 공용 톱니바퀴(gear/cog) 아이콘.
  *
- * 기존 변형들 (blob path, 회전 광선 등) 을 이 컴포넌트로 통일:
- *   - pages/project-list/ProjectCard.tsx (local SettingIcon)
- *   - pages/flex-board/operation.tsx (ActionIcon "설정")
- *   - pages/flex-board/FlexBoardWidget.tsx (IconButton "설정")
- *   - pages/db/DbRacDashboard.tsx (2곳)
+ * ## Purpose
+ * 설정/구성을 의미하는 Material-style 톱니바퀴 SVG 아이콘. 흩어져 있던
+ * 변형(blob path·회전 광선 등)을 이 하나로 통일한 단일 소스.
  *
- * 디자인: 8-tooth 가운데 hole, viewBox 24, fillRule evenodd. Material-style 톱니바퀴.
+ * ## When to use
+ * - "설정" 액션/메뉴/IconButton 안의 아이콘 (카드 우상단, 위젯 헤더 등)
  *
- * 정책: feedback-common-components-catalog (chrome-level 공용 아이콘).
+ * ## When NOT to use
+ * - AI 브랜드 표식 → [[AiSymbol]]
+ * - 톱니바퀴 외 다른 의미(필터·더보기 등)는 각 전용 아이콘 사용
+ *
+ * ## Composition rules
+ * - **정책 feedback-common-components-catalog**: 설정 아이콘은 항상 이 컴포넌트 재사용.
+ * - `size`(px)·`color`(기본 `--color-text-tertiary`)·`className`·`style` 로 조정.
+ * - 단색 fill 아이콘, `aria-hidden` — 의미 라벨은 감싸는 버튼에 부여.
+ *
+ * @example
+ * ```tsx
+ * <button aria-label="설정"><SettingsIcon size={16} /></button>
+ * ```
  */
 import type { CSSProperties } from "react";
 

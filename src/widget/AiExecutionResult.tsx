@@ -1,21 +1,34 @@
 /**
- * AI 위젯 — 실행 결과 메시지 (Figma 27139:62532).
+ * AiExecutionResult — 작업 실행 후 결과 통지 메시지.
  *
- * variant:
- *   - "success"  → ✅ 실행 완료
- *   - "failure"  → ⚠️ 실행 실패
- *   - "unknown"  → ❓ 알수 없는 오류
+ * ## Purpose
+ * AI 가 어떤 작업을 **실행한 뒤** 그 결과를 사용자에게 알리는 읽기 전용 통지. variant 로 상태를
+ * 구분(✅ success / ⚠️ failure / ❔ unknown)하고, 헤더(상태 라벨 + 타임스탬프) + 본문 한 줄 +
+ * bullet 목록 + 상세 KV 라인 + 후속 안내(footer)로 구성됩니다. bullet/details/footer 는 옵션.
  *
- * 구조:
- *   [emoji 상태 라벨]          [yyyy-mm-dd HH:MM:SS]
- *   [본문(h4 bold 14)]
- *   • bullet 1
- *   • bullet 2
- *   ...
- *   [선택: 상세 블록 (KV 라인들)]
- *   [선택: 후속 안내 텍스트]
+ * ## When to use
+ * - 규칙 등록·설정 변경 등 작업이 끝난 직후 성공/실패 결과를 통지할 때.
+ * - 실패·미상 오류의 원인을 details(KV) + footer 후속 안내로 보여줄 때.
  *
- * 컬러는 #222(본문), var(--color-text-secondary)(보조), var(--color-text-tertiary)(timestamp).
+ * ## When NOT to use
+ * - 실행 **전** 미리보기 / 승인 요청 → [[AiAlertRulePreview]] + [[AiChoiceButtons]].
+ * - 진행 중(스피너) 상태 표시 → 도구 호출 진행 표시 컴포넌트.
+ * - 구성 제안 안내 → [[AiDashboardProposal]] / [[AiMigPlan]].
+ *
+ * ## Composition rules
+ * - 이 컴포넌트는 `AiCard` chrome 없이 자체 `flex-col` 레이아웃 (헤더+타임스탬프 전용 구조).
+ * - 상태 emoji/라벨은 `VARIANT_LABEL` 맵으로 고정 — 호출부에서 임의 변경하지 말 것.
+ * - 텍스트 색은 토큰 (`--color-text-primary/secondary/tertiary`) 사용.
+ *
+ * @example
+ * ```tsx
+ * <AiExecutionResult
+ *   variant="success"
+ *   timestamp="2026-05-31 14:02:11"
+ *   body="CPU 알림 임계값이 변경되었습니다."
+ *   bullets={["Critical 90% → 85%"]}
+ * />
+ * ```
  */
 
 export type ExecutionResultVariant = "success" | "failure" | "unknown";

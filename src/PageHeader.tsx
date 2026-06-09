@@ -1,17 +1,39 @@
 /**
- * 48px 페이지 헤더 (좌: 타이틀 + WhaTap AI + Docs / 우: 고객지원 + 알림 + 아바타).
+ * PageHeader — Chrome layer. 48px 페이지 최상단 헤더.
  *
- * 공통 정책(feedback-page-header-invariant): WhaTap AI 위젯 토글과 무관하게
- * 항상 동일한 레이아웃·동일한 가시 요소·동일한 크기로 렌더링됩니다. 어떤
- * 호출처도 이 컴포넌트의 내부 항목을 숨기거나 줄일 수 없습니다(prop으로
- * 제거 API를 의도적으로 제공하지 않음).
+ * ## Purpose
+ * 페이지 상단 48px 고정 바. 좌측은 페이지 타이틀 + WhaTap AI 토글([[AiAssistantButton]])
+ * + Docs 버튼, 우측은 고객지원 버튼 + 알림 벨(드롭다운) + 프로필 아바타(드롭다운).
+ * [[Sidebar]] 의 48px 로고 헤더와 동일 높이로 chrome 의 최상단 행을 정렬.
  *
- * WhaTap AI 토글 버튼은 [[AiAssistantButton]] 컴포넌트 — 인라인 마크업 → 토큰 binding 컴포넌트로 dogfooding.
+ * ## When to use
+ * - [[DashboardLayout]] 의 `header` 슬롯에 들어가는 주 페이지 헤더.
+ * - 페이지 타이틀과 WhaTap AI 진입점이 함께 필요한 모든 화면.
  *
- * 가변 데이터:
- *   - `title`        — "K8s-GPU / GPU 트렌드"와 같은 페이지 제목
- *   - `aiActive`     — WhaTap AI 버튼의 active 상태
- *   - `onAiToggle`   — 버튼 클릭 핸들러
+ * ## When NOT to use
+ * - 뒤로가기/브레드크럼 등 보조 네비 행 → [[SubHeaderBar]] (48px 아래 40px 행).
+ * - 시간/프리셋 등 데이터 필터 옵션 → `OptionbarPage` / `FilterBar`.
+ *
+ * ## Composition rules
+ * - 공통 정책(feedback-page-header-invariant): WhaTap AI 위젯 토글과 무관하게 항상
+ *   동일한 레이아웃·가시 요소·크기로 렌더. 내부 항목을 숨기거나 줄이는 prop 은
+ *   의도적으로 제공하지 않음.
+ * - WhaTap AI 토글은 인라인 마크업이 아니라 [[AiAssistantButton]] 채택 (토큰 binding dogfooding).
+ * - 높이 48px 고정(`box-border`) — 페이지에서 inline `<div>` 로 재구현 금지.
+ * - 배경/경계/텍스트 색은 토큰 (`--color-border-strong` · `--color-text-*` · `--color-brand-blue-bg`).
+ * - `notifications` 1건 이상이면 벨에 빨간 점 + 클릭 시 목록, `profileMenu` 있으면 아바타가 드롭다운.
+ *
+ * @example
+ * ```tsx
+ * <PageHeader
+ *   title="K8s-GPU / GPU 트렌드"
+ *   aiActive={aiActive}
+ *   onAiToggle={() => setAiActive((v) => !v)}
+ *   roleBadge="OWNER"
+ *   profileMenu={[{ label: "엔터프라이즈 관리", onClick: goAdmin }]}
+ *   notifications={[{ label: "임계값 초과: disk-usage" }]}
+ * />
+ * ```
  */
 import { useState } from "react";
 import AiAssistantButton from "./widget/AiAssistantButton";

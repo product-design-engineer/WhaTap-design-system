@@ -1,15 +1,35 @@
 /**
- * 인스턴스 셀렉터 (OptionbarPage 공용 컴포넌트).
+ * OptionbarInstanceSelector — 상태 dot + 라벨 + chevron 의 인스턴스 셀렉터.
  *
- * 라이브 SaaS-PG OptionbarPage의 "인스턴스" 항목 마크업 그대로:
- *   - 폭 180px
- *   - 1px solid var(--color-border-divider) 보더 + rounded 2
- *   - 좌측 상태 dot (status: ok/warn/error/idle) + 인스턴스 라벨 (Roboto 13px)
- *   - 우측 16×16 chevron-down 토글 (20×20 hit-area)
+ * ## Purpose
+ * 옵션바 "인스턴스" 항목 — 좌측 상태 dot(`status`: ok/warn/error/idle) + 선택된
+ * 인스턴스 라벨 + 우측 chevron-down 토글로 구성된 32px 드롭다운 트리거 버튼.
+ * 토글/오픈 상태는 `open`·`onToggle` 로 외부 제어(트리거만 제공, 옵션 패널은 호출측 책임).
  *
- * 정책: feedback-decision-priorities (재활용), feedback-design-system-css-source
- * (라이브 마크업·아이콘 그대로). 색은 라이브 토큰(var(--color-border-divider)/#222/#00C853/var(--color-indicator-warning)/
- * var(--color-indicator-critical)/var(--color-text-tertiary)) 유지.
+ * ## When to use
+ * - [[OptionbarPage]] 의 "인스턴스" 항목.
+ * - 상태 색 dot 으로 헬스를 즉시 보여줘야 하는 인스턴스 선택 트리거.
+ *
+ * ## When NOT to use
+ * - 상태 dot 이 없는 일반 라벨 드롭다운(프리셋 등) → [[PresetSelect]].
+ * - 시간 범위 선택 → [[TimeRangeSelector]].
+ * - 일반 텍스트/검색 입력 → [[TextField]].
+ *
+ * ## Composition rules
+ * - 폭 `width`(기본 180px), minHeight 32px, 1px border-divider + rounded 2.
+ * - status → dot 색은 `STATUS_COLOR` 매핑(ok #00C853 / warn·error·idle 토큰) 고정.
+ * - 라벨은 numeric 폰트 + truncate. chevron 은 `open` 시 180deg 회전.
+ * - `title=""` 이면 내부 title 렌더 억제(부모가 라벨을 그릴 때 중복 방지).
+ *
+ * @example
+ * ```tsx
+ * <OptionbarInstanceSelector
+ *   label="DMX-3-12-949"
+ *   status="ok"
+ *   open={open}
+ *   onToggle={() => setOpen((v) => !v)}
+ * />
+ * ```
  */
 export type InstanceStatus = "ok" | "warn" | "error" | "idle";
 

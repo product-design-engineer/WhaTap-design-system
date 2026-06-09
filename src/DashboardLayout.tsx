@@ -2,13 +2,43 @@ import { ReactNode } from "react";
 import Sidebar, { MenuItem, ProjectContext, OrgContext } from "./Sidebar";
 
 /**
- * Dashboard chrome — WhaTap 좌측 240px Sidebar + 우측 컨텐츠.
+ * DashboardLayout — Chrome layer. 좌측 240px [[Sidebar]] + 우측 컨텐츠 컬럼의 전체 셸.
  *
- * Sidebar는 자체 헤더(로고/검색/접기)를 가지므로 grid에서 별도 header row를
- * 두지 않습니다. 컨텐츠는 `children` 또는 `main` prop으로 주입합니다.
+ * ## Purpose
+ * WhaTap SaaS 화면의 최상위 골격. 좌측은 [[Sidebar]], 우측은 세로 스택으로
+ * `header`(48px [[PageHeader]] 자리) → 그 아래 `main` + `children`(우측 위젯/패널)
+ * 행으로 구성. AI 위젯(`children`, 예: [[WhaTapAiWidget]])은 `main` 과 같은 행에
+ * 자리잡아 자체 width 애니메이션으로 밀고 들어옴.
+ * Sidebar 의 모든 가변 데이터(`activeProduct`/`project`/`menu`/`org` 등)는 통과만
+ * 시키고 기본값은 [[Sidebar]] 에 위임 — 빈 호출이면 K8s-GPU 컨텍스트가 default.
  *
- * Sidebar의 모든 가변 데이터(activeProduct, project, menu)는 prop으로 통과만
- * 시키고 기본값은 Sidebar 쪽에 위임 — 빈 호출이면 K8s-GPU 컨텍스트가 default.
+ * ## When to use
+ * - 사이드바 + 헤더 + 본문 + (선택) AI 위젯을 한 화면에 조합하는 모든 대시보드 라우트.
+ * - AI 위젯 개폐에 따라 Sidebar 가 collapse 되어야 하는 화면.
+ *
+ * ## When NOT to use
+ * - 사이드바·헤더가 없는 단독 페이지/모달 → 셸 없이 컴포넌트를 직접 배치.
+ * - 좌측 네비만 필요 → [[Sidebar]] 단독 사용.
+ *
+ * ## Composition rules
+ * - 공통 정책(feedback-widget-sidebar-collapse): `widgetOpen` 을 [[Sidebar]] 의
+ *   `collapsed` 로 그대로 전달 — 위젯이 열리면 사이드바가 40px 로 최소화.
+ * - 공통 정책(feedback-page-header-invariant): `header` 는 위젯 행과 분리된 위쪽
+ *   행이라 위젯 개폐와 무관하게 우측 컬럼 전폭을 유지 — 헤더는 절대 좁아지지 않음.
+ * - `header`/`main`/`children` 슬롯만 주입. 레이아웃 구조(`flex` 골격)는 재구현 금지.
+ * - 우측 위젯(`children`)은 자체 width 트랜지션을 가진 컴포넌트를 넣음([[WhaTapAiWidget]]).
+ *
+ * @example
+ * ```tsx
+ * <DashboardLayout
+ *   widgetOpen={aiActive}
+ *   activeProduct="gpu"
+ *   header={<PageHeader title="K8s-GPU / GPU 트렌드" aiActive={aiActive} onAiToggle={toggle} />}
+ *   main={<GpuTrendPage />}
+ * >
+ *   <WhaTapAiWidget open={aiActive} onClose={() => setAiActive(false)} />
+ * </DashboardLayout>
+ * ```
  */
 export default function DashboardLayout({
   children,

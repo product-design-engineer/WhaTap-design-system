@@ -1,11 +1,35 @@
 /**
  * AiReceiverChannels — 사용자별 알림 수신 채널 카드.
  *
- * 위젯에서 "지금 이메일만 켜져있어요, 모바일도 켤까요?" 같은 권유 흐름에 사용.
- * 정밀 설정(요일×시간, 이벤트 수신 태그, 3rd-party 등)은 레거시 페이지에 위임 —
- * 본 카드는 단순 채널 토글 + 정밀 설정 진입 안내까지만 책임.
+ * ## Purpose
+ * 현재 켜진/꺼진 알림 수신 채널(✉️ 이메일 · 💬 SMS · 📞 WhatsApp · 📱 모바일)을 한 카드에
+ * 요약해 보여주고, 위젯에서 "지금 이메일만 켜져있어요, 모바일도 켤까요?" 같은 채널 권유 흐름을
+ * 돕습니다. 각 행은 라벨 + 보조 정보(주소/번호) + 유료 배지 + 토글 핀으로 구성됩니다.
  *
- * 정책: feedback-widget-primitives — AiCard + AiSectionHeading + tone 토큰.
+ * ## When to use
+ * - 알림 채널 현황을 보여주고 켜기/끄기 권유를 곁들이는 안내 카드.
+ * - 채널 토글까지만 가볍게 처리하는 흐름 (`onToggle` 미지정 시 read-only 현황 표시).
+ *
+ * ## When NOT to use
+ * - 요일×시간, 이벤트 수신 태그, 3rd-party 연동 등 **정밀 설정** → 레거시 알림 설정 페이지에 위임.
+ * - 채널 단위가 아닌 일반 선택지 제시 → [[AiChoiceButtons]].
+ *
+ * ## Composition rules
+ * - [[AiCard]] + [[AiSectionHeading]](📬) 프리미티브 조립 — 인라인 chrome 금지.
+ * - 토글 핀 색은 tone 토큰(`TONE_DOT.low`) 사용, 인라인 hex 는 off 상태 트랙에만 한정.
+ * - 토글은 visual mock — 실제 상태는 부모가 `enabled` 로 제어하고 `onToggle` 로 갱신.
+ *
+ * @example
+ * ```tsx
+ * <AiReceiverChannels
+ *   channels={[
+ *     { key: "email", label: "이메일", detail: "kyungho.oh@whatap.io", enabled: true },
+ *     { key: "mobile", label: "모바일", enabled: false },
+ *     { key: "sms", label: "SMS", enabled: false, paid: true },
+ *   ]}
+ *   onToggle={(key, next) => setChannel(key, next)}
+ * />
+ * ```
  */
 import { AiCard, AiSectionHeading } from "./_primitives";
 import { TONE_DOT, } from "./_tokens";

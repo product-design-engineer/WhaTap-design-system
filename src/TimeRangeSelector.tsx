@@ -1,22 +1,36 @@
 /**
- * 시간 범위 셀렉터 (OptionbarPage 공용 컴포넌트).
+ * TimeRangeSelector — LIVE 토글 + 듀얼 datetime + duration 태그의 시간 범위 입력기.
  *
- * 라이브 페이지의 OptionbarPage 우측 옵션 패널에서 사용되는 시간 범위 입력기.
- * 마크업 구조는 라이브 SPA의 ic-live-time + ic-left/ic-right + ic-start-date
- * 아이콘 + 듀얼 datetime 입력 + duration 태그.
+ * ## Purpose
+ * LIVE 토글 · 이전/다음 이동 · 듀얼 datetime(`start`~`end`) 입력 · duration 태그 ·
+ * 달력 버튼을 한 박스에 묶은 시간 범위 셀렉터. datetime 은 `YYYY-MM-DD HH:MM` 으로
+ * 정규화 표시(month/day/hour/minute 2자리, year 4자리 자동 padding, numeric 폰트로
+ * 자리수 정렬). 이동/달력/LIVE 동작은 `onLive`/`onPrev`/`onNext`/`onPickDate` 콜백으로 외부화.
  *
- * ## 표시 형식
- * 모든 datetime 은 `YYYY-MM-DD HH:MM` 으로 정규화 표시. 단일 자리 값은 `padStart(2, "0")`
- * 으로 자동 padding (year 는 4자리). 자리수 정렬은 numeric 폰트 (tabular-nums 효과)로 보장.
+ * ## When to use
+ * - 시작~종료 절대 시간 범위를 직접 입력/이동해야 하는 옵션바 "시간" 항목.
+ * - LIVE 와 과거 범위 조회를 한 컨트롤에서 전환해야 할 때.
  *
- * 공용 정책 — feedback-decision-priorities (재활용), feedback-design-system-css-source
- * (라이브 마크업 그대로 옮김). 색·아이콘은 라이브 토큰(#00C853, var(--color-text-tertiary), var(--color-border-divider))
- * 유지.
+ * ## When NOT to use
+ * - LIVE 현재 시각 + polling 만 compact 하게 보여주면 충분 → [[LiveTimerCompact]].
+ * - 옵션바 전체 행 구성 → [[OptionbarPage]] (이 컴포넌트를 항목으로 품을 수 있음).
+ * - 일반 텍스트/숫자 입력 → [[TextField]].
  *
- * Props로 외부화:
- *   - `start`/`end` ISO-ish date parts (year/month/day/hour/min) — 입력값은 padding 무관, 표시 시 자동 padding
- *   - `durationLabel` — "10분" 같은 태그
- *   - `onLive`/`onPrev`/`onNext`/`onPickDate` 콜백
+ * ## Composition rules
+ * - 단일 border-divider + rounded 4 박스, LIVE 버튼과 datetime 영역을 1px divider 로 분할.
+ * - `start`/`end` 는 padding 무관 date parts 입력, 표시 시 `pad2`/`pad4` 자동 적용.
+ * - duration 태그는 #00B543 알약. 아이콘은 라이브 SVG·토큰 색 그대로.
+ *
+ * @example
+ * ```tsx
+ * <TimeRangeSelector
+ *   start={{ year: "2026", month: "05", day: "15", hour: "13", minute: "27" }}
+ *   end={{ year: "2026", month: "05", day: "15", hour: "13", minute: "37" }}
+ *   durationLabel="10분"
+ *   onLive={goLive}
+ *   onPickDate={openCalendar}
+ * />
+ * ```
  */
 type DateParts = {
   year: string;

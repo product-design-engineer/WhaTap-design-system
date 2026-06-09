@@ -1,11 +1,33 @@
 /**
- * AI 위젯 — AI 응답 하단 피드백 액션 (Figma 27598:4604).
+ * AiMessageActions — AI 응답 하단의 like/dislike/copy 피드백 toolbar (Figma 27598:4604).
  *
- * 우측 정렬 3개 outline 아이콘: 👍 like / 👎 dislike / 📋 copy.
- * 사용자가 AI 응답에 대해 좋아요/싫어요/복사 동작을 할 수 있는 toolbar.
+ * ## Purpose
+ * AI 응답에 대한 사용자 반응을 받는 우측 정렬 3-아이콘 바: 👍 like / 👎 dislike / 📋 copy.
+ * like·dislike 는 토글(같은 버튼 재클릭 시 해제, 상호 배타) 상태를 내부에서 관리하고,
+ * copy 는 클릭 후 약 1.4초간 체크 아이콘으로 전환. 각 동작은 `onLike`/`onDislike`/`onCopy` 로 전달.
  *
- * 컬러 토큰: stroke var(--color-text-tertiary) (sementic_background_secondary), gap 8px (spacing_xs).
- * 상단에 var(--color-border-default) 1px divider (옵션) — 응답 카드와 시각적으로 분리.
+ * ## When to use
+ * - AI 응답 메시지 하단에 좋아요/싫어요/복사 피드백 컨트롤이 필요할 때.
+ * - 응답 카드 본문과 시각적으로 분리하고 싶을 때 `divider` 로 상단 구분선 추가.
+ *
+ * ## When NOT to use
+ * - 복사/재시도만 필요한 단순 교환 → [[AiChatExchange]] 의 내장 toolbar (like/dislike 없음).
+ * - prompt 전송 액션 → [[AiSendButton]].
+ *
+ * ## Composition rules
+ * - 응답 본문 아래에 붙여 배치, 우측 정렬(`justify-end`)·gap 8px(spacing_xs) 유지.
+ * - 아이콘 색·구분선은 토큰만 사용(tertiary stroke, like=brand-blue, dislike=indicator-critical, copy 완료=status-success) — 인라인 hex 금지.
+ * - like/dislike/copy 상태는 컴포넌트가 자체 관리, 외부 콜백은 부수효과(서버 전송 등)에만 사용.
+ *
+ * @example
+ * ```tsx
+ * <AiMessageActions
+ *   divider
+ *   onLike={() => logFeedback("like")}
+ *   onDislike={() => logFeedback("dislike")}
+ *   onCopy={() => navigator.clipboard.writeText(answer)}
+ * />
+ * ```
  */
 import { useState } from "react";
 

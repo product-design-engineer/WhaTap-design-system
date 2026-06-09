@@ -1,8 +1,43 @@
 /**
- * AI 위젯 — 비용 분석 상세 (이미지 11.23.02 스타일).
+ * AiCostBreakdown — GPU 단위 낭비 비용 상세 분석 카드.
  *
- * 헤더(컬러 칩) + 1줄 컨텍스트 + 4컬럼 표(GPU / Pod / 유휴 비율 / 일일 낭비) +
- * 소계 행 + 월 환산 라인.
+ * ## Purpose
+ * 헤더(컬러 도트 + 라벨) + 1줄 컨텍스트 + 5컬럼 표(GPU / Pod / 평균 사용률 / 유휴 비율 /
+ * 일일 낭비) + 소계 행 + 월 환산 라인으로 구성된 상세 비용 breakdown. 어떤 리소스가
+ * 얼마나 유휴 상태로 비용을 발생시키는지 행 단위로 분해해 보여줌. 진입 시 `ai-anim-in`.
+ *
+ * ## When to use
+ * - GPU/Pod 등 리소스별로 낭비 비용을 다컬럼 표로 분해해 제시할 때.
+ * - 행별 소계 + 월 환산까지 한 카드에서 누적 요약이 필요할 때.
+ *
+ * ## When NOT to use
+ * - 현행/제안 2-안 비교 위주 → [[AiCostTable]].
+ * - 활용 분류(고/저활용) 표 → [[AiClassificationTable]].
+ * - 시간대별 사용률 추이 → [[AiUsageChart]].
+ *
+ * ## Composition rules
+ * - 자체 레이아웃을 가지며 [[AiCard]] 로 감싸지 않음 (표 자체는 보더, 외곽은 무 chrome).
+ * - 헤더 도트 색은 호출처가 `toneColor` 로 직접 주입 — [[Tone]] 토큰값
+ *   (`tokens.color.indicator.*`)을 넘기는 것을 권장.
+ * - `context`/`subtotal`/`monthly`/`monthlyNote` 는 모두 선택 — 없으면 해당 줄 생략.
+ * - 그 외 배경/보더는 토큰 사용. 단, 소계 행 등 일부 인라인 hex(`#f9f9f9`)가 남아 있어
+ *   토큰화는 차후 정리 대상.
+ * - `delay` 는 부모 메시지 시퀀스의 stagger 지연(ms).
+ *
+ * @example
+ * ```tsx
+ * <AiCostBreakdown
+ *   toneLabel="저활용 GPU - 낭비 비용 분석"
+ *   toneColor="var(--color-brand-blue)"
+ *   context="A100 40GB 참고 비용 ₩2,800/hr 기준 일일 환산"
+ *   rows={[
+ *     { gpu: "#3", pod: "infer-batch-2", avg: "12%", idle: "88%", daily: "₩59,136" },
+ *   ]}
+ *   subtotal="₩268,600/일"
+ *   monthly="약 ₩8,058,000/월"
+ *   monthlyNote="(저활용 5개 GPU)"
+ * />
+ * ```
  */
 export type CostBreakdownRow = {
   gpu: string;

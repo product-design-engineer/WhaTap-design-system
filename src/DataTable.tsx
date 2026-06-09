@@ -1,23 +1,41 @@
 /**
- * DataTable — 모든 모니터링 페이지에서 재활용 가능한 generic 데이터 테이블.
+ * DataTable — 컬럼/행을 prop 으로 받는 generic grid 데이터 테이블.
  *
- * 컬럼 정의(`columns`)와 행 데이터(`rows`)를 prop으로 받아 grid 기반 테이블 렌더링.
- * density: "compact" (DB 세션 테이블처럼 10px 헤더 / 11px 셀)
- *          "default" (Process TOP5 패널처럼 12px 헤더 / 13px 셀)
+ * ## Purpose
+ * `columns`(컬럼 정의) + `rows`(행 데이터)를 받아 CSS grid 기반 테이블을 렌더하는
+ * side-effect free generic 컴포넌트. 모든 모니터링 페이지에서 컬럼/density 만 바꿔 재활용.
+ * `render` 로 셀 커스텀, `onRowClick` 으로 행 클릭(없으면 hover 효과만) 지원.
  *
- * 컬럼 너비:
- *   - `flex` (number)   → 가변 트랙 (fr). 남는 공간을 비율로 분배. (예: 메시지·이름)
- *   - `width` (px/CSS)  → 고정 트랙. 내용 폭이 정형인 컬럼(No / 시각 / 상태 / 액션)에 사용해
- *                         가변 컬럼이 넓어져도 흔들리지 않게 고정. `width` 지정 시 `flex` 무시.
+ * ## When to use
+ * - 세션/프로세스/SQL 등 표 형태의 모니터링 데이터 목록.
+ * - 컬럼 너비·정렬·density 정책을 일관되게 적용해야 하는 테이블 전반.
  *
- * 정책 (feedback-common-components-catalog / feedback-decision-priorities):
- *   재활용 가능, side-effect free — 새 페이지에서는 컬럼/density만 교체.
+ * ## When NOT to use
+ * - 단일 값/메트릭 표시 → 인라인 텍스트(예: OptionbarPage 의 ValueDisplay).
+ * - 행 선택·검색 등 폼 입력 chrome → [[TextField]] 등 별도 primitive 와 조합.
  *
- * 정렬 정책 (feedback-data-table-alignment):
- *   - 텍스트 컬럼   → left
- *   - 숫자 컬럼     → right (numeric)
- *   - "No" 컬럼     → center (행 순번 — header 가 "No" 면 헤더/셀 모두 가운데 정렬)
- *   명시적 `align` prop 은 위 기본값을 항상 override.
+ * ## Composition rules
+ * - density: `"compact"`(헤더 text-xs / 셀 text-sm, 8/6px 패딩) ·
+ *   `"default"`(헤더 text-base / 셀 text-md, 12/10px 패딩). 기본 `"default"`.
+ * - 컬럼 너비: `width`(px/CSS) 고정 트랙이 `flex`(fr) 가변 트랙보다 우선
+ *   (`width` 지정 시 `flex` 무시). 정형 컬럼(No/시각/상태/액션)은 `width` 권장.
+ * - 정렬: 명시 `align` 이 최우선 → header 가 "No" 면 center → `numeric` 이면 right →
+ *   그 외 text 는 left. `numeric=true` 셀은 Roboto numeric 폰트.
+ * - 색·border 는 토큰(var(--color-border-default)/var(--color-surface-50)) 사용.
+ *
+ * @example
+ * ```tsx
+ * <DataTable
+ *   density="compact"
+ *   columns={[
+ *     { key: "no", header: "No", width: 40 },
+ *     { key: "name", header: "세션", flex: 2 },
+ *     { key: "cpu", header: "CPU", width: 80, numeric: true },
+ *   ]}
+ *   rows={sessions}
+ *   onRowClick={(row) => openDetail(row)}
+ * />
+ * ```
  */
 import type { CSSProperties, ReactNode } from "react";
 

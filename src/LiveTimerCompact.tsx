@@ -16,10 +16,32 @@
  *   * durationLabel: 우측 캘린더 자리에 녹색 알약 태그 ("10분", "30분" 등).
  *     캘린더 아이콘과 동시 표시도 가능 — 필요 시 calendar prop 으로 제어.
  *
- * 정책:
- *   - feedback-design-system-css-source — 라이브 마크업/Tailwind 클래스 그대로
- *   - feedback-common-components-catalog — chrome-level 공용은 src/components/
- *   - 다른 page 에서 같은 LIVE 패턴 필요 시 이 컴포넌트만 import
+ * ## Purpose
+ * LIVE 모니터링의 현재 시각 + polling 진행을 32px compact 박스로 표시.
+ * 좌측 pause/play 버튼(`onTogglePause`) + 우측 타이머 박스(LIVE 배지 + 시각 + 선택적
+ * duration 알약/달력)로 구성. `time` 미지정 시 시스템 시각으로 자동 tick 하며,
+ * `refreshIntervalMs`(기본 5000ms) 주기로 배경 progress fill 이 좌→우로 채워지고 cycle
+ * 마다 리셋된다. `paused=true` 면 시계·progress 모두 정지.
+ *
+ * ## When to use
+ * - 옵션바 "시간" 항목에서 LIVE 현재 시각 + polling cycle 을 compact 하게 보여줄 때.
+ * - [[OptionbarPage]] 의 시간 슬롯 등 세로 공간이 한정된 자리.
+ *
+ * ## When NOT to use
+ * - 시작~종료 절대 범위 입력/이동이 필요 → [[TimeRangeSelector]].
+ * - 옵션바 전체 행 구성 → [[OptionbarPage]].
+ *
+ * ## Composition rules
+ * - 높이 32px 고정, pause(좌)·timer(우) 가 chained 보더로 한 알약처럼 붙음.
+ * - `durationLabel` 만 있으면 캘린더 자리에 #00B543 알약 표시. `showCalendar` 로
+ *   캘린더 아이콘을 명시 제어(default: durationLabel 없을 때만 true).
+ * - 색은 토큰(var(--color-status-success) 등) — LIVE 텍스트·progress fill 라이브 값 유지.
+ *
+ * @example
+ * ```tsx
+ * <LiveTimerCompact paused={paused} onTogglePause={togglePause} durationLabel="10분" />
+ * <LiveTimerCompact time="12:01:35" refreshIntervalMs={3000} showCalendar onOpenCalendar={open} />
+ * ```
  */
 import { useEffect, useRef, useState } from "react";
 

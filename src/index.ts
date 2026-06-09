@@ -40,6 +40,7 @@ export type { ButtonProps, ButtonVariant, ButtonSize, ButtonTone } from "./Butto
 export { default as FilterBar } from "./FilterBar";
 export type { FilterBarProps, FilterBarDropdownConfig, FilterBarSize } from "./FilterBar";
 export { default as DashboardBuildingProgress } from "./DashboardBuildingProgress";
+export type { DashboardBuildingProgressProps } from "./DashboardBuildingProgress";
 export { default as DashboardLayout } from "./DashboardLayout";
 export { default as DataTable } from "./DataTable";
 export type { DataTableColumn, DataTableProps } from "./DataTable";
@@ -48,23 +49,28 @@ export type { EventWeekTimeMatrixProps } from "./EventWeekTimeMatrix";
 export { default as LiveTimerCompact } from "./LiveTimerCompact";
 export { default as MiniLineChart } from "./MiniLineChart";
 export { default as OptionbarInstanceSelector } from "./OptionbarInstanceSelector";
+export type { InstanceStatus } from "./OptionbarInstanceSelector";
 export { default as OptionbarPage } from "./OptionbarPage";
 export { default as PageHeader } from "./PageHeader";
+export type { ProfileMenuItem, NotificationItem } from "./PageHeader";
 export { default as PageHeaderAiInline } from "./PageHeaderAiInline";
 export type { PageHeaderAiInlineProps } from "./PageHeaderAiInline";
 export { default as PresetSelect } from "./PresetSelect";
 export { default as Sidebar, K8S_GPU_MENU } from "./Sidebar";
-export type { MenuItem, ProjectContext } from "./Sidebar";
+export type { MenuItem, ProjectContext, OrgContext } from "./Sidebar";
 export { default as Stage } from "./Stage";
 export { default as SubHeaderBar } from "./SubHeaderBar";
 export type { SubHeaderBarProps } from "./SubHeaderBar";
 export { default as TimeRangeSelector } from "./TimeRangeSelector";
 export { default as Toast } from "./Toast";
+export type { ToastVariant } from "./Toast";
 
 // AI Widget shell + context
 export { default as WhaTapAiWidget } from "./WhaTapAiWidget";
 export { default as AiWidget } from "./AiWidget";
 export { WhaTapAiProvider, useWhaTapAi } from "./WhaTapAiContext";
+export type { LastPrompt } from "./WhaTapAiContext";
+export type { WidgetAction } from "./WhaTapAiWidget";
 
 // Icons
 export { default as SettingsIcon } from "./icons/SettingsIcon";

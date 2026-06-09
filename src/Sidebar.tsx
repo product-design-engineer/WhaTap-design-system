@@ -1,15 +1,44 @@
 /**
- * WhaTap SaaS 좌측 240px 사이드바.
+ * Sidebar — Chrome layer. WhaTap SaaS 좌측 240px 네비게이션 사이드바.
  *
- * 구조(위→아래, 모두 shrink-0 — 가운데 본문(메뉴) 영역만 flex-1로 늘어남):
- *   1. 48px 로고 헤더 (WhaTap 로고 · 검색 · 접기) — PageHeader(48px) 와 동일 높이
- *   2. 40px 조직 스위처
+ * ## Purpose
+ * 화면 좌측의 전체 네비게이션 기둥. 위→아래로 다섯 영역이 쌓이며 모두 shrink-0,
+ * 가운데 본문(메뉴) 영역만 flex-1 로 늘어남:
+ *   1. 48px 로고 헤더 (WhaTap 로고 · 검색 · 접기) — [[PageHeader]](48px) 와 동일 높이
+ *   2. 40px 조직 스위처 ([[SubHeaderBar]] 40px 과 정렬)
  *   3. 44px 프로젝트 스위처
  *   4. 본문 (flex-1) — 40px 제품 레일 + 우측 메뉴 목록(+ 즐겨찾기 바)
  *   5. 24px 저작권 푸터
+ * 모든 가변 데이터(`activeProduct`/`project`/`menu`/`org`)는 prop 주입, 기본값은
+ * K8s-GPU 컨텍스트라 빈 호출과도 호환. `collapsed` 면 40px 제품 레일만 노출.
  *
- * 아이콘은 라이브 배포의 동일 경로에서 가져와 로컬에 아이콘 파일이 없어도
- * 그대로 렌더되도록 합니다. (절대 URL → no VPN 필요)
+ * ## When to use
+ * - 보통 단독으로 두지 않고 [[DashboardLayout]] 의 좌측 컬럼으로 조합.
+ * - 제품 레일 + 메뉴 트리 + 조직/프로젝트 스위처가 필요한 모든 모니터링 화면.
+ *
+ * ## When NOT to use
+ * - 사이드바 외 헤더/본문/위젯까지 한 셸로 묶고 싶을 때 → [[DashboardLayout]].
+ * - 제품 네비가 불필요한 관리 콘솔 → `hideProductRail`/`hideProjectSwitcher` 로 영역만 끔.
+ *
+ * ## Composition rules
+ * - 폭은 `collapsed` 가 결정 (240px ↔ 40px), `transition-all duration-400` 로 애니메이션.
+ *   AI 위젯 활성 시 항상 동기화(feedback-widget-sidebar-collapse) — [[DashboardLayout]] 이 전달.
+ * - 경계선·강조 배경은 토큰 binding (`--color-border-default` · `--color-brand-blue-bg`) — 인라인 hex 금지.
+ * - 아이콘은 표준 경로(`/icons/*`) 참조 (Storybook/소비자 정적 서빙 동일).
+ * - 메뉴는 `MenuItem[]` 트리로 주입 — `children` 유무로 단일/확장 항목이 갈림.
+ *
+ * @example
+ * ```tsx
+ * <Sidebar activeProduct="gpu" collapsed={aiActive} />
+ *
+ * <Sidebar
+ *   activeProduct="app"
+ *   project={{ productIcon: "product-app.svg", groupLabel: "[그룹] 운영", projectLabel: "[프로젝트] my-app" }}
+ *   menu={customMenu}
+ *   org={{ label: "[조직] 와탭랩스", icon: "whatap-symbol.svg" }}
+ *   onOrgClick={openOrgPicker}
+ * />
+ * ```
  */
 /**
  * 아이콘은 표준 경로(`/icons/*`)를 그대로 참조합니다. 호스트별로 자산 제공 경로가 다름:

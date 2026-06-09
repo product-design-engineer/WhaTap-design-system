@@ -1,17 +1,36 @@
 /**
  * EventWeekTimeMatrix — 요일(7) × 시간(24) 알림 수신 매트릭스.
  *
- * 사용 위치:
- *  - 경고 알림 > 이벤트 수신 설정 > 요일·시간별 알림 설정
- *  - 향후 다른 알림류 페이지(예: 보고서 전송 시간대)에서도 재사용 가능
+ * ## Purpose
+ * 7행(요일) × 24열(시간) boolean 격자를 토글 버튼으로 표현. 각 셀 ON/OFF 로
+ * 해당 요일·시간대에 알림을 수신할지 설정. read-only / 편집 두 모드 지원.
  *
- * 디자인 정책:
- *  - 셀 ON = Tone "low" 의 배경(#e8f4ff) + 도트(var(--color-brand-blue))
- *  - 셀 OFF = 회색 격자 (var(--color-surface-100))
- *  - 시간 헤더는 6시간 간격(0/6/12/18)만 표시 — 24개 다 쓰면 비좁음
- *  - 요일 헤더는 한국어 약어 (월/화/수/목/금/토/일)
+ * ## When to use
+ * - 경고 알림 > 이벤트 수신 설정 > 요일·시간별 알림 설정
+ * - 보고서 전송 시간대 등 "요일×시간" 빈도/스케줄 설정 화면
  *
- * 디자인 자산 없이 합리적 외형으로 만든 stub — 진짜 디자인 들어오면 색·셀크기 갱신.
+ * ## When NOT to use
+ * - 시계열 추이 그래프 → [[MiniLineChart]]
+ * - 단일 시각 한 개 선택(시작 시각 등) → [[Select]] / [[TimeRangeSelector]]
+ * - 자유 텍스트·숫자 입력 → [[TextField]]
+ *
+ * ## Composition rules
+ * - `weekdays` 는 7×24 그리드 — `weekdays[d][h]` 가 행·열 인덱스. 행/열 라벨 정합을
+ *   위해 grid 는 `gridTemplateColumns: "28px repeat(24, 1fr)"` 로 헤더·각 행이 동일 트랙.
+ * - **시간 헤더는 6시간 간격(0/6/12/18)만** 표기 — 24개 라벨은 셀 폭보다 넓어 겹침.
+ *   빈 칸도 `<span>` 으로 자리를 채워 24열 정렬을 보존.
+ * - `onToggle` 미지정이면 read-only (버튼 disabled). 지정 시 셀 클릭으로 토글.
+ * - 색은 ON `--color-brand-blue`, OFF `--color-surface-100` 토큰 기반(테두리는 hex stub).
+ * - 각 셀은 `aria-pressed` + 한국어 `aria-label`(요일·시·수신여부)로 접근성 제공.
+ *
+ * @example
+ * ```tsx
+ * <EventWeekTimeMatrix
+ *   caption="요일·시간별 알림 설정"
+ *   weekdays={grid}
+ *   onToggle={(d, h, next) => setCell(d, h, next)}
+ * />
+ * ```
  */
 
 const DEFAULT_DAY_LABELS = ["월", "화", "수", "목", "금", "토", "일"];

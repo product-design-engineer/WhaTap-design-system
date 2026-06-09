@@ -1,7 +1,36 @@
 /**
- * AI 위젯 — MIG 통합 기획 (이미지 11.23.14/37/48 스타일).
+ * AiMigPlan — GPU MIG 통합 기획 제안 카드.
  *
- * 섹션 헤딩 + 본문 bullet 목록 + 통합 기회 요약 테이블 + 우선순위 액션 카드.
+ * ## Purpose
+ * AI 가 제안하는 GPU MIG(Multi-Instance GPU) 통합 전략을 읽기 전용으로 보여주는 카드.
+ * 섹션 헤딩 + 본문 bullet + 구성/분할/월 환산 요약 테이블 + 통합 비용 요약 + 우선순위
+ * 액션(번호 목록)으로 구성됩니다. 모든 영역은 옵션이라 데이터가 있는 블록만 렌더됩니다.
+ *
+ * ## When to use
+ * - GPU MIG 분할·통합 전략을 표 + 비용 요약 + 단계별 액션으로 제안할 때.
+ * - 비용 비교(행별 highlight)와 우선순위 액션을 한 카드에 묶어 안내할 때.
+ *
+ * ## When NOT to use
+ * - 실제 MIG 구성 **적용** 액션 → 이 카드는 기획 제안일 뿐, 적용은 별도 흐름/페이지에서.
+ * - 일반 KV 요약 표 → [[AiAlertRulePreview]].
+ * - 사용자 선택 CTA → [[AiChoiceButtons]].
+ *
+ * ## Composition rules
+ * - 이 카드는 `AiCard` chrome 없이 자체 `flex-col` 레이아웃 (테이블·비용 요약 등 전용 구조).
+ * - 색은 토큰 (`--color-brand-blue` · `--color-indicator-critical` · `--color-whatap-blue`) 사용,
+ *   비용 요약 그라데이션/highlight 행만 인라인 색 한정.
+ * - 액션 버튼을 내부에 넣지 말 것 — 승인/적용 CTA 는 [[AiChoiceButtons]] 로 분리.
+ *
+ * @example
+ * ```tsx
+ * <AiMigPlan
+ *   bullets={["A100 한 장을 4개 인스턴스로 분할"]}
+ *   rows={[{ label: "현재", config: "Full GPU × 1", monthly: "₩560,000" }]}
+ *   total="₩134,400"
+ *   totalNote="/월"
+ *   actions={[{ step: 1, body: "MIG 프로파일 1g.10gb 적용" }]}
+ * />
+ * ```
  */
 export type MigPlanRow = {
   label: string;

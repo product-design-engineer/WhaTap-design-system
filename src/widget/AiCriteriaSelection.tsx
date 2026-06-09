@@ -1,13 +1,38 @@
 /**
- * AI 위젯 — 분류 기준 선택 카드.
+ * AiCriteriaSelection — 분류/임계값 기준 선택 카드.
  *
- * Reasoning 헤딩 + 본문 + 카테고리 그룹들(아이콘 + 라벨) + 참고 사항 + 4개 CTA.
- * 사용자가 기준을 선택하면 onSelect(key)가 호출되어 다음 stage로 진행.
+ * ## Purpose
+ * AI 가 제안한 분류 기준을 설명하고, 사용자가 그중 하나를 골라 다음 stage 로 진행하게 하는
+ * 카드. Reasoning 헤딩 + 본문 + tone 별 기준 그룹(📊) + 참고 사항(📌) + 확인 질문 + 옵션 CTA
+ * 로 구성됩니다. 옵션 클릭 시 선택지는 filled blue 로 강조, 나머지는 dim/disabled 되고
+ * `selectionDelay` ms 후 `onSelect(key)` 가 호출됩니다.
  *
- * 클릭 효과: 선택한 옵션은 즉시 filled blue로 강조, 나머지는 dim & disabled,
- *   `selectionDelay` ms 후 onSelect 호출.
- * 자동 데모: `autoPick={{ key, after }}`가 주어지면 `after - 1200ms` 후 클릭 손
- *   인디케이터가 해당 옵션 위에 나타나 tap 애니메이션 → `after`에 자동 클릭.
+ * ## When to use
+ * - AI 가 제시한 여러 기준(임계값·분류 정책 등) 중 사용자가 하나를 택해 흐름을 분기할 때.
+ * - 선택지에 근거(reasoning)와 tone 별 기준 설명을 함께 보여줘야 할 때.
+ * - 데모/시연에서 자동 선택 연출이 필요할 때 (`autoPick`).
+ *
+ * ## When NOT to use
+ * - 단순 2지선다(예: 진행/취소) → [[AiChoiceButtons]] (primary/secondary 한 쌍).
+ * - 선택 없이 정보만 제시하는 읽기 전용 제안 → [[AiDashboardProposal]] / [[AiAlertRulePreview]].
+ *
+ * ## Composition rules
+ * - 이 카드는 `AiCard` chrome 없이 자체 흰 배경/보더/라운드 레이아웃 (선택 상태·tone 그룹 전용 구조).
+ * - tone 색은 모듈 내 `TONE_BG` / `TONE_DOT` 맵(토큰 binding) 사용 — 인라인 hex 신규 추가 금지.
+ * - 선택은 1회성 — `selectedKey` 가 정해지면 모든 옵션이 잠김(중복 선택 방지).
+ *
+ * @example
+ * ```tsx
+ * <AiCriteriaSelection
+ *   body="제안을 3단계 심각도로 분류했습니다."
+ *   groups={[
+ *     { tone: "high", title: "즉시 조치", detail: "임계값 초과" },
+ *     { tone: "mid", title: "관찰", detail: "경고 구간" },
+ *   ]}
+ *   options={[{ key: "strict", label: "엄격" }, { key: "default", label: "기본" }]}
+ *   onSelect={(key) => goNext(key)}
+ * />
+ * ```
  */
 import { useEffect, useState } from "react";
 import AiClickCursor from "./AiClickCursor";

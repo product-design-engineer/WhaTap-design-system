@@ -1,15 +1,41 @@
 /**
- * MiniLineChart — DB/APM/GPU 등 모든 모니터링 페이지에서 재활용 가능한
- * 작은 line chart 카드 공용 컴포넌트.
+ * MiniLineChart — 카드형 미니 line chart (모니터링 지표 요약).
  *
- * 핵심 특징:
- *   - SVG line/area는 `preserveAspectRatio="none" width="100%"`로 카드 폭에 맞춰
- *     수평 확장, stroke는 `vectorEffect="non-scaling-stroke"`로 1px 유지
- *   - 모든 텍스트(Y축 / X축 / peak 값)는 SVG 밖 HTML overlay로 절대 위치
- *     → 카드 폭이 변해도 글자 크기가 고정 (정책: feedback-svg-text-units)
- *   - X·Y 1px 축 보더(var(--color-border-divider))
- *   - 헤더: 타이틀 + ⓘ info icon + (옵션) Top Stat 칩 + ⋮ menu
- *   - peak 위치: ▼ + 값 라벨 정확한 좌표에 매칭
+ * ## Purpose
+ * DB/APM/GPU 등 모든 모니터링 페이지에서 재활용하는 작은 line chart 카드.
+ * 헤더(타이틀 + ⓘ + 옵션 Top Stat + ⋮) + plot 영역 + peak ▼ 라벨로 구성.
+ * 카드 폭에 맞춰 line/area 는 수평 확장하되 stroke 1px·글자 크기는 고정.
+ *
+ * ## When to use
+ * - 지표 한 개의 시계열 추이를 작은 카드로 나열 (대시보드 grid, 사이드 패널)
+ * - peak 값과 시간대만 빠르게 확인하면 되는 요약 view
+ *
+ * ## When NOT to use
+ * - 요일×시간 같은 격자형 빈도 표현 → [[EventWeekTimeMatrix]]
+ * - 진행 단계 표시 → [[DashboardBuildingProgress]]
+ * - 정밀한 인터랙션(zoom·tooltip·다중 시리즈)이 필요한 본격 차트 → 전용 차트 라이브러리
+ *
+ * ## Composition rules
+ * - **SVG font-size 단위 정책 (feedback-svg-text-units)**: SVG 내부에는 텍스트를
+ *   두지 않음. Y축/X축/peak 값은 모두 SVG 밖 HTML overlay 로 px 고정 — `preserveAspectRatio="none"`
+ *   로 가로 stretch 되는 SVG 안에 글자를 넣으면 폭에 따라 늘어나기 때문.
+ * - **좌표 정합 (feedback-chart-peak-alignment)**: viewBox 는 plot 사각형과 동일 비율
+ *   (`1000 × PLOT_H_PX`), SVG 는 plot 영역(`PAD_LEFT`/`PAD_RIGHT`/패딩)에만 absolute 배치.
+ *   peak ▼/라벨은 동일 좌표계(`peakXRatio`/`peakYRatio`)로 찍어 폭과 무관하게 1:1 일치.
+ * - stroke 는 `vectorEffect="non-scaling-stroke"` 로 1px 유지, area fill 은 color + alpha.
+ * - 색은 토큰 (`color` 기본 `--color-brand-blue-soft`), 축선은 `--color-border-divider`.
+ * - `delay` 지정 시에만 stagger 진입 애니메이션 적용.
+ *
+ * @example
+ * ```tsx
+ * <MiniLineChart
+ *   title="CPU 사용률"
+ *   values={[12, 30, 22, 80, 45, 60, 38]}
+ *   unit="%"
+ *   showTopStat
+ *   delay={120}
+ * />
+ * ```
  */
 import type { CSSProperties } from "react";
 

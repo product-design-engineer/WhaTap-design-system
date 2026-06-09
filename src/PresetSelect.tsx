@@ -1,10 +1,33 @@
 /**
- * PresetSelect — 우측 정렬 프리셋 드롭다운 + 우측 작은 저장/관리 아이콘 버튼.
+ * PresetSelect — 프리셋 드롭다운 + 관리 아이콘 버튼.
  *
- * 라이브 마크업 `PresetSelector-styles__DropdownText` 등 그대로 옮긴 공용 컴포넌트.
- * DB / Server / APM 모든 페이지의 우측 옵션바에서 동일하게 사용.
+ * ## Purpose
+ * 선택된 프리셋 라벨을 보여주는 드롭다운 트리거(`onOpenList`)와 그 우측의 정사각형
+ * 관리 아이콘 버튼(`onManage`) 한 쌍. 두 콜백 모두 외부 제어이며, 컴포넌트 자체는
+ * 트리거 버튼만 렌더하고 목록/관리 패널은 호출측이 띄운다.
  *
- * 정책: feedback-design-system-css-source / feedback-common-components-catalog
+ * ## When to use
+ * - [[OptionbarPage]] 우측의 "프리셋" 항목.
+ * - DB / Server / APM 페이지 옵션바에서 프리셋 선택 + 관리 진입이 함께 필요한 자리.
+ *
+ * ## When NOT to use
+ * - 상태 dot 이 필요한 인스턴스 선택 → [[OptionbarInstanceSelector]].
+ * - 시간 범위 선택 → [[TimeRangeSelector]].
+ * - 일반 텍스트/검색 입력 → [[TextField]].
+ *
+ * ## Composition rules
+ * - 드롭다운 버튼 폭 `width`(기본 230px) + 32px 정사각 관리 버튼, 4px gap.
+ * - 두 버튼 모두 32px height, border-divider + rounded 4 로 옵션바 baseline 통일.
+ * - 라벨은 korean 폰트 + truncate. 색은 토큰(var(--color-border-divider) 등).
+ *
+ * @example
+ * ```tsx
+ * <PresetSelect
+ *   label="Default"
+ *   onOpenList={() => openPresetList()}
+ *   onManage={() => openPresetManager()}
+ * />
+ * ```
  */
 
 export default function PresetSelect({

@@ -1,20 +1,29 @@
 /**
- * AiUserBubble — WhaTap AI 위젯 "인간 입력 정보 버블" 공용 컴포넌트.
+ * AiUserBubble — 채팅 스레드에서 사용자가 입력한 메시지를 담는 우측 정렬 버블 (Figma 27110:53409).
  *
- * Figma source: Common file `ttJ3slHi0F7Hp8NE02c6nZ`, node `27110:53409`.
+ * ## Purpose
+ * AI 대화 스레드의 "사람 발화" 단일 building block. 우측 정렬(`justify-end`)·max-width 85%·
+ * surface-50 배경의 4px 라운드 버블로, 사용자 입력의 줄바꿈을 `pre-wrap` 으로 보존.
+ * 사용자 메시지를 인라인 `<div>` 로 새로 짜지 말 것 — 정렬·색·폭 일관성은 이 컴포넌트가 보장.
  *
- * Exact-design verbatim:
- *   - 배경: var(--color-surface-50) (sementic_background_page)
- *   - 라운드: 4px (radius_sm)
- *   - 패딩: 8px (spacing_xs)
- *   - 텍스트: 14px / line-height 1.4 / letter-spacing -0.1px / color #222
- *   - 폰트: Noto Sans / Noto Sans KR, weight 400
- *   - word-break: break-word, white-space pre-wrap (사용자 입력의 줄바꿈 보존)
- *   - 컨테이너 정렬: justify-end — 채팅 스레드 우측 정렬
- *   - max-width: 부모의 85% (긴 입력 시 오른쪽으로 치우치되 좌측 여백 확보)
+ * ## When to use
+ * - 채팅 스레드 안의 사용자 발화 한 줄/한 문단.
+ * - [[AiChatExchange]] 등 상위 교환 블록의 질문 슬롯.
  *
- * 정책: [[reference-ai-widget-content-guide]] / [[feedback-widget-primitives]]
- *      AI 위젯 메시지 타입은 모두 src/components/widget/ 에 위치.
+ * ## When NOT to use
+ * - AI 응답 본문 → 응답 버블/카드 컴포넌트([[AiInsightSection]] · [[AiChatExchange]] 의 응답 슬롯).
+ * - 질문+응답을 한 번에 묶을 때 → [[AiChatExchange]] (내부에서 이 버블을 자동 사용).
+ * - 새 prompt 입력 → [[AiPromptInput]] · [[AiInlinePrompt]].
+ *
+ * ## Composition rules
+ * - 배경은 surface-50, 라운드 4px(radius_sm), 패딩 8px(spacing_xs) — Figma exact, 인라인 hex 금지.
+ * - 텍스트는 `whitespace-pre-wrap` + `word-break: break-word` 로 사용자 입력 줄바꿈/긴 토큰 보존.
+ * - 우측 정렬은 루트 `flex justify-end` 가 담당 — 부모에서 정렬을 재정의하지 말 것.
+ *
+ * @example
+ * ```tsx
+ * <AiUserBubble>지난 1시간 에러율 추이 알려줘</AiUserBubble>
+ * ```
  */
 import type { ReactNode } from "react";
 

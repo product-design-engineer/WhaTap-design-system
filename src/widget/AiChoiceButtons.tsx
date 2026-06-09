@@ -1,8 +1,32 @@
 /**
- * AI 위젯 — 사용자 선택 CTA 한 쌍.
+ * AiChoiceButtons — 사용자 선택 CTA 한 쌍.
  *
- * Primary(그라데이션)와 Secondary(아웃라인) 두 옵션. 라벨/설명은 prop으로
- * 주입. 진입 시 페이드인.
+ * ## Purpose
+ * AI 흐름에서 다음 행동을 사용자가 고르게 하는 2지선다 버튼. Primary(filled blue)와
+ * Secondary(아웃라인) 두 옵션으로, 각 라벨과 선택 hint(예: "(98%)")는 prop 으로 주입하고
+ * 진입 시 페이드인합니다. 제안/미리보기 카드 **아래**에 두어 승인·진행·취소 등 결정을 받습니다.
+ *
+ * ## When to use
+ * - 제안/미리보기 카드 다음의 "진행 / 취소", "등록 / 수정" 같은 2지선다 결정.
+ * - primary 강조 + secondary 보조의 위계가 분명한 한 쌍의 액션.
+ *
+ * ## When NOT to use
+ * - 3개 이상의 기준 중 택1 + 근거 설명 → [[AiCriteriaSelection]].
+ * - 결정 없이 정보만 제시 → [[AiDashboardProposal]] / [[AiAlertRulePreview]] (카드 자체에 버튼 금지).
+ * - 자유 입력 / 자연어 응답 → [[AiInlinePrompt]] / [[AiPromptInput]].
+ *
+ * ## Composition rules
+ * - 이 컴포넌트는 카드가 아님 — 버튼 한 쌍만 렌더하며, 위 메시지 [[AiCard]] 와 형제로 배치.
+ * - 색은 토큰 (`--color-brand-blue` · `--color-brand-blue-deep` · `--color-brand-blue-bg`) — 인라인 hex 금지.
+ * - 실제 결정 로직은 부모가 `onClick` 으로 소유 — 버튼은 트리거만.
+ *
+ * @example
+ * ```tsx
+ * <AiChoiceButtons
+ *   primary={{ label: "이 구성으로 진행", onClick: confirm }}
+ *   secondary={{ label: "다시 제안받기", onClick: retry }}
+ * />
+ * ```
  */
 export type Choice = {
   label: string;

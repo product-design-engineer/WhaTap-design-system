@@ -9,11 +9,37 @@ interface AiWidgetProps {
 const QUICK_ACTIONS = ["현재 상태 요약", "슬로우 트랜잭션 분석", "이상 징후 진단"];
 
 /**
- * WhaTap AI widget — replicates whatap-ai-assistant.vercel.app
- * Width 440px (extracted from live bundle).
- * variants:
- *  - slide: full-height right panel, slides in from right (pushes content)
- *  - overlap: floating bottom-right card (overlays content)
+ * AiWidget — AI surface. 440px WhaTap AI 위젯, whatap-ai-assistant.vercel.app 재현.
+ *
+ * ## Purpose
+ * 라이브 vercel 위젯을 그대로 옮긴 440px AI 패널(폭은 라이브 번들에서 추출).
+ * 헤더(WhaTap AI + Beta 배지 · 새 세션/너비조정/닫기) + 본문(환영 메시지 +
+ * 빠른 액션 칩) + 푸터(첨부 버튼 · 입력창 · "Claude Opus 4" 모델 선택기 · 보내기).
+ * `variant` 로 두 가지 배치를 제공:
+ *  - `slide`   — 우측 full-height 패널, 우→좌 translate 슬라이드(컨텐츠를 밀지 않고 overlay).
+ *  - `overlap` — 우하단 floating 카드(440×640), 컨텐츠 위에 떠 있음.
+ *
+ * ## When to use
+ * - vercel 데모와 동일한 룩앤필(Beta 배지 · 모델 선택기 pill)을 그대로 보여줄 때.
+ * - overlay 슬라이드/floating 카드 형태의 가벼운 AI 패널이 필요할 때.
+ *
+ * ## When NOT to use
+ * - 프로덕션 대시보드의 위젯 본체(480px · prop 외부화 · 토큰 사용량 · 첨부 칩 · 자동 스크롤)
+ *   → [[WhaTapAiWidget]].
+ * - 헤더/카드/모달의 한 줄 inline 입력 → [[AiInlinePrompt]].
+ * - 헤더 안 AI 토글 버튼만 → [[AiAssistantButton]].
+ *
+ * ## Composition rules
+ * - 색·그라데이션·경계는 토큰 binding (`--color-brand-blue` / `--color-brand-blue-deep` /
+ *   `--color-border-*` 등). 환영 메시지/입력 영역은 정적 마크업(prop 외부화 없음).
+ * - 빠른 액션은 모듈 상수 `QUICK_ACTIONS` 로 고정, `{userName}`/`{dashboardName}` 은 플레이스홀더 텍스트.
+ * - `open` 으로 가시성 제어 — slide 는 `translate-x`, overlap 은 `opacity`/`pointer-events` 로 전환.
+ *
+ * @example
+ * ```tsx
+ * <AiWidget open={aiOpen} variant="slide" onClose={() => setAiOpen(false)} />
+ * <AiWidget open={aiOpen} variant="overlap" onClose={() => setAiOpen(false)} />
+ * ```
  */
 export default function AiWidget({ open = true, variant = "slide", onClose }: AiWidgetProps) {
   const containerClass =

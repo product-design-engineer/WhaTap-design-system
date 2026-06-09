@@ -1,11 +1,36 @@
 /**
- * WhaTapAiContext — 라우트 간 WhaTap AI 위젯 상태 + 대화 문맥 공유.
+ * WhaTapAiContext — State layer. 라우트 간 WhaTap AI 위젯 상태 + 대화 문맥 공유 컨텍스트.
  *
- * 단일 페이지 안에서는 위젯이 닫혀도 다음에 열 때 컨텍스트가 살아 있고,
- * 라우트가 바뀌어도 (예: /project-list → /flex-board) 같은 conversation
- * 으로 이어집니다.
+ * ## Purpose
+ * WhaTap AI 위젯의 열림/닫힘(`aiActive`)과 마지막 사용자 prompt(`lastPrompt`)를
+ * 앱 전역에서 공유. 위젯이 닫혀도 다음에 열 때 컨텍스트가 살아 있고, 라우트가
+ * 바뀌어도(예: /project-list → /flex-board) 같은 conversation 으로 이어짐.
+ * `WhaTapAiProvider`(Provider) + `useWhaTapAi`(consumer hook) 한 쌍으로 제공.
  *
- * 정책: feedback-common-components-catalog — chrome/위젯 상태는 공용.
+ * ## When to use
+ * - 여러 라우트에 걸쳐 [[WhaTapAiWidget]] 의 개폐 상태/대화 연속성을 유지해야 할 때.
+ * - [[PageHeader]] 의 AI 토글과 [[DashboardLayout]] 의 `widgetOpen` 을 한 source 로 묶을 때.
+ *
+ * ## When NOT to use
+ * - 한 화면 안에서만 쓰는 일시적 토글 → 로컬 `useState` 로 충분, 컨텍스트 불필요.
+ * - 위젯의 시각적 셸 자체 → [[WhaTapAiWidget]] / [[DashboardLayout]].
+ *
+ * ## Composition rules
+ * - 트리 최상단을 `WhaTapAiProvider` 로 감싸고, 하위는 `useWhaTapAi()` 로 소비
+ *   (Provider 밖 호출 시 throw).
+ * - `lastPrompt` 는 라우트 전이 시 chat 연속용 — 새 페이지에서 소비 후 `setLastPrompt(null)` 로 clear.
+ * - 정책(feedback-common-components-catalog): chrome/위젯 상태는 공용 — 화면마다 재선언 금지.
+ *
+ * @example
+ * ```tsx
+ * <WhaTapAiProvider>
+ *   <App />
+ * </WhaTapAiProvider>
+ *
+ * // 하위 컴포넌트
+ * const { aiActive, setAiActive, lastPrompt, setLastPrompt } = useWhaTapAi();
+ * <PageHeader title="..." aiActive={aiActive} onAiToggle={() => setAiActive(!aiActive)} />
+ * ```
  */
 import { createContext, useContext, useMemo, useState } from "react";
 import type { ReactNode } from "react";

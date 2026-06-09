@@ -1,15 +1,35 @@
 /**
  * DashboardBuildingProgress — 대시보드 구성/적용 중 노출되는 공용 로딩 화면.
  *
- * 사용처:
- *   - /db 의 "네, 적용하고 트렌드 보기" 클릭 후 RAC 대시보드 구성 (5s · 5 steps · 카드 chrome)
- *   - /flex-board 의 진입 직후 위젯 grid 구성 전 (3.2s · 4 steps · 카드 chrome 없음)
+ * ## Purpose
+ * gradient ring spinner + 제목/부제 + 단계별 ✓ progress 리스트로 "지금 구성 중"
+ * 상태를 보여주는 로딩 화면. `intervalMs` 간격으로 단계가 하나씩 완료(✓)된다.
  *
- * 구조:
- *   gradient ring spinner + title + subtitle + 단계별 ✓ progress 리스트.
- *   `card` prop 으로 흰색 카드 chrome (DB 스타일) 토글, `intervalMs` 로 단계당 진행 속도 조정.
+ * ## When to use
+ * - 대시보드/위젯 grid 를 만들어 보여주기 직전의 준비 단계 화면
+ *   (예: /db RAC 대시보드 구성, /flex-board 진입 직후 위젯 grid 구성)
+ * - 여러 단계가 순차 진행됨을 사용자에게 알려야 하는 짧은 대기 구간
  *
- * 정책: feedback-common-components-catalog (chrome-level 공용 컴포넌트).
+ * ## When NOT to use
+ * - 단발 액션 결과 알림 → [[Toast]]
+ * - 단순 스피너 한 개만 필요 → 인라인 spinner (단계 리스트 불필요)
+ * - 진행률 막대(%) 가 명확한 결정적 작업 → 별도 progress bar
+ *
+ * ## Composition rules
+ * - **정책 feedback-common-components-catalog**: chrome-level 공용 컴포넌트로 재구현 금지.
+ * - 단계 진행은 컴포넌트 내부 타이머가 자동 구동 — 전체 시간 ≈ `steps.length × intervalMs`.
+ * - `card=true` → 흰색 카드 chrome(border+radius), `false` → 콘텐츠만(부모 배경 위, `flex-1`).
+ * - `background` 미지정 + `card=false` 면 부모 배경을 그대로 둠.
+ *
+ * @example
+ * ```tsx
+ * <DashboardBuildingProgress
+ *   title="대시보드를 구성하고 있어요"
+ *   steps={["지표 수집", "위젯 배치", "임계값 적용", "렌더링"]}
+ *   intervalMs={380}
+ *   card
+ * />
+ * ```
  */
 import { useEffect, useState } from "react";
 

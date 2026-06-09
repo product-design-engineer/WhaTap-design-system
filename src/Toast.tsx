@@ -1,11 +1,39 @@
 /**
  * Toast — 시스템 수준 알림 (상단 중앙 fixed, 자동 dismiss).
  *
- * 시나리오 안에서 "AiExecutionResult" 와 같은 액션 결과가 위젯 안에 노출된 뒤,
- * 위젯 밖에서도 한 번 더 시각 확인이 필요한 경우 사용 (예: 알림 규칙 등록 완료).
+ * ## Purpose
+ * 화면 상단 중앙에 띄우는 짧은 결과 알림. `createPortal` 로 `document.body` 에
+ * 렌더되어 어떤 레이아웃 위에도 떠 있고, `durationMs` 후 자동으로 닫힘.
+ * variant(success/info/warning/error) 별 색 도트 + 한 줄 메시지 + 선택 action.
  *
- * 정책: feedback-decision-priorities — 위젯 메시지와 정보 중복을 피하기 위해
- *   toast는 짧은 한 줄 + 선택적 action 만. 상세는 위젯에 둠.
+ * ## When to use
+ * - 액션 완료의 가벼운 확인 (알림 규칙 등록 완료, 저장됨 등)
+ * - 위젯 안 결과가 표시된 뒤 위젯 밖에서 한 번 더 시각 확인이 필요할 때
+ *
+ * ## When NOT to use
+ * - 사용자의 확인/선택을 강제로 막아야 하는 흐름 → [[Modal]]
+ * - 길고 상세한 결과·설명 → 위젯 본체에 표시 (toast 는 한 줄만)
+ * - 마우스 hover 시 보조 설명 → [[Tooltip]]
+ *
+ * ## Composition rules
+ * - **정책 feedback-decision-priorities**: 위젯 메시지와 정보 중복을 피해 toast 는
+ *   짧은 한 줄 + 선택적 action 한 개만. 상세는 위젯에 둠.
+ * - controlled: `open` 으로 표시 제어, `onClose` 로 닫힘 반영(자동/수동/action 공통).
+ * - `durationMs=0` 이면 자동 dismiss 없이 수동 닫기(× / action)만.
+ * - action 클릭 시 `onAction` 후 자동으로 `onClose` 호출.
+ * - `role="status"` + `aria-live="polite"` 로 스크린리더 알림.
+ *
+ * @example
+ * ```tsx
+ * <Toast
+ *   open={saved}
+ *   variant="success"
+ *   message="알림 규칙이 등록되었습니다"
+ *   actionLabel="보기"
+ *   onAction={goToRule}
+ *   onClose={() => setSaved(false)}
+ * />
+ * ```
  */
 import { useEffect } from "react";
 import { createPortal } from "react-dom";

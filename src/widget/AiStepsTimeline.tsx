@@ -1,8 +1,36 @@
 /**
- * AI 위젯 — "N steps..." 콜랩서블 진행 타임라인 (이미지 11.21.51 스타일).
+ * AiStepsTimeline — "N steps" 접기/펼치기 진행 타임라인.
  *
- * 헤더(▼ N steps) 클릭으로 펼침/접힘. 각 step은 ✓ 체크 또는 회전 spinner.
- * 마지막 running step만 spinner, 나머지는 모두 완료.
+ * ## Purpose
+ * 여러 실행 단계를 행 카드 목록으로 보여주는 접이식 타임라인. 헤더(`N steps`,
+ * 미완료가 있으면 `...` 표기)를 클릭해 펼침/접힘. 각 step 은 완료 시 status-success 체크,
+ * 진행 중(`running: true`)이면 회전 spinner 로 표시. `defaultOpen`·`delay` 로 초기 상태와
+ * 등장 시점을 제어.
+ *
+ * ## When to use
+ * - 다단계 작업의 진행 상태를 펼칠 수 있는 목록으로 보여줄 때.
+ * - 완료/진행 단계를 한눈에 요약하고 상세는 접어둘 때.
+ *
+ * ## When NOT to use
+ * - 단일 tool 호출 + 결과 서술 → [[AiToolCallStep]].
+ * - 카드 형태의 reasoning 단계 묶음 → [[AiReasoning]].
+ * - 단순 로딩 표시 → [[AiLoadingMessage]].
+ *
+ * ## Composition rules
+ * - 카드 없는 단독 블록 — 외형 카드가 필요하면 [[AiCard]] 로 감싸 composition.
+ * - 각 step 행은 흰 배경 + border-default 1px 라운드 카드, 마커 색은 토큰(완료 status-success / 진행 brand-blue) — 인라인 hex 금지.
+ * - 진행 중 단계는 마지막 하나만 `running: true` 로 두는 것을 권장.
+ *
+ * @example
+ * ```tsx
+ * <AiStepsTimeline
+ *   steps={[
+ *     { label: "지표 수집" },
+ *     { label: "이상 구간 분석" },
+ *     { label: "리포트 생성", running: true },
+ *   ]}
+ * />
+ * ```
  */
 import { useState } from "react";
 

@@ -1,15 +1,44 @@
 /**
- * WhaTap AI 위젯 (480px 우측 패널).
+ * WhaTapAiWidget — AI surface. 480px 우측 슬라이드 패널형 WhaTap AI 위젯.
  *
- * 마크업은 /application/slider 라이브 위젯과 동일. 데이터는 prop으로 외부화:
- *   - `user`         — 인사말 좌측에 굵게 표시되는 사용자 이름
- *   - `pageHighlight` — 인사말 본문 안에 굵게 표시되는 페이지 이름
- *   - `actions`      — 하단 액션 칩 버튼 라벨 배열
- *   - `open` · `onClose` · `onNewSession` · `onFullscreen` — 상태/콜백
+ * ## Purpose
+ * 대시보드 우측에 폭 480px(닫히면 0)로 펼쳐지는 AI 어시스턴트 패널. 그라데이션
+ * 40px 헤더(새 세션/전체화면/닫기) + 본문(랜딩 인사말 + 액션 칩, 또는 시나리오
+ * 메시지 스택) + 하단 입력 영역(첨부 칩 행 · multi-line textarea · 첨부 버튼 ·
+ * 토큰 사용량 pill · 전송 버튼)으로 구성. 마크업은 /application/slider 라이브
+ * 위젯과 동일하게 재현(side-effect-free)하고 데이터는 모두 prop 으로 외부화.
  *
- * Side-effect-free: /application/slider의 원본 위젯은 그대로 두고 React 라우트
- * (e.g. /gpu)에서 동일 룩앤필을 재현. CSS는 라이브 번들에서 추출해 index.css에
- * 옮겨둔 클래스를 사용.
+ * ## When to use
+ * - [[DashboardLayout]] 의 `children` 슬롯에 들어가는 위젯 본체 — 세로 전체 높이를 쓰는 대화 패널.
+ * - 랜딩 인사말 + 빠른 액션 칩 + 토큰 사용량 + 첨부까지 풀 chrome 이 필요한 자리.
+ *
+ * ## When NOT to use
+ * - 세로 공간이 한정된 헤더/카드/모달의 한 줄 입력 → [[AiInlinePrompt]] (single-row).
+ * - 헤더 안 AI 토글 버튼만 필요 → [[AiAssistantButton]].
+ * - 라이브 vercel 위젯의 440px 변형(Beta 배지 · 모델 선택기) 재현 → [[AiWidget]].
+ *
+ * ## Composition rules
+ * - 폭은 `open` 이 결정(480px ↔ 0), `transition: width 0.4s` 로 애니메이션. [[DashboardLayout]]
+ *   에서 Sidebar collapse 와 동기화(feedback-widget-sidebar-collapse).
+ * - editable mode: `inputValue` 미지정이면 내부 state 로 사용자가 직접 입력, `onSubmit`
+ *   은 입력값이 있을 때만 Enter(shift 제외)/전송 버튼으로 호출. `inputValue` 지정 시 readOnly 데모.
+ * - `scrollSignal` 이 바뀔 때마다 본문을 부드럽게 최하단으로 자동 스크롤(메시지 추가 후 반영).
+ * - 색·경계는 토큰 binding (`--color-brand-blue` / `--color-brand-blue-bg-2` 등). 토큰 pill 은 내부 TokenUsageBadge.
+ * - `showLanding=true` 일 때만 인사말+칩 렌더, `messages` 는 그 아래 시나리오 스택으로 누적.
+ *
+ * @example
+ * ```tsx
+ * <WhaTapAiWidget
+ *   open={aiActive}
+ *   onClose={() => setAiActive(false)}
+ *   onNewSession={resetSession}
+ *   onFullscreen={goFullscreen}
+ *   user="Wha-tap Kim"
+ *   pageHighlight="GPU 트렌드"
+ *   actions={["현재 상태 요약", "이상 징후 진단"]}
+ *   onSubmit={(v) => askAi(v)}
+ * />
+ * ```
  */
 import { useEffect, useRef, useState } from "react";
 import AiClickCursor from "./widget/AiClickCursor";
