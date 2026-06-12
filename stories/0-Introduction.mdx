@@ -10,6 +10,24 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 ---
 
+## 시작점 — 독자별
+
+### 👩‍💻 프론트엔드 개발자
+
+- **소비:** `import { DashboardLayout, ... } from "@whatap/design-system"` + `import "@whatap/design-system/tokens.css"`. 의존은 `link:` 심링크 → **DS 수정이 자동 반영(HMR)**.
+- **본인 AI 연결:** 호스팅 MCP(권장, dev 서버 불필요) `https://whatap-ds-mcp.vercel.app/mcp` · 라이브 도구는 로컬 `storybook dev` 의 `:5181/mcp`. 절차: [AI-INTEGRATION.md](/design-system/AI-INTEGRATION.md) · 빠른 안내 [mcp.txt](/mcp.txt) · AI 인덱스 [llms.txt](/llms.txt).
+- **컨텍스트 주입:** `curl /design-system/DESIGN.md` ([DESIGN.md](/design-system/DESIGN.md), 합본).
+- **단일 출처 규칙:** 인라인 hex 금지(토큰 사용)·컴포넌트 inline 재구현 금지(prop 조합). 컴포넌트 선택은 각 docstring 의 **When to use / When NOT** + autodocs prop 표.
+
+### 🎨 디자이너
+
+- **디자인 토큰(단일 출처):** 색·타입 스케일·웨이트·라인하이트·트래킹·Tone(semantic). `@theme static` 이라 토큰 1값 변경 = 전 컴포넌트 반영. → 좌측 **Tokens** 트리 ([Color](?path=/docs/tokens-color--docs) · [Typography](?path=/docs/tokens-typography--docs)).
+- **컴포넌트 카탈로그:** Primitives · Chrome · Widget 카드 · AI 진입 — 각 컴포넌트 "언제 쓰고/쓰지 말지" 4섹션 명시. → 좌측 트리.
+- **합성 패턴:** 페이지 헤더 invariant · 사이드바 collapse · DataTable density · 타이포 위계 · AI 영역 분리. → [patterns.md](/design-system/patterns.md).
+- **디자인↔코드 정합:** Figma 콘텐츠 가이드 · 라이브 CSS 1:1 · 토큰=구현 동일값.
+
+---
+
 ## 이 Storybook 이 다루는 것
 
 - ✅ **WDS 토큰** — `src/tokens.css` 의 `@theme static` (색·타이포·간격·라인하이트·트래킹). Tailwind v4 가 자동 utility 생성, 값 1 개 = 전 컴포넌트 자동 반영. `static` 이라 사용 여부와 무관하게 모든 토큰이 `:root` 에 emit → 외부 소비 앱이 `tokens.css` 만 import 해도 인라인 `var(--color-X)` 보장.
