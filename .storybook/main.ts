@@ -25,6 +25,8 @@ const config: StorybookConfig = {
     // 카탈로그 .md (DESIGN.md 합본 포함) 를 /design-system/ 로 서빙 — AI 에이전트 컨텍스트 주입용.
     // DESIGN.md 는 build:design (build-storybook 직전) 가 생성.
     { from: '../docs', to: '/design-system' },
+    // AI 진입 파일 (llms.txt / mcp.txt) 을 사이트 루트로 서빙 — 엔지니어 AI 연결 진입점.
+    { from: '../static/public', to: '/' },
   ],
   addons: [
     '@chromatic-com/storybook',

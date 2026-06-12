@@ -1,0 +1,25 @@
+# WhaTap Design System
+
+> `@whatap/design-system` — WhaTap SaaS 의 단일 컴포넌트·토큰 출처. Primitives · Chrome · AI Widget 카드 + 토큰(@theme static). 프론트엔드 엔지니어가 자기 AI 작업 환경에서 인터페이스 작업에 그대로 사용하기 위한 디자인 시스템.
+
+## 지식 주입 (catalog)
+
+- [DESIGN.md](/design-system/DESIGN.md): 전체 합본 카탈로그(SKILL→tokens→primitives→chrome→ai-entry→widget→patterns). AI 컨텍스트에 한 번에 주입용.
+- [SKILL.md](/design-system/SKILL.md): 진입점 · 5 핵심 규칙 · 빠른 시작
+- [tokens.md](/design-system/tokens.md): 색·타입·톤 토큰
+- [primitives.md](/design-system/primitives.md): Primitives 14
+- [chrome-components.md](/design-system/chrome-components.md): Chrome 20
+- [ai-entry.md](/design-system/ai-entry.md): AI 진입 컴포넌트
+- [widget-components.md](/design-system/widget-components.md): AI 위젯 카드
+- [patterns.md](/design-system/patterns.md): 합성 패턴 + Do/Don't
+
+## 라이브 도구 (MCP)
+
+- [AI-INTEGRATION.md](/design-system/AI-INTEGRATION.md): **본인 AI(Cursor·Claude Code·VS Code·Windsurf)를 연결하는 절차.**
+- MCP 서버는 로컬 `storybook dev` 에서 제공: `http://localhost:5181/mcp` (streamable HTTP). 스토리 작성·프리뷰·규약 조회 도구.
+- 빠른 연결: `claude mcp add --transport http whatap-ds http://localhost:5181/mcp`
+- mcp 전용 빠른 안내: [mcp.txt](/mcp.txt)
+
+## 규약
+
+- 단일 출처: 인라인 색 리터럴 금지(토큰 사용), 컴포넌트 재구현 금지(prop 조합). 모든 컴포넌트 docstring = Purpose/When to use/When NOT to use/Composition rules + @example.
