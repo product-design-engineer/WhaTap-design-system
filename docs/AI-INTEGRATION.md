@@ -3,16 +3,41 @@
 프론트엔드 엔지니어가 **자기 AI 코딩 환경(Cursor · Claude Code · VS Code · Windsurf 등)** 에서
 WhaTap 디자인 시스템을 그대로 사용해 인터페이스를 만들 수 있도록 하는 두 채널을 제공합니다.
 
-| 채널 | 무엇을 주나 | 라이브? |
+| 채널 | 무엇을 주나 | 셋업 |
 |---|---|---|
-| **① MCP 서버** (`@storybook/addon-mcp`) | AI가 이 DS 기준으로 **스토리 작성·컴포넌트 프리뷰·규약 조회** 하는 도구(tool) | 로컬 `storybook dev` 실행 중에만 |
-| **② 카탈로그 주입** (`DESIGN.md`) | 컴포넌트·토큰·패턴 **지식**을 AI 컨텍스트에 한 번에 주입 | 배포본에서 항상 (정적) |
+| **①-A 호스팅 MCP** (권장) | DS 컴포넌트·토큰·코드·프리뷰 URL 도구 | **dev 서버 불필요** — 공개 URL로 바로 연결 |
+| **①-B 로컬 dev MCP** (`@storybook/addon-mcp`) | 위 + **라이브 preview·story 작성·테스트 실행** | 로컬 `storybook dev` 실행 중에만 |
+| **② 카탈로그 주입** (`DESIGN.md`) | 컴포넌트·토큰·패턴 **지식** 한 번에 주입 | 배포본에서 항상 (정적) |
 
-권장: **둘 다** 사용. ①로 "쓰기/프리뷰" 도구를, ②로 "무엇이 있고 어떻게 조합하는지" 지식을.
+권장: 평소엔 **①-A 호스팅 MCP + ② 카탈로그**(셋업 0). 스토리 작성·라이브 테스트가 필요할 때만 **①-B 로컬 dev MCP**.
 
 ---
 
-## ① MCP 서버 연결
+## ①-A 호스팅 MCP (dev 서버 불필요 — 권장)
+
+엔드포인트: **`https://whatap-ds-mcp.vercel.app/mcp`** (transport: streamable HTTP, 공개)
+배포된 카탈로그를 런타임에 읽어 항상 최신. 클론·설치·dev 서버 **모두 불필요**.
+
+**Claude Code**
+```bash
+claude mcp add --transport http whatap-ds https://whatap-ds-mcp.vercel.app/mcp
+```
+**Cursor** — `.cursor/mcp.json`
+```json
+{ "mcpServers": { "whatap-ds": { "url": "https://whatap-ds-mcp.vercel.app/mcp" } } }
+```
+**VS Code (Copilot)** — `.vscode/mcp.json`
+```json
+{ "servers": { "whatap-ds": { "type": "http", "url": "https://whatap-ds-mcp.vercel.app/mcp" } } }
+```
+
+**도구:** `get_design_catalog`(DESIGN.md 합본) · `list_components` · `get_component`(스토리·import) · `get_tokens` · `get_preview_url`(배포 Storybook iframe/문서 URL).
+
+> 한계: 호스팅 MCP는 **지식·문서·프리뷰 URL** 제공. **라이브 렌더 프리뷰·스토리 작성·테스트 실행**은 ①-B 로컬 dev MCP 전용.
+
+---
+
+## ①-B 로컬 dev MCP (라이브 preview·story 작성·테스트)
 
 ### 1. 디자인 시스템 dev 서버 실행
 

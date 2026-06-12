@@ -30,10 +30,11 @@ import "@whatap/design-system/tokens.css";   // import 만으로 전 토큰 :roo
 
 엔지니어가 Cursor · Claude Code · VS Code · Windsurf 등에서 이 DS 기준으로 작업하도록 두 채널 제공:
 
-1. **MCP 서버** (`@storybook/addon-mcp`) — 로컬 dev 서버에서 AI에게 스토리 작성·프리뷰·규약 도구 제공
-   - 엔드포인트: `http://localhost:5181/mcp` (`pnpm storybook` 실행 중)
-   - Claude Code: `claude mcp add --transport http whatap-ds http://localhost:5181/mcp`
-   - Cursor `.cursor/mcp.json`: `{ "mcpServers": { "whatap-ds": { "url": "http://localhost:5181/mcp" } } }`
+1. **호스팅 MCP** (권장, dev 서버 불필요) — 공개 URL로 바로 연결, DS 컴포넌트·토큰·코드·프리뷰 도구
+   - 엔드포인트: `https://whatap-ds-mcp.vercel.app/mcp`
+   - Claude Code: `claude mcp add --transport http whatap-ds https://whatap-ds-mcp.vercel.app/mcp`
+   - Cursor `.cursor/mcp.json`: `{ "mcpServers": { "whatap-ds": { "url": "https://whatap-ds-mcp.vercel.app/mcp" } } }`
+   - 라이브 preview·story 작성·테스트가 필요하면 로컬 `pnpm storybook` 의 `http://localhost:5181/mcp` (addon-mcp)
 2. **카탈로그 주입** — AI 컨텍스트에 지식 한 번에 주입
    - `curl https://whatap-design-system-storybook.vercel.app/design-system/DESIGN.md > whatap-ds.md`
 
