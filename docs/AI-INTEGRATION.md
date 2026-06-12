@@ -62,6 +62,51 @@ claude mcp add --transport http whatap-ds http://localhost:5181/mcp
 
 > 작업 규칙: 컴포넌트/스토리 생성·수정 **전** `get-storybook-story-instructions` 를 호출해 규약을 먼저 따르도록 안내됩니다.
 
+### ⚠️ 4. 포트 함정 — config의 5181 대신 "실제 URL" 사용
+
+`pnpm storybook` 은 5181 을 쓰지만, **이미 5181 이 점유돼 있으면 5182 등 다른 포트로 뜨고 MCP URL 도 함께 바뀝니다.** 시작 시 **콘솔에 출력되는 실제 MCP URL 을 그대로** 클라이언트 config 에 넣으세요.
+
+```
+# storybook dev 콘솔 예:
+#   MCP server enabled at http://localhost:5181/mcp   ← 이 URL 을 등록
+```
+
+포트를 고정하고 싶으면 `pnpm storybook` (스크립트가 `-p 5181 --no-open` 고정) 실행 전에 5181 점유 프로세스를 정리하세요.
+
+### 5. 연결 확인 (verification)
+
+등록 후 AI에게 이렇게 물어 툴이 호출되면 성공:
+
+- "스토리북 스토리 목록을 보여줘" / "list storybook stories"
+- "WhaTap DS 의 DataTable 스토리를 프리뷰해줘"
+
+→ AI 응답에 `get-storybook-story-instructions` / `preview` 같은 **툴 호출**이 보이면 연결 정상. 안 보이면 아래 트러블슈팅.
+
+### 6. stdio-only 클라이언트 (HTTP 미지원 시)
+
+일부 MCP 클라이언트는 streamable-HTTP 를 직접 지원하지 않고 stdio 만 지원합니다. 이때 `mcp-remote` 브리지를 사용:
+
+```jsonc
+// 예: .cursor/mcp.json (stdio 브리지)
+{
+  "mcpServers": {
+    "whatap-ds": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "http://localhost:5181/mcp"]
+    }
+  }
+}
+```
+
+### 7. 트러블슈팅
+
+| 증상 | 원인 / 해결 |
+|---|---|
+| `/mcp` 404 · 툴 안 보임 | dev 서버 미실행 → `pnpm storybook` 실행 확인. 배포 정적본엔 MCP 없음(로컬만). |
+| 연결은 됐는데 URL 안 맞음 | 포트 변동(위 ⚠️4) — 콘솔의 실제 URL 사용. |
+| 클라이언트가 http 거부 | stdio-only — 위 6의 `mcp-remote` 브리지. |
+| 툴은 뜨는데 컴포넌트 지식이 약함 | ② 카탈로그(DESIGN.md) 를 함께 주입. MCP(도구) + DESIGN.md(지식) 병행이 정석. |
+
 ---
 
 ## ② 카탈로그 주입 (DESIGN.md)
@@ -103,6 +148,16 @@ import "@whatap/design-system/tokens.css";   // 토큰(@theme static) — import
 - 모든 컴포넌트 docstring 은 Purpose / When to use / When NOT to use / Composition rules 4섹션 + `@example` 표준(autodocs prop 표와 함께 AI가 참조).
 
 ---
+
+## 사용 예시 (프롬프트)
+
+MCP(도구) + DESIGN.md(지식) 연결 후 AI에게:
+
+- "WhaTap DS 로 DB 인스턴스 목록 페이지를 만들어줘 — DashboardLayout + PageHeaderAiInline + DataTable."
+- "이 컴포넌트에 맞는 스토리를 작성해줘." → AI가 `get-storybook-story-instructions` 로 규약을 먼저 읽고 작성.
+- "AiCard 톤별 변형을 프리뷰로 확인해줘." → `preview` 도구로 렌더 확인.
+
+**MCP 의 역할 범위 (정직하게):** addon-mcp 는 *Storybook 안에서* 스토리 작성·프리뷰·규약 조회를 돕는 도구입니다. "엔지니어 앱에서 DS 로 제품 페이지를 직접 빌드"하려면 **MCP(작성 규약/프리뷰) + DESIGN.md(컴포넌트·토큰 지식) + 실제 패키지 import(`@whatap/design-system`)** 를 함께 써야 합니다. MCP 단독으로 임의 앱 코드를 생성해주는 것은 아닙니다.
 
 ## 요약 — 가장 빠른 시작
 
