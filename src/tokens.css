@@ -26,6 +26,11 @@
   --color-surface-100: #F1F2F4;
   --color-surface-200: #EAEAEA;
 
+  /* Base surface (semantic) — page background + card.
+     라이트 기본값은 흰색(기존 동작 불변). 다크 값은 파일 하단 `.dark` 블록에서 오버라이드. */
+  --color-bg: #FFFFFF;
+  --color-card: #FFFFFF;
+
   /* Text */
   --color-text-strong: #1E1E1E;
   --color-text-body: #2D2D2D;
@@ -192,8 +197,8 @@
 html, body, #root {
   height: 100%;
   font-family: var(--font-sans);
-  background: #fff;
-  color: var(--color-text-strong);
+  background: var(--color-bg);
+  color: var(--color-text-primary);
 }
 
 /* AI symbol breathe animation */
@@ -355,4 +360,47 @@ html, body, #root {
 @keyframes toastSlideUp {
   0%   { opacity: 1; transform: translate(-50%, 0); }
   100% { opacity: 0; transform: translate(-50%, -12px); }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+ *  Dark theme — opt-in via `.dark` class on <html> (앱이 토글로 제어).
+ *
+ *  정책: 토큰 "구조"는 그대로 두고 같은 토큰명을 다크 값으로 재매핑한다.
+ *  컴포넌트는 var(--color-*)를 그대로 쓰므로 코드 변경 없이 전환된다.
+ *  type-scale·weight·line-height·tracking·AI 그라데이션·status·chart palette는
+ *  테마 무관이라 오버라이드하지 않는다(라이트와 동일).
+ *
+ *  대비(가독성) 기준: text-primary는 bg 위에서 ≈14:1, secondary ≈8:1,
+ *  tertiary ≈4.6:1. 표면은 base(어두움) → card(밝음) 순으로 층을 둔다.
+ * ────────────────────────────────────────────────────────────────────── */
+.dark {
+  /* Base surface — page → 한 단계씩 올라오는 표면 */
+  --color-bg: #0E1116;
+  --color-card: #181C22;
+  --color-surface-50: #14181E;
+  --color-surface-100: #1B2026;
+  --color-surface-200: #232932;
+
+  /* Borders */
+  --color-border-default: #2A2F39;
+  --color-border-soft: #21262E;
+  --color-border-strong: #353B46;
+  --color-border-divider: #4A515C;
+
+  /* Text hierarchy (4단계) */
+  --color-text-primary: #E9EBEE;
+  --color-text-secondary: #B7BDC6;
+  --color-text-tertiary: #8B929C;
+  --color-text-disabled: #5C636E;
+
+  /* Legacy text aliases (strong/body/muted/subtle) */
+  --color-text-strong: #F0F2F4;
+  --color-text-body: #E2E5E9;
+  --color-text-muted: #B7BDC6;
+  --color-text-subtle: #8B929C;
+
+  /* Brand tint surfaces + on-dark deep (텍스트로 쓰일 때 가독성 위해 밝힘) */
+  --color-brand-blue-bg: #1C2A46;
+  --color-brand-blue-bg-2: #233357;
+  --color-brand-blue-deep: #7FB0FF;
 }
