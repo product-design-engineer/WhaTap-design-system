@@ -32,6 +32,7 @@ const config: StorybookConfig = {
     '@storybook/addon-a11y',
     '@storybook/addon-docs',
     '@storybook/addon-mcp',
+    '@storybook/addon-themes',
   ],
   framework: '@storybook/react-vite',
   docs: {

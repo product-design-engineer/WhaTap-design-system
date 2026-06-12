@@ -30,12 +30,12 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
-  "dependencies": {},
   "devDependencies": {
     "@chromatic-com/storybook": "^5.2.1",
     "@storybook/addon-a11y": "^10.4.1",
     "@storybook/addon-docs": "^10.4.1",
     "@storybook/addon-mcp": "^0.6.0",
+    "@storybook/addon-themes": "^10.4.4",
     "@storybook/addon-vitest": "^10.4.1",
     "@storybook/react-vite": "^10.4.1",
     "@tailwindcss/vite": "^4.2.0",
