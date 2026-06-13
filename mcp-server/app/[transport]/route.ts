@@ -73,22 +73,24 @@ const handler = createMcpHandler(
       async ({ id }) => {
         const entries = await fetchIndex();
         const key = id.toLowerCase();
-        const matches = Object.values(entries).filter(
+        // 1) id/제목으로 한 항목(hit) 찾기 → 2) 같은 title 의 전체 그룹(docs + stories) 수집.
+        const hit = Object.values(entries).find(
           (e) =>
             e.id === id ||
-            e.id.replace(/--docs$/, "") === key ||
+            e.id.replace(/--(docs|[a-z0-9-]+)$/, "") === key ||
             e.title.toLowerCase() === key ||
             e.title.toLowerCase().endsWith("/" + key),
         );
-        if (matches.length === 0) return text(`'${id}' 에 해당하는 컴포넌트를 찾지 못했습니다. list_components 로 확인하세요.`);
-        const title = matches[0].title;
-        const stories = matches.filter((e) => e.type === "story");
-        const importPath = matches[0].importPath;
+        if (!hit) return text(`'${id}' 에 해당하는 컴포넌트를 찾지 못했습니다. list_components 로 확인하세요.`);
+        const title = hit.title;
+        const group = Object.values(entries).filter((e) => e.title === title);
+        const stories = group.filter((e) => e.type === "story");
+        const docs = group.find((e) => e.type === "docs");
         const lines = [
           `# ${title}`,
           ``,
-          `import path: ${importPath}`,
-          `프리뷰/문서: ${BASE}/?path=/docs/${matches.find((e) => e.type === "docs")?.id ?? matches[0].id}`,
+          `import path: ${hit.importPath}`,
+          `프리뷰/문서: ${BASE}/?path=/docs/${docs?.id ?? hit.id}`,
           ``,
           `## Stories (${stories.length})`,
           ...stories.map((s) => `- ${s.name}  →  ${BASE}/iframe.html?id=${s.id}`),
