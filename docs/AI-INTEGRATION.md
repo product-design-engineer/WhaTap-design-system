@@ -208,10 +208,14 @@ pnpm install        # 심링크 구성 → DS 수정 자동 반영(HMR)
 
 ### zero-friction 설치 (검토중)
 
-`npm install` 만으로 받는 부담 없는 경로는 **사설 레지스트리 publish** 가 필요하며 조직 결정 대상입니다:
-- **GitHub Packages** — 스코프(`@whatap`)가 소유 org 와 일치해야 함 → repo 를 `whatap` org 로 이전 + publish 권한 필요(현재 repo 는 user 소유라 미충족).
-- 또는 패키지명을 소유자에 맞게 변경(모든 import 영향) — 비권장.
-- publish 시 **dist(컴파일 JS + d.ts + CSS) 동봉**하면 번들러 호환성↑(③ 해소). 별도 빌드 파이프라인 추가 필요.
+**dist 빌드는 준비됨** — `pnpm build:lib` 가 `dist/index.js` · `dist/widget.js` · `*.d.ts` · `dist/style.css`(토큰 + 컴파일된 Tailwind 유틸) 산출(tsup + Tailwind CLI). 비-Vite 번들러도:
+```ts
+import { DashboardLayout } from "@whatap/design-system";   // dist JS (publish 후 또는 build:lib 후)
+import "@whatap/design-system/style.css";                  // 컴파일 CSS — Tailwind 없이도 스타일 적용 (③ 해소)
+```
+- 현재 exports `.` 기본값은 **source(`src/*.ts`)** — Vite/워크스페이스 소비자의 HMR 유지(프로토타입 무회귀). `./style.css` 만 dist 를 가리킴.
+- `npm install` 만으로 받는 경로(#1/#2 해소)는 **사설 레지스트리 publish** 필요(조직 결정): **GitHub Packages** 는 스코프(`@whatap`)=소유 org 일치 필요 → repo 를 `whatap` org 로 이전 + publish 권한. 패키지명 변경은 모든 import 영향이라 비권장.
+- publish 시점에 `.` 기본값을 dist 로 전환(`source` 조건은 src 유지)하면 bare import 가 모든 번들러에서 동작.
 
 ---
 
