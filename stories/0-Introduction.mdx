@@ -4,9 +4,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # WDS — WhaTap Design System
 
-> AI Assistant prototype 에서 시작 → **WhaTap Design System (WDS) 전체 범위로 확장 중**.
-
-토큰부터 chrome · widget · AI 진입 · AI 메시지 카드까지 — WhaTap 제품 전체의 디자인 시스템 단일 출처. 현재 카탈로그는 `@whatap/design-system` 워크스페이스 패키지로 패키징된 **56+ 컴포넌트** + Storybook + tokens.css.
+WhaTap 제품의 디자인 시스템 **단일 출처** — 토큰 · Primitives · Chrome · AI 위젯 카드. `@whatap/design-system` 패키지 + Storybook + `tokens.css`.
 
 ---
 
@@ -21,7 +19,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 ### 🎨 디자이너
 
-- **디자인 토큰(단일 출처):** 색·타입 스케일·웨이트·라인하이트·트래킹·Tone(semantic). `@theme static` 이라 토큰 1값 변경 = 전 컴포넌트 반영. → 좌측 **Tokens** 트리 ([Color](?path=/docs/tokens-color--docs) · [Typography](?path=/docs/tokens-typography--docs)).
+- **디자인 토큰(단일 출처):** 색·타입 스케일·웨이트·라인하이트·트래킹·Tone(semantic). `@theme static` 이라 토큰 1값 변경 = 전 컴포넌트 반영. → 좌측 **Tokens** 트리 ([Color](/?path=/docs/tokens-color--docs) · [Typography](/?path=/docs/tokens-typography--docs)).
 - **컴포넌트 카탈로그:** Primitives · Chrome · Widget 카드 · AI 진입 — 각 컴포넌트 "언제 쓰고/쓰지 말지" 4섹션 명시. → 좌측 트리.
 - **합성 패턴:** 페이지 헤더 invariant · 사이드바 collapse · DataTable density · 타이포 위계 · AI 영역 분리. → [patterns.md](/design-system/patterns.md).
 - **디자인↔코드 정합:** Figma 콘텐츠 가이드 · 라이브 CSS 1:1 · 토큰=구현 동일값.
@@ -36,15 +34,6 @@ import { Meta } from '@storybook/addon-docs/blocks';
 - ✅ **AI 진입점 4 종** — AiAssistantButton · AiSendButton · AiInlinePrompt · AiPromptInput.
 - ✅ **Widget Cards 20 종** — AI 응답 메시지 카드 (Reasoning · CostTable · ClassificationTable · MigPlan · …)
 - ✅ **Foundation** — WhaTap Symbol (4-bar 브랜드 마크) + Horizon 워드마크.
-
-## 이 카탈로그 호스팅 (동일 빌드)
-
-- [whatap-design-system-storybook](https://whatap-design-system-storybook.vercel.app/) — 본 WDS 카탈로그 (2026-05-31 부터, 이전 shadcn 스펙 교체)
-- [whatap-ai-prototype-storybook](https://whatap-ai-prototype-storybook.vercel.app/) — 동일 빌드 미러
-
-## 관련 (별개 제품)
-
-- [vircaai-storybook](https://vircaai-storybook.vercel.app/) — VircaAI 전용 (별개 제품).
 
 ---
 
