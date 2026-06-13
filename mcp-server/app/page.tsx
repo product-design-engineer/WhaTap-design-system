@@ -17,6 +17,7 @@ claude mcp add --transport http whatap-ds <이 사이트 URL>/mcp
       <ul>
         <li><code>get_design_catalog</code> — 전체 카탈로그(DESIGN.md)</li>
         <li><code>list_components</code> — 컴포넌트 목록</li>
+        <li><code>search_components</code> — 키워드로 컴포넌트/스토리 검색</li>
         <li><code>get_component</code> — 특정 컴포넌트 문서·스토리·import</li>
         <li><code>get_tokens</code> — 토큰 카탈로그</li>
         <li><code>get_preview_url</code> — 스토리 프리뷰/문서 URL</li>

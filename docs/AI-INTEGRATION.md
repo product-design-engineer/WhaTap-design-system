@@ -31,7 +31,7 @@ claude mcp add --transport http whatap-ds https://whatap-ds-mcp.vercel.app/mcp
 { "servers": { "whatap-ds": { "type": "http", "url": "https://whatap-ds-mcp.vercel.app/mcp" } } }
 ```
 
-**도구:** `get_design_catalog`(DESIGN.md 합본) · `list_components` · `get_component`(스토리·import) · `get_tokens` · `get_preview_url`(배포 Storybook iframe/문서 URL).
+**도구:** `get_design_catalog`(DESIGN.md 합본) · `list_components` · `search_components`(키워드 검색 — 영문 id/title 정밀 + 한국어 본문 폴백) · `get_component`(스토리·import) · `get_tokens` · `get_preview_url`(배포 Storybook iframe/문서 URL).
 
 > 한계: 호스팅 MCP는 **지식·문서·프리뷰 URL** 제공. **라이브 렌더 프리뷰·스토리 작성·테스트 실행**은 ①-B 로컬 dev MCP 전용.
 
