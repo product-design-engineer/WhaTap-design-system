@@ -16,6 +16,8 @@ WhaTap AI Assistant 프론트엔드의 단일 컴포넌트 출처. pnpm 워크�
 
 ## 설치 / Import
 
+> 외부 repo·신규 엔지니어(접근 권한·사전조건·설치 순서)는 [`ONBOARDING.md`](./ONBOARDING.md)의 체크리스트를 먼저 참고하세요. (private repo collaborator 초대 + Vite·TS·React19·Tailwind4)
+
 ### 본 repo 안 (자동)
 
 `packages/design-system` 은 pnpm 워크스페이스 패키지입니다. 소비자 프로토타입의 `package.json` 에 한 줄만 있으면 됩니다:
