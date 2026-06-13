@@ -161,8 +161,8 @@ curl https://whatap-design-system-storybook.vercel.app/design-system/DESIGN.md >
 ## 컴포넌트 사용 (소비 측)
 
 ```bash
-# package.json 에 추가 (모노레포 file: 또는 git 의존)
-"@whatap/design-system": "file:<상대경로>/WhaTap-design-system"
+# package.json — 로컬 clone 을 심링크로 소비(자동 반영). 모노레포 내부 경로 기준.
+"@whatap/design-system": "link:<상대경로>/WhaTap-design-system"
 ```
 ```tsx
 import { DashboardLayout, PageHeaderAiInline, DataTable } from "@whatap/design-system";
@@ -171,6 +171,47 @@ import "@whatap/design-system/tokens.css";   // 토큰(@theme static) — import
 
 - **단일 출처:** 인라인 색 리터럴·카드 재구현 금지. 토큰·컴포넌트 prop 으로 조합. 정책 전문: 루트 `CLAUDE.md`.
 - 모든 컴포넌트 docstring 은 Purpose / When to use / When NOT to use / Composition rules 4섹션 + `@example` 표준(autodocs prop 표와 함께 AI가 참조).
+
+---
+
+## 신규 엔지니어 온보딩 체크리스트 (코드 레벨 통합)
+
+> **두 가지 수준을 구분하세요.**
+> - **① AI 지식 안내** (JSX/스타일/규약 가이드) — **사전 조건 0.** 호스팅 MCP + `DESIGN.md` 만으로 누구나 가능. 접근 권한·설치 불필요.
+> - **② 실제 컴포넌트 import·빌드·HMR** — 아래 사전 조건 필요.
+
+### ② 실제 통합 사전 조건
+
+1. **저장소 접근 (private)** — `interfacedesigner/WhaTap-design-system` 은 private. 엔지니어 GitHub 계정이 **협업자로 초대**되어야 clone 가능.
+   - 관리자(초대): `gh api -X PUT repos/interfacedesigner/WhaTap-design-system/collaborators/<github-login> -f permission=pull`
+   - 엔지니어: 메일/알림의 초대 수락 → `git clone https://github.com/interfacedesigner/WhaTap-design-system.git`
+2. **npm 미등록** — `npm install @whatap/design-system` 으로는 못 받습니다(공개 레지스트리 아님). **로컬 clone 을 `link:`(또는 `file:`)** 로 소비하거나 워크스페이스(`workspace:*`) 멤버로 둡니다.
+3. **소비 환경 호환** — 이 패키지는 빌드 산출물(dist) 없이 **`.ts` 소스를 직접 export**합니다. 소비 측이 **Vite + TypeScript + React 19 + Tailwind 4** 여야 무설정 동작. 다른 번들러(webpack 등)는 TS/JSX 트랜스파일·CSS 처리 추가 설정이 필요하며, 이 경우 별도 빌드 산출물 배포 방식([아래 zero-friction 옵션](#zero-friction-설치-검토중)) 검토.
+
+### 설치 (사전 조건 충족 후)
+
+```bash
+git clone https://github.com/interfacedesigner/WhaTap-design-system.git   # 협업자 권한 필요
+# 소비 앱 package.json: "@whatap/design-system": "link:<상대경로>/WhaTap-design-system"
+pnpm install        # 심링크 구성 → DS 수정 자동 반영(HMR)
+# vite.config: resolve.dedupe ['react','react-dom']  (DS 자체 react 중복 방지)
+```
+
+### 체크리스트
+
+- [ ] GitHub 계정이 repo 협업자로 초대·수락됨
+- [ ] 소비 앱이 Vite + TS + React 19 + Tailwind 4
+- [ ] `link:` 의존 + `pnpm install` 로 심링크 구성
+- [ ] `import "@whatap/design-system/tokens.css"` (토큰 보장)
+- [ ] vite `resolve.dedupe: ['react','react-dom']`
+- [ ] (선택) 본인 AI 를 호스팅 MCP `https://whatap-ds-mcp.vercel.app/mcp` 에 연결
+
+### zero-friction 설치 (검토중)
+
+`npm install` 만으로 받는 부담 없는 경로는 **사설 레지스트리 publish** 가 필요하며 조직 결정 대상입니다:
+- **GitHub Packages** — 스코프(`@whatap`)가 소유 org 와 일치해야 함 → repo 를 `whatap` org 로 이전 + publish 권한 필요(현재 repo 는 user 소유라 미충족).
+- 또는 패키지명을 소유자에 맞게 변경(모든 import 영향) — 비권장.
+- publish 시 **dist(컴파일 JS + d.ts + CSS) 동봉**하면 번들러 호환성↑(③ 해소). 별도 빌드 파이프라인 추가 필요.
 
 ---
 
