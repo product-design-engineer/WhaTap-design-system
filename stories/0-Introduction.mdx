@@ -31,19 +31,22 @@ WhaTap 제품의 디자인 시스템 **단일 출처** — 토큰 · Primitives 
 전체 카탈로그는 **좌측 트리**가 정본이며, 각 항목의 Docs 에 prop·예시·When to use/NOT 이 있습니다. 구성:
 
 - **Tokens** — 색 · 타입 스케일(11단계) · 웨이트 · 라인하이트 · 트래킹 · Tone(semantic). `tokens.css` 의 `@theme static` 단일 출처.
-- **Primitives 14** — 일반 폼 9 (Checkbox · TextField · Select · Modal · Tabs …) + AI 카드 빌딩 블록 5 (AiCard · AiToneBadge · AiSectionHeading …)
-- **Chrome 20** — 레이아웃(DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · SubHeaderBar) · 옵션바 · 데이터(DataTable · MiniLineChart · EventWeekTimeMatrix) · 알림/상태(Toast · Stage)
-- **AI 진입 4** — AiAssistantButton · AiSendButton · AiInlinePrompt · AiPromptInput
-- **Widget Cards 20+** — AI 응답 메시지 카드 (AiReasoning · AiCostTable · AiMigPlan · AiExecutionResult …)
+- **Primitives 9** — 일반 폼/표시: Checkbox · Tooltip · Chip · FilterChip · TextField · Select · Tabs · Modal · FilterDropdown
+- **Chrome 20** — 레이아웃(DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · SubHeaderBar) · 옵션바 · 데이터(DataTable · MiniLineChart · EventWeekTimeMatrix) · 알림/상태(Toast · Stage). *PageHeaderAiInline 은 AI inline 진입을 품은 헤더 — 구조상 Chrome, 진입 UX 는 WhaTap AI.*
+- **WhaTap AI** — **모든 AI 컴포넌트는 이 카테고리** (좌측 `WhaTap AI/`):
+  - 빌딩 블록 5 — AiCard · AiCaption · AiSectionHeading · AiToneBadge · AiBulletList
+  - 진입 4 — AiAssistantButton · AiSendButton · AiInlinePrompt · AiPromptInput
+  - 위젯 셸 — WhaTapAiWidget · WhaTapAiContext · AiSymbol
+  - 메시지 카드 22 — AiReasoning · AiCostTable · AiMigPlan · AiExecutionResult …
 - **Foundation** — WhaTap Symbol(4-bar 핀휠) + Horizon 워드마크
 
 ### 의존 방향 (역방향 import 금지)
 
 ```
-Tokens   ←   Primitives   ←   Chrome / AI 진입 / Widget Cards
+Tokens   ←   Primitives   ←   Chrome / WhaTap AI
 ```
 
-Tokens 는 leaf(누구도 import 안 함) · Primitives 는 Tokens 만 import · Chrome/AI/Widget 은 Primitives + Tokens import. 자세한 규칙: [patterns.md](/design-system/patterns.md).
+Tokens 는 leaf(누구도 import 안 함) · Primitives 는 Tokens 만 import · Chrome · WhaTap AI 는 Primitives + Tokens import. 자세한 규칙: [patterns.md](/design-system/patterns.md).
 
 ---
 

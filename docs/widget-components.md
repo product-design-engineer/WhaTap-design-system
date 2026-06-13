@@ -1,6 +1,6 @@
-# Widget Components — AI 위젯 메시지
+# Widget Components — AI 위젯 메시지 (WhaTap AI 카테고리)
 
-> 원본: `packages/design-system/src/WhaTapAiWidget.tsx`, `…/src/components/widget/`
+> 원본: `src/WhaTapAiWidget.tsx`, `src/widget/` (interfacedesigner/WhaTap-design-system) · Storybook 트리 `WhaTap AI/Cards` · `WhaTap AI/Widget`
 
 AI 위젯 본체(`WhaTapAiWidget`)와 그 안에 표시되는 20여 종의 메시지 카드입니다. **모든 메시지 카드는 [`primitives.md`](./primitives.md)의 `AiCard`로 감싸지거나, 동등한 외형을 따릅니다.**
 

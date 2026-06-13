@@ -5,7 +5,7 @@
 ## 디렉토리 구성
 
 - `src/` — 컴포넌트 소스 + `tokens.css` + `widget/` (AI 카테고리)
-- `stories/` — Storybook 카탈로그 (Primitives / Chrome / Widget 폴더 분리)
+- `stories/` — Storybook 카탈로그 (Tokens / Primitives / Chrome / WhaTap AI 카테고리)
 - `docs/` — markdown 카탈로그 (단일 출처 문서)
   - `SKILL.md` — 본 디자인 시스템 사용 절차
   - `primitives.md` / `chrome-components.md` / `widget-components.md` — 컴포넌트 카탈로그 (텍스트 형태)
@@ -13,13 +13,13 @@
   - `patterns.md` — 합성 패턴 (페이지 레벨 컴포지션)
   - `STORIES_ROADMAP.md` — Storybook 카탈로그 추가 작업 목록
 
-## 카테고리 분리 — Primitives · Chrome · Widget · AI 입력
+## 카테고리 분리 — Primitives · Chrome · WhaTap AI
 
 | 카테고리 | 폴더 | 예 |
 |---|---|---|
 | Primitives | `src/` 루트 | Button, TextField, Select, Chip, FilterChip, Tabs, Modal, Tooltip, Checkbox |
 | Chrome | `src/` 루트 | DashboardLayout, PageHeader, PageHeaderAiInline, Sidebar, FilterBar, DataTable, FilterDropdown |
-| Widget (AI) | `src/widget/` | AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList, AiChatExchange, AiReasoning, WhaTapAiWidget, AiInlinePrompt, AiSendButton, AiAssistantButton |
+| WhaTap AI | `src/widget/` | **모든 AI 컴포넌트의 집** — 빌딩 블록(AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList) · 진입(AiInlinePrompt, AiPromptInput, AiSendButton, AiAssistantButton) · 위젯 셸(WhaTapAiWidget, WhaTapAiContext, AiSymbol) · 메시지 카드(AiReasoning, AiChatExchange …). Storybook 트리 `WhaTap AI/` 로 통일. (단 `PageHeaderAiInline` 은 헤더 레이아웃이라 Chrome 유지) |
 | Tokens | `src/tokens.css` | `@theme` 컬러·폰트·spacing 변수 |
 
 **AI 영역 ↔ 일반 영역 분리 원칙**
