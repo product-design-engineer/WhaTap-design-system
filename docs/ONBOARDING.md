@@ -42,19 +42,20 @@ DS는 빌드 산출물(dist) 없이 **`.ts` 소스를 직접 export** 합니다.
 
 ## 3. 설치 (Install) — 두 경로
 
-**A) 같은 pnpm 워크스페이스 안 (권장)**
-```json
-// 소비자 package.json
-"dependencies": { "@whatap/design-system": "workspace:*" }
-```
-`pnpm install` → symlink 자동 생성, **빌드 단계 없음**(HMR 즉시).
-
-**B) 외부 repo에서 로컬 clone 후 link**
+**A) `link:` 심링크 (권장 — 현재 모델)**
 ```bash
-git clone https://github.com/interfacedesigner/WhaTap-design-system.git
+git clone https://github.com/interfacedesigner/WhaTap-design-system.git   # 협업자 권한 필요
 # 소비 앱에서
 pnpm add "link:../WhaTap-design-system"
 ```
+`pnpm install` → 심링크 생성, **빌드 단계 없음**(DS 수정 자동 반영/HMR). 소비 vite 에 `resolve.dedupe: ['react','react-dom']` 필요(React 중복 방지).
+
+**B) 같은 pnpm 워크스페이스일 때만**
+```json
+// 소비자 package.json (DS 가 동일 워크스페이스 멤버인 경우만)
+"dependencies": { "@whatap/design-system": "workspace:*" }
+```
+현재 DS 는 별도 repo라 기본은 A). 동일 모노레포로 편입했을 때만 B).
 
 ---
 
@@ -86,7 +87,7 @@ import { AiCard, AiSectionHeading } from "@whatap/design-system/widget";
 |---|---|
 | `git clone` 실패 | collaborator 초대/수락 여부 (1) |
 | 색·보더가 안 나옴 | `index.css` 의 `@source` 경로 (4) |
-| import가 안 잡힘 | `workspace:*` / `link:` + `pnpm install` (3) |
+| import가 안 잡힘 | `link:` + `pnpm install` (3) |
 | `npm install` 시도 실패 | 미배포(private). 토큰만 필요하면 `tokens.css` 다운로드 |
 | 다른 번들러에서 깨짐 | Vite·TS·React19·Tailwind4 호환 여부 (2) |
 

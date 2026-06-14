@@ -51,16 +51,16 @@
 
 ## 작업 컨벤션 (모든 카드 공통)
 
-1. **파일 위치**: `packages/design-system/src/<Component>.tsx` (평면)
-2. **Story 위치**: `packages/design-system/stories/3-Primitives/<Component>.stories.tsx` (Chrome 은 `4-Chrome/`)
-3. **Barrel export**: `packages/design-system/src/index.ts` 에 `export { default as <Component> } from "./<Component>";` + 타입 named export
+1. **파일 위치**: `src/<Component>.tsx` (평면)
+2. **Story 위치**: `stories/3-Primitives/<Component>.stories.tsx` (Chrome 은 `4-Chrome/`)
+3. **Barrel export**: `src/index.ts` 에 `export { default as <Component> } from "./<Component>";` + 타입 named export
 4. **토큰만 사용**: Tailwind 4 토큰 utility (`text-base`, `text-primary`, `bg-brand-blue`). 직접 hex 금지
 5. **default export = 컴포넌트** / named export = 타입 (Props / Variant)
 6. **`tags: ['autodocs']`**: 모든 story 에 추가 → Storybook 자동 prop 문서
 7. **a11y**: ARIA role + 키보드 지원 (Tab/Enter/Escape) 기본
 8. **size variants**: `size?: "sm" | "md" | "lg"` 가능한 곳은 일관 — md 가 default
 9. **4 섹션 docstring**: Purpose / When to use / When NOT to use / Composition rules
-10. **카탈로그 동기 갱신**: 같은 PR 에서 `packages/design-system/docs/<해당 .md>` 표 + 예시 추가
+10. **카탈로그 동기 갱신**: 같은 PR 에서 `docs/<해당 .md>` 표 + 예시 추가
 
 ## 변경 이력
 

@@ -1,34 +1,34 @@
 ---
 name: whatap-design-system
-description: WhaTap AI Assistant 디자인 시스템 — `@whatap/design-system` 워크스페이스 패키지 (56+ 컴포넌트). chrome / widget(AI) / AI 진입점 + 토큰 + 합성 패턴. 신규 화면은 인라인 스타일 새로 짜지 말고 이 패키지의 컴포넌트를 prop으로 조립하세요.
+description: WhaTap 디자인 시스템 — `@whatap/design-system` (별도 repo · 소스온리). Tokens / Primitives / Chrome / WhaTap AI + 합성 패턴. 신규 화면은 인라인 스타일 새로 짜지 말고 이 패키지의 컴포넌트를 prop으로 조립하세요.
 metadata:
   type: design-system
-  scope: WhaTap AI Assistant (frontend)
-  source: packages/design-system
+  scope: WhaTap (프로토타입이 link: 로 소비)
+  source: src/ (interfacedesigner/WhaTap-design-system)
   audience: frontend engineers
 ---
 
 # WhaTap Design System (@whatap/design-system)
 
-WhaTap AI Assistant 프론트엔드의 단일 컴포넌트 출처. pnpm 워크스페이스 패키지로 패키징되어 본 repo 의 모든 React 프로토타입이 `workspace:*` 의존성으로 import.
+WhaTap 제품의 단일 컴포넌트 출처(별도 git repo, 빌드 산출물 없는 소스온리). 소비 측(프로토타입)은 `link:` 심링크로 import — DS 수정이 자동 반영(HMR).
 
-원본 소스는 `packages/design-system/src/`. 이 문서는 실제 코드와 1:1 동기화된 카탈로그입니다.
+원본 소스는 `src/`. 이 문서는 실제 코드와 1:1 동기화된 카탈로그입니다.
 
 ## 설치 / Import
 
 > 외부 repo·신규 엔지니어(접근 권한·사전조건·설치 순서)는 [`ONBOARDING.md`](./ONBOARDING.md)의 체크리스트를 먼저 참고하세요. (private repo collaborator 초대 + Vite·TS·React19·Tailwind4)
 
-### 본 repo 안 (자동)
+### 소비 (link: 심링크)
 
-`packages/design-system` 은 pnpm 워크스페이스 패키지입니다. 소비자 프로토타입의 `package.json` 에 한 줄만 있으면 됩니다:
+소비자 프로토타입의 `package.json` 에:
 
 ```json
 "dependencies": {
-  "@whatap/design-system": "workspace:*"
+  "@whatap/design-system": "link:<상대경로>/WhaTap-design-system"
 }
 ```
 
-`pnpm install` 후 소비자가 `node_modules/@whatap/design-system` symlink 를 자동 갖게 됨 — **빌드 단계 없음**. 패키지의 `exports` 필드가 `.ts` 소스를 직접 가리키므로 Vite 가 source 로 취급해 **HMR 즉시 동작**.
+`pnpm install` 후 `node_modules/@whatap/design-system` 가 DS 소스로의 **심링크**가 됨 — **빌드 단계 없음**. `exports` 가 `.ts` 소스를 직접 가리키므로 Vite 가 source 로 취급해 **DS 수정이 즉시 HMR**. (소비 vite 에 `resolve.dedupe: ['react','react-dom']` 필요 — DS 자체 react 중복 방지.)
 
 ### Import 예
 
@@ -50,25 +50,25 @@ import { AiCard, AiSectionHeading, TONE_DOT } from "@whatap/design-system/widget
 @import "@whatap/design-system/tokens.css";
 ```
 
-### Tailwind 4 워크스페이스 — `@source` 디렉티브 필수
+### Tailwind 4 — 토큰 import (`@theme static`)
 
 소비자 프로토타입의 `index.css` 에:
 
 ```css
 @import "tailwindcss";
 @import "@whatap/design-system/tokens.css";
-@source "../../../packages/design-system/src/**/*.{ts,tsx}";
 ```
 
-`@source` 없으면 패키지 안의 inline `var(--color-X)` 가 utility 가 아니라서 소비자 빌드에서 tree-shake 됨 (Tailwind 4 동작). 자세한 내용은 repo root `CLAUDE.md` 참조.
+`tokens.css` 가 `@theme static` 이라 **모든 토큰이 `:root` 에 항상 emit** → 컴포넌트의 inline `var(--color-X)` 가 보장됨. (과거엔 `@source` 로 DS src 를 스캔해야 했으나 `@theme static` 전환으로 **불필요**.) 자세한 내용은 repo root `CLAUDE.md` 참조.
 
-### 새 React 프로토타입 추가 시
+### 새 소비 프로토타입 추가 시
 
-1. `prototypes/<NewProject>/package.json` 에 `"@whatap/design-system": "workspace:*"` 추가
-2. `index.css` 위 3 줄 복사
-3. `import { ... } from "@whatap/design-system"`
+1. `package.json` 에 `"@whatap/design-system": "link:<상대경로>/WhaTap-design-system"`
+2. vite `resolve.dedupe: ['react','react-dom']`
+3. `index.css` 에 `@import "@whatap/design-system/tokens.css"`
+4. `import { ... } from "@whatap/design-system"`
 
-별도 alias 설정·tsconfig paths 불필요. **워크스페이스 패키지가 모든 것을 처리**합니다.
+자세한 절차·사전조건(협업자 초대 등): [`ONBOARDING.md`](./ONBOARDING.md) · [`AI-INTEGRATION.md`](./AI-INTEGRATION.md).
 
 ## 누가, 언제 읽나
 
@@ -77,42 +77,38 @@ import { AiCard, AiSectionHeading, TONE_DOT } from "@whatap/design-system/widget
 - **새 색/뱃지/카드 스타일이 필요한가 싶다** → 먼저 [`tokens.md`](./tokens.md) + [`primitives.md`](./primitives.md)에서 재사용할 수 있는지 확인 (있을 확률 매우 높음)
 - **인라인 div 새로 짤까 고민된다** → [`patterns.md`](./patterns.md)의 Do/Don't부터 확인
 
-## 디자인 시스템 구조 — 56+ 컴포넌트
+## 디자인 시스템 구조
 
 ```
 WhaTap Design System (@whatap/design-system)
-├─ Tokens           ─ 색·폰트·spacing 11 type-scale·3 weight·6 line-height
-│                     `tokens.css` `@theme` + `widget/_tokens.ts` 의 Tone 5단계
-├─ Primitives (14)  ─ 일반 form / 표시 widget 빌딩 블록
-│   ├─ AI 위젯용 5  ─ AiCard / AiCaption / AiSectionHeading / AiToneBadge / AiBulletList
-│   └─ 일반 form 9  ─ Checkbox / Tooltip / Chip / FilterChip / TextField / Select / Tabs
-│                     / Modal / FilterDropdown
-├─ Chrome (19)      ─ 페이지 레벨 레이아웃·도구·표시
-│                     DashboardLayout / Sidebar / PageHeader / PageHeaderAiInline /
-│                     OptionbarPage / OptionbarInstanceSelector / LiveTimerCompact /
-│                     TimeRangeSelector / PresetSelect / Stage / Toast / AiSymbol /
-│                     DataTable / FilterBar / MiniLineChart / EventWeekTimeMatrix /
-│                     Button / DashboardBuildingProgress / WhaTapAiContext
-├─ AI 진입 (4)      ─ 페이지 → AI 위젯 진입점
-│                     AiAssistantButton / AiSendButton / AiInlinePrompt / AiPromptInput
-└─ Widget Cards (20) ─ WhaTapAiWidget 안 메시지 카드
-                       AiChatExchange / AiReasoning / AiInsightSection / AiCostTable /
-                       AiClassificationTable / AiUsageChart / AiEventList /
-                       AiDashboardProposal / AiMigPlan / AiCriteriaSelection /
-                       AiChoiceButtons / AiAlertRulePreview / AiExecutionResult /
-                       AiReceiverChannels / AiToolCallStep / AiStepsTimeline /
-                       AiLoadingMessage / AiMessageActions / AiUserBubble / AiClickCursor
+├─ Tokens            ─ 색·폰트·spacing · 11 type-scale · 3 weight · 6 line-height
+│                      `tokens.css` `@theme static` (단일 출처) + `widget/_tokens.ts` Tone 5단계
+├─ Primitives (9)    ─ 일반 form / 표시
+│                      Checkbox / Tooltip / Chip / FilterChip / TextField / Select /
+│                      Tabs / Modal / FilterDropdown
+├─ Chrome (20)       ─ 페이지 레벨 레이아웃·도구·표시
+│                      DashboardLayout / Sidebar / PageHeader / PageHeaderAiInline /
+│                      SubHeaderBar / OptionbarPage / OptionbarInstanceSelector /
+│                      LiveTimerCompact / TimeRangeSelector / PresetSelect / Stage /
+│                      Toast / DataTable / FilterBar / MiniLineChart /
+│                      EventWeekTimeMatrix / Button / DashboardBuildingProgress
+└─ WhaTap AI         ─ 모든 AI 컴포넌트 (좌측 `WhaTap AI/`)
+    ├─ 빌딩 블록 5   ─ AiCard / AiCaption / AiSectionHeading / AiToneBadge / AiBulletList
+    ├─ 진입 4        ─ AiAssistantButton / AiSendButton / AiInlinePrompt / AiPromptInput
+    ├─ 위젯 셸       ─ WhaTapAiWidget / WhaTapAiContext / AiSymbol
+    └─ 메시지 카드 22 ─ AiChatExchange / AiReasoning / AiCostTable / AiMigPlan /
+                        AiExecutionResult / AiReceiverChannels / … / AiClickCursor
 ```
 
 **의존 방향 (역방향 import 금지):**
 
 ```
-Chrome / AI 진입 / Widget Cards → Primitives → Tokens
+Chrome / WhaTap AI → Primitives → Tokens
 ```
 
-- Tokens 는 누구도 import 하지 않는 leaf — `@theme` CSS 변수 + Tone 토큰
+- Tokens 는 누구도 import 하지 않는 leaf — `@theme static` CSS 변수 + Tone 토큰
 - Primitives 는 Tokens 만 import — 형태 + 외관의 base
-- Chrome / AI 진입 / Widget Cards 는 Primitives 와 Tokens import — Primitives 끼리 조합 가능
+- Chrome · WhaTap AI 는 Primitives 와 Tokens import (PageHeaderAiInline 은 헤더 레이아웃이라 Chrome)
 
 ### AI 카테고리 vs 일반 Primitives 분리 원칙
 
@@ -200,5 +196,5 @@ export default function AiMyNewMessage({
 
 ## 동기화 정책
 
-이 가이드의 모든 prop 시그니처는 `packages/design-system/src/` 의 실제 코드에서 추출된 것입니다.
+이 가이드의 모든 prop 시그니처는 `src/` 의 실제 코드에서 추출된 것입니다.
 컴포넌트의 prop을 변경했다면 해당 .md 파일의 표도 같은 PR에서 업데이트하세요. 어긋난 채로 머지하지 마세요.
