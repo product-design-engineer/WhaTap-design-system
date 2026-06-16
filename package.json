@@ -14,7 +14,8 @@
       "default": "./src/widget/index.ts"
     },
     "./tokens.css": "./src/tokens.css",
-    "./style.css": "./dist/style.css"
+    "./style.css": "./dist/style.css",
+    "./whatap-ds.css": "./src/whatap-ds.css"
   },
   "files": [
     "src",
@@ -26,6 +27,7 @@
     "build:design": "node scripts/build-design.mjs",
     "build:js": "tsup",
     "build:css": "tailwindcss -i scripts/dist-style.css -o dist/style.css --minify",
+    "build:standalone": "tailwindcss -i scripts/dist-style.css -o src/whatap-ds.css",
     "build:lib": "pnpm build:js && pnpm build:css",
     "storybook": "node scripts/build-design.mjs && storybook dev -p 5181 --no-open",
     "build-storybook": "node scripts/build-design.mjs && storybook build",
