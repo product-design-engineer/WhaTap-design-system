@@ -187,6 +187,7 @@ export default function AiMyNewMessage({
 
 | 파일 | 내용 |
 |---|---|
+| [`GUIDE.md`](./GUIDE.md) | **비개발자 가이드** — 5단계 절차 + 프리셋 4종(코드+Prompt) + Prompt 예시 8개 + 검수 체크리스트 |
 | [`tokens.md`](./tokens.md) | `@theme` 색·타입 스케일·웨이트·라인하이트·트래킹 + Tone 5 단계 + TONE_BG/DOT/LABEL |
 | [`primitives.md`](./primitives.md) | 14 종 — 일반 폼 (Checkbox · Tooltip · Chip · FilterChip · TextField · Select · Tabs · Modal · FilterDropdown) + AI 카드 빌딩 블록 (AiCard · AiCaption · AiSectionHeading · AiToneBadge · AiBulletList) |
 | [`chrome-components.md`](./chrome-components.md) | 19 종 — DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · Optionbar* · LiveTimerCompact · TimeRangeSelector · PresetSelect · Stage · Toast · AiSymbol · DataTable · FilterBar · MiniLineChart · EventWeekTimeMatrix · Button · DashboardBuildingProgress · WhaTapAiContext |
