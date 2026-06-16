@@ -484,7 +484,22 @@ components:
 
 ## Overview
 
-WhaTap 모니터링 SaaS의 단일 컴포넌트 출처. `exports`로 `.` (Chrome) · `./widget` (AI 위젯)을 분리하며, Storybook 카탈로그 + `tokens.css` 단일 출처를 유지합니다.
+WhaTap 모니터링 SaaS의 단일 컴포넌트 출처. No-Tailwind 자체완결 CSS(`whatap-ds.css`).
+
+### 아키텍처 — 2-Tier Token + 3-Layer Component
+
+```
+Token Tier          Component Layer
+─────────────       ──────────────────────────
+Global (원시값)  ─▶  Foundation (39) — 단독 렌더
+     │                    │
+Semantic (의미)  ─▶  Composite (12) — Foundation 1단계 조합
+                          │
+                     Shell (2) — 최종 진입점
+```
+
+**토큰 규칙:** 컴포넌트는 Semantic 토큰만 참조. Global 직접 참조 금지.
+**조합 규칙:** Composite 끼리 import 금지. 필요하면 Shell로 승격.
 
 ### 토큰 타입 규약
 

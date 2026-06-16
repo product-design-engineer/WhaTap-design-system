@@ -1,16 +1,32 @@
-/*! @whatap/design-system — standalone (no-tailwind) */
-/*  Generated from tailwindcss v4.3.1 + src/tokens.css  */
-/*  Regenerate: npm run build:standalone               */
+/*! @whatap/design-system — standalone (no-tailwind)
+ *
+ *  Token Architecture: 2-Tier
+ *    Global    — 원시 팔레트 · 스케일 · 시스템 값 (값 자체가 이름)
+ *    Semantic  — 의미 · 역할 · 의도 (용도가 이름)
+ *
+ *  Component Architecture: 3-Layer
+ *    Foundation — 조합 대상 없는 단독 렌더 (39개)
+ *    Composite  — Foundation 1단계 조합 (12개)
+ *    Shell      — 최종 조립 진입점 (2개)
+ */
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
   :root, :host {
-    /* ── Tailwind base internals (내재화) ── */
+
+    /* ================================================================
+     *  TIER 1 — GLOBAL TOKENS (원시 팔레트 · 스케일)
+     *  값 자체가 이름. 의미를 부여하지 않은 raw value.
+     *  직접 사용 금지 — Semantic 토큰을 통해서만 참조.
+     * ================================================================ */
+
+    /* ── System ── */
     --default-font-feature-settings: normal;
     --default-font-variation-settings: normal;
     --default-mono-font-feature-settings: normal;
     --default-mono-font-variation-settings: normal;
-    /* ── Button dynamic tokens (기본값) ── */
+
+    /* ── Component Dynamic (runtime 주입) ── */
     --wds-btn-bg: transparent;
     --wds-btn-fg: inherit;
     --wds-btn-border: transparent;
@@ -58,60 +74,90 @@
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
+
+    /* ================================================================
+     *  TIER 2 — SEMANTIC TOKENS (의미 · 역할)
+     *  용도가 이름. UI 컴포넌트는 이 토큰만 참조.
+     * ================================================================ */
+
+    /* ── Brand ── */
     --color-brand-blue: #296CF2;
     --color-brand-blue-deep: #1B5CD9;
     --color-brand-blue-soft: #3DA9FF;
     --color-brand-blue-bg: #D6E1FF;
     --color-brand-blue-bg-2: #C2D5FC;
+
+    /* ── Status ── */
     --color-status-success: #00B442;
     --color-status-warning: #FFA012;
     --color-status-error: #f34646;
+
+    /* ── Surface ── */
     --color-surface-50: #F5F5F5;
     --color-surface-100: #F1F2F4;
     --color-surface-200: #EAEAEA;
     --color-bg: #FFFFFF;
     --color-card: #FFFFFF;
-    --color-text-strong: #1E1E1E;
-    --color-text-body: #2D2D2D;
-    --color-text-muted: #4C4C4C;
-    --color-text-subtle: #757575;
-    --color-border-default: #EAEAEA;
-    --color-border-soft: #F0F0F0;
-    --color-border-strong: #E6E6E6;
-    --color-border-divider: #ADADAD;
-    --color-whatap-blue: #004BE0;
-    --color-whatap-purple: #8B52FF;
-    --color-whatap-purple-deep: #4F5BD5;
-    --font-family-korean: "Noto Sans", "Noto Sans KR", sans-serif;
-    --font-family-numeric: Roboto, "Noto Sans", sans-serif;
-    --text-chart: 9px;
-    --text-md: 13px;
-    --font-weight-regular: 400;
-    --leading-none: 1;
-    --tracking-display: -0.3px;
-    --tracking-metric: -0.2px;
-    --tracking-default: -0.1px;
-    --tracking-caps: 0.3px;
+
+    /* ── Text Hierarchy (4단계) ── */
     --color-text-primary: #222;
     --color-text-secondary: #4c4c4c;
     --color-text-tertiary: #757575;
     --color-text-disabled: #adadad;
+    /* legacy aliases — 신규 코드 사용 금지, text-primary/secondary/tertiary 사용 */
+    --color-text-strong: #1E1E1E;
+    --color-text-body: #2D2D2D;
+    --color-text-muted: #4C4C4C;
+    --color-text-subtle: #757575;
+
+    /* ── Border ── */
+    --color-border-default: #EAEAEA;
+    --color-border-soft: #F0F0F0;
+    --color-border-strong: #E6E6E6;
+    --color-border-divider: #ADADAD;
+
+    /* ── Indicator (Tone intent) ── */
     --color-indicator-critical: #E53935;
     --color-indicator-warning: #F0B400;
+
+    /* ── AI Gradient ── */
+    --color-whatap-blue: #004BE0;
+    --color-whatap-purple: #8B52FF;
+    --color-whatap-purple-deep: #4F5BD5;
+
+    /* ── Extended Gray ── */
     --color-gray-mid: #8b8b8b;
     --color-gray-soft: #a0a3a6;
     --color-gray-pale: #bdbdbd;
-    --tracking-precision: -0.48px;
-    --leading-px-0: 0;
-    --leading-px-12: 12px;
-    --leading-px-16: 16px;
-    --leading-px-18: 18px;
-    --leading-px-20: 20px;
+
+    /* ── Typography (Semantic) ── */
+    --font-family-korean: "Noto Sans", "Noto Sans KR", sans-serif;
+    --font-family-numeric: Roboto, "Noto Sans", sans-serif;
     --font-family-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
     --font-family-korean-kr-only: "Noto Sans KR", sans-serif;
     --font-family-korean-inter: Inter, "Noto Sans KR", sans-serif;
     --font-family-numeric-kr: Roboto, "Noto Sans KR", sans-serif;
     --font-family-numeric-jp: Roboto, NotoSansJP, NotoSans, sans-serif;
+    --text-chart: 9px;
+    --text-md: 13px;
+    --font-weight-regular: 400;
+    --leading-none: 1;
+
+    /* ── Tracking (Semantic) ── */
+    --tracking-display: -0.3px;
+    --tracking-metric: -0.2px;
+    --tracking-default: -0.1px;
+    --tracking-caps: 0.3px;
+    --tracking-precision: -0.48px;
+
+    /* ── Leading px (Semantic) ── */
+    --leading-px-0: 0;
+    --leading-px-12: 12px;
+    --leading-px-16: 16px;
+    --leading-px-18: 18px;
+    --leading-px-20: 20px;
+
+    /* ── Chart Palette (Global — 값 기반, 차트 시리즈 전용) ── */
     --color-palette-0078dc: #0078dc;
     --color-palette-00beb8: #00beb8;
     --color-palette-10b981: #10b981;

@@ -28,6 +28,35 @@
 - 일반 폼/검색은 TextField·Button
 - 페이지의 AI 진입점은 **버튼 대신 AiInlinePrompt 직접 주입 (2-step → 1-step)**
 
+## 아키텍처 — 2-Tier Token + 3-Layer Component
+
+### 토큰 2계층
+
+| Tier | 역할 | 명명 규칙 | 예 |
+|---|---|---|---|
+| **Global** | 원시 팔레트 · 스케일 · 시스템 값 | 값 자체가 이름 | `--color-gray-50`, `--text-xs`, `--spacing`, `--radius-md` |
+| **Semantic** | 의미 · 역할 · 의도 | 용도가 이름 | `--color-brand-blue`, `--color-text-primary`, `--color-status-error`, `--color-bg` |
+
+- UI 컴포넌트는 **Semantic 토큰만 참조**. Global 직접 참조 금지.
+- Component 토큰(3계층)은 variant×tone 조합이 복잡한 것만 선택 도입 (`--wds-btn-*`).
+- `--color-palette-*` (hex suffix) 는 차트 시리즈 전용 Global. 컴포넌트에서 직접 참조 가능 (차트 한정).
+
+### 컴포넌트 3계층 — Foundation · Composite · Shell
+
+| Layer | 역할 | 조합 규칙 | 수량 |
+|---|---|---|---|
+| **Foundation** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 | — | 39 |
+| **Composite** | Foundation 을 1단계 조합 | Foundation 만 import. **Composite 끼리 import 금지** | 12 |
+| **Shell** | Composite + Foundation 을 최종 조립하는 진입점 | 모든 계층 import 가능 | 2 |
+
+**Foundation** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, DataTable, MiniLineChart, LiveTimerCompact, AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList, AiUserBubble, AiAssistantButton, AiClickCursor 등 (39개)
+
+**Composite** — FilterBar(=FilterChip+FilterDropdown), PageHeader(=AiAssistantButton), OptionbarPage(=LiveTimerCompact+PresetSelect), AiInlinePrompt(=AiSendButton), AiChatExchange(=AiUserBubble) 등 (12개)
+
+**Shell** — DashboardLayout(=Sidebar), WhaTapAiWidget (2개)
+
+**신규 컴포넌트 추가 시 반드시 계층을 명시.** Composite 가 다른 Composite 를 import 하면 Shell 로 승격하거나 구조 분리.
+
 ## 타이포그래피 위계 — `font-weight` 평탄화 금지
 
 | 사이즈 | weight 기준 | 용도 |
