@@ -35,9 +35,9 @@ const ROWS: Row[] = [
   { no: 6, name: "gpu-batch-01",   tps: 0,     cpu: 2,  mem: 8,  status: "정상" },
 ];
 
-const STATUS_TONE: Record<string, "mid" | "high" | undefined> = {
-  "경고": "mid",
-  "위험": "high",
+const STATUS_TONE: Record<string, "warning" | "critical" | undefined> = {
+  "경고": "warning",
+  "위험": "critical",
 };
 
 const COLUMNS: DataTableColumn<Row>[] = [

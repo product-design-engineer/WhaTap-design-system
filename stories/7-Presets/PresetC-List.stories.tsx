@@ -47,9 +47,9 @@ const ROWS: Row[] = [
   { no: 8, title: "SSL 인증서 만료 30일 이내",   category: "Security", severity: "경고", project: "prod-eks",    time: "14:05:47" },
 ];
 
-const SEVERITY_TONE: Record<string, "high" | "mid" | undefined> = {
-  "위험": "high",
-  "경고": "mid",
+const SEVERITY_TONE: Record<string, "critical" | "warning" | undefined> = {
+  "위험": "critical",
+  "경고": "warning",
 };
 
 const COLUMNS: DataTableColumn<Row>[] = [
