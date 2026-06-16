@@ -715,6 +715,7 @@ AI 컴포넌트(그라데이션 · 핀휠 심볼 · 송신 ⬆)와 일반 UI(단
 
 ### Don't
 
+- **🔒 소비 레이어에서 토큰 · 컴포넌트 · Atom · 위젯을 역방향 수정 (불변 정책, 예외 없음)** — override · 재정의 · CSS 덮어쓰기 · 토큰 값 변경 모두 금지. 변경은 본 repo에서만.
 - `style={{ color: "#E53935" }}` — 토큰 우회
 - 같은 사이즈에서 weight만 바꾸기(평탄화) — 사이즈 + weight 둘 다 조합
 - default density 셀에 `text-sm`/`text-xs` — compact 잔재

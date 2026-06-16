@@ -72,6 +72,10 @@ export { WhaTapAiProvider, useWhaTapAi } from "./WhaTapAiContext";
 export type { LastPrompt } from "./WhaTapAiContext";
 export type { WidgetAction } from "./WhaTapAiWidget";
 
+// Policy
+export { default as DsReadOnlyNotice } from "./DsReadOnlyNotice";
+export type { DsReadOnlyNoticeProps } from "./DsReadOnlyNotice";
+
 // Icons
 export { default as SettingsIcon } from "./icons/SettingsIcon";
 
