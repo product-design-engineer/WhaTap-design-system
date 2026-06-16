@@ -1,7 +1,6 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
@@ -20,7 +19,7 @@ const dirname =
  * 직접 컴파일하므로 HMR 즉시 동작.
  */
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react()],
   test: {
     projects: [
       {

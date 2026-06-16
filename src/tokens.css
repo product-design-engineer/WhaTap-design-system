@@ -1,14 +1,18 @@
-@import "tailwindcss";
-
-/* === Tokens extracted from live whatap-ai-assistant.vercel.app bundle === */
 /*
- * `@theme static` — 모든 토큰을 사용 여부와 무관하게 항상 :root 에 emit.
- * 기본 @theme 는 "사용된 토큰만" tree-shake 하므로, 외부 소비 앱(프로토타입)이
- * DS 컴포넌트 src 를 @source 로 스캔하지 않으면 인라인 var(--color-X) 토큰이
- * :root 에서 빠져 보더·색이 사라짐. static 으로 두면 소비 앱이 tokens.css 만
- * import 해도 모든 토큰이 보장됨 (외부 소비용 디자인 시스템의 portable 보장).
+ * tokens.css — 디자인 토큰 원본 (참조용).
+ *
+ * 런타임 CSS 는 whatap-ds.css 를 사용. 이 파일은 토큰 값의 단일 출처(source of truth)이며,
+ * whatap-ds.css 의 :root 블록과 동기화되어야 합니다.
+ *
+ * 구 `@theme static` 문법은 Tailwind v4 전용이었으나, 현재는 Tailwind 의존을 완전 제거.
+ * 토큰 변경 시: 이 파일 수정 → whatap-ds.css 의 :root 블록에 동일 반영.
  */
-@theme static {
+
+/* ── Token definitions (reference) ──────────────────────
+   런타임에는 whatap-ds.css 의 :root 가 이 값을 제공합니다.
+   이 블록은 소비자가 tokens.css 를 직접 import 할 때의 fallback.
+   ────────────────────────────────────────────────────── */
+:root {
   /* Brand primary */
   --color-brand-blue: #296CF2;
   --color-brand-blue-deep: #1B5CD9;

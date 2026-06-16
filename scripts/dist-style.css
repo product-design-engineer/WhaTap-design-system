@@ -1,4 +1,0 @@
-/* dist/style.css 입력 — 토큰(:root) + 컴포넌트가 쓰는 Tailwind 유틸을 컴파일.
-   비-Tailwind 소비자가 import "@whatap/design-system/style.css" 만으로 스타일 확보. */
-@import "../src/tokens.css";
-@source "../src/**/*.{ts,tsx}";
