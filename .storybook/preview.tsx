@@ -9,7 +9,7 @@ import '../src/whatap-ds.css';
  *
  * - layout: 'centered' — 대시보드 chrome 같이 큰 컴포넌트는 개별 story 에서 'fullscreen' 으로 override.
  * - backgrounds: light(#fff) / surface-muted(#f5f5f5) / dark(#1a1a1a). prototype 에 자주 등장하는 배경 3종.
- * - storySort: 카탈로그 좌측 트리 ordering — Introduction → Foundation → Tokens → Chrome → WhaTap AI (Symbol/Context/Widget/Primitives/Cards).
+ * - storySort: 카탈로그 좌측 트리 ordering — Introduction → Foundation → Tokens → Chrome → WhaTap AI (Symbol/Context/Widget/Primitives/Cards) → Example(복수 컴포넌트 합성 위젯·페이지).
  */
 const preview: Preview = {
   parameters: {
@@ -45,6 +45,7 @@ const preview: Preview = {
           'Chrome',
           'WhaTap AI',
           ['Symbol', 'Context', 'Widget', 'Buttons', 'Input', 'Primitives', 'Cards'],
+          'Example',
         ],
       },
     },
