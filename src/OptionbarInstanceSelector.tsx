@@ -70,7 +70,7 @@ export default function OptionbarInstanceSelector({
         <button
           type="button"
           onClick={onToggle}
-          className="flex items-center justify-between w-full bg-white border border-color-var-color-border-divider rounded-2px cursor-pointer hover-opacity-70 transition-shadow"
+          className="flex items-center justify-between w-full bg-card border border-color-var-color-border-divider rounded-2px cursor-pointer hover-opacity-70 transition-shadow"
           style={{
             minHeight: 32,
             padding: "5px 4px 5px 8px",

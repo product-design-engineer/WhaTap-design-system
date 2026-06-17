@@ -181,7 +181,7 @@ export default function FilterDropdown({
     position: "absolute",
     zIndex: 60,
     width,
-    backgroundColor: "#fff",
+    backgroundColor: "var(--color-card)",
     border: "1px solid var(--color-border-default)",
     borderRadius: 6,
     boxShadow: "0 4px 16px rgba(0,0,0,0.08)",

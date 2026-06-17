@@ -72,13 +72,13 @@ export default function TimeRangeSelector({
           {title}
         </div>
       )}
-      <div className="flex items-stretch border border-color-var-color-border-divider rounded-4px bg-white overflow-hidden">
+      <div className="flex items-stretch border border-color-var-color-border-divider rounded-4px bg-card overflow-hidden">
         {/* Live 토글 */}
         <button
           type="button"
           onClick={onLive}
           aria-label="LIVE"
-          className="flex items-center justify-center px-6px cursor-pointer hover-bg-gray-50"
+          className="flex items-center justify-center px-6px cursor-pointer hover-bg-surface-100"
         >
           <IcLiveTime />
         </button>

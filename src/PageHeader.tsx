@@ -63,7 +63,7 @@ export default function PageHeader({
   const [notifyOpen, setNotifyOpen] = useState(false);
   const hasNotify = !!notifications && notifications.length > 0;
   return (
-    <div className="flex items-center justify-between h-48px box-border px-8px bg-white border-b border-color-var-color-border-strong shrink-0">
+    <div className="flex items-center justify-between h-48px box-border px-8px bg-card border-b border-color-var-color-border-strong shrink-0">
       {/* 좌측: 타이틀 + AI/Docs */}
       <div className="flex items-center gap-24px shrink-0">
         <p
@@ -78,7 +78,7 @@ export default function PageHeader({
         <div className="flex items-center gap-8px">
           <AiAssistantButton aiActive={aiActive} onClick={onAiToggle} />
           <button
-            className="flex items-center justify-center gap-4px h-32px px-16px py-8px rounded-full border border-color-var-color-border-divider bg-white text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover-bg-gray-50 transition-colors"
+            className="flex items-center justify-center gap-4px h-32px px-16px py-8px rounded-full border border-color-var-color-border-divider bg-card text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover-bg-surface-100 transition-colors"
             style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
@@ -96,7 +96,7 @@ export default function PageHeader({
       {/* 우측: 고객지원 + 알림 + 아바타 */}
       <div className="flex items-center gap-16px h-full shrink-0">
         <button
-          className="flex items-center justify-center gap-4px h-32px px-16px py-8px rounded-full border border-color-var-color-border-divider bg-white text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover-bg-gray-50 transition-colors"
+          className="flex items-center justify-center gap-4px h-32px px-16px py-8px rounded-full border border-color-var-color-border-divider bg-card text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover-bg-surface-100 transition-colors"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
@@ -134,14 +134,14 @@ export default function PageHeader({
             {hasNotify && notifyOpen && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setNotifyOpen(false)} />
-                <div className="absolute right-0 top-32px z-50 min-w-260px rounded-8px border border-color-var-color-border-default bg-white py-4px shadow-0_4px_16px_rgba-0-0-0-0_12">
+                <div className="absolute right-0 top-32px z-50 min-w-260px rounded-8px border border-color-var-color-border-default bg-card py-4px shadow-0_4px_16px_rgba-0-0-0-0_12">
                   <div className="px-14px py-6px text-xs text-tertiary" style={{ fontFamily: "var(--font-family-korean)" }}>알림</div>
                   {notifications!.map((n) => (
                     <button
                       key={n.label}
                       type="button"
                       onClick={() => { setNotifyOpen(false); n.onClick?.(); }}
-                      className="flex items-start gap-8px w-full text-left px-14px py-8px text-md text-primary tracking-default cursor-pointer hover-bg-gray-50 whitespace-nowrap"
+                      className="flex items-start gap-8px w-full text-left px-14px py-8px text-md text-primary tracking-default cursor-pointer hover-bg-surface-100 whitespace-nowrap"
                       style={{ fontFamily: "var(--font-family-korean)" }}
                     >
                       <span className="mt-6px size-6px rounded-full bg-ce5484d shrink-0" />
@@ -172,7 +172,7 @@ export default function PageHeader({
             {profileMenu && profileMenu.length > 0 && profileOpen && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setProfileOpen(false)} />
-                <div className="absolute right-0 top-32px z-50 min-w-200px rounded-8px border border-color-var-color-border-default bg-white py-4px shadow-0_4px_16px_rgba-0-0-0-0_12">
+                <div className="absolute right-0 top-32px z-50 min-w-200px rounded-8px border border-color-var-color-border-default bg-card py-4px shadow-0_4px_16px_rgba-0-0-0-0_12">
                   {roleBadge && (
                     <div className="flex items-center gap-6px px-14px pt-8px pb-8px mb-2px border-b border-color-var-color-border-soft">
                       <span className="inline-flex items-center h-18px px-6px rounded-4px text-xs font-bold bg-var-color-brand-blue-bg text-color-var-color-brand-blue" style={{ fontFamily: "var(--font-family-korean)" }}>{roleBadge}</span>
@@ -184,7 +184,7 @@ export default function PageHeader({
                       key={it.label}
                       type="button"
                       onClick={() => { setProfileOpen(false); it.onClick?.(); }}
-                      className="block w-full text-left px-14px py-8px text-md text-primary tracking-default cursor-pointer hover-bg-gray-50 whitespace-nowrap"
+                      className="block w-full text-left px-14px py-8px text-md text-primary tracking-default cursor-pointer hover-bg-surface-100 whitespace-nowrap"
                       style={{ fontFamily: "var(--font-family-korean)" }}
                     >
                       {it.label}

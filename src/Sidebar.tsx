@@ -185,7 +185,7 @@ export default function Sidebar({
     >
       {/* 48px 로고 헤더 — 페이지 헤더(48px) 표준과 정렬. collapsed면 심볼만, 아니면 풀 로고 + 검색/접기 */}
       <div
-        className="flex items-center h-48px box-border shrink-0 bg-white border-r border-b border-color-var-color-border-default"
+        className="flex items-center h-48px box-border shrink-0 bg-card border-r border-b border-color-var-color-border-default"
         style={{
           width,
           justifyContent: collapsed ? "center" : "space-between",
@@ -206,9 +206,6 @@ export default function Sidebar({
               style={{ width: 126, height: 24 }}
             />
             <div className="flex gap-4px items-center justify-end shrink-0">
-              <div className="shrink-0 size-20px flex items-center justify-center cursor-pointer">
-                <img alt="" className="size-20px" src={icon("header-search.svg")} />
-              </div>
               <div className="shrink-0 size-16px flex items-center justify-center cursor-pointer">
                 <img
                   alt=""
@@ -225,7 +222,7 @@ export default function Sidebar({
       {/* 40px 조직 스위처 — collapsed 또는 org=null이면 숨김. 라벨/심볼은 org prop으로 제어. */}
       {!collapsed && org && (
       <button onClick={onOrgClick} className="flex h-40px items-start w-full shrink-0 cursor-pointer">
-        <div className="flex flex-col h-full items-start justify-center pr-8px w-240px bg-white border-r border-b border-color-var-color-border-default">
+        <div className="flex flex-col h-full items-start justify-center pr-8px w-240px bg-card border-r border-b border-color-var-color-border-default">
           <div className="flex items-center justify-between w-full">
             {org.icon ? (
               <div className="flex items-center justify-center shrink-0 size-40px">
@@ -259,7 +256,7 @@ export default function Sidebar({
       {/* 44px 프로젝트 스위처 — collapsed 또는 hideProjectSwitcher면 숨김 */}
       {!collapsed && !hideProjectSwitcher && (
       <button className="flex items-start shrink-0 cursor-pointer">
-        <div className="flex h-44px items-center justify-between pr-8px w-240px bg-white border-b border-r border-color-var-color-border-default">
+        <div className="flex h-44px items-center justify-between pr-8px w-240px bg-card border-b border-r border-color-var-color-border-default">
           {project.productIcon ? (
             <div className="flex items-center justify-center shrink-0 size-40px">
               <img alt="" className="size-24px" src={icon(project.productIcon)} />
@@ -292,7 +289,7 @@ export default function Sidebar({
       <div className="flex flex-1 items-start min-h-0 w-full">
         {/* 좌측 40px 제품 레일 — hideProductRail이면 숨김(관리 콘솔 등 제품 네비 불필요 화면) */}
         {!hideProductRail && (
-        <div className="flex flex-col h-full items-start shrink-0 w-40px bg-white border-r border-color-var-color-border-default">
+        <div className="flex flex-col h-full items-start shrink-0 w-40px bg-card border-r border-color-var-color-border-default">
           <div className="flex flex-1 flex-col items-start min-h-0">
             {PRODUCT_ICONS.map((name) => {
               const key = name.replace("product-", "").replace(".svg", "");
@@ -300,7 +297,7 @@ export default function Sidebar({
               return (
                 <div
                   key={name}
-                  className="flex items-center justify-center shrink-0 size-40px cursor-pointer hover-bg-gray-50"
+                  className="flex items-center justify-center shrink-0 size-40px cursor-pointer hover-bg-surface-100"
                   style={
                     isActive
                       ? { backgroundColor: "var(--color-brand-blue-bg)" }
@@ -316,7 +313,7 @@ export default function Sidebar({
             {BOTTOM_RAIL_ICONS.map((name) => (
               <div
                 key={name}
-                className="flex h-32px items-center justify-center shrink-0 w-40px cursor-pointer hover-bg-gray-50"
+                className="flex h-32px items-center justify-center shrink-0 w-40px cursor-pointer hover-bg-surface-100"
               >
                 <img alt="" className="size-20px" src={icon(name)} />
               </div>
@@ -328,7 +325,7 @@ export default function Sidebar({
         {/* 우측 메뉴 목록 — collapsed면 통째로 숨김 */}
         {!collapsed && (
         <div className="flex flex-1 flex-col h-full items-start min-w-0">
-          <div className="flex flex-1 flex-col items-start min-h-0 pr-px w-full bg-white border-r border-color-var-color-border-default">
+          <div className="flex flex-1 flex-col items-start min-h-0 pr-px w-full bg-card border-r border-color-var-color-border-default">
             {menu.map((item) => {
               const hasChildren = Array.isArray(item.children);
               if (!hasChildren) {
@@ -337,7 +334,7 @@ export default function Sidebar({
                   <div
                     key={item.label}
                     onClick={item.onClick}
-                    className="flex h-32px items-center overflow-clip p-8px shrink-0 w-full cursor-pointer hover-bg-gray-50"
+                    className="flex h-32px items-center overflow-clip p-8px shrink-0 w-full cursor-pointer hover-bg-surface-100"
                     style={item.active ? { backgroundColor: "var(--color-brand-blue-bg)" } : undefined}
                   >
                     <div className="flex items-center shrink-0 size-20px justify-center">
@@ -358,7 +355,7 @@ export default function Sidebar({
               return (
                 <div key={item.label} className="contents">
                   <button className="flex flex-col items-start shrink-0 w-full cursor-pointer">
-                    <div className="flex h-32px items-center justify-between overflow-clip px-8px py-6px shrink-0 w-full hover-bg-gray-50">
+                    <div className="flex h-32px items-center justify-between overflow-clip px-8px py-6px shrink-0 w-full hover-bg-surface-100">
                       <div className="flex gap-4px items-start shrink-0">
                         <div className="shrink-0 size-16px flex items-center justify-center">
                           <img alt="" className="size-16px" src={icon(item.icon)} />
@@ -391,8 +388,8 @@ export default function Sidebar({
                           onClick={c.onClick}
                           className={
                             c.active
-                              ? "flex gap-4px h-28px items-center overflow-clip pl-28px pr-8px py-4px shrink-0 w-full cursor-pointer hover-bg-gray-50"
-                              : "flex h-28px items-center overflow-clip pl-28px pr-8px py-4px shrink-0 w-full cursor-pointer hover-bg-gray-50"
+                              ? "flex gap-4px h-28px items-center overflow-clip pl-28px pr-8px py-4px shrink-0 w-full cursor-pointer hover-bg-surface-100"
+                              : "flex h-28px items-center overflow-clip pl-28px pr-8px py-4px shrink-0 w-full cursor-pointer hover-bg-surface-100"
                           }
                         >
                           {c.active ? (
@@ -422,7 +419,7 @@ export default function Sidebar({
           </div>
 
           {/* 메뉴 영역 하단의 즐겨찾기/홈/사이트맵 바 */}
-          <div className="flex h-32px items-center justify-between p-8px shrink-0 w-full bg-white border-r border-t border-color-var-color-border-default">
+          <div className="flex h-32px items-center justify-between p-8px shrink-0 w-full bg-card border-r border-t border-color-var-color-border-default">
             <div className="flex gap-4px items-center w-73px">
               <img alt="" className="size-20px" src={icon("bar-home.svg")} />
               <img alt="" className="size-20px" src={icon("bar-star.svg")} />
@@ -436,7 +433,7 @@ export default function Sidebar({
 
       {/* 24px 저작권 푸터 — collapsed면 숨김 */}
       {!collapsed && (
-      <div className="flex h-24px items-center p-8px shrink-0 w-full bg-white border-r border-t border-color-var-color-border-default">
+      <div className="flex h-24px items-center p-8px shrink-0 w-full bg-card border-r border-t border-color-var-color-border-default">
         <p
           className="text-sm text-tertiary whitespace-nowrap leading-none"
           style={{ fontFamily: ROBOTO, fontWeight: "var(--font-weight-regular)" }}

@@ -44,10 +44,10 @@ const QUICK_ACTIONS = ["현재 상태 요약", "슬로우 트랜잭션 분석", 
 export default function AiWidget({ open = true, variant = "slide", onClose }: AiWidgetProps) {
   const containerClass =
     variant === "slide"
-      ? `absolute top-0 right-0 bottom-0 w-440px bg-white flex flex-col z-50 transition-transform duration-300 ease-cubic-bezier-0_4-0-0_2-1 ${
+      ? `absolute top-0 right-0 bottom-0 w-440px bg-card flex flex-col z-50 transition-transform duration-300 ease-cubic-bezier-0_4-0-0_2-1 ${
           open ? "translate-x-0" : "translate-x-full"
         }`
-      : `absolute bottom-5 right-5 w-440px h-640px bg-white rounded-lg flex flex-col z-50 overflow-hidden ${
+      : `absolute bottom-5 right-5 w-440px h-640px bg-card rounded-lg flex flex-col z-50 overflow-hidden ${
           open ? "opacity-100" : "opacity-0 pointer-events-none"
         }`;
 
@@ -59,7 +59,7 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
   return (
     <div className={containerClass} style={containerStyle}>
       {/* Header */}
-      <div className="flex items-center justify-between h-47px px-2 shrink-0 bg-white border-b" style={{ borderColor: "var(--color-border-default)" }}>
+      <div className="flex items-center justify-between h-47px px-2 shrink-0 bg-card border-b" style={{ borderColor: "var(--color-border-default)" }}>
         <div className="flex items-center gap-2 pl-1_5">
           <div className="ai-symbol-anim flex items-center justify-center w-6 h-6 rounded-md" style={{ background: "linear-gradient(135deg, var(--color-brand-blue), var(--color-brand-blue-deep))" }}>
             <AiSymbol size={14} />
@@ -89,7 +89,7 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
       </div>
 
       {/* Body */}
-      <div className="flex-1 overflow-auto p-4 bg-white">
+      <div className="flex-1 overflow-auto p-4 bg-card">
         {/* AI welcome message */}
         <div className="flex gap-2_5 mb-4">
           <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 shadow-0_2px_8px_rgba-41-108-242-0_25" style={{ background: "linear-gradient(135deg, var(--color-brand-blue), var(--color-brand-blue-deep))" }}>
@@ -108,7 +108,7 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
               key={label}
               className="px-3 h-7 rounded-full text-base font-medium border cursor-pointer transition-colors"
               style={{
-                background: "#fff",
+                background: "var(--color-card)",
                 color: "var(--color-brand-blue-deep)",
                 borderColor: "var(--color-brand-blue-bg)",
               }}
@@ -116,7 +116,7 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
                 e.currentTarget.style.background = "var(--color-brand-blue-bg)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#fff";
+                e.currentTarget.style.background = "var(--color-card)";
               }}
             >
               {label}
@@ -126,9 +126,9 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
       </div>
 
       {/* Footer — input area */}
-      <div className="px-3 pt-2 pb-2_5 bg-white border-t" style={{ borderColor: "var(--color-border-soft)" }}>
+      <div className="px-3 pt-2 pb-2_5 bg-card border-t" style={{ borderColor: "var(--color-border-soft)" }}>
         <div
-          className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white mb-2"
+          className="flex items-center gap-2 px-3 py-2 rounded-xl bg-card mb-2"
           style={{ border: "1px solid var(--color-border-divider)" }}
         >
           <button className="size-5 flex items-center justify-center cursor-pointer" style={{ color: "var(--color-text-tertiary)" }} aria-label="파일 또는 이미지 추가">

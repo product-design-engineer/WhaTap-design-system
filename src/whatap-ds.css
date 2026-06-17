@@ -719,6 +719,15 @@
 .z-50 { z-index: 50; }
 .z-9999 { z-index: 9999; }
 
+/* ── 테마 적응 표면/배경 유틸 (다크 대응 · .dark 토큰으로 자동 전환) ──────────── */
+.bg-bg { background-color: var(--color-bg); }
+.bg-card { background-color: var(--color-card); }
+.bg-surface-50 { background-color: var(--color-surface-50); }
+.bg-surface-100 { background-color: var(--color-surface-100); }
+.bg-surface-200 { background-color: var(--color-surface-200); }
+.hover-bg-surface-100:hover { background-color: var(--color-surface-100); }
+.hover-bg-surface-200:hover { background-color: var(--color-surface-200); }
+
 /* ── globals (keyframes · 컴포넌트 전역 클래스 · .dark) ────────────────────── */
 html, body, #root {
   height: 100%;

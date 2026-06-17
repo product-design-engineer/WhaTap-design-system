@@ -130,7 +130,7 @@ export default function TextField({
         </label>
       )}
       <div
-        className={`relative inline-flex items-center rounded-md bg-white transition-colors`}
+        className={`relative inline-flex items-center rounded-md bg-card transition-colors`}
         style={{
           height: spec.h,
           paddingInline: spec.padX,

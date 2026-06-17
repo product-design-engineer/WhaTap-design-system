@@ -64,6 +64,9 @@
 - **소비자:** 진입점에서 `import "@whatap/design-system/style.css"` 한 줄. Tailwind·`@source`·PostCSS 불필요. 토큰만 필요하면 `tokens.css`(참조용 `:root`).
 - **`whatap-ds.css` 는 생성물 — 손으로 늘리지 말 것.** 컴포넌트 className/토큰 변경 시 `node scripts/detailwind.mjs generate` 로 **(1) whatap-ds.css 재생성 + (2) tsx className 코드모드(escape 토큰→일반 식별자)**. 진실 원본 `scripts/frozen-whatap-ds.css`(구 빌드 1회 스냅샷, 미배포). self-contained(:root 토큰 + preflight + utilities + 전역/keyframes/.dark 포함).
 - **동적 색**(variant×tone)은 정적 유틸로 불가 → Button 처럼 inline CSS custom property(`--wds-btn-*`).
+- **다크 대응 (테마 적응 표면 유틸):** 페이지/패널 배경에 `bg-white`·인라인 `#fff` **금지** — 테마 토큰으로:
+  `bg-bg`(앱 셸 = `--color-bg`) · `bg-card`(헤더/사이드바/카드/입력/드롭다운 = `--color-card`) · `bg-surface-50/100/200` · `hover-bg-surface-100/200`. `.dark` 가 토큰만 재매핑하므로 라이트/다크 자동 전환. **흰색 전경**(컬러 위 텍스트·아이콘: `--wds-btn-fg`, `stroke/fill "#fff"`)은 그대로 유지.
+- **⚠️ `detailwind generate` 는 원본(escaped className) tsx 에서만 실행** — 이미 codemod된 트리에서 재실행하면 유틸이 누락됨(가드가 중단시킴). 증분 변경은 `src/whatap-ds.css` 직접 편집(+ EXTRAS 유틸은 스크립트에도 반영).
 - **Tailwind 재도입 금지** — 의존성·빌드·런타임·CSS 산출물 어디에도 없음. (Storybook Guardrails: `no-tailwind-plain-css`)
 
 ## 타이포그래피 위계 — `font-weight` 평탄화 금지

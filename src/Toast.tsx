@@ -86,7 +86,7 @@ export default function Toast({
       aria-live="polite"
     >
       <div
-        className="flex items-center gap-12px bg-white border border-color-var-color-border-default rounded-8px px-16px py-10px"
+        className="flex items-center gap-12px bg-card border border-color-var-color-border-default rounded-8px px-16px py-10px"
         style={{
           boxShadow: "0 8px 24px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04)",
           fontFamily: "var(--font-family-korean)",

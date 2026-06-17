@@ -156,7 +156,7 @@ export default function Tabs({
                 spec.text
               } ${spec.gap === 4 ? "gap-1" : "gap-1_5"} ${fullWidth ? "flex-1" : ""} ${
                 selected
-                  ? "bg-white text-primary shadow-0_1px_2px_rgba-0-0-0-0_08 font-medium"
+                  ? "bg-card text-primary shadow-0_1px_2px_rgba-0-0-0-0_08 font-medium"
                   : it.disabled
                   ? "cursor-not-allowed text-disabled"
                   : "text-tertiary hover:text-primary"
