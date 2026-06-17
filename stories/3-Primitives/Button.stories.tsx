@@ -7,7 +7,7 @@ import { Button } from "@whatap/design-system";
  * @whatap/wds Button-specs 기반: 3 variant × 4 size × 3 tone + disabled / loading / fullWidth.
  */
 const meta: Meta<typeof Button> = {
-  title: "Chrome/Button",
+  title: "Primitives/Button",
   component: Button,
   tags: ["autodocs"],
   parameters: {
