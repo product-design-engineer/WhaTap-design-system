@@ -18,6 +18,14 @@
  * ## When NOT to use
  * - 일반 form submit → [[Button]] (variant=contained · tone=primary · type=submit).
  * - AI 위젯 토글 → [[AiAssistantButton]].
+ * - 페이지 헤더의 AI 진입 → [[AiInlinePrompt]] (내부에서 AiSendButton 을 자동 사용).
+ *
+ * ## Composition rules
+ * - 24×24px, `rounded-4px` — 위젯 인라인 spec 1:1.
+ * - active 색은 토큰 (`--color-brand-blue` 배경, 흰 화살표) — 인라인 hex 금지.
+ * - inactive 색은 토큰 (`--color-surface-50` 배경, `#d3d3d3` 보더) — 보더만 예외적 hex(토큰화 대상).
+ * - `showCursor` 는 시연 전용 — 프로덕션에서 사용 금지.
+ * - [[AiPromptInput]] · [[AiInlinePrompt]] 가 내부에서 자동 렌더 — 단독 import 는 시연 시나리오 한정.
  *
  * @example
  * ```tsx

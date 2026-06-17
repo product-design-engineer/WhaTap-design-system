@@ -32,16 +32,8 @@
  * />
  * ```
  */
-type DateParts = {
-  year: string;
-  month: string;
-  day: string;
-  hour: string;
-  minute: string;
-};
-
-const pad2 = (v: string) => v.padStart(2, "0");
-const pad4 = (v: string) => v.padStart(4, "0");
+import DateTimeBlock from "./DateTimeBlock";
+import type { DateParts } from "./DateTimeBlock";
 
 export default function TimeRangeSelector({
   title = "시간",
@@ -127,67 +119,6 @@ export default function TimeRangeSelector({
           </button>
         </div>
       </div>
-    </div>
-  );
-}
-
-/**
- * DateTimeBlock — 듀얼 datetime 입력의 단일 측 (start / end).
- *
- * 표시: `YYYY-MM-DD HH:MM` — year 4자리, month/day/hour/minute 2자리 padding 자동.
- * 자리수 정렬을 위해 `--font-family-numeric` (tabular-nums 효과) 사용.
- */
-function DateTimeBlock({ parts, side }: { parts: DateParts; side: "start" | "end" }) {
-  const inputCls =
-    "outline-none border-none bg-transparent text-base text-primary text-center";
-  const inputStyle = {
-    fontFamily: "var(--font-family-numeric)",
-    fontVariantNumeric: "tabular-nums" as const,
-  };
-  const sepCls = "text-base text-tertiary";
-  const tabBase = side === "start" ? -100000000 : -200000000;
-  return (
-    <div className="flex items-center" style={{ height: "100%" }}>
-      <input
-        className={inputCls}
-        style={{ ...inputStyle, width: 28 }}
-        defaultValue={pad4(parts.year)}
-        tabIndex={tabBase}
-        aria-label={`${side === "start" ? "시작" : "종료"} 년도`}
-      />
-      <span className={sepCls} aria-hidden>-</span>
-      <input
-        className={inputCls}
-        style={{ ...inputStyle, width: 16 }}
-        defaultValue={pad2(parts.month)}
-        tabIndex={tabBase - 1}
-        aria-label={`${side === "start" ? "시작" : "종료"} 월`}
-      />
-      <span className={sepCls} aria-hidden>-</span>
-      <input
-        className={inputCls}
-        style={{ ...inputStyle, width: 16 }}
-        defaultValue={pad2(parts.day)}
-        tabIndex={tabBase - 2}
-        aria-label={`${side === "start" ? "시작" : "종료"} 일`}
-      />
-      {/* YYYY-MM-DD 와 HH:MM 사이의 단일 space — 가시 폭 일관화 (margin 대신 명시적 span) */}
-      <span className={sepCls} style={{ ...inputStyle, width: 6, display: "inline-block" }} aria-hidden> </span>
-      <input
-        className={inputCls}
-        style={{ ...inputStyle, width: 16 }}
-        defaultValue={pad2(parts.hour)}
-        tabIndex={tabBase - 3}
-        aria-label={`${side === "start" ? "시작" : "종료"} 시`}
-      />
-      <span className={sepCls} aria-hidden>:</span>
-      <input
-        className={inputCls}
-        style={{ ...inputStyle, width: 16 }}
-        defaultValue={pad2(parts.minute)}
-        tabIndex={tabBase - 4}
-        aria-label={`${side === "start" ? "시작" : "종료"} 분`}
-      />
     </div>
   );
 }

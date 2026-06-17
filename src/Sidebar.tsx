@@ -40,9 +40,13 @@
  * />
  * ```
  */
+import SidebarLogoHeader from "./SidebarLogoHeader";
 import SidebarMenuItem from "./SidebarMenuItem";
+import SidebarOrgSwitcher from "./SidebarOrgSwitcher";
+import SidebarProjectSwitcher from "./SidebarProjectSwitcher";
 import ProductRailItem from "./ProductRailItem";
 import BottomRailItem from "./BottomRailItem";
+import SidebarCopyright from "./SidebarCopyright";
 
 /**
  * 아이콘은 표준 경로(`/icons/*`)를 그대로 참조합니다. 호스트별로 자산 제공 경로가 다름:
@@ -187,106 +191,17 @@ export default function Sidebar({
       className="flex flex-col items-start relative h-full shrink-0 transition-all duration-400 ease-in-out overflow-hidden"
       style={{ width }}
     >
-      {/* 48px 로고 헤더 — 페이지 헤더(48px) 표준과 정렬. collapsed면 심볼만, 아니면 풀 로고 + 검색/접기 */}
-      <div
-        className="flex items-center h-48px box-border shrink-0 bg-card border-r border-b border-color-var-color-border-default"
-        style={{
-          width,
-          justifyContent: collapsed ? "center" : "space-between",
-          paddingInline: collapsed ? 0 : 8,
-        }}
-      >
-        {collapsed ? (
-          <img
-            alt="WhaTap"
-            src={icon("whatap-symbol.svg")}
-            style={{ width: 24, height: 24 }}
-          />
-        ) : (
-          <>
-            <img
-              alt="WhaTap"
-              src={icon("whatap-logo.svg")}
-              style={{ width: 126, height: 24 }}
-            />
-            <div className="flex gap-4px items-center justify-end shrink-0">
-              <div className="shrink-0 size-16px flex items-center justify-center cursor-pointer">
-                <img
-                  alt=""
-                  className="size-16px"
-                  src={icon("chevron-right.svg")}
-                  style={{ transform: "scaleX(-1)" }}
-                />
-              </div>
-            </div>
-          </>
-        )}
-      </div>
+      {/* 48px 로고 헤더 */}
+      <SidebarLogoHeader collapsed={collapsed} width={width} />
 
-      {/* 40px 조직 스위처 — collapsed 또는 org=null이면 숨김. 라벨/심볼은 org prop으로 제어. */}
-      {!collapsed && org && (
-      <button onClick={onOrgClick} className="flex h-40px items-start w-full shrink-0 cursor-pointer">
-        <div className="flex flex-col h-full items-start justify-center pr-8px w-240px bg-card border-r border-b border-color-var-color-border-default">
-          <div className="flex items-center justify-between w-full">
-            {org.icon ? (
-              <div className="flex items-center justify-center shrink-0 size-40px">
-                <img alt="" className="size-24px" src={icon(org.icon)} />
-              </div>
-            ) : (
-              <div className="w-12px shrink-0" />
-            )}
-            <p
-              className="flex-1 min-w-0 overflow-hidden text-md font-bold text-secondary text-left tracking-default whitespace-nowrap text-ellipsis leading-none"
-              style={{ fontFamily: NOTO_SANS }}
-            >
-              {org.label}
-            </p>
-            {org.badge && (
-              <span
-                className="shrink-0 inline-flex items-center h-18px px-6px mr-6px rounded-4px text-xs font-bold whitespace-nowrap bg-var-color-brand-blue-bg text-color-var-color-brand-blue"
-                style={{ fontFamily: NOTO_SANS }}
-              >
-                {org.badge}
-              </span>
-            )}
-            <div className="shrink-0 size-16px flex items-center justify-center">
-              <img alt="" className="size-16px" src={icon("chevron-right.svg")} />
-            </div>
-          </div>
-        </div>
-      </button>
+      {/* 40px 조직 스위처 — org=null이면 숨김, collapsed면 아이콘만 */}
+      {org && (
+        <SidebarOrgSwitcher org={org} onClick={onOrgClick} collapsed={collapsed} />
       )}
 
-      {/* 44px 프로젝트 스위처 — collapsed 또는 hideProjectSwitcher면 숨김 */}
-      {!collapsed && !hideProjectSwitcher && (
-      <button className="flex items-start shrink-0 cursor-pointer">
-        <div className="flex h-44px items-center justify-between pr-8px w-240px bg-card border-b border-r border-color-var-color-border-default">
-          {project.productIcon ? (
-            <div className="flex items-center justify-center shrink-0 size-40px">
-              <img alt="" className="size-24px" src={icon(project.productIcon)} />
-            </div>
-          ) : (
-            <div className="w-12px shrink-0" />
-          )}
-          <div className="flex flex-1 flex-col gap-4px items-start justify-center min-w-0 leading-none text-left whitespace-nowrap">
-            <p
-              className="text-base text-secondary overflow-hidden text-ellipsis w-full tracking-normal"
-              style={{ fontFamily: NOTO_LIGHT, fontWeight: "var(--font-weight-regular)" }}
-            >
-              {project.groupLabel}
-            </p>
-            <p
-              className="text-md font-bold text-secondary overflow-hidden text-ellipsis w-full tracking-default"
-              style={{ fontFamily: NOTO_SANS }}
-            >
-              {project.projectLabel}
-            </p>
-          </div>
-          <div className="flex items-center justify-between shrink-0 size-16px">
-            <img alt="" className="size-16px" src={icon("chevron-right.svg")} />
-          </div>
-        </div>
-      </button>
+      {/* 44px 프로젝트 스위처 — hideProjectSwitcher면 숨김, collapsed면 아이콘만 */}
+      {!hideProjectSwitcher && (
+        <SidebarProjectSwitcher project={project} collapsed={collapsed} />
       )}
 
       {/* 본문 (flex-1): 좌 40px 제품 레일 + (collapsed가 아닐 때만) 우 메뉴 목록 */}
@@ -311,8 +226,8 @@ export default function Sidebar({
 
         {/* 우측 메뉴 목록 — collapsed면 통째로 숨김 */}
         {!collapsed && (
-        <div className="flex flex-1 flex-col h-full items-start min-w-0">
-          <div className="flex flex-1 flex-col items-start min-h-0 pr-px w-full bg-card border-r border-color-var-color-border-default">
+        <div className="flex flex-1 flex-col h-full items-stretch min-w-0">
+          <div className="flex flex-1 flex-col items-stretch min-h-0 pr-px w-full bg-card border-r border-color-var-color-border-default">
             {menu.map((item) => (
               <SidebarMenuItem key={item.label} item={item} />
             ))}
@@ -332,16 +247,7 @@ export default function Sidebar({
       </div>
 
       {/* 24px 저작권 푸터 — collapsed면 숨김 */}
-      {!collapsed && (
-      <div className="flex h-24px items-center p-8px shrink-0 w-full bg-card border-r border-t border-color-var-color-border-default">
-        <p
-          className="text-sm text-tertiary whitespace-nowrap leading-none"
-          style={{ fontFamily: ROBOTO, fontWeight: "var(--font-weight-regular)" }}
-        >
-          Copyright 2024 WhaTap
-        </p>
-      </div>
-      )}
+      {!collapsed && <SidebarCopyright />}
     </div>
   );
 }
