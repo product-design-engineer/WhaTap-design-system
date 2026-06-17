@@ -119,7 +119,7 @@ export default function Chip({
           type="button"
           aria-label="닫기"
           onClick={onClose}
-          className="inline-flex shrink-0 cursor-pointer items-center justify-center rounded-full opacity-70 hover:opacity-100"
+          className="inline-flex shrink-0 cursor-pointer items-center justify-center rounded-full opacity-70 hover-opacity-100"
           style={{
             width: spec.h - 8,
             height: spec.h - 8,

@@ -91,21 +91,21 @@ export default function DataTable<T>({
       ? {
           headerText: "text-xs font-bold text-secondary",
           rowText: "text-sm text-primary",
-          rowPadding: "px-[8px] py-[6px] gap-[6px]",
+          rowPadding: "px-8px py-6px gap-6px",
           rowHeight: "leading-snug",
         }
       : {
           headerText: "text-base font-bold text-tertiary",
           rowText: "text-md text-primary",
-          rowPadding: "px-[12px] py-[10px] gap-[10px]",
+          rowPadding: "px-12px py-10px gap-10px",
           rowHeight: "leading-normal",
         };
 
   return (
-    <div className="flex flex-col rounded-[4px] border border-[color:var(--color-border-default)] bg-white overflow-hidden">
+    <div className="flex flex-col rounded-4px border border-color-var-color-border-default bg-white overflow-hidden">
       {/* 헤더 행 */}
       <div
-        className={`grid items-center bg-[color:var(--color-surface-50)] ${tokens.rowPadding}`}
+        className={`grid items-center bg-color-var-color-surface-50 ${tokens.rowPadding}`}
         style={{ gridTemplateColumns: gridTemplate }}
       >
         {columns.map((c, ci) => (
@@ -126,7 +126,7 @@ export default function DataTable<T>({
       {rows.map((row, ri) => (
         <div
           key={ri}
-          className={`grid items-center border-t border-[color:var(--color-border-default)] ${tokens.rowPadding} ${onRowClick ? "cursor-pointer" : ""} hover:bg-gray-50`}
+          className={`grid items-center border-t border-color-var-color-border-default ${tokens.rowPadding} ${onRowClick ? "cursor-pointer" : ""} hover-bg-gray-50`}
           style={{ gridTemplateColumns: gridTemplate }}
           onClick={onRowClick ? () => onRowClick(row, ri) : undefined}
         >

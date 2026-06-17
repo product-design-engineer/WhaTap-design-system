@@ -34,9 +34,10 @@
 
 DS는 빌드 산출물(dist) 없이 **`.ts` 소스를 직접 export** 합니다. 소비 앱이 다음과 호환이어야 합니다.
 
-- **Vite + TypeScript + React 19 + Tailwind v4**
+- **Vite + TypeScript + React 19**
 - Node 18+, pnpm
-- 다른 번들러(webpack 등)는 `.ts` 트랜스파일·Tailwind 통합 **추가 설정 필요**.
+- **Tailwind 불필요** — DS는 외부 프레임워크 의존이 없는 자체 일반 CSS(`whatap-ds.css`)를 ship.
+- 다른 번들러(webpack 등)는 `.ts` 트랜스파일 **추가 설정 필요**.
 
 ---
 
@@ -59,15 +60,15 @@ pnpm add "link:../WhaTap-design-system"
 
 ---
 
-## 4. Tailwind v4 설정 (필수)
+## 4. 스타일 import (필수)
 
-소비자 `index.css`:
-```css
-@import "tailwindcss";
-@import "@whatap/design-system/tokens.css";
-@source "../../../WhaTap-design-system/src/**/*.{ts,tsx}";
+소비자 진입점(예: `main.tsx`)에서 **한 줄**:
+```ts
+import "@whatap/design-system/style.css";   // = whatap-ds.css. 토큰+유틸+전역+.dark 전부 포함
 ```
-⚠️ `@source` 누락 시 패키지 내부 인라인 `var(--color-*)` 가 tree-shake 되어 **색·보더가 사라집니다.**
+- **Tailwind·`@source` 불필요.** 자체 일반 CSS라 컴포넌트가 쓰는 모든 유틸·토큰이 이미 들어 있음.
+- 토큰 변수만 필요하면 `@whatap/design-system/tokens.css`.
+- (DS 작업자만) `whatap-ds.css` 는 `scripts/detailwind.mjs` 생성물 — className/토큰 변경 시 `node scripts/detailwind.mjs generate` 재실행.
 
 ---
 
@@ -89,7 +90,7 @@ import { AiCard, AiSectionHeading } from "@whatap/design-system/widget";
 | 색·보더가 안 나옴 | `index.css` 의 `@source` 경로 (4) |
 | import가 안 잡힘 | `link:` + `pnpm install` (3) |
 | `npm install` 시도 실패 | 미배포(private). 토큰만 필요하면 `tokens.css` 다운로드 |
-| 다른 번들러에서 깨짐 | Vite·TS·React19·Tailwind4 호환 여부 (2) |
+| 다른 번들러에서 깨짐 | Vite·TS·React19 호환 여부 (2) |
 
 ---
 

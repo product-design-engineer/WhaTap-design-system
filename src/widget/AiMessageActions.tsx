@@ -64,7 +64,7 @@ export default function AiMessageActions({
 
   return (
     <div
-      className="flex items-center justify-end gap-[8px] w-full"
+      className="flex items-center justify-end gap-8px w-full"
       style={{
         paddingTop: divider ? 8 : 0,
         borderTop: divider ? "1px solid var(--color-border-default)" : "none",
@@ -99,7 +99,7 @@ function ActionBtn({
       type="button"
       aria-label={ariaLabel}
       onClick={onClick}
-      className="flex items-center justify-center size-[20px] rounded-[4px] cursor-pointer transition-colors"
+      className="flex items-center justify-center size-20px rounded-4px cursor-pointer transition-colors"
       style={{
         background: active ? "rgba(41,108,242,0.08)" : "transparent",
       }}

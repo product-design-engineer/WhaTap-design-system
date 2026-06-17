@@ -57,7 +57,7 @@ export default function OptionbarInstanceSelector({
   onToggle?: () => void;
 }) {
   return (
-    <div className="flex flex-col gap-[6px]">
+    <div className="flex flex-col gap-6px">
       {title && (
         <div
           className="text-base font-bold text-primary tracking-default leading-none"
@@ -70,16 +70,16 @@ export default function OptionbarInstanceSelector({
         <button
           type="button"
           onClick={onToggle}
-          className="flex items-center justify-between w-full bg-white border border-[color:var(--color-border-divider)] rounded-[2px] cursor-pointer hover:opacity-70 transition-shadow"
+          className="flex items-center justify-between w-full bg-white border border-color-var-color-border-divider rounded-2px cursor-pointer hover-opacity-70 transition-shadow"
           style={{
             minHeight: 32,
             padding: "5px 4px 5px 8px",
           }}
         >
           {/* 선택값 영역 */}
-          <div className="flex items-center gap-[4px] min-w-0 flex-1 pr-[4px]">
+          <div className="flex items-center gap-4px min-w-0 flex-1 pr-4px">
             <span
-              className="shrink-0 size-[8px] rounded-full"
+              className="shrink-0 size-8px rounded-full"
               style={{ background: STATUS_COLOR[status] }}
             />
             <span

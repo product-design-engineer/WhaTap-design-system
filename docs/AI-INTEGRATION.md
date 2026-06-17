@@ -166,7 +166,7 @@ curl https://whatap-design-system-storybook.vercel.app/design-system/DESIGN.md >
 ```
 ```tsx
 import { DashboardLayout, PageHeaderAiInline, DataTable } from "@whatap/design-system";
-import "@whatap/design-system/tokens.css";   // 토큰(@theme static) — import 만으로 전 토큰 보장
+import "@whatap/design-system/style.css";   // 일반 CSS — 토큰+유틸+전역 (Tailwind 불필요)
 ```
 
 - **단일 출처:** 인라인 색 리터럴·카드 재구현 금지. 토큰·컴포넌트 prop 으로 조합. 정책 전문: 루트 `CLAUDE.md`.
@@ -200,7 +200,7 @@ pnpm install        # 심링크 구성 → DS 수정 자동 반영(HMR)
 ### 체크리스트
 
 - [ ] GitHub 계정이 repo 협업자로 초대·수락됨
-- [ ] 소비 앱이 Vite + TS + React 19 + Tailwind 4
+- [ ] 소비 앱이 Vite + TS + React 19 (Tailwind 불필요)
 - [ ] `link:` 의존 + `pnpm install` 로 심링크 구성
 - [ ] `import "@whatap/design-system/tokens.css"` (토큰 보장)
 - [ ] vite `resolve.dedupe: ['react','react-dom']`
@@ -208,7 +208,7 @@ pnpm install        # 심링크 구성 → DS 수정 자동 반영(HMR)
 
 ### zero-friction 설치 (검토중)
 
-**dist 빌드는 준비됨** — `pnpm build:lib` 가 `dist/index.js` · `dist/widget.js` · `*.d.ts` · `dist/style.css`(토큰 + 컴파일된 Tailwind 유틸) 산출(tsup + Tailwind CLI). 비-Vite 번들러도:
+**dist 빌드는 준비됨** — `pnpm build:lib` 가 `dist/index.js` · `dist/widget.js` · `*.d.ts` 산출(tsup). CSS 는 `whatap-ds.css`(일반 CSS) 를 그대로 사용. 비-Vite 번들러도:
 ```ts
 import { DashboardLayout } from "@whatap/design-system";   // dist JS (publish 후 또는 build:lib 후)
 import "@whatap/design-system/style.css";                  // 컴파일 CSS — Tailwind 없이도 스타일 적용 (③ 해소)

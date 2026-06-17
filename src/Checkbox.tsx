@@ -52,8 +52,8 @@ export type CheckboxProps = {
 };
 
 const SIZE = {
-  sm: { box: 14, gap: "gap-[6px]", text: "text-sm" },
-  md: { box: 16, gap: "gap-[8px]", text: "text-base" },
+  sm: { box: 14, gap: "gap-6px", text: "text-sm" },
+  md: { box: 16, gap: "gap-8px", text: "text-base" },
 } as const;
 
 export default function Checkbox({
@@ -87,7 +87,7 @@ export default function Checkbox({
       } ${className}`}
     >
       <span
-        className="relative inline-flex shrink-0 items-center justify-center rounded-[3px] border transition-colors"
+        className="relative inline-flex shrink-0 items-center justify-center rounded-3px border transition-colors"
         style={{
           width: spec.box,
           height: spec.box,
@@ -121,7 +121,7 @@ export default function Checkbox({
         {/* indeterminate: 가로 막대 */}
         {indeterminate && !checked && (
           <span
-            className="block rounded-[1.5px] bg-white"
+            className="block rounded-1_5px bg-white"
             style={{ width: spec.box - 6, height: 2 }}
             aria-hidden
           />

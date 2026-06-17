@@ -38,7 +38,7 @@ export default function AiInsightSection({
 }) {
   return (
     <div
-      className="ai-anim-in flex flex-col gap-[4px] w-full"
+      className="ai-anim-in flex flex-col gap-4px w-full"
       style={{ animationDelay: `${delay}ms` }}
     >
       {title && (

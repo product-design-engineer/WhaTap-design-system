@@ -232,7 +232,7 @@ export default function Modal({
                 type="button"
                 aria-label="닫기"
                 onClick={onClose}
-                className="inline-flex shrink-0 cursor-pointer items-center justify-center rounded-md text-tertiary transition-colors hover:bg-[color:var(--color-surface-100)] hover:text-primary"
+                className="inline-flex shrink-0 cursor-pointer items-center justify-center rounded-md text-tertiary transition-colors hover-bg-color-var-color-surface-100 hover:text-primary"
                 style={{
                   width: 28,
                   height: 28,

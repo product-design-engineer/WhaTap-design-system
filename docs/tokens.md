@@ -1,6 +1,6 @@
 # Tokens
 
-> 원본: `src/widget/_tokens.ts` (위젯 Tone 토큰). 색·타입 등 메인 토큰의 단일 출처는 `src/tokens.css` 의 `@theme static`.
+> 원본: `src/widget/_tokens.ts` (위젯 Tone 토큰). 색·타입 등 메인 토큰의 단일 출처는 `src/tokens.css` 의 `:root` (순수 CSS, Tailwind 없음).
 
 위젯 안에서 분류/상태 색상이 필요한 **모든** 컴포넌트는 이 토큰을 사용합니다. 인라인 색상 리터럴(`#E53935` 등)을 컴포넌트 내부에 적지 마세요 — 토큰을 추가하거나 기존 톤을 재사용하세요.
 
@@ -42,7 +42,7 @@ tokens.font.family.numeric.value  // Roboto, 'Noto Sans', sans-serif
 - `korean` — 위젯 본문, 헤딩, 라벨 (한국어 + 영문 혼합)
 - `numeric` — 숫자 강조 (지표값, 비용, 카운트). 가독성을 위해 의도적으로 라틴 폰트 사용.
 
-**Tailwind만 쓰지 말고 `style={{ fontFamily: tokens.font.family.korean.value }}`를 명시하세요.** Tailwind의 기본 sans 스택은 OS 폰트에 의존하므로 macOS와 Windows에서 다르게 보입니다. 위젯의 일관성을 위해 토큰을 직접 주입합니다.
+**`font-korean` 유틸에만 의존하지 말고 `style={{ fontFamily: tokens.font.family.korean.value }}`를 명시하세요.** 기본 sans 스택은 OS 폰트에 의존하므로 macOS와 Windows에서 다르게 보입니다. 위젯의 일관성을 위해 토큰을 직접 주입합니다.
 
 > `WIDGET_FONT_KO`/`WIDGET_FONT_NUM` 은 `@deprecated` alias 로 backward-compat 유지.
 

@@ -46,7 +46,7 @@ export default function AiReasoning({
 }) {
   return (
     <div
-      className="ai-anim-in flex flex-col gap-[6px] bg-white border border-[color:var(--color-border-default)] rounded-[8px] px-[12px] py-[10px]"
+      className="ai-anim-in flex flex-col gap-6px bg-white border border-color-var-color-border-default rounded-8px px-12px py-10px"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div
@@ -56,10 +56,10 @@ export default function AiReasoning({
         Reasoning
       </div>
       {steps.map((s, i) => (
-        <div key={i} className="flex items-center gap-[8px]">
+        <div key={i} className="flex items-center gap-8px">
           {s.running ? (
             <span
-              className="size-[10px] rounded-full border-[1.5px] border-[color:var(--color-brand-blue)] border-t-transparent"
+              className="size-10px rounded-full border-1_5px border-color-var-color-brand-blue border-t-transparent"
               style={{ animation: "aiSymbolRotateSlow 0.9s linear infinite" }}
             />
           ) : (

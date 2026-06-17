@@ -196,7 +196,7 @@ export const ChildrenWithFooter: Story = {
               </>
             }
           >
-            <div className="flex flex-col gap-1.5" style={{ padding: "10px 12px" }}>
+            <div className="flex flex-col gap-1_5" style={{ padding: "10px 12px" }}>
               {SEVERITY_OPTIONS.map((opt) => (
                 <Checkbox
                   key={opt.value}

@@ -48,7 +48,7 @@ export default function AiUsageChart({
   const HEIGHT = 96;
   return (
     <div
-      className="ai-anim-in flex flex-col gap-[8px] w-full bg-white border border-[color:var(--color-border-default)] rounded-[8px] p-[12px]"
+      className="ai-anim-in flex flex-col gap-8px w-full bg-white border border-color-var-color-border-default rounded-8px p-12px"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="flex items-center justify-between">
@@ -66,7 +66,7 @@ export default function AiUsageChart({
         </span>
       </div>
       <div
-        className="flex items-end gap-[2px] w-full"
+        className="flex items-end gap-2px w-full"
         style={{ height: HEIGHT }}
       >
         {values.map((v, i) => {
@@ -76,7 +76,7 @@ export default function AiUsageChart({
           return (
             <div
               key={i}
-              className="ai-anim-bar flex-1 min-w-0 rounded-[2px]"
+              className="ai-anim-bar flex-1 min-w-0 rounded-2px"
               style={{
                 height: h,
                 background: v === null

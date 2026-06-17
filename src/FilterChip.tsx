@@ -98,8 +98,8 @@ export default function FilterChip({
         disabled
           ? "cursor-not-allowed opacity-60"
           : selected
-          ? "cursor-pointer hover:bg-[color:var(--color-brand-blue-deep)] hover:border-[color:var(--color-brand-blue-deep)]"
-          : "cursor-pointer hover:text-[color:var(--color-text-primary)] hover:border-[color:var(--color-border-strong)]"
+          ? "cursor-pointer hover-bg-color-var-color-brand-blue-deep hover-border-color-var-color-brand-blue-deep"
+          : "cursor-pointer hover-text-color-var-color-text-primary hover-border-color-var-color-border-strong"
       } ${className}`}
       style={{
         height: spec.h,

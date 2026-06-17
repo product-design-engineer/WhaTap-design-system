@@ -63,7 +63,7 @@ export default function TimeRangeSelector({
   onPickDate?: () => void;
 }) {
   return (
-    <div className="flex flex-col gap-[6px]">
+    <div className="flex flex-col gap-6px">
       {title && (
         <div
           className="text-base font-bold text-primary tracking-default leading-none"
@@ -72,25 +72,25 @@ export default function TimeRangeSelector({
           {title}
         </div>
       )}
-      <div className="flex items-stretch border border-[color:var(--color-border-divider)] rounded-[4px] bg-white overflow-hidden">
+      <div className="flex items-stretch border border-color-var-color-border-divider rounded-4px bg-white overflow-hidden">
         {/* Live 토글 */}
         <button
           type="button"
           onClick={onLive}
           aria-label="LIVE"
-          className="flex items-center justify-center px-[6px] cursor-pointer hover:bg-gray-50"
+          className="flex items-center justify-center px-6px cursor-pointer hover-bg-gray-50"
         >
           <IcLiveTime />
         </button>
-        <div className="w-[1px] bg-[color:var(--color-border-divider)]" />
+        <div className="w-1px bg-color-var-color-border-divider" />
 
         {/* 듀얼 datetime + 컨트롤 */}
-        <div className="flex items-center gap-[6px] px-[6px] py-[6px]">
+        <div className="flex items-center gap-6px px-6px py-6px">
           <button
             type="button"
             onClick={onPrev}
             aria-label="이전"
-            className="flex items-center justify-center cursor-pointer hover:opacity-70"
+            className="flex items-center justify-center cursor-pointer hover-opacity-70"
           >
             <IcLeft />
           </button>
@@ -100,7 +100,7 @@ export default function TimeRangeSelector({
           <DateTimeBlock parts={end} side="end" />
 
           <span
-            className="flex items-center px-[4px] h-[16px] rounded-[2px] text-base font-bold text-white leading-none"
+            className="flex items-center px-4px h-16px rounded-2px text-base font-bold text-white leading-none"
             style={{
               background: "#00B543",
               fontFamily: "var(--font-family-numeric)",
@@ -113,7 +113,7 @@ export default function TimeRangeSelector({
             type="button"
             onClick={onPickDate}
             aria-label="달력"
-            className="flex items-center justify-center cursor-pointer hover:opacity-70"
+            className="flex items-center justify-center cursor-pointer hover-opacity-70"
           >
             <IcStartDate />
           </button>
@@ -121,7 +121,7 @@ export default function TimeRangeSelector({
             type="button"
             onClick={onNext}
             aria-label="다음"
-            className="flex items-center justify-center cursor-pointer hover:opacity-70"
+            className="flex items-center justify-center cursor-pointer hover-opacity-70"
           >
             <IcRight />
           </button>

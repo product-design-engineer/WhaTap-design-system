@@ -48,7 +48,7 @@ export const Default: Story = {
   args: {
     content: "평일 09–19시 알림만 ON",
     children: (
-      <button className="rounded-md border border-[color:var(--color-border-strong)] px-3 py-1.5 text-base">
+      <button className="rounded-md border border-color-var-color-border-strong px-3 py-1_5 text-base">
         도움말 ?
       </button>
     ),
@@ -60,16 +60,16 @@ export const Placements: Story = {
   render: () => (
     <div className="grid grid-cols-2 gap-12 p-12">
       <Tooltip content="위에 표시" placement="top">
-        <button className="rounded-md border border-[color:var(--color-border-strong)] px-3 py-1.5">top</button>
+        <button className="rounded-md border border-color-var-color-border-strong px-3 py-1_5">top</button>
       </Tooltip>
       <Tooltip content="아래에 표시" placement="bottom">
-        <button className="rounded-md border border-[color:var(--color-border-strong)] px-3 py-1.5">bottom</button>
+        <button className="rounded-md border border-color-var-color-border-strong px-3 py-1_5">bottom</button>
       </Tooltip>
       <Tooltip content="왼쪽에 표시" placement="left">
-        <button className="rounded-md border border-[color:var(--color-border-strong)] px-3 py-1.5">left</button>
+        <button className="rounded-md border border-color-var-color-border-strong px-3 py-1_5">left</button>
       </Tooltip>
       <Tooltip content="오른쪽에 표시" placement="right">
-        <button className="rounded-md border border-[color:var(--color-border-strong)] px-3 py-1.5">right</button>
+        <button className="rounded-md border border-color-var-color-border-strong px-3 py-1_5">right</button>
       </Tooltip>
     </div>
   ),
@@ -81,7 +81,7 @@ export const Pinned: Story = {
     open: true,
     content: "이 툴팁은 강제 표시됨 (open=true)",
     children: (
-      <button className="rounded-md border border-[color:var(--color-border-strong)] px-3 py-1.5 text-base">
+      <button className="rounded-md border border-color-var-color-border-strong px-3 py-1_5 text-base">
         트리거
       </button>
     ),
@@ -94,7 +94,7 @@ export const IconOnly: Story = {
     <Tooltip content="설정 — 알림 채널 편집">
       <button
         aria-label="설정"
-        className="flex h-8 w-8 items-center justify-center rounded-md border border-[color:var(--color-border-strong)]"
+        className="flex h-8 w-8 items-center justify-center rounded-md border border-color-var-color-border-strong"
       >
         ⚙
       </button>
@@ -108,7 +108,7 @@ export const Disabled: Story = {
     disabled: true,
     content: "안 보일 메시지",
     children: (
-      <button className="rounded-md border border-[color:var(--color-border-strong)] px-3 py-1.5 opacity-60">
+      <button className="rounded-md border border-color-var-color-border-strong px-3 py-1_5 opacity-60">
         disabled tooltip
       </button>
     ),

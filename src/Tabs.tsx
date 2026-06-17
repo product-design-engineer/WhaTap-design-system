@@ -131,7 +131,7 @@ export default function Tabs({
       <div
         role="tablist"
         aria-label={ariaLabel}
-        className={`inline-flex rounded-md bg-[color:var(--color-surface-100)] p-[2px] ${
+        className={`inline-flex rounded-md bg-color-var-color-surface-100 p-2px ${
           fullWidth ? "w-full" : ""
         } ${className}`}
       >
@@ -152,11 +152,11 @@ export default function Tabs({
               disabled={it.disabled}
               onClick={() => !it.disabled && onChange(it.value)}
               onKeyDown={(e) => handleKey(e, i)}
-              className={`inline-flex shrink-0 items-center justify-center rounded-[5px] transition-colors ${
+              className={`inline-flex shrink-0 items-center justify-center rounded-5px transition-colors ${
                 spec.text
-              } ${spec.gap === 4 ? "gap-1" : "gap-1.5"} ${fullWidth ? "flex-1" : ""} ${
+              } ${spec.gap === 4 ? "gap-1" : "gap-1_5"} ${fullWidth ? "flex-1" : ""} ${
                 selected
-                  ? "bg-white text-primary shadow-[0_1px_2px_rgba(0,0,0,0.08)] font-medium"
+                  ? "bg-white text-primary shadow-0_1px_2px_rgba-0-0-0-0_08 font-medium"
                   : it.disabled
                   ? "cursor-not-allowed text-disabled"
                   : "text-tertiary hover:text-primary"
@@ -185,7 +185,7 @@ export default function Tabs({
     <div
       role="tablist"
       aria-label={ariaLabel}
-      className={`inline-flex items-end border-b border-[color:var(--color-border-default)] ${
+      className={`inline-flex items-end border-b border-color-var-color-border-default ${
         fullWidth ? "w-full" : ""
       } ${className}`}
     >
@@ -208,9 +208,9 @@ export default function Tabs({
             onKeyDown={(e) => handleKey(e, i)}
             className={`relative inline-flex shrink-0 items-center justify-center transition-colors ${
               spec.text
-            } ${spec.gap === 4 ? "gap-1" : "gap-1.5"} ${fullWidth ? "flex-1" : ""} ${
+            } ${spec.gap === 4 ? "gap-1" : "gap-1_5"} ${fullWidth ? "flex-1" : ""} ${
               selected
-                ? "text-[color:var(--color-brand-blue)] font-medium"
+                ? "text-color-var-color-brand-blue font-medium"
                 : it.disabled
                 ? "cursor-not-allowed text-disabled"
                 : "text-tertiary hover:text-primary"
@@ -232,7 +232,7 @@ export default function Tabs({
             {selected && (
               <span
                 aria-hidden
-                className="absolute left-0 right-0 bottom-[-1px] h-[2px] bg-[color:var(--color-brand-blue)]"
+                className="absolute left-0 right-0 bottom-1px h-2px bg-color-var-color-brand-blue"
               />
             )}
           </button>

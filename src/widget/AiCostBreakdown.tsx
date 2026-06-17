@@ -73,11 +73,11 @@ export default function AiCostBreakdown({
 }) {
   return (
     <div
-      className="ai-anim-in flex flex-col gap-[8px] w-full"
+      className="ai-anim-in flex flex-col gap-8px w-full"
       style={{ animationDelay: `${delay}ms` }}
     >
-      <div className="flex items-center gap-[6px]">
-        <span className="size-[10px] rounded-full" style={{ background: toneColor }} />
+      <div className="flex items-center gap-6px">
+        <span className="size-10px rounded-full" style={{ background: toneColor }} />
         <span
           className="text-md font-bold text-primary tracking-default leading-normal"
           style={{ fontFamily: "var(--font-family-korean)" }}
@@ -93,9 +93,9 @@ export default function AiCostBreakdown({
           {context}
         </p>
       )}
-      <div className="rounded-[6px] overflow-hidden border border-[color:var(--color-border-default)]">
+      <div className="rounded-6px overflow-hidden border border-color-var-color-border-default">
         <div
-          className="grid items-center px-[8px] py-[6px] bg-[color:var(--color-surface-50)] gap-[4px]"
+          className="grid items-center px-8px py-6px bg-color-var-color-surface-50 gap-4px"
           style={{ gridTemplateColumns: "0.7fr 1.4fr 0.8fr 0.9fr 1fr" }}
         >
           {["GPU", "Pod", "평균 사용률", "유휴 비율", "일일 낭비"].map((h) => (
@@ -111,7 +111,7 @@ export default function AiCostBreakdown({
         {rows.map((r, i) => (
           <div
             key={i}
-            className="grid items-center px-[8px] py-[6px] gap-[4px] border-t border-[color:var(--color-border-default)]"
+            className="grid items-center px-8px py-6px gap-4px border-t border-color-var-color-border-default"
             style={{ gridTemplateColumns: "0.7fr 1.4fr 0.8fr 0.9fr 1fr" }}
           >
             <span
@@ -149,7 +149,7 @@ export default function AiCostBreakdown({
         ))}
         {subtotal && (
           <div
-            className="grid items-center px-[8px] py-[6px] gap-[4px] border-t border-[color:var(--color-border-default)] bg-[#f9f9f9]"
+            className="grid items-center px-8px py-6px gap-4px border-t border-color-var-color-border-default bg-cf9f9f9"
             style={{ gridTemplateColumns: "0.7fr 1.4fr 0.8fr 0.9fr 1fr" }}
           >
             <span
