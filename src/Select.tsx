@@ -123,7 +123,7 @@ export default function Select({
 
   return (
     <div
-      className={`inline-flex flex-col gap-1.5 ${fullWidth ? "w-full" : ""} ${className}`}
+      className={`inline-flex flex-col gap-1_5 ${fullWidth ? "w-full" : ""} ${className}`}
     >
       {label !== undefined && label !== null && (
         <label
@@ -155,7 +155,7 @@ export default function Select({
           disabled={disabled}
           aria-invalid={invalid || undefined}
           aria-describedby={helperId}
-          className={`min-w-0 flex-1 appearance-none border-0 bg-transparent p-0 outline-none ${spec.text} text-primary disabled:cursor-not-allowed`}
+          className={`min-w-0 flex-1 appearance-none border-0 bg-transparent p-0 outline-none ${spec.text} text-primary disabled-cursor-not-allowed`}
           style={{
             // value 비어있고 placeholder 있으면 text-tertiary 색
             color:
@@ -187,7 +187,7 @@ export default function Select({
               onClear?.();
             }}
             // subtle 톤 — TextField clear 와 일관. 보조 액션이라 약함.
-            className="inline-flex shrink-0 cursor-pointer items-center justify-center text-[color:var(--color-text-disabled)] transition-colors hover:text-[color:var(--color-text-secondary)]"
+            className="inline-flex shrink-0 cursor-pointer items-center justify-center text-color-var-color-text-disabled transition-colors hover-text-color-var-color-text-secondary"
             style={{
               width: CLEAR_ICON_SIZE[size] + 4,
               height: CLEAR_ICON_SIZE[size] + 4,
@@ -236,7 +236,7 @@ export default function Select({
         <span
           id={helperId}
           className={`${size === "sm" ? "text-xs" : "text-sm"} ${
-            invalid ? "text-[color:var(--color-status-error)]" : "text-tertiary"
+            invalid ? "text-color-var-color-status-error" : "text-tertiary"
           }`}
         >
           {helperText}

@@ -69,23 +69,23 @@ export default function AiAlertRulePreview({
         }}
       >
         {/* 헤더 행 */}
-        <div className="text-base font-bold text-tertiary tracking-default leading-none px-[2px] py-[6px] border-b border-[color:var(--color-border-default)]">
+        <div className="text-base font-bold text-tertiary tracking-default leading-none px-2px py-6px border-b border-color-var-color-border-default">
           항목
         </div>
-        <div className="text-base font-bold text-tertiary tracking-default leading-none px-[2px] py-[6px] border-b border-[color:var(--color-border-default)]">
+        <div className="text-base font-bold text-tertiary tracking-default leading-none px-2px py-6px border-b border-color-var-color-border-default">
           내용
         </div>
         {/* 데이터 행 */}
         {fields.map((f, i) => (
           <Fragment key={i}>
             <div
-              className="text-base text-secondary tracking-default leading-normal px-[2px] py-[6px] border-b border-[color:var(--color-surface-50)]"
+              className="text-base text-secondary tracking-default leading-normal px-2px py-6px border-b border-color-var-color-surface-50"
               style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
             >
               {f.label}
             </div>
             <div
-              className="text-md text-primary tracking-default leading-normal px-[2px] py-[6px] border-b border-[color:var(--color-surface-50)]"
+              className="text-md text-primary tracking-default leading-normal px-2px py-6px border-b border-color-var-color-surface-50"
               style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
             >
               {f.value}
@@ -96,8 +96,8 @@ export default function AiAlertRulePreview({
 
       {/* 참고 노트 */}
       {notes && notes.length > 0 && (
-        <div className="flex flex-col gap-[6px] mt-[4px]">
-          <div className="flex items-center gap-[6px]">
+        <div className="flex flex-col gap-6px mt-4px">
+          <div className="flex items-center gap-6px">
             <span className="text-lg leading-none">ℹ️</span>
             <span
               className="text-md font-bold text-primary tracking-default leading-none"

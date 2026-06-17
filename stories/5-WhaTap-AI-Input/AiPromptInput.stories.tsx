@@ -96,7 +96,7 @@ export const Interactive: Story = {
           />
           {submitted.length > 0 && (
             <div
-              className="text-xs text-tertiary p-2 border border-[var(--color-border-default)] rounded"
+              className="text-xs text-tertiary p-2 border border-var-color-border-default rounded"
               style={{ fontFamily: "var(--font-family-korean)" }}
             >
               최근 송신:

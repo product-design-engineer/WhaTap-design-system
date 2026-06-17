@@ -6,7 +6,7 @@
  * input 텍스트 유무에 따라 활성(파랑 채움) / 비활성(회색 채움) 자동 전환.
  *
  * ## Spec (실 위젯 마크업 1:1)
- * - 24×24, `rounded-[4px]` (squared) — 위젯 인라인 spec 그대로
+ * - 24×24, `rounded-4px` (squared) — 위젯 인라인 spec 그대로
  * - active:   배경 `var(--color-brand-blue)` (var(--color-brand-blue)) + 같은 색 1px 보더 + 흰 화살표
  * - inactive: 배경 `var(--color-surface-50)` (var(--color-surface-50)) + #d3d3d3 1px 보더 + 회색 화살표
  * - icon: 8→4/12 의 상향 화살표 (위로 올리는 송신)
@@ -47,7 +47,7 @@ export default function AiSendButton({
         type={rest.type ?? "submit"}
         aria-label="전송"
         disabled={isDisabled}
-        className={`ai-send-btn flex items-center justify-center rounded-[4px] shrink-0 size-[24px] transition-colors ${
+        className={`ai-send-btn flex items-center justify-center rounded-4px shrink-0 size-24px transition-colors ${
           isDisabled ? "cursor-not-allowed" : "cursor-pointer"
         } ${className}`}
         style={{

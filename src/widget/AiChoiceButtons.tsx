@@ -46,30 +46,30 @@ export default function AiChoiceButtons({
 }) {
   return (
     <div
-      className="ai-anim-in flex flex-col gap-[8px] w-full"
+      className="ai-anim-in flex flex-col gap-8px w-full"
       style={{ animationDelay: `${delay}ms` }}
     >
       <button
         onClick={primary.onClick}
-        className="flex items-center justify-center h-[36px] px-[16px] rounded-[6px] bg-[color:var(--color-brand-blue)] text-white text-md tracking-default cursor-pointer transition-colors hover:bg-[color:var(--color-brand-blue-deep)]"
+        className="flex items-center justify-center h-36px px-16px rounded-6px bg-color-var-color-brand-blue text-white text-md tracking-default cursor-pointer transition-colors hover-bg-color-var-color-brand-blue-deep"
         style={{
           fontFamily: "var(--font-family-korean)",
           fontWeight: "var(--font-weight-medium)",
         }}
       >
         {primary.label}
-        {primary.hint && <span className="ml-[4px] opacity-90">{primary.hint}</span>}
+        {primary.hint && <span className="ml-4px opacity-90">{primary.hint}</span>}
       </button>
       <button
         onClick={secondary.onClick}
-        className="flex items-center justify-center h-[36px] px-[16px] rounded-[6px] bg-white text-brand-blue text-md tracking-default border border-[color:var(--color-brand-blue)] cursor-pointer transition-colors hover:bg-[color:var(--color-brand-blue-bg)]"
+        className="flex items-center justify-center h-36px px-16px rounded-6px bg-white text-brand-blue text-md tracking-default border border-color-var-color-brand-blue cursor-pointer transition-colors hover-bg-color-var-color-brand-blue-bg"
         style={{
           fontFamily: "var(--font-family-korean)",
           fontWeight: "var(--font-weight-medium)",
         }}
       >
         {secondary.label}
-        {secondary.hint && <span className="ml-[4px] opacity-80">{secondary.hint}</span>}
+        {secondary.hint && <span className="ml-4px opacity-80">{secondary.hint}</span>}
       </button>
     </div>
   );

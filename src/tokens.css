@@ -1,14 +1,13 @@
-@import "tailwindcss";
-
 /* === Tokens extracted from live whatap-ai-assistant.vercel.app bundle === */
 /*
- * `@theme static` — 모든 토큰을 사용 여부와 무관하게 항상 :root 에 emit.
- * 기본 @theme 는 "사용된 토큰만" tree-shake 하므로, 외부 소비 앱(프로토타입)이
- * DS 컴포넌트 src 를 @source 로 스캔하지 않으면 인라인 var(--color-X) 토큰이
- * :root 에서 빠져 보더·색이 사라짐. static 으로 두면 소비 앱이 tokens.css 만
- * import 해도 모든 토큰이 보장됨 (외부 소비용 디자인 시스템의 portable 보장).
+ * WhaTap Design System — 토큰 단일 출처 (순수 CSS · 외부 프레임워크 의존 없음).
+ *
+ * 모든 토큰을 항상 `:root` 에 선언합니다 → 컴포넌트의 인라인 `var(--color-X)` 보장
+ * (tree-shake 없음 → portable). utility 클래스(flex·text-md·gap-4px 등)는 여기가 아니라
+ * `src/styles.css`(= `@whatap/design-system/style.css`, `scripts/detailwind.mjs` 생성)에
+ * 일반 CSS 로 정의됩니다. 소비자는 토큰만 필요하면 이 파일을, 유틸까지 필요하면 style.css 를 import.
  */
-@theme static {
+:root {
   /* Brand primary */
   --color-brand-blue: #296CF2;
   --color-brand-blue-deep: #1B5CD9;
@@ -25,6 +24,20 @@
   --color-surface-50: #F5F5F5;
   --color-surface-100: #F1F2F4;
   --color-surface-200: #EAEAEA;
+
+  /* 기본 흑·백·회색 — 일부 유틸(bg-white·text-black·hover-bg-gray-* 등)이 참조. 값 보존. */
+  --color-white: #fff;
+  --color-black: #000;
+  --color-gray-50: oklch(0.985 0.002 247.839);
+  --color-gray-100: oklch(0.967 0.003 264.542);
+
+  /* 스케일 토큰 — spacing(gap/padding/margin) · radius(rounded-*) · container(max-w-*) 유틸이 참조. */
+  --spacing: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --container-2xl: 42rem;
+  --container-3xl: 48rem;
 
   /* Base surface (semantic) — page background + card.
      라이트 기본값은 흰색(기존 동작 불변). 다크 값은 파일 하단 `.dark` 블록에서 오버라이드. */
@@ -53,8 +66,8 @@
   /* ──────────────────────────────────────────────────────────────────────
    *  Design System Typography Tokens — single source of truth.
    *
-   *  Tailwind v4 가 이 @theme 변수에서 utility class 를 자동 생성.
-   *  컴포넌트는 인라인 `text-[Xpx]` / `fontFamily: "..."` 대신 utility 클래스 사용:
+   *  이 토큰들에서 파생된 utility class 는 styles.css 에 일반 CSS 로 정의돼 있습니다.
+   *  컴포넌트는 인라인 px 대신 utility 클래스 사용:
    *
    *    font-korean    font-numeric                            (font-family)
    *    text-chart text-xs text-sm text-base text-md text-lg   (Dense scale)
@@ -64,8 +77,9 @@
    *    text-primary text-secondary text-tertiary text-disabled
    *
    *  JS 동적 케이스: `style={{ fontSize: "var(--text-base)" }}` 도 가능 (같은 변수 참조).
-   *  Single source of truth — 이 @theme 한 값 바꾸면 47 컴포넌트 자동 갱신.
-   *  Sync 대상: src/widget/_tokens.ts 의 value 필드 (display 용).
+   *  Single source of truth — 이 :root 값을 바꾸면 인라인 var(...) 참조는 즉시 반영.
+   *  단, utility 클래스가 참조하는 값도 바꾸려면 `detailwind generate` 로 styles.css 재생성.
+   *  Sync 대상: src/widget/_tokens.ts 의 value 필드 (display 용) + styles.css.
    * ────────────────────────────────────────────────────────────────────── */
 
   /* Font Family */
@@ -73,7 +87,7 @@
   --font-family-numeric: Roboto, "Noto Sans", sans-serif;
 
   /* Type Scale — Hybrid (Dense 1px + Display 2배수 인접).
-     Tailwind 기본 text-* 클래스 override. */
+     text-* utility(styles.css)의 font-size 값. */
   --text-chart: 9px;
   --text-xs: 10px;
   --text-sm: 11px;
@@ -86,14 +100,12 @@
   --text-4xl: 32px;
   --text-5xl: 48px;
 
-  /* Font Weight — 3 단계.
-     Tailwind 기본 font-{regular|medium|bold} 와 정렬. */
+  /* Font Weight — 3 단계 (font-{medium|bold} utility 값; normal=400 은 styles.css 인라인). */
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-bold: 700;
 
-  /* Line Height — 6 단계.
-     Tailwind 기본 leading-{none|tight|...} override. */
+  /* Line Height — 6 단계 (leading-{none|tight|...} utility 값). */
   --leading-none: 1;
   --leading-tight: 1.2;
   --leading-snug: 1.3;
@@ -101,8 +113,7 @@
   --leading-relaxed: 1.5;
   --leading-loose: 1.6;
 
-  /* Letter Spacing (Tracking) — 4 단계.
-     Tailwind tracking-* 추가. -0.1px default 는 한국어 본문 최적. */
+  /* Letter Spacing (Tracking) — 4 단계 (tracking-* utility 값. -0.1px default 는 한국어 본문 최적). */
   --tracking-display: -0.3px;
   --tracking-metric: -0.2px;
   --tracking-default: -0.1px;
@@ -117,7 +128,6 @@
   --color-text-disabled: #adadad;
 
   /* Indicator (Intent) — tokens.color.indicator TS 와 동일값.
-     CSS var 로 노출해 Tailwind utility (text-indicator-critical 등) 자동 생성.
      palette-e53935/f0b400 잔재를 semantic 으로 collapse 하기 위해 추가. */
   --color-indicator-critical: #E53935;
   --color-indicator-warning: #F0B400;
@@ -338,7 +348,7 @@ html, body, #root {
 /* ──────────────────────────────────────────────────────────────────────
  *  WDS Button — 동적 variant×tone 색을 inline CSS custom property 로 받음.
  *
- *  Tailwind v4 JIT 가 runtime 조립 className arbitrary value 를 못 잡으므로,
+ *  runtime 에 조립되는 variant×tone 색은 정적 유틸로 표현 불가하므로,
  *  컴포넌트는 .wds-btn class + inline `--wds-btn-{bg,fg,border,bg-hover}` 설정.
  *  이 global rule 이 그 변수를 적용 → background/color/border + :hover 정상 동작.
  *  토큰: --color-brand-blue / --color-status-warning / --color-status-error 가 binding.

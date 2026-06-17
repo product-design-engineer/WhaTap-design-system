@@ -20,7 +20,7 @@
 | Primitives | `src/` 루트 | Button, TextField, Select, Chip, FilterChip, Tabs, Modal, Tooltip, Checkbox |
 | Chrome | `src/` 루트 | DashboardLayout, PageHeader, PageHeaderAiInline, Sidebar, FilterBar, DataTable, FilterDropdown |
 | WhaTap AI | `src/widget/` | **모든 AI 컴포넌트의 집** — 빌딩 블록(AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList) · 진입(AiInlinePrompt, AiPromptInput, AiSendButton, AiAssistantButton) · 위젯 셸(WhaTapAiWidget, WhaTapAiContext, AiSymbol) · 메시지 카드(AiReasoning, AiChatExchange …). Storybook 트리 `WhaTap AI/` 로 통일. (단 `PageHeaderAiInline` 은 헤더 레이아웃이라 Chrome 유지) |
-| Tokens | `src/tokens.css` | `@theme` 컬러·폰트·spacing 변수 |
+| Tokens | `src/tokens.css` | `:root` 컬러·폰트·spacing 변수 (Tailwind 없는 순수 CSS) |
 
 **AI 영역 ↔ 일반 영역 분리 원칙**
 
@@ -135,3 +135,13 @@ SVG 차트의 peak 라벨/마커는 **plot 영역 absolute 배치 + HTML overlay
 3. **그대로 paste**. 즉흥 작성 금지.
 
 라이브와의 픽셀 일치 보장이 본 정책의 핵심.
+
+## 스타일 — 일반 CSS (Tailwind 완전 제거 · 흔적 0)
+
+본 DS는 **Tailwind 의존이 전혀 없습니다.** 스타일은 외부 CSS 프레임워크 흔적이 0인 **자체 소유 일반 CSS** `src/styles.css` (= export `./style.css`). 클래스명은 escape 없는 일반 식별자(`gap-4px`·`hover-opacity-70` 등), 내부에 `@layer`·`--tw-*`·`.foo-\[…\]` 없음.
+
+- **소비자:** 진입점에서 `import "@whatap/design-system/style.css"` 한 줄 (토큰+유틸+전역+`.dark` 전부). Tailwind·`@source`·PostCSS 설정 불필요. 토큰 변수만 필요하면 `tokens.css`.
+- **`tokens.css`** 는 순수 `:root` 토큰 선언 + 전역 keyframes/`.ai-*`/`.wds-btn` + `.dark`. `styles.css` 가 이를 `@import`.
+- **`styles.css` 는 생성물 — 손으로 직접 늘리지 말 것.** 컴포넌트 className 을 바꾸면 `node scripts/detailwind.mjs generate` 로 **(1) styles.css 재생성 + (2) tsx className 코드모드(escape 토큰→일반 식별자)** 가 함께 수행됩니다. 진실 원본은 `scripts/frozen-styles.css`(과거 빌드 산출 1회 스냅샷, 미배포). 동적 색은 Button 처럼 inline CSS custom property(`--wds-btn-*`)로.
+- **새 토큰/유틸 추가 시:** `tokens.css` 에 토큰 추가 → 컴포넌트에서 사용 → `detailwind generate` 재실행 (또는 단순 값은 inline `style`).
+- **Tailwind 재도입 금지** — 의존성·빌드·런타임·CSS 산출물 어디에도 없음. (Guardrails: `no-tailwind-plain-css`)

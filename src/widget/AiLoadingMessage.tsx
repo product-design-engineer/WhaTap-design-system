@@ -32,7 +32,7 @@ export default function AiLoadingMessage({
 }) {
   return (
     <div
-      className="flex items-center gap-[8px] w-full bg-white rounded-[8px] border border-[color:var(--color-border-default)] px-[12px] py-[10px]"
+      className="flex items-center gap-8px w-full bg-white rounded-8px border border-color-var-color-border-default px-12px py-10px"
     >
       <LoadingIcon />
       <span

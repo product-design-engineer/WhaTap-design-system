@@ -1,8 +1,9 @@
 import type { Preview } from '@storybook/react-vite';
 import { withThemeByClassName } from '@storybook/addon-themes';
-// Tailwind v4 + 디자인 시스템 토큰·키프레임 — 모든 story 에 자동 적용.
-// (구 ../src/index.css → tokens.css 로 분리. Product-SaaS 등 소비자도 이 파일을 import.)
-import '../src/tokens.css';
+// 스타일시트 — 토큰(:root) + 유틸리티 + 전역 keyframes + .dark 를 모두 포함.
+// Tailwind 미사용(일반 CSS)이라 styles.css 를 직접 로드.
+// (소비자도 동일하게 `@whatap/design-system/style.css` 하나를 import.)
+import '../src/styles.css';
 
 /**
  * Storybook 10 preview — 모든 story 에 공통 적용되는 parameters / decorators.
@@ -15,7 +16,7 @@ const preview: Preview = {
   parameters: {
     layout: 'centered',
     backgrounds: {
-      // default 미지정 — 캔버스는 tokens.css 의 body 배경(var(--color-bg))을 따르므로
+      // default 미지정 — 캔버스는 styles.css 의 body 배경(var(--color-bg))을 따르므로
       // 우측 상단 Theme 토글(라이트/다크)이 배경까지 함께 전환한다. (수동 배경은 아래 값 유지)
       values: [
         { name: 'light', value: '#ffffff' },
@@ -51,7 +52,7 @@ const preview: Preview = {
   },
   decorators: [
     // 우측 상단 툴바에 Light/Dark 토글 추가 — <html> 에 `.dark` 클래스를 토글한다.
-    // tokens.css 의 `.dark` 토큰이 cascade 되어 모든 story 가 다크로 전환된다.
+    // styles.css 의 `.dark` 토큰이 cascade 되어 모든 story 가 다크로 전환된다.
     withThemeByClassName({
       themes: { light: '', dark: 'dark' },
       defaultTheme: 'light',

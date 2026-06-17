@@ -66,7 +66,7 @@ export function AiCard({
 }) {
   return (
     <div
-      className={`ai-anim-in flex flex-col w-full bg-white border border-[color:var(--color-border-default)] rounded-[8px] ${className}`}
+      className={`ai-anim-in flex flex-col w-full bg-white border border-color-var-color-border-default rounded-8px ${className}`}
       style={{ animationDelay: `${delay}ms`, padding, gap }}
     >
       {children}
@@ -158,11 +158,11 @@ export function AiSectionHeading({
   children: ReactNode;
 }) {
   return (
-    <div className="flex items-center gap-[6px]">
+    <div className="flex items-center gap-6px">
       {emoji ? (
         <span className="text-lg leading-none">{emoji}</span>
       ) : tone ? (
-        <span className="size-[10px] rounded-full" style={{ background: TONE_DOT[tone] }} />
+        <span className="size-10px rounded-full" style={{ background: TONE_DOT[tone] }} />
       ) : null}
       <span
         className="text-md font-bold text-primary tracking-default leading-normal"
@@ -217,11 +217,11 @@ export function AiToneBadge({
   const text = label ?? TONE_LABEL[tone];
   return (
     <div
-      className="flex items-center gap-[4px] px-[6px] py-[2px] rounded-[10px] self-start whitespace-nowrap"
+      className="flex items-center gap-4px px-6px py-2px rounded-10px self-start whitespace-nowrap"
       style={{ background: TONE_BG[tone] }}
     >
       <span
-        className="size-[6px] rounded-full shrink-0"
+        className="size-6px rounded-full shrink-0"
         style={{ background: TONE_DOT[tone] }}
       />
       <span
@@ -278,7 +278,7 @@ export function AiBulletList({ items, size = "sm" }: {
       ? "text-md text-primary tracking-default leading-normal"
       : "text-base text-secondary tracking-default leading-relaxed";
   return (
-    <ul className="flex flex-col gap-[3px] pl-[12px]">
+    <ul className="flex flex-col gap-3px pl-12px">
       {items.map((b, i) => (
         <li
           key={i}

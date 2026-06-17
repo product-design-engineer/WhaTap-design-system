@@ -92,11 +92,11 @@ export default function AiEventList({
           return (
             <li
               key={i}
-              className="flex items-start gap-[8px] py-[6px] border-b border-[color:var(--color-surface-50)] last:border-b-0"
+              className="flex items-start gap-8px py-6px border-b border-color-var-color-surface-50 last-border-b-0"
             >
               {/* 시간 (고정폭) */}
               <span
-                className="shrink-0 text-sm text-tertiary tracking-default leading-relaxed w-[42px] tabular-nums"
+                className="shrink-0 text-sm text-tertiary tracking-default leading-relaxed w-42px tabular-nums"
                 style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}
               >
                 {r.time}
@@ -104,11 +104,11 @@ export default function AiEventList({
 
               {/* 심각도 도트 + 라벨 (컬러 칩) */}
               <span
-                className="shrink-0 flex items-center gap-[4px] px-[5px] py-[1px] rounded-[8px] whitespace-nowrap"
+                className="shrink-0 flex items-center gap-4px px-5px py-1px rounded-8px whitespace-nowrap"
                 style={{ background: TONE_BG[tone] }}
               >
                 <span
-                  className="size-[5px] rounded-full"
+                  className="size-5px rounded-full"
                   style={{ background: TONE_DOT[tone] }}
                 />
                 <span
@@ -125,7 +125,7 @@ export default function AiEventList({
                 style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
               >
                 <span className="text-secondary">{r.source}</span>
-                <span className="text-gray-pale mx-[6px]">·</span>
+                <span className="text-gray-pale mx-6px">·</span>
                 {r.message}
               </span>
             </li>

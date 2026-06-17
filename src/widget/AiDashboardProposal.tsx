@@ -69,7 +69,7 @@ export default function AiDashboardProposal({
       </p>
 
       {locationLabel && (
-        <div className="flex items-start gap-[6px]">
+        <div className="flex items-start gap-6px">
           {locationHeading && <span className="text-lg leading-none">{locationHeading}</span>}
           <span
             className="text-base font-bold text-primary tracking-default leading-normal"
@@ -81,8 +81,8 @@ export default function AiDashboardProposal({
       )}
 
       {sections.map((s, i) => (
-        <div key={i} className="flex flex-col gap-[4px]">
-          <div className="flex items-center gap-[6px]">
+        <div key={i} className="flex flex-col gap-4px">
+          <div className="flex items-center gap-6px">
             <span className="text-lg leading-none">{s.emoji}</span>
             <span
               className="text-base font-bold text-primary tracking-default leading-normal"
@@ -96,7 +96,7 @@ export default function AiDashboardProposal({
       ))}
 
       <p
-        className="text-md text-primary tracking-default leading-relaxed mt-[4px]"
+        className="text-md text-primary tracking-default leading-relaxed mt-4px"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
       >
         {closingQuestion}

@@ -8,7 +8,7 @@ import type { StorybookConfig } from '@storybook/react-vite';
  *   - stories/**\/*.stories.{ts,tsx} — 카탈로그 stories (Tokens / Primitives / Chrome / Widget Cards)
  *
  * Vite 통합:
- *   - 패키지의 vite.config.ts 가 자동 inherit 되어 react + @tailwindcss/vite 적용.
+ *   - 패키지의 vite.config.ts 가 자동 inherit 되어 react 적용 (Tailwind 제거됨 — styles.css 직접 로드).
  *   - 소비자(Product-SaaS 등) 가 file: hard link 로 import — vite alias 불필요.
  *
  * 정적 자산(staticDirs):

@@ -77,7 +77,7 @@ export default function Toast({
 
   const toastNode = (
     <div
-      className="fixed top-[20px] left-1/2 z-[9999]"
+      className="fixed top-20px left-1-2 z-9999"
       style={{
         animation: "toastSlideDown 0.32s cubic-bezier(0.22, 1, 0.36, 1) both",
         transform: "translate(-50%, 0)",
@@ -86,7 +86,7 @@ export default function Toast({
       aria-live="polite"
     >
       <div
-        className="flex items-center gap-[12px] bg-white border border-[color:var(--color-border-default)] rounded-[8px] px-[16px] py-[10px]"
+        className="flex items-center gap-12px bg-white border border-color-var-color-border-default rounded-8px px-16px py-10px"
         style={{
           boxShadow: "0 8px 24px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04)",
           fontFamily: "var(--font-family-korean)",
@@ -94,7 +94,7 @@ export default function Toast({
       >
         {/* variant dot/icon */}
         <span
-          className="flex items-center justify-center size-[18px] rounded-full shrink-0"
+          className="flex items-center justify-center size-18px rounded-full shrink-0"
           style={{ background: dot }}
         >
           {variant === "success" && (
@@ -123,7 +123,7 @@ export default function Toast({
           type="button"
           onClick={onClose}
           aria-label="닫기"
-          className="flex items-center justify-center size-[16px] cursor-pointer hover:opacity-70 shrink-0"
+          className="flex items-center justify-center size-16px cursor-pointer hover-opacity-70 shrink-0"
         >
           <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
             <path d="M1 1l8 8M9 1l-8 8" stroke="var(--color-text-tertiary)" strokeWidth="1.4" strokeLinecap="round" />

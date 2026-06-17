@@ -102,12 +102,12 @@ export default function MiniLineChart({
 
   return (
     <div
-      className={`flex flex-col bg-white border border-[color:var(--color-border-default)] rounded-[4px] px-[8px] py-[6px] gap-[2px] min-w-0${delay !== undefined ? " ai-anim-in" : ""}`}
+      className={`flex flex-col bg-white border border-color-var-color-border-default rounded-4px px-8px py-6px gap-2px min-w-0${delay !== undefined ? " ai-anim-in" : ""}`}
       style={delay !== undefined ? { animationDelay: `${delay}ms` } : undefined}
     >
       {/* 헤더 */}
-      <div className="flex items-center justify-between gap-[6px]">
-        <div className="flex items-center gap-[3px] min-w-0">
+      <div className="flex items-center justify-between gap-6px">
+        <div className="flex items-center gap-3px min-w-0">
           <span
             className="text-base font-bold text-primary tracking-default leading-none truncate"
             style={{ fontFamily: "var(--font-family-korean)" }}
@@ -117,10 +117,10 @@ export default function MiniLineChart({
           </span>
           <InfoIcon />
         </div>
-        <div className="flex items-center gap-[4px] shrink-0">
+        <div className="flex items-center gap-4px shrink-0">
           {showTopStat && (
             <button
-              className="flex items-center h-[18px] px-[6px] rounded-[3px] bg-white border border-[color:var(--color-border-default)] text-xs text-secondary cursor-pointer hover:bg-gray-50 whitespace-nowrap"
+              className="flex items-center h-18px px-6px rounded-3px bg-white border border-color-var-color-border-default text-xs text-secondary cursor-pointer hover-bg-gray-50 whitespace-nowrap"
               style={{ fontFamily: "var(--font-family-korean)" }}
             >
               Top Stat
@@ -134,17 +134,17 @@ export default function MiniLineChart({
       <div className="relative w-full" style={{ height: CHART_HEIGHT }}>
         {/* X-axis (plot 하단) */}
         <div
-          className="absolute h-[1px] bg-[color:var(--color-border-divider)]"
+          className="absolute h-1px bg-color-var-color-border-divider"
           style={{ left: PAD_LEFT, right: PAD_RIGHT, top: PAD_TOP_PX + PLOT_H_PX }}
         />
         {/* Y-axis (plot 좌측) */}
         <div
-          className="absolute w-[1px] bg-[color:var(--color-border-divider)]"
+          className="absolute w-1px bg-color-var-color-border-divider"
           style={{ left: PAD_LEFT, top: PAD_TOP_PX, height: PLOT_H_PX }}
         />
         {/* 중간 horizontal grid line */}
         <div
-          className="absolute h-[1px] bg-[color:var(--color-border-soft)]"
+          className="absolute h-1px bg-color-var-color-border-soft"
           style={{ left: PAD_LEFT, right: PAD_RIGHT, top: PAD_TOP_PX + PLOT_H_PX * 0.5 }}
         />
         {/* 좌측 검정 점선 reference */}
@@ -222,7 +222,7 @@ export default function MiniLineChart({
               >
                 {formatPeak(max) + unit}
               </span>
-              <svg width="8" height="5" viewBox="0 0 8 5" className="mt-[1px] block">
+              <svg width="8" height="5" viewBox="0 0 8 5" className="mt-1px block">
                 <path d="M0 0h8L4 5z" fill={color} />
               </svg>
             </div>
@@ -297,7 +297,7 @@ function MenuDots() {
     <button
       type="button"
       aria-label="더보기"
-      className="flex items-center justify-center size-[16px] rounded-[2px] cursor-pointer hover:bg-[rgba(0,0,0,0.05)] shrink-0"
+      className="flex items-center justify-center size-16px rounded-2px cursor-pointer hover-bg-rgba-0-0-0-0_05 shrink-0"
     >
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
         <circle cx="7" cy="3" r="1" fill="var(--color-text-tertiary)" />

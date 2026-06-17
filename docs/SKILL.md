@@ -16,7 +16,7 @@ WhaTap 제품의 단일 컴포넌트 출처(별도 git repo, 빌드 산출물 �
 
 ## 설치 / Import
 
-> 외부 repo·신규 엔지니어(접근 권한·사전조건·설치 순서)는 [`ONBOARDING.md`](./ONBOARDING.md)의 체크리스트를 먼저 참고하세요. (private repo collaborator 초대 + Vite·TS·React19·Tailwind4)
+> 외부 repo·신규 엔지니어(접근 권한·사전조건·설치 순서)는 [`ONBOARDING.md`](./ONBOARDING.md)의 체크리스트를 먼저 참고하세요. (private repo collaborator 초대 + Vite·TS·React19 · 스타일은 일반 CSS style.css)
 
 ### 소비 (link: 심링크)
 
@@ -46,26 +46,27 @@ import {
 // 위젯 (AI 카테고리) subpath
 import { AiCard, AiSectionHeading, TONE_DOT } from "@whatap/design-system/widget";
 
-// 토큰 CSS (소비자의 index.css 에서 1회)
-@import "@whatap/design-system/tokens.css";
+// 스타일시트 (소비자 진입점에서 1회) — 토큰+유틸+전역+.dark 전부 포함
+import "@whatap/design-system/style.css";
 ```
 
-### Tailwind 4 — 토큰 import (`@theme static`)
+### 스타일 import (일반 CSS · Tailwind 없음)
 
-소비자 프로토타입의 `index.css` 에:
+소비자 진입점(`main.tsx` 등)에서:
 
-```css
-@import "tailwindcss";
-@import "@whatap/design-system/tokens.css";
+```ts
+import "@whatap/design-system/style.css";
 ```
 
-`tokens.css` 가 `@theme static` 이라 **모든 토큰이 `:root` 에 항상 emit** → 컴포넌트의 inline `var(--color-X)` 가 보장됨. (과거엔 `@source` 로 DS src 를 스캔해야 했으나 `@theme static` 전환으로 **불필요**.) 자세한 내용은 repo root `CLAUDE.md` 참조.
+DS는 **Tailwind를 쓰지 않습니다.** `style.css` 는 외부 프레임워크 흔적이 0인 자체 일반 CSS(클래스명도 escape 없는 식별자)라, 컴포넌트가 쓰는 모든 유틸·토큰·전역 규칙·`.dark`가 이미 포함됩니다. 소비 앱에 Tailwind·`@source`·PostCSS 설정이 **불필요**합니다. (토큰 변수만 필요하면 `@whatap/design-system/tokens.css`.) 자세한 내용은 repo root `CLAUDE.md` 참조.
+
+> ⚠️ `style.css` 는 생성물입니다(DS repo 내부). 컴포넌트 className 을 추가/변경하면 `node scripts/detailwind.mjs generate` 로 재생성됩니다 — 소비자가 손댈 일은 없고, DS 작업자는 임의의 새 유틸을 쓰기 전 재생성하거나 inline style 을 씁니다. (Guardrails: `no-tailwind-plain-css`)
 
 ### 새 소비 프로토타입 추가 시
 
 1. `package.json` 에 `"@whatap/design-system": "link:<상대경로>/WhaTap-design-system"`
 2. vite `resolve.dedupe: ['react','react-dom']`
-3. `index.css` 에 `@import "@whatap/design-system/tokens.css"`
+3. 진입점에 `import "@whatap/design-system/style.css"` (Tailwind 불필요)
 4. `import { ... } from "@whatap/design-system"`
 
 자세한 절차·사전조건(협업자 초대 등): [`ONBOARDING.md`](./ONBOARDING.md) · [`AI-INTEGRATION.md`](./AI-INTEGRATION.md).
@@ -82,7 +83,7 @@ import { AiCard, AiSectionHeading, TONE_DOT } from "@whatap/design-system/widget
 ```
 WhaTap Design System (@whatap/design-system)
 ├─ Tokens            ─ 색·폰트·spacing · 11 type-scale · 3 weight · 6 line-height
-│                      `tokens.css` `@theme static` (단일 출처) + `widget/_tokens.ts` Tone 5단계
+│                      `tokens.css` 의 `:root` (단일 출처) + `widget/_tokens.ts` Tone 5단계
 ├─ Primitives (9)    ─ 일반 form / 표시
 │                      Checkbox / Tooltip / Chip / FilterChip / TextField / Select /
 │                      Tabs / Modal / FilterDropdown
@@ -106,7 +107,7 @@ WhaTap Design System (@whatap/design-system)
 Chrome / WhaTap AI → Primitives → Tokens
 ```
 
-- Tokens 는 누구도 import 하지 않는 leaf — `@theme static` CSS 변수 + Tone 토큰
+- Tokens 는 누구도 import 하지 않는 leaf — 순수 `:root` CSS 변수 + Tone 토큰
 - Primitives 는 Tokens 만 import — 형태 + 외관의 base
 - Chrome · WhaTap AI 는 Primitives 와 Tokens import (PageHeaderAiInline 은 헤더 레이아웃이라 Chrome)
 
@@ -187,7 +188,7 @@ export default function AiMyNewMessage({
 
 | 파일 | 내용 |
 |---|---|
-| [`tokens.md`](./tokens.md) | `@theme` 색·타입 스케일·웨이트·라인하이트·트래킹 + Tone 5 단계 + TONE_BG/DOT/LABEL |
+| [`tokens.md`](./tokens.md) | `:root` 색·타입 스케일·웨이트·라인하이트·트래킹 + Tone 5 단계 + TONE_BG/DOT/LABEL |
 | [`primitives.md`](./primitives.md) | 14 종 — 일반 폼 (Checkbox · Tooltip · Chip · FilterChip · TextField · Select · Tabs · Modal · FilterDropdown) + AI 카드 빌딩 블록 (AiCard · AiCaption · AiSectionHeading · AiToneBadge · AiBulletList) |
 | [`chrome-components.md`](./chrome-components.md) | 19 종 — DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · Optionbar* · LiveTimerCompact · TimeRangeSelector · PresetSelect · Stage · Toast · AiSymbol · DataTable · FilterBar · MiniLineChart · EventWeekTimeMatrix · Button · DashboardBuildingProgress · WhaTapAiContext |
 | [`ai-entry.md`](./ai-entry.md) | AI 진입점 4 종 — AiAssistantButton · AiSendButton · AiInlinePrompt · AiPromptInput |

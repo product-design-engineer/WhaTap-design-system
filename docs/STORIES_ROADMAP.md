@@ -54,7 +54,7 @@
 1. **파일 위치**: `src/<Component>.tsx` (평면)
 2. **Story 위치**: `stories/3-Primitives/<Component>.stories.tsx` (Chrome 은 `4-Chrome/`)
 3. **Barrel export**: `src/index.ts` 에 `export { default as <Component> } from "./<Component>";` + 타입 named export
-4. **토큰만 사용**: Tailwind 4 토큰 utility (`text-base`, `text-primary`, `bg-brand-blue`). 직접 hex 금지
+4. **토큰만 사용**: 토큰 utility 클래스 (`text-base`, `text-primary`, `bg-brand-blue` — styles.css 제공, Tailwind 없음). 직접 hex 금지
 5. **default export = 컴포넌트** / named export = 타입 (Props / Variant)
 6. **`tags: ['autodocs']`**: 모든 story 에 추가 → Storybook 자동 prop 문서
 7. **a11y**: ARIA role + 키보드 지원 (Tab/Enter/Escape) 기본

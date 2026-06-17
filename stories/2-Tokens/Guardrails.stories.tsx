@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
  * Guardrails — WhaTap 디자인 시스템의 무결성 게이트.
  *
  * "정책을 사람이 지키길 바라는" 대신, 디자인 시스템이 깨지지 않도록 지키는 **불변식(invariant)** 목록입니다.
- * WhaTap 은 단일 출처(`tokens.css @theme static`)·소스온리 모델이라, 생성형 파이프라인 가드레일을 통째로
+ * WhaTap 은 단일 출처(`tokens.css` 의 `:root`)·소스온리·일반 CSS(Tailwind 미사용) 모델이라, 생성형 파이프라인 가드레일을 통째로
  * 옮기지 않고 **이 모델에 맞는 게이트만** 둡니다. 각 게이트의 현 강제 수준을 상태로 표기합니다.
  *
  * (격리: 본 페이지는 자체완결 — 외부 디자인 시스템을 참조하지 않습니다.)
@@ -48,9 +48,18 @@ const GUARDRAILS: Guardrail[] = [
     name: "토큰 단일 출처",
     status: "auto",
     invariant:
-      "`tokens.css` 의 `@theme static` 가 모든 토큰을 `:root` 에 항상 emit. 토큰 1값 변경 = 전 컴포넌트 반영, 소비 앱은 `tokens.css` import 만으로 인라인 `var(--color-X)` 보장.",
+      "`tokens.css` 의 `:root` 가 모든 토큰을 항상 선언(순수 CSS). 토큰 1값 변경 = 전 컴포넌트 반영, 소비 앱은 `style.css`(또는 `tokens.css`) import 만으로 인라인 `var(--color-X)` 보장.",
     prevents: "토큰 분산/누락 · 보더·색이 사라지는 tree-shake",
-    command: "구조 (@theme static)",
+    command: "구조 (:root in tokens.css)",
+  },
+  {
+    id: "no-tailwind-plain-css",
+    name: "Tailwind 미사용 · 일반 CSS",
+    status: "auto",
+    invariant:
+      "스타일은 외부 CSS 프레임워크 의존 없는 일반 CSS(`styles.css`). 유틸 클래스명은 escape 없는 식별자(gap-4px·hover-opacity-70 등). 컴포넌트 className 변경 시 `node scripts/detailwind.mjs generate` 로 `styles.css` 재생성 + 코드모드.",
+    prevents: "Tailwind 재도입 · CSS 내 프레임워크 흔적(@layer·--tw-*·escape 클래스명)",
+    command: "scripts/detailwind.mjs (generate)",
   },
   {
     id: "catalog-build",
@@ -119,7 +128,7 @@ const GUARDRAILS: Guardrail[] = [
 function Badge({ status }: { status: Status }) {
   const s = STATUS[status];
   return (
-    <span className="inline-flex items-center gap-[6px] whitespace-nowrap">
+    <span className="inline-flex items-center gap-6px whitespace-nowrap">
       <span className="rounded-full shrink-0" style={{ width: 8, height: 8, background: s.dot }} />
       <span className="text-sm text-secondary tracking-default leading-none">{s.label}</span>
     </span>
@@ -139,7 +148,7 @@ function Guardrails() {
 
       <section className="flex gap-3">
         {(["auto", "policy", "planned"] as Status[]).map((st) => (
-          <div key={st} className="flex items-center gap-[8px] px-3 py-2 border border-[color:var(--color-border-default)] rounded-md">
+          <div key={st} className="flex items-center gap-8px px-3 py-2 border border-color-var-color-border-default rounded-md">
             <Badge status={st} />
             <span className="text-lg font-bold font-numeric text-primary leading-none tabular-nums">{count(st)}</span>
           </div>
@@ -149,7 +158,7 @@ function Guardrails() {
       <section className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-[color:var(--color-border-strong)]">
+            <tr className="border-b border-color-var-color-border-strong">
               {["게이트", "상태", "불변식 (invariant)", "막는 것", "체크"].map((h) => (
                 <th key={h} className="p-2 text-base font-bold text-secondary tracking-default align-bottom">{h}</th>
               ))}
@@ -157,7 +166,7 @@ function Guardrails() {
           </thead>
           <tbody>
             {GUARDRAILS.map((g) => (
-              <tr key={g.id} className="border-b border-[color:var(--color-border-default)] align-top">
+              <tr key={g.id} className="border-b border-color-var-color-border-default align-top">
                 <td className="p-2 text-md font-medium text-primary whitespace-nowrap">{g.name}</td>
                 <td className="p-2"><Badge status={g.status} /></td>
                 <td className="p-2 text-base text-secondary leading-normal" style={{ maxWidth: 420 }}>{g.invariant}</td>

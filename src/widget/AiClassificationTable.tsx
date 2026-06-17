@@ -75,7 +75,7 @@ export default function AiClassificationTable({
 }) {
   return (
     <div
-      className="ai-anim-in flex flex-col gap-[8px] w-full"
+      className="ai-anim-in flex flex-col gap-8px w-full"
       style={{ animationDelay: `${delay}ms` }}
     >
       {description && (
@@ -88,10 +88,10 @@ export default function AiClassificationTable({
       )}
       {warning && (
         <div
-          className="flex items-start gap-[6px] rounded-[6px] px-[10px] py-[6px]"
+          className="flex items-start gap-6px rounded-6px px-10px py-6px"
           style={{ background: "#fff7e0" }}
         >
-          <span className="text-base mt-[1px]">⚠️</span>
+          <span className="text-base mt-1px">⚠️</span>
           <span
             className="text-base text-secondary tracking-default leading-relaxed"
             style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
@@ -102,16 +102,16 @@ export default function AiClassificationTable({
       )}
       {caption && (
         <div
-          className="text-base font-bold text-primary tracking-default leading-normal mt-[2px]"
+          className="text-base font-bold text-primary tracking-default leading-normal mt-2px"
           style={{ fontFamily: "var(--font-family-korean)" }}
         >
           📊 {caption}
         </div>
       )}
-      <div className="rounded-[6px] overflow-hidden border border-[color:var(--color-border-default)]">
+      <div className="rounded-6px overflow-hidden border border-color-var-color-border-default">
         {/* 헤더 */}
         <div
-          className="grid items-center px-[6px] py-[6px] bg-[color:var(--color-surface-50)] gap-[4px]"
+          className="grid items-center px-6px py-6px bg-color-var-color-surface-50 gap-4px"
           style={{ gridTemplateColumns: "28px 1.4fr 0.7fr 0.6fr 0.6fr 1.3fr 0.8fr" }}
         >
           {["GPU", "모델명", "평균", "최대", "최소", "Pod", "분류"].map((h) => (
@@ -130,7 +130,7 @@ export default function AiClassificationTable({
           return (
             <div
               key={i}
-              className="grid items-center px-[6px] py-[6px] gap-[4px] border-t border-[color:var(--color-border-default)]"
+              className="grid items-center px-6px py-6px gap-4px border-t border-color-var-color-border-default"
               style={{ gridTemplateColumns: "28px 1.4fr 0.7fr 0.6fr 0.6fr 1.3fr 0.8fr" }}
             >
               <span
@@ -171,11 +171,11 @@ export default function AiClassificationTable({
                 {r.pod}
               </span>
               <div
-                className="flex items-center gap-[4px] px-[6px] py-[2px] rounded-[10px] self-start whitespace-nowrap"
+                className="flex items-center gap-4px px-6px py-2px rounded-10px self-start whitespace-nowrap"
                 style={{ background: badge.bg }}
               >
                 <span
-                  className="size-[6px] rounded-full shrink-0"
+                  className="size-6px rounded-full shrink-0"
                   style={{ background: badge.dot }}
                 />
                 <span

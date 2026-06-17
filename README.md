@@ -1,6 +1,6 @@
 # @whatap/design-system
 
-WhaTap SaaS 의 단일 컴포넌트·토큰 출처. **Primitives · Chrome · AI Widget 카드 + 토큰(`tokens.css` `@theme static`)** 을 Storybook 카탈로그로 제공하며, 프론트엔드 엔지니어가 **자기 AI 작업 환경에서 인터페이스 작업에 그대로 사용**하도록 설계됨.
+WhaTap SaaS 의 단일 컴포넌트·토큰 출처. **Primitives · Chrome · AI Widget 카드 + 토큰(`tokens.css` 의 `:root`)** 을 Storybook 카탈로그로 제공하며, 프론트엔드 엔지니어가 **자기 AI 작업 환경에서 인터페이스 작업에 그대로 사용**하도록 설계됨.
 
 - 라이브 Storybook: https://whatap-design-system-storybook.vercel.app
 - 정책 전문: [`CLAUDE.md`](./CLAUDE.md) · 카탈로그: [`docs/`](./docs)
@@ -21,7 +21,7 @@ pnpm build-storybook    # 정적 빌드 (DESIGN.md 합본 자동 생성)
 ```
 ```tsx
 import { DashboardLayout, PageHeaderAiInline, DataTable } from "@whatap/design-system";
-import "@whatap/design-system/tokens.css";   // import 만으로 전 토큰 :root 보장
+import "@whatap/design-system/style.css";   // 일반 CSS — 토큰+유틸+전역+.dark (Tailwind 불필요)
 ```
 
 단일 출처 원칙: 인라인 색 리터럴 금지(토큰 사용), 컴포넌트 inline 재구현 금지(prop 조합). 자세한 정책은 `CLAUDE.md`.
@@ -42,4 +42,4 @@ import "@whatap/design-system/tokens.css";   // import 만으로 전 토큰 :roo
 
 ## 기술 스택
 
-React 19 · Vite 6 + Tailwind 4 · Storybook 10 · TypeScript 5 (strict) · `react-docgen-typescript` autodocs.
+React 19 · Vite 6 · Storybook 10 · TypeScript 5 (strict) · `react-docgen-typescript` autodocs. (스타일은 자체 일반 CSS `style.css` — Tailwind 의존·흔적 없음.)

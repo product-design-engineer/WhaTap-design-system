@@ -10,7 +10,7 @@ const meta: Meta = {
       description: {
         component:
           "**WDS Color 토큰 전체 카탈로그.**\n\n" +
-          "단일 출처: `src/index.css` 의 `@theme` 블록. Tailwind v4 가 이 변수에서 utility class 를 자동 생성.\n\n" +
+          "단일 출처: `src/tokens.css` 의 `:root` 블록. 파생 utility class 는 `styles.css` 에 일반 CSS 로 정의 (Tailwind 없음).\n\n" +
           "구성:\n" +
           "- **Surface (Intent)** — `tokens.color.surface.*` 5 톤 위젯 카드 배경\n" +
           "- **Indicator (Intent)** — `tokens.color.indicator.*` 5 톤 도트/스트로크\n" +
@@ -45,7 +45,7 @@ function Swatch({
   border?: boolean;
 }) {
   return (
-    <div className="flex items-stretch gap-3 p-3 border border-[#eaeaea] rounded-lg bg-white" style={{ fontFamily: "var(--font-family-korean)" }}>
+    <div className="flex items-stretch gap-3 p-3 border border-ceaeaea rounded-lg bg-white" style={{ fontFamily: "var(--font-family-korean)" }}>
       <div
         className="rounded-md flex-shrink-0"
         style={{
@@ -55,7 +55,7 @@ function Swatch({
           border: border ? "1px dashed #ccc" : undefined,
         }}
       />
-      <div className="flex flex-col justify-center gap-0.5 min-w-0">
+      <div className="flex flex-col justify-center gap-0_5 min-w-0">
         <div className="text-base font-bold text-primary tracking-default leading-none">{label}</div>
         <div className="text-xs text-tertiary leading-none" style={{ fontFamily: "var(--font-family-numeric)" }}>{hex}</div>
         {description && (
@@ -76,7 +76,7 @@ function SwatchGrid({ children, minColumn = 320 }: { children: React.ReactNode; 
 
 function CompactSwatch({ token, hex }: { token: string; hex: string }) {
   return (
-    <div className="flex flex-col items-stretch gap-1 p-2 border border-[#eaeaea] rounded-md bg-white" style={{ fontFamily: "var(--font-family-numeric)" }}>
+    <div className="flex flex-col items-stretch gap-1 p-2 border border-ceaeaea rounded-md bg-white" style={{ fontFamily: "var(--font-family-numeric)" }}>
       <div className="rounded h-12" style={{ background: hex }} />
       <div className="text-chart text-tertiary leading-none truncate" style={{ fontFamily: "var(--font-family-numeric)" }}>{token}</div>
       <div className="text-chart text-tertiary leading-none">{hex}</div>
@@ -125,14 +125,14 @@ export const TonePairing: StoryObj = {
         const indicator = tokens.color.indicator[intent];
         const label = tokens.label[intent];
         return (
-          <div key={intent} className="flex items-center gap-4 p-3 border border-[#eaeaea] rounded-lg" style={{ background: surface.value, fontFamily: "var(--font-family-korean)" }}>
-            <div className="flex items-center gap-1.5 px-2 py-1 rounded-xl" style={{ background: "rgba(255,255,255,0.6)" }}>
+          <div key={intent} className="flex items-center gap-4 p-3 border border-ceaeaea rounded-lg" style={{ background: surface.value, fontFamily: "var(--font-family-korean)" }}>
+            <div className="flex items-center gap-1_5 px-2 py-1 rounded-xl" style={{ background: "rgba(255,255,255,0.6)" }}>
               <div className="rounded-full" style={{ width: 6, height: 6, background: indicator.value }} />
               <span className="text-xs leading-none" style={{ color: indicator.value, fontWeight: 500 }}>
                 {label.value || `(${intent})`}
               </span>
             </div>
-            <div className="flex-1 min-w-0 flex flex-col gap-0.5" style={{ fontFamily: "var(--font-family-numeric)" }}>
+            <div className="flex-1 min-w-0 flex flex-col gap-0_5" style={{ fontFamily: "var(--font-family-numeric)" }}>
               <div className="text-sm text-primary font-bold">{intent}</div>
               <div className="text-chart text-tertiary">
                 surface {surface.value} · indicator {indicator.value} · label "{label.value}"

@@ -166,7 +166,7 @@ curl https://whatap-design-system-storybook.vercel.app/design-system/DESIGN.md >
 ```
 ```tsx
 import { DashboardLayout, PageHeaderAiInline, DataTable } from "@whatap/design-system";
-import "@whatap/design-system/tokens.css";   // 토큰(@theme static) — import 만으로 전 토큰 보장
+import "@whatap/design-system/style.css";   // 일반 CSS — 토큰+유틸+전역 (Tailwind 불필요)
 ```
 
 - **단일 출처:** 인라인 색 리터럴·카드 재구현 금지. 토큰·컴포넌트 prop 으로 조합. 정책 전문: 루트 `CLAUDE.md`.
@@ -186,7 +186,7 @@ import "@whatap/design-system/tokens.css";   // 토큰(@theme static) — import
    - 관리자(초대): `gh api -X PUT repos/interfacedesigner/WhaTap-design-system/collaborators/<github-login> -f permission=pull`
    - 엔지니어: 메일/알림의 초대 수락 → `git clone https://github.com/interfacedesigner/WhaTap-design-system.git`
 2. **npm 미등록** — `npm install @whatap/design-system` 으로는 못 받습니다(공개 레지스트리 아님). **로컬 clone 을 `link:`(또는 `file:`)** 로 소비하거나 워크스페이스(`workspace:*`) 멤버로 둡니다.
-3. **소비 환경 호환** — 이 패키지는 빌드 산출물(dist) 없이 **`.ts` 소스를 직접 export**합니다. 소비 측이 **Vite + TypeScript + React 19 + Tailwind 4** 여야 무설정 동작. 다른 번들러(webpack 등)는 TS/JSX 트랜스파일·CSS 처리 추가 설정이 필요하며, 이 경우 별도 빌드 산출물 배포 방식([아래 zero-friction 옵션](#zero-friction-설치-검토중)) 검토.
+3. **소비 환경 호환** — 이 패키지는 빌드 산출물(dist) 없이 **`.ts` 소스를 직접 export**합니다. 소비 측이 **Vite + TypeScript + React 19** 면 무설정 동작. 스타일은 자체 일반 CSS(`style.css`)를 import 하면 되고 **Tailwind 는 불필요**. 다른 번들러(webpack 등)는 TS/JSX 트랜스파일 추가 설정이 필요하며, 이 경우 별도 빌드 산출물 배포 방식([아래 zero-friction 옵션](#zero-friction-설치-검토중)) 검토.
 
 ### 설치 (사전 조건 충족 후)
 
@@ -200,18 +200,18 @@ pnpm install        # 심링크 구성 → DS 수정 자동 반영(HMR)
 ### 체크리스트
 
 - [ ] GitHub 계정이 repo 협업자로 초대·수락됨
-- [ ] 소비 앱이 Vite + TS + React 19 + Tailwind 4
+- [ ] 소비 앱이 Vite + TS + React 19 (Tailwind 불필요)
 - [ ] `link:` 의존 + `pnpm install` 로 심링크 구성
-- [ ] `import "@whatap/design-system/tokens.css"` (토큰 보장)
+- [ ] `import "@whatap/design-system/style.css"` (토큰+유틸+전역)
 - [ ] vite `resolve.dedupe: ['react','react-dom']`
 - [ ] (선택) 본인 AI 를 호스팅 MCP `https://whatap-ds-mcp.vercel.app/mcp` 에 연결
 
 ### zero-friction 설치 (검토중)
 
-**dist 빌드는 준비됨** — `pnpm build:lib` 가 `dist/index.js` · `dist/widget.js` · `*.d.ts` · `dist/style.css`(토큰 + 컴파일된 Tailwind 유틸) 산출(tsup + Tailwind CLI). 비-Vite 번들러도:
+**dist 빌드는 준비됨** — `pnpm build:lib` 가 `dist/index.js` · `dist/widget.js` · `*.d.ts` 산출(tsup) + `dist/style.css`(일반 CSS 복사). 비-Vite 번들러도:
 ```ts
 import { DashboardLayout } from "@whatap/design-system";   // dist JS (publish 후 또는 build:lib 후)
-import "@whatap/design-system/style.css";                  // 컴파일 CSS — Tailwind 없이도 스타일 적용 (③ 해소)
+import "@whatap/design-system/style.css";                  // 일반 CSS — Tailwind 없이 스타일 적용 (③ 해소)
 ```
 - 현재 exports `.` 기본값은 **source(`src/*.ts`)** — Vite/워크스페이스 소비자의 HMR 유지(프로토타입 무회귀). `./style.css` 만 dist 를 가리킴.
 - `npm install` 만으로 받는 경로(#1/#2 해소)는 **사설 레지스트리 publish** 필요(조직 결정): **GitHub Packages** 는 스코프(`@whatap`)=소유 org 일치 필요 → repo 를 `whatap` org 로 이전 + publish 권한. 패키지명 변경은 모든 import 영향이라 비권장.

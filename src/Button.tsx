@@ -8,10 +8,10 @@
  * Spec: @whatap/wds Button-specs.md 기반 (Figma 5701-33519). 3 variant × 4 size × 3 tone +
  * disabled / loading / fullWidth.
  *
- * ## 구현 노트 — Tailwind v4 동적 클래스 제약 회피
- * Tailwind JIT 가 runtime 에 조립된 className arbitrary value 를 못 잡으므로, variant×tone 색은
+ * ## 구현 노트 — 동적 variant×tone 색은 CSS custom property 로
+ * runtime 에 조립되는 variant×tone 색은 정적 유틸 클래스로 표현할 수 없으므로,
  * **inline CSS custom property** 로 전달 (`--wds-btn-bg`, `--wds-btn-fg`, `--wds-btn-border`,
- * `--wds-btn-bg-hover`). `index.css` 의 `.wds-btn` 규칙이 이 변수들을 적용 — hover 까지 정상.
+ * `--wds-btn-bg-hover`). `tokens.css` 의 `.wds-btn` 규칙이 이 변수들을 적용 — hover 까지 정상.
  *
  * ## When to use
  * - 사용자 액션 trigger (제출 / 적용 / 닫기 / 등록 등).
@@ -61,11 +61,11 @@ export type ButtonProps = {
 /* ─── style maps ────────────────────────────────────── */
 
 const SIZE_CLASS: Record<ButtonSize, string> = {
-  // 정적 Tailwind class 만 (JIT 가 source 에서 인식). h-[Xpx]/px-[Xpx] arbitrary 라도 클래스가 string literal 이라 OK.
-  xl: "h-[36px] px-[16px] text-md gap-[8px]",
-  lg: "h-[32px] px-[14px] text-md gap-[6px]",
-  md: "h-[24px] px-[10px] text-base gap-[4px]",
-  sm: "h-[20px] px-[8px] text-sm gap-[4px]",
+  // styles.css 에 정의된 일반 유틸 클래스 (h-36px/px-16px 등 — escape 없는 식별자).
+  xl: "h-36px px-16px text-md gap-8px",
+  lg: "h-32px px-14px text-md gap-6px",
+  md: "h-24px px-10px text-base gap-4px",
+  sm: "h-20px px-8px text-sm gap-4px",
 };
 
 /** tone → CSS color (main / hover / soft surface). */
@@ -125,7 +125,7 @@ export default function Button({
       disabled={isDisabled}
       className={[
         "wds-btn",
-        "inline-flex items-center justify-center rounded-[4px] border whitespace-nowrap select-none relative overflow-hidden",
+        "inline-flex items-center justify-center rounded-4px border whitespace-nowrap select-none relative overflow-hidden",
         "transition-colors duration-150",
         "tracking-default font-medium",
         SIZE_CLASS[size],
@@ -158,7 +158,7 @@ export default function Button({
           />
         </span>
       )}
-      <span className={loading ? "invisible" : "inline-flex items-center gap-[inherit]"}>
+      <span className={loading ? "invisible" : "inline-flex items-center gap-inherit"}>
         {children}
       </span>
     </button>

@@ -38,7 +38,7 @@ export default function AiUserBubble({ children, className }: AiUserBubbleProps)
   return (
     <div className={`flex justify-end w-full ${className ?? ""}`} data-node-id="27110:53409">
       <div
-        className="rounded-[4px] px-[8px] py-[8px]"
+        className="rounded-4px px-8px py-8px"
         style={{
           background: "var(--color-surface-50)",
           maxWidth: "85%",

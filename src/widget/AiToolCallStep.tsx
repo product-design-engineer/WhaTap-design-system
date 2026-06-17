@@ -52,12 +52,12 @@ export default function AiToolCallStep({
 
   return (
     <div
-      className="ai-anim-in flex flex-col gap-[6px] w-full"
+      className="ai-anim-in flex flex-col gap-6px w-full"
       style={{ animationDelay: `${delay}ms` }}
     >
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-[6px] self-start cursor-pointer"
+        className="flex items-center gap-6px self-start cursor-pointer"
       >
         <svg
           width="12"
@@ -86,7 +86,7 @@ export default function AiToolCallStep({
         </span>
         {running && (
           <span
-            className="size-[12px] rounded-full border-[1.5px] border-[color:var(--color-brand-blue)] border-t-transparent shrink-0"
+            className="size-12px rounded-full border-1_5px border-color-var-color-brand-blue border-t-transparent shrink-0"
             style={{ animation: "aiSymbolRotateSlow 0.9s linear infinite" }}
           />
         )}
@@ -94,7 +94,7 @@ export default function AiToolCallStep({
 
       {open && toolName && (
         <code
-          className="self-start text-base text-secondary bg-[color:var(--color-surface-50)] border border-[color:var(--color-border-default)] rounded-[4px] px-[8px] py-[3px]"
+          className="self-start text-base text-secondary bg-color-var-color-surface-50 border border-color-var-color-border-default rounded-4px px-8px py-3px"
           style={{
             fontFamily:
               "'JetBrains Mono', 'SF Mono', 'Roboto Mono', Menlo, Consolas, monospace",

@@ -136,7 +136,7 @@ export const InteractiveSuggestions: Story = {
             placeholder="DB RAC 에 대해 질문..."
           />
           <div
-            className="text-xs text-tertiary p-2 border border-[var(--color-border-default)] rounded grid grid-cols-2 gap-3"
+            className="text-xs text-tertiary p-2 border border-var-color-border-default rounded grid grid-cols-2 gap-3"
             style={{ fontFamily: "var(--font-family-korean)" }}
           >
             <div>
@@ -175,7 +175,7 @@ export const Interactive: Story = {
           />
           {submitted.length > 0 && (
             <div
-              className="text-xs text-tertiary p-2 border border-[var(--color-border-default)] rounded"
+              className="text-xs text-tertiary p-2 border border-var-color-border-default rounded"
               style={{ fontFamily: "var(--font-family-korean)" }}
             >
               최근 송신:
