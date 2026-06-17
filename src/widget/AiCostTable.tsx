@@ -61,7 +61,7 @@ export default function AiCostTable({
 }) {
   return (
     <div
-      className="ai-anim-in flex flex-col gap-[8px] w-full bg-white border border-[color:var(--color-border-default)] rounded-[8px] p-[12px]"
+      className="ai-anim-in flex flex-col gap-8px w-full bg-white border border-color-var-color-border-default rounded-8px p-12px"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="flex items-center justify-between">
@@ -73,12 +73,12 @@ export default function AiCostTable({
         </span>
       </div>
 
-      <div className="flex flex-col rounded-[6px] overflow-hidden border border-[color:var(--color-border-default)]">
+      <div className="flex flex-col rounded-6px overflow-hidden border border-color-var-color-border-default">
         {rows.map((r, i) => (
           <div
             key={r.label}
-            className={`flex items-center justify-between px-[10px] py-[8px] ${
-              i > 0 ? "border-t border-[color:var(--color-border-default)]" : ""
+            className={`flex items-center justify-between px-10px py-8px ${
+              i > 0 ? "border-t border-color-var-color-border-default" : ""
             }`}
             style={{
               background: r.highlight ? "#eef4ff" : "#fff",
@@ -92,7 +92,7 @@ export default function AiCostTable({
                 {r.label}
               </span>
               <span
-                className="text-base text-primary tracking-default leading-normal mt-[3px]"
+                className="text-base text-primary tracking-default leading-normal mt-3px"
                 style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
               >
                 {r.detail}
@@ -113,7 +113,7 @@ export default function AiCostTable({
 
       {(savingsLabel || savingsValue) && (
         <div
-          className="flex items-center justify-between px-[10px] py-[8px] rounded-[6px]"
+          className="flex items-center justify-between px-10px py-8px rounded-6px"
           style={{
             background: "linear-gradient(95deg, rgba(0,75,224,0.08) 0%, rgba(139,82,255,0.08) 100%)",
             border: "1px solid rgba(41,108,242,0.25)",

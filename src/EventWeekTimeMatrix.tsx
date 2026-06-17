@@ -55,7 +55,7 @@ export default function EventWeekTimeMatrix({
   const interactive = !!onToggle;
 
   return (
-    <div className="flex flex-col gap-[6px]">
+    <div className="flex flex-col gap-6px">
       {caption && (
         <span className="text-base font-bold text-primary tracking-default leading-normal">
           {caption}
@@ -94,8 +94,8 @@ export default function EventWeekTimeMatrix({
               type="button"
               disabled={!interactive}
               onClick={() => interactive && onToggle!(d, h, !on)}
-              className={`h-[14px] rounded-[2px] transition-colors ${
-                interactive ? "cursor-pointer hover:brightness-95" : "cursor-default"
+              className={`h-14px rounded-2px transition-colors ${
+                interactive ? "cursor-pointer hover-brightness-95" : "cursor-default"
               }`}
               style={{
                 background: on ? "var(--color-brand-blue)" : "var(--color-surface-100)",
@@ -109,13 +109,13 @@ export default function EventWeekTimeMatrix({
       ))}
 
       {/* 범례 */}
-      <div className="flex items-center gap-[10px] mt-[4px]">
-        <span className="flex items-center gap-[4px]">
-          <span className="inline-block w-[12px] h-[10px] rounded-[2px]" style={{ background: "var(--color-brand-blue)", border: "1px solid #1f57c8" }} />
+      <div className="flex items-center gap-10px mt-4px">
+        <span className="flex items-center gap-4px">
+          <span className="inline-block w-12px h-10px rounded-2px" style={{ background: "var(--color-brand-blue)", border: "1px solid #1f57c8" }} />
           <span className="text-xs text-secondary">수신</span>
         </span>
-        <span className="flex items-center gap-[4px]">
-          <span className="inline-block w-[12px] h-[10px] rounded-[2px]" style={{ background: "var(--color-surface-100)", border: "1px solid #e0e1e3" }} />
+        <span className="flex items-center gap-4px">
+          <span className="inline-block w-12px h-10px rounded-2px" style={{ background: "var(--color-surface-100)", border: "1px solid #e0e1e3" }} />
           <span className="text-xs text-secondary">미수신</span>
         </span>
       </div>

@@ -20,7 +20,7 @@
 | Primitives | `src/` 루트 | Button, TextField, Select, Chip, FilterChip, Tabs, Modal, Tooltip, Checkbox |
 | Chrome | `src/` 루트 | DashboardLayout, PageHeader, PageHeaderAiInline, Sidebar, FilterBar, DataTable, FilterDropdown |
 | WhaTap AI | `src/widget/` | **모든 AI 컴포넌트의 집** — 빌딩 블록(AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList) · 진입(AiInlinePrompt, AiPromptInput, AiSendButton, AiAssistantButton) · 위젯 셸(WhaTapAiWidget, WhaTapAiContext, AiSymbol) · 메시지 카드(AiReasoning, AiChatExchange …). Storybook 트리 `WhaTap AI/` 로 통일. (단 `PageHeaderAiInline` 은 헤더 레이아웃이라 Chrome 유지) |
-| Tokens | `src/tokens.css` | `@theme` 컬러·폰트·spacing 변수 |
+| Tokens | `src/tokens.css` | `:root` 컬러·폰트·spacing 변수 (참조용; 런타임은 whatap-ds.css) |
 
 **AI 영역 ↔ 일반 영역 분리 원칙**
 
@@ -56,6 +56,15 @@
 **Shell** — DashboardLayout(=Sidebar), WhaTapAiWidget (2개)
 
 **신규 컴포넌트 추가 시 반드시 계층을 명시.** Composite 가 다른 Composite 를 import 하면 Shell 로 승격하거나 구조 분리.
+
+## 스타일 — 일반 CSS (Tailwind 미사용 · 흔적 0)
+
+런타임 스타일은 외부 CSS 프레임워크 흔적이 0인 **자체 소유 일반 CSS** `src/whatap-ds.css` (= export `./style.css`·`./whatap-ds.css`). 내부에 `@layer`·`--tw-*`·`@property`·`.foo-\[…\]`(escape 클래스명) 없음. 유틸 클래스명은 escape 없는 일반 식별자(`gap-4px`·`hover-opacity-70` 등).
+
+- **소비자:** 진입점에서 `import "@whatap/design-system/style.css"` 한 줄. Tailwind·`@source`·PostCSS 불필요. 토큰만 필요하면 `tokens.css`(참조용 `:root`).
+- **`whatap-ds.css` 는 생성물 — 손으로 늘리지 말 것.** 컴포넌트 className/토큰 변경 시 `node scripts/detailwind.mjs generate` 로 **(1) whatap-ds.css 재생성 + (2) tsx className 코드모드(escape 토큰→일반 식별자)**. 진실 원본 `scripts/frozen-whatap-ds.css`(구 빌드 1회 스냅샷, 미배포). self-contained(:root 토큰 + preflight + utilities + 전역/keyframes/.dark 포함).
+- **동적 색**(variant×tone)은 정적 유틸로 불가 → Button 처럼 inline CSS custom property(`--wds-btn-*`).
+- **Tailwind 재도입 금지** — 의존성·빌드·런타임·CSS 산출물 어디에도 없음. (Storybook Guardrails: `no-tailwind-plain-css`)
 
 ## 타이포그래피 위계 — `font-weight` 평탄화 금지
 

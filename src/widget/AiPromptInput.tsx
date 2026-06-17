@@ -130,16 +130,16 @@ export default function AiPromptInput({
   return (
     <div className="flex flex-col items-center justify-center w-full">
       <div
-        className="ai-input-wrapper relative bg-white flex flex-col gap-[4px] items-center justify-center p-[12px] shrink-0 rounded-[8px] transition-all duration-200 w-full"
+        className="ai-input-wrapper relative bg-white flex flex-col gap-4px items-center justify-center p-12px shrink-0 rounded-8px transition-all duration-200 w-full"
         style={{ border: hasInput ? "2px solid var(--color-brand-blue)" : "2px solid var(--color-brand-blue-bg-2)" }}
       >
         {/* 첨부 chip 행 — Figma 27087:3416 */}
         {attachments && attachments.length > 0 && (
-          <div className="flex gap-[6px] items-center w-full overflow-x-auto pb-[4px]">
+          <div className="flex gap-6px items-center w-full overflow-x-auto pb-4px">
             {attachments.map((a, i) => (
               <div
                 key={i}
-                className="flex flex-col gap-[4px] bg-white border border-[#d3d3d3] rounded-[6px] px-[8px] py-[6px] shrink-0"
+                className="flex flex-col gap-4px bg-white border border-cd3d3d3 rounded-6px px-8px py-6px shrink-0"
                 style={{ width: 100 }}
               >
                 <p
@@ -150,7 +150,7 @@ export default function AiPromptInput({
                   {a.name}
                 </p>
                 <span
-                  className="self-start text-xs text-tertiary bg-[rgba(0,0,0,0.05)] rounded-[3px] px-[4px] py-[1px] uppercase"
+                  className="self-start text-xs text-tertiary bg-rgba-0-0-0-0_05 rounded-3px px-4px py-1px uppercase"
                   style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
                 >
                   {a.mime ?? "CSV"}
@@ -161,7 +161,7 @@ export default function AiPromptInput({
         )}
 
         {/* textarea */}
-        <div className="flex gap-0 items-center p-[2px] w-full">
+        <div className="flex gap-0 items-center p-2px w-full">
           <textarea
             placeholder={placeholder}
             rows={1}
@@ -188,22 +188,22 @@ export default function AiPromptInput({
 
         {/* 하단 row: [+ attach] [token pill] ... [send button] */}
         <div className="flex items-center justify-between p-0 w-full">
-          <div className="flex gap-[8px] items-center shrink-0">
+          <div className="flex gap-8px items-center shrink-0">
             <button
               type="button"
               aria-label="파일 또는 이미지 추가"
               onClick={onAttachClick}
               disabled={disabled}
-              className="group/plus flex items-center justify-center p-[2px] rounded-[4px] shrink-0 size-[20px] cursor-pointer border-0 bg-white hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group-plus flex items-center justify-center p-2px rounded-4px shrink-0 size-20px cursor-pointer border-0 bg-white hover-bg-black transition-colors disabled-opacity-50 disabled-cursor-not-allowed"
             >
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-colors">
-                <line x1="8" y1="3.33" x2="8" y2="12.67" className="stroke-[color:var(--color-text-secondary)] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
-                <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-[color:var(--color-text-secondary)] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="8" y1="3.33" x2="8" y2="12.67" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-white" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-white" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
             </button>
             <TokenUsageBadge inputTokens={tokenInput} outputTokens={tokenOutput} />
           </div>
-          <div className="flex gap-[8px] items-center shrink-0">
+          <div className="flex gap-8px items-center shrink-0">
             <AiSendButton
               active={hasInput && !disabled}
               onClick={submit}
@@ -215,7 +215,7 @@ export default function AiPromptInput({
 
       {/* 하단 caption */}
       {caption && (
-        <div className="flex gap-0 items-center justify-end px-0 py-[4px] shrink-0 w-full">
+        <div className="flex gap-0 items-center justify-end px-0 py-4px shrink-0 w-full">
           <p
             className="text-base text-disabled tracking-normal leading-none whitespace-nowrap"
             style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
@@ -238,7 +238,7 @@ function TokenUsageBadge({ inputTokens, outputTokens }: { inputTokens: number; o
   const fmt = (n: number) => n.toLocaleString("en-US");
   return (
     <div
-      className="inline-flex items-center px-[8px] py-[4px] rounded-[24px] shrink-0"
+      className="inline-flex items-center px-8px py-4px rounded-24px shrink-0"
       style={{ backgroundColor: "var(--color-surface-50)" }}
       data-node-id="29424:19317"
     >

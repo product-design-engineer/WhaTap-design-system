@@ -60,7 +60,7 @@ export const Large: Story = {
       return (
         <div style={{ width: 520 }}>
           <Tabs items={SECTIONS} value={v} onChange={setV} variant="large" aria-label="룰 편집기 섹션" />
-          <div className="mt-4 rounded-md border border-[color:var(--color-border-default)] p-4 text-sm text-secondary">
+          <div className="mt-4 rounded-md border border-color-var-color-border-default p-4 text-sm text-secondary">
             현재 탭: <b>{v}</b> — 본문 영역은 호출자가 value 로 분기하여 렌더링
           </div>
         </div>
@@ -125,7 +125,7 @@ export const WithIcons: Story = {
               { value: "runbook", label: "런북", icon: <span>📘</span>, disabled: true },
             ]}
           />
-          <div className="mt-4 rounded-md border border-[color:var(--color-border-default)] p-4 text-sm text-secondary">
+          <div className="mt-4 rounded-md border border-color-var-color-border-default p-4 text-sm text-secondary">
             현재 탭: <b>{v}</b>
           </div>
         </div>
@@ -200,7 +200,7 @@ export const WithPanels: Story = {
       return (
         <div style={{ width: 560 }}>
           <Tabs items={SECTIONS} value={v} onChange={setV} variant="large" aria-label="패널 데모" />
-          <div className="mt-4 rounded-md border border-[color:var(--color-border-default)] p-5">
+          <div className="mt-4 rounded-md border border-color-var-color-border-default p-5">
             {v === "rule" && (
               <div>
                 <h4 className="text-md font-medium text-primary mb-2">룰 정의</h4>

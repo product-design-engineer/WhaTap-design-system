@@ -36,11 +36,11 @@ const meta: Meta<typeof PageHeaderAiInline> = {
           "**48px 페이지 헤더의 AI inline variant.** 기존 [[PageHeader]] 의 WhaTap AI 토글 버튼 자리를 [[AiInlinePrompt]] 로 대체.\n\n" +
           "**차이 (vs PageHeader):**\n" +
           "- ❌ AiAssistantButton (WhaTap AI 토글) — 제거\n" +
-          "- ✅ AiInlinePrompt — 중앙, `flex-1 + max-w-[480px]`\n" +
+          "- ✅ AiInlinePrompt — 중앙, `flex-1 + max-w-480px`\n" +
           "- 좌측 그룹: Title + Docs (Docs 는 Title 바로 우측에 인접)\n" +
           "- 우측 chrome: 고객지원 / 🔔 / Avatar — Docs 제외, 유지\n\n" +
           "**언제 사용:** inline prompt 가 AI 위젯 호출 entry 인 페이지 (위젯 토글 별도 entry 불필요).\n\n" +
-          "**Composition rules:** inline prompt 는 `max-w-[480px]` cap, w-full 100% 강제 금지 ([[feedback_page_header_invariant]] 우측 chrome 잠식 방지). " +
+          "**Composition rules:** inline prompt 는 `max-w-480px` cap, w-full 100% 강제 금지 ([[feedback_page_header_invariant]] 우측 chrome 잠식 방지). " +
           "48px height invariant 유지.\n\n" +
           "**롤링 placeholder (옵션):** `promptPlaceholders` (제품별 핵심 prompt 배열) 주입 시 입력이 비어 있을 때 placeholder 가 세로 순환. 송신 버튼은 비활성 유지(placeholder ≠ value). 미주입이면 `promptPlaceholder` 정적.",
       },
@@ -126,7 +126,7 @@ export const Interactive: Story = {
             onPromptSelectSuggestion={(s) => setPicks((arr) => [s.label, ...arr].slice(0, 5))}
           />
           <div
-            className="text-xs text-tertiary p-3 grid grid-cols-2 gap-3 bg-[var(--color-surface-50)]"
+            className="text-xs text-tertiary p-3 grid grid-cols-2 gap-3 bg-var-color-surface-50"
             style={{ fontFamily: "var(--font-family-korean)" }}
           >
             <div>

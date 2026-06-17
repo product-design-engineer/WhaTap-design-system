@@ -119,7 +119,7 @@ export default function TextField({
 
   return (
     <div
-      className={`inline-flex flex-col gap-1.5 ${fullWidth ? "w-full" : ""} ${className}`}
+      className={`inline-flex flex-col gap-1_5 ${fullWidth ? "w-full" : ""} ${className}`}
     >
       {label !== undefined && label !== null && (
         <label
@@ -165,7 +165,7 @@ export default function TextField({
               onClear?.();
             }}
             // subtle 톤 — 보조 액션이라 약함. hover 시에만 색 진해짐, 배경 변화 없음.
-            className="inline-flex shrink-0 cursor-pointer items-center justify-center text-[color:var(--color-text-disabled)] transition-colors hover:text-[color:var(--color-text-secondary)]"
+            className="inline-flex shrink-0 cursor-pointer items-center justify-center text-color-var-color-text-disabled transition-colors hover-text-color-var-color-text-secondary"
             style={{
               width: CLEAR_ICON_SIZE[size] + 4,
               height: CLEAR_ICON_SIZE[size] + 4,
@@ -197,7 +197,7 @@ export default function TextField({
         <span
           id={helperId}
           className={`${size === "sm" ? "text-xs" : "text-sm"} ${
-            invalid ? "text-[color:var(--color-status-error)]" : "text-tertiary"
+            invalid ? "text-color-var-color-status-error" : "text-tertiary"
           }`}
         >
           {helperText}

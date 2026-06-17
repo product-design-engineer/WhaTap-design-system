@@ -153,7 +153,7 @@ export default function LiveTimerCompact({
             transition: "width 16ms linear",
           }}
         />
-        <div className="flex items-center gap-[6px] relative">
+        <div className="flex items-center gap-6px relative">
           <span
             className="text-base font-medium text-status-success leading-px-16 whitespace-nowrap"
             style={{ fontFamily: "var(--font-family-numeric)" }}
@@ -168,7 +168,7 @@ export default function LiveTimerCompact({
           </span>
           {durationLabel && (
             <span
-              className="inline-flex items-center justify-center px-[5px] rounded-[2px] text-white whitespace-nowrap shrink-0"
+              className="inline-flex items-center justify-center px-5px rounded-2px text-white whitespace-nowrap shrink-0"
               style={{
                 background: "#00B543",
                 height: 16,

@@ -205,7 +205,7 @@ row height ≈ 33-36px (default density) 기준:
 
 **Why.** 한국어는 영문보다 가독성 향상이 weight 보다 size 에 더 의존. 같은 사이즈에서 medium ↔ bold 만 바꾸는 것은 위계가 흐릿. 사이즈 + weight 둘 다 조합 시 정보 우선순위가 분명해짐.
 
-**How.** Tailwind utility 토큰 (`text-md font-bold`) 만 사용. 직접 `style={{ fontSize: 13, fontWeight: 700 }}` 금지 — 토큰 외 값은 차후 토큰 변경 시 누락됨.
+**How.** 토큰 utility 클래스 (`text-md font-bold`, whatap-ds.css 제공) 만 사용. 직접 `style={{ fontSize: 13, fontWeight: 700 }}` 금지 — 토큰 외 값은 차후 토큰 변경 시 누락됨.
 
 ---
 

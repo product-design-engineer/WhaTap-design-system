@@ -144,20 +144,20 @@ export default function WhaTapAiWidget({
       </div>
 
       <div
-        className="flex flex-col h-full bg-white border-l border-[color:var(--color-border-default)]"
+        className="flex flex-col h-full bg-white border-l border-color-var-color-border-default"
         style={{ width: WIDGET_WIDTH }}
       >
         {/* 헤더 (40px, 그라데이션) */}
         <div
-          className="flex h-[40px] items-center px-[16px] py-[8px] shrink-0 w-full relative overflow-visible z-10"
+          className="flex h-40px items-center px-16px py-8px shrink-0 w-full relative overflow-visible z-10"
           style={{
             background:
               "linear-gradient(138.94deg, rgb(0, 75, 224) 2.33%, rgb(139, 82, 255) 107.07%)",
           }}
         >
           <div className="flex flex-1 items-center justify-between min-w-0">
-            <div className="flex gap-[4px] items-center shrink-0">
-              <img alt="" className="size-[16px]" src="/icons/ai-header-symbol.svg" />
+            <div className="flex gap-4px items-center shrink-0">
+              <img alt="" className="size-16px" src="/icons/ai-header-symbol.svg" />
               <span
                 className="text-lg font-bold text-white tracking-default leading-px-20 whitespace-nowrap"
                 style={{ fontFamily: "var(--font-family-korean)" }}
@@ -165,12 +165,12 @@ export default function WhaTapAiWidget({
                 WhaTap AI
               </span>
             </div>
-            <div className="flex gap-[8px] items-center shrink-0">
+            <div className="flex gap-8px items-center shrink-0">
               <button
                 type="button"
                 onClick={onNewSession}
                 aria-label="새로운 세션 추가"
-                className="shrink-0 size-[20px] cursor-pointer hover:opacity-80 transition-opacity flex items-center justify-center relative"
+                className="shrink-0 size-20px cursor-pointer hover-opacity-80 transition-opacity flex items-center justify-center relative"
               >
                 <img alt="새로운 세션추가" src="/icons/ai-header-plus.svg" style={{ height: 14 }} />
               </button>
@@ -178,7 +178,7 @@ export default function WhaTapAiWidget({
                 type="button"
                 onClick={onFullscreen}
                 aria-label="전체 크기"
-                className="shrink-0 size-[20px] cursor-pointer hover:opacity-80 transition-opacity flex items-center justify-center relative"
+                className="shrink-0 size-20px cursor-pointer hover-opacity-80 transition-opacity flex items-center justify-center relative"
               >
                 <img
                   alt="전체 크기"
@@ -190,7 +190,7 @@ export default function WhaTapAiWidget({
                 type="button"
                 onClick={onClose}
                 aria-label="닫기"
-                className="shrink-0 size-[20px] cursor-pointer hover:opacity-80 transition-opacity flex items-center justify-center relative"
+                className="shrink-0 size-20px cursor-pointer hover-opacity-80 transition-opacity flex items-center justify-center relative"
               >
                 <img alt="닫기" src="/icons/ai-header-close.svg" style={{ height: 14 }} />
               </button>
@@ -201,13 +201,13 @@ export default function WhaTapAiWidget({
         {/* 본문 — 인사말 + 액션 칩 (showLanding=true일 때만). ref → scrollSignal 변경 시 자동 스크롤 */}
         <div
           ref={scrollRef}
-          className="flex-1 min-h-0 flex flex-col items-center gap-[16px] overflow-y-auto overflow-x-hidden w-full pt-[16px] pb-[8px] px-[16px]"
+          className="flex-1 min-h-0 flex flex-col items-center gap-16px overflow-y-auto overflow-x-hidden w-full pt-16px pb-8px px-16px"
         >
           {showLanding && (
           // key={open}로 위젯을 열 때마다 인사말 영역이 remount되어 entrance animation 재생
           <div key={open ? "open" : "closed"} className="bg-white flex flex-col items-start justify-center relative w-full">
             {/* AI 심볼 (호흡 + 회전) — 진입 시 fade-in이 한 번 추가로 재생 */}
-            <div className="ai-anim-in mb-[12px]" style={{ animationDelay: "0ms" }}>
+            <div className="ai-anim-in mb-12px" style={{ animationDelay: "0ms" }}>
               <div
                 className="relative shrink-0"
                 style={{
@@ -221,8 +221,8 @@ export default function WhaTapAiWidget({
               </div>
             </div>
 
-            <div className="flex flex-col gap-[16px] items-start w-full">
-              <div className="flex flex-1 flex-col gap-[16px] items-start justify-center min-w-0">
+            <div className="flex flex-col gap-16px items-start w-full">
+              <div className="flex flex-1 flex-col gap-16px items-start justify-center min-w-0">
                 <p
                   className="ai-anim-in text-md text-primary tracking-default w-full whitespace-pre-wrap leading-normal"
                   style={{
@@ -252,11 +252,11 @@ export default function WhaTapAiWidget({
                 </p>
 
                 {/* 액션 칩 */}
-                <div className="flex flex-wrap gap-[6px] items-start w-full">
+                <div className="flex flex-wrap gap-6px items-start w-full">
                   {actions.map((label, i) => (
                     <button
                       key={label}
-                      className="ai-anim-in ai-landing-action border border-[color:var(--color-brand-blue)] flex h-[32px] items-center justify-center px-[16px] rounded-[4px] cursor-pointer text-brand-blue hover:bg-[color:var(--color-brand-blue-bg)] hover:border-[color:var(--color-brand-blue-bg)] relative overflow-hidden w-fit whitespace-nowrap text-md bg-white"
+                      className="ai-anim-in ai-landing-action border border-color-var-color-brand-blue flex h-32px items-center justify-center px-16px rounded-4px cursor-pointer text-brand-blue hover-bg-color-var-color-brand-blue-bg hover-border-color-var-color-brand-blue-bg relative overflow-hidden w-fit whitespace-nowrap text-md bg-white"
                       style={{
                         fontFamily: "var(--font-family-korean)",
                         fontWeight: "var(--font-weight-medium)",
@@ -275,23 +275,23 @@ export default function WhaTapAiWidget({
 
           {/* 시나리오 메시지 스택 */}
           {messages && (
-            <div className="flex flex-col gap-[16px] w-full">{messages}</div>
+            <div className="flex flex-col gap-16px w-full">{messages}</div>
           )}
         </div>
 
         {/* Input 영역 */}
-        <div className="flex flex-col items-center justify-center px-[16px] shrink-0 w-full">
+        <div className="flex flex-col items-center justify-center px-16px shrink-0 w-full">
           <div
-            className="ai-input-wrapper relative bg-white flex flex-col gap-[4px] items-center justify-center p-[12px] shrink-0 rounded-[8px] transition-all duration-200 w-full"
+            className="ai-input-wrapper relative bg-white flex flex-col gap-4px items-center justify-center p-12px shrink-0 rounded-8px transition-all duration-200 w-full"
             style={{ border: hasInput ? "2px solid var(--color-brand-blue)" : "2px solid var(--color-brand-blue-bg-2)" }}
           >
             {/* 첨부 파일 칩 행 (Figma 27087:3416) */}
             {attachments && attachments.length > 0 && (
-              <div className="flex gap-[6px] items-center w-full overflow-x-auto pb-[4px]">
+              <div className="flex gap-6px items-center w-full overflow-x-auto pb-4px">
                 {attachments.map((a, i) => (
                   <div
                     key={i}
-                    className="flex flex-col gap-[4px] bg-white border border-[#d3d3d3] rounded-[6px] px-[8px] py-[6px] shrink-0"
+                    className="flex flex-col gap-4px bg-white border border-cd3d3d3 rounded-6px px-8px py-6px shrink-0"
                     style={{ width: 100 }}
                   >
                     <p
@@ -302,7 +302,7 @@ export default function WhaTapAiWidget({
                       {a.name}
                     </p>
                     <span
-                      className="self-start text-xs text-tertiary bg-[rgba(0,0,0,0.05)] rounded-[3px] px-[4px] py-[1px] uppercase"
+                      className="self-start text-xs text-tertiary bg-rgba-0-0-0-0_05 rounded-3px px-4px py-1px uppercase"
                       style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
                     >
                       {a.mime ?? "CSV"}
@@ -311,7 +311,7 @@ export default function WhaTapAiWidget({
                 ))}
               </div>
             )}
-            <div className="flex gap-0 items-center p-[2px] w-full">
+            <div className="flex gap-0 items-center p-2px w-full">
               <textarea
                 placeholder={inputPlaceholder}
                 rows={1}
@@ -329,7 +329,7 @@ export default function WhaTapAiWidget({
               />
             </div>
             <div className="flex items-center justify-between p-0 w-full">
-              <div className="flex gap-[8px] items-center shrink-0">
+              <div className="flex gap-8px items-center shrink-0">
                 <input
                   multiple
                   accept=".csv,.pdf,.txt,.json,.log,image/*"
@@ -339,24 +339,24 @@ export default function WhaTapAiWidget({
                 <button
                   type="button"
                   aria-label="파일 또는 이미지 추가"
-                  className="group/plus flex items-center justify-center p-[2px] rounded-[4px] shrink-0 size-[20px] cursor-pointer border-0 bg-white hover:bg-black transition-colors"
+                  className="group-plus flex items-center justify-center p-2px rounded-4px shrink-0 size-20px cursor-pointer border-0 bg-white hover-bg-black transition-colors"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-colors">
-                    <line x1="8" y1="3.33" x2="8" y2="12.67" className="stroke-[color:var(--color-text-secondary)] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
-                    <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-[color:var(--color-text-secondary)] group-hover/plus:stroke-white" strokeWidth="1.5" strokeLinecap="round" />
+                    <line x1="8" y1="3.33" x2="8" y2="12.67" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-white" strokeWidth="1.5" strokeLinecap="round" />
+                    <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-white" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>
                 </button>
                 {/* 토큰 입출력 정보 (Figma 29424:19317) — plus 버튼 옆 pill */}
                 <TokenUsageBadge inputTokens={tokenInput} outputTokens={tokenOutput} />
               </div>
-              <div className="flex gap-[8px] items-center shrink-0">
+              <div className="flex gap-8px items-center shrink-0">
                 {/* 전송 버튼 — input에 텍스트가 있으면 활성(blue) */}
                 <div className="relative shrink-0">
                 <button
                   type="button"
                   disabled={!hasInput}
                   onClick={handleSubmit}
-                  className="ai-send-btn flex items-center justify-center rounded-[4px] shrink-0 size-[24px] cursor-pointer transition-colors disabled:cursor-not-allowed"
+                  className="ai-send-btn flex items-center justify-center rounded-4px shrink-0 size-24px cursor-pointer transition-colors disabled-cursor-not-allowed"
                   style={{
                     backgroundColor: hasInput ? "var(--color-brand-blue)" : "var(--color-surface-50)",
                     border: hasInput ? "1px solid var(--color-brand-blue)" : "1px solid #d3d3d3",
@@ -380,7 +380,7 @@ export default function WhaTapAiWidget({
               </div>
             </div>
           </div>
-          <div className="flex gap-0 items-center justify-end px-0 py-[4px] shrink-0 w-full">
+          <div className="flex gap-0 items-center justify-end px-0 py-4px shrink-0 w-full">
             <p
               className="text-base text-disabled tracking-normal leading-none whitespace-nowrap"
               style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
@@ -404,7 +404,7 @@ function TokenUsageBadge({ inputTokens, outputTokens }: { inputTokens: number; o
   const fmt = (n: number) => n.toLocaleString("en-US");
   return (
     <div
-      className="inline-flex items-center px-[8px] py-[4px] rounded-[24px] shrink-0"
+      className="inline-flex items-center px-8px py-4px rounded-24px shrink-0"
       style={{ backgroundColor: "var(--color-surface-50)" }}
       data-node-id="29424:19317"
     >

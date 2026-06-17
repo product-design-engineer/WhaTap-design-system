@@ -53,18 +53,18 @@ export default function AiChatExchange({
 }: AiChatExchangeProps) {
   const hasAnswer = answer && answer.trim().length > 0;
   return (
-    <div className="flex flex-col gap-[12px] w-full">
+    <div className="flex flex-col gap-12px w-full">
       {/* 사용자 질문 — 우측 정렬 그레이 버블 (Figma 27110:53409) */}
-      <div className="flex flex-col items-end gap-[4px] w-full">
+      <div className="flex flex-col items-end gap-4px w-full">
         <AiUserBubble>{question}</AiUserBubble>
         <MessageTools />
       </div>
 
       {/* AI 응답 (full-width 그레이 버블) — answer가 있을 때만 렌더 */}
       {hasAnswer && (
-        <div className="flex flex-col items-start gap-[4px] w-full">
+        <div className="flex flex-col items-start gap-4px w-full">
           <div
-            className="w-full rounded-[8px] px-[12px] py-[12px]"
+            className="w-full rounded-8px px-12px py-12px"
             style={{ background: "var(--color-surface-50)" }}
           >
             <p
@@ -80,7 +80,7 @@ export default function AiChatExchange({
 
       {/* 첨부 (선택) — 우측 정렬 스택 */}
       {attachments && attachments.length > 0 && (
-        <div className="flex flex-col items-end gap-[8px] w-full">
+        <div className="flex flex-col items-end gap-8px w-full">
           {attachments.map((a, i) =>
             a.kind === "file" ? (
               <FileCard key={i} name={a.name} mime={a.mime ?? "FILE"} />
@@ -96,7 +96,7 @@ export default function AiChatExchange({
 
 function MessageTools() {
   return (
-    <div className="flex items-center gap-[6px]">
+    <div className="flex items-center gap-6px">
       <ToolBtn ariaLabel="복사">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
           <rect x="3" y="3" width="8" height="8" rx="1.2" stroke="var(--color-text-tertiary)" strokeWidth="1.2" />
@@ -123,7 +123,7 @@ function ToolBtn({
   return (
     <button
       aria-label={ariaLabel}
-      className="flex items-center justify-center size-[20px] rounded-[4px] cursor-pointer hover:bg-[rgba(0,0,0,0.05)] transition-colors"
+      className="flex items-center justify-center size-20px rounded-4px cursor-pointer hover-bg-rgba-0-0-0-0_05 transition-colors"
     >
       {children}
     </button>
@@ -133,7 +133,7 @@ function ToolBtn({
 function FileCard({ name, mime }: { name: string; mime: string }) {
   return (
     <div
-      className="flex flex-col gap-[6px] bg-white border border-[#d3d3d3] rounded-[8px] p-[10px]"
+      className="flex flex-col gap-6px bg-white border border-cd3d3d3 rounded-8px p-10px"
       style={{ width: 140 }}
     >
       <p
@@ -144,7 +144,7 @@ function FileCard({ name, mime }: { name: string; mime: string }) {
         {name}
       </p>
       <span
-        className="self-start text-sm text-tertiary bg-[rgba(0,0,0,0.05)] rounded-[4px] px-[6px] py-[2px] uppercase"
+        className="self-start text-sm text-tertiary bg-rgba-0-0-0-0_05 rounded-4px px-6px py-2px uppercase"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
       >
         {mime}
@@ -156,7 +156,7 @@ function FileCard({ name, mime }: { name: string; mime: string }) {
 function ImagePreview({ src, alt }: { src: string; alt?: string }) {
   return (
     <div
-      className="rounded-[8px] overflow-hidden border border-[#d3d3d3]"
+      className="rounded-8px overflow-hidden border border-cd3d3d3"
       style={{ width: 140, height: 140 }}
     >
       <img src={src} alt={alt ?? ""} className="w-full h-full object-cover" />

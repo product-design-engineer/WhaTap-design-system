@@ -18,7 +18,7 @@
  * - 위젯 토글 entry 가 필요한 페이지 → [[PageHeader]] (기존, AI 버튼 포함).
  *
  * ## Composition rules
- * - inline prompt 는 [[feedback_page_header_invariant]] 정책 따라 `max-w-[480px]` cap, w-full 100% 강제 금지.
+ * - inline prompt 는 [[feedback_page_header_invariant]] 정책 따라 `max-w-480px` cap, w-full 100% 강제 금지.
  * - 우측 chrome 잠식 금지 — `flex-1 + max-width` 컨테이너로 가용 공간만 흡수.
  * - 48px height invariant 유지 — inline prompt 자체가 ~32px 이라 안전하게 들어감.
  *
@@ -69,9 +69,9 @@ export default function PageHeaderAiInline({
   promptDefaultOpen = false,
 }: PageHeaderAiInlineProps) {
   return (
-    <div className="flex items-center h-[48px] box-border px-[8px] gap-[16px] bg-white border-b border-[color:var(--color-border-strong)] shrink-0">
+    <div className="flex items-center h-48px box-border px-8px gap-16px bg-white border-b border-color-var-color-border-strong shrink-0">
       {/* 좌측: 타이틀 + Docs */}
-      <div className="flex items-center gap-[24px] shrink-0">
+      <div className="flex items-center gap-24px shrink-0">
         <p
           className="text-2xl text-primary tracking-display whitespace-nowrap leading-normal"
           style={{
@@ -82,7 +82,7 @@ export default function PageHeaderAiInline({
           {title}
         </p>
         <button
-          className="flex items-center justify-center gap-[4px] h-[32px] px-[16px] py-[8px] rounded-full border border-[color:var(--color-border-divider)] bg-white text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover:bg-gray-50 transition-colors"
+          className="flex items-center justify-center gap-4px h-32px px-16px py-8px rounded-full border border-color-var-color-border-divider bg-white text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover-bg-gray-50 transition-colors"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
@@ -98,7 +98,7 @@ export default function PageHeaderAiInline({
 
       {/* 중앙: inline prompt (flex-grow + max-width cap, 우측 chrome 잠식 방지) */}
       <div className="flex-1 flex justify-center min-w-0">
-        <div className="w-full max-w-[480px]">
+        <div className="w-full max-w-480px">
           <AiInlinePrompt
             placeholder={promptPlaceholder}
             rollingPlaceholders={promptPlaceholders}
@@ -113,9 +113,9 @@ export default function PageHeaderAiInline({
       </div>
 
       {/* 우측 chrome: 고객지원 + 알림 + 아바타 (Docs 는 좌측 그룹) */}
-      <div className="flex items-center gap-[16px] h-full shrink-0">
+      <div className="flex items-center gap-16px h-full shrink-0">
         <button
-          className="flex items-center justify-center gap-[4px] h-[32px] px-[16px] py-[8px] rounded-full border border-[color:var(--color-border-divider)] bg-white text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover:bg-gray-50 transition-colors"
+          className="flex items-center justify-center gap-4px h-32px px-16px py-8px rounded-full border border-color-var-color-border-divider bg-white text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover-bg-gray-50 transition-colors"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
@@ -125,8 +125,8 @@ export default function PageHeaderAiInline({
           </svg>
           고객지원
         </button>
-        <div className="flex items-center gap-[16px]">
-          <div className="shrink-0 size-[24px] flex items-center justify-center cursor-pointer">
+        <div className="flex items-center gap-16px">
+          <div className="shrink-0 size-24px flex items-center justify-center cursor-pointer">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path
                 d="M6 10C6 6.69 8.69 4 12 4C15.31 4 18 6.69 18 10V14L20 16V17H4V16L6 14V10Z"
@@ -142,7 +142,7 @@ export default function PageHeaderAiInline({
               />
             </svg>
           </div>
-          <div className="shrink-0 size-[24px] cursor-pointer">
+          <div className="shrink-0 size-24px cursor-pointer">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <defs>
                 <linearGradient id="avatar-grad-ai-inline" x1="0" y1="0" x2="24" y2="24">

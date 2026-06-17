@@ -18,7 +18,7 @@ import { ReactNode } from "react";
  *
  * ## Composition rules
  * - 한 페이지에 하나만, 최상위에 배치. `children` 이 무대 안에 `overflow-hidden` 으로 클립됨.
- * - 무대는 `aspectRatio: "16 / 9"`, `max-w-[1280px]` 고정 — 내부는 이 비율 기준으로 구성.
+ * - 무대는 `aspectRatio: "16 / 9"`, `max-w-1280px` 고정 — 내부는 이 비율 기준으로 구성.
  * - `badge` 는 fixed 우상단 라벨(시나리오 이름 등), 미지정 시 생략.
  *
  * @example
@@ -38,12 +38,12 @@ export default function Stage({
   return (
     <div className="min-h-screen flex items-center justify-center p-6" style={{ background: "#0a0a14" }}>
       {badge && (
-        <div className="fixed top-4 right-4 z-[1000] px-3.5 py-2 rounded-full text-sm font-semibold tracking-wider border border-white/10 text-white" style={{ background: "rgba(26, 26, 46, 0.85)" }}>
+        <div className="fixed top-4 right-4 z-1000 px-3_5 py-2 rounded-full text-sm font-semibold tracking-wider border border-white-10 text-white" style={{ background: "rgba(26, 26, 46, 0.85)" }}>
           {badge}
         </div>
       )}
       <div
-        className="w-full max-w-[1280px] bg-[#f5f6f8] rounded-lg overflow-hidden relative shadow-[0_20px_60px_rgba(0,0,0,0.45)]"
+        className="w-full max-w-1280px bg-cf5f6f8 rounded-lg overflow-hidden relative shadow-0_20px_60px_rgba-0-0-0-0_45"
         style={{ aspectRatio: "16 / 9" }}
       >
         {children}

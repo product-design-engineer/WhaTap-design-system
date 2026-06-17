@@ -245,7 +245,7 @@ export const LongContent: Story = {
           >
             <ul className="flex flex-col gap-2">
               {Array.from({ length: 40 }, (_, i) => (
-                <li key={i} className="border-b border-[color:var(--color-border-soft)] pb-2 text-sm">
+                <li key={i} className="border-b border-color-var-color-border-soft pb-2 text-sm">
                   <strong>2026-05-{(i + 1).toString().padStart(2, "0")}</strong> · 박운영 — 임계값
                   변경 ({90 + (i % 10)}% → {91 + (i % 10)}%)
                 </li>

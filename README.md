@@ -1,6 +1,6 @@
 # @whatap/design-system
 
-WhaTap SaaS 의 단일 컴포넌트·토큰 출처. **Primitives · Chrome · AI Widget 카드 + 토큰(`tokens.css` `@theme static`)** 을 Storybook 카탈로그로 제공하며, 프론트엔드 엔지니어가 **자기 AI 작업 환경에서 인터페이스 작업에 그대로 사용**하도록 설계됨.
+WhaTap SaaS 의 단일 컴포넌트·토큰 출처. **Primitives · Chrome · AI Widget 카드 + 토큰(`tokens.css` 의 `:root`)** 을 Storybook 카탈로그로 제공하며, 프론트엔드 엔지니어가 **자기 AI 작업 환경에서 인터페이스 작업에 그대로 사용**하도록 설계됨.
 
 - 라이브 Storybook: https://whatap-design-system-storybook.vercel.app
 - 정책 전문: [`CLAUDE.md`](./CLAUDE.md) · 카탈로그: [`docs/`](./docs)
@@ -42,4 +42,4 @@ import "@whatap/design-system/tokens.css";   // import 만으로 전 토큰 :roo
 
 ## 기술 스택
 
-React 19 · Vite 6 + Tailwind 4 · Storybook 10 · TypeScript 5 (strict) · `react-docgen-typescript` autodocs.
+React 19 · Vite 6 · Storybook 10 · TypeScript 5 (strict) · `react-docgen-typescript` autodocs. (스타일은 자체 일반 CSS `whatap-ds.css` — Tailwind 의존·흔적 없음.)

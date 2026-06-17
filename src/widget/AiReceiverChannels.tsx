@@ -75,19 +75,19 @@ export default function AiReceiverChannels({
           return (
             <li
               key={c.key}
-              className={`flex items-center gap-[10px] py-[6px] border-b border-[color:var(--color-surface-50)] last:border-b-0 ${
-                interactive ? "cursor-pointer hover:bg-[#fafafa]" : ""
+              className={`flex items-center gap-10px py-6px border-b border-color-var-color-surface-50 last-border-b-0 ${
+                interactive ? "cursor-pointer hover-bg-cfafafa" : ""
               }`}
               onClick={() => interactive && onToggle!(c.key, !c.enabled)}
             >
               {/* 이모지 아이콘 */}
-              <span className="text-lg leading-none shrink-0 w-[20px] text-center">
+              <span className="text-lg leading-none shrink-0 w-20px text-center">
                 {CHANNEL_ICON[c.key]}
               </span>
 
               {/* 라벨 + 보조 정보 */}
               <div className="flex flex-col flex-1 min-w-0">
-                <div className="flex items-center gap-[6px]">
+                <div className="flex items-center gap-6px">
                   <span
                     className="text-base font-bold text-primary tracking-default leading-normal"
                     style={{ fontFamily: "var(--font-family-korean)" }}
@@ -96,7 +96,7 @@ export default function AiReceiverChannels({
                   </span>
                   {c.paid && (
                     <span
-                      className="text-chart px-[4px] py-[1px] rounded-[6px] tracking-default leading-none"
+                      className="text-chart px-4px py-1px rounded-6px tracking-default leading-none"
                       style={{
                         fontFamily: "var(--font-family-korean)",
                         fontWeight: "var(--font-weight-medium)",
@@ -120,12 +120,12 @@ export default function AiReceiverChannels({
 
               {/* 토글 핀 (mock — visual only) */}
               <span
-                className="shrink-0 relative inline-block w-[28px] h-[16px] rounded-full transition-colors"
+                className="shrink-0 relative inline-block w-28px h-16px rounded-full transition-colors"
                 style={{ background: c.enabled ? TONE_DOT.low : "#d4d6d8" }}
                 aria-hidden
               >
                 <span
-                  className="absolute top-[2px] size-[12px] rounded-full bg-white transition-[left]"
+                  className="absolute top-2px size-12px rounded-full bg-white transition-left"
                   style={{ left: c.enabled ? 14 : 2 }}
                 />
               </span>

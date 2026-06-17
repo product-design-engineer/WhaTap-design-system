@@ -53,12 +53,12 @@ export default function AiStepsTimeline({
   const completed = steps.filter((s) => !s.running).length;
   return (
     <div
-      className="ai-anim-in flex flex-col gap-[6px] w-full"
+      className="ai-anim-in flex flex-col gap-6px w-full"
       style={{ animationDelay: `${delay}ms` }}
     >
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-[6px] text-md text-secondary tracking-default leading-normal cursor-pointer self-start"
+        className="flex items-center gap-6px text-md text-secondary tracking-default leading-normal cursor-pointer self-start"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
       >
         <svg
@@ -73,16 +73,16 @@ export default function AiStepsTimeline({
         {steps.length} steps{completed < steps.length ? "..." : ""}
       </button>
       {open && (
-        <div className="flex flex-col gap-[4px] w-full">
+        <div className="flex flex-col gap-4px w-full">
           {steps.map((s, i) => (
             <div
               key={i}
-              className="flex items-center justify-between gap-[8px] bg-white border border-[color:var(--color-border-default)] rounded-[6px] px-[12px] h-[36px] cursor-pointer hover:bg-gray-50"
+              className="flex items-center justify-between gap-8px bg-white border border-color-var-color-border-default rounded-6px px-12px h-36px cursor-pointer hover-bg-gray-50"
             >
-              <div className="flex items-center gap-[8px] min-w-0">
+              <div className="flex items-center gap-8px min-w-0">
                 {s.running ? (
                   <span
-                    className="size-[14px] rounded-full border-[1.5px] border-[color:var(--color-brand-blue)] border-t-transparent shrink-0"
+                    className="size-14px rounded-full border-1_5px border-color-var-color-brand-blue border-t-transparent shrink-0"
                     style={{ animation: "aiSymbolRotateSlow 0.9s linear infinite" }}
                   />
                 ) : (

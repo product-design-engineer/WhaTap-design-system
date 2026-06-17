@@ -108,7 +108,7 @@ export default function AiCriteriaSelection({
   }, []);
   return (
     <div
-      className="ai-anim-in flex flex-col gap-[12px] w-full bg-white border border-[color:var(--color-border-default)] rounded-[8px] p-[12px]"
+      className="ai-anim-in flex flex-col gap-12px w-full bg-white border border-color-var-color-border-default rounded-8px p-12px"
       style={{ animationDelay: `${delay}ms` }}
     >
       <span
@@ -126,7 +126,7 @@ export default function AiCriteriaSelection({
       </p>
 
       {/* 분류 기준 그룹 */}
-      <div className="flex flex-col gap-[6px]">
+      <div className="flex flex-col gap-6px">
         <div
           className="text-base font-bold text-primary tracking-default leading-normal"
           style={{ fontFamily: "var(--font-family-korean)" }}
@@ -136,14 +136,14 @@ export default function AiCriteriaSelection({
         {groups.map((g, i) => (
           <div
             key={i}
-            className="flex items-start gap-[8px] rounded-[6px] px-[10px] py-[6px]"
+            className="flex items-start gap-8px rounded-6px px-10px py-6px"
             style={{ background: TONE_BG[g.tone] }}
           >
             <span
-              className="size-[8px] rounded-full mt-[6px] shrink-0"
+              className="size-8px rounded-full mt-6px shrink-0"
               style={{ background: TONE_DOT[g.tone] }}
             />
-            <div className="flex flex-col gap-[2px] min-w-0">
+            <div className="flex flex-col gap-2px min-w-0">
               <span
                 className="text-base font-bold text-primary tracking-default leading-normal"
                 style={{ fontFamily: "var(--font-family-korean)" }}
@@ -163,14 +163,14 @@ export default function AiCriteriaSelection({
 
       {/* 참고 사항 */}
       {notes && notes.length > 0 && (
-        <div className="flex flex-col gap-[4px]">
+        <div className="flex flex-col gap-4px">
           <div
             className="text-base font-bold text-primary tracking-default leading-normal"
             style={{ fontFamily: "var(--font-family-korean)" }}
           >
             📌 참고 사항
           </div>
-          <ul className="flex flex-col gap-[2px] pl-[12px]">
+          <ul className="flex flex-col gap-2px pl-12px">
             {notes.map((n, i) => (
               <li
                 key={i}
@@ -192,7 +192,7 @@ export default function AiCriteriaSelection({
       </p>
 
       {/* CTA */}
-      <div className="flex flex-wrap gap-[6px]">
+      <div className="flex flex-wrap gap-6px">
         {options.map((o) => {
           const isSelected = selectedKey === o.key;
           const isDimmed = selectedKey !== null && !isSelected;
@@ -202,7 +202,7 @@ export default function AiCriteriaSelection({
               <button
                 onClick={() => handleClick(o.key)}
                 disabled={selectedKey !== null}
-                className="flex items-center justify-center h-[32px] px-[12px] rounded-[6px] text-base tracking-default border cursor-pointer whitespace-nowrap"
+                className="flex items-center justify-center h-32px px-12px rounded-6px text-base tracking-default border cursor-pointer whitespace-nowrap"
                 style={{
                   fontFamily: "var(--font-family-korean)",
                   fontWeight: "var(--font-weight-medium)",

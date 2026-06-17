@@ -76,14 +76,14 @@ export default function DashboardBuildingProgress({
 
   return (
     <div
-      className={`flex flex-col items-center justify-center gap-[16px] py-[60px] px-[40px] ${
+      className={`flex flex-col items-center justify-center gap-16px py-60px px-40px ${
         card ? "" : "flex-1 overflow-hidden"
       } ${className}`}
       style={cardStyles}
     >
       {/* gradient ring spinner */}
       <div
-        className="size-[36px] rounded-full"
+        className="size-36px rounded-full"
         style={{
           background: "conic-gradient(from 90deg, var(--color-whatap-blue), var(--color-whatap-purple), var(--color-whatap-blue))",
           mask: "radial-gradient(circle 15px at center, transparent 98%, #000 100%)",
@@ -92,7 +92,7 @@ export default function DashboardBuildingProgress({
         }}
       />
       {/* title + subtitle */}
-      <div className="flex flex-col gap-[6px] items-center">
+      <div className="flex flex-col gap-6px items-center">
         <p
           className="text-lg font-bold text-primary tracking-default leading-none"
           style={{ fontFamily: "var(--font-family-korean)" }}
@@ -107,11 +107,11 @@ export default function DashboardBuildingProgress({
         </p>
       </div>
       {/* step list */}
-      <ul className="flex flex-col gap-[5px] mt-[4px]">
+      <ul className="flex flex-col gap-5px mt-4px">
         {steps.map((s, i) => (
           <li
             key={s}
-            className="flex items-center gap-[8px] text-base"
+            className="flex items-center gap-8px text-base"
             style={{
               fontFamily: "var(--font-family-korean)",
               color: i < stepIdx ? "var(--color-text-secondary)" : "var(--color-border-divider)",
@@ -132,11 +132,11 @@ export default function DashboardBuildingProgress({
               </svg>
             ) : i === stepIdx ? (
               <span
-                className="size-[12px] rounded-full border-[1.5px] border-[color:var(--color-brand-blue)] border-t-transparent"
+                className="size-12px rounded-full border-1_5px border-color-var-color-brand-blue border-t-transparent"
                 style={{ animation: "aiSymbolRotateSlow 0.9s linear infinite" }}
               />
             ) : (
-              <span className="size-[12px] rounded-full border border-[#d3d3d3]" />
+              <span className="size-12px rounded-full border border-cd3d3d3" />
             )}
             {s}
           </li>

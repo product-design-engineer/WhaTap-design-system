@@ -72,7 +72,7 @@ export default function OptionbarPage({
   presetLabel?: string;
 }) {
   return (
-    <div className="flex flex-row items-end gap-[12px] flex-wrap p-[8px] bg-white border-b border-[color:var(--color-border-default)]">
+    <div className="flex flex-row items-end gap-12px flex-wrap p-8px bg-white border-b border-color-var-color-border-default">
       <OptionbarItem title="시간">
         <LiveTimerCompact
           time={liveTime}
@@ -96,7 +96,7 @@ export default function OptionbarPage({
       </OptionbarItem>
 
       {/* 신규 버전·프리셋은 우측 정렬 — ml-auto로 좌측 빈 공간 흡수 */}
-      <div className="ml-auto flex flex-row items-end gap-[12px] flex-wrap">
+      <div className="ml-auto flex flex-row items-end gap-12px flex-wrap">
         <OptionbarItem title="">
           <NewVersionButton href={newVersionHref} label={newVersionLabel} />
         </OptionbarItem>
@@ -112,7 +112,7 @@ export default function OptionbarPage({
 /* ─── shared row wrapper ─── */
 function OptionbarItem({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <div className="flex flex-col gap-[6px]">
+    <div className="flex flex-col gap-6px">
       {title && (
         <div
           className="text-base font-bold text-primary tracking-default leading-none"
@@ -132,7 +132,7 @@ function OptionbarItem({ title, children }: { title: string; children: ReactNode
 function ValueDisplay({ value }: { value: string }) {
   return (
     <div
-      className="flex items-center h-[32px] text-md text-primary leading-normal tracking-normal truncate"
+      className="flex items-center h-32px text-md text-primary leading-normal tracking-normal truncate"
       style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}
       title={value}
     >
@@ -147,7 +147,7 @@ function NewVersionButton({ href, label }: { href: string; label: string }) {
     <a href={href}>
       <button
         type="button"
-        className="flex items-center justify-center gap-[6px] h-[32px] w-full px-[12px] rounded-[4px] bg-white border border-[color:var(--color-brand-blue)] text-md text-brand-blue cursor-pointer hover:bg-[color:var(--color-brand-blue-bg)] transition-colors"
+        className="flex items-center justify-center gap-6px h-32px w-full px-12px rounded-4px bg-white border border-color-var-color-brand-blue text-md text-brand-blue cursor-pointer hover-bg-color-var-color-brand-blue-bg transition-colors"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">

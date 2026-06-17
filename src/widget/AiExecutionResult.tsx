@@ -63,10 +63,10 @@ export default function AiExecutionResult({
 }: AiExecutionResultProps) {
   const { emoji, title } = VARIANT_LABEL[variant];
   return (
-    <div className="flex flex-col gap-[8px] w-full">
+    <div className="flex flex-col gap-8px w-full">
       {/* 헤더: 상태 라벨 + 타임스탬프 */}
-      <div className="flex items-center justify-between gap-[8px]">
-        <div className="flex items-center gap-[6px]">
+      <div className="flex items-center justify-between gap-8px">
+        <div className="flex items-center gap-6px">
           <span className="text-lg leading-none">{emoji}</span>
           <span
             className="text-md font-bold text-primary tracking-default leading-normal"
@@ -93,7 +93,7 @@ export default function AiExecutionResult({
 
       {/* bullet 리스트 */}
       {bullets && bullets.length > 0 && (
-        <ul className="flex flex-col gap-[4px] pl-[12px]">
+        <ul className="flex flex-col gap-4px pl-12px">
           {bullets.map((b, i) => (
             <li
               key={i}
@@ -108,7 +108,7 @@ export default function AiExecutionResult({
 
       {/* details 블록 (라벨: 값) */}
       {details && details.length > 0 && (
-        <div className="flex flex-col gap-[2px] pl-[12px]">
+        <div className="flex flex-col gap-2px pl-12px">
           {details.map((d, i) => (
             <div
               key={i}
