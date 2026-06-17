@@ -45,17 +45,25 @@
 
 | Layer | 역할 | 조합 규칙 | 수량 |
 |---|---|---|---|
-| **Foundation** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 | — | 39 |
-| **Composite** | Foundation 을 1단계 조합 | Foundation 만 import. **Composite 끼리 import 금지** | 12 |
+| **Foundation** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 | — | 40 |
+| **Composite** | Foundation 을 1단계 조합 | Foundation 만 import. **Composite 끼리 import 금지** | 13 |
 | **Shell** | Composite + Foundation 을 최종 조립하는 진입점 | 모든 계층 import 가능 | 2 |
 
-**Foundation** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, DataTable, MiniLineChart, LiveTimerCompact, AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList, AiUserBubble, AiAssistantButton, AiClickCursor 등 (39개)
+**Foundation** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, DataTable, MiniLineChart, LiveTimerCompact, SidebarMenuItem, AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList, AiUserBubble, AiAssistantButton, AiClickCursor 등 (40개)
 
-**Composite** — FilterBar(=FilterChip+FilterDropdown), PageHeader(=AiAssistantButton), OptionbarPage(=LiveTimerCompact+PresetSelect), AiInlinePrompt(=AiSendButton), AiChatExchange(=AiUserBubble) 등 (12개)
+**Composite** — FilterBar(=FilterChip+FilterDropdown), PageHeader(=AiAssistantButton), OptionbarPage(=LiveTimerCompact+PresetSelect), Sidebar(=SidebarMenuItem), AiInlinePrompt(=AiSendButton), AiChatExchange(=AiUserBubble) 등 (13개)
 
 **Shell** — DashboardLayout(=Sidebar), WhaTapAiWidget (2개)
 
 **신규 컴포넌트 추가 시 반드시 계층을 명시.** Composite 가 다른 Composite 를 import 하면 Shell 로 승격하거나 구조 분리.
+
+### 🔒 글로벌 정책 — 구조는 인라인 금지 (컴포넌트로 추출)
+
+**모든 컴포넌트/위젯의 구조는 인라인 JSX 로 흩어 두지 않는다.** 반복되거나 의미 단위가 분명한 구조(목록 행·카드·셀·항목 등)는 `map` 내부에 인라인으로 펼치지 말고 **독립 컴포넌트로 추출**한다. (예: Sidebar 의 메뉴 행 → [[SidebarMenuItem]] Foundation 으로 분리.)
+
+- 새 구조 단위를 인라인으로 만들기 전에 **컴포넌트로 추출 가능한지 먼저 검토** — 추출이 기본.
+- 추출된 컴포넌트는 계층 명시 + docstring(4섹션) + story + `index.ts` export + 카탈로그 동기.
+- 인라인 허용은 **재사용 없는 1회성 레이아웃 래퍼**(flex 컨테이너 등)에 한함.
 
 ## 스타일 — 일반 CSS (Tailwind 미사용 · 흔적 0)
 

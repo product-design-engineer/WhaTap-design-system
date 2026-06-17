@@ -58,6 +58,7 @@ export type { PageHeaderAiInlineProps } from "./PageHeaderAiInline";
 export { default as PresetSelect } from "./PresetSelect";
 export { default as Sidebar, K8S_GPU_MENU } from "./Sidebar";
 export type { MenuItem, ProjectContext, OrgContext } from "./Sidebar";
+export { default as SidebarMenuItem } from "./SidebarMenuItem";
 export { default as Stage } from "./Stage";
 export { default as SubHeaderBar } from "./SubHeaderBar";
 export type { SubHeaderBarProps } from "./SubHeaderBar";

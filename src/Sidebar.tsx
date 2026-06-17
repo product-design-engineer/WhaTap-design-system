@@ -40,6 +40,8 @@
  * />
  * ```
  */
+import SidebarMenuItem from "./SidebarMenuItem";
+
 /**
  * 아이콘은 표준 경로(`/icons/*`)를 그대로 참조합니다. 호스트별로 자산 제공 경로가 다름:
  *   - Storybook(이 패키지): `.storybook` 의 `staticDirs` 가 `static/icons` 를 `/icons` 로 번들.
@@ -326,96 +328,9 @@ export default function Sidebar({
         {!collapsed && (
         <div className="flex flex-1 flex-col h-full items-start min-w-0">
           <div className="flex flex-1 flex-col items-start min-h-0 pr-px w-full bg-card border-r border-color-var-color-border-default">
-            {menu.map((item) => {
-              const hasChildren = Array.isArray(item.children);
-              if (!hasChildren) {
-                // 단일 항목 (펼침/접힘 chevron 없음, e.g. "보고서")
-                return (
-                  <div
-                    key={item.label}
-                    onClick={item.onClick}
-                    className="flex h-32px items-center overflow-clip p-8px shrink-0 w-full cursor-pointer hover-bg-surface-100"
-                    style={item.active ? { backgroundColor: "var(--color-brand-blue-bg)" } : undefined}
-                  >
-                    <div className="flex items-center shrink-0 size-20px justify-center">
-                      <img alt="" className="size-16px" src={icon(item.icon)} />
-                    </div>
-                    <div className="flex gap-4px items-center shrink-0">
-                      <p
-                        className={`text-md font-bold tracking-default whitespace-nowrap leading-none ${item.active ? "text-primary" : "text-secondary"}`}
-                        style={{ fontFamily: NOTO_SANS }}
-                      >
-                        {item.label}
-                      </p>
-                    </div>
-                  </div>
-                );
-              }
-              // 확장 가능 항목 (chevron-down(접힘) / chevron-up(펼침))
-              return (
-                <div key={item.label} className="contents">
-                  <button className="flex flex-col items-start shrink-0 w-full cursor-pointer">
-                    <div className="flex h-32px items-center justify-between overflow-clip px-8px py-6px shrink-0 w-full hover-bg-surface-100">
-                      <div className="flex gap-4px items-start shrink-0">
-                        <div className="shrink-0 size-16px flex items-center justify-center">
-                          <img alt="" className="size-16px" src={icon(item.icon)} />
-                        </div>
-                        <p
-                          className="text-md font-bold text-secondary tracking-default whitespace-nowrap leading-none text-left"
-                          style={{ fontFamily: NOTO_SANS }}
-                        >
-                          {item.label}
-                        </p>
-                      </div>
-                      <div className="shrink-0 size-16px flex items-center justify-center">
-                        <img
-                          alt=""
-                          src={icon("caret-down.svg")}
-                          style={{
-                            width: 8,
-                            height: 5,
-                            transform: item.expanded ? "rotate(180deg)" : undefined,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </button>
-                  {item.expanded && (item.children?.length ?? 0) > 0 && (
-                    <div className="flex flex-col items-start shrink-0 w-full">
-                      {item.children!.map((c) => (
-                        <div
-                          key={c.label}
-                          onClick={c.onClick}
-                          className={
-                            c.active
-                              ? "flex gap-4px h-28px items-center overflow-clip pl-28px pr-8px py-4px shrink-0 w-full cursor-pointer hover-bg-surface-100"
-                              : "flex h-28px items-center overflow-clip pl-28px pr-8px py-4px shrink-0 w-full cursor-pointer hover-bg-surface-100"
-                          }
-                        >
-                          {c.active ? (
-                            <p
-                              className="text-md font-bold text-primary tracking-default whitespace-pre leading-none"
-                              style={{ fontFamily: NOTO_SANS }}
-                            >
-                              {c.label}
-                            </p>
-                          ) : (
-                            <div className="flex gap-4px items-center shrink-0">
-                              <p
-                                className="text-md text-secondary tracking-default whitespace-nowrap leading-none"
-                                style={{ fontFamily: NOTO_LIGHT, fontWeight: "var(--font-weight-regular)" }}
-                              >
-                                {c.label}
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+            {menu.map((item) => (
+              <SidebarMenuItem key={item.label} item={item} />
+            ))}
           </div>
 
           {/* 메뉴 영역 하단의 즐겨찾기/홈/사이트맵 바 */}
