@@ -64,7 +64,7 @@ const COLUMNS: DataTableColumn<Row>[] = [
 /* ─── Meta ───────────────────────────────────────────── */
 
 const meta: Meta = {
-  title: "Example/A — 기본 대시보드",
+  title: "Page/A — 기본 대시보드",
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",
