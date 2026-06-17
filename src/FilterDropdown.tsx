@@ -56,7 +56,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
-import Checkbox from "./Checkbox";
+import FilterDropdownOptionItem from "./FilterDropdownOptionItem";
 
 export type FilterDropdownPlacement = "bottom-start" | "bottom-end" | "top-start" | "top-end";
 
@@ -181,7 +181,7 @@ export default function FilterDropdown({
     position: "absolute",
     zIndex: 60,
     width,
-    backgroundColor: "#fff",
+    backgroundColor: "var(--color-card)",
     border: "1px solid var(--color-border-default)",
     borderRadius: 6,
     boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
@@ -263,19 +263,11 @@ export default function FilterDropdown({
             <ul className="flex flex-col gap-1" style={{ listStyle: "none", margin: 0, padding: 0 }}>
               {options.map((opt) => (
                 <li key={opt.value}>
-                  <Checkbox
-                    size="md"
+                  <FilterDropdownOptionItem
+                    option={opt}
                     checked={value.includes(opt.value)}
-                    disabled={opt.disabled}
-                    onChange={() => toggleOption(opt.value)}
-                  >
-                    <span className="inline-flex w-full items-center justify-between gap-2 text-base text-primary">
-                      <span className="truncate">{opt.label}</span>
-                      {opt.count !== undefined && opt.count !== null && (
-                        <span className="shrink-0 text-sm text-tertiary">{opt.count}</span>
-                      )}
-                    </span>
-                  </Checkbox>
+                    onToggle={() => toggleOption(opt.value)}
+                  />
                 </li>
               ))}
             </ul>

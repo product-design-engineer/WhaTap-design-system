@@ -45,17 +45,26 @@
 
 | Layer | 역할 | 조합 규칙 | 수량 |
 |---|---|---|---|
-| **Foundation** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 | — | 39 |
-| **Composite** | Foundation 을 1단계 조합 | Foundation 만 import. **Composite 끼리 import 금지** | 12 |
+| **Foundation** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 | — | ~57 |
+| **Composite** | Foundation 을 1단계 조합 | Foundation 만 import. **Composite 끼리 import 금지** | ~18 |
 | **Shell** | Composite + Foundation 을 최종 조립하는 진입점 | 모든 계층 import 가능 | 2 |
 
-**Foundation** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, DataTable, MiniLineChart, LiveTimerCompact, AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList, AiUserBubble, AiAssistantButton, AiClickCursor 등 (39개)
+**Foundation** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, DataTable, MiniLineChart, LiveTimerCompact, SidebarMenuItem, AiCard … + **인라인 추출 Parts**(SidebarMenuItem · PageHeaderNotificationItem · PageHeaderProfileMenuItem · ProductRailItem · BottomRailItem · TabButton · CostBreakdownRow · ClassificationTableRow · CostTableRow · MigPlanRow · EventListItem · ReasoningStep · TimelineStepItem · CriteriaGroup · AiActionChip · AiAttachmentChip · AiQuickActionChip)
 
-**Composite** — FilterBar(=FilterChip+FilterDropdown), PageHeader(=AiAssistantButton), OptionbarPage(=LiveTimerCompact+PresetSelect), AiInlinePrompt(=AiSendButton), AiChatExchange(=AiUserBubble) 등 (12개)
+**Composite** — FilterBar · PageHeader · OptionbarPage · Sidebar(=SidebarMenuItem) · AiInlinePrompt · AiChatExchange … + **추출 Parts**(DataTableRow · FilterDropdownOptionItem · FilterChipItem · CriteriaOptionButton · ReceiverChannelItem · ProposalSection)
 
 **Shell** — DashboardLayout(=Sidebar), WhaTapAiWidget (2개)
 
 **신규 컴포넌트 추가 시 반드시 계층을 명시.** Composite 가 다른 Composite 를 import 하면 Shell 로 승격하거나 구조 분리.
+
+### 🔒 글로벌 정책 — 구조는 인라인 금지 (컴포넌트로 추출)
+
+**모든 컴포넌트/위젯의 구조는 인라인 JSX 로 흩어 두지 않는다.** 반복되거나 의미 단위가 분명한 구조(목록 행·카드·셀·항목 등)는 `map` 내부에 인라인으로 펼치지 말고 **독립 컴포넌트로 추출**한다. (예: Sidebar 의 메뉴 행 → [[SidebarMenuItem]] Foundation 으로 분리.)
+
+- 새 구조 단위를 인라인으로 만들기 전에 **컴포넌트로 추출 가능한지 먼저 검토** — 추출이 기본.
+- 추출된 컴포넌트는 계층 명시 + docstring(4섹션) + story + `index.ts` export + 카탈로그 동기.
+- 인라인 허용은 **재사용 없는 1회성 레이아웃 래퍼**(flex 컨테이너 등)에 한함.
+- **적용 현황(2026-06-17):** 위젯·chrome 의 반복 인라인 구조 23종을 컴포넌트로 추출 완료 — 카탈로그는 `Chrome/Parts/*` · `WhaTap AI/Parts/*` 하위에 등록(`index.ts` export + story). 테이블 행·스텝·칩·메뉴 항목 등.
 
 ## 스타일 — 일반 CSS (Tailwind 미사용 · 흔적 0)
 
@@ -64,6 +73,9 @@
 - **소비자:** 진입점에서 `import "@whatap/design-system/style.css"` 한 줄. Tailwind·`@source`·PostCSS 불필요. 토큰만 필요하면 `tokens.css`(참조용 `:root`).
 - **`whatap-ds.css` 는 생성물 — 손으로 늘리지 말 것.** 컴포넌트 className/토큰 변경 시 `node scripts/detailwind.mjs generate` 로 **(1) whatap-ds.css 재생성 + (2) tsx className 코드모드(escape 토큰→일반 식별자)**. 진실 원본 `scripts/frozen-whatap-ds.css`(구 빌드 1회 스냅샷, 미배포). self-contained(:root 토큰 + preflight + utilities + 전역/keyframes/.dark 포함).
 - **동적 색**(variant×tone)은 정적 유틸로 불가 → Button 처럼 inline CSS custom property(`--wds-btn-*`).
+- **다크 대응 (테마 적응 표면 유틸):** 페이지/패널 배경에 `bg-white`·인라인 `#fff` **금지** — 테마 토큰으로:
+  `bg-bg`(앱 셸 = `--color-bg`) · `bg-card`(헤더/사이드바/카드/입력/드롭다운 = `--color-card`) · `bg-surface-50/100/200` · `hover-bg-surface-100/200`. `.dark` 가 토큰만 재매핑하므로 라이트/다크 자동 전환. **흰색 전경**(컬러 위 텍스트·아이콘: `--wds-btn-fg`, `stroke/fill "#fff"`)은 그대로 유지.
+- **⚠️ `detailwind generate` 는 원본(escaped className) tsx 에서만 실행** — 이미 codemod된 트리에서 재실행하면 유틸이 누락됨(가드가 중단시킴). 증분 변경은 `src/whatap-ds.css` 직접 편집(+ EXTRAS 유틸은 스크립트에도 반영).
 - **Tailwind 재도입 금지** — 의존성·빌드·런타임·CSS 산출물 어디에도 없음. (Storybook Guardrails: `no-tailwind-plain-css`)
 
 ## 타이포그래피 위계 — `font-weight` 평탄화 금지

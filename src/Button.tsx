@@ -88,7 +88,7 @@ function toneStyle(variant: ButtonVariant, tone: ButtonTone): CSSProperties {
   }
   if (variant === "outline") {
     return {
-      "--wds-btn-bg": "#fff",
+      "--wds-btn-bg": "var(--color-card)",
       "--wds-btn-bg-hover": c.soft,
       "--wds-btn-fg": c.main,
       "--wds-btn-border": c.main,

@@ -37,7 +37,8 @@
  * />
  * ```
  */
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
+import DataTableRow from "./DataTableRow";
 
 export type DataTableColumn<T> = {
   /** rows[i][key]가 cell content (render 미지정 시) */
@@ -102,7 +103,7 @@ export default function DataTable<T>({
         };
 
   return (
-    <div className="flex flex-col rounded-4px border border-color-var-color-border-default bg-white overflow-hidden">
+    <div className="flex flex-col rounded-4px border border-color-var-color-border-default bg-card overflow-hidden">
       {/* 헤더 행 */}
       <div
         className={`grid items-center bg-color-var-color-surface-50 ${tokens.rowPadding}`}
@@ -124,34 +125,18 @@ export default function DataTable<T>({
 
       {/* 데이터 행 */}
       {rows.map((row, ri) => (
-        <div
+        <DataTableRow
           key={ri}
-          className={`grid items-center border-t border-color-var-color-border-default ${tokens.rowPadding} ${onRowClick ? "cursor-pointer" : ""} hover-bg-gray-50`}
-          style={{ gridTemplateColumns: gridTemplate }}
-          onClick={onRowClick ? () => onRowClick(row, ri) : undefined}
-        >
-          {columns.map((c, ci) => {
-            const content: ReactNode = c.render
-              ? c.render(row, ri)
-              : ((row as Record<string, unknown>)[c.key] as ReactNode);
-            const style: CSSProperties = {
-              fontFamily: c.numeric
-                ? "Roboto, 'Noto Sans', sans-serif"
-                : "'Noto Sans', 'Noto Sans KR', sans-serif",
-              textAlign: colAlign(c),
-            };
-            return (
-              <span
-                key={ci}
-                className={`${tokens.rowText} ${tokens.rowHeight} tracking-default truncate min-w-0`}
-                style={style}
-                title={typeof content === "string" ? content : undefined}
-              >
-                {content}
-              </span>
-            );
-          })}
-        </div>
+          row={row}
+          rowIndex={ri}
+          columns={columns}
+          gridTemplate={gridTemplate}
+          colAlign={colAlign}
+          rowText={tokens.rowText}
+          rowHeight={tokens.rowHeight}
+          rowPadding={tokens.rowPadding}
+          onRowClick={onRowClick}
+        />
       ))}
     </div>
   );

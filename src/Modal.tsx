@@ -157,7 +157,7 @@ export default function Modal({
   };
 
   const panelStyle: CSSProperties = {
-    backgroundColor: "#fff",
+    backgroundColor: "var(--color-card)",
     borderRadius: 8,
     border: "1px solid var(--color-border-default)",
     boxShadow: "0 8px 32px rgba(0,0,0,0.16)",

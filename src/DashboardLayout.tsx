@@ -79,7 +79,7 @@ export default function DashboardLayout({
   // 공통 정책 (feedback-widget-sidebar-collapse): 위젯이 열리면 사이드바 최소화
   // 공통 정책 (feedback-page-header-invariant): 헤더는 widget 행과 분리 → 영향 없음
   return (
-    <div className="flex h-full w-full bg-white">
+    <div className="flex h-full w-full bg-bg">
       <Sidebar
         activeProduct={activeProduct}
         project={project}
@@ -95,7 +95,7 @@ export default function DashboardLayout({
         <div className="flex flex-1 min-h-0">
           <main
             className="flex-1 min-w-0 overflow-auto"
-            style={{ background: "#fff" }}
+            style={{ background: "var(--color-bg)" }}
           >
             {main}
           </main>

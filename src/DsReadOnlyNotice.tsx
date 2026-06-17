@@ -91,7 +91,7 @@ export default function DsReadOnlyNotice({
   };
 
   const panel: CSSProperties = {
-    backgroundColor: "#fff",
+    backgroundColor: "var(--color-card)",
     borderRadius: 12,
     border: "1px solid var(--color-border-default, #eaeaea)",
     boxShadow: "0 12px 40px rgba(0,0,0,0.2)",

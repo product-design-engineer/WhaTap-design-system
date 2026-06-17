@@ -69,7 +69,7 @@ export default function PageHeaderAiInline({
   promptDefaultOpen = false,
 }: PageHeaderAiInlineProps) {
   return (
-    <div className="flex items-center h-48px box-border px-8px gap-16px bg-white border-b border-color-var-color-border-strong shrink-0">
+    <div className="flex items-center h-48px box-border px-8px gap-16px bg-card border-b border-color-var-color-border-strong shrink-0">
       {/* 좌측: 타이틀 + Docs */}
       <div className="flex items-center gap-24px shrink-0">
         <p
@@ -82,7 +82,7 @@ export default function PageHeaderAiInline({
           {title}
         </p>
         <button
-          className="flex items-center justify-center gap-4px h-32px px-16px py-8px rounded-full border border-color-var-color-border-divider bg-white text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover-bg-gray-50 transition-colors"
+          className="flex items-center justify-center gap-4px h-32px px-16px py-8px rounded-full border border-color-var-color-border-divider bg-card text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover-bg-surface-100 transition-colors"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
@@ -115,7 +115,7 @@ export default function PageHeaderAiInline({
       {/* 우측 chrome: 고객지원 + 알림 + 아바타 (Docs 는 좌측 그룹) */}
       <div className="flex items-center gap-16px h-full shrink-0">
         <button
-          className="flex items-center justify-center gap-4px h-32px px-16px py-8px rounded-full border border-color-var-color-border-divider bg-white text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover-bg-gray-50 transition-colors"
+          className="flex items-center justify-center gap-4px h-32px px-16px py-8px rounded-full border border-color-var-color-border-divider bg-card text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover-bg-surface-100 transition-colors"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">

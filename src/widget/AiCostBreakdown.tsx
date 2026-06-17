@@ -1,3 +1,5 @@
+import CostBreakdownRow from "./CostBreakdownRow";
+
 /**
  * AiCostBreakdown — GPU 단위 낭비 비용 상세 분석 카드.
  *
@@ -109,43 +111,7 @@ export default function AiCostBreakdown({
           ))}
         </div>
         {rows.map((r, i) => (
-          <div
-            key={i}
-            className="grid items-center px-8px py-6px gap-4px border-t border-color-var-color-border-default"
-            style={{ gridTemplateColumns: "0.7fr 1.4fr 0.8fr 0.9fr 1fr" }}
-          >
-            <span
-              className="text-base font-bold text-primary tracking-default leading-none"
-              style={{ fontFamily: "var(--font-family-numeric)" }}
-            >
-              {r.gpu}
-            </span>
-            <span
-              className="text-sm text-secondary tracking-default leading-snug truncate"
-              style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
-              title={r.pod}
-            >
-              {r.pod}
-            </span>
-            <span
-              className="text-base text-secondary tracking-default leading-none"
-              style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}
-            >
-              {r.avg}
-            </span>
-            <span
-              className="text-base text-secondary tracking-default leading-none"
-              style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}
-            >
-              {r.idle}
-            </span>
-            <span
-              className="text-base font-bold text-primary tracking-default leading-none text-right"
-              style={{ fontFamily: "var(--font-family-numeric)" }}
-            >
-              {r.daily}
-            </span>
-          </div>
+          <CostBreakdownRow key={i} row={r} />
         ))}
         {subtotal && (
           <div

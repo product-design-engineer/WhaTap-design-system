@@ -69,7 +69,7 @@ export default function DashboardBuildingProgress({
   }, [steps.length, intervalMs]);
 
   const cardStyles = card
-    ? { background: background ?? "#fff", border: "1px solid var(--color-border-default)", borderRadius: 6 }
+    ? { background: background ?? "var(--color-card)", border: "1px solid var(--color-border-default)", borderRadius: 6 }
     : background
       ? { background }
       : {};

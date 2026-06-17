@@ -1,3 +1,5 @@
+import MigPlanRowComponent from "./MigPlanRow";
+
 /**
  * AiMigPlan — GPU MIG 통합 기획 제안 카드.
  *
@@ -114,33 +116,7 @@ export default function AiMigPlan({
             ))}
           </div>
           {rows.map((r, i) => (
-            <div
-              key={i}
-              className="grid items-center px-8px py-6px gap-4px border-t border-color-var-color-border-default"
-              style={{
-                gridTemplateColumns: "1.4fr 1.4fr 1fr",
-                background: r.highlight ? "#eef4ff" : "#fff",
-              }}
-            >
-              <span
-                className="text-base font-bold text-primary tracking-default leading-snug"
-                style={{ fontFamily: "var(--font-family-korean)" }}
-              >
-                {r.label}
-              </span>
-              <span
-                className="text-sm text-secondary tracking-default leading-snug"
-                style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
-              >
-                {r.config}
-              </span>
-              <span
-                className="text-base font-bold text-primary tracking-default leading-none text-right"
-                style={{ fontFamily: "var(--font-family-numeric)" }}
-              >
-                {r.monthly}
-              </span>
-            </div>
+            <MigPlanRowComponent key={i} {...r} />
           ))}
         </div>
       )}

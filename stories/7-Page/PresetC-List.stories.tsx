@@ -85,7 +85,7 @@ const SEVERITY_OPTIONS = [
 /* ─── Meta ───────────────────────────────────────────── */
 
 const meta: Meta = {
-  title: "Presets/C — 목록 페이지",
+  title: "Page/C — 목록 페이지",
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",

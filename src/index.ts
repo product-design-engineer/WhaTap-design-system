@@ -58,6 +58,7 @@ export type { PageHeaderAiInlineProps } from "./PageHeaderAiInline";
 export { default as PresetSelect } from "./PresetSelect";
 export { default as Sidebar, K8S_GPU_MENU } from "./Sidebar";
 export type { MenuItem, ProjectContext, OrgContext } from "./Sidebar";
+export { default as SidebarMenuItem } from "./SidebarMenuItem";
 export { default as Stage } from "./Stage";
 export { default as SubHeaderBar } from "./SubHeaderBar";
 export type { SubHeaderBarProps } from "./SubHeaderBar";
@@ -75,6 +76,32 @@ export type { WidgetAction } from "./WhaTapAiWidget";
 // Policy
 export { default as DsReadOnlyNotice } from "./DsReadOnlyNotice";
 export type { DsReadOnlyNoticeProps } from "./DsReadOnlyNotice";
+
+// Parts — 인라인 구조 추출 컴포넌트 (구조 인라인 금지 정책). 부모 카탈로그의 Chrome/Parts·WhaTap AI/Parts.
+//   Chrome parts
+export { default as PageHeaderNotificationItem } from "./PageHeaderNotificationItem";
+export { default as PageHeaderProfileMenuItem } from "./PageHeaderProfileMenuItem";
+export { default as DataTableRow } from "./DataTableRow";
+export { default as FilterDropdownOptionItem } from "./FilterDropdownOptionItem";
+export { default as TabButton } from "./TabButton";
+export { default as ProductRailItem } from "./ProductRailItem";
+export { default as BottomRailItem } from "./BottomRailItem";
+export { default as FilterChipItem } from "./FilterChipItem";
+export { default as AiQuickActionChip } from "./AiQuickActionChip";
+//   WhaTap AI parts (src/widget)
+export { default as CostBreakdownRow } from "./widget/CostBreakdownRow";
+export { default as ClassificationTableRow } from "./widget/ClassificationTableRow";
+export { default as CostTableRow } from "./widget/CostTableRow";
+export { default as MigPlanRow } from "./widget/MigPlanRow";
+export { default as EventListItem } from "./widget/EventListItem";
+export { default as ReasoningStep } from "./widget/ReasoningStep";
+export { default as TimelineStepItem } from "./widget/TimelineStepItem";
+export { default as ReceiverChannelItem } from "./widget/ReceiverChannelItem";
+export { default as CriteriaGroup } from "./widget/CriteriaGroup";
+export { default as CriteriaOptionButton } from "./widget/CriteriaOptionButton";
+export { default as ProposalSection } from "./widget/ProposalSection";
+export { default as AiActionChip } from "./widget/AiActionChip";
+export { default as AiAttachmentChip } from "./widget/AiAttachmentChip";
 
 // Icons
 export { default as SettingsIcon } from "./icons/SettingsIcon";

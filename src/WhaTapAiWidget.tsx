@@ -42,6 +42,8 @@
  */
 import { useEffect, useRef, useState } from "react";
 import AiClickCursor from "./widget/AiClickCursor";
+import AiActionChip from "./widget/AiActionChip";
+import AiAttachmentChip from "./widget/AiAttachmentChip";
 
 const WIDGET_WIDTH = 480;
 
@@ -144,7 +146,7 @@ export default function WhaTapAiWidget({
       </div>
 
       <div
-        className="flex flex-col h-full bg-white border-l border-color-var-color-border-default"
+        className="flex flex-col h-full bg-card border-l border-color-var-color-border-default"
         style={{ width: WIDGET_WIDTH }}
       >
         {/* 헤더 (40px, 그라데이션) */}
@@ -205,7 +207,7 @@ export default function WhaTapAiWidget({
         >
           {showLanding && (
           // key={open}로 위젯을 열 때마다 인사말 영역이 remount되어 entrance animation 재생
-          <div key={open ? "open" : "closed"} className="bg-white flex flex-col items-start justify-center relative w-full">
+          <div key={open ? "open" : "closed"} className="bg-card flex flex-col items-start justify-center relative w-full">
             {/* AI 심볼 (호흡 + 회전) — 진입 시 fade-in이 한 번 추가로 재생 */}
             <div className="ai-anim-in mb-12px" style={{ animationDelay: "0ms" }}>
               <div
@@ -254,18 +256,7 @@ export default function WhaTapAiWidget({
                 {/* 액션 칩 */}
                 <div className="flex flex-wrap gap-6px items-start w-full">
                   {actions.map((label, i) => (
-                    <button
-                      key={label}
-                      className="ai-anim-in ai-landing-action border border-color-var-color-brand-blue flex h-32px items-center justify-center px-16px rounded-4px cursor-pointer text-brand-blue hover-bg-color-var-color-brand-blue-bg hover-border-color-var-color-brand-blue-bg relative overflow-hidden w-fit whitespace-nowrap text-md bg-white"
-                      style={{
-                        fontFamily: "var(--font-family-korean)",
-                        fontWeight: "var(--font-weight-medium)",
-                        // entrance: 400ms부터 칩마다 80ms 스태거로 페이드인
-                        animationDelay: `${400 + i * 80}ms`,
-                      }}
-                    >
-                      {label}
-                    </button>
+                    <AiActionChip key={label} label={label} index={i} />
                   ))}
                 </div>
               </div>
@@ -282,32 +273,14 @@ export default function WhaTapAiWidget({
         {/* Input 영역 */}
         <div className="flex flex-col items-center justify-center px-16px shrink-0 w-full">
           <div
-            className="ai-input-wrapper relative bg-white flex flex-col gap-4px items-center justify-center p-12px shrink-0 rounded-8px transition-all duration-200 w-full"
+            className="ai-input-wrapper relative bg-card flex flex-col gap-4px items-center justify-center p-12px shrink-0 rounded-8px transition-all duration-200 w-full"
             style={{ border: hasInput ? "2px solid var(--color-brand-blue)" : "2px solid var(--color-brand-blue-bg-2)" }}
           >
             {/* 첨부 파일 칩 행 (Figma 27087:3416) */}
             {attachments && attachments.length > 0 && (
               <div className="flex gap-6px items-center w-full overflow-x-auto pb-4px">
                 {attachments.map((a, i) => (
-                  <div
-                    key={i}
-                    className="flex flex-col gap-4px bg-white border border-cd3d3d3 rounded-6px px-8px py-6px shrink-0"
-                    style={{ width: 100 }}
-                  >
-                    <p
-                      className="text-base font-bold text-primary tracking-default leading-normal truncate"
-                      style={{ fontFamily: "var(--font-family-korean)" }}
-                      title={a.name}
-                    >
-                      {a.name}
-                    </p>
-                    <span
-                      className="self-start text-xs text-tertiary bg-rgba-0-0-0-0_05 rounded-3px px-4px py-1px uppercase"
-                      style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
-                    >
-                      {a.mime ?? "CSV"}
-                    </span>
-                  </div>
+                  <AiAttachmentChip key={i} name={a.name} mime={a.mime} />
                 ))}
               </div>
             )}
@@ -339,7 +312,7 @@ export default function WhaTapAiWidget({
                 <button
                   type="button"
                   aria-label="파일 또는 이미지 추가"
-                  className="group-plus flex items-center justify-center p-2px rounded-4px shrink-0 size-20px cursor-pointer border-0 bg-white hover-bg-black transition-colors"
+                  className="group-plus flex items-center justify-center p-2px rounded-4px shrink-0 size-20px cursor-pointer border-0 bg-card hover-bg-black transition-colors"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-colors">
                     <line x1="8" y1="3.33" x2="8" y2="12.67" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-white" strokeWidth="1.5" strokeLinecap="round" />

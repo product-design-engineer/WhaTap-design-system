@@ -47,7 +47,7 @@ export default function PresetSelect({
       <button
         type="button"
         onClick={onOpenList}
-        className="flex items-center justify-between h-32px px-10px bg-white border border-color-var-color-border-divider rounded-4px cursor-pointer hover-bg-gray-50"
+        className="flex items-center justify-between h-32px px-10px bg-card border border-color-var-color-border-divider rounded-4px cursor-pointer hover-bg-surface-100"
         style={{ width }}
       >
         <span
@@ -64,7 +64,7 @@ export default function PresetSelect({
         type="button"
         aria-label="프리셋 관리"
         onClick={onManage}
-        className="flex items-center justify-center size-32px bg-white border border-color-var-color-border-divider rounded-4px cursor-pointer hover-bg-gray-50"
+        className="flex items-center justify-center size-32px bg-card border border-color-var-color-border-divider rounded-4px cursor-pointer hover-bg-surface-100"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-text-tertiary)">
           <path d="M2 22V2h16l4 4.051V22H2zM8 4H4v16h2v-8h12v8h2V6.873L17.164 4H16v4H8V4zm8 10H8v6h8v-6zM14 4h-4v2h4V4z" />

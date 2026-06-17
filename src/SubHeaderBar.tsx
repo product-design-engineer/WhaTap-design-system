@@ -45,7 +45,7 @@ export type SubHeaderBarProps = {
 export default function SubHeaderBar({ children, right, className = "" }: SubHeaderBarProps) {
   return (
     <div
-      className={`flex items-center justify-between h-40px box-border px-16px gap-8px bg-white border-b border-color-var-color-border-strong shrink-0 ${className}`}
+      className={`flex items-center justify-between h-40px box-border px-16px gap-8px bg-card border-b border-color-var-color-border-strong shrink-0 ${className}`}
     >
       <div className="flex items-center gap-8px min-w-0">{children}</div>
       {right != null && <div className="flex items-center gap-8px shrink-0">{right}</div>}

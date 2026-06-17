@@ -37,6 +37,8 @@
  * />
  * ```
  */
+import CostTableRow from "./CostTableRow";
+
 export type CostRow = {
   label: string; // "현행" / "제안"
   detail: string; // "A100 GPU 4개 (평균 사용률 32%)"
@@ -75,39 +77,7 @@ export default function AiCostTable({
 
       <div className="flex flex-col rounded-6px overflow-hidden border border-color-var-color-border-default">
         {rows.map((r, i) => (
-          <div
-            key={r.label}
-            className={`flex items-center justify-between px-10px py-8px ${
-              i > 0 ? "border-t border-color-var-color-border-default" : ""
-            }`}
-            style={{
-              background: r.highlight ? "#eef4ff" : "#fff",
-            }}
-          >
-            <div className="flex flex-col min-w-0">
-              <span
-                className="text-sm text-tertiary tracking-default leading-none"
-                style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
-              >
-                {r.label}
-              </span>
-              <span
-                className="text-base text-primary tracking-default leading-normal mt-3px"
-                style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
-              >
-                {r.detail}
-              </span>
-            </div>
-            <span
-              className="text-lg text-primary font-bold tracking-default leading-none"
-              style={{
-                fontFamily: "var(--font-family-numeric)",
-                color: r.highlight ? "var(--color-brand-blue)" : "#222",
-              }}
-            >
-              {r.cost}
-            </span>
-          </div>
+          <CostTableRow key={r.label} row={r} isFirst={i === 0} />
         ))}
       </div>
 

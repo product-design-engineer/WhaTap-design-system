@@ -102,7 +102,7 @@ export default function MiniLineChart({
 
   return (
     <div
-      className={`flex flex-col bg-white border border-color-var-color-border-default rounded-4px px-8px py-6px gap-2px min-w-0${delay !== undefined ? " ai-anim-in" : ""}`}
+      className={`flex flex-col bg-card border border-color-var-color-border-default rounded-4px px-8px py-6px gap-2px min-w-0${delay !== undefined ? " ai-anim-in" : ""}`}
       style={delay !== undefined ? { animationDelay: `${delay}ms` } : undefined}
     >
       {/* 헤더 */}
@@ -120,7 +120,7 @@ export default function MiniLineChart({
         <div className="flex items-center gap-4px shrink-0">
           {showTopStat && (
             <button
-              className="flex items-center h-18px px-6px rounded-3px bg-white border border-color-var-color-border-default text-xs text-secondary cursor-pointer hover-bg-gray-50 whitespace-nowrap"
+              className="flex items-center h-18px px-6px rounded-3px bg-card border border-color-var-color-border-default text-xs text-secondary cursor-pointer hover-bg-surface-100 whitespace-nowrap"
               style={{ fontFamily: "var(--font-family-korean)" }}
             >
               Top Stat

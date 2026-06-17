@@ -300,6 +300,17 @@ function innermostDecls(body) {
   return oneLine(b);
 }
 
+// 멱등성 가드 — generate 는 **원본(escaped className) tsx** 에서만 유효.
+// 이미 codemod된 트리(arbitrary `[` 클래스 없음)에서 재실행하면 frozen 매칭 실패로
+// 유틸이 대량 누락된다. 그 경우 덮어쓰기 전에 중단.
+const tsxHasArbitrary = usedArr.some((t) => t.includes("["));
+if (!tsxHasArbitrary && /\\\[/.test(css)) {
+  console.error("✗ tsx 가 이미 codemod된 상태로 보입니다 (className 에 arbitrary `[` 없음).");
+  console.error("  detailwind generate 는 원본 escaped tsx 에서만 실행하세요.");
+  console.error("  증분 변경은 src/whatap-ds.css 를 직접 편집하거나, `git checkout` 으로 원본 복원 후 실행하세요.");
+  process.exit(1);
+}
+
 const renameMap = {};
 const cssLines = [];
 const skipped = [];
@@ -331,6 +342,18 @@ for (const tok of usedArr) {
   }
   cssLines.push(`${decorate(clean, variants)} { ${body} }`);
 }
+
+// EXTRAS — 테마 적응 표면/배경 유틸 (frozen 에 없음). .dark 토큰으로 자동 전환되는 의미 클래스.
+const EXTRAS = [
+  ".bg-bg { background-color: var(--color-bg); }",
+  ".bg-card { background-color: var(--color-card); }",
+  ".bg-surface-50 { background-color: var(--color-surface-50); }",
+  ".bg-surface-100 { background-color: var(--color-surface-100); }",
+  ".bg-surface-200 { background-color: var(--color-surface-200); }",
+  ".hover-bg-surface-100:hover { background-color: var(--color-surface-100); }",
+  ".hover-bg-surface-200:hover { background-color: var(--color-surface-200); }",
+];
+for (const e of EXTRAS) if (!cssLines.includes(e)) cssLines.push(e);
 
 // --tw-/Tailwind 내부 var 잔존 검사
 const joined = cssLines.join("\n");

@@ -111,7 +111,7 @@ export default function LiveTimerCompact({
           }
         }}
         aria-label={paused ? "재생" : "일시정지"}
-        className="flex items-center justify-center bg-white cursor-pointer"
+        className="flex items-center justify-center bg-card cursor-pointer"
         style={{
           width: 32,
           height: 32,
@@ -135,7 +135,7 @@ export default function LiveTimerCompact({
 
       {/* Timer box — 우측 chained 보더 (4면), polling progress (배경 full-fill) + 텍스트 */}
       <div
-        className="flex flex-col justify-center bg-white relative overflow-hidden"
+        className="flex flex-col justify-center bg-card relative overflow-hidden"
         style={{
           height: 32,
           padding: 8,

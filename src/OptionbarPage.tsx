@@ -72,7 +72,7 @@ export default function OptionbarPage({
   presetLabel?: string;
 }) {
   return (
-    <div className="flex flex-row items-end gap-12px flex-wrap p-8px bg-white border-b border-color-var-color-border-default">
+    <div className="flex flex-row items-end gap-12px flex-wrap p-8px bg-card border-b border-color-var-color-border-default">
       <OptionbarItem title="시간">
         <LiveTimerCompact
           time={liveTime}
@@ -147,7 +147,7 @@ function NewVersionButton({ href, label }: { href: string; label: string }) {
     <a href={href}>
       <button
         type="button"
-        className="flex items-center justify-center gap-6px h-32px w-full px-12px rounded-4px bg-white border border-color-var-color-brand-blue text-md text-brand-blue cursor-pointer hover-bg-color-var-color-brand-blue-bg transition-colors"
+        className="flex items-center justify-center gap-6px h-32px w-full px-12px rounded-4px bg-card border border-color-var-color-brand-blue text-md text-brand-blue cursor-pointer hover-bg-color-var-color-brand-blue-bg transition-colors"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
