@@ -31,7 +31,8 @@
  * />
  * ```
  */
-import { AiCard, AiBulletList } from "./_primitives";
+import { AiCard } from "./_primitives";
+import ProposalSection from "./ProposalSection";
 
 export type ProposalSection = {
   emoji: string;
@@ -81,18 +82,7 @@ export default function AiDashboardProposal({
       )}
 
       {sections.map((s, i) => (
-        <div key={i} className="flex flex-col gap-4px">
-          <div className="flex items-center gap-6px">
-            <span className="text-lg leading-none">{s.emoji}</span>
-            <span
-              className="text-base font-bold text-primary tracking-default leading-normal"
-              style={{ fontFamily: "var(--font-family-korean)" }}
-            >
-              {s.title}
-            </span>
-          </div>
-          <AiBulletList items={s.bullets} />
-        </div>
+        <ProposalSection key={i} emoji={s.emoji} title={s.title} bullets={s.bullets} />
       ))}
 
       <p

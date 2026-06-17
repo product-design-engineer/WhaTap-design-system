@@ -35,7 +35,8 @@
  * ```
  */
 import { AiCard, AiSectionHeading } from "./_primitives";
-import { TONE_DOT, TONE_BG, type Tone } from "./_tokens";
+import { type Tone } from "./_tokens";
+import EventListItem from "./EventListItem";
 
 /** 와탭 알림 심각도 → 디자인 시스템 Tone 매핑 */
 export type EventSeverity = "critical" | "warning" | "info";
@@ -87,50 +88,17 @@ export default function AiEventList({
       )}
 
       <ul className="flex flex-col">
-        {rows.map((r, i) => {
-          const tone = SEVERITY_TONE[r.severity];
-          return (
-            <li
-              key={i}
-              className="flex items-start gap-8px py-6px border-b border-color-var-color-surface-50 last-border-b-0"
-            >
-              {/* 시간 (고정폭) */}
-              <span
-                className="shrink-0 text-sm text-tertiary tracking-default leading-relaxed w-42px tabular-nums"
-                style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}
-              >
-                {r.time}
-              </span>
-
-              {/* 심각도 도트 + 라벨 (컬러 칩) */}
-              <span
-                className="shrink-0 flex items-center gap-4px px-5px py-1px rounded-8px whitespace-nowrap"
-                style={{ background: TONE_BG[tone] }}
-              >
-                <span
-                  className="size-5px rounded-full"
-                  style={{ background: TONE_DOT[tone] }}
-                />
-                <span
-                  className="text-xs tracking-default leading-none"
-                  style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)", color: TONE_DOT[tone] }}
-                >
-                  {SEVERITY_LABEL[r.severity]}
-                </span>
-              </span>
-
-              {/* source + message — 한 줄 truncate */}
-              <span
-                className="text-base text-primary tracking-default leading-relaxed flex-1 min-w-0 truncate"
-                style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
-              >
-                <span className="text-secondary">{r.source}</span>
-                <span className="text-gray-pale mx-6px">·</span>
-                {r.message}
-              </span>
-            </li>
-          );
-        })}
+        {rows.map((r, i) => (
+          <EventListItem
+            key={i}
+            time={r.time}
+            tone={SEVERITY_TONE[r.severity]}
+            label={SEVERITY_LABEL[r.severity]}
+            source={r.source}
+            message={r.message}
+            isLast={i === rows.length - 1}
+          />
+        ))}
       </ul>
     </AiCard>
   );

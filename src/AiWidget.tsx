@@ -1,4 +1,5 @@
 import AiSymbol from "./AiSymbol";
+import AiQuickActionChip from "./AiQuickActionChip";
 
 interface AiWidgetProps {
   open?: boolean;
@@ -104,23 +105,7 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
         {/* Quick action chips */}
         <div className="flex flex-wrap gap-2 pl-38px">
           {QUICK_ACTIONS.map((label) => (
-            <button
-              key={label}
-              className="px-3 h-7 rounded-full text-base font-medium border cursor-pointer transition-colors"
-              style={{
-                background: "var(--color-card)",
-                color: "var(--color-brand-blue-deep)",
-                borderColor: "var(--color-brand-blue-bg)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "var(--color-brand-blue-bg)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "var(--color-card)";
-              }}
-            >
-              {label}
-            </button>
+            <AiQuickActionChip key={label} label={label} />
           ))}
         </div>
       </div>

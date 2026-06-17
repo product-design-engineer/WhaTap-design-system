@@ -45,13 +45,13 @@
 
 | Layer | 역할 | 조합 규칙 | 수량 |
 |---|---|---|---|
-| **Foundation** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 | — | 40 |
-| **Composite** | Foundation 을 1단계 조합 | Foundation 만 import. **Composite 끼리 import 금지** | 13 |
+| **Foundation** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 | — | ~57 |
+| **Composite** | Foundation 을 1단계 조합 | Foundation 만 import. **Composite 끼리 import 금지** | ~18 |
 | **Shell** | Composite + Foundation 을 최종 조립하는 진입점 | 모든 계층 import 가능 | 2 |
 
-**Foundation** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, DataTable, MiniLineChart, LiveTimerCompact, SidebarMenuItem, AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList, AiUserBubble, AiAssistantButton, AiClickCursor 등 (40개)
+**Foundation** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, DataTable, MiniLineChart, LiveTimerCompact, SidebarMenuItem, AiCard … + **인라인 추출 Parts**(SidebarMenuItem · PageHeaderNotificationItem · PageHeaderProfileMenuItem · ProductRailItem · BottomRailItem · TabButton · CostBreakdownRow · ClassificationTableRow · CostTableRow · MigPlanRow · EventListItem · ReasoningStep · TimelineStepItem · CriteriaGroup · AiActionChip · AiAttachmentChip · AiQuickActionChip)
 
-**Composite** — FilterBar(=FilterChip+FilterDropdown), PageHeader(=AiAssistantButton), OptionbarPage(=LiveTimerCompact+PresetSelect), Sidebar(=SidebarMenuItem), AiInlinePrompt(=AiSendButton), AiChatExchange(=AiUserBubble) 등 (13개)
+**Composite** — FilterBar · PageHeader · OptionbarPage · Sidebar(=SidebarMenuItem) · AiInlinePrompt · AiChatExchange … + **추출 Parts**(DataTableRow · FilterDropdownOptionItem · FilterChipItem · CriteriaOptionButton · ReceiverChannelItem · ProposalSection)
 
 **Shell** — DashboardLayout(=Sidebar), WhaTapAiWidget (2개)
 
@@ -64,6 +64,7 @@
 - 새 구조 단위를 인라인으로 만들기 전에 **컴포넌트로 추출 가능한지 먼저 검토** — 추출이 기본.
 - 추출된 컴포넌트는 계층 명시 + docstring(4섹션) + story + `index.ts` export + 카탈로그 동기.
 - 인라인 허용은 **재사용 없는 1회성 레이아웃 래퍼**(flex 컨테이너 등)에 한함.
+- **적용 현황(2026-06-17):** 위젯·chrome 의 반복 인라인 구조 23종을 컴포넌트로 추출 완료 — 카탈로그는 `Chrome/Parts/*` · `WhaTap AI/Parts/*` 하위에 등록(`index.ts` export + story). 테이블 행·스텝·칩·메뉴 항목 등.
 
 ## 스타일 — 일반 CSS (Tailwind 미사용 · 흔적 0)
 

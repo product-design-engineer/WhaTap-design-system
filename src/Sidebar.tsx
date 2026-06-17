@@ -41,6 +41,8 @@
  * ```
  */
 import SidebarMenuItem from "./SidebarMenuItem";
+import ProductRailItem from "./ProductRailItem";
+import BottomRailItem from "./BottomRailItem";
 
 /**
  * 아이콘은 표준 경로(`/icons/*`)를 그대로 참조합니다. 호스트별로 자산 제공 경로가 다름:
@@ -296,29 +298,12 @@ export default function Sidebar({
             {PRODUCT_ICONS.map((name) => {
               const key = name.replace("product-", "").replace(".svg", "");
               const isActive = key === activeProduct;
-              return (
-                <div
-                  key={name}
-                  className="flex items-center justify-center shrink-0 size-40px cursor-pointer hover-bg-surface-100"
-                  style={
-                    isActive
-                      ? { backgroundColor: "var(--color-brand-blue-bg)" }
-                      : undefined
-                  }
-                >
-                  <img alt="" className="size-24px" src={icon(name)} />
-                </div>
-              );
+              return <ProductRailItem key={name} name={name} active={isActive} />;
             })}
           </div>
           <div className="flex flex-col items-start shrink-0">
             {BOTTOM_RAIL_ICONS.map((name) => (
-              <div
-                key={name}
-                className="flex h-32px items-center justify-center shrink-0 w-40px cursor-pointer hover-bg-surface-100"
-              >
-                <img alt="" className="size-20px" src={icon(name)} />
-              </div>
+              <BottomRailItem key={name} name={name} />
             ))}
           </div>
         </div>

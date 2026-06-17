@@ -37,6 +37,8 @@
  */
 import { useState } from "react";
 import AiAssistantButton from "./widget/AiAssistantButton";
+import PageHeaderNotificationItem from "./PageHeaderNotificationItem";
+import PageHeaderProfileMenuItem from "./PageHeaderProfileMenuItem";
 
 export type ProfileMenuItem = { label: string; onClick?: () => void };
 export type NotificationItem = { label: string; onClick?: () => void };
@@ -137,16 +139,11 @@ export default function PageHeader({
                 <div className="absolute right-0 top-32px z-50 min-w-260px rounded-8px border border-color-var-color-border-default bg-card py-4px shadow-0_4px_16px_rgba-0-0-0-0_12">
                   <div className="px-14px py-6px text-xs text-tertiary" style={{ fontFamily: "var(--font-family-korean)" }}>알림</div>
                   {notifications!.map((n) => (
-                    <button
+                    <PageHeaderNotificationItem
                       key={n.label}
-                      type="button"
+                      item={n}
                       onClick={() => { setNotifyOpen(false); n.onClick?.(); }}
-                      className="flex items-start gap-8px w-full text-left px-14px py-8px text-md text-primary tracking-default cursor-pointer hover-bg-surface-100 whitespace-nowrap"
-                      style={{ fontFamily: "var(--font-family-korean)" }}
-                    >
-                      <span className="mt-6px size-6px rounded-full bg-ce5484d shrink-0" />
-                      {n.label}
-                    </button>
+                    />
                   ))}
                 </div>
               </>
@@ -180,15 +177,11 @@ export default function PageHeader({
                     </div>
                   )}
                   {profileMenu.map((it) => (
-                    <button
+                    <PageHeaderProfileMenuItem
                       key={it.label}
-                      type="button"
+                      item={it}
                       onClick={() => { setProfileOpen(false); it.onClick?.(); }}
-                      className="block w-full text-left px-14px py-8px text-md text-primary tracking-default cursor-pointer hover-bg-surface-100 whitespace-nowrap"
-                      style={{ fontFamily: "var(--font-family-korean)" }}
-                    >
-                      {it.label}
-                    </button>
+                    />
                   ))}
                 </div>
               </>

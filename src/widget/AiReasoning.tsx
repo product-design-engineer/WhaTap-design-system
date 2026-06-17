@@ -31,6 +31,8 @@
  * />
  * ```
  */
+import ReasoningStep from "./ReasoningStep";
+
 export type ReasoningStep = {
   label: string;
   /** true면 점 애니메이션 진행 중, false면 완료(체크) */
@@ -56,32 +58,7 @@ export default function AiReasoning({
         Reasoning
       </div>
       {steps.map((s, i) => (
-        <div key={i} className="flex items-center gap-8px">
-          {s.running ? (
-            <span
-              className="size-10px rounded-full border-1_5px border-color-var-color-brand-blue border-t-transparent"
-              style={{ animation: "aiSymbolRotateSlow 0.9s linear infinite" }}
-            />
-          ) : (
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="shrink-0">
-              <circle cx="6" cy="6" r="5.4" fill="var(--color-brand-blue)" />
-              <path
-                d="M3.5 6.1l1.8 1.8L8.5 4.5"
-                stroke="#fff"
-                strokeWidth="1.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          )}
-          <span
-            className="text-base text-secondary tracking-default leading-normal"
-            style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
-          >
-            {s.label}
-            {s.running && <span className="ai-reasoning-dots" />}
-          </span>
-        </div>
+        <ReasoningStep key={i} index={i} label={s.label} running={s.running} />
       ))}
     </div>
   );

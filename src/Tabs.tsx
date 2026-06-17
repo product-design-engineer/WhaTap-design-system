@@ -45,6 +45,7 @@
  * ```
  */
 import { useId, useRef, type KeyboardEvent, type ReactNode } from "react";
+import TabButton from "./TabButton";
 
 export type TabsVariant = "large" | "segmented";
 export type TabsSize = "sm" | "md" | "lg";
@@ -135,47 +136,22 @@ export default function Tabs({
           fullWidth ? "w-full" : ""
         } ${className}`}
       >
-        {items.map((it, i) => {
-          const selected = it.value === value;
-          return (
-            <button
-              key={it.value}
-              ref={(el) => {
-                tabRefs.current[i] = el;
-              }}
-              role="tab"
-              type="button"
-              id={`${groupId}-tab-${it.value}`}
-              aria-selected={selected}
-              aria-disabled={it.disabled || undefined}
-              tabIndex={selected ? 0 : -1}
-              disabled={it.disabled}
-              onClick={() => !it.disabled && onChange(it.value)}
-              onKeyDown={(e) => handleKey(e, i)}
-              className={`inline-flex shrink-0 items-center justify-center rounded-5px transition-colors ${
-                spec.text
-              } ${spec.gap === 4 ? "gap-1" : "gap-1_5"} ${fullWidth ? "flex-1" : ""} ${
-                selected
-                  ? "bg-card text-primary shadow-0_1px_2px_rgba-0-0-0-0_08 font-medium"
-                  : it.disabled
-                  ? "cursor-not-allowed text-disabled"
-                  : "text-tertiary hover:text-primary"
-              }`}
-              style={{
-                height: spec.h - 4, // p-2px 빼고 안쪽 높이
-                paddingInline: spec.padX - 4,
-                border: 0,
-              }}
-            >
-              {it.icon !== undefined && it.icon !== null && (
-                <span className="inline-flex shrink-0 items-center" aria-hidden>
-                  {it.icon}
-                </span>
-              )}
-              <span>{it.label}</span>
-            </button>
-          );
-        })}
+        {items.map((it, i) => (
+          <TabButton
+            key={it.value}
+            ref={(el) => {
+              tabRefs.current[i] = el;
+            }}
+            item={it}
+            variant="segmented"
+            selected={it.value === value}
+            spec={spec}
+            id={`${groupId}-tab-${it.value}`}
+            fullWidth={fullWidth}
+            onClick={() => !it.disabled && onChange(it.value)}
+            onKeyDown={(e) => handleKey(e, i)}
+          />
+        ))}
       </div>
     );
   }
@@ -189,55 +165,22 @@ export default function Tabs({
         fullWidth ? "w-full" : ""
       } ${className}`}
     >
-      {items.map((it, i) => {
-        const selected = it.value === value;
-        return (
-          <button
-            key={it.value}
-            ref={(el) => {
-              tabRefs.current[i] = el;
-            }}
-            role="tab"
-            type="button"
-            id={`${groupId}-tab-${it.value}`}
-            aria-selected={selected}
-            aria-disabled={it.disabled || undefined}
-            tabIndex={selected ? 0 : -1}
-            disabled={it.disabled}
-            onClick={() => !it.disabled && onChange(it.value)}
-            onKeyDown={(e) => handleKey(e, i)}
-            className={`relative inline-flex shrink-0 items-center justify-center transition-colors ${
-              spec.text
-            } ${spec.gap === 4 ? "gap-1" : "gap-1_5"} ${fullWidth ? "flex-1" : ""} ${
-              selected
-                ? "text-color-var-color-brand-blue font-medium"
-                : it.disabled
-                ? "cursor-not-allowed text-disabled"
-                : "text-tertiary hover:text-primary"
-            }`}
-            style={{
-              height: spec.h,
-              paddingInline: spec.padX,
-              border: 0,
-              background: "transparent",
-            }}
-          >
-            {it.icon !== undefined && it.icon !== null && (
-              <span className="inline-flex shrink-0 items-center" aria-hidden>
-                {it.icon}
-              </span>
-            )}
-            <span>{it.label}</span>
-            {/* 활성 underline — 보더 색 위에 1px overlap */}
-            {selected && (
-              <span
-                aria-hidden
-                className="absolute left-0 right-0 bottom-1px h-2px bg-color-var-color-brand-blue"
-              />
-            )}
-          </button>
-        );
-      })}
+      {items.map((it, i) => (
+        <TabButton
+          key={it.value}
+          ref={(el) => {
+            tabRefs.current[i] = el;
+          }}
+          item={it}
+          variant="large"
+          selected={it.value === value}
+          spec={spec}
+          id={`${groupId}-tab-${it.value}`}
+          fullWidth={fullWidth}
+          onClick={() => !it.disabled && onChange(it.value)}
+          onKeyDown={(e) => handleKey(e, i)}
+        />
+      ))}
     </div>
   );
 }

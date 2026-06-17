@@ -42,6 +42,8 @@
  */
 import { useEffect, useRef, useState } from "react";
 import AiClickCursor from "./widget/AiClickCursor";
+import AiActionChip from "./widget/AiActionChip";
+import AiAttachmentChip from "./widget/AiAttachmentChip";
 
 const WIDGET_WIDTH = 480;
 
@@ -254,18 +256,7 @@ export default function WhaTapAiWidget({
                 {/* 액션 칩 */}
                 <div className="flex flex-wrap gap-6px items-start w-full">
                   {actions.map((label, i) => (
-                    <button
-                      key={label}
-                      className="ai-anim-in ai-landing-action border border-color-var-color-brand-blue flex h-32px items-center justify-center px-16px rounded-4px cursor-pointer text-brand-blue hover-bg-color-var-color-brand-blue-bg hover-border-color-var-color-brand-blue-bg relative overflow-hidden w-fit whitespace-nowrap text-md bg-card"
-                      style={{
-                        fontFamily: "var(--font-family-korean)",
-                        fontWeight: "var(--font-weight-medium)",
-                        // entrance: 400ms부터 칩마다 80ms 스태거로 페이드인
-                        animationDelay: `${400 + i * 80}ms`,
-                      }}
-                    >
-                      {label}
-                    </button>
+                    <AiActionChip key={label} label={label} index={i} />
                   ))}
                 </div>
               </div>
@@ -289,25 +280,7 @@ export default function WhaTapAiWidget({
             {attachments && attachments.length > 0 && (
               <div className="flex gap-6px items-center w-full overflow-x-auto pb-4px">
                 {attachments.map((a, i) => (
-                  <div
-                    key={i}
-                    className="flex flex-col gap-4px bg-card border border-cd3d3d3 rounded-6px px-8px py-6px shrink-0"
-                    style={{ width: 100 }}
-                  >
-                    <p
-                      className="text-base font-bold text-primary tracking-default leading-normal truncate"
-                      style={{ fontFamily: "var(--font-family-korean)" }}
-                      title={a.name}
-                    >
-                      {a.name}
-                    </p>
-                    <span
-                      className="self-start text-xs text-tertiary bg-rgba-0-0-0-0_05 rounded-3px px-4px py-1px uppercase"
-                      style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
-                    >
-                      {a.mime ?? "CSV"}
-                    </span>
-                  </div>
+                  <AiAttachmentChip key={i} name={a.name} mime={a.mime} />
                 ))}
               </div>
             )}

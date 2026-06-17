@@ -35,7 +35,8 @@
  * ```
  */
 import { useEffect, useState } from "react";
-import AiClickCursor from "./AiClickCursor";
+import CriteriaGroup from "./CriteriaGroup";
+import CriteriaOptionButton from "./CriteriaOptionButton";
 export type CriterionGroup = {
   /** 행 좌측 컬러/아이콘 토큰 ("low" 회색 · "mid" 노랑 · "high" 빨강 등) */
   tone: "low" | "mid" | "high" | "neutral";
@@ -134,30 +135,13 @@ export default function AiCriteriaSelection({
           📊 제안 분류 기준
         </div>
         {groups.map((g, i) => (
-          <div
+          <CriteriaGroup
             key={i}
-            className="flex items-start gap-8px rounded-6px px-10px py-6px"
-            style={{ background: TONE_BG[g.tone] }}
-          >
-            <span
-              className="size-8px rounded-full mt-6px shrink-0"
-              style={{ background: TONE_DOT[g.tone] }}
-            />
-            <div className="flex flex-col gap-2px min-w-0">
-              <span
-                className="text-base font-bold text-primary tracking-default leading-normal"
-                style={{ fontFamily: "var(--font-family-korean)" }}
-              >
-                {g.title}
-              </span>
-              <span
-                className="text-base text-secondary tracking-default leading-normal"
-                style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
-              >
-                {g.detail}
-              </span>
-            </div>
-          </div>
+            title={g.title}
+            detail={g.detail}
+            background={TONE_BG[g.tone]}
+            dotColor={TONE_DOT[g.tone]}
+          />
         ))}
       </div>
 
@@ -198,30 +182,15 @@ export default function AiCriteriaSelection({
           const isDimmed = selectedKey !== null && !isSelected;
           const isPending = pendingPick === o.key && !selectedKey;
           return (
-            <div key={o.key} className="relative">
-              <button
-                onClick={() => handleClick(o.key)}
-                disabled={selectedKey !== null}
-                className="flex items-center justify-center h-32px px-12px rounded-6px text-base tracking-default border cursor-pointer whitespace-nowrap"
-                style={{
-                  fontFamily: "var(--font-family-korean)",
-                  fontWeight: "var(--font-weight-medium)",
-                  background: isSelected ? "var(--color-brand-blue)" : "#fff",
-                  color: isSelected ? "#fff" : "var(--color-brand-blue)",
-                  borderColor: isSelected ? "var(--color-brand-blue)" : "var(--color-brand-blue)",
-                  opacity: isDimmed ? 0.4 : 1,
-                  pointerEvents: selectedKey ? "none" : "auto",
-                  transition: "background 180ms, color 180ms, opacity 180ms, transform 120ms",
-                  transform: isSelected ? "scale(1.02)" : "scale(1)",
-                  boxShadow: isSelected ? "0 2px 8px rgba(41,108,242,0.25)" : "none",
-                }}
-              >
-                {o.label}
-              </button>
-              {isPending && (
-                <AiClickCursor style={{ right: -16, top: 10 }} />
-              )}
-            </div>
+            <CriteriaOptionButton
+              key={o.key}
+              label={o.label}
+              selected={isSelected}
+              dimmed={isDimmed}
+              pending={isPending}
+              locked={selectedKey !== null}
+              onClick={() => handleClick(o.key)}
+            />
           );
         })}
       </div>

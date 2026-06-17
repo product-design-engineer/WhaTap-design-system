@@ -54,6 +54,7 @@
  */
 import type { ReactNode } from "react";
 import FilterChip from "./FilterChip";
+import FilterChipItem from "./FilterChipItem";
 import type { ChipSize } from "./Chip";
 import FilterDropdown, { type FilterDropdownOption } from "./FilterDropdown";
 
@@ -177,18 +178,14 @@ export default function FilterBar({
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm text-tertiary">선택됨:</span>
           {selectedChipItems.map((it) => (
-            <FilterChip
+            <FilterChipItem
               key={`${it.dKey}-${it.value}`}
-              size="sm"
-              selected
-              closable
-              onClose={() => {
+              item={it}
+              onRemove={() => {
                 const d = dropdowns.find((x) => x.key === it.dKey);
                 if (d) d.onChange(d.value.filter((v) => v !== it.value));
               }}
-            >
-              {it.dLabel}: {it.label}
-            </FilterChip>
+            />
           ))}
           {showResetAll && totalSelected > 0 && (
             <button
