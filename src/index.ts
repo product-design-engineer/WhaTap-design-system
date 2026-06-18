@@ -32,6 +32,10 @@ export { default as TextField } from "./TextField";
 export type { TextFieldProps, TextFieldSize } from "./TextField";
 export { default as Tooltip } from "./Tooltip";
 export type { TooltipProps, TooltipPlacement } from "./Tooltip";
+export { default as Switch } from "./Switch";
+export type { SwitchProps, SwitchSize } from "./Switch";
+export { default as ThemeToggle } from "./ThemeToggle";
+export type { ThemeToggleProps, ThemeMode } from "./ThemeToggle";
 
 // Chrome — 대시보드 쉘
 export { default as AiSymbol } from "./AiSymbol";
