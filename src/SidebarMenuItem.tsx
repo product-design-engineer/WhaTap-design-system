@@ -5,24 +5,30 @@ import type { MenuItem } from "./Sidebar";
  *
  * ## Purpose
  * 사이드바(240px 펼침 상태) 본문의 단일 메뉴 행을 렌더. `MenuItem` 데이터 한 건을 받아
- * 세 형태 중 하나로 그린다 — 인라인으로 흩어져 있던 행 마크업을 한 곳으로 모은 것:
+ * 세 형태 중 하나로 그린다:
  *   1. **단일 항목** (`children` 없음) — 아이콘 + 라벨 (caret 없음). `active` 면 라이트블루 배경 강조.
  *   2. **확장 항목** (`children` 배열 있음) — 아이콘 + 라벨 + caret(▾, `expanded` 면 180° 회전).
- *   3. **자식 목록** (`expanded` && children.length>0) — 들여쓴 하위 행. `active` 자식은 bold.
+ *   3. **자식 목록** (`expanded` && children.length>0) — 들여쓴 하위 행(28px). `active` 자식은 bold.
+ * collapsed(40px) 시 Sidebar 가 메뉴 영역 자체를 숨김 — 이 컴포넌트는 240px 펼침 전용.
  *
  * ## When to use
- * - [[Sidebar]] 가 `menu.map` 으로 항목마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
- * - 사이드바와 동일한 메뉴 행 외형이 필요한 다른 네비게이션 표면.
+ * - [[Sidebar]] 가 `menu.map` 으로 항목마다 렌더하는 **기본 용법**. 보통 단독 사용하지 않음.
+ * - 사이드바 밖에서 **동일한 메뉴 행 외형**이 필요한 경우 (예: 검색 결과 메뉴 트리, 사이트맵 팝오버).
+ * - 메뉴 트리 1단계(부모 + children) 렌더 — 이 컴포넌트 하나가 부모 행 + 자식 목록을 모두 담당.
  *
  * ## When NOT to use
- * - collapsed(40px) 제품 레일 아이콘 → Sidebar 내부 레일이 별도 처리.
- * - 헤더/탭 등 비-사이드바 네비 → 해당 Chrome 컴포넌트 사용.
+ * - **collapsed(40px) 제품 레일 아이콘** → [[ProductRailItem]] (40px 정사각, active 강조).
+ * - **레일 하단 유틸 아이콘** → [[BottomRailItem]] (40px×32px).
+ * - **조직/프로젝트 스위처** → [[SidebarOrgSwitcher]] / [[SidebarProjectSwitcher]].
+ * - **헤더/탭 등 비-사이드바 네비** → [[PageHeader]] / [[Tabs]] 등 해당 Chrome 컴포넌트.
+ * - **2단계 이상 중첩 메뉴** — 현재 1단계(부모→자식)만 지원. 깊은 트리는 구조 분리 필요.
  *
  * ## Composition rules
- * - 데이터(`MenuItem`)만 주입 — 행 외형/들여쓰기/active 강조는 이 컴포넌트가 책임.
+ * - 데이터(`MenuItem`)만 주입 — 행 외형(높이 32px/28px · 들여쓰기 · active 강조)은 이 컴포넌트가 책임.
  * - 색·배경은 토큰 (`--color-brand-blue-bg` · `text-primary/secondary` · `hover-bg-surface-100`) — 인라인 hex 금지.
- * - 펼침 토글은 데이터(`expanded`)로 제어 — 행 자체는 표현용(상태 비보유).
+ * - 펼침 토글은 데이터(`expanded`)로 제어 — 행 자체는 표현용(상태 비보유). 토글 콜백은 Sidebar 가 관리.
  * - 아이콘은 표준 경로(`/icons/*`).
+ * - 자식 행은 `pl-28px` 들여쓰기 — 부모 아이콘(20px) + gap(8px) 정렬.
  *
  * @example
  * ```tsx

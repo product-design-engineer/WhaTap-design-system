@@ -188,6 +188,11 @@
     --color-palette-ffc771: #ffc771;
     --color-palette-ffe4cc: #ffe4cc;
     --color-palette-fff176: #fff176;
+
+    /* ── Component tokens: DateTimeBlock ── */
+    --wds-datetime-year-w: 28px;
+    --wds-datetime-field-w: 16px;
+    --wds-datetime-space-w: 6px;
   }
 
 /* ── preflight reset ────────────────────────────────────────────────────── */

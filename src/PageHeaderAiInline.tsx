@@ -1,8 +1,10 @@
 /**
  * PageHeaderAiInline — 48px 페이지 헤더의 AI inline variant.
  *
+ * ## Purpose
  * 기존 [[PageHeader]] 의 WhaTap AI 토글 버튼 자리를 [[AiInlinePrompt]] 로 대체.
  * AI 위젯 호출 trigger 가 인라인 prompt 의 송신으로 이동 — 별도 토글 entry 없음.
+ * 48px 높이 invariant 유지. 좌측 타이틀 + 중앙 inline prompt(max 480px) + 우측 chrome(고객지원/벨/아바타).
  *
  * ## 차이 (vs PageHeader)
  * - ❌ AiAssistantButton (WhaTap AI 토글) — 제거
@@ -35,6 +37,8 @@
 import AiInlinePrompt, {
   type AiPromptSuggestion,
 } from "./widget/AiInlinePrompt";
+import HeaderPillButton from "./HeaderPillButton";
+import { IcDocs, IcSupport } from "./icons/HeaderIcons";
 
 export type PageHeaderAiInlineProps = {
   /** "K8s-GPU / GPU 트렌드"와 같은 페이지 제목. */
@@ -70,34 +74,23 @@ export default function PageHeaderAiInline({
 }: PageHeaderAiInlineProps) {
   return (
     <div className="flex items-center h-48px box-border px-8px gap-16px bg-card border-b border-color-var-color-border-strong shrink-0">
-      {/* 좌측: 타이틀 + Docs */}
-      <div className="flex items-center gap-24px shrink-0">
+      {/* 좌측: 타이틀 + Docs — shrink 허용, 타이틀 max-width + ellipsis로 inline prompt 영역 보호 */}
+      <div className="flex items-center gap-24px shrink min-w-0">
         <p
-          className="text-2xl text-primary tracking-display whitespace-nowrap leading-normal"
+          className="text-2xl text-primary tracking-display whitespace-nowrap leading-normal overflow-hidden text-ellipsis"
           style={{
             fontFamily: "var(--font-family-korean)",
             fontWeight: "var(--font-weight-medium)",
+            maxWidth: 320,
           }}
         >
           {title}
         </p>
-        <button
-          className="flex items-center justify-center gap-4px h-32px px-16px py-8px rounded-full border border-color-var-color-border-divider bg-card text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover-bg-surface-100 transition-colors"
-          style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
-            <path d="M4 2H9.5L12 4.5V13C12 13.55 11.55 14 11 14H4C3.45 14 3 13.55 3 13V3C3 2.45 3.45 2 4 2Z" stroke="var(--color-text-secondary)" strokeWidth="1.2" strokeLinejoin="round" />
-            <path d="M9.5 2V5H12" stroke="var(--color-text-secondary)" strokeWidth="1.2" strokeLinejoin="round" />
-            <line x1="5" y1="7.5" x2="11" y2="7.5" stroke="var(--color-text-secondary)" strokeWidth="1" strokeLinecap="round" />
-            <line x1="5" y1="9.5" x2="11" y2="9.5" stroke="var(--color-text-secondary)" strokeWidth="1" strokeLinecap="round" />
-            <line x1="5" y1="11.5" x2="9" y2="11.5" stroke="var(--color-text-secondary)" strokeWidth="1" strokeLinecap="round" />
-          </svg>
-          Docs
-        </button>
+        <HeaderPillButton icon={<IcDocs />}>Docs</HeaderPillButton>
       </div>
 
-      {/* 중앙: inline prompt (flex-grow + max-width cap, 우측 chrome 잠식 방지) */}
-      <div className="flex-1 flex justify-center min-w-0">
+      {/* 중앙: inline prompt (flex-grow + max/min-width cap, 좌측 타이틀·우측 chrome 잠식 방지) */}
+      <div className="flex-1 flex justify-center min-w-0" style={{ minWidth: 280 }}>
         <div className="w-full max-w-480px">
           <AiInlinePrompt
             placeholder={promptPlaceholder}
@@ -114,17 +107,7 @@ export default function PageHeaderAiInline({
 
       {/* 우측 chrome: 고객지원 + 알림 + 아바타 (Docs 는 좌측 그룹) */}
       <div className="flex items-center gap-16px h-full shrink-0">
-        <button
-          className="flex items-center justify-center gap-4px h-32px px-16px py-8px rounded-full border border-color-var-color-border-divider bg-card text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover-bg-surface-100 transition-colors"
-          style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
-            <circle cx="8" cy="8" r="6" stroke="var(--color-text-secondary)" strokeWidth="1.2" />
-            <path d="M6.5 6C6.5 5.17 7.17 4.5 8 4.5C8.83 4.5 9.5 5.17 9.5 6C9.5 6.83 8 7.5 8 8.5" stroke="var(--color-text-secondary)" strokeWidth="1.2" strokeLinecap="round" />
-            <circle cx="8" cy="10.5" r="0.75" fill="var(--color-text-secondary)" />
-          </svg>
-          고객지원
-        </button>
+        <HeaderPillButton icon={<IcSupport />}>고객지원</HeaderPillButton>
         <div className="flex items-center gap-16px">
           <div className="shrink-0 size-24px flex items-center justify-center cursor-pointer">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">

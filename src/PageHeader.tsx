@@ -37,6 +37,8 @@
  */
 import { useState } from "react";
 import AiAssistantButton from "./widget/AiAssistantButton";
+import HeaderPillButton from "./HeaderPillButton";
+import { IcDocs, IcSupport } from "./icons/HeaderIcons";
 import PageHeaderNotificationItem from "./PageHeaderNotificationItem";
 import PageHeaderProfileMenuItem from "./PageHeaderProfileMenuItem";
 
@@ -79,35 +81,13 @@ export default function PageHeader({
         </p>
         <div className="flex items-center gap-8px">
           <AiAssistantButton aiActive={aiActive} onClick={onAiToggle} />
-          <button
-            className="flex items-center justify-center gap-4px h-32px px-16px py-8px rounded-full border border-color-var-color-border-divider bg-card text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover-bg-surface-100 transition-colors"
-            style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
-              <path d="M4 2H9.5L12 4.5V13C12 13.55 11.55 14 11 14H4C3.45 14 3 13.55 3 13V3C3 2.45 3.45 2 4 2Z" stroke="var(--color-text-secondary)" strokeWidth="1.2" strokeLinejoin="round" />
-              <path d="M9.5 2V5H12" stroke="var(--color-text-secondary)" strokeWidth="1.2" strokeLinejoin="round" />
-              <line x1="5" y1="7.5" x2="11" y2="7.5" stroke="var(--color-text-secondary)" strokeWidth="1" strokeLinecap="round" />
-              <line x1="5" y1="9.5" x2="11" y2="9.5" stroke="var(--color-text-secondary)" strokeWidth="1" strokeLinecap="round" />
-              <line x1="5" y1="11.5" x2="9" y2="11.5" stroke="var(--color-text-secondary)" strokeWidth="1" strokeLinecap="round" />
-            </svg>
-            Docs
-          </button>
+          <HeaderPillButton icon={<IcDocs />}>Docs</HeaderPillButton>
         </div>
       </div>
 
       {/* 우측: 고객지원 + 알림 + 아바타 */}
       <div className="flex items-center gap-16px h-full shrink-0">
-        <button
-          className="flex items-center justify-center gap-4px h-32px px-16px py-8px rounded-full border border-color-var-color-border-divider bg-card text-md text-primary tracking-default cursor-pointer whitespace-nowrap hover-bg-surface-100 transition-colors"
-          style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0">
-            <circle cx="8" cy="8" r="6" stroke="var(--color-text-secondary)" strokeWidth="1.2" />
-            <path d="M6.5 6C6.5 5.17 7.17 4.5 8 4.5C8.83 4.5 9.5 5.17 9.5 6C9.5 6.83 8 7.5 8 8.5" stroke="var(--color-text-secondary)" strokeWidth="1.2" strokeLinecap="round" />
-            <circle cx="8" cy="10.5" r="0.75" fill="var(--color-text-secondary)" />
-          </svg>
-          고객지원
-        </button>
+        <HeaderPillButton icon={<IcSupport />}>고객지원</HeaderPillButton>
         <div className="flex items-center gap-16px">
           <div className="relative shrink-0 size-24px">
             <button

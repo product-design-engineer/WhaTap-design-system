@@ -36,12 +36,14 @@
  * />
  * ```
  */
-import type { ReactNode } from "react";
 import OptionbarInstanceSelector, {
   type InstanceStatus,
 } from "./OptionbarInstanceSelector";
 import LiveTimerCompact from "./LiveTimerCompact";
 import PresetSelect from "./PresetSelect";
+import OptionbarItem from "./OptionbarItem";
+import OptionbarValueDisplay from "./OptionbarValueDisplay";
+import OptionbarNewVersionButton from "./OptionbarNewVersionButton";
 
 export default function OptionbarPage({
   /** 시간 옵션 (live + duration tag) */
@@ -92,13 +94,13 @@ export default function OptionbarPage({
       </OptionbarItem>
 
       <OptionbarItem title="데이터베이스">
-        <ValueDisplay value={databaseLabel} />
+        <OptionbarValueDisplay value={databaseLabel} />
       </OptionbarItem>
 
       {/* 신규 버전·프리셋은 우측 정렬 — ml-auto로 좌측 빈 공간 흡수 */}
       <div className="ml-auto flex flex-row items-end gap-12px flex-wrap">
         <OptionbarItem title="">
-          <NewVersionButton href={newVersionHref} label={newVersionLabel} />
+          <OptionbarNewVersionButton href={newVersionHref} label={newVersionLabel} />
         </OptionbarItem>
 
         <OptionbarItem title="프리셋">
@@ -109,62 +111,3 @@ export default function OptionbarPage({
   );
 }
 
-/* ─── shared row wrapper ─── */
-function OptionbarItem({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <div className="flex flex-col gap-6px">
-      {title && (
-        <div
-          className="text-base font-bold text-primary tracking-default leading-none"
-          style={{ fontFamily: "var(--font-family-korean)" }}
-        >
-          {title}
-        </div>
-      )}
-      {children}
-    </div>
-  );
-}
-
-/* ─── ValueDisplay (데이터베이스 옵션) — 텍스트만 표시 (32px 박스 정렬).
-   다른 옵션 (LiveTimer / InstanceSelect / NewVersionButton / PresetSelect)
-   모두 32px height chrome 이므로, 본 컴포넌트도 동일 높이로 baseline 통일. */
-function ValueDisplay({ value }: { value: string }) {
-  return (
-    <div
-      className="flex items-center h-32px text-md text-primary leading-normal tracking-normal truncate"
-      style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}
-      title={value}
-    >
-      {value}
-    </div>
-  );
-}
-
-/* ─── NewVersionButton — 그라데이션 sparkle 아이콘 + 라벨 + chevron-right ─── */
-function NewVersionButton({ href, label }: { href: string; label: string }) {
-  return (
-    <a href={href}>
-      <button
-        type="button"
-        className="flex items-center justify-center gap-6px h-32px w-full px-12px rounded-4px bg-card border border-color-var-color-brand-blue text-md text-brand-blue cursor-pointer hover-bg-color-var-color-brand-blue-bg transition-colors"
-        style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M9.5 2C8.5 9.68 2 10.5 2 10.5s6.5.82 7.5 8.5C10.5 11.32 17 10.5 17 10.5s-6.5-.82-7.5-8.5z"
-            fill="var(--color-brand-blue)"
-          />
-          <path
-            d="M18 13c-.5 4.06-4 4.5-4 4.5s3.5.44 4 4.5c.5-4.06 4-4.5 4-4.5s-3.5-.44-4-4.5z"
-            fill="var(--color-brand-blue)"
-          />
-        </svg>
-        <span className="flex-1 text-center">{label}</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-          <path d="M9 6l6 6-6 6" stroke="var(--color-text-tertiary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-    </a>
-  );
-}

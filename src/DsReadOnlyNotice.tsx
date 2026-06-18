@@ -10,9 +10,20 @@
  * 예외 없이 금지. 변경은 디자인 시스템 repo에서만 수행.
  *
  * ## When to use
- * - 소비 앱에서 DS 컴포넌트 prop 외의 스타일 override 시도 시
- * - DevTools 에서 DS 토큰 값 변경 시도 시 (optional)
- * - 컴포넌트 소스 수정 시도를 감지했을 때
+ * - 소비 앱에서 DS 컴포넌트 prop 외의 스타일 override 시도 시.
+ * - DevTools 에서 DS 토큰 값 변경 시도 시 (optional).
+ * - 컴포넌트 소스 수정 시도를 감지했을 때.
+ *
+ * ## When NOT to use
+ * - **디자인 시스템 repo 내부** 작업 — 이 모달은 소비자(엔지니어) 방향 전용. DS 작업자는 대상이 아님.
+ * - **일반 확인/경고 모달** → [[Modal]].
+ * - **토스트 알림** (비파괴적 안내) → [[Toast]].
+ *
+ * ## Composition rules
+ * - [[Modal]] 기반 — 동일한 portal · backdrop · ESC 닫기 동작.
+ * - 불변 정책 텍스트는 하드코딩 — 정책 내용은 이 컴포넌트가 단일 출처.
+ * - `attemptedAction` prop 으로 어떤 시도가 차단되었는지 맥락 표시.
+ * - 색은 토큰 (`text-primary` · `text-secondary` · `bg-card`) — 인라인 hex 금지.
  *
  * @example
  * ```tsx
