@@ -52,6 +52,12 @@
   --color-whatap-purple: #8B52FF;
   --color-whatap-purple-deep: #4F5BD5;
 
+  /* Brand gradient · full radius · sm shadow · white (Switch/ThemeToggle 등 참조) */
+  --gradient-brand: linear-gradient(90deg, var(--color-brand-blue), var(--color-whatap-purple));
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
+  --color-white: #fff;
+
   --font-sans: "Noto Sans KR", "Noto Sans", ui-sans-serif, system-ui, sans-serif;
 
   /* ──────────────────────────────────────────────────────────────────────
@@ -352,6 +358,12 @@ html, body, #root {
   color: var(--wds-btn-fg, inherit);
   border-color: var(--wds-btn-border, transparent);
 }
+
+/* Switch/ThemeToggle 키보드 포커스 링 (DS 공통 focus 톤). */
+.wds-switch:focus-visible {
+  outline: 2px solid var(--color-brand-blue);
+  outline-offset: 2px;
+}
 .wds-btn:hover:not(:disabled) {
   background-color: var(--wds-btn-bg-hover, var(--wds-btn-bg, transparent));
 }
@@ -377,7 +389,7 @@ html, body, #root {
  *  대비(가독성) 기준: text-primary는 bg 위에서 ≈14:1, secondary ≈8:1,
  *  tertiary ≈4.6:1. 표면은 base(어두움) → card(밝음) 순으로 층을 둔다.
  * ────────────────────────────────────────────────────────────────────── */
-.dark {
+.dark, [data-theme="dark"] {
   /* Base surface — page → 한 단계씩 올라오는 표면 */
   --color-bg: #0E1116;
   --color-card: #181C22;
