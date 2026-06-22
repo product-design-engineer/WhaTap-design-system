@@ -67,7 +67,10 @@ export default function PageHeader({
   const [notifyOpen, setNotifyOpen] = useState(false);
   const hasNotify = !!notifications && notifications.length > 0;
   return (
-    <div className="flex items-center justify-between h-48px box-border px-8px bg-card border-b border-color-var-color-border-strong shrink-0">
+    <div
+      className="flex items-center justify-between h-48px box-border bg-card border-b border-color-var-color-border-strong shrink-0"
+      style={{ paddingInline: "var(--wds-header-px)" }}
+    >
       {/* 좌측: 타이틀 + AI/Docs */}
       <div className="flex items-center gap-24px shrink-0">
         <p
