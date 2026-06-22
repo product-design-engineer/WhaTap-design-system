@@ -27,6 +27,8 @@ WhaTap 디자인 시스템에는 **3가지 영역**이 있습니다. 어떤 화�
 - "AI 응답에 새 카드를 추가하겠다" → WhaTap AI
 - "기존 페이지에 입력란/버튼을 추가하겠다" → Primitives
 
+> 위 "영역"은 **이해를 돕는 개념 묶음**이다. 실제 Storybook 카탈로그 트리는 *import 계층* 기준 3-Layer 단일 체계 — **Primitives**(자체 렌더 리프) · **Composite**(프리미티브 조합) · **Shell**(진입점). "Chrome" 컴포넌트는 Composite/Primitives 로, "WhaTap AI" 는 각 계층 `Ai/` 하위그룹으로 들어간다. (예: `PageHeader`→`Composite/`, `Toast`→`Primitives/`, `AiReasoning`→`Composite/Ai/`, `DashboardLayout`→`Shell/`)
+
 ---
 
 ## 2단계: 페이지 뼈대를 조립한다 (Chrome)

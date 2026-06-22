@@ -1,11 +1,11 @@
 # @whatap/design-system — 컴포넌트·디자인 시스템 정책
 
-본 패키지는 WhaTap-AI-Assistant 의 단일 컴포넌트 출처. Storybook 카탈로그 + tokens.css 단일 출처 + `exports` 로 `.` (Chrome) · `./widget` (AI 위젯) 분리.
+본 패키지는 WhaTap-AI-Assistant 의 단일 컴포넌트 출처. Storybook 카탈로그 + tokens.css 단일 출처 + `exports` 로 `.` (루트 컴포넌트) · `./widget` (AI 위젯) 분리.
 
 ## 디렉토리 구성
 
 - `src/` — 컴포넌트 소스 + `tokens.css` + `widget/` (AI 카테고리)
-- `stories/` — Storybook 카탈로그 (Tokens / Primitives / Chrome / WhaTap AI 카테고리)
+- `stories/` — Storybook 카탈로그 (Tokens 메타 + Primitives / Composite / Shell 3-Layer, AI 는 각 계층 `Ai/` 하위그룹)
 - `docs/` — markdown 카탈로그 (단일 출처 문서)
   - `SKILL.md` — 본 디자인 시스템 사용 절차
   - `primitives.md` / `chrome-components.md` / `widget-components.md` — 컴포넌트 카탈로그 (텍스트 형태)
@@ -13,14 +13,20 @@
   - `patterns.md` — 합성 패턴 (페이지 레벨 컴포지션)
   - `STORIES_ROADMAP.md` — Storybook 카탈로그 추가 작업 목록
 
-## 카테고리 분리 — Primitives · Chrome · WhaTap AI
+## 카탈로그 — 단일 3-Layer 체계 (Primitives · Composite · Shell)
 
-| 카테고리 | 폴더 | 예 |
-|---|---|---|
-| Primitives | `src/` 루트 | Button, TextField, Select, Chip, FilterChip, Tabs, Modal, Tooltip, Checkbox |
-| Chrome | `src/` 루트 | DashboardLayout, PageHeader, PageHeaderAiInline, Sidebar, FilterBar, DataTable, FilterDropdown |
-| WhaTap AI | `src/widget/` | **모든 AI 컴포넌트의 집** — 빌딩 블록(AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList) · 진입(AiInlinePrompt, AiPromptInput, AiSendButton, AiAssistantButton) · 위젯 셸(WhaTapAiWidget, WhaTapAiContext, AiSymbol) · 메시지 카드(AiReasoning, AiChatExchange …). Storybook 트리 `WhaTap AI/` 로 통일. (단 `PageHeaderAiInline` 은 헤더 레이아웃이라 Chrome 유지) |
-| Tokens | `src/tokens.css` | `:root` 컬러·폰트·spacing 변수 (참조용; 런타임은 whatap-ds.css) |
+Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분류한다. (구 `Chrome` / `WhaTap AI` / `Foundation` / `Page` 카테고리는 폐지 → 계층으로 흡수.) AI 전용 에셋은 폐지하지 않고 **각 계층 안 `Ai/` 접두 하위그룹**으로 묶어 발견성을 유지한다.
+
+| 카탈로그 그룹 | 의미 | 소스 | 예 |
+|---|---|---|---|
+| **Primitives/** | 자체 렌더 리프. 다른 DS 컴포넌트 import 0 | `src/` 루트 · `src/widget/`(리프) | Button, TextField, Select, Chip, Tabs, Modal, Tooltip, Toast, Checkbox, Switch, DataTableRow, SidebarMenuItem … |
+| **Primitives/Ai/** | AI 위젯 리프 프리미티브 | `src/widget/` | AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList, AiSymbol, AiUserBubble, ReasoningStep … |
+| **Composite/** | 프리미티브를 1단계 조합 | `src/` 루트 | PageHeader, PageHeaderAiInline, Sidebar, FilterBar, DataTable, FilterDropdown, Tabs, ThemeToggle … |
+| **Composite/Ai/** | AI 진입·응답 합성 위젯 | `src/widget/` | AiChatExchange, AiReasoning, AiDashboardProposal, AiCostTable, InlinePrompt, PromptInput, SendButton … |
+| **Shell/** | 최종 조립 진입점 | `src/` · `src/widget/` | DashboardLayout, Ai/Widget(WhaTapAiWidget), Page/(A~D 페이지 합성 템플릿) |
+| **Tokens** (메타) | `:root` 컬러·폰트·spacing 변수 (참조용; 런타임은 whatap-ds.css) | `src/tokens.css` | Color, Type Scale, Tones … |
+
+> 카탈로그 그룹명과 아키텍처 계층명은 **동일 용어**(Primitives/Composite/Shell)로 통일한다. `PageHeaderAiInline` 은 헤더 레이아웃(프리미티브 조합)이므로 `Ai/` 가 아닌 `Composite/` 에 둔다.
 
 **AI 영역 ↔ 일반 영역 분리 원칙**
 
@@ -41,30 +47,37 @@
 - Component 토큰(3계층)은 variant×tone 조합이 복잡한 것만 선택 도입 (`--wds-btn-*`).
 - `--color-palette-*` (hex suffix) 는 차트 시리즈 전용 Global. 컴포넌트에서 직접 참조 가능 (차트 한정).
 
-### 컴포넌트 3계층 — Foundation · Composite · Shell
+**🔒 페이지 좌·우 거터 — 단일 토큰 규칙 (`--wds-page-px`)**
+- 페이지의 좌·우 거터는 **단 하나의 토큰 `--wds-page-px`(24px)** 이 소유한다. 헤더(`--wds-header-px`)·옵션바·본문(`--wds-content-px`)은 모두 이 값을 **alias 로 참조** → 한 곳만 바꾸면 헤더·옵션바·테이블 가장자리가 함께 정렬된다.
+- 본문 콘텐츠 블록 패딩은 인라인 `padding:16` 같은 **매직넘버 금지**. 등록된 유틸 클래스 **`.wds-page-content`**(`padding-block: --wds-content-py(16px)` + `padding-inline: --wds-content-px`)를 쓴다.
+- 헤더류는 `style={{ paddingInline: "var(--wds-header-px)" }}` 패턴(PageHeader · SubHeaderBar · PageHeaderAiInline · OptionbarPage 동일).
 
-| Layer | 역할 | 조합 규칙 | 수량 |
+### 컴포넌트 3계층 — Primitives · Composite · Shell
+
+카탈로그 그룹명과 **동일 용어**. (구 명칭 `Foundation` → `Primitives` 로 통일.)
+
+| Layer | 역할 | 조합 규칙 | 수량(카탈로그) |
 |---|---|---|---|
-| **Foundation** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 | — | ~57 |
-| **Composite** | Foundation 을 1단계 조합 | Foundation 만 import. **Composite 끼리 import 금지** | ~18 |
-| **Shell** | Composite + Foundation 을 최종 조립하는 진입점 | 모든 계층 import 가능 | 2 |
+| **Primitives** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 | — | 65 (Ai/ 포함) |
+| **Composite** | Primitives 를 1단계 조합 | Primitives 만 import. **Composite 끼리 import 금지** | 29 (Ai/ 포함) |
+| **Shell** | Composite + Primitives 를 최종 조립하는 진입점 | 모든 계층 import 가능 | 5 (DashboardLayout · Ai/Widget · Page A·B·D) |
 
-**Foundation** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, DataTable, MiniLineChart, LiveTimerCompact, SidebarMenuItem, AiCard … + **인라인 추출 Parts**(SidebarMenuItem · PageHeaderNotificationItem · PageHeaderProfileMenuItem · ProductRailItem · BottomRailItem · TabButton · CostBreakdownRow · ClassificationTableRow · CostTableRow · MigPlanRow · EventListItem · ReasoningStep · TimelineStepItem · CriteriaGroup · AiActionChip · AiAttachmentChip · AiQuickActionChip)
+**Primitives** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, Switch, DataTable, MiniLineChart, LiveTimerCompact, AiCard, AiCaption … + **인라인 추출 Parts**(SidebarMenuItem · PageHeaderNotificationItem · PageHeaderProfileMenuItem · ProductRailItem · BottomRailItem · TabButton · CostBreakdownRow · ClassificationTableRow · CostTableRow · MigPlanRow · EventListItem · ReasoningStep · TimelineStepItem · CriteriaGroup · AiActionChip · AiAttachmentChip · AiQuickActionChip)
 
-**Composite** — FilterBar · PageHeader · OptionbarPage · Sidebar(=SidebarMenuItem) · AiInlinePrompt · AiChatExchange … + **추출 Parts**(DataTableRow · FilterDropdownOptionItem · FilterChipItem · CriteriaOptionButton · ReceiverChannelItem · ProposalSection)
+**Composite** — FilterBar · PageHeader · PageHeaderAiInline · OptionbarPage · Sidebar(=SidebarMenuItem) · ThemeToggle · AiChatExchange · AiReasoning · InlinePrompt … + **추출 Parts**(DataTableRow · FilterDropdownOptionItem · FilterChipItem · CriteriaOptionButton · ReceiverChannelItem · ProposalSection · AiAlertRulePreview)
 
-**Shell** — DashboardLayout(=Sidebar), WhaTapAiWidget (2개)
+**Shell** — DashboardLayout(=Sidebar) · WhaTapAiWidget(`Shell/Ai/Widget`) · Page 합성 템플릿(A 기본 대시보드 · B AI 전용 · D 상세)
 
-**신규 컴포넌트 추가 시 반드시 계층을 명시.** Composite 가 다른 Composite 를 import 하면 Shell 로 승격하거나 구조 분리.
+**신규 컴포넌트 추가 시 반드시 계층을 명시.** Composite 가 다른 Composite 를 import 하면 Shell 로 승격하거나 구조 분리. AI 전용이면 카탈로그 title 을 `<Layer>/Ai/<Name>` 으로 둔다.
 
 ### 🔒 글로벌 정책 — 구조는 인라인 금지 (컴포넌트로 추출)
 
-**모든 컴포넌트/위젯의 구조는 인라인 JSX 로 흩어 두지 않는다.** 반복되거나 의미 단위가 분명한 구조(목록 행·카드·셀·항목 등)는 `map` 내부에 인라인으로 펼치지 말고 **독립 컴포넌트로 추출**한다. (예: Sidebar 의 메뉴 행 → [[SidebarMenuItem]] Foundation 으로 분리.)
+**모든 컴포넌트/위젯의 구조는 인라인 JSX 로 흩어 두지 않는다.** 반복되거나 의미 단위가 분명한 구조(목록 행·카드·셀·항목 등)는 `map` 내부에 인라인으로 펼치지 말고 **독립 컴포넌트로 추출**한다. (예: Sidebar 의 메뉴 행 → [[SidebarMenuItem]] Primitives 로 분리.)
 
 - 새 구조 단위를 인라인으로 만들기 전에 **컴포넌트로 추출 가능한지 먼저 검토** — 추출이 기본.
 - 추출된 컴포넌트는 계층 명시 + docstring(4섹션) + story + `index.ts` export + 카탈로그 동기.
 - 인라인 허용은 **재사용 없는 1회성 레이아웃 래퍼**(flex 컨테이너 등)에 한함.
-- **적용 현황(2026-06-17):** 위젯·chrome 의 반복 인라인 구조 23종을 컴포넌트로 추출 완료 — 카탈로그는 `Chrome/Parts/*` · `WhaTap AI/Parts/*` 하위에 등록(`index.ts` export + story). 테이블 행·스텝·칩·메뉴 항목 등.
+- **적용 현황(2026-06-17):** 위젯·chrome 의 반복 인라인 구조 23종을 컴포넌트로 추출 완료 — 추출 Parts 는 각자 계층에 맞춰 `Primitives/*`(리프 행·칩·항목) 또는 `Composite/*`(조합 단위)에 등록(`index.ts` export + story). 테이블 행·스텝·칩·메뉴 항목 등.
 
 ## 스타일 — 일반 CSS (Tailwind 미사용 · 흔적 0)
 

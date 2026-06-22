@@ -1,8 +1,8 @@
-# AI 진입점 — 4 컴포넌트 (WhaTap AI 카테고리)
+# AI 진입점 — 4 컴포넌트 (AI 영역)
 
-> 원본: `src/widget/` (interfacedesigner/WhaTap-design-system) · Storybook 트리 `WhaTap AI/Buttons` · `WhaTap AI/Input`
+> 원본: `src/widget/` (interfacedesigner/WhaTap-design-system) · Storybook 트리 `Composite/Ai`(InlinePrompt · PromptInput · SendButton) · `Primitives/Ai`(AssistantButton)
 
-페이지에서 WhaTap AI 위젯을 호출하는 진입 컴포넌트 4 종. **일반 form Primitive (Button/TextField) 와 의도적으로 분리** — AI 영역에는 `Ai...` 카테고리만 사용 (AI 카테고리 분리 원칙은 [`patterns.md`](./patterns.md#ai-카테고리-vs-일반-primitive-분리)).
+페이지에서 WhaTap AI 위젯을 호출하는 진입 컴포넌트 4 종. **일반 form Primitive (Button/TextField) 와 의도적으로 분리** — AI 영역에는 `Ai...` 컴포넌트만 사용 (각 계층 안 `Ai/` 하위그룹). AI 영역 분리 원칙은 [`patterns.md`](./patterns.md#ai-카테고리-vs-일반-primitive-분리).
 
 | 컴포넌트 | 용도 | 트리거 위치 |
 |---|---|---|

@@ -73,8 +73,12 @@ export default function OptionbarPage({
   newVersionLabel?: string;
   presetLabel?: string;
 }) {
+  // 좌·우 거터는 헤더(PageHeader·SubHeaderBar·PageHeaderAiInline)와 동일한 --wds-header-px 토큰으로 정렬. 세로는 8px 유지.
   return (
-    <div className="flex flex-row items-end gap-12px flex-wrap p-8px bg-card border-b border-color-var-color-border-default">
+    <div
+      className="flex flex-row items-end gap-12px flex-wrap py-8px bg-card border-b border-color-var-color-border-default"
+      style={{ paddingInline: "var(--wds-header-px)" }}
+    >
       <OptionbarItem title="시간">
         <LiveTimerCompact
           time={liveTime}

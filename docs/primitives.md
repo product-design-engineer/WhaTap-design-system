@@ -1,12 +1,14 @@
-# Primitives — 9 컴포넌트 (일반 폼/표시)
+# 일반 폼/표시 Primitives — 9 컴포넌트
 
-> 원본: `src/` (interfacedesigner/WhaTap-design-system)
+> 원본: `src/` (interfacedesigner/WhaTap-design-system) · Storybook 트리 `Primitives/`
 
 가장 작은 단위의 재사용 컴포넌트들. **새 화면을 만들 때 인라인 form/feedback UI 를 새로 짜지 마세요. 이들을 조립하세요.**
 
+> **참고:** `Primitives` 는 "자체 렌더 리프" 계층 전체(65종 — 행·칩·항목·심볼 포함)를 뜻한다. 이 문서는 그중 **일반 폼/표시 9종**만 다룬다. AI 리프 카드는 `Primitives/Ai`(아래) 참조.
+
 - **일반 폼/표시 (9)** — 페이지·다이얼로그 어디서나 — Checkbox · Tooltip · Chip · FilterChip · TextField · Select · Tabs · Modal · FilterDropdown
 
-> **AI 카드 빌딩 블록(AiCard · AiCaption · AiSectionHeading · AiToneBadge · AiBulletList)은 Primitives 가 아니라 `WhaTap AI` 카테고리**입니다 (Storybook `WhaTap AI/Primitives`). 카탈로그: [widget-components.md](./widget-components.md). 아래 "AI 카드 빌딩 블록" 상세는 참고용으로 유지.
+> **AI 카드 빌딩 블록(AiCard · AiCaption · AiSectionHeading · AiToneBadge · AiBulletList)** 은 Storybook `Primitives/Ai` 하위그룹(AI 리프 프리미티브). 카탈로그: [widget-components.md](./widget-components.md). 아래 "AI 카드 빌딩 블록" 상세는 참고용으로 유지.
 
 모든 컴포넌트는 [`tokens.md`](./tokens.md) 의 색·타입 토큰을 사용하며 직접 hex 리터럴 금지.
 

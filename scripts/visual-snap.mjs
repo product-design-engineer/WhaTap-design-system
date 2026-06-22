@@ -30,16 +30,16 @@ const SHOTS = [
   { id: "primitives-button--default", theme: "light" },
   { id: "primitives-switch--sizes", theme: "light" },
   { id: "primitives-switch--states", theme: "light" },
-  { id: "primitives-themetoggle--scoped-demo", theme: "light" },
-  { id: "chrome-pageheader--default", theme: "light" },
-  { id: "chrome-pageheaderaiinline--default", theme: "light" },
-  { id: "chrome-sidebar--default", theme: "light" },
-  { id: "chrome-datatable--default-density", theme: "light" },
-  { id: "chrome-toast--success", theme: "light" },
+  { id: "composite-themetoggle--scoped-demo", theme: "light" },
+  { id: "composite-pageheader--default", theme: "light" },
+  { id: "composite-pageheaderaiinline--default", theme: "light" },
+  { id: "composite-sidebar--default", theme: "light" },
+  { id: "composite-datatable--default-density", theme: "light" },
+  { id: "primitives-toast--success", theme: "light" },
   // 다크 커버리지
-  { id: "chrome-sidebar--default", theme: "dark" },
-  { id: "chrome-pageheaderaiinline--default", theme: "dark" },
-  { id: "chrome-datatable--default-density", theme: "dark" },
+  { id: "composite-sidebar--default", theme: "dark" },
+  { id: "composite-pageheaderaiinline--default", theme: "dark" },
+  { id: "composite-datatable--default-density", theme: "dark" },
 ];
 
 // 애니메이션·캐럿·transition 비활성화 (스냅샷 안정화)

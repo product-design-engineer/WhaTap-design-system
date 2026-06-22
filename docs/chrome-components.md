@@ -1,8 +1,10 @@
-# Chrome Components — 20 컴포넌트
+# Chrome (페이지 골격) Components — 20 컴포넌트
 
 > 원본: `src/` (interfacedesigner/WhaTap-design-system)
 
 페이지 단위 레이아웃·도구·표시 컴포넌트. 위젯(AI Assistant) 외부의 모든 SaaS 화면 골격이 이 카탈로그 안에 있습니다.
+
+> **카탈로그 위치:** "Chrome" 은 *페이지 골격*을 가리키는 개념 묶음일 뿐, 별도 Storybook 카테고리가 아니다. 3-Layer 트리에서는 조합 단위(`PageHeader` · `Sidebar` · `DataTable` · `FilterBar` · `FilterDropdown` · `OptionbarPage`)는 **`Composite/`**, 리프(`Toast` · `Stage` · `MiniLineChart` · `LiveTimerCompact` · `Button` 등)는 **`Primitives/`**, 최상위 조립(`DashboardLayout`)은 **`Shell/`** 에 위치한다.
 
 > **Enterprise 시나리오 신규 정책/prop**(2026-06): `Sidebar`(`MenuItem.children[].onClick`, `OrgContext.badge`, 아이콘-없음 12px 스페이서) · `PageHeader`(`profileMenu`, `roleBadge`=드롭다운 헤더, `notifications` 벨 인디케이터) · `SubHeaderBar` · 토큰 색상/48px 헤더/사용자 메뉴 일원화/컨텍스트 정합성 정책 → **[`enterprise-changes.md`](./enterprise-changes.md)** 참조.
 

@@ -1,6 +1,6 @@
 ---
 name: whatap-design-system
-description: WhaTap 디자인 시스템 — `@whatap/design-system` (별도 repo · 소스온리). Tokens / Primitives / Chrome / WhaTap AI + 합성 패턴. 신규 화면은 인라인 스타일 새로 짜지 말고 이 패키지의 컴포넌트를 prop으로 조립하세요.
+description: WhaTap 디자인 시스템 — `@whatap/design-system` (별도 repo · 소스온리). Tokens + 3-Layer(Primitives / Composite / Shell, AI 는 각 계층 `Ai/`) + 합성 패턴. 신규 화면은 인라인 스타일 새로 짜지 말고 이 패키지의 컴포넌트를 prop으로 조립하세요.
 metadata:
   type: design-system
   scope: WhaTap (프로토타입이 link: 로 소비)
@@ -33,7 +33,7 @@ WhaTap 제품의 단일 컴포넌트 출처(별도 git repo, 빌드 산출물 �
 ### Import 예
 
 ```ts
-// Chrome + Primitive 한 번에
+// Shell · Composite · Primitive 한 번에
 import {
   DashboardLayout, PageHeader, PageHeaderAiInline,
   WhaTapAiWidget, WhaTapAiProvider, useWhaTapAi,
@@ -80,38 +80,39 @@ DS는 **Tailwind를 쓰지 않습니다.** `style.css`(= `whatap-ds.css`)는 외
 
 ## 디자인 시스템 구조
 
+트리는 **컴포넌트 3계층(Primitives · Composite · Shell)** 과 동일한 축. AI 전용 에셋은 별도 카테고리가 아니라 각 계층 안 **`Ai/` 하위그룹**.
+
 ```
 WhaTap Design System (@whatap/design-system)
-├─ Tokens            ─ 색·폰트·spacing · 11 type-scale · 3 weight · 6 line-height
-│                      `tokens.css` 의 `:root` (단일 출처) + `widget/_tokens.ts` Tone 5단계
-├─ Primitives (9)    ─ 일반 form / 표시
-│                      Checkbox / Tooltip / Chip / FilterChip / TextField / Select /
-│                      Tabs / Modal / FilterDropdown
-├─ Chrome (20)       ─ 페이지 레벨 레이아웃·도구·표시
-│                      DashboardLayout / Sidebar / PageHeader / PageHeaderAiInline /
-│                      SubHeaderBar / OptionbarPage / OptionbarInstanceSelector /
-│                      LiveTimerCompact / TimeRangeSelector / PresetSelect / Stage /
-│                      Toast / DataTable / FilterBar / MiniLineChart /
-│                      EventWeekTimeMatrix / Button / DashboardBuildingProgress
-└─ WhaTap AI         ─ 모든 AI 컴포넌트 (좌측 `WhaTap AI/`)
-    ├─ 빌딩 블록 5   ─ AiCard / AiCaption / AiSectionHeading / AiToneBadge / AiBulletList
-    ├─ 진입 4        ─ AiAssistantButton / AiSendButton / AiInlinePrompt / AiPromptInput
-    ├─ 위젯 셸       ─ WhaTapAiWidget / WhaTapAiContext / AiSymbol
-    └─ 메시지 카드 22 ─ AiChatExchange / AiReasoning / AiCostTable / AiMigPlan /
-                        AiExecutionResult / AiReceiverChannels / … / AiClickCursor
+├─ Tokens (메타)       ─ 색·폰트·spacing · 11 type-scale · 3 weight · 6 line-height
+│                        `tokens.css` 의 `:root` (단일 출처) + `widget/_tokens.ts` Tone 5단계
+├─ Primitives (65)     ─ 자체 렌더 리프 (다른 DS import 0)
+│   │                    Button / TextField / Select / Tabs / Modal / Tooltip / Toast /
+│   │                    Switch / Checkbox / Chip / FilterChip / DataTableRow /
+│   │                    SidebarMenuItem / MiniLineChart / WhaTap Symbol …
+│   └─ Ai/              ─ AiCard / AiCaption / AiSectionHeading / AiToneBadge /
+│                          AiBulletList / AiSymbol / AiUserBubble / ReasoningStep …
+├─ Composite (29)      ─ 프리미티브 1단계 조합 (Composite 끼리 import 금지)
+│   │                    PageHeader / PageHeaderAiInline / Sidebar / FilterBar /
+│   │                    DataTable / FilterDropdown / OptionbarPage / ThemeToggle …
+│   └─ Ai/              ─ AiChatExchange / AiReasoning / AiDashboardProposal /
+│                          AiCostTable / InlinePrompt / PromptInput / SendButton …
+└─ Shell (6)           ─ 최종 조립 진입점 (전 계층 import 가능)
+                         DashboardLayout / Ai/Widget(WhaTapAiWidget) /
+                         Page(A 기본 · B AI 전용 · C 목록 · D 상세)
 ```
 
 **의존 방향 (역방향 import 금지):**
 
 ```
-Chrome / WhaTap AI → Primitives → Tokens
+Tokens → Primitives → Composite → Shell
 ```
 
 - Tokens 는 누구도 import 하지 않는 leaf — 순수 `:root` CSS 변수 + Tone 토큰
 - Primitives 는 Tokens 만 import — 형태 + 외관의 base
-- Chrome · WhaTap AI 는 Primitives 와 Tokens import (PageHeaderAiInline 은 헤더 레이아웃이라 Chrome)
+- Composite 는 Primitives + Tokens import · Shell 은 전 계층 import (PageHeaderAiInline 은 헤더 레이아웃이라 `Composite/`, `Ai/` 아님)
 
-### AI 카테고리 vs 일반 Primitives 분리 원칙
+### AI 영역 vs 일반 Primitives 분리 원칙
 
 - AI 진입점·AI 응답 UI 는 **`Ai...` 카테고리만** 사용 (AiInlinePrompt / AiSendButton / AiAssistantButton)
 - 일반 폼/검색은 TextField / Button

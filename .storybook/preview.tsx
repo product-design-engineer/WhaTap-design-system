@@ -9,7 +9,7 @@ import '../src/whatap-ds.css';
  *
  * - layout: 'centered' — 대시보드 chrome 같이 큰 컴포넌트는 개별 story 에서 'fullscreen' 으로 override.
  * - backgrounds: light(#fff) / surface-muted(#f5f5f5) / dark(#1a1a1a). prototype 에 자주 등장하는 배경 3종.
- * - storySort: 카탈로그 좌측 트리 ordering — Introduction → Foundation → Tokens → Chrome → WhaTap AI (Symbol/Context/Widget/Primitives/Cards) → Page(전체 페이지 합성 템플릿). 합성 위젯(FilterBar 등)은 Chrome 에 일원화.
+ * - storySort: 카탈로그 좌측 트리 ordering — 3-Layer 단일 체계. Introduction → Tokens(메타) → Primitives(자체 렌더 리프, Ai/ 하위그룹) → Composite(프리미티브 조합, Ai/ 하위그룹) → Shell(진입점: DashboardLayout · Ai/Widget · Page 합성 템플릿). 각 계층 안에서 AI 전용 에셋은 `Ai/` 접두 그룹으로 묶는다.
  */
 const preview: Preview = {
   parameters: {
@@ -38,14 +38,14 @@ const preview: Preview = {
       storySort: {
         order: [
           'Introduction',
-          'Foundation',
-          ['WhaTap Symbol'],
           'Tokens',
           ['Color', 'Type Scale', 'Font Weights', 'Line Heights', 'Tracking', 'Text Colors', 'Patterns', 'Korean vs Numeric', 'Typography', 'Tones (Semantic Intent)'],
-          'Chrome',
-          'WhaTap AI',
-          ['Symbol', 'Context', 'Widget', 'Buttons', 'Input', 'Primitives', 'Cards'],
-          'Page',
+          'Primitives',
+          ['Ai'],
+          'Composite',
+          ['Ai'],
+          'Shell',
+          ['DashboardLayout', 'Ai', 'Page'],
         ],
       },
     },

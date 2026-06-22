@@ -311,7 +311,7 @@ const OUT_PATH = OUT;
 let outExisting = "";
 try { outExisting = fs.readFileSync(OUT_PATH, "utf8"); } catch { /* 최초 생성 */ }
 // hand-maintained 마커: frozen 스냅샷에는 없고 운영 중 손으로 추가된 것들.
-const MANUAL_MARKERS = ["[data-theme=", "--wds-header-px", ".wds-switch", "--wds-datetime", "--radius-full", "--gradient-brand"];
+const MANUAL_MARKERS = ["[data-theme=", "--wds-header-px", "--wds-page-px", ".wds-page-content", ".wds-switch", "--wds-datetime", "--radius-full", "--gradient-brand"];
 const manualHits = MANUAL_MARKERS.filter((m) => outExisting.includes(m));
 const tsxHasArbitrary = usedArr.some((t) => t.includes("["));
 
