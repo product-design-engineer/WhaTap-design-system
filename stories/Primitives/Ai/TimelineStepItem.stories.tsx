@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import TimelineStepItem from "../../src/widget/TimelineStepItem";
+import TimelineStepItem from "../../../src/widget/TimelineStepItem";
 
 const meta: Meta<typeof TimelineStepItem> = {
   title: "Primitives/Ai/TimelineStepItem",

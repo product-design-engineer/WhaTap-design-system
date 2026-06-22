@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import MigPlanRow from "../../src/widget/MigPlanRow";
+import MigPlanRow from "../../../src/widget/MigPlanRow";
 
 const meta: Meta<typeof MigPlanRow> = {
   title: "Primitives/Ai/MigPlanRow",

@@ -29,7 +29,8 @@
     "build:lib": "pnpm build:js",
     "storybook": "node scripts/build-design.mjs && storybook dev -p 5181 --no-open",
     "build-storybook": "node scripts/build-design.mjs && storybook build",
-    "test": "vitest run",
+    "check:catalog": "node scripts/check-catalog-folders.mjs",
+    "test": "node scripts/check-catalog-folders.mjs && vitest run",
     "test:visual": "node scripts/visual-snap.mjs",
     "test:visual:update": "node scripts/visual-snap.mjs --update"
   },

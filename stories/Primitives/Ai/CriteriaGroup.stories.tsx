@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CriteriaGroup from "../../src/widget/CriteriaGroup";
+import CriteriaGroup from "../../../src/widget/CriteriaGroup";
 
 const meta: Meta<typeof CriteriaGroup> = {
   title: "Primitives/Ai/CriteriaGroup",

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import ProposalSection from "../../src/widget/ProposalSection";
+import ProposalSection from "../../../src/widget/ProposalSection";
 
 const meta: Meta<typeof ProposalSection> = {
   title: "Composite/Ai/ProposalSection",

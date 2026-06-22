@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CriteriaOptionButton from "../../src/widget/CriteriaOptionButton";
+import CriteriaOptionButton from "../../../src/widget/CriteriaOptionButton";
 
 const meta: Meta<typeof CriteriaOptionButton> = {
   title: "Composite/Ai/CriteriaOptionButton",

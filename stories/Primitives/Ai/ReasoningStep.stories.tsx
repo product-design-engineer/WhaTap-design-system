@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import ReasoningStep from "../../src/widget/ReasoningStep";
+import ReasoningStep from "../../../src/widget/ReasoningStep";
 
 const meta: Meta<typeof ReasoningStep> = {
   title: "Primitives/Ai/ReasoningStep",

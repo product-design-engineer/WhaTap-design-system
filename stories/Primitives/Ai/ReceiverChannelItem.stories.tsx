@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import ReceiverChannelItem from "../../src/widget/ReceiverChannelItem";
+import ReceiverChannelItem from "../../../src/widget/ReceiverChannelItem";
 
 const meta: Meta<typeof ReceiverChannelItem> = {
   title: "Primitives/Ai/ReceiverChannelItem",

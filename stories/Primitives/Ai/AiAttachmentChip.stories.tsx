@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import AiAttachmentChip from "../../src/widget/AiAttachmentChip";
+import AiAttachmentChip from "../../../src/widget/AiAttachmentChip";
 
 const meta: Meta<typeof AiAttachmentChip> = {
   title: "Primitives/Ai/AiAttachmentChip",

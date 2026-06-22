@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import EventListItem from "../../src/widget/EventListItem";
+import EventListItem from "../../../src/widget/EventListItem";
 
 const meta: Meta<typeof EventListItem> = {
   title: "Primitives/Ai/EventListItem",

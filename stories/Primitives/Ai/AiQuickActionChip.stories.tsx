@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import AiQuickActionChip from "../../src/AiQuickActionChip";
+import AiQuickActionChip from "../../../src/AiQuickActionChip";
 
 const meta: Meta<typeof AiQuickActionChip> = {
   title: "Primitives/Ai/AiQuickActionChip",

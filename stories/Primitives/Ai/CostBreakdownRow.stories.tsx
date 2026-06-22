@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CostBreakdownRow from "../../src/widget/CostBreakdownRow";
+import CostBreakdownRow from "../../../src/widget/CostBreakdownRow";
 
 const meta: Meta<typeof CostBreakdownRow> = {
   title: "Primitives/Ai/CostBreakdownRow",
