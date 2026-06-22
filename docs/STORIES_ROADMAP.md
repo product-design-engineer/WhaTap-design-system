@@ -70,12 +70,12 @@
 |---|---|---|---|---|
 | 1 | **Preset A: 기본 대시보드** | DashboardLayout + PageHeader + OptionbarPage + DataTable + WhaTapAiWidget | ✅ 완료 | 가장 기본. Sidebar 메뉴 + AI 위젯 토글 포함 |
 | 2 | **Preset B: AI 전용 페이지** | DashboardLayout + PageHeaderAiInline + WhaTapAiWidget | ✅ 완료 | 롤링 placeholder + suggestion chip 데모 |
-| 3 | **Preset C: 목록 페이지** | DashboardLayout + PageHeader + FilterBar + DataTable | ✅ 완료 | 검색 + 드롭다운 필터 + 선택 칩 + 초기화 |
+| 3 | ~~**Preset C: 목록 페이지**~~ | — | 🗑 삭제(2026-06-22) | 목록 패턴은 `DataTable` + `FilterBar` 컴포넌트 조합으로 직접 구성 |
 | 4 | **Preset D: 상세 페이지** | DashboardLayout + PageHeader + OptionbarPage + Tabs + MiniLineChart 그리드 + DataTable | ✅ 완료 | 탭 전환 + 차트 2x2 + 하단 테이블 |
 
 **Story 위치**: `stories/7-Page/PresetA-Dashboard.stories.tsx` ~ `PresetD-Detail.stories.tsx`
 
-**Storybook 트리**: `Shell / Page / A — 기본 대시보드` · `B — AI 전용 페이지` · `C — 목록 페이지` · `D — 상세 페이지`
+**Storybook 트리**: `Shell / Page / A — 기본 대시보드` · `B — AI 전용 페이지` · `D — 상세 페이지`
 
 **구현 지침:**
 - 각 Story 는 `GUIDE.md` 코드 템플릿과 **1:1 대응** — 코드 복사 시 동작 보장

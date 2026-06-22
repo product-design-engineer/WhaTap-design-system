@@ -97,9 +97,9 @@ WhaTap Design System (@whatap/design-system)
 │   │                    DataTable / FilterDropdown / OptionbarPage / ThemeToggle …
 │   └─ Ai/              ─ AiChatExchange / AiReasoning / AiDashboardProposal /
 │                          AiCostTable / InlinePrompt / PromptInput / SendButton …
-└─ Shell (6)           ─ 최종 조립 진입점 (전 계층 import 가능)
+└─ Shell (5)           ─ 최종 조립 진입점 (전 계층 import 가능)
                          DashboardLayout / Ai/Widget(WhaTapAiWidget) /
-                         Page(A 기본 · B AI 전용 · C 목록 · D 상세)
+                         Page(A 기본 · B AI 전용 · D 상세)
 ```
 
 **의존 방향 (역방향 import 금지):**
