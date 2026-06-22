@@ -29,7 +29,9 @@
     "build:lib": "pnpm build:js",
     "storybook": "node scripts/build-design.mjs && storybook dev -p 5181 --no-open",
     "build-storybook": "node scripts/build-design.mjs && storybook build",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:visual": "node scripts/visual-snap.mjs",
+    "test:visual:update": "node scripts/visual-snap.mjs --update"
   },
   "peerDependencies": {
     "react": "^19.0.0",
@@ -48,7 +50,9 @@
     "@vitejs/plugin-react": "^4.3.0",
     "@vitest/browser-playwright": "^4.1.7",
     "@vitest/coverage-v8": "^4.1.7",
+    "pixelmatch": "^7.2.0",
     "playwright": "^1.60.0",
+    "pngjs": "^7.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "storybook": "^10.4.1",
