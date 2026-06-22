@@ -73,7 +73,10 @@ export default function PageHeaderAiInline({
   promptDefaultOpen = false,
 }: PageHeaderAiInlineProps) {
   return (
-    <div className="flex items-center h-48px box-border px-8px gap-16px bg-card border-b border-color-var-color-border-strong shrink-0">
+    <div
+      className="flex items-center h-48px box-border gap-16px bg-card border-b border-color-var-color-border-strong shrink-0"
+      style={{ paddingInline: "var(--wds-header-px)" }}
+    >
       {/* 좌측: 타이틀 + Docs — shrink 허용, 타이틀 max-width + ellipsis로 inline prompt 영역 보호 */}
       <div className="flex items-center gap-24px shrink min-w-0">
         <p

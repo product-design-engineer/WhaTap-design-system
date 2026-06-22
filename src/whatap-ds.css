@@ -193,6 +193,9 @@
     --wds-datetime-year-w: 28px;
     --wds-datetime-field-w: 16px;
     --wds-datetime-space-w: 6px;
+
+    /* ── Component tokens: PageHeader ── */
+    --wds-header-px: 24px; /* 페이지 헤더 좌·우 padding */
   }
 
 /* ── preflight reset ────────────────────────────────────────────────────── */
