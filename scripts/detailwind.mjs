@@ -300,14 +300,33 @@ function innermostDecls(body) {
   return oneLine(b);
 }
 
-// 멱등성 가드 — generate 는 **원본(escaped className) tsx** 에서만 유효.
-// 이미 codemod된 트리(arbitrary `[` 클래스 없음)에서 재실행하면 frozen 매칭 실패로
-// 유틸이 대량 누락된다. 그 경우 덮어쓰기 전에 중단.
+// ──────────────────────────────────────────────────────────────────────────
+// 안전 가드 — generate 는 **최초 1회**(원본 escaped tsx → 일반 CSS) 변환용이다.
+// 그 이후 src/whatap-ds.css 는 **hand-maintained** 가 된다(토큰·전역 규칙·신규 유틸을
+// 직접 편집). 따라서 generate 재실행은 (a) codemod 된 tsx 미스매치로 유틸을 잃고,
+// (b) frozen 에 없는 manual 추가(토큰/전역/포커스 규칙 등)를 통째로 날린다.
+// → 아래 두 조건 중 하나라도 걸리면 덮어쓰기 전에 **거부**한다. (의도적 재생성은 FORCE=1)
+const FORCE = process.env.DETAILWIND_FORCE === "1";
+const OUT_PATH = OUT;
+let outExisting = "";
+try { outExisting = fs.readFileSync(OUT_PATH, "utf8"); } catch { /* 최초 생성 */ }
+// hand-maintained 마커: frozen 스냅샷에는 없고 운영 중 손으로 추가된 것들.
+const MANUAL_MARKERS = ["[data-theme=", "--wds-header-px", ".wds-switch", "--wds-datetime", "--radius-full", "--gradient-brand"];
+const manualHits = MANUAL_MARKERS.filter((m) => outExisting.includes(m));
 const tsxHasArbitrary = usedArr.some((t) => t.includes("["));
-if (!tsxHasArbitrary && /\\\[/.test(css)) {
-  console.error("✗ tsx 가 이미 codemod된 상태로 보입니다 (className 에 arbitrary `[` 없음).");
-  console.error("  detailwind generate 는 원본 escaped tsx 에서만 실행하세요.");
-  console.error("  증분 변경은 src/whatap-ds.css 를 직접 편집하거나, `git checkout` 으로 원본 복원 후 실행하세요.");
+
+if (!FORCE && manualHits.length > 0) {
+  console.error("✗ src/whatap-ds.css 는 hand-maintained 상태입니다 (frozen 에 없는 수동 추가 감지):");
+  console.error("    " + manualHits.join(", "));
+  console.error("  generate 재실행은 이 수동 추가(토큰·전역·포커스 규칙 등)를 모두 잃습니다.");
+  console.error("  → 증분 변경은 src/whatap-ds.css 를 **직접 편집**하세요. (정책: CLAUDE.md '스타일' 섹션)");
+  console.error("  정말 frozen 기준으로 재생성하려면: DETAILWIND_FORCE=1 node scripts/detailwind.mjs generate");
+  process.exit(1);
+}
+if (!FORCE && !tsxHasArbitrary && /\\\[/.test(css)) {
+  console.error("✗ tsx 가 이미 codemod된 상태로 보입니다 (className 에 arbitrary `[` 없음) → 재실행 시 유틸 누락.");
+  console.error("  최초 변환은 원본 escaped tsx 에서만. 증분 변경은 src/whatap-ds.css 직접 편집.");
+  console.error("  강제: DETAILWIND_FORCE=1 …");
   process.exit(1);
 }
 
