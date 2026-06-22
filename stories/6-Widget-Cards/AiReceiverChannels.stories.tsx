@@ -4,7 +4,7 @@ import { AiReceiverChannels } from "@whatap/design-system/widget";
 import type { ChannelState } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof AiReceiverChannels> = {
-  title: "WhaTap AI/Cards/AiReceiverChannels",
+  title: "Composite/Ai/AiReceiverChannels",
   component: AiReceiverChannels,
   tags: ["autodocs"],
   parameters: {

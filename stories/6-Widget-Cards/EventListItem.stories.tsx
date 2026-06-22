@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import EventListItem from "../../src/widget/EventListItem";
 
 const meta: Meta<typeof EventListItem> = {
-  title: "WhaTap AI/Parts/EventListItem",
+  title: "Primitives/Ai/EventListItem",
   component: EventListItem,
   tags: ["autodocs"],
   parameters: {

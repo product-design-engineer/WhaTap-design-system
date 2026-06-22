@@ -5,7 +5,7 @@ import { PresetSelect } from "@whatap/design-system";
  * Stories for [[PresetSelect]] — 프리셋 드롭다운 + 관리 아이콘 버튼.
  */
 const meta: Meta<typeof PresetSelect> = {
-  title: "Chrome/PresetSelect",
+  title: "Primitives/PresetSelect",
   component: PresetSelect,
   tags: ["autodocs"],
   parameters: {

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AiChatExchange } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof AiChatExchange> = {
-  title: "WhaTap AI/Cards/AiChatExchange",
+  title: "Composite/Ai/AiChatExchange",
   component: AiChatExchange,
   tags: ["autodocs"],
   parameters: {

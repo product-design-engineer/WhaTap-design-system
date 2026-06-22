@@ -5,7 +5,7 @@ import { OptionbarNewVersionButton } from "@whatap/design-system";
  * Stories for [[OptionbarNewVersionButton]] — 옵션바 "신규 버전" CTA 버튼.
  */
 const meta: Meta<typeof OptionbarNewVersionButton> = {
-  title: "Chrome/OptionbarNewVersionButton",
+  title: "Primitives/OptionbarNewVersionButton",
   component: OptionbarNewVersionButton,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

@@ -150,8 +150,8 @@ curl https://whatap-design-system-storybook.vercel.app/design-system/DESIGN.md >
 |---|---|
 | [`/design-system/SKILL.md`](https://whatap-design-system-storybook.vercel.app/design-system/SKILL.md) | 진입점 · 5 핵심 규칙 · 빠른 시작 |
 | [`/design-system/tokens.md`](https://whatap-design-system-storybook.vercel.app/design-system/tokens.md) | 색·타입·톤 토큰 |
-| [`/design-system/primitives.md`](https://whatap-design-system-storybook.vercel.app/design-system/primitives.md) | Primitives 14 |
-| [`/design-system/chrome-components.md`](https://whatap-design-system-storybook.vercel.app/design-system/chrome-components.md) | Chrome 20 |
+| [`/design-system/primitives.md`](https://whatap-design-system-storybook.vercel.app/design-system/primitives.md) | 일반 폼/표시 Primitives 9 (트리 `Primitives/`) |
+| [`/design-system/chrome-components.md`](https://whatap-design-system-storybook.vercel.app/design-system/chrome-components.md) | Chrome 골격 20 (트리 `Composite/`·`Primitives/`·`Shell/`) |
 | [`/design-system/ai-entry.md`](https://whatap-design-system-storybook.vercel.app/design-system/ai-entry.md) | AI 진입 컴포넌트 |
 | [`/design-system/widget-components.md`](https://whatap-design-system-storybook.vercel.app/design-system/widget-components.md) | AI 위젯 카드 |
 | [`/design-system/patterns.md`](https://whatap-design-system-storybook.vercel.app/design-system/patterns.md) | 합성 패턴 + Do/Don't |

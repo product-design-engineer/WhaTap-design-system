@@ -5,7 +5,7 @@ import { TimeRangeSelector } from "@whatap/design-system";
  * Stories for [[TimeRangeSelector]] — OptionbarPage 시간 범위 선택자.
  */
 const meta: Meta<typeof TimeRangeSelector> = {
-  title: "Chrome/TimeRangeSelector",
+  title: "Composite/TimeRangeSelector",
   component: TimeRangeSelector,
   tags: ["autodocs"],
   parameters: {

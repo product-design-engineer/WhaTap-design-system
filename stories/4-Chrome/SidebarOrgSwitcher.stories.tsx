@@ -8,7 +8,7 @@ import { SidebarOrgSwitcher } from "@whatap/design-system";
  * 240px 컨테이너로 감싸 실제 사이드바 맥락을 재현.
  */
 const meta: Meta<typeof SidebarOrgSwitcher> = {
-  title: "Chrome/SidebarOrgSwitcher",
+  title: "Primitives/SidebarOrgSwitcher",
   component: SidebarOrgSwitcher,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

@@ -6,7 +6,7 @@ import { LiveTimerCompact } from "@whatap/design-system";
  * Stories for [[LiveTimerCompact]] — 32px LIVE 시계 + polling progress 토글.
  */
 const meta: Meta<typeof LiveTimerCompact> = {
-  title: "Chrome/LiveTimerCompact",
+  title: "Primitives/LiveTimerCompact",
   component: LiveTimerCompact,
   tags: ["autodocs"],
   parameters: {

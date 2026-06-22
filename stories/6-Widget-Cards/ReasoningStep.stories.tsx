@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import ReasoningStep from "../../src/widget/ReasoningStep";
 
 const meta: Meta<typeof ReasoningStep> = {
-  title: "WhaTap AI/Parts/ReasoningStep",
+  title: "Primitives/Ai/ReasoningStep",
   component: ReasoningStep,
   tags: ["autodocs"],
   parameters: {

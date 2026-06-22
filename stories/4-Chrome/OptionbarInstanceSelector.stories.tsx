@@ -6,7 +6,7 @@ import { OptionbarInstanceSelector } from "@whatap/design-system";
  * Stories for [[OptionbarInstanceSelector]] — 옵션바 인스턴스 셀렉터.
  */
 const meta: Meta<typeof OptionbarInstanceSelector> = {
-  title: "Chrome/OptionbarInstanceSelector",
+  title: "Primitives/OptionbarInstanceSelector",
   component: OptionbarInstanceSelector,
   tags: ["autodocs"],
   parameters: {

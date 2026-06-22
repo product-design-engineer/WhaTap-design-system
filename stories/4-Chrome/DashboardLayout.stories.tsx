@@ -6,7 +6,7 @@ import { DashboardLayout, PageHeader, OptionbarPage } from "@whatap/design-syste
  * Stories for [[DashboardLayout]] — 페이지 chrome (Sidebar + 컨텐츠).
  */
 const meta: Meta<typeof DashboardLayout> = {
-  title: "Chrome/DashboardLayout",
+  title: "Shell/DashboardLayout",
   component: DashboardLayout,
   tags: ["autodocs"],
   parameters: {

@@ -5,7 +5,7 @@ import { OptionbarPage } from "@whatap/design-system";
  * Stories for [[OptionbarPage]] — 페이지 우측 옵션 패널 (composite).
  */
 const meta: Meta<typeof OptionbarPage> = {
-  title: "Chrome/OptionbarPage",
+  title: "Composite/OptionbarPage",
   component: OptionbarPage,
   tags: ["autodocs"],
   parameters: {

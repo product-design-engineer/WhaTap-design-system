@@ -8,7 +8,7 @@ import PageHeaderProfileMenuItem from "../../src/PageHeaderProfileMenuItem";
  * 실제 프로필 메뉴 맥락을 보여준다.
  */
 const meta: Meta<typeof PageHeaderProfileMenuItem> = {
-  title: "Chrome/Parts/PageHeaderProfileMenuItem",
+  title: "Primitives/PageHeaderProfileMenuItem",
   component: PageHeaderProfileMenuItem,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

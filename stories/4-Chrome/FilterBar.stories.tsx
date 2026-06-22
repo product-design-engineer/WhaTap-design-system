@@ -38,7 +38,7 @@ const PROJECT_OPTIONS = [
  * Primitives 9 종 (TextField/FilterChip/FilterDropdown 등) 을 조립한 디자인 시스템의 *마지막* 컴포넌트.
  */
 const meta: Meta<typeof FilterBar> = {
-  title: "Chrome/FilterBar",
+  title: "Composite/FilterBar",
   component: FilterBar,
   tags: ["autodocs"],
   parameters: {

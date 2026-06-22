@@ -8,7 +8,7 @@ import PageHeaderNotificationItem from "../../src/PageHeaderNotificationItem";
  * 실제 알림 목록 맥락을 보여준다.
  */
 const meta: Meta<typeof PageHeaderNotificationItem> = {
-  title: "Chrome/Parts/PageHeaderNotificationItem",
+  title: "Primitives/PageHeaderNotificationItem",
   component: PageHeaderNotificationItem,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

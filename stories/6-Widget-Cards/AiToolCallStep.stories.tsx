@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AiToolCallStep } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof AiToolCallStep> = {
-  title: "WhaTap AI/Cards/AiToolCallStep",
+  title: "Primitives/Ai/AiToolCallStep",
   component: AiToolCallStep,
   tags: ["autodocs"],
   parameters: {

@@ -9,7 +9,7 @@ import DsReadOnlyNotice from "../../src/DsReadOnlyNotice";
  * 역으로 수정하려 할 때 표시합니다. 예외 없는 불변 정책.
  */
 const meta: Meta<typeof DsReadOnlyNotice> = {
-  title: "Chrome/DsReadOnlyNotice",
+  title: "Primitives/DsReadOnlyNotice",
   component: DsReadOnlyNotice,
   parameters: { layout: "centered" },
 };

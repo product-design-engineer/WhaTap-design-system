@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import ProposalSection from "../../src/widget/ProposalSection";
 
 const meta: Meta<typeof ProposalSection> = {
-  title: "WhaTap AI/Parts/ProposalSection",
+  title: "Composite/Ai/ProposalSection",
   component: ProposalSection,
   tags: ["autodocs"],
   parameters: {

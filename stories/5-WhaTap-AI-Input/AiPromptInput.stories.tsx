@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AiPromptInput } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof AiPromptInput> = {
-  title: "WhaTap AI/Input/PromptInput",
+  title: "Composite/Ai/PromptInput",
   component: AiPromptInput,
   tags: ["autodocs"],
   parameters: {

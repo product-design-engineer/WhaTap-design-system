@@ -25,7 +25,7 @@ const DB_SUGGESTIONS: AiPromptSuggestion[] = [
 ];
 
 const meta: Meta<typeof PageHeaderAiInline> = {
-  title: "Chrome/PageHeaderAiInline",
+  title: "Composite/PageHeaderAiInline",
   component: PageHeaderAiInline,
   tags: ["autodocs"],
   parameters: {

@@ -6,7 +6,7 @@ import type { DataTableColumn } from "@whatap/design-system/DataTable";
  * Stories for [[DataTable]] — 모니터링 페이지의 재활용 generic 데이터 테이블.
  */
 const meta: Meta = {
-  title: "Chrome/DataTable",
+  title: "Composite/DataTable",
   // generic 컴포넌트 — Meta 에는 component 미지정, 각 story 의 render 에서 구체 row type 으로 사용
   tags: ["autodocs"],
   parameters: {

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AiClickCursor } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof AiClickCursor> = {
-  title: "WhaTap AI/Cards/AiClickCursor",
+  title: "Primitives/Ai/AiClickCursor",
   component: AiClickCursor,
   tags: ["autodocs"],
   parameters: {

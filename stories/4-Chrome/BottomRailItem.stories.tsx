@@ -8,7 +8,7 @@ import BottomRailItem from "../../src/BottomRailItem";
  * 40px 폭 레일 컨테이너로 감싸 실제 사이드바 하단 레일 맥락을 재현.
  */
 const meta: Meta<typeof BottomRailItem> = {
-  title: "Chrome/Parts/BottomRailItem",
+  title: "Primitives/BottomRailItem",
   component: BottomRailItem,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

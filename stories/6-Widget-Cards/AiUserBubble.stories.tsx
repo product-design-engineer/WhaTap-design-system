@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AiUserBubble } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof AiUserBubble> = {
-  title: "WhaTap AI/Cards/AiUserBubble",
+  title: "Primitives/Ai/AiUserBubble",
   component: AiUserBubble,
   tags: ["autodocs"],
   parameters: {

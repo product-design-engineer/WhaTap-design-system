@@ -5,7 +5,7 @@ import { AiCard, AiSectionHeading, AiBulletList } from "@whatap/design-system/wi
  * Stories for [[AiBulletList]] — 위젯 본문의 통일 bullet list.
  */
 const meta: Meta<typeof AiBulletList> = {
-  title: "WhaTap AI/Primitives/AiBulletList",
+  title: "Primitives/Ai/AiBulletList",
   component: AiBulletList,
   tags: ["autodocs"],
   parameters: {

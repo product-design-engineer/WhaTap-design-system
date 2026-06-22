@@ -22,7 +22,7 @@ const TIME_RANGES = [
  * 페이지 본문 섹션 전환(large) + 작은 토글 그룹(segmented) 양쪽을 variant 하나로 처리.
  */
 const meta: Meta<typeof Tabs> = {
-  title: "Primitives/Tabs",
+  title: "Composite/Tabs",
   component: Tabs,
   tags: ["autodocs"],
   parameters: {

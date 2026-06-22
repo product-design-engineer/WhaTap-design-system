@@ -7,7 +7,7 @@ import { SidebarLogoHeader } from "@whatap/design-system";
  * 펼침(240px) 시 풀 로고, collapsed(40px) 시 심볼만.
  */
 const meta: Meta<typeof SidebarLogoHeader> = {
-  title: "Chrome/SidebarLogoHeader",
+  title: "Primitives/SidebarLogoHeader",
   component: SidebarLogoHeader,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

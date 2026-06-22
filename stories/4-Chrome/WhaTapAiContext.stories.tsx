@@ -5,7 +5,7 @@ import { WhaTapAiProvider, useWhaTapAi } from "@whatap/design-system";
  * Stories for [[WhaTapAiContext]] — 라우트 간 WhaTap AI 위젯 상태 공유.
  */
 const meta: Meta = {
-  title: "WhaTap AI/Context",
+  title: "Primitives/Ai/Context",
   tags: ["autodocs"],
   parameters: {
     layout: "padded",

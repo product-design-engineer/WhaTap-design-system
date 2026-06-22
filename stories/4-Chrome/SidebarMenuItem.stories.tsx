@@ -8,7 +8,7 @@ import { SidebarMenuItem, type MenuItem } from "@whatap/design-system";
  * 240px 폭 컨테이너로 감싸 실제 사이드바 본문 맥락을 재현.
  */
 const meta: Meta<typeof SidebarMenuItem> = {
-  title: "Chrome/SidebarMenuItem",
+  title: "Primitives/SidebarMenuItem",
   component: SidebarMenuItem,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

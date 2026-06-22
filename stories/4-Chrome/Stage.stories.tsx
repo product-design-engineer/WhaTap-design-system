@@ -5,7 +5,7 @@ import { Stage } from "@whatap/design-system";
  * Stories for [[Stage]] — 16:9 페이지 wrapper.
  */
 const meta: Meta<typeof Stage> = {
-  title: "Chrome/Stage",
+  title: "Primitives/Stage",
   component: Stage,
   tags: ["autodocs"],
   parameters: {

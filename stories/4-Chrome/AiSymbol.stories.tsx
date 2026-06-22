@@ -5,7 +5,7 @@ import { AiSymbol } from "@whatap/design-system";
  * Stories for [[AiSymbol]] — WhaTap AI pinwheel symbol with gradient.
  */
 const meta: Meta<typeof AiSymbol> = {
-  title: "WhaTap AI/Symbol",
+  title: "Primitives/Ai/Symbol",
   component: AiSymbol,
   tags: ["autodocs"],
   parameters: {

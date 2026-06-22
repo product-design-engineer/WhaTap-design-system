@@ -73,9 +73,9 @@
 | 3 | **Preset C: 목록 페이지** | DashboardLayout + PageHeader + FilterBar + DataTable | ✅ 완료 | 검색 + 드롭다운 필터 + 선택 칩 + 초기화 |
 | 4 | **Preset D: 상세 페이지** | DashboardLayout + PageHeader + OptionbarPage + Tabs + MiniLineChart 그리드 + DataTable | ✅ 완료 | 탭 전환 + 차트 2x2 + 하단 테이블 |
 
-**Story 위치**: `stories/7-Presets/PresetA-Dashboard.stories.tsx` ~ `PresetD-Detail.stories.tsx`
+**Story 위치**: `stories/7-Page/PresetA-Dashboard.stories.tsx` ~ `PresetD-Detail.stories.tsx`
 
-**Storybook 트리**: `Presets / A — 기본 대시보드` · `B — AI 전용` · `C — 목록 페이지` · `D — 상세 페이지`
+**Storybook 트리**: `Shell / Page / A — 기본 대시보드` · `B — AI 전용 페이지` · `C — 목록 페이지` · `D — 상세 페이지`
 
 **구현 지침:**
 - 각 Story 는 `GUIDE.md` 코드 템플릿과 **1:1 대응** — 코드 복사 시 동작 보장

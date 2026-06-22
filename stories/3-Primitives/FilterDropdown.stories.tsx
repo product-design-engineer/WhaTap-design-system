@@ -24,7 +24,7 @@ const SEVERITY_OPTIONS = [
  * FilterBar 안 다중 필터 진입점. 트리거 + Checkbox 묶음 + outside-click/ESC 닫기.
  */
 const meta: Meta<typeof FilterDropdown> = {
-  title: "Primitives/FilterDropdown",
+  title: "Composite/FilterDropdown",
   component: FilterDropdown,
   tags: ["autodocs"],
   parameters: {

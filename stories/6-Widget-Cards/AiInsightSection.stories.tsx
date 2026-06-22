@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AiInsightSection } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof AiInsightSection> = {
-  title: "WhaTap AI/Cards/AiInsightSection",
+  title: "Primitives/Ai/AiInsightSection",
   component: AiInsightSection,
   tags: ["autodocs"],
   parameters: {

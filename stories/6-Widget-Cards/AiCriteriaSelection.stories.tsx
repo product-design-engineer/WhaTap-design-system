@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AiCriteriaSelection } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof AiCriteriaSelection> = {
-  title: "WhaTap AI/Cards/AiCriteriaSelection",
+  title: "Composite/Ai/AiCriteriaSelection",
   component: AiCriteriaSelection,
   tags: ["autodocs"],
   parameters: {

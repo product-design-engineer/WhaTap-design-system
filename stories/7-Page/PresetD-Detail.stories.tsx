@@ -96,7 +96,7 @@ const EventsPanel = () => (
 /* ─── Meta ───────────────────────────────────────────── */
 
 const meta: Meta = {
-  title: "Page/D — 상세 페이지",
+  title: "Shell/Page/D — 상세 페이지",
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",

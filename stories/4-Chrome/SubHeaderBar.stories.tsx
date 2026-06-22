@@ -5,7 +5,7 @@ import { SubHeaderBar, Button } from "@whatap/design-system";
  * Stories for [[SubHeaderBar]] — 페이지 헤더 아래 40px 보조 네비 행.
  */
 const meta: Meta<typeof SubHeaderBar> = {
-  title: "Chrome/SubHeaderBar",
+  title: "Primitives/SubHeaderBar",
   component: SubHeaderBar,
   tags: ["autodocs"],
   parameters: {

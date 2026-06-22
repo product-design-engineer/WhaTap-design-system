@@ -8,7 +8,7 @@ import FilterDropdownOptionItem from "../../src/FilterDropdownOptionItem";
  * 240px 폭 컨테이너로 감싸 실제 드롭다운 패널 본문 맥락을 재현.
  */
 const meta: Meta<typeof FilterDropdownOptionItem> = {
-  title: "Chrome/Parts/FilterDropdownOptionItem",
+  title: "Composite/FilterDropdownOptionItem",
   component: FilterDropdownOptionItem,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

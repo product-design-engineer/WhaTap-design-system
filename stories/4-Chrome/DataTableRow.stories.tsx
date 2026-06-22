@@ -33,7 +33,7 @@ const defaultTokens = {
 };
 
 const meta: Meta<typeof DataTableRow<Session>> = {
-  title: "Chrome/Parts/DataTableRow",
+  title: "Primitives/DataTableRow",
   component: DataTableRow,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

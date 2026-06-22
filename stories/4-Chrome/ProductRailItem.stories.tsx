@@ -8,7 +8,7 @@ import ProductRailItem from "../../src/ProductRailItem";
  * 40px 폭 레일 컨테이너로 감싸 실제 사이드바 제품 레일 맥락을 재현.
  */
 const meta: Meta<typeof ProductRailItem> = {
-  title: "Chrome/Parts/ProductRailItem",
+  title: "Primitives/ProductRailItem",
   component: ProductRailItem,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

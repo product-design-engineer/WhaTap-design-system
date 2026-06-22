@@ -7,7 +7,7 @@ import { HeaderPillButton, IcDocs, IcSupport } from "@whatap/design-system";
  * Docs · 고객지원 등 48px 헤더 안의 pill 텍스트 버튼.
  */
 const meta: Meta<typeof HeaderPillButton> = {
-  title: "Chrome/HeaderPillButton",
+  title: "Primitives/HeaderPillButton",
   component: HeaderPillButton,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

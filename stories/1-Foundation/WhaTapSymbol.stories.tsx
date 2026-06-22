@@ -18,7 +18,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
  * 별개입니다. WhaTap 회사·제품 브랜드를 식별할 때는 본 심볼, AI 기능 식별일 때는 `<AiSymbol>` 사용.
  */
 const meta: Meta = {
-  title: "Foundation/WhaTap Symbol",
+  title: "Primitives/WhaTap Symbol",
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",

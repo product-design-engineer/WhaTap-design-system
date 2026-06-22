@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AiCostTable } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof AiCostTable> = {
-  title: "WhaTap AI/Cards/AiCostTable",
+  title: "Composite/Ai/AiCostTable",
   component: AiCostTable,
   tags: ["autodocs"],
   parameters: {

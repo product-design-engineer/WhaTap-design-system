@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import TimelineStepItem from "../../src/widget/TimelineStepItem";
 
 const meta: Meta<typeof TimelineStepItem> = {
-  title: "WhaTap AI/Parts/TimelineStepItem",
+  title: "Primitives/Ai/TimelineStepItem",
   component: TimelineStepItem,
   tags: ["autodocs"],
   parameters: {

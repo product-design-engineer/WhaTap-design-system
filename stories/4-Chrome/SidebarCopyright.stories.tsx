@@ -5,7 +5,7 @@ import { SidebarCopyright } from "@whatap/design-system";
  * Stories for [[SidebarCopyright]] — Sidebar 하단 24px 저작권 푸터.
  */
 const meta: Meta<typeof SidebarCopyright> = {
-  title: "Chrome/SidebarCopyright",
+  title: "Primitives/SidebarCopyright",
   component: SidebarCopyright,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

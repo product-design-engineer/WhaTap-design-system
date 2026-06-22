@@ -8,7 +8,7 @@ import FilterChipItem from "../../src/FilterChipItem";
  * 으로 렌더. × 클릭 시 `onRemove` 호출.
  */
 const meta: Meta<typeof FilterChipItem> = {
-  title: "Chrome/Parts/FilterChipItem",
+  title: "Composite/FilterChipItem",
   component: FilterChipItem,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

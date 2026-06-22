@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AiAlertRulePreview } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof AiAlertRulePreview> = {
-  title: "WhaTap AI/Cards/AiAlertRulePreview",
+  title: "Composite/Ai/AiAlertRulePreview",
   component: AiAlertRulePreview,
   tags: ["autodocs"],
   parameters: {

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AiAssistantButton } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof AiAssistantButton> = {
-  title: "WhaTap AI/Buttons/AssistantButton",
+  title: "Primitives/Ai/AssistantButton",
   component: AiAssistantButton,
   tags: ["autodocs"],
   parameters: {

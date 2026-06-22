@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AiEventList } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof AiEventList> = {
-  title: "WhaTap AI/Cards/AiEventList",
+  title: "Composite/Ai/AiEventList",
   component: AiEventList,
   tags: ["autodocs"],
   parameters: {

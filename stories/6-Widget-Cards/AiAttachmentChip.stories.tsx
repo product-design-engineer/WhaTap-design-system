@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import AiAttachmentChip from "../../src/widget/AiAttachmentChip";
 
 const meta: Meta<typeof AiAttachmentChip> = {
-  title: "WhaTap AI/Parts/AiAttachmentChip",
+  title: "Primitives/Ai/AiAttachmentChip",
   component: AiAttachmentChip,
   tags: ["autodocs"],
   parameters: {

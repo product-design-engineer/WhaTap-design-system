@@ -6,7 +6,7 @@ import { PageHeader } from "@whatap/design-system";
  * Stories for [[PageHeader]] — 48px 페이지 헤더 (invariant).
  */
 const meta: Meta<typeof PageHeader> = {
-  title: "Chrome/PageHeader",
+  title: "Composite/PageHeader",
   component: PageHeader,
   tags: ["autodocs"],
   parameters: {

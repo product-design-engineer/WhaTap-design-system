@@ -5,7 +5,7 @@ import { OptionbarValueDisplay } from "@whatap/design-system";
  * Stories for [[OptionbarValueDisplay]] — 옵션바 텍스트 전용 값 표시 (32px).
  */
 const meta: Meta<typeof OptionbarValueDisplay> = {
-  title: "Chrome/OptionbarValueDisplay",
+  title: "Primitives/OptionbarValueDisplay",
   component: OptionbarValueDisplay,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

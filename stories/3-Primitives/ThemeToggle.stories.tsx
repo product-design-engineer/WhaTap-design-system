@@ -10,7 +10,7 @@ import { ThemeToggle, type ThemeMode } from "@whatap/design-system";
  * 아래 데모는 글로벌(documentElement) 대신 **로컬 박스**에 적용해 그 안에서만 전환을 시연합니다.
  */
 const meta: Meta<typeof ThemeToggle> = {
-  title: "Primitives/ThemeToggle",
+  title: "Composite/ThemeToggle",
   component: ThemeToggle,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

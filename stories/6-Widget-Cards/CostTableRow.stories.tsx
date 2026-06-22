@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import CostTableRow from "../../src/widget/CostTableRow";
 
 const meta: Meta<typeof CostTableRow> = {
-  title: "WhaTap AI/Parts/CostTableRow",
+  title: "Primitives/Ai/CostTableRow",
   component: CostTableRow,
   tags: ["autodocs"],
   parameters: {

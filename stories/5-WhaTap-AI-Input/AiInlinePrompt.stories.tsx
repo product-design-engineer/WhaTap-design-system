@@ -15,7 +15,7 @@ const DB_SUGGESTIONS: AiPromptSuggestion[] = [
 ];
 
 const meta: Meta<typeof AiInlinePrompt> = {
-  title: "WhaTap AI/Input/InlinePrompt",
+  title: "Composite/Ai/InlinePrompt",
   component: AiInlinePrompt,
   tags: ["autodocs"],
   parameters: {

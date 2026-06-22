@@ -8,7 +8,7 @@ import TabButton from "../../src/TabButton";
  * tablist 컨테이너 외형을 재현하기 위해 variant 별 배경/보더로 감싼다.
  */
 const meta: Meta<typeof TabButton> = {
-  title: "Chrome/Parts/TabButton",
+  title: "Primitives/TabButton",
   component: TabButton,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

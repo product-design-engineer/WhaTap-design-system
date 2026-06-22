@@ -6,7 +6,7 @@ import { Toast } from "@whatap/design-system";
  * Stories for [[Toast]] — 시스템 수준 알림 (상단 중앙 fixed, 자동 dismiss).
  */
 const meta: Meta<typeof Toast> = {
-  title: "Chrome/Toast",
+  title: "Primitives/Toast",
   component: Toast,
   tags: ["autodocs"],
   parameters: {

@@ -7,7 +7,7 @@ import { DateTimeBlock } from "@whatap/design-system";
  * `YYYY-MM-DD HH:MM` — numeric 폰트 + tabular-nums 자릿수 정렬.
  */
 const meta: Meta<typeof DateTimeBlock> = {
-  title: "Chrome/DateTimeBlock",
+  title: "Primitives/DateTimeBlock",
   component: DateTimeBlock,
   tags: ["autodocs"],
   parameters: {

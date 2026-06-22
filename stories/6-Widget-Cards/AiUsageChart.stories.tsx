@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AiUsageChart } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof AiUsageChart> = {
-  title: "WhaTap AI/Cards/AiUsageChart",
+  title: "Primitives/Ai/AiUsageChart",
   component: AiUsageChart,
   tags: ["autodocs"],
   parameters: {

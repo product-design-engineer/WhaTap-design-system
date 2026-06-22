@@ -12,7 +12,7 @@ import { AiUserBubble, AiChatExchange } from "@whatap/design-system/widget";
  * Stories for [[WhaTapAiWidget]] — AI 위젯 (480px 우측 패널).
  */
 const meta: Meta<typeof WhaTapAiWidget> = {
-  title: "WhaTap AI/Widget",
+  title: "Shell/Ai/Widget",
   component: WhaTapAiWidget,
   tags: ["autodocs"],
   parameters: {
