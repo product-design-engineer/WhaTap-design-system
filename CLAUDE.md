@@ -47,6 +47,11 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 - Component 토큰(3계층)은 variant×tone 조합이 복잡한 것만 선택 도입 (`--wds-btn-*`).
 - `--color-palette-*` (hex suffix) 는 차트 시리즈 전용 Global. 컴포넌트에서 직접 참조 가능 (차트 한정).
 
+**🔒 페이지 좌·우 거터 — 단일 토큰 규칙 (`--wds-page-px`)**
+- 페이지의 좌·우 거터는 **단 하나의 토큰 `--wds-page-px`(24px)** 이 소유한다. 헤더(`--wds-header-px`)·옵션바·본문(`--wds-content-px`)은 모두 이 값을 **alias 로 참조** → 한 곳만 바꾸면 헤더·옵션바·테이블 가장자리가 함께 정렬된다.
+- 본문 콘텐츠 블록 패딩은 인라인 `padding:16` 같은 **매직넘버 금지**. 등록된 유틸 클래스 **`.wds-page-content`**(`padding-block: --wds-content-py(16px)` + `padding-inline: --wds-content-px`)를 쓴다.
+- 헤더류는 `style={{ paddingInline: "var(--wds-header-px)" }}` 패턴(PageHeader · SubHeaderBar · PageHeaderAiInline · OptionbarPage 동일).
+
 ### 컴포넌트 3계층 — Primitives · Composite · Shell
 
 카탈로그 그룹명과 **동일 용어**. (구 명칭 `Foundation` → `Primitives` 로 통일.)
@@ -55,13 +60,13 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 |---|---|---|---|
 | **Primitives** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 | — | 65 (Ai/ 포함) |
 | **Composite** | Primitives 를 1단계 조합 | Primitives 만 import. **Composite 끼리 import 금지** | 29 (Ai/ 포함) |
-| **Shell** | Composite + Primitives 를 최종 조립하는 진입점 | 모든 계층 import 가능 | 6 (DashboardLayout · Ai/Widget · Page A~D) |
+| **Shell** | Composite + Primitives 를 최종 조립하는 진입점 | 모든 계층 import 가능 | 5 (DashboardLayout · Ai/Widget · Page A·B·D) |
 
 **Primitives** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, Switch, DataTable, MiniLineChart, LiveTimerCompact, AiCard, AiCaption … + **인라인 추출 Parts**(SidebarMenuItem · PageHeaderNotificationItem · PageHeaderProfileMenuItem · ProductRailItem · BottomRailItem · TabButton · CostBreakdownRow · ClassificationTableRow · CostTableRow · MigPlanRow · EventListItem · ReasoningStep · TimelineStepItem · CriteriaGroup · AiActionChip · AiAttachmentChip · AiQuickActionChip)
 
 **Composite** — FilterBar · PageHeader · PageHeaderAiInline · OptionbarPage · Sidebar(=SidebarMenuItem) · ThemeToggle · AiChatExchange · AiReasoning · InlinePrompt … + **추출 Parts**(DataTableRow · FilterDropdownOptionItem · FilterChipItem · CriteriaOptionButton · ReceiverChannelItem · ProposalSection · AiAlertRulePreview)
 
-**Shell** — DashboardLayout(=Sidebar) · WhaTapAiWidget(`Shell/Ai/Widget`) · Page 합성 템플릿(A 기본 대시보드 · B AI 전용 · C 목록 · D 상세)
+**Shell** — DashboardLayout(=Sidebar) · WhaTapAiWidget(`Shell/Ai/Widget`) · Page 합성 템플릿(A 기본 대시보드 · B AI 전용 · D 상세)
 
 **신규 컴포넌트 추가 시 반드시 계층을 명시.** Composite 가 다른 Composite 를 import 하면 Shell 로 승격하거나 구조 분리. AI 전용이면 카탈로그 title 을 `<Layer>/Ai/<Name>` 으로 둔다.
 

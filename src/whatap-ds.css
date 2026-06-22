@@ -194,8 +194,11 @@
     --wds-datetime-field-w: 16px;
     --wds-datetime-space-w: 6px;
 
-    /* ── Component tokens: PageHeader ── */
-    --wds-header-px: 24px; /* 페이지 헤더 좌·우 padding */
+    /* ── Component tokens: 페이지 좌·우 거터 (헤더·옵션바·본문 공통 단일 규칙) ── */
+    --wds-page-px: 24px;                  /* 페이지 좌·우 거터 — 헤더·옵션바·본문이 공유하는 단일 값 */
+    --wds-header-px: var(--wds-page-px);  /* 헤더 좌·우 padding (= 페이지 거터) */
+    --wds-content-px: var(--wds-page-px); /* 본문 콘텐츠 좌·우 거터 (= 페이지 거터, 헤더와 세로 정렬) */
+    --wds-content-py: 16px;               /* 본문 콘텐츠 상·하 padding */
   }
 
 /* ── preflight reset ────────────────────────────────────────────────────── */
@@ -945,6 +948,11 @@ html, body, #root {
 .wds-switch:focus-visible {
   outline: 2px solid var(--color-brand-blue);
   outline-offset: 2px;
+}
+/* 페이지 본문 콘텐츠 블록 — 좌·우 거터를 헤더·옵션바와 동일한 토큰으로 정렬. 인라인 padding 매직넘버 대체. */
+.wds-page-content {
+  padding-block: var(--wds-content-py);
+  padding-inline: var(--wds-content-px);
 }
 .wds-btn:hover:not(:disabled) {
   background-color: var(--wds-btn-bg-hover, var(--wds-btn-bg, transparent));

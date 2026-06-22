@@ -62,7 +62,7 @@ const TIME_COLS: DataTableColumn<TimeRow>[] = [
 /* ─── Tab panels ─────────────────────────────────────── */
 
 const OverviewPanel = () => (
-  <div style={{ padding: 16 }}>
+  <div className="wds-page-content">
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24 }}>
       <MiniLineChart title="CPU Usage"    values={CPU_DATA}     unit="%" showTopStat />
       <MiniLineChart title="Memory"       values={MEM_DATA}     unit="%" showTopStat color="#8B52FF" />

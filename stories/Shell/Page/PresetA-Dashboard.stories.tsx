@@ -109,7 +109,7 @@ export const Example: StoryObj = {
             </>
           }
           main={
-            <div style={{ padding: 16 }}>
+            <div className="wds-page-content">
               <DataTable<Row>
                 columns={COLUMNS}
                 rows={ROWS}
