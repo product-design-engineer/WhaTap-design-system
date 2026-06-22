@@ -25,15 +25,16 @@
   --color-status-warning: #FFA012;
   --color-status-error: #f34646;
 
-  /* Surface */
-  --color-surface-50: #F5F5F5;
-  --color-surface-100: #F1F2F4;
-  --color-surface-200: #EAEAEA;
+  /* Surface — ⚠️ 값이 아니라 *의도*로 고른다. 값이 같아도 용도가 다르면 다른 토큰을 쓸 것
+     (한 토큰만 바꿔도 그 용도의 모든 곳이 자동 반영). 외형(gray/light)이 아닌 용도로 명명·선택. */
+  --color-surface-50: #F5F5F5;  /* 용도: 가장 옅은 보조 표면 — hover 배경, muted 셀, 입력 비활성 */
+  --color-surface-100: #F1F2F4; /* 용도: 중간 보조 표면 — active row, 트랙(progress/skeleton), 선택 강조 */
+  --color-surface-200: #EAEAEA; /* 용도: 가장 진한 보조 표면 — switch off 트랙, 구분 블록, 무채색 채움 */
 
   /* Base surface (semantic) — page background + card.
      라이트 기본값은 흰색(기존 동작 불변). 다크 값은 파일 하단 `.dark` 블록에서 오버라이드. */
-  --color-bg: #FFFFFF;
-  --color-card: #FFFFFF;
+  --color-bg: #FFFFFF;   /* 용도: 페이지/앱 셸 배경 (DashboardLayout, main) */
+  --color-card: #FFFFFF; /* 용도: 떠 있는 표면 — 헤더·사이드바·카드·패널·입력·드롭다운·모달 */
 
   /* Text */
   --color-text-strong: #1E1E1E;

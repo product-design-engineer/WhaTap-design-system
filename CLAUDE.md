@@ -90,6 +90,40 @@
 
 본문 (running text) 만 regular. 같은 사이즈에서 weight 만 평탄화하면 위계 손실 — 사이즈 + weight 둘 다 조합.
 
+### 타이포 Role Catalog — 의도 → utility 조합
+
+크기를 직접 고르지 말고 **역할(role)** 로 선택. 같은 역할은 같은 조합을 쓴다 (위계 일관성).
+
+| Role | 의도 | utility 조합 |
+|---|---|---|
+| `heading.page` | 페이지 타이틀 | `text-2xl font-medium` (PageHeader) |
+| `heading.section` | 섹션/카드 헤더 | `text-lg font-bold` |
+| `heading.subsection` | 강조 부제·테이블 row 강조 | `text-md font-bold` |
+| `body` | 본문 running text | `text-base` (regular) |
+| `body.label` | 폼/항목 라벨 | `text-base font-medium` |
+| `meta.primary` | 보조 정보·캡션 | `text-sm` |
+| `meta.secondary` | 마이크로 정보·인디케이터 | `text-xs` |
+| `numeric.metric` | 지표·카운트 강조 | `text-md font-numeric tabular-nums` |
+| `numeric.compact` | 표 안 수치 | `text-base font-numeric tabular-nums` |
+
+## Border vs Ring — 경계 vs 상태
+
+- **`border-*`** = **상시 경계** (`--color-border-*`). Card/Sidebar/Header 구분선, Input 평상 테두리.
+- **focus 등 상태** = 상황에 맞게:
+  - **버튼·토글류**: `:focus-visible` **ring/outline** 사용 (예: `.wds-switch:focus-visible` → `outline: 2px var(--color-brand-blue)`). border 로 focus 표현 금지.
+  - **입력 필드(TextField·Select)**: focus 시 **border 색 전환**(`--color-brand-blue`)이 *의도된 관례* — 허용. (focus=ring 규칙의 예외)
+- 즉 "focus엔 무조건 ring"이 아니라 — **컨트롤은 ring, 입력 필드는 focus-border** 로 구분.
+
+## 컴포넌트 선택 가이드 — 같은 효과도 의도로 구분
+
+| 의도 | 컴포넌트 | 특징 |
+|---|---|---|
+| **즉시 반영 설정** (다크모드·알림 on/off) | `Switch` / `ThemeToggle` | 1-step, 토글 즉시 적용 |
+| **폼 제출 시 함께 보냄** (약관 동의·다중 선택) | `Checkbox` | form 일부, submit 필요 |
+| 일시적 누름 상태 (텍스트 Bold 등) | *(미보유 — 필요 시 `Toggle` 신설)* | press/unpress |
+
+❌ 약관 동의에 `Switch`, 즉시-적용 설정에 `Checkbox` 처럼 의도와 어긋난 선택 금지.
+
 ## DataTable 종합 정책
 
 ### Density — 기본 `default`
