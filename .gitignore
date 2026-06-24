@@ -15,3 +15,5 @@ coverage/
 storybook-static/
 docs/DESIGN.md
 tests/visual/diff/
+# npm pack 임시 산출물 (static/public/releases/ 의 배포본만 커밋)
+/whatap-design-system-*.tgz

@@ -1,0 +1,7 @@
+{
+  "latest": "0.1.0",
+  "base": "https://whatap-design-system-storybook.vercel.app/releases",
+  "versions": [
+    "whatap-design-system-0.1.0.tgz"
+  ]
+}

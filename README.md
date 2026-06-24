@@ -13,16 +13,19 @@ pnpm storybook          # http://localhost:5181 (dev) — MCP 엔드포인트 �
 pnpm build-storybook    # 정적 빌드 (DESIGN.md 합본 자동 생성)
 ```
 
-## 소비 (다른 앱/프로토타입에서 사용)
+## 소비 (다른 앱에서 사용)
 
-```jsonc
-// package.json
-"@whatap/design-system": "file:<상대경로>/WhaTap-design-system"
+**Vercel 호스팅 tarball** 로 설치 — repo clone 불필요, Vite·Next·webpack 모두 추가 설정 없이 동작.
+```bash
+npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-0.1.0.tgz
+# 최신: .../releases/whatap-design-system-latest.tgz · 버전 목록: /releases/index.json
 ```
 ```tsx
 import { DashboardLayout, PageHeaderAiInline, DataTable } from "@whatap/design-system";
 import "@whatap/design-system/tokens.css";   // import 만으로 전 토큰 :root 보장
 ```
+> DS 자체를 수정하며 개발하는 워크스페이스는 tarball 대신 `file:`/`link:` 로 소스를 직접 물린다.
+> 릴리스: 버전 올림 → `pnpm release` → `static/public/releases` 커밋·푸시(Vercel 자동 배포).
 
 단일 출처 원칙: 인라인 색 리터럴 금지(토큰 사용), 컴포넌트 inline 재구현 금지(prop 조합). 자세한 정책은 `CLAUDE.md`.
 

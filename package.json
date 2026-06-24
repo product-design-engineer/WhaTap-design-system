@@ -1,32 +1,35 @@
 {
   "name": "@whatap/design-system",
-  "version": "0.0.1",
-  "private": true,
+  "version": "0.1.0",
+  "private": false,
   "type": "module",
-  "description": "WhaTap AI Assistant design system — chrome + widget cards + tokens. Source-only package consumed by prototypes via workspace symlink.",
+  "description": "WhaTap AI Assistant design system — chrome + widget cards + tokens. Vercel-hosted tarball; workspace consumers use the `source` export condition for HMR.",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "default": "./src/index.ts"
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./widget": {
-      "types": "./src/widget/index.ts",
-      "default": "./src/widget/index.ts"
+      "source": "./src/widget/index.ts",
+      "types": "./dist/widget.d.ts",
+      "import": "./dist/widget.js",
+      "default": "./dist/widget.js"
     },
     "./tokens.css": "./src/tokens.css",
-    "./style.css": "./src/whatap-ds.css",
-    "./whatap-ds.css": "./src/whatap-ds.css"
+    "./style.css": "./dist/style.css",
+    "./whatap-ds.css": "./dist/style.css"
   },
   "files": [
-    "src",
-    "stories",
-    ".storybook",
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
     "build:design": "node scripts/build-design.mjs",
     "build:js": "tsup",
     "build:lib": "pnpm build:js",
+    "release": "node scripts/pack-release.mjs",
     "storybook": "node scripts/build-design.mjs && storybook dev -p 5181 --no-open",
     "build-storybook": "node scripts/build-design.mjs && storybook build",
     "check:catalog": "node scripts/check-catalog-folders.mjs",
