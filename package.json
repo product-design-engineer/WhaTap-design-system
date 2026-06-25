@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": false,
   "type": "module",
-  "description": "WhaTap AI Assistant design system — chrome + widget cards + tokens. Vercel-hosted tarball; workspace consumers use the `source` export condition for HMR.",
+  "description": "WhaTap AI Assistant design system — chrome + widget cards + tokens. Consumed as a Vercel-hosted tarball; the `source` export condition serves the DS's own Storybook/Vitest from src.",
   "exports": {
     ".": {
       "source": "./src/index.ts",

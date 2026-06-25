@@ -24,7 +24,6 @@ npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-s
 import { DashboardLayout, PageHeaderAiInline, DataTable } from "@whatap/design-system";
 import "@whatap/design-system/tokens.css";   // import 만으로 전 토큰 :root 보장
 ```
-> DS 자체를 수정하며 개발하는 워크스페이스는 tarball 대신 `file:`/`link:` 로 소스를 직접 물린다.
 > 릴리스: 버전 올림 → `pnpm release` → `static/public/releases` 커밋·푸시(Vercel 자동 배포).
 
 단일 출처 원칙: 인라인 색 리터럴 금지(토큰 사용), 컴포넌트 inline 재구현 금지(prop 조합). 자세한 정책은 `CLAUDE.md`.

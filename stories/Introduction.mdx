@@ -13,7 +13,7 @@ WhaTap 제품의 디자인 시스템 **단일 출처** — 토큰 · 3-Layer 컴
 ### 👩‍💻 프론트엔드 개발자
 
 - **설치:** Vercel 호스팅 tarball — `npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-latest.tgz` (repo clone 불필요, Vite·Next·webpack 모두 동작).
-- **소비:** `import { DashboardLayout, ... } from "@whatap/design-system"` + `import "@whatap/design-system/tokens.css"`. DS 자체를 수정하는 워크스페이스는 `file:`/`link:` 심링크 → **DS 수정이 자동 반영(HMR)**.
+- **소비:** `import { DashboardLayout, ... } from "@whatap/design-system"` + `import "@whatap/design-system/tokens.css"`.
 - **본인 AI 연결:** 호스팅 MCP(권장, dev 서버 불필요) `https://whatap-ds-mcp.vercel.app/mcp` · 라이브 도구는 로컬 `storybook dev` 의 `:5181/mcp`. 절차: [AI-INTEGRATION.md](/design-system/AI-INTEGRATION.md) · 빠른 안내 [mcp.txt](/mcp.txt) · AI 인덱스 [llms.txt](/llms.txt).
 - **컨텍스트 주입:** `curl /design-system/DESIGN.md` ([DESIGN.md](/design-system/DESIGN.md), 합본).
 - **단일 출처 규칙:** 인라인 hex 금지(토큰 사용)·컴포넌트 inline 재구현 금지(prop 조합). 컴포넌트 선택은 각 docstring 의 **When to use / When NOT** + autodocs prop 표.

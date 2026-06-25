@@ -20,9 +20,9 @@ const dirname =
  */
 export default defineConfig({
   plugins: [react()],
-  // exports map 이 dist 우선(외부 소비자용)으로 바뀐 뒤에도 Storybook/Vitest 는
-  // `source` 조건으로 src 의 .tsx 를 직접 해석한다 → HMR + react-docgen autodocs 유지,
-  // dist 빌드 없이도 동작(Vercel build-storybook 가 dist 를 만들지 않으므로 필수).
+  // exports map 이 dist 우선(외부 소비자용)으로 바뀐 뒤에도, DS 자신의 Storybook/Vitest 는
+  // `source` 조건으로 src 의 .tsx 를 직접 해석한다 → react-docgen autodocs 유지 +
+  // dist 빌드 없이 동작(Vercel build-storybook 가 dist 를 만들지 않으므로 필수). 외부 소비/모노레포용 아님.
   // 'development|production' 은 Vite 가 모드별로 치환하는 특수 토큰(기본값 보존).
   resolve: {
     conditions: ["source", "module", "browser", "development|production"],
