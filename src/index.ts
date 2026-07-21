@@ -39,6 +39,8 @@ export type { ThemeToggleProps, ThemeMode } from "./ThemeToggle";
 
 // Chrome — 대시보드 쉘
 export { default as AiSymbol } from "./AiSymbol";
+export { default as AiTriggerButton } from "./AiTriggerButton";
+export type { AiTriggerButtonProps } from "./AiTriggerButton";
 export { default as Button } from "./Button";
 export type { ButtonProps, ButtonVariant, ButtonSize, ButtonTone } from "./Button";
 export { default as FilterBar } from "./FilterBar";
