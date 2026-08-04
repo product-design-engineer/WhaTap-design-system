@@ -51,6 +51,7 @@ export default function AiChoiceButtons({
     >
       <button
         onClick={primary.onClick}
+        data-ds-policy-ok="brand-blue primary 버튼 위 라벨 — 컬러 위 고정 흰색"
         // raw-color-ok: brand-blue primary 버튼 위 라벨 — 컬러 위 고정 흰색.
         className="flex items-center justify-center h-36px px-16px rounded-6px bg-color-var-color-brand-blue text-white text-md tracking-default cursor-pointer transition-colors hover-bg-color-var-color-brand-blue-deep"
         style={{

@@ -42,6 +42,7 @@ export default function Stage({
     >
       {badge && (
         <div
+          data-ds-policy-ok="무대 backdrop(테마 무관 어두움) 위 배지 전경·경계 — 고정 흰색"
           // raw-color-ok: 무대 backdrop(테마 무관 어두움) 위 배지 전경·경계 — 고정 흰색.
           className="fixed top-4 right-4 z-1000 px-3_5 py-2 rounded-full text-sm font-semibold tracking-wider border border-white-10 text-white"
           style={{ background: "var(--color-stage-badge-bg)" }}

@@ -207,6 +207,7 @@ export default function LiveTimerCompact({
           </span>
           {durationLabel && (
             <span
+              data-ds-policy-ok="녹색 알약 위 전경 — 컬러 배경 위 고정 흰색"
               // raw-color-ok: 녹색 알약 위 전경 — 컬러 배경 위 고정 흰색.
               className="inline-flex items-center justify-center px-5px rounded-2px text-white whitespace-nowrap shrink-0"
               style={{

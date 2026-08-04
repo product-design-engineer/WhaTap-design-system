@@ -293,7 +293,7 @@ export const TonePairing: StoryObj = {
             style={{ background: surface.cssVar, fontFamily: "var(--font-family-korean)" }}
           >
             <div className="flex items-center gap-1_5 px-2 py-1 rounded-xl bg-card">
-              <div className="rounded-full" style={{ width: 6, height: 6, background: indicator.value }} />
+              <div className="rounded-full" style={{ width: 6, height: 6, background: indicator.cssVar }} />
               <span className="text-xs leading-none" style={{ color: toneText.cssVar, fontWeight: 500 }}>
                 {label.value || `(${intent})`}
               </span>

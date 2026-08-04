@@ -189,13 +189,26 @@ if (args.includes("--list")) {
 }
 
 if (args.includes("--update")) {
+  // ⛔ 동결선은 0 에 도달했다. 되돌릴 수 없다 — `--update` 로 위반을 등록하는 길을 막는다.
+  //    (이 장치가 없으면 "일단 --update 해두고 나중에" 가 반복되며 정책이 서서히 녹는다.)
+  if (violations.length > 0) {
+    console.error(
+      `\n⛔ 베이스라인 갱신 거부 — 현재 위반 ${violations.length}건.\n\n` +
+        "  동결선은 이미 **0건**입니다. 위반을 베이스라인에 등록하는 것은\n" +
+        "  정책을 되돌리는 일이므로 허용하지 않습니다. 리터럴을 토큰으로 바꾸거나,\n" +
+        "  정당한 예외라면 `// raw-color-ok: <이유>` 로 사유를 남기세요.\n\n" +
+        "  토큰이 없어서 못 바꾸는 경우 → 토큰을 먼저 추가하세요.\n" +
+        "  토큰 부재는 리터럴의 근거가 아니라 토큰 추가의 근거입니다.\n"
+    );
+    process.exit(1);
+  }
   writeFileSync(
     BASELINE_PATH,
     JSON.stringify(
       {
         _comment:
-          "인라인 색 리터럴 기존 위반 동결선. 신규 위반은 차단되고, 이 수치는 줄일 수만 있다. " +
-          "리터럴을 토큰으로 치환한 뒤 `node scripts/check-no-raw-colors.mjs --update` 로 갱신.",
+          "인라인 색 리터럴 동결선 — **0 고정**. 위반 등록은 --update 가 거부한다. " +
+          "정당한 예외는 베이스라인이 아니라 `// raw-color-ok: <이유>` 로 표기한다.",
         total: violations.length,
         files: counts,
       },

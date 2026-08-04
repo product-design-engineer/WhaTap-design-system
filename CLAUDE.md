@@ -79,6 +79,61 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 - 인라인 허용은 **재사용 없는 1회성 레이아웃 래퍼**(flex 컨테이너 등)에 한함.
 - **적용 현황(2026-06-17):** 위젯·chrome 의 반복 인라인 구조 23종을 컴포넌트로 추출 완료 — 추출 Parts 는 각자 계층에 맞춰 `Primitives/*`(리프 행·칩·항목) 또는 `Composite/*`(조합 단위)에 등록(`index.ts` export + story). 테이블 행·스텝·칩·메뉴 항목 등.
 
+### 🔒 불변 정책 — 색 리터럴 0 (Zero Literal)
+
+> **이 정책은 불변(immutable)입니다. 동결선은 0이며 되돌리지 않습니다.**
+
+`src/` · `stories/` · `.storybook/` **전 범위**에 색 리터럴이 존재하지 않는다. 카탈로그도 예외가 아니다 — 디자인 시스템이 가르치는 예시가 위반이면 정책은 이미 죽은 것이다.
+
+**금지 대상 (4종)** — 이름이 다를 뿐 전부 같은 위반이다.
+
+| # | 형태 | 예 |
+|---|---|---|
+| 1 | hex 리터럴 | `#fff` · `#F5F5F5` · `#ffffffcc` |
+| 2 | rgb()/rgba() 리터럴 | `rgba(0,0,0,.5)` |
+| 3 | 고정색 유틸 클래스 | `bg-white` · `text-black` · `border-white` |
+| 4 | **값이 이름에 박힌 유틸** | `bg-ce5484d` · `border-cd3d3d3` · `bg-rgba-0-0-0-0_05` · `shadow-0_4px_16px_rgba-...` |
+
+**3중 게이트** — 하나만으로는 막히지 않는다는 것이 실측으로 드러났다.
+
+1. **`npm run lint:tokens`** (소스) — 위 4종을 스캔. 신규 위반은 `exit 1`.
+   **`--update` 는 위반이 있으면 거부한다** — 동결선 0을 되돌리는 길 자체를 막는다.
+2. **`npm run audit:runtime`** (렌더된 DOM) — Storybook 전 스토리에 `devPolicyGuard` 를 태운다.
+   소스에 리터럴이 없는데 DOM 에는 박히는 경로가 실제로 있었다: `_tokens.ts`(게이트 면제)의
+   hex 를 `TONE_DOT[tone]` 로 참조해 인라인 주입 → DOM 에 `rgb(229,57,53)`. **44건이 이렇게
+   숨어 있었고 다크에서 뒤집히지 않았다.** 소스 스캔으로는 원리적으로 볼 수 없다.
+3. **`npm run test:visual`** — 라이트/다크 스냅샷. 위젯 tone/표면을 포함해야 한다.
+   위젯 커버리지가 없어서 "밝은 배경 위 밝은 글자" 판독 불가를 **두 번** 놓쳤다.
+
+**허용 예외는 2종뿐.** 그 외에 예외는 없다.
+
+- **컬러 배경 위 고정 흰색 전경** — contained 버튼 · solid chip · 그라데이션 헤더/아바타 · 원형 배지 안 체크 · switch knob. 테마와 무관하게 흰색이어야 하므로 유지한다.
+- **`mask` 의 알파 지정** — 색이 아니라 불투명/투명을 뜻한다.
+
+**예외는 두 채널에 동시에 표기한다.** 하나만 달면 다른 게이트가 잡는다.
+
+```tsx
+<button
+  data-ds-policy-ok="컬러 위 고정 흰색 전경"   // ← 런타임 가드용
+  // raw-color-ok: contained 버튼 — tone 원색 배경 위 고정 흰색 전경.   ← 소스 게이트용
+  style={{ "--wds-btn-fg": "#fff" }}
+/>
+```
+
+⚠️ 사유 주석은 **리터럴 줄 바로 위**여야 한다(게이트는 같은 줄/윗줄만 본다). 사이에 다른 속성을 끼우면 면제가 깨진다. 사유 문구 안에 hex 를 쓰지 말 것 — 그것도 리터럴로 잡힌다.
+
+**TS 토큰을 인라인 주입할 때는 `.value` 가 아니라 `.cssVar`.** `.dark` 는 CSS 변수만 재매핑하므로 hex 를 박으면 다크가 따라오지 않는다. `TONE_BG` · `TONE_DOT` · `TONE_TEXT` 는 이미 `cssVar` 기반이다.
+
+```tsx
+style={{ background: tokens.color.surface.critical.cssVar }}   // ✅ 다크 따라옴
+style={{ background: tokens.color.surface.critical.value }}     // ❌ 라이트 hex 가 박힘
+```
+
+**카탈로그는 값을 복제하지 않는다.** 토큰 스토리는 `stories/_useTokens.ts` 로 `:root` 를 런타임 열거해 계산값을 읽는다 → 토큰을 추가하면 자동 등장, 값을 바꾸면 자동 반영, 다크는 다크 값 표시. 카탈로그가 소유하는 것은 **값이 아니라 의미(용도 설명)** 뿐이다.
+
+**토큰이 없어서 리터럴을 쓴다는 것은 성립하지 않는다.** 토큰 부재는 리터럴의 근거가 아니라 **토큰 추가의 근거**다. 새 색이 필요하면:
+`tokens.css` → `whatap-ds.css`(:root + `.dark`) → `DESIGN.md` → 필요시 `_tokens.ts`(`value` + `cssVar`) 순으로 **먼저** 추가하고, 그 다음 컴포넌트가 참조한다. **값이 아니라 역할로 명명**한다(`--shadow-md` ⭕ / `--shadow-0-8-24` ❌).
+
 ## 스타일 — 일반 CSS (Tailwind 미사용 · 흔적 0)
 
 런타임 스타일은 외부 CSS 프레임워크 흔적이 0인 **자체 소유 일반 CSS** `src/whatap-ds.css` (= export `./style.css`·`./whatap-ds.css`). 내부에 `@layer`·`--tw-*`·`@property`·`.foo-\[…\]`(escape 클래스명) 없음. 유틸 클래스명은 escape 없는 일반 식별자(`gap-4px`·`hover-opacity-70` 등).

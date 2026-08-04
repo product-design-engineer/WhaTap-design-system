@@ -93,6 +93,7 @@ export default function FilterChip({
       role="switch"
       aria-checked={selected}
       aria-disabled={disabled || undefined}
+      data-ds-policy-ok={selected ? "brand-blue 배경 위 고정 흰색 전경(라벨·카운트)" : undefined}
       disabled={disabled}
       onClick={() => onChange?.(!selected)}
       className={`inline-flex shrink-0 items-center font-medium transition-colors ${spec.text} ${

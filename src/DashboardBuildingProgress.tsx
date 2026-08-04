@@ -83,6 +83,7 @@ export default function DashboardBuildingProgress({
     >
       {/* gradient ring spinner */}
       <div
+        data-ds-policy-ok="mask 의 불투명 알파 지정 — 색이 아니다(도넛 구멍)"
         className="size-36px rounded-full"
         style={{
           background: "conic-gradient(from 90deg, var(--color-whatap-blue), var(--color-whatap-purple), var(--color-whatap-blue))",
@@ -126,6 +127,7 @@ export default function DashboardBuildingProgress({
                 <circle cx="7" cy="7" r="6.5" fill="var(--color-status-success)" />
                 <path
                   d="M4 7l2 2 4-4"
+                  data-ds-policy-ok="status-success 원형 위 체크마크 — 컬러 위 고정 흰색"
                   // raw-color-ok: status-success 원형 위 체크마크 — 컬러 위 고정 흰색.
                   stroke="#fff"
                   strokeWidth="1.4"

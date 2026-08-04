@@ -64,6 +64,7 @@ export default function CriteriaOptionButton({
       <button
         onClick={onClick}
         disabled={locked}
+        data-ds-policy-ok={selected ? "brand-blue 배경 위 전경 — 컬러 위 고정 흰색" : undefined}
         className="flex items-center justify-center h-32px px-12px rounded-6px text-base tracking-default border cursor-pointer whitespace-nowrap"
         style={{
           fontFamily: "var(--font-family-korean)",

@@ -37,7 +37,9 @@
     "test": "node scripts/check-catalog-folders.mjs && node scripts/design-lint.js && node scripts/check-no-raw-colors.mjs && vitest run",
     "test:visual": "node scripts/visual-snap.mjs",
     "test:visual:update": "node scripts/visual-snap.mjs --update",
-    "lint:tokens": "node scripts/check-no-raw-colors.mjs"
+    "lint:tokens": "node scripts/check-no-raw-colors.mjs",
+    "audit:runtime": "node scripts/audit-runtime-policy.mjs",
+    "audit:runtime:dark": "node scripts/audit-runtime-policy.mjs --theme dark"
   },
   "peerDependencies": {
     "react": "^19.0.0",

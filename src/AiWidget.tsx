@@ -134,6 +134,7 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
             </svg>
           </div>
           <button
+            data-ds-policy-ok="brand-blue 보내기 버튼 위 아이콘 — 컬러 위 고정 흰색"
             // raw-color-ok: brand-blue 보내기 버튼 위 아이콘 — 컬러 위 고정 흰색.
             className="size-7 rounded-md flex items-center justify-center text-white cursor-pointer"
             style={{ background: "var(--color-brand-blue)" }}

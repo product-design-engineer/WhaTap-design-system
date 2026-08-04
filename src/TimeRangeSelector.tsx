@@ -92,6 +92,7 @@ export default function TimeRangeSelector({
           <DateTimeBlock parts={end} side="end" />
 
           <span
+            data-ds-policy-ok="success 알약 위 전경 — 컬러 배경 위 고정 흰색"
             // raw-color-ok: success 알약 위 전경 — 컬러 배경 위 고정 흰색.
             className="flex items-center px-4px h-16px rounded-2px text-base font-bold text-white leading-none"
             style={{

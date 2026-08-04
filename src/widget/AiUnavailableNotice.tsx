@@ -155,7 +155,7 @@ export default function AiUnavailableNotice({
   const resolvedActionLabel = actionLabel ?? preset?.actionLabel;
   const showAction = Boolean(resolvedActionLabel) && Boolean(onAction);
 
-  const indicator = tokens.color.indicator[tone].value;
+  const indicator = tokens.color.indicator[tone].cssVar!;
   const koFont = tokens.font.family.korean.value;
 
   return (

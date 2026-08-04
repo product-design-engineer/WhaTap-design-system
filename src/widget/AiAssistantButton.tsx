@@ -74,6 +74,7 @@ export default function AiAssistantButton({
         />
       </div>
       <span
+        data-ds-policy-ok="hover/active 시 그라데이션 배경 위 라벨 — 컬러 위 고정 흰색"
         // raw-color-ok: hover/active 시 그라데이션 배경 위 라벨 — 컬러 위 고정 흰색.
         className={`${spec.text} tracking-default leading-none whitespace-nowrap relative z-10 transition-colors text-brand-blue group-hover-text-white group-_is-active-text-white`}
         style={{

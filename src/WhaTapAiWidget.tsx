@@ -172,6 +172,7 @@ export default function WhaTapAiWidget({
             <div className="flex gap-4px items-center shrink-0">
               <img alt="" className="size-16px" src="/icons/ai-header-symbol.svg" />
               <span
+                data-ds-policy-ok="AI 그라데이션 헤더 위 전경 — 컬러 배경 위 고정 흰색"
                 // raw-color-ok: AI 그라데이션 헤더 위 전경 — 컬러 배경 위 고정 흰색.
                 className="text-lg font-bold text-white tracking-default leading-px-20 whitespace-nowrap"
                 style={{ fontFamily: "var(--font-family-korean)" }}
@@ -361,6 +362,7 @@ export default function WhaTapAiWidget({
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path
                       d="M8 12V4M8 4L4 8M8 4L12 8"
+                      data-ds-policy-ok="활성 시 brand-blue 배경 위 전경 — 컬러 위 고정 흰색"
                       // raw-color-ok: 활성 시 brand-blue 배경 위 전경 — 컬러 위 고정 흰색.
                       stroke={hasInput ? "#fff" : "var(--color-border-divider)"}
                       strokeWidth="1.6"

@@ -124,6 +124,8 @@ export default function Button({
     <button
       type={rest.type ?? "button"}
       disabled={isDisabled}
+      // 소스의 raw-color-ok 와 짝 — 런타임 가드에도 사유를 알린다(contained 는 컬러 위 흰 전경).
+      data-ds-policy-ok={variant === "contained" ? "컬러 위 고정 흰색 전경(--wds-btn-fg)" : undefined}
       className={[
         "wds-btn",
         "inline-flex items-center justify-center rounded-4px border whitespace-nowrap select-none relative overflow-hidden",

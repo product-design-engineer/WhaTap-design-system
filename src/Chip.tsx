@@ -98,6 +98,7 @@ export default function Chip({
 
   return (
     <span
+      data-ds-policy-ok={variant === "solid" ? "tone 원색 배경 위 고정 흰색 전경" : undefined}
       className={`inline-flex items-center font-medium ${spec.text} ${className}`}
       style={{
         height: spec.h,

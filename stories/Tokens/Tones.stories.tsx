@@ -42,13 +42,14 @@ export const SemanticIntentMatrix: StoryObj = {
       {INTENTS.map((intent) => {
         const surface = tokens.color.surface[intent];
         const indicator = tokens.color.indicator[intent];
+        const toneText = tokens.color.toneText[intent];
         const label = tokens.label[intent];
         const m = INTENT_META[intent];
         return (
-          <div key={intent} style={{ display: "grid", gridTemplateColumns: "100px 200px 1fr 240px", gap: 16, alignItems: "center", padding: 16, border: "1px solid var(--color-border-default)", borderRadius: 8, background: surface.value }}>
+          <div key={intent} style={{ display: "grid", gridTemplateColumns: "100px 200px 1fr 240px", gap: 16, alignItems: "center", padding: 16, border: "1px solid var(--color-border-default)", borderRadius: 8, background: surface.cssVar }}>
             {/* 1. 이름 */}
             <div>
-              <div style={{ fontFamily: "Roboto, monospace", fontWeight: 700, fontSize: 14, color: indicator.value }}>{intent}</div>
+              <div style={{ fontFamily: "Roboto, monospace", fontWeight: 700, fontSize: 14, color: indicator.cssVar }}>{intent}</div>
               <div style={{ fontFamily: "Roboto, monospace", fontSize: 10, color: "var(--color-text-tertiary)", marginTop: 2 }}>
                 legacy: <code>{m.legacyAlias}</code>
               </div>
@@ -65,8 +66,8 @@ export const SemanticIntentMatrix: StoryObj = {
             </div>
             {/* 4. 배지 미리보기 */}
             <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 10px", borderRadius: 12, background: "var(--color-card)" }}>
-              <div style={{ width: 8, height: 8, borderRadius: 4, background: indicator.value }} />
-              <span style={{ fontFamily: "'Noto Sans', sans-serif", fontSize: 12, color: indicator.value, fontWeight: 500 }}>
+              <div style={{ width: 8, height: 8, borderRadius: 4, background: indicator.cssVar }} />
+              <span style={{ fontFamily: "'Noto Sans', sans-serif", fontSize: 12, color: toneText.cssVar, fontWeight: 500 }}>
                 {label.value || `(${intent})`}
               </span>
             </div>

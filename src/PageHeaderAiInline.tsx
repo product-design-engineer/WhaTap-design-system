@@ -143,6 +143,7 @@ export default function PageHeaderAiInline({
                 textAnchor="middle"
                 fontSize="13px"
                 fontWeight="700"
+                data-ds-policy-ok="그라데이션 아바타 위 이니셜 — 컬러 위 고정 흰색"
                 // raw-color-ok: 그라데이션 아바타 위 이니셜 — 컬러 위 고정 흰색.
                 fill="#fff"
                 fontFamily="Roboto, sans-serif"

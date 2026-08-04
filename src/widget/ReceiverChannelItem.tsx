@@ -112,6 +112,7 @@ export default function ReceiverChannelItem({
         aria-hidden
       >
         <span
+          data-ds-policy-ok="트랙(컬러/회색) 위 knob — Switch 프리미티브와 같은 고정 흰색"
           // raw-color-ok: 트랙(컬러/회색) 위 knob — Switch 프리미티브와 같은 고정 흰색.
           className="absolute top-2px size-12px rounded-full bg-white transition-left"
           style={{ left: enabled ? 14 : 2 }}

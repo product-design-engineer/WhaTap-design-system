@@ -122,22 +122,27 @@ export const tokens = {
     indicator: {
       critical: {
         value: "#E53935",
+        cssVar: "var(--color-indicator-critical)",
         description: "Critical 톤 indicator — 위험·이상치 도트/스트로크/차트 강조선.",
       },
       warning: {
         value: "#F0B400",
+        cssVar: "var(--color-indicator-warning)",
         description: "Warning 톤 indicator — 경고 도트/스트로크/차트 강조선.",
       },
       info: {
         value: "#296CF2",
+        cssVar: "var(--color-brand-blue)",
         description: "Info 톤 indicator — 정보·안내 도트/스트로크/차트 강조선.",
       },
       muted: {
         value: "#757575",
+        cssVar: "var(--color-text-tertiary)",
         description: "Muted 톤 indicator — 비활성 도트/스트로크.",
       },
       neutral: {
         value: "#757575",
+        cssVar: "var(--color-text-tertiary)",
         description: "Neutral 톤 indicator — 기본 회색 도트/스트로크.",
       },
     },
@@ -184,22 +189,27 @@ export const tokens = {
     text: {
       primary: {
         value: "#222",
+        cssVar: "var(--color-text-primary)",
         description: "본문 default · 헤딩 · 강조 텍스트. 가장 흔한 텍스트 색.",
       },
       secondary: {
         value: "#4c4c4c",
+        cssVar: "var(--color-text-secondary)",
         description: "보조 본문 · dim 텍스트 · sub-section 본문.",
       },
       tertiary: {
         value: "#757575",
+        cssVar: "var(--color-text-tertiary)",
         description: "라벨 · 메타 · placeholder · 캡션 부속 정보.",
       },
       disabled: {
         value: "#adadad",
+        cssVar: "var(--color-text-disabled)",
         description: "비활성 상태 텍스트 · 사용 불가 항목 표시.",
       },
       inverse: {
         value: "#FFFFFF",
+        cssVar: "var(--color-text-inverse)",
         description:
           "반전 전경 — text-strong 을 배경으로 깐 표면(툴팁 등) 위의 텍스트·아이콘. 이 용도에 --color-bg(페이지 배경)를 쓰지 말 것.",
       },
@@ -458,15 +468,15 @@ export const TONE_TEXT: Record<Tone, string> = {
  * @deprecated `tokens.color.indicator[intent].value` 사용 권장.
  */
 export const TONE_DOT: Record<Tone, string> = {
-  high: tokens.color.indicator.critical.value,
-  mid: tokens.color.indicator.warning.value,
-  low: tokens.color.indicator.info.value,
-  idle: tokens.color.indicator.muted.value,
-  critical: tokens.color.indicator.critical.value,
-  warning: tokens.color.indicator.warning.value,
-  info: tokens.color.indicator.info.value,
-  muted: tokens.color.indicator.muted.value,
-  neutral: tokens.color.indicator.neutral.value,
+  high: tokens.color.indicator.critical.cssVar!,
+  mid: tokens.color.indicator.warning.cssVar!,
+  low: tokens.color.indicator.info.cssVar!,
+  idle: tokens.color.indicator.muted.cssVar!,
+  critical: tokens.color.indicator.critical.cssVar!,
+  warning: tokens.color.indicator.warning.cssVar!,
+  info: tokens.color.indicator.info.cssVar!,
+  muted: tokens.color.indicator.muted.cssVar!,
+  neutral: tokens.color.indicator.neutral.cssVar!,
 };
 
 /**

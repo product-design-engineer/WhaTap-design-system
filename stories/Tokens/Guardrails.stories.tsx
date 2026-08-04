@@ -75,9 +75,18 @@ const GUARDRAILS: Guardrail[] = [
     name: "인라인 색 리터럴 금지",
     status: "auto",
     invariant:
-      "**`src/` · `stories/` · `.storybook/` 전 범위**를 검사한다 — 카탈로그가 리터럴을 쓰면 \"디자인 시스템이 가르치는 예시\" 자체가 위반이 되므로. 컴포넌트는 토큰/유틸로만 색 표현. hex · rgb() · `bg-white`/`bg-black` · **값이 이름에 박힌 유틸**(`bg-ce5484d` · `border-cd3d3d3` · `bg-rgba-0-0-0-0_05` · `shadow-0_4px_16px_rgba-...`) 을 스캔해 **신규 위반은 exit 1 로 차단**한다(`npm test` 포함). 기존 위반 동결선은 **0건** — `scripts/raw-color-baseline.json` 이 파일별 건수를 기록하며, 줄일 수만 있고 늘릴 수 없다. 정당한 예외는 `// raw-color-ok: <이유>` 로 사유를 남긴다(실질적으로 컬러 위 고정 흰색 전경과 mask 알파 두 종류뿐). 토큰 부재는 리터럴의 근거가 아니라 토큰 추가의 근거.",
+      "**`src/` · `stories/` · `.storybook/` 전 범위**를 검사한다 — 카탈로그가 리터럴을 쓰면 \"디자인 시스템이 가르치는 예시\" 자체가 위반이 되므로. 컴포넌트는 토큰/유틸로만 색 표현. hex · rgb() · `bg-white`/`bg-black` · **값이 이름에 박힌 유틸**(`bg-ce5484d` · `border-cd3d3d3` · `bg-rgba-0-0-0-0_05` · `shadow-0_4px_16px_rgba-...`) 을 스캔해 **신규 위반은 exit 1 로 차단**한다(`npm test` 포함). 동결선은 **0건이며 되돌리지 않는다** — 위반이 남아 있으면 `--update` 가 **거부**하므로 베이스라인에 등록해 미루는 길이 막혀 있다. 정당한 예외는 `// raw-color-ok: <이유>` 로 사유를 남긴다(실질적으로 컬러 위 고정 흰색 전경과 mask 알파 두 종류뿐). 토큰 부재는 리터럴의 근거가 아니라 토큰 추가의 근거.",
     prevents: "토큰 우회 raw color · 단일 출처 약화 · 다크에서만 깨지는 컴포넌트",
     command: "lint:tokens (scripts/check-no-raw-colors.mjs)",
+  },
+  {
+    id: "runtime-policy-audit",
+    name: "런타임 리터럴 감사",
+    status: "auto",
+    invariant:
+      "Storybook 전 스토리에 가드를 태워 **렌더된 DOM** 의 위반을 센다. 소스 스캔으로는 원리적으로 볼 수 없는 경로가 있다 — `_tokens.ts`(게이트 면제)의 hex 를 `TONE_DOT[tone]` 로 참조해 인라인 주입하면 소스엔 리터럴이 없지만 DOM 엔 `rgb(229,57,53)` 이 박힌다. **실측 44건이 이렇게 숨어 있었고 다크에서 뒤집히지 않았다.** 예외는 요소의 `data-ds-policy-ok` — 소스의 `// raw-color-ok:` 와 짝을 맞춰야 한다.",
+    prevents: "소스에는 없고 DOM 에만 있는 리터럴 · TS 토큰 value(hex) 인라인 주입 · 다크 미반영",
+    command: "audit:runtime (+ audit:runtime:dark)",
   },
   {
     id: "ds-policy-guard",

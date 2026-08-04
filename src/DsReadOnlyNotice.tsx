@@ -249,6 +249,7 @@ export default function DsReadOnlyNotice({
           <button
             ref={closeBtnRef}
             type="button"
+            data-ds-policy-ok="brand-blue 버튼 위 전경 — 컬러 배경 위 고정 흰색"
             onClick={onClose}
             style={{
               backgroundColor: "var(--color-brand-blue, #296CF2)",

@@ -67,6 +67,7 @@ export default function AiSendButton({
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
           <path
             d="M8 12V4M8 4L4 8M8 4L12 8"
+            data-ds-policy-ok="활성 시 brand-blue 배경 위 화살표 — 컬러 위 고정 흰색"
             // raw-color-ok: 활성 시 brand-blue 배경 위 화살표 — 컬러 위 고정 흰색.
             stroke={active ? "#fff" : "var(--color-text-disabled)"}
             strokeWidth="1.6"
