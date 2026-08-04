@@ -48,6 +48,18 @@ colors:
   status-warning:            "#FFA012"    # Color
   status-error:              "#f34646"    # Color
 
+  # Status Deep — hover/pressed 단계 (brand-blue-deep 과 같은 역할)
+  status-warning-deep:       "#E08A0E"    # Color
+  status-error-deep:         "#D03333"    # Color
+
+  # Status Soft — status 원색의 옅은 표면 (토스트 배경 · soft 칩/버튼 · 경고 배너)
+  #  위에 올리는 텍스트는 tone-text-* 를 쓴다. status 원색을 배경으로 쓰지 말 것.
+  status-success-soft:       "#E8F8EE"    # Color
+  status-info-soft:          "#E8F0FE"    # Color
+  status-warning-soft:       "#FFF4E5"    # Color
+  status-error-soft:         "#FDECEC"    # Color
+  status-warning-soft-border: "#FFE0B2"   # Color — warning-soft 표면의 경계선
+
   # Surface
   surface-50:                "#F5F5F5"    # Color
   surface-100:               "#F1F2F4"    # Color
@@ -62,6 +74,7 @@ colors:
   text-secondary:            "#4c4c4c"    # Color — 보조 본문 · dim (75 callsite)
   text-tertiary:             "#757575"    # Color — 라벨 · 메타 · placeholder (63 callsite)
   text-disabled:             "#adadad"    # Color — 비활성 (6 callsite)
+  text-inverse:              "#FFFFFF"    # Color — text-strong 을 배경으로 깐 표면 위 전경 (툴팁 · 반전 hover)
 
   # Border
   border-default:            "#EAEAEA"    # Color
@@ -90,8 +103,12 @@ colors:
   tone-text-critical:        "#B5302A"    # Color
   tone-text-warning:         "#8A6200"    # Color
   tone-text-info:            "#1B5CD9"    # Color
+  tone-text-success:         "#007030"    # Color — status-success-soft 위 라벨 (원색은 대비 미달)
   tone-text-muted:           "#6E6E6E"    # Color
   tone-text-neutral:         "#6E6E6E"    # Color
+
+  # Backdrop scrim — 모달류 배경 딤. 역할이 하나이므로 토큰도 하나.
+  overlay-scrim:             "rgba(0, 0, 0, 0.5)"   # Color
 
   # AI Gradient
   ai-gradient-blue:          "#004BE0"    # Color
@@ -255,13 +272,25 @@ layout:
   widget-width:             "480px"    # Dimension
   stagger-delay-step:       "120ms"    # Dimension
 
-# ── 5. Shapes ───────────────────────────────────────────
+# ── 5. Elevation & Depth ────────────────────────────────
+#
+#  층(surface)이 아니라 *떠 있는 높이*로 고른다. 컴포넌트가 rgba 를 직접 적지 않도록
+#  그림자도 토큰이다. hairline 은 단독 그림자가 아니라 md/lg 에 겹쳐 쓰는 1px 경계.
+
+elevation:
+  shadow-sm:              "0 1px 3px rgba(0, 0, 0, 0.25)"    # 용도: 컨트롤 — switch/토글 knob
+  shadow-md:              "0 8px 24px rgba(0, 0, 0, 0.12)"   # 용도: 떠 있는 패널 — 드롭다운·토스트
+  shadow-lg:              "0 12px 40px rgba(0, 0, 0, 0.2)"   # 용도: 모달·다이얼로그
+  shadow-ring-hairline:   "0 0 0 1px rgba(0, 0, 0, 0.04)"    # 용도: md/lg 에 겹쳐 쓰는 1px 경계
+  scrim:                  "{colors.overlay-scrim}"           # Reference → rgba(0, 0, 0, 0.5)
+
+# ── 6. Shapes ───────────────────────────────────────────
 
 shapes:
   ai-card-rounded:          "8px"      # Dimension
   ai-card-border-color:     "{colors.border-default}"  # Reference → #EAEAEA
 
-# ── 6. Components ───────────────────────────────────────
+# ── 7. Components ───────────────────────────────────────
 
 components:
 

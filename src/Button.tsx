@@ -71,8 +71,8 @@ const SIZE_CLASS: Record<ButtonSize, string> = {
 /** tone → CSS color (main / hover / soft surface). */
 const TONE_COLORS: Record<ButtonTone, { main: string; hover: string; soft: string }> = {
   primary:  { main: "var(--color-brand-blue)",     hover: "var(--color-brand-blue-deep)", soft: "var(--color-brand-blue-bg)" },
-  warning:  { main: "var(--color-status-warning)", hover: "#E08A0E",                       soft: "#FFF4E5" },
-  critical: { main: "var(--color-status-error)",   hover: "#D03333",                       soft: "#FDECEC" },
+  warning:  { main: "var(--color-status-warning)", hover: "var(--color-status-warning-deep)", soft: "var(--color-status-warning-soft)" },
+  critical: { main: "var(--color-status-error)",   hover: "var(--color-status-error-deep)",   soft: "var(--color-status-error-soft)" },
 };
 
 /** variant × tone → inline CSS custom property set (button 색 전체 결정). */

@@ -25,6 +25,22 @@
   --color-status-warning: #FFA012;
   --color-status-error: #f34646;
 
+  /* Status Deep — status 원색의 hover/pressed 단계. brand-blue-deep 과 같은 역할.
+     contained 버튼의 hover 배경이 여기서 온다. */
+  --color-status-warning-deep: #E08A0E;
+  --color-status-error-deep: #D03333;
+
+  /* Status Soft — status 원색의 옅은 *표면*. 토스트 배경 · soft 버튼/칩 · 경고 배너.
+     위에 올리는 텍스트는 대비 검증된 짝 `--color-tone-text-*` 를 쓴다.
+     ⚠️ status 원색을 배경으로 쓰지 말 것 — 그 위 텍스트 대비가 무너진다.
+     ⚠️ 다크 오버라이드 없음 — 기존 tone surface(widget/_tokens.ts)와 동일 취급.
+        다크 tone surface 는 5색을 한 번에 뒤집어야 하므로 별건으로 도입한다. */
+  --color-status-success-soft: #E8F8EE;
+  --color-status-info-soft: #E8F0FE;
+  --color-status-warning-soft: #FFF4E5;
+  --color-status-error-soft: #FDECEC;
+  --color-status-warning-soft-border: #FFE0B2; /* warning-soft 표면의 경계선 */
+
   /* Surface — ⚠️ 값이 아니라 *의도*로 고른다. 값이 같아도 용도가 다르면 다른 토큰을 쓸 것
      (한 토큰만 바꿔도 그 용도의 모든 곳이 자동 반영). 외형(gray/light)이 아닌 용도로 명명·선택. */
   --color-surface-50: #F5F5F5;  /* 용도: 가장 옅은 보조 표면 — hover 배경, muted 셀, 입력 비활성 */
@@ -57,8 +73,17 @@
   /* Brand gradient · full radius · sm shadow · white (Switch/ThemeToggle 등 참조) */
   --gradient-brand: linear-gradient(90deg, var(--color-brand-blue), var(--color-whatap-purple));
   --radius-full: 9999px;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
   --color-white: #fff;
+
+  /* Elevation — 층이 아니라 *떠 있는 높이*로 고른다. 컴포넌트가 rgba 를 직접 적지 않도록
+     그림자도 토큰이다. hairline 은 그림자에 겹쳐 쓰는 1px 경계(토스트 등). */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);      /* 용도: 컨트롤 — switch/토글 knob */
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);     /* 용도: 떠 있는 패널 — 드롭다운·토스트 */
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.2);     /* 용도: 모달·다이얼로그 */
+  --shadow-ring-hairline: 0 0 0 1px rgba(0, 0, 0, 0.04);
+
+  /* Backdrop scrim — 모달류 배경 딤. 값이 아니라 역할이 하나이므로 토큰도 하나. */
+  --color-overlay-scrim: rgba(0, 0, 0, 0.5);
 
   --font-sans: "Noto Sans KR", "Noto Sans", ui-sans-serif, system-ui, sans-serif;
 
@@ -141,6 +166,7 @@
   --color-tone-text-critical: #B5302A;
   --color-tone-text-warning: #8A6200;
   --color-tone-text-info: #1B5CD9;
+  --color-tone-text-success: #007030; /* success-soft 위 라벨 — status-success 원색은 대비 미달 */
   --color-tone-text-muted: #6E6E6E;
   --color-tone-text-neutral: #6E6E6E;
 

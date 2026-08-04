@@ -41,10 +41,10 @@ import { createPortal } from "react-dom";
 export type ToastVariant = "success" | "info" | "warning" | "error";
 
 const VARIANT_COLOR: Record<ToastVariant, { dot: string; bg: string }> = {
-  success: { dot: "var(--color-status-success)", bg: "#E8F8EE" },
-  info:    { dot: "var(--color-brand-blue)", bg: "#E8F0FE" },
-  warning: { dot: "#FF8800", bg: "#FFF4E5" },
-  error:   { dot: "#F34747", bg: "#FDECEC" },
+  success: { dot: "var(--color-status-success)",     bg: "var(--color-status-success-soft)" },
+  info:    { dot: "var(--color-brand-blue)",         bg: "var(--color-status-info-soft)" },
+  warning: { dot: "var(--color-palette-ff8800)",     bg: "var(--color-status-warning-soft)" },
+  error:   { dot: "var(--color-palette-f34747)",     bg: "var(--color-status-error-soft)" },
 };
 
 export default function Toast({
@@ -88,7 +88,7 @@ export default function Toast({
       <div
         className="flex items-center gap-12px bg-card border border-color-var-color-border-default rounded-8px px-16px py-10px"
         style={{
-          boxShadow: "0 8px 24px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04)",
+          boxShadow: "var(--shadow-md), var(--shadow-ring-hairline)",
           fontFamily: "var(--font-family-korean)",
         }}
       >
@@ -99,6 +99,7 @@ export default function Toast({
         >
           {variant === "success" && (
             <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+              {/* raw-color-ok: status-success 도트 위 체크 — 컬러 배경 위 고정 흰색 전경. */}
               <path d="M2 5l2 2 4-4" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
             </svg>
           )}

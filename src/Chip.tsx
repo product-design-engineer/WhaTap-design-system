@@ -65,9 +65,9 @@ const SIZE = {
 
 const TONE_COLORS: Record<ChipTone, { main: string; soft: string; fgSoft: string }> = {
   primary:  { main: "var(--color-brand-blue)",     soft: "var(--color-brand-blue-bg)", fgSoft: "var(--color-brand-blue-deep)" },
-  warning:  { main: "var(--color-indicator-warning)", soft: "#FFF4E5",                  fgSoft: "var(--color-tone-text-warning)" },
-  critical: { main: "var(--color-indicator-critical)", soft: "#FDECEC",                 fgSoft: "var(--color-tone-text-critical)" },
-  success:  { main: "var(--color-status-success)", soft: "#E4F7EC",                    fgSoft: "#007030" },
+  warning:  { main: "var(--color-indicator-warning)", soft: "var(--color-status-warning-soft)", fgSoft: "var(--color-tone-text-warning)" },
+  critical: { main: "var(--color-indicator-critical)", soft: "var(--color-status-error-soft)",  fgSoft: "var(--color-tone-text-critical)" },
+  success:  { main: "var(--color-status-success)", soft: "var(--color-status-success-soft)",    fgSoft: "var(--color-tone-text-success)" },
   neutral:  { main: "var(--color-text-tertiary)",  soft: "var(--color-surface-100)",   fgSoft: "var(--color-text-secondary)" },
 };
 

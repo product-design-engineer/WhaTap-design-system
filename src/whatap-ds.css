@@ -64,7 +64,13 @@
     --radius-lg: 0.5rem;
     --radius-xl: 0.75rem;
     --radius-full: 9999px;
+    /* Elevation — 컴포넌트가 rgba 를 직접 적지 않도록 그림자도 토큰. 정의: tokens.css */
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.2);
+    --shadow-ring-hairline: 0 0 0 1px rgba(0, 0, 0, 0.04);
+    /* Backdrop scrim — 모달류 배경 딤. 역할이 하나이므로 토큰도 하나. */
+    --color-overlay-scrim: rgba(0, 0, 0, 0.5);
     --gradient-brand: linear-gradient(90deg, var(--color-brand-blue), var(--color-whatap-purple));
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --default-transition-duration: 150ms;
@@ -85,6 +91,18 @@
     --color-status-success: #00B442;
     --color-status-warning: #FFA012;
     --color-status-error: #f34646;
+
+    /* Status Deep — status 원색의 hover/pressed 단계 (contained 버튼 hover 배경). */
+    --color-status-warning-deep: #E08A0E;
+    --color-status-error-deep: #D03333;
+
+    /* Status Soft — status 원색의 옅은 표면(토스트 배경·soft 칩/버튼·경고 배너).
+       위에 올리는 텍스트는 --color-tone-text-*. 다크 오버라이드는 별건. 정의: tokens.css */
+    --color-status-success-soft: #E8F8EE;
+    --color-status-info-soft: #E8F0FE;
+    --color-status-warning-soft: #FFF4E5;
+    --color-status-error-soft: #FDECEC;
+    --color-status-warning-soft-border: #FFE0B2;
 
     
     --color-surface-50: #F5F5F5;
@@ -119,6 +137,7 @@
     --color-tone-text-critical: #B5302A;
     --color-tone-text-warning: #8A6200;
     --color-tone-text-info: #1B5CD9;
+    --color-tone-text-success: #007030;
     --color-tone-text-muted: #6E6E6E;
     --color-tone-text-neutral: #6E6E6E;
 
@@ -478,6 +497,9 @@
 .gap-inherit { gap: inherit; }
 .grid { display: grid; }
 .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* 반전 hover 짝 — .hover-bg-invert(표면) 와 함께 쓴다. 표면이 text-strong 으로
+   뒤집히므로 아이콘은 text-inverse. 라이트/다크 모두 자동 대비. */
+.group-plus:hover .group-hover-plus-stroke-invert { stroke: var(--color-text-inverse); }
 .group-plus:hover .group-hover-plus-stroke-white { stroke: var(--color-white); }
 .group.is-active .group-_is-active-opacity-0 { opacity: 0%; }
 .group.is-active .group-_is-active-opacity-100 { opacity: 100%; }
@@ -509,6 +531,9 @@
 .h-full { height: 100%; }
 .hidden { display: none; }
 .hover-bg-black:hover { background-color: var(--color-black); }
+/* 반전 hover 표면 — 아이콘 버튼이 hover 시 어두워지는 패턴. 다크에서는 밝아진다
+   (text-strong 이 뒤집히므로). 전경은 .group-hover-plus-stroke-invert 짝. */
+.hover-bg-invert:hover { background-color: var(--color-text-strong); }
 .hover-bg-cfafafa:hover { background-color: #fafafa; }
 .hover-bg-color-var-color-brand-blue-bg:hover { background-color: var(--color-brand-blue-bg); }
 .hover-bg-color-var-color-brand-blue-deep:hover { background-color: var(--color-brand-blue-deep); }
@@ -719,6 +744,9 @@
 .text-left { text-align: left; }
 .text-lg { font-size:var(--text-lg);line-height:calc(1.75 / 1.125) }
 .text-md { font-size: var(--text-md); }
+/* text-primary — 컴포넌트가 오래 써온 클래스인데 정의가 없어 body 상속에 기대고 있었다.
+   실체를 부여해 반전 문맥 안에서도 의도대로 동작하게 한다. */
+.text-primary { color: var(--color-text-primary); }
 .text-right { text-align: right; }
 .text-sm { font-size:var(--text-sm);line-height:calc(1.25 / 0.875) }
 .text-status-success { color: var(--color-status-success); }

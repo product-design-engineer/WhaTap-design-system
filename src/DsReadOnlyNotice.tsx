@@ -92,7 +92,7 @@ export default function DsReadOnlyNotice({
   const backdrop: CSSProperties = {
     position: "fixed",
     inset: 0,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "var(--color-overlay-scrim)",
     zIndex: 9999,
     display: "flex",
     alignItems: "center",
@@ -105,7 +105,7 @@ export default function DsReadOnlyNotice({
     backgroundColor: "var(--color-card)",
     borderRadius: 12,
     border: "1px solid var(--color-border-default, #eaeaea)",
-    boxShadow: "0 12px 40px rgba(0,0,0,0.2)",
+    boxShadow: "var(--shadow-lg)",
     width: "100%",
     maxWidth: 440,
     overflow: "hidden",
@@ -131,15 +131,15 @@ export default function DsReadOnlyNotice({
       <div role="alertdialog" aria-modal="true" aria-labelledby="ds-readonly-title" style={panel}>
         {/* Header — 경고 배너 */}
         <div style={{
-          backgroundColor: "#FFF3E0",
-          borderBottom: "1px solid #FFE0B2",
+          backgroundColor: "var(--color-status-warning-soft)",
+          borderBottom: "1px solid var(--color-status-warning-soft-border)",
           padding: "16px 20px",
           display: "flex",
           alignItems: "center",
           gap: 10,
         }}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-2h2v2h-2zm0-4V7h2v6h-2z" fill="#E65100"/>
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-2h2v2h-2zm0-4V7h2v6h-2z" fill="var(--color-status-warning)"/>
           </svg>
           <h2
             id="ds-readonly-title"
@@ -147,7 +147,7 @@ export default function DsReadOnlyNotice({
               margin: 0,
               fontSize: 15,
               fontWeight: 700,
-              color: "#BF360C",
+              color: "var(--color-tone-text-warning)",
               lineHeight: 1.3,
               fontFamily: "var(--font-family-korean, 'Noto Sans KR', sans-serif)",
             }}
@@ -199,12 +199,12 @@ export default function DsReadOnlyNotice({
           </ul>
 
           <div style={{
-            backgroundColor: "#E3F2FD",
+            backgroundColor: "var(--color-status-info-soft)",
             borderRadius: 6,
             padding: "10px 12px",
             fontSize: 12,
             lineHeight: 1.5,
-            color: "#1565C0",
+            color: "var(--color-tone-text-info)",
           }}>
             변경 요청은 디자인 시스템 repo에 Issue를 등록하거나 담당 디자이너에게 문의하세요.
           </div>
@@ -252,6 +252,7 @@ export default function DsReadOnlyNotice({
             onClick={onClose}
             style={{
               backgroundColor: "var(--color-brand-blue, #296CF2)",
+              // raw-color-ok: brand-blue 버튼 위 전경 — 컬러 배경 위 고정 흰색.
               color: "#fff",
               border: "none",
               borderRadius: 6,

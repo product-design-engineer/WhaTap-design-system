@@ -232,6 +232,52 @@ page/card 층을 지켜도, **카드 컴포넌트 내부**(위젯 셸·툴바 �
 
 > 예외는 하나뿐: **컬러 위에 얹는 흰색 전경**(브랜드 배경 위 텍스트·아이콘, `--wds-btn-fg`, 배지 안 `fill="#fff"`). 이건 테마와 무관하게 흰색이어야 하므로 유지한다.
 
+## Status — 원색 · Deep · Soft 3단
+
+`--color-status-*` 는 세 단계로 나뉩니다. **같은 의미의 색을 어느 자리에 쓰는지**가 단계를 결정합니다.
+
+| 단계 | 토큰 | 자리 |
+|---|---|---|
+| 원색 | `--color-status-{success,warning,error}` | 채워진 배경(contained 버튼·도트·알약), 아이콘 |
+| Deep | `--color-status-{warning,error}-deep` | 원색 배경의 **hover/pressed** (`--color-brand-blue-deep` 과 같은 역할) |
+| Soft | `--color-status-{success,info,warning,error}-soft` | 옅은 **표면** — 토스트 배경, soft 칩/버튼, 경고 배너 |
+
+Soft 표면 위 텍스트는 대비가 검증된 짝 **`--color-tone-text-*`** 를 씁니다 (`success` → `--color-tone-text-success` #007030). `warning-soft` 표면에 경계선이 필요하면 `--color-status-warning-soft-border`.
+
+❌ **status 원색을 배경으로 쓰지 마세요** — 그 위 텍스트 대비가 무너집니다. 원색은 도트·아이콘·채워진 컨트롤 전용입니다.
+
+⚠️ Soft 4색은 현재 **다크 오버라이드가 없습니다** (위젯 `tone-surface-*` 와 동일 취급). 다크 tone surface 는 5색을 한 번에 뒤집어야 정합이 맞으므로 별건으로 도입합니다.
+
+## Elevation — 그림자도 토큰
+
+층(surface)이 아니라 **떠 있는 높이**로 고릅니다. 컴포넌트가 `rgba(...)` 를 직접 적지 않도록 그림자에도 토큰이 있습니다.
+
+| 토큰 | 값 | 자리 |
+|---|---|---|
+| `--shadow-sm` | `0 1px 3px rgba(0,0,0,.25)` | 컨트롤 — switch/토글 knob |
+| `--shadow-md` | `0 8px 24px rgba(0,0,0,.12)` | 떠 있는 패널 — 드롭다운·토스트 |
+| `--shadow-lg` | `0 12px 40px rgba(0,0,0,.2)` | 모달·다이얼로그 |
+| `--shadow-ring-hairline` | `0 0 0 1px rgba(0,0,0,.04)` | 단독으로 쓰지 않음 — md/lg 에 겹치는 1px 경계 |
+
+```tsx
+// Toast — 패널 그림자 + hairline 경계
+boxShadow: "var(--shadow-md), var(--shadow-ring-hairline)",
+```
+
+**Backdrop scrim** — 모달류 배경 딤은 역할이 하나이므로 토큰도 하나입니다: `--color-overlay-scrim` (`rgba(0,0,0,0.5)`). Modal · DsReadOnlyNotice 가 이 하나를 공유합니다. 컴포넌트마다 0.4/0.5 를 따로 적던 것을 통일한 결과입니다.
+
+## 반전 hover — 아이콘 버튼이 어두워지는 패턴
+
+hover 시 표면이 뒤집히는 아이콘 버튼(첨부 `+` 버튼 등)은 `black`/`white` 고정색이 아니라 반전 짝을 씁니다.
+
+```tsx
+<button className="group-plus bg-card hover-bg-invert">
+  <svg><line className="stroke-color-var-color-text-secondary group-hover-plus-stroke-invert" /></svg>
+</button>
+```
+
+`.hover-bg-invert` → `--color-text-strong` (다크에서는 밝아짐) · `.group-hover-plus-stroke-invert` → `--color-text-inverse`. 라이트/다크 모두 자동으로 대비가 맞습니다. ❌ `hover-bg-black` + `stroke-white` 조합은 다크에서 검정 위 흰색이 되어 문맥과 어긋납니다.
+
 ## 색상 — 토큰 외 hard-coded
 
 토큰화되지 않은 색상은 거의 모두 chrome / 카드 외형에 한정됩니다. 자주 등장하는 것:

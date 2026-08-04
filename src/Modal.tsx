@@ -26,7 +26,7 @@
  * - role="dialog" + aria-modal="true" + aria-labelledby (title) + aria-describedby (description)
  * - 3 채널 닫기: × 버튼 / ESC / backdrop 클릭 (각각 prop 으로 disable 가능)
  * - open 시 첫 focusable 요소로 focus 이동 (× 버튼 기본)
- * - 색·간격: surface 흰 배경 / border-default 외곽 / rgba(0,0,0,0.4) backdrop
+ * - 색·간격: card 표면 / border-default 외곽 / --color-overlay-scrim backdrop / --shadow-lg
  *
  * @example
  * ```tsx
@@ -147,7 +147,7 @@ export default function Modal({
   const backdropStyle: CSSProperties = {
     position: "fixed",
     inset: 0,
-    backgroundColor: "rgba(0,0,0,0.4)",
+    backgroundColor: "var(--color-overlay-scrim)",
     zIndex: 1000,
     display: "flex",
     alignItems: "center",
@@ -160,7 +160,7 @@ export default function Modal({
     backgroundColor: "var(--color-card)",
     borderRadius: 8,
     border: "1px solid var(--color-border-default)",
-    boxShadow: "0 8px 32px rgba(0,0,0,0.16)",
+    boxShadow: "var(--shadow-lg)",
     width: "100%",
     maxWidth: SIZE_WIDTH[size],
     maxHeight: "calc(100vh - 32px)",
