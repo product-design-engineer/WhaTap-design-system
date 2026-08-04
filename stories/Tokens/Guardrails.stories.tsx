@@ -73,11 +73,11 @@ const GUARDRAILS: Guardrail[] = [
   {
     id: "raw-color",
     name: "인라인 색 리터럴 금지",
-    status: "policy",
+    status: "auto",
     invariant:
-      "`src/` 컴포넌트는 토큰/유틸로만 색 표현(raw hex·색함수 금지). 정확-매칭 hex 188건 토큰화 완료. lint 자동화는 계획.",
-    prevents: "토큰 우회 raw color · 단일 출처 약화",
-    command: "(계획) lint:tokens (check-no-raw-colors)",
+      "`src/` 컴포넌트는 토큰/유틸로만 색 표현. hex · rgb() · `bg-white`/`bg-black` 을 스캔해 **신규 위반은 exit 1 로 차단**한다(`npm test` 포함). 기존 위반은 `scripts/raw-color-baseline.json` 에 파일별 건수로 동결 — 줄일 수만 있고 늘릴 수 없다. 정당한 예외(컬러 위 흰색 전경)는 `// raw-color-ok: <이유>` 로 사유를 남긴다. 토큰 부재는 리터럴의 근거가 아니라 토큰 추가의 근거.",
+    prevents: "토큰 우회 raw color · 단일 출처 약화 · 다크에서만 깨지는 컴포넌트",
+    command: "lint:tokens (scripts/check-no-raw-colors.mjs)",
   },
   {
     id: "docstring-standard",

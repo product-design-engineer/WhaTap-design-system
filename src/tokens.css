@@ -32,8 +32,9 @@
   --color-surface-200: #EAEAEA; /* 용도: 가장 진한 보조 표면 — switch off 트랙, 구분 블록, 무채색 채움 */
 
   /* Base surface (semantic) — page background + card.
-     라이트 기본값은 흰색(기존 동작 불변). 다크 값은 파일 하단 `.dark` 블록에서 오버라이드. */
-  --color-bg: #FFFFFF;   /* 용도: 페이지/앱 셸 배경 (DashboardLayout, main) */
+     페이지는 회색, 카드는 흰색 — 콘텐츠가 카드로 "쌓여" 보이도록 하는 기준 대비.
+     다크 값은 파일 하단 `.dark` 블록에서 오버라이드. */
+  --color-bg: #F5F5F5;   /* 용도: 페이지/앱 셸 배경 (DashboardLayout, main) */
   --color-card: #FFFFFF; /* 용도: 떠 있는 표면 — 헤더·사이드바·카드·패널·입력·드롭다운·모달 */
 
   /* Text */

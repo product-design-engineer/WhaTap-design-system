@@ -88,6 +88,8 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 - **동적 색**(variant×tone)은 정적 유틸로 불가 → Button 처럼 inline CSS custom property(`--wds-btn-*`).
 - **다크 대응 (테마 적응 표면 유틸):** 페이지/패널 배경에 `bg-white`·인라인 `#fff` **금지** — 테마 토큰으로:
   `bg-bg`(앱 셸 = `--color-bg`) · `bg-card`(헤더/사이드바/카드/입력/드롭다운 = `--color-card`) · `bg-surface-50/100/200` · `hover-bg-surface-100/200`. `.dark` 가 토큰만 재매핑하므로 라이트/다크 자동 전환. **흰색 전경**(컬러 위 텍스트·아이콘: `--wds-btn-fg`, `stroke/fill "#fff"`)은 그대로 유지.
+- **🔒 Base surface 2단 레이어 (page → card).** `--color-bg`(바닥, 라이트 `#F5F5F5`) 위에 `--color-card`(흰색)가 **쌓인다**. 페이지 본문의 의미 단위(테이블·차트·폼 섹션)는 각각 `bg-card` 블록으로 감싼다 — 회색 바닥에 맨몸 배치 금지. **두 토큰을 같은 값으로 만들지 말 것**(카드가 보더만 남아 층이 사라짐). 페이지 배경에 `--color-surface-50` 대용 금지(값이 같아도 용도가 hover/muted). `--color-bg` 를 **전경색으로 쓰지 말 것**.
+- **🔒 컴포넌트 표면도 동일 규칙.** 카드 *안쪽*(위젯 셸·툴바 컨트롤·차트 그리드)에서 `bg-white`·`#fff`·`#d3d3d3`·`#f0f0f0`·`fill="#757575"` 하드코딩 금지 → `--color-card` · `--color-border-strong` · `--color-border-soft` · `--color-text-tertiary`. 보더 4종 모두 `.dark` 오버라이드가 있으므로 토큰만 쓰면 다크는 자동. **색 리터럴을 prop 기본값으로 굳히지 말 것**(`bodyBg = "#fff"` 형태 → 호출부로 위반 번식). 토큰 부재는 리터럴의 근거가 아니라 토큰 추가의 근거. 예외는 컬러 위 흰색 전경뿐. 전문·매핑표: `docs/tokens.md` → *Base Surface — 페이지 vs 카드*.
 - **⚠️ `detailwind generate` 재실행 금지.** whatap-ds.css 는 frozen 과 분기된 hand-maintained 상태라, 재실행 시 (a) codemod된 tsx 미스매치로 유틸 누락 (b) 수동 추가(토큰·전역·포커스 규칙) 손실. **가드가 자동 거부**한다(manual 마커/codemod 감지 → exit 1). 의도적 재생성만 `DETAILWIND_FORCE=1`. 평소엔 `whatap-ds.css` 직접 편집.
 - **Tailwind 재도입 금지** — 의존성·빌드·런타임·CSS 산출물 어디에도 없음. (Storybook Guardrails: `no-tailwind-plain-css`)
 
