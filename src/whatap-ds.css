@@ -164,6 +164,12 @@
     --color-tone-text-neutral: #6E6E6E;
 
     
+    /* Brand logo — 회사 심볼 4색. 테마 무관 고정(로고는 리브랜딩되지 않음). 정의: tokens.css */
+    --color-logo-orange: #F25022;
+    --color-logo-yellow: #FFB902;
+    --color-logo-green: #80BA01;
+    --color-logo-blue: #19A0E5;
+
     --color-whatap-blue: #004BE0;
     --color-whatap-purple: #8B52FF;
     --color-whatap-purple-deep: #4F5BD5;

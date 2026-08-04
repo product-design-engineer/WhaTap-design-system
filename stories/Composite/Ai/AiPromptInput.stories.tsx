@@ -16,7 +16,7 @@ const meta: Meta<typeof AiPromptInput> = {
           "textarea + 첨부 chip 행 + 토큰 pill + 첨부 버튼 + 송신 버튼 + 하단 caption.\n\n" +
           "- **Controlled** (`value` + `onChange`) — parent 가 텍스트 상태 관리\n" +
           "- **Editable** (`value` 미지정) — 내부 state 자동 관리, 시연 데모에 편리\n\n" +
-          "border: 비어있을 때 brand-blue-bg-2 (#c2d5fc), 입력 있을 때 brand-blue (#296CF2) 로 자동 강조.",
+          "border: 비어있을 때 `--color-brand-blue-bg-2`, 입력 있을 때 `--color-brand-blue` 로 자동 강조.",
       },
     },
   },

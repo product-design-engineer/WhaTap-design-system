@@ -11,7 +11,7 @@ const meta: Meta<typeof AiMessageActions> = {
     docs: {
       description: {
         component:
-          "**AI 응답 하단의 좋아요/싫어요/복사 액션.** 사용자 피드백 수집. divider prop 으로 위쪽 #eaeaea 라인 토글.",
+          "**AI 응답 하단의 좋아요/싫어요/복사 액션.** 사용자 피드백 수집. divider prop 으로 위쪽 `--color-border-default` 라인 토글.",
       },
     },
   },

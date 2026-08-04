@@ -26,13 +26,13 @@ export const LineHeights: StoryObj = {
       {LHS.map((lh) => {
         const t = tokens.font.lineHeight[lh];
         return (
-          <div key={lh} style={{ display: "flex", flexDirection: "column", gap: 4, padding: 16, border: "1px solid #eaeaea", borderRadius: 8, background: "#fff" }}>
+          <div key={lh} style={{ display: "flex", flexDirection: "column", gap: 4, padding: 16, border: "1px solid var(--color-border-default)", borderRadius: 8, background: "var(--color-card)" }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
-              <code style={{ fontFamily: "Roboto, monospace", fontSize: 12, color: "#222", fontWeight: 700 }}>{lh}</code>
-              <code style={{ fontFamily: "Roboto, monospace", fontSize: 11, color: "#757575" }}>{t.value}</code>
+              <code style={{ fontFamily: "Roboto, monospace", fontSize: 12, color: "var(--color-text-primary)", fontWeight: 700 }}>{lh}</code>
+              <code style={{ fontFamily: "Roboto, monospace", fontSize: 11, color: "var(--color-text-tertiary)" }}>{t.value}</code>
             </div>
-            <div style={{ fontSize: 11, color: "#4c4c4c", lineHeight: 1.5 }}>{t.description}</div>
-            <div style={{ marginTop: 8, padding: 12, background: "#f5f5f5", borderRadius: 4, fontSize: 13, color: "#222", lineHeight: t.value, letterSpacing: "-0.1px" }}>
+            <div style={{ fontSize: 11, color: "var(--color-text-secondary)", lineHeight: 1.5 }}>{t.description}</div>
+            <div style={{ marginTop: 8, padding: 12, background: "var(--color-surface-50)", borderRadius: 4, fontSize: 13, color: "var(--color-text-primary)", lineHeight: t.value, letterSpacing: "-0.1px" }}>
               {SAMPLE_TEXT}
             </div>
           </div>

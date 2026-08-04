@@ -13,7 +13,7 @@ const meta: Meta<typeof AiSymbol> = {
     docs: {
       description: {
         component:
-          "**WhaTap AI 브랜드 심볼.** 4-blade pinwheel + 청보라 그라데이션 (`#004BE0 → #8B52FF`). " +
+          "**WhaTap AI 브랜드 심볼.** 4-blade pinwheel + 청보라 그라데이션 (`--color-whatap-blue` → `--color-whatap-purple`). " +
           "AI 위젯 헤더, AI 토글 버튼, AI 응답 메시지 분류 등 브랜드 식별이 필요한 모든 자리에 사용. " +
           "`size` prop 으로 px 크기 조정 (viewBox 가 그대로 스케일).",
       },
@@ -66,7 +66,7 @@ export const SizeMatrix: Story = {
       {[12, 16, 24, 32, 48, 64].map((s) => (
         <div key={s} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
           <AiSymbol size={s} />
-          <span style={{ fontFamily: "Roboto, monospace", fontSize: 10, color: "#757575" }}>{s}px</span>
+          <span style={{ fontFamily: "Roboto, monospace", fontSize: 10, color: "var(--color-text-tertiary)" }}>{s}px</span>
         </div>
       ))}
     </div>

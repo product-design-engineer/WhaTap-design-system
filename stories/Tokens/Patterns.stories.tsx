@@ -61,25 +61,25 @@ export const Patterns: StoryObj = {
         const r = resolvePattern(p.key);
         const t = tokens.font.pattern[p.key];
         return (
-          <div key={p.key} style={{ display: "grid", gridTemplateColumns: "180px 1fr", gap: 16, alignItems: "center", padding: 16, border: "1px solid #eaeaea", borderRadius: 8, background: "#fff" }}>
+          <div key={p.key} style={{ display: "grid", gridTemplateColumns: "180px 1fr", gap: 16, alignItems: "center", padding: 16, border: "1px solid var(--color-border-default)", borderRadius: 8, background: "var(--color-card)" }}>
             {/* 메타 */}
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              <code style={{ fontFamily: "Roboto, monospace", fontSize: 12, color: "#222", fontWeight: 700 }}>{p.key}</code>
-              <code style={{ fontFamily: "Roboto, monospace", fontSize: 9, color: "#757575", lineHeight: 1.4 }}>
+              <code style={{ fontFamily: "Roboto, monospace", fontSize: 12, color: "var(--color-text-primary)", fontWeight: 700 }}>{p.key}</code>
+              <code style={{ fontFamily: "Roboto, monospace", fontSize: 9, color: "var(--color-text-tertiary)", lineHeight: 1.4 }}>
                 {r.spec.family} · {r.spec.size} · {r.spec.weight}
                 <br />
                 {r.spec.lineHeight} · {r.spec.tracking}{r.spec.transform ? " · " + r.spec.transform : ""}
               </code>
-              <span style={{ fontFamily: "'Noto Sans', sans-serif", fontSize: 10, color: "#296CF2", marginTop: 4 }}>{p.usage}</span>
+              <span style={{ fontFamily: "'Noto Sans', sans-serif", fontSize: 10, color: "var(--color-brand-blue)", marginTop: 4 }}>{p.usage}</span>
             </div>
             {/* 미리보기 */}
-            <div style={{ padding: 12, background: "#f5f5f5", borderRadius: 4, color: "#222", ...r }}>
+            <div style={{ padding: 12, background: "var(--color-surface-50)", borderRadius: 4, color: "var(--color-text-primary)", ...r }}>
               {p.sample}
             </div>
           </div>
         );
       })}
-      <div style={{ marginTop: 12, padding: 12, background: "#fff8e0", border: "1px solid #F0B400", borderRadius: 6, fontSize: 12, color: "#4c4c4c", lineHeight: 1.5, fontFamily: tokens.font.family.korean.value, maxWidth: 860 }}>
+      <div style={{ marginTop: 12, padding: 12, background: "var(--color-tone-surface-warning)", border: "1px solid var(--color-indicator-warning)", borderRadius: 6, fontSize: 12, color: "var(--color-text-secondary)", lineHeight: 1.5, fontFamily: tokens.font.family.korean.value, maxWidth: 860 }}>
         💡 <strong>Description 메타</strong>: 각 pattern 의 <code>tokens.font.pattern[name].description</code> 으로 사용 의도 즉시 조회 가능. AI agent 가 코드 생성 시 이 description 을 lookup 하여 적합한 pattern 선택.
       </div>
     </div>

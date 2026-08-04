@@ -40,7 +40,7 @@ export const InInputContext: Story = {
       const [input, setInput] = useState("");
       const active = input.trim().length > 0;
       return (
-        <div className="flex items-center gap-2 p-2 border border-var-color-border-default rounded-lg bg-white" style={{ width: 360 }}>
+        <div className="flex items-center gap-2 p-2 border border-var-color-border-default rounded-lg bg-card" style={{ width: 360 }}>
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}

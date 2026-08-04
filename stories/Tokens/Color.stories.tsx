@@ -1,6 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { tokens, type SemanticIntent } from "@whatap/design-system/widget";
+import { useTokens, tokenLabel, type TokenEntry } from "../_useTokens";
 
+/**
+ * Color — WDS 컬러 토큰 전체 카탈로그.
+ *
+ * ## 값을 손으로 적지 않는다
+ * 이 페이지는 `:root` 에 선언된 커스텀 프로퍼티를 **런타임에 열거**하고 계산값을 읽는다.
+ * 예전에는 `<Swatch color="#296CF2" hex="#296CF2" />` 처럼 값을 적어 두었는데, 그러면
+ * `tokens.css` 와 두 벌이 되어 (a) 새 토큰이 카탈로그에 누락되고 (b) 설명이 낡고
+ * (c) 값이 어긋나도 아무도 모른다. 지금은 **토큰을 추가하면 여기 자동으로 나타나고**,
+ * 값을 바꾸면 자동으로 따라오며, 다크로 전환하면 다크 값이 보인다.
+ *
+ * 카탈로그가 소유하는 것은 **값이 아니라 의미**(용도 설명)뿐이다.
+ */
 const meta: Meta = {
   title: "Tokens/Color",
   tags: ["autodocs"],
@@ -10,19 +23,10 @@ const meta: Meta = {
       description: {
         component:
           "**WDS Color 토큰 전체 카탈로그.**\n\n" +
-          "단일 출처: `src/tokens.css` 의 `:root` 블록. 파생 utility class 는 `whatap-ds.css` 에 일반 CSS 로 정의 (Tailwind 없음).\n\n" +
-          "구성:\n" +
-          "- **Surface (Intent)** — `tokens.color.surface.*` 5 톤 위젯 카드 배경\n" +
-          "- **Indicator (Intent)** — `tokens.color.indicator.*` 5 톤 도트/스트로크\n" +
-          "- **Tone Pairing** — 5 톤별 surface + indicator + label 조합\n" +
-          "- **Text Hierarchy** — primary / secondary / tertiary / disabled\n" +
-          "- **Brand** — brand-blue 5 변형\n" +
-          "- **Status** — success / warning / error\n" +
-          "- **Surface Generic** — surface-50 / 100 / 200\n" +
-          "- **Border** — default / soft / strong / divider\n" +
-          "- **WhaTap Gradient** — whatap-blue / whatap-purple / whatap-purple-deep (AI symbol/위젯 그라데이션)\n" +
-          "- **Extended Gray** — gray-mid / soft / pale (text 4계층 외 UI 회색)\n" +
-          "- **Extended Palette** — 40 chart/brand ad-hoc 색 (hex-suffix 토큰)",
+          "값은 `:root` 에서 런타임에 읽습니다 — 토큰을 추가하면 자동으로 나타나고, " +
+          "테마를 바꾸면 그 테마의 계산값이 보입니다. 카탈로그가 값을 복제하지 않으므로 드리프트가 불가능합니다.\n\n" +
+          "- **Semantic** — 용도가 이름인 토큰. UI 컴포넌트는 이것만 참조합니다.\n" +
+          "- **Global (palette)** — 값이 이름인 원시 팔레트. 차트 시리즈 전용.",
       },
     },
   },
@@ -31,35 +35,114 @@ export default meta;
 
 /* ─── 공통 ────────────────────────────────────────── */
 
-function Swatch({
-  color,
-  label,
-  hex,
-  description,
-  border,
-}: {
-  color: string;
-  label: string;
-  hex: string;
-  description?: string;
-  border?: boolean;
-}) {
+/** 토큰의 *의미* — CSS 에서 읽을 수 없는 유일한 정보. 카탈로그가 소유한다. */
+const DESCRIPTIONS: Record<string, string> = {
+  "--color-brand-blue": "주요 브랜드 컬러 — AI 버튼 · 링크 · 강조",
+  "--color-brand-blue-deep": "hover/pressed 단계",
+  "--color-brand-blue-soft": "MiniLineChart 기본 라인",
+  "--color-brand-blue-bg": "브랜드 배경 — active 카드 강조",
+  "--color-brand-blue-bg-2": "브랜드 배경 변형 — 입력 평상 보더",
+  "--color-brand-blue-tint": "가장 옅은 틴트 — 강조된 표 행/셀",
+  "--color-brand-blue-wash": "반투명 — active/선택 행·버튼 (아래 층이 배어남)",
+  "--color-brand-blue-border-tint": "반투명 — 틴트 표면의 경계선",
+
+  "--color-status-success": "정상 · 완료 — 도트 · LIVE 알약 · 체크",
+  "--color-status-warning": "주의 · 경고",
+  "--color-status-error": "오류 · 실패",
+  "--color-status-warning-deep": "warning hover/pressed",
+  "--color-status-error-deep": "error hover/pressed",
+  "--color-status-success-soft": "옅은 표면 — 토스트 배경 · soft 칩/버튼",
+  "--color-status-info-soft": "옅은 표면 — info 토스트",
+  "--color-status-warning-soft": "옅은 표면 — 경고 배너 · soft 버튼",
+  "--color-status-error-soft": "옅은 표면 — 에러 토스트 · soft 버튼",
+  "--color-status-warning-soft-border": "warning-soft 표면의 경계선",
+
+  "--color-bg": "페이지/앱 셸 배경 (바닥 층)",
+  "--color-card": "떠 있는 표면 — 헤더·사이드바·카드·입력·드롭다운",
+  "--color-surface-50": "가장 옅은 보조 표면 — hover 배경 · muted 셀",
+  "--color-surface-100": "중간 보조 표면 — active row · 트랙 · 선택 강조",
+  "--color-surface-200": "가장 진한 보조 표면 — switch off 트랙 · 무채색 채움",
+
+  "--color-text-primary": "본문 default · 헤딩 · 강조",
+  "--color-text-secondary": "보조 본문 · dim 텍스트",
+  "--color-text-tertiary": "라벨 · 메타 · placeholder",
+  "--color-text-disabled": "비활성 상태 텍스트",
+  "--color-text-inverse": "반전 전경 — text-strong 을 배경으로 깐 표면 위",
+  "--color-text-strong": "legacy alias",
+  "--color-text-body": "legacy alias",
+  "--color-text-muted": "legacy alias",
+  "--color-text-subtle": "legacy alias",
+
+  "--color-border-default": "위젯·카드 표준 보더",
+  "--color-border-soft": "더 옅은 구분선 — 차트 그리드",
+  "--color-border-strong": "강조 보더 — PageHeader 하단 · 컨트롤",
+  "--color-border-divider": "더 진한 구분선 — LiveTimerCompact 보더",
+
+  "--color-indicator-critical": "위험 도트·스트로크 (텍스트로 쓰지 말 것)",
+  "--color-indicator-warning": "경고 도트·스트로크 (텍스트로 쓰지 말 것)",
+
+  "--color-tone-surface-critical": "위젯 분류 배지/카드 배경 — critical",
+  "--color-tone-surface-warning": "위젯 분류 배지/카드 배경 — warning",
+  "--color-tone-surface-info": "위젯 분류 배지/카드 배경 — info",
+  "--color-tone-surface-muted": "위젯 분류 배지/카드 배경 — muted",
+  "--color-tone-surface-neutral": "위젯 분류 배지/카드 배경 — neutral",
+
+  "--color-tone-text-critical": "tone-surface 위 라벨 — 대비 검증된 짝",
+  "--color-tone-text-warning": "tone-surface 위 라벨 — 대비 검증된 짝",
+  "--color-tone-text-info": "tone-surface 위 라벨 — 대비 검증된 짝",
+  "--color-tone-text-success": "status-success-soft 위 라벨",
+  "--color-tone-text-muted": "tone-surface 위 라벨 — 대비 검증된 짝",
+  "--color-tone-text-neutral": "tone-surface 위 라벨 — 대비 검증된 짝",
+
+  "--color-whatap-blue": "AI 그라데이션 시작",
+  "--color-whatap-purple": "AI 그라데이션 끝 — pinwheel 강조",
+  "--color-whatap-purple-deep": "AI 그라데이션 deep variant",
+
+  "--color-gray-mid": "text 4단계 외 UI 회색",
+  "--color-gray-soft": "text 4단계 외 UI 회색",
+  "--color-gray-pale": "text 4단계 외 UI 회색",
+
+  "--color-overlay-scrim": "모달류 backdrop 딤 (역할이 하나 → 토큰도 하나)",
+  "--color-overlay-loading": "컨트롤 위 로딩 막 — 컬러 버튼 위 흰 워시",
+  "--color-stage-backdrop": "Stage 무대 캔버스 (테마 무관 고정 어두움)",
+  "--color-stage-badge-bg": "Stage 배지 배경 (테마 무관)",
+
+  "--color-white": "테마 무관 고정 흰색 — 컬러 위 전경 전용",
+  "--color-black": "테마 무관 고정 검정 — 팔레트 색이 아님",
+};
+
+/** 값이 투명/반투명일 수 있으므로 체커보드 위에 얹어 알파를 드러낸다. */
+const CHECKER =
+  "repeating-conic-gradient(var(--color-surface-200) 0% 25%, var(--color-card) 0% 50%) 50% / 12px 12px";
+
+function Swatch({ entry }: { entry: TokenEntry }) {
+  const described = DESCRIPTIONS[entry.name];
   return (
-    <div className="flex items-stretch gap-3 p-3 border border-default rounded-lg bg-white" style={{ fontFamily: "var(--font-family-korean)" }}>
-      <div
-        className="rounded-md flex-shrink-0"
-        style={{
-          width: 80,
-          height: 56,
-          background: color,
-          border: border ? "1px dashed #ccc" : undefined,
-        }}
-      />
+    <div
+      className="flex items-stretch gap-3 p-3 border border-default rounded-lg bg-card"
+      style={{ fontFamily: "var(--font-family-korean)" }}
+    >
+      <div className="rounded-md flex-shrink-0" style={{ width: 80, height: 56, background: CHECKER }}>
+        <div
+          className="rounded-md w-full h-full"
+          style={{ background: `var(${entry.name})`, border: "1px dashed var(--color-border-strong)" }}
+        />
+      </div>
       <div className="flex flex-col justify-center gap-0_5 min-w-0">
-        <div className="text-base font-bold text-primary tracking-default leading-none">{label}</div>
-        <div className="text-xs text-tertiary leading-none" style={{ fontFamily: "var(--font-family-numeric)" }}>{hex}</div>
-        {description && (
-          <div className="text-xs text-secondary leading-normal mt-1">{description}</div>
+        <div className="text-base font-bold text-primary tracking-default leading-none">
+          {tokenLabel(entry.name)}
+        </div>
+        <div
+          className="text-chart text-tertiary leading-none"
+          style={{ fontFamily: "var(--font-family-numeric)" }}
+        >
+          {entry.value}
+        </div>
+        {described ? (
+          <div className="text-sm text-secondary leading-snug">{described}</div>
+        ) : (
+          // 설명은 CSS 에서 읽을 수 없다 — 새 토큰이면 여기 표시되어 문서화 누락이 드러난다.
+          <div className="text-sm text-disabled leading-snug">설명 미기술 — DESCRIPTIONS 에 추가</div>
         )}
       </div>
     </div>
@@ -68,53 +151,125 @@ function Swatch({
 
 function SwatchGrid({ children, minColumn = 320 }: { children: React.ReactNode; minColumn?: number }) {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: `repeat(auto-fill, minmax(${minColumn}px, 1fr))`, gap: 8, maxWidth: 1200 }}>
+    <div
+      className="grid gap-3"
+      style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${minColumn}px, 1fr))` }}
+    >
       {children}
     </div>
   );
 }
 
-function CompactSwatch({ token, hex }: { token: string; hex: string }) {
+/** prefix 로 CSS 에서 토큰을 긁어 그리는 그룹. 값을 인자로 받지 않는 것이 요점. */
+function TokenGroup({
+  prefix,
+  exclude,
+  minColumn,
+}: {
+  prefix: string;
+  exclude?: string[];
+  minColumn?: number;
+}) {
+  const entries = useTokens(prefix, exclude ?? NONE);
+  if (!entries.length) {
+    return (
+      <div className="text-md text-tertiary" style={{ fontFamily: "var(--font-family-korean)" }}>
+        `{prefix}*` 토큰이 없습니다.
+      </div>
+    );
+  }
   return (
-    <div className="flex flex-col items-stretch gap-1 p-2 border border-default rounded-md bg-white" style={{ fontFamily: "var(--font-family-numeric)" }}>
-      <div className="rounded h-12" style={{ background: hex }} />
-      <div className="text-chart text-tertiary leading-none truncate" style={{ fontFamily: "var(--font-family-numeric)" }}>{token}</div>
-      <div className="text-chart text-tertiary leading-none">{hex}</div>
-    </div>
+    <SwatchGrid minColumn={minColumn}>
+      {entries.map((e) => (
+        <Swatch key={e.name} entry={e} />
+      ))}
+    </SwatchGrid>
   );
 }
 
+/* 모듈 상수 — useTokens deps 의 identity 안정용 (매 렌더 새 배열 생성 방지). */
+const NONE: string[] = [];
+const BRAND_EXCLUDE = ["palette"];
+const TEXT_EXCLUDE = ["--color-text-strong", "--color-text-body", "--color-text-muted", "--color-text-subtle"];
+
 const INTENTS: SemanticIntent[] = ["critical", "warning", "info", "muted", "neutral"];
 
-/* ─── 1) Surface (Intent) ─────────────────────────── */
+/* ─── Semantic ─────────────────────────────────────── */
 
-/** **`tokens.color.surface.<intent>`** — 카드/패널 배경 5종. */
+/** **`--color-brand-*`** — 브랜드 파랑 계열 (불투명 단계 + 반투명 워시). */
+export const Brand: StoryObj = { render: () => <TokenGroup prefix="--color-brand-" exclude={BRAND_EXCLUDE} /> };
+
+/** **`--color-status-*`** — 운영 상태 3색 × 원색/deep/soft 3단. */
+export const Status: StoryObj = { render: () => <TokenGroup prefix="--color-status-" /> };
+
+/** **`--color-text-*`** — 텍스트 위계 4단계 + 반전 전경. (legacy alias 제외) */
+export const TextHierarchy: StoryObj = {
+  render: () => <TokenGroup prefix="--color-text-" exclude={TEXT_EXCLUDE} />,
+};
+
+/** **`--color-border-*`** — 라인/보더 4단계. */
+export const Border: StoryObj = { render: () => <TokenGroup prefix="--color-border-" /> };
+
+/** **`--color-surface-*`** — 보조 표면 3단계. base surface(bg/card)는 Surface 스토리 참조. */
+export const SurfaceGeneric: StoryObj = { render: () => <TokenGroup prefix="--color-surface-" /> };
+
+/** **`--color-indicator-*`** — 도트·스트로크 전용 고채도. ❌ 텍스트로 쓰지 말 것. */
+export const Indicator: StoryObj = { render: () => <TokenGroup prefix="--color-indicator-" /> };
+
+/** **`--color-tone-*`** — 위젯 분류 표면(surface) + 그 위 라벨(text) 짝. */
+export const Tone: StoryObj = { render: () => <TokenGroup prefix="--color-tone-" /> };
+
+/** **`--color-overlay-*` · `--color-stage-*`** — 덮개와 무대 chrome. */
+export const OverlayAndStage: StoryObj = {
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <TokenGroup prefix="--color-overlay-" />
+      <TokenGroup prefix="--color-stage-" />
+    </div>
+  ),
+};
+
+/** **`--color-gray-*`** — text 4단계 외 UI 회색. */
+export const ExtendedGray: StoryObj = { render: () => <TokenGroup prefix="--color-gray-" /> };
+
+/* ─── Base surface (2단 레이어) ─────────────────────── */
+
+/**
+ * **`--color-bg` / `--color-card`** — 값이 아니라 **층(layer)** 을 뜻하는 토큰.
+ * 페이지는 한 단계 뒤로(회색), 콘텐츠는 그 위에 카드로 쌓인다(흰색).
+ * ⚠️ 두 토큰을 같은 값으로 만들면 카드가 보더만 남아 층이 사라진다.
+ */
 export const Surface: StoryObj = {
-  render: () => (
-    <SwatchGrid>
-      {INTENTS.map((intent) => {
-        const t = tokens.color.surface[intent];
-        return <Swatch key={intent} color={t.value} label={`surface.${intent}`} hex={t.value} description={t.description} />;
-      })}
-    </SwatchGrid>
-  ),
+  render: () => {
+    const base = useTokens("--color-bg", NONE);
+    const card = useTokens("--color-card", NONE);
+    return (
+      <div className="flex flex-col gap-6">
+        <SwatchGrid>
+          {[...base, ...card].map((e) => (
+            <Swatch key={e.name} entry={e} />
+          ))}
+        </SwatchGrid>
+        {/* 층이 실제로 어떻게 쌓이는지 */}
+        <div className="rounded-lg p-4 flex flex-col gap-3" style={{ background: "var(--color-bg)" }}>
+          <div
+            className="text-sm text-tertiary"
+            style={{ fontFamily: "var(--font-family-korean)" }}
+          >
+            page (`--color-bg`)
+          </div>
+          <div className="bg-card border border-default rounded-8px p-4">
+            <div className="text-md text-primary" style={{ fontFamily: "var(--font-family-korean)" }}>
+              card (`--color-card`) — 의미 단위는 이 위에 얹는다
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  },
 };
 
-/* ─── 2) Indicator (Intent) ────────────────────────── */
-
-/** **`tokens.color.indicator.<intent>`** — 도트/스트로크/강조선 5종. */
-export const Indicator: StoryObj = {
-  render: () => (
-    <SwatchGrid>
-      {INTENTS.map((intent) => {
-        const t = tokens.color.indicator[intent];
-        return <Swatch key={intent} color={t.value} label={`indicator.${intent}`} hex={t.value} description={t.description} />;
-      })}
-    </SwatchGrid>
-  ),
-};
-
-/* ─── 3) Tone Pairing ──────────────────────────────── */
+/* ─── Tone pairing (의미 조합) ──────────────────────── */
 
 /**
  * **Surface + Indicator + ToneText pairing** — 한 톤의 3역할이 실제로 어떻게 보이는지.
@@ -132,14 +287,21 @@ export const TonePairing: StoryObj = {
         const label = tokens.label[intent];
         return (
           // cssVar 로 주입 — value(hex) 를 쓰면 다크에서 뒤집히지 않는다.
-          <div key={intent} className="flex items-center gap-4 p-3 border border-default rounded-lg" style={{ background: surface.cssVar, fontFamily: "var(--font-family-korean)" }}>
+          <div
+            key={intent}
+            className="flex items-center gap-4 p-3 border border-default rounded-lg"
+            style={{ background: surface.cssVar, fontFamily: "var(--font-family-korean)" }}
+          >
             <div className="flex items-center gap-1_5 px-2 py-1 rounded-xl bg-card">
               <div className="rounded-full" style={{ width: 6, height: 6, background: indicator.value }} />
               <span className="text-xs leading-none" style={{ color: toneText.cssVar, fontWeight: 500 }}>
                 {label.value || `(${intent})`}
               </span>
             </div>
-            <div className="flex-1 min-w-0 flex flex-col gap-0_5" style={{ fontFamily: "var(--font-family-numeric)" }}>
+            <div
+              className="flex-1 min-w-0 flex flex-col gap-0_5"
+              style={{ fontFamily: "var(--font-family-numeric)" }}
+            >
               <div className="text-sm text-primary font-bold">{intent}</div>
               <div className="text-chart text-tertiary">
                 surface {surface.value} · indicator {indicator.value} · toneText {toneText.value}
@@ -152,158 +314,81 @@ export const TonePairing: StoryObj = {
   ),
 };
 
-/* ─── 4) Text Hierarchy ────────────────────────────── */
+/* ─── Gradient ─────────────────────────────────────── */
 
-/** **`--color-text-{primary/secondary/tertiary/disabled}`** — 4 단계 텍스트 위계. */
-export const TextHierarchy: StoryObj = {
-  render: () => (
-    <SwatchGrid>
-      <Swatch color="#222"     label="text-primary"   hex="#222"     description="본문 default · 헤딩 · 강조 텍스트 (154 회)" />
-      <Swatch color="#4c4c4c"  label="text-secondary" hex="#4c4c4c"  description="보조 본문 · dim 텍스트 (75 회)" />
-      <Swatch color="#757575"  label="text-tertiary"  hex="#757575"  description="라벨 · 메타 · placeholder (63 회)" />
-      <Swatch color="#adadad"  label="text-disabled"  hex="#adadad"  description="비활성 상태 텍스트 (6 회)" />
-    </SwatchGrid>
-  ),
-};
-
-/* ─── 5) Brand ─────────────────────────────────────── */
-
-/** **WhaTap Brand 색상** — 라이브 whatap-ai-assistant 번들에서 추출. */
-export const Brand: StoryObj = {
-  render: () => (
-    <SwatchGrid>
-      <Swatch color="#296CF2" label="color-brand-blue"      hex="#296CF2" description="WhaTap 주요 브랜드 컬러 — AI 버튼 / 링크 / 강조" />
-      <Swatch color="#1B5CD9" label="color-brand-blue-deep" hex="#1B5CD9" description="브랜드 블루 deep — hover 강조" />
-      <Swatch color="#3DA9FF" label="color-brand-blue-soft" hex="#3DA9FF" description="브랜드 블루 soft — MiniLineChart 기본 라인" />
-      <Swatch color="#D6E1FF" label="color-brand-blue-bg"   hex="#D6E1FF" description="브랜드 블루 배경 — active 카드 강조" />
-      <Swatch color="#C2D5FC" label="color-brand-blue-bg-2" hex="#C2D5FC" description="브랜드 블루 배경 변형" />
-    </SwatchGrid>
-  ),
-};
-
-/* ─── 6) Status ────────────────────────────────────── */
-
-/** **`--color-status-*`** — 운영 상태 신호 3색. */
-export const Status: StoryObj = {
-  render: () => (
-    <SwatchGrid>
-      <Swatch color="#00B442" label="color-status-success" hex="#00B442" description="정상 · 완료 — Toast success, LIVE 타이머 ▌▌, 체크 마크" />
-      <Swatch color="#FFA012" label="color-status-warning" hex="#FFA012" description="주의 · 경고 — 알림 카드, 모니터링 권장 상태" />
-      <Swatch color="#f34646" label="color-status-error"   hex="#f34646" description="오류 · 실패 — 실패 메시지, 에러 토스트" />
-    </SwatchGrid>
-  ),
-};
-
-/* ─── 7) Surface (Generic) ─────────────────────────── */
-
-/** **`--color-surface-{50/100/200}`** — 일반 표면 회색 단계. */
-export const SurfaceGeneric: StoryObj = {
-  render: () => (
-    <SwatchGrid>
-      <Swatch color="#F5F5F5" label="color-surface-50"  hex="#F5F5F5" description="가장 옅은 표면 — AiUserBubble 배경, hover 영역" border />
-      <Swatch color="#F1F2F4" label="color-surface-100" hex="#F1F2F4" description="dashboard 본문 영역 배경, sub-card 배경" />
-      <Swatch color="#EAEAEA" label="color-surface-200" hex="#EAEAEA" description="카드 보더, divider — 살짝 진한 표면" />
-    </SwatchGrid>
-  ),
-};
-
-/* ─── 8) Border ────────────────────────────────────── */
-
-/** **`--color-border-*`** — 라인/보더 4 단계. */
-export const Border: StoryObj = {
-  render: () => (
-    <SwatchGrid>
-      <Swatch color="#EAEAEA" label="color-border-default"  hex="#EAEAEA" description="AiCard 보더 등 위젯 표준 보더" border />
-      <Swatch color="#F0F0F0" label="color-border-soft"     hex="#F0F0F0" description="더 옅은 구분선 — chart grid line" border />
-      <Swatch color="#E6E6E6" label="color-border-strong"   hex="#E6E6E6" description="강조 보더 — PageHeader 하단 라인" border />
-      <Swatch color="#ADADAD" label="color-border-divider"  hex="#ADADAD" description="더 진한 구분선 — LiveTimerCompact 보더" />
-    </SwatchGrid>
-  ),
-};
-
-/* ─── 9) WhaTap Gradient ───────────────────────────── */
-
-/** **`--color-whatap-*`** — AI 심볼·위젯 보라/파랑 그라데이션 stops. */
+/** **`--color-whatap-*`** — AI 심볼·위젯 그라데이션 stops + 실제 적용 미리보기. */
 export const WhaTapGradient: StoryObj = {
   render: () => (
     <div className="flex flex-col gap-3 max-w-3xl">
-      <SwatchGrid>
-        <Swatch color="#004BE0" label="color-whatap-blue"          hex="#004BE0" description="AI 그라데이션 시작 (보라-파랑)" />
-        <Swatch color="#8B52FF" label="color-whatap-purple"        hex="#8B52FF" description="AI 그라데이션 중간 — pinwheel 강조" />
-        <Swatch color="#4F5BD5" label="color-whatap-purple-deep"   hex="#4F5BD5" description="AI 그라데이션 deep variant" />
-      </SwatchGrid>
+      <TokenGroup prefix="--color-whatap-" />
       <div className="text-md text-secondary mt-2" style={{ fontFamily: "var(--font-family-korean)" }}>
-        그라데이션 미리보기 — <code className="text-chart text-tertiary" style={{ fontFamily: "var(--font-family-numeric)" }}>linear-gradient(110deg, #004BE0, #8B52FF, #004BE0)</code>
+        그라데이션 미리보기 — 토큰 stops 로만 조립 (hex 를 다시 적지 않는다)
       </div>
       <div
         className="rounded-lg h-12"
         style={{
-          background: "linear-gradient(110.34deg, #004BE0, #8B52FF, #004BE0, #8B52FF, #004BE0) 0 0 / 300% 100%",
+          background:
+            "linear-gradient(110.34deg, var(--color-whatap-blue), var(--color-whatap-purple), var(--color-whatap-blue), var(--color-whatap-purple), var(--color-whatap-blue)) 0 0 / 300% 100%",
         }}
       />
-      <div className="text-md text-secondary mt-2" style={{ fontFamily: "var(--font-family-korean)" }}>
-        AI 심볼 conic-gradient — <code className="text-chart text-tertiary" style={{ fontFamily: "var(--font-family-numeric)" }}>conic-gradient(from 90deg, #004BE0, #8B52FF, #004BE0)</code>
-      </div>
       <div className="flex items-center gap-3">
         <div
           className="rounded-full"
           style={{
             width: 48,
             height: 48,
-            background: "conic-gradient(from 90deg, #004BE0, #8B52FF, #004BE0)",
+            background:
+              "conic-gradient(from 90deg, var(--color-whatap-blue), var(--color-whatap-purple), var(--color-whatap-blue))",
           }}
         />
-        <div className="text-md text-secondary" style={{ fontFamily: "var(--font-family-korean)" }}>DashboardBuildingProgress 의 spinner</div>
+        <div className="text-md text-secondary" style={{ fontFamily: "var(--font-family-korean)" }}>
+          DashboardBuildingProgress 의 spinner
+        </div>
       </div>
     </div>
   ),
 };
 
-/* ─── 10) Extended Gray ────────────────────────────── */
+/* ─── Global (palette) ─────────────────────────────── */
 
-/** **`--color-gray-{mid/soft/pale}`** — text 4단계 외 UI 회색 (ad-hoc 1-5 callsite). */
-export const ExtendedGray: StoryObj = {
-  render: () => (
-    <SwatchGrid>
-      <Swatch color="#8b8b8b" label="color-gray-mid"  hex="#8b8b8b" description="중간 회색 — 5 callsite (special UI text)" />
-      <Swatch color="#a0a3a6" label="color-gray-soft" hex="#a0a3a6" description="부드러운 회색 — 1 callsite" />
-      <Swatch color="#bdbdbd" label="color-gray-pale" hex="#bdbdbd" description="옅은 회색 — 1 callsite" />
-    </SwatchGrid>
-  ),
-};
-
-/* ─── 11) Extended Palette ─────────────────────────── */
-
-/** **`--color-palette-{hex}`** — Chart series / brand ad-hoc 색 (36종, hex-suffix).
+/**
+ * **`--color-palette-{hex}`** — 값이 이름인 Global 팔레트. **차트 시리즈 전용.**
  *
- * 원래 40종이었으나 의미적 매칭 4 색은 semantic 토큰으로 collapse 됨:
- * - `palette-e53935` → `indicator-critical` (×4 callsite)
- * - `palette-f0b400` → `indicator-warning` (×2)
- * - `palette-f5f5f5` → `surface-50` (×1)
- * - `palette-2d2d2d` → `text-body` (×1)
+ * 목록을 손으로 적지 않고 CSS 에서 긁어 오므로, 팔레트를 추가/제거하면 여기 자동 반영된다.
+ * 의미가 명확해지는 색은 semantic 토큰으로 collapse 하는 것이 방향이다
+ * (예: `palette-e53935` → `indicator-critical`).
  */
 export const ExtendedPalette: StoryObj = {
   render: () => {
-    const PALETTE = [
-      "0078dc", "00beb8", "10b981", "1b9bd0", "1f3c88",          "2ec4b6", "3c4ec1",
-      "4f65b5", "4fc3f7", "57ca7e", "5cc97d", "71df8b", "81c784", "85c2fa", "a0a65a",
-      "a8d8ff", "b7dbff", "ba68c8", "c44cd8", "d4f0e5", "dcefff", "e040b8", "e0d6f5",
-                "e5564e", "e8d6f0",           "f34747", "f5c84a",           "fb88e1",
-      "ff8800", "ff8c2d", "ffa1a1", "ffb74d", "ffc300", "ffc771", "ffe4cc", "fff176",
-    ];
+    const palette = useTokens("--color-palette-", NONE);
     return (
-      <>
-        <div className="text-md text-secondary mb-3 max-w-2xl" style={{ fontFamily: "var(--font-family-korean)" }}>
-          Chart series + brand ad-hoc 색 <strong>36 종</strong>. (40 → 36, semantic 매칭 4 색 collapse 됨.)
-          inline <code className="text-chart" style={{ fontFamily: "var(--font-family-numeric)" }}>color: "#hex"</code> 잔재 제거를 위한 hex-suffix 토큰 binding.
-          향후 chart series 의미가 명확해지면 semantic naming (chart-blue-deep, chart-magenta 등) 으로 점진 collapse 가능.
+      <div className="flex flex-col gap-3">
+        <div
+          className="text-md text-secondary max-w-2xl"
+          style={{ fontFamily: "var(--font-family-korean)" }}
+        >
+          차트 시리즈 + brand ad-hoc 색 <strong>{palette.length}종</strong>. 컴포넌트에서 직접
+          참조 가능한 유일한 Global 토큰군(차트 한정)입니다.
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 6, maxWidth: 1200 }}>
-          {PALETTE.map((h) => (
-            <CompactSwatch key={h} token={`palette-${h}`} hex={`#${h}`} />
+        <div
+          className="grid gap-2"
+          style={{ gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))" }}
+        >
+          {palette.map((e) => (
+            <div
+              key={e.name}
+              className="flex flex-col items-stretch gap-1 p-2 border border-default rounded-md bg-card"
+              style={{ fontFamily: "var(--font-family-numeric)" }}
+            >
+              <div className="rounded h-12" style={{ background: `var(${e.name})` }} />
+              <div className="text-chart text-tertiary leading-none truncate">
+                {tokenLabel(e.name).replace("color-palette-", "")}
+              </div>
+              <div className="text-chart text-tertiary leading-none">{e.value}</div>
+            </div>
           ))}
         </div>
-      </>
+      </div>
     );
   },
 };

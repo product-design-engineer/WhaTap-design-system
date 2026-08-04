@@ -26,7 +26,7 @@ const meta: Meta<typeof MiniLineChart> = {
     xLabels: { description: "X축 라벨. 기본 13:27~13:36 sample.", control: "object" },
     markerAt: { description: "peak ▼ 마커 위치 (0~1, x축 비율).", control: { type: "range", min: 0, max: 1, step: 0.01 } },
     showTopStat: { description: "헤더 우측 Top Stat 칩 노출.", control: "boolean" },
-    color: { description: "line/area 색상. 기본 #3DA9FF (라이브 토큰).", control: "color" },
+    color: { description: "line/area 색상. 기본 `--color-brand-blue-soft`.", control: "color" },
     unit: { description: "Y축·peak 라벨 단위 ('%', 'K', 'ms' 등).", control: "text" },
     delay: { description: "stagger 진입 애니메이션 지연 (ms).", control: { type: "number", min: 0, max: 2000, step: 100 } },
   },
@@ -51,7 +51,7 @@ export const Memory: Story = {
     title: "[XOS] Memory",
     values: [4.2, 4.5, 5.1, 5.8, 6.3, 6.1, 5.9],
     unit: "GB",
-    color: "#8B52FF",
+    color: "var(--color-whatap-purple)",
   },
 };
 
@@ -61,7 +61,7 @@ export const DiskUsage: Story = {
     title: "[XOS] Disk Usage",
     values: [62, 62, 63, 63, 64, 64, 65],
     unit: "%",
-    color: "#FF8800",
+    color: "var(--color-palette-ff8800)",
   },
 };
 
@@ -70,7 +70,7 @@ export const CriticalTrend: Story = {
   args: {
     title: "Lock Waiting Session Count",
     values: [3, 5, 12, 28, 45, 32, 18],
-    color: "#E53935",
+    color: "var(--color-indicator-critical)",
     showTopStat: true,
   },
 };

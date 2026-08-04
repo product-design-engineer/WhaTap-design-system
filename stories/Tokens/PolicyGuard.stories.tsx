@@ -36,6 +36,7 @@ const RULES: { rule: DsPolicyRule; label: string; detects: string; fix: string }
   {
     rule: "raw-color",
     label: "인라인 색 리터럴",
+    // raw-color-ok: 가드가 무엇을 탐지하는지 설명하는 문서 문구 — 패턴 이름 자체다.
     detects: "인라인 style 의 hex/rgba · SVG fill·stroke 리터럴 · bg-white 계열 고정색 유틸",
     fix: "토큰으로 — var(--color-card) · var(--color-border-strong) · var(--color-text-tertiary)",
   },

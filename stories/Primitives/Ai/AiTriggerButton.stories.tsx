@@ -83,7 +83,7 @@ export const SizeMatrix: Story = {
       {[13, 16, 24].map((s) => (
         <div key={s} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
           <AiTriggerButton size={s} />
-          <span style={{ fontFamily: "Roboto, monospace", fontSize: 10, color: "#757575" }}>{s}px</span>
+          <span style={{ fontFamily: "Roboto, monospace", fontSize: 10, color: "var(--color-text-tertiary)" }}>{s}px</span>
         </div>
       ))}
     </div>

@@ -65,6 +65,14 @@
   --color-border-strong: #E6E6E6;
   --color-border-divider: #ADADAD;
 
+  /* Brand logo — WhaTap 회사 심볼(4 컬러 바)의 고정 색.
+     로고는 테마에 따라 리브랜딩되지 않으므로 `.dark` 오버라이드가 없다.
+     ⚠️ UI 색으로 쓰지 말 것 — 브랜드 마크 전용. UI 는 semantic 토큰. */
+  --color-logo-orange: #F25022;
+  --color-logo-yellow: #FFB902;
+  --color-logo-green: #80BA01;
+  --color-logo-blue: #19A0E5;
+
   /* AI gradient (preserved for compat) */
   --color-whatap-blue: #004BE0;
   --color-whatap-purple: #8B52FF;

@@ -32,14 +32,14 @@ const AI_SUGGESTIONS: AiPromptSuggestion[] = [
 
 const SampleMain = (
   <div style={{ padding: 24, fontFamily: "'Noto Sans', sans-serif" }}>
-    <div style={{ fontSize: 14, color: "#757575", marginBottom: 12 }}>
+    <div style={{ fontSize: 14, color: "var(--color-text-tertiary)", marginBottom: 12 }}>
       AI 전용 페이지 — 헤더 인라인 입력으로 위젯 진입
     </div>
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
       {["GPU 사용률", "메모리", "네트워크"].map((label) => (
-        <div key={label} style={{ background: "#fff", border: "1px solid #eaeaea", borderRadius: 6, padding: 16 }}>
-          <div style={{ fontSize: 12, color: "#757575" }}>{label}</div>
-          <div style={{ fontSize: 24, fontWeight: 700, color: "#222" }}>
+        <div key={label} style={{ background: "var(--color-card)", border: "1px solid var(--color-border-default)", borderRadius: 6, padding: 16 }}>
+          <div style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>{label}</div>
+          <div style={{ fontSize: 24, fontWeight: 700, color: "var(--color-text-primary)" }}>
             {Math.floor(Math.random() * 80 + 10)}%
           </div>
         </div>

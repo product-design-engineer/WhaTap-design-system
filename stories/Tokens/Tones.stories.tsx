@@ -45,26 +45,26 @@ export const SemanticIntentMatrix: StoryObj = {
         const label = tokens.label[intent];
         const m = INTENT_META[intent];
         return (
-          <div key={intent} style={{ display: "grid", gridTemplateColumns: "100px 200px 1fr 240px", gap: 16, alignItems: "center", padding: 16, border: "1px solid #eaeaea", borderRadius: 8, background: surface.value }}>
+          <div key={intent} style={{ display: "grid", gridTemplateColumns: "100px 200px 1fr 240px", gap: 16, alignItems: "center", padding: 16, border: "1px solid var(--color-border-default)", borderRadius: 8, background: surface.value }}>
             {/* 1. 이름 */}
             <div>
               <div style={{ fontFamily: "Roboto, monospace", fontWeight: 700, fontSize: 14, color: indicator.value }}>{intent}</div>
-              <div style={{ fontFamily: "Roboto, monospace", fontSize: 10, color: "#757575", marginTop: 2 }}>
+              <div style={{ fontFamily: "Roboto, monospace", fontSize: 10, color: "var(--color-text-tertiary)", marginTop: 2 }}>
                 legacy: <code>{m.legacyAlias}</code>
               </div>
             </div>
             {/* 2. 의미 */}
-            <div style={{ fontFamily: "'Noto Sans', sans-serif", fontSize: 12, color: "#222", lineHeight: 1.4 }}>
+            <div style={{ fontFamily: "'Noto Sans', sans-serif", fontSize: 12, color: "var(--color-text-primary)", lineHeight: 1.4 }}>
               {m.meaning}
             </div>
             {/* 3. 토큰 값 */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 4, fontFamily: "Roboto, monospace", fontSize: 10, color: "#4c4c4c" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4, fontFamily: "Roboto, monospace", fontSize: 10, color: "var(--color-text-secondary)" }}>
               <div>surface: <code>{surface.value}</code></div>
               <div>indicator: <code>{indicator.value}</code></div>
               <div>label: "{label.value || "(none)"}"</div>
             </div>
             {/* 4. 배지 미리보기 */}
-            <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 10px", borderRadius: 12, background: "rgba(255,255,255,0.6)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 10px", borderRadius: 12, background: "var(--color-card)" }}>
               <div style={{ width: 8, height: 8, borderRadius: 4, background: indicator.value }} />
               <span style={{ fontFamily: "'Noto Sans', sans-serif", fontSize: 12, color: indicator.value, fontWeight: 500 }}>
                 {label.value || `(${intent})`}
@@ -83,10 +83,10 @@ export const LegacyToneMapping: StoryObj = {
     <div style={{ maxWidth: 720 }}>
       <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "'Noto Sans', sans-serif", fontSize: 13 }}>
         <thead>
-          <tr style={{ background: "#f5f5f5", textAlign: "left" }}>
-            <th style={{ padding: "8px 12px", borderBottom: "1px solid #eaeaea" }}>Legacy Tone</th>
-            <th style={{ padding: "8px 12px", borderBottom: "1px solid #eaeaea" }}>New SemanticIntent</th>
-            <th style={{ padding: "8px 12px", borderBottom: "1px solid #eaeaea" }}>의미</th>
+          <tr style={{ background: "var(--color-surface-50)", textAlign: "left" }}>
+            <th style={{ padding: "8px 12px", borderBottom: "1px solid var(--color-border-default)" }}>Legacy Tone</th>
+            <th style={{ padding: "8px 12px", borderBottom: "1px solid var(--color-border-default)" }}>New SemanticIntent</th>
+            <th style={{ padding: "8px 12px", borderBottom: "1px solid var(--color-border-default)" }}>의미</th>
           </tr>
         </thead>
         <tbody>
@@ -98,14 +98,14 @@ export const LegacyToneMapping: StoryObj = {
             ["neutral", "neutral", "기본 (그대로)"],
           ].map(([legacy, intent, meaning]) => (
             <tr key={legacy}>
-              <td style={{ padding: "8px 12px", borderBottom: "1px solid #eaeaea", fontFamily: "Roboto, monospace" }}><code>{legacy}</code></td>
-              <td style={{ padding: "8px 12px", borderBottom: "1px solid #eaeaea", fontFamily: "Roboto, monospace" }}><code>{intent}</code></td>
-              <td style={{ padding: "8px 12px", borderBottom: "1px solid #eaeaea", color: "#4c4c4c" }}>{meaning}</td>
+              <td style={{ padding: "8px 12px", borderBottom: "1px solid var(--color-border-default)", fontFamily: "Roboto, monospace" }}><code>{legacy}</code></td>
+              <td style={{ padding: "8px 12px", borderBottom: "1px solid var(--color-border-default)", fontFamily: "Roboto, monospace" }}><code>{intent}</code></td>
+              <td style={{ padding: "8px 12px", borderBottom: "1px solid var(--color-border-default)", color: "var(--color-text-secondary)" }}>{meaning}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div style={{ marginTop: 12, padding: 12, background: "#fff8e0", border: "1px solid #F0B400", borderRadius: 6, fontSize: 12, color: "#4c4c4c", lineHeight: 1.5 }}>
+      <div style={{ marginTop: 12, padding: 12, background: "var(--color-tone-surface-warning)", border: "1px solid var(--color-indicator-warning)", borderRadius: 6, fontSize: 12, color: "var(--color-text-secondary)", lineHeight: 1.5 }}>
         ⚠️ <strong>Legacy</strong> 이름은 <code>@deprecated</code> 로 동작하지만 신규 코드는 새 SemanticIntent 이름 사용 권장.
         Tone 타입은 union 이므로 옛 이름과 새 이름 모두 같은 컴포넌트에 전달 가능 — 점진 마이그레이션 가능.
       </div>

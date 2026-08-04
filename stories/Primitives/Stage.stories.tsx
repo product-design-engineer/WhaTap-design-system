@@ -29,9 +29,9 @@ type Story = StoryObj<typeof Stage>;
 export const Default: Story = {
   args: {
     children: (
-      <div style={{ padding: 24, fontFamily: "'Noto Sans', sans-serif", color: "#222" }}>
+      <div style={{ padding: 24, fontFamily: "'Noto Sans', sans-serif", color: "var(--color-text-primary)" }}>
         <h1 style={{ fontSize: 32, fontWeight: 700, marginBottom: 16 }}>페이지 콘텐츠</h1>
-        <p style={{ fontSize: 14, color: "#4c4c4c" }}>이 자리에 페이지가 들어갑니다. 16:9 비율로 고정.</p>
+        <p style={{ fontSize: 14, color: "var(--color-text-secondary)" }}>이 자리에 페이지가 들어갑니다. 16:9 비율로 고정.</p>
       </div>
     ),
   },
@@ -42,7 +42,7 @@ export const WithBadge: Story = {
   args: {
     badge: "AWS SUMMIT · LIVE DEMO",
     children: (
-      <div style={{ padding: 24, fontFamily: "'Noto Sans', sans-serif", color: "#222" }}>
+      <div style={{ padding: 24, fontFamily: "'Noto Sans', sans-serif", color: "var(--color-text-primary)" }}>
         <h1 style={{ fontSize: 32, fontWeight: 700 }}>WhaTap AI 데모 시작</h1>
       </div>
     ),

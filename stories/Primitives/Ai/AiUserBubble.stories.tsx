@@ -11,7 +11,7 @@ const meta: Meta<typeof AiUserBubble> = {
     docs: {
       description: {
         component:
-          "**사용자 발화 버블.** 우측 정렬, #f5f5f5 배경, 4px 라운드, 최대 폭 85%. AI 메시지 시퀀스 안에서 사용자 입력 표시.",
+          "**사용자 발화 버블.** 우측 정렬, `--color-surface-50` 배경, 4px 라운드, 최대 폭 85%. AI 메시지 시퀀스 안에서 사용자 입력 표시.",
       },
     },
   },

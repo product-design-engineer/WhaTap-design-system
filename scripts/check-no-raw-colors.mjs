@@ -34,7 +34,14 @@ import { join, relative, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = join(ROOT, "src");
+/**
+ * 스캔 루트 — `src/` 뿐 아니라 **카탈로그(`stories/`)와 Storybook 설정도 포함**한다.
+ *
+ * 카탈로그가 리터럴을 쓰면 "디자인 시스템이 가르치는 예시" 자체가 정책 위반이 된다.
+ * 실제로 stories/ 가 검사 밖이던 동안 토큰 카탈로그가 tokens.css 의 hex 를 손으로
+ * 복제해 드리프트 위험을 안고 있었다(신규 토큰은 카탈로그에 누락).
+ */
+const SCAN_ROOTS = ["src", "stories", ".storybook"].map((d) => join(ROOT, d));
 const BASELINE_PATH = join(ROOT, "scripts", "raw-color-baseline.json");
 
 /** 토큰 정의 원본 — 여기서만 리터럴이 정당하다. */
@@ -140,7 +147,7 @@ function walk(dir, out = []) {
 
 function scan() {
   const violations = [];
-  for (const file of walk(SRC)) {
+  for (const file of SCAN_ROOTS.filter(existsSync).flatMap((root) => walk(root))) {
     const rel = relative(ROOT, file);
     if (EXEMPT_FILES.has(rel)) continue;
 

@@ -14,7 +14,7 @@ const meta: Meta<typeof AiSectionHeading> = {
     docs: {
       description: {
         component:
-          "**카드 메인 헤딩.** 13px 굵은 #222 텍스트. 좌측에 톤 도트(`tone` prop) 또는 이모지(`emoji` prop) 로 시각 강조. " +
+          "**카드 메인 헤딩.** 13px 굵은 `--color-text-primary` 텍스트. 좌측에 톤 도트(`tone` prop) 또는 이모지(`emoji` prop) 로 시각 강조. " +
           "모든 위젯 카드는 보통 이 헤딩으로 시작합니다. `tone` 과 `emoji` 동시 지정 시 emoji 우선.",
       },
     },

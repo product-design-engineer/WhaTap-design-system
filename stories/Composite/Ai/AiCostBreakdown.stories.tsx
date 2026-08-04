@@ -22,7 +22,7 @@ type Story = StoryObj<typeof AiCostBreakdown>;
 export const HighUtilization: Story = {
   args: {
     toneLabel: "고활용",
-    toneColor: "#E53935",
+    toneColor: "var(--color-indicator-critical)",
     context: "최근 7일 평균 — Inference 워크로드",
     rows: [
       { gpu: "GPU-0", pod: "inference-prod", avg: "95%", idle: "0%", daily: "₩87,750" },
@@ -37,7 +37,7 @@ export const HighUtilization: Story = {
 export const IdleResources: Story = {
   args: {
     toneLabel: "유휴",
-    toneColor: "#757575",
+    toneColor: "var(--color-text-tertiary)",
     context: "최근 7일 평균 — 미사용 GPU",
     rows: [
       { gpu: "GPU-2", pod: "(none)", avg: "0%", idle: "100%", daily: "₩87,750" },

@@ -75,7 +75,7 @@ const GUARDRAILS: Guardrail[] = [
     name: "인라인 색 리터럴 금지",
     status: "auto",
     invariant:
-      "`src/` 컴포넌트는 토큰/유틸로만 색 표현. hex · rgb() · `bg-white`/`bg-black` · **값이 이름에 박힌 유틸**(`bg-ce5484d` · `border-cd3d3d3` · `bg-rgba-0-0-0-0_05` · `shadow-0_4px_16px_rgba-...`) 을 스캔해 **신규 위반은 exit 1 로 차단**한다(`npm test` 포함). 기존 위반 동결선은 **0건** — `scripts/raw-color-baseline.json` 이 파일별 건수를 기록하며, 줄일 수만 있고 늘릴 수 없다. 정당한 예외는 `// raw-color-ok: <이유>` 로 사유를 남긴다(실질적으로 컬러 위 고정 흰색 전경과 mask 알파 두 종류뿐). 토큰 부재는 리터럴의 근거가 아니라 토큰 추가의 근거.",
+      "**`src/` · `stories/` · `.storybook/` 전 범위**를 검사한다 — 카탈로그가 리터럴을 쓰면 \"디자인 시스템이 가르치는 예시\" 자체가 위반이 되므로. 컴포넌트는 토큰/유틸로만 색 표현. hex · rgb() · `bg-white`/`bg-black` · **값이 이름에 박힌 유틸**(`bg-ce5484d` · `border-cd3d3d3` · `bg-rgba-0-0-0-0_05` · `shadow-0_4px_16px_rgba-...`) 을 스캔해 **신규 위반은 exit 1 로 차단**한다(`npm test` 포함). 기존 위반 동결선은 **0건** — `scripts/raw-color-baseline.json` 이 파일별 건수를 기록하며, 줄일 수만 있고 늘릴 수 없다. 정당한 예외는 `// raw-color-ok: <이유>` 로 사유를 남긴다(실질적으로 컬러 위 고정 흰색 전경과 mask 알파 두 종류뿐). 토큰 부재는 리터럴의 근거가 아니라 토큰 추가의 근거.",
     prevents: "토큰 우회 raw color · 단일 출처 약화 · 다크에서만 깨지는 컴포넌트",
     command: "lint:tokens (scripts/check-no-raw-colors.mjs)",
   },
@@ -147,7 +147,7 @@ function Badge({ status }: { status: Status }) {
 function Guardrails() {
   const count = (st: Status) => GUARDRAILS.filter((g) => g.status === st).length;
   return (
-    <div className="flex flex-col gap-6 p-6 bg-white" style={{ fontFamily: "var(--font-family-korean)" }}>
+    <div className="flex flex-col gap-6 p-6 bg-card" style={{ fontFamily: "var(--font-family-korean)" }}>
       <header className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-primary tracking-display leading-tight">Guardrails</h1>
         <p className="text-base text-tertiary leading-normal max-w-2xl">

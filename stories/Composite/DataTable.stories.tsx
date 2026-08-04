@@ -104,7 +104,7 @@ export const CustomCellRender: StoryObj = {
                 width: 6,
                 height: 6,
                 borderRadius: 3,
-                background: r.status === "ACTIVE" ? "#00B442" : "#adadad",
+                background: r.status === "ACTIVE" ? "var(--color-status-success)" : "var(--color-text-disabled)",
               }}
             />
             {r.status}
