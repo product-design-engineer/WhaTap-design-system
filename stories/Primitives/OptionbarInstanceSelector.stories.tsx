@@ -65,3 +65,8 @@ export const Interactive: Story = {
     return <Demo />;
   },
 };
+
+/** `size="md"` — 32px(기본은 sm 24px). 세로 공간이 넉넉한 자리. */
+export const SizeMedium: Story = {
+  args: { title: "", size: "md", label: "DMX-3-12-949", status: "ok" },
+};

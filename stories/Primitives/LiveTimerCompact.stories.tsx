@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LiveTimerCompact } from "@whatap/design-system";
 
 /**
- * Stories for [[LiveTimerCompact]] — 32px LIVE 시계 + polling progress 토글.
+ * Stories for [[LiveTimerCompact]] — LIVE 시계 + polling progress 토글 (sm 24px 기본 · md 32px).
  */
 const meta: Meta<typeof LiveTimerCompact> = {
   title: "Primitives/LiveTimerCompact",
@@ -15,7 +15,7 @@ const meta: Meta<typeof LiveTimerCompact> = {
     docs: {
       description: {
         component:
-          "**라이브 시계 + polling progress 토글 (32px 높이).** 좌측 pause/play 박스 + 우측 timer 박스. " +
+          "**라이브 시계 + polling progress 토글 (sm 24px 기본 · md 32px).** 좌측 pause/play 박스 + 우측 timer 박스. " +
           "박스 전체 영역을 좌→우로 채우는 fill 이 cycle 마다 0% 리셋되어 polling 펄스 시각화. " +
           "`/application/slider` 라이브 마크업 verbatim — chained 보더 + 폰트 Roboto.",
       },
@@ -41,6 +41,11 @@ const meta: Meta<typeof LiveTimerCompact> = {
     showCalendar: {
       description: "캘린더 아이콘 표시. 기본 durationLabel 없을 때 true.",
       control: "boolean",
+    },
+    size: {
+      description: "높이 — sm(24px, 기본) / md(32px). 아이콘·타이포·알약이 함께 움직임.",
+      control: { type: "radio" },
+      options: ["sm", "md"],
     },
   },
 };
@@ -70,6 +75,21 @@ export const With30MinAndCalendar: Story = {
 /** 시각 고정 — 시연 / 스크린샷용. */
 export const FixedTime: Story = {
   args: { time: "12:01:35" },
+};
+
+/** `size="md"` — 32px. 세로 공간이 넉넉한 자리(기본은 sm 24px). */
+export const SizeMedium: Story = {
+  args: { size: "md", durationLabel: "10분" },
+};
+
+/** 사이즈 비교 — sm(24px, 기본) vs md(32px). */
+export const SizeMatrix: Story = {
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
+      <LiveTimerCompact size="sm" time="12:01:35" durationLabel="10분" />
+      <LiveTimerCompact size="md" time="12:01:35" durationLabel="10분" />
+    </div>
+  ),
 };
 
 /** 인터랙티브 — pause/play 토글 가능. */
