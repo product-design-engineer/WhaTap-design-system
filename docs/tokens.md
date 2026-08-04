@@ -160,6 +160,18 @@ tokens.color.text.disabled.value   // #adadad — 비활성 상태 텍스트 (6 
 
 본문이 압도적으로 흔하므로 `primary` 가 다른 색을 합친 것보다 많이 쓰임 — 위계 4 단계로 충분.
 
+### 반전 전경 — `--color-text-inverse`
+
+위계 4단계와 별개로, **`--color-text-strong` 을 배경으로 깐 표면**(툴팁 등) 위의 텍스트·아이콘에 쓰는 전용 토큰입니다. 라이트 `#FFFFFF` / 다크 `#0E1116` — `text-strong` 이 다크에서 밝아지므로 전경은 반대로 어두워집니다.
+
+```tsx
+// Tooltip 패널
+backgroundColor: "var(--color-text-strong)",
+color: "var(--color-text-inverse)",
+```
+
+❌ 이 자리에 `--color-bg`(페이지 배경)를 쓰지 마세요. 값이 우연히 맞아 보여도 **페이지 배경을 바꾸는 순간 전경색이 딸려 움직입니다** — 실제로 라이트 `--color-bg` 를 회색으로 바꿨을 때 툴팁 글자색이 함께 흐려지는 문제가 있었습니다. 컬러 배경 위 **고정** 흰색(브랜드 배지 등)은 `--color-text-inverse` 가 아니라 `#fff` + `// raw-color-ok:` 입니다 — 그건 테마에 따라 반전되면 안 되기 때문입니다.
+
 ## Base Surface — 페이지 vs 카드 (2단 레이어)
 
 `--color-bg` / `--color-card` 는 **값이 아니라 층(layer)** 을 뜻하는 토큰입니다. 페이지는 한 단계 뒤로 물러나고(회색), 콘텐츠는 그 위에 카드로 **쌓입니다**(흰색). 라이트·다크 모두 같은 모델입니다.
@@ -181,7 +193,7 @@ tokens.color.text.disabled.value   // #adadad — 비활성 상태 텍스트 (6 
 ❌ **Don't**
 
 - `bg-white` · 인라인 `#fff` · `background: "#FFFFFF"` 로 페이지/패널 배경 지정 — 다크에서 깨진다. (예외: **컬러 위 전경** 텍스트·아이콘의 `#fff` 는 유지)
-- **`--color-bg` 를 전경색(글자·아이콘·stroke)으로 사용** — 배경 토큰의 용도 이탈. 반전 전경이 필요하면 전용 토큰을 추가한다. (현존 위반: `src/Tooltip.tsx` 의 `color: var(--color-bg)`)
+- **`--color-bg` 를 전경색(글자·아이콘·stroke)으로 사용** — 배경 토큰의 용도 이탈. 페이지 배경을 바꾸는 순간 전경색이 딸려 움직인다. 반전 전경에는 **`--color-text-inverse`** 를 쓴다.
 - 페이지 배경에 `--color-surface-50` 사용 — 값은 같아도(`#F5F5F5`) 의미가 "hover/muted 보조 표면"이라, 나중에 한쪽만 조정할 수 없게 된다.
 - `--color-bg` 를 `#FFFFFF` 로 되돌려 카드와 동일화 — 위 대비 규칙 위반.
 - 카드 위에 카드를 또 얹어 3층 이상 쌓기 — 층은 page → card 2단까지. 더 필요하면 `surface-*` 로 표현.

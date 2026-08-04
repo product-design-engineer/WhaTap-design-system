@@ -183,7 +183,7 @@ export default function Tooltip({
     pointerEvents: "none",
     whiteSpace: "nowrap",
     backgroundColor: "var(--color-text-strong)",
-    color: "var(--color-bg)",
+    color: "var(--color-text-inverse)",
     borderRadius: 4,
     padding: "4px 8px",
     fontSize: "var(--text-sm)",

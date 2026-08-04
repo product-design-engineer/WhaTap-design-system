@@ -125,6 +125,11 @@
   --color-text-tertiary: #757575;
   --color-text-disabled: #adadad;
 
+  /* 반전 전경 — text-strong 을 배경으로 깐 표면(툴팁 등) 위의 텍스트·아이콘.
+     ⚠️ 이 용도에 --color-bg(페이지 배경)를 쓰지 말 것. 값이 우연히 맞아 보여도
+     페이지 배경을 바꾸는 순간 전경색이 따라 움직인다. */
+  --color-text-inverse: #FFFFFF;
+
   /* Indicator (Intent) — tokens.color.indicator TS 와 동일값.
      palette-e53935/f0b400 잔재를 semantic 으로 collapse 하기 위해 추가.
      도트·스트로크·차트 강조선 전용. tone-surface 위 텍스트로는 쓰지 않는다. */
@@ -496,6 +501,9 @@ html, body, #root {
   --color-text-secondary: #B7BDC6;
   --color-text-tertiary: #8B929C;
   --color-text-disabled: #5C636E;
+
+  /* 반전 전경 — 다크에서는 text-strong(#F0F2F4) 이 밝으므로 전경이 어두워진다. */
+  --color-text-inverse: #0E1116;
 
   /* Legacy text aliases (strong/body/muted/subtle) */
   --color-text-strong: #F0F2F4;

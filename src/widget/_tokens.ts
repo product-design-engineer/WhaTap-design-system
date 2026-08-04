@@ -180,6 +180,11 @@ export const tokens = {
         value: "#adadad",
         description: "비활성 상태 텍스트 · 사용 불가 항목 표시.",
       },
+      inverse: {
+        value: "#FFFFFF",
+        description:
+          "반전 전경 — text-strong 을 배경으로 깐 표면(툴팁 등) 위의 텍스트·아이콘. 이 용도에 --color-bg(페이지 배경)를 쓰지 말 것.",
+      },
     },
   },
   /** 분류 배지의 기본 한국어 라벨. AiToneBadge 등에서 톤 → 텍스트 매핑. */

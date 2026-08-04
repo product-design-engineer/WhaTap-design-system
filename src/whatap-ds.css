@@ -98,7 +98,8 @@
     --color-text-secondary: #4c4c4c;
     --color-text-tertiary: #757575;
     --color-text-disabled: #adadad;
-    
+    --color-text-inverse: #FFFFFF;
+
     --color-text-strong: #1E1E1E;
     --color-text-body: #2D2D2D;
     --color-text-muted: #4C4C4C;
@@ -1029,6 +1030,7 @@ html, body, #root {
   --color-text-secondary: #B7BDC6;
   --color-text-tertiary: #8B929C;
   --color-text-disabled: #5C636E;
+  --color-text-inverse: #0E1116;
   --color-text-strong: #F0F2F4;
   --color-text-body: #E2E5E9;
   --color-text-muted: #B7BDC6;
