@@ -44,6 +44,9 @@ import { useEffect, useRef, useState } from "react";
 import AiClickCursor from "./widget/AiClickCursor";
 import AiActionChip from "./widget/AiActionChip";
 import AiAttachmentChip from "./widget/AiAttachmentChip";
+import AiUnavailableNotice, {
+  type AiUnavailableNoticeProps,
+} from "./widget/AiUnavailableNotice";
 
 const WIDGET_WIDTH = 480;
 
@@ -67,6 +70,7 @@ export default function WhaTapAiWidget({
   inputPlaceholder = "어떤 작업을 함께 할까요?",
   tokenInput = 3395,
   tokenOutput = 181,
+  unavailable,
 }: {
   open: boolean;
   onClose?: () => void;
@@ -97,9 +101,16 @@ export default function WhaTapAiWidget({
   onSubmit?: (value: string) => void;
   /** 입력창 placeholder 문구. 시나리오별 시작 prompt 안내에 사용. */
   inputPlaceholder?: string;
+  /**
+   * 값이 있으면 특정 사유로 AI 사용이 불가한 상태 — 랜딩/시나리오 대신
+   * [[AiUnavailableNotice]] 안내를 본문에 노출하고 입력창을 비활성화합니다.
+   * preset 사유만 쓰려면 `{ reason: "quota" }` 처럼 전달.
+   */
+  unavailable?: AiUnavailableNoticeProps;
 }) {
+  const isUnavailable = unavailable != null;
   // editable mode: parent 가 inputValue 를 지정하지 않으면 사용자가 직접 입력.
-  const editable = inputValue === undefined;
+  const editable = inputValue === undefined && !isUnavailable;
   const [typed, setTyped] = useState("");
   const effectiveValue = editable ? typed : inputValue ?? "";
   const hasInput = effectiveValue.trim().length > 0;
@@ -205,7 +216,9 @@ export default function WhaTapAiWidget({
           ref={scrollRef}
           className="flex-1 min-h-0 flex flex-col items-center gap-16px overflow-y-auto overflow-x-hidden w-full pt-16px pb-8px px-16px"
         >
-          {showLanding && (
+          {isUnavailable && <AiUnavailableNotice {...unavailable} />}
+
+          {!isUnavailable && showLanding && (
           // key={open}로 위젯을 열 때마다 인사말 영역이 remount되어 entrance animation 재생
           <div key={open ? "open" : "closed"} className="bg-card flex flex-col items-start justify-center relative w-full">
             {/* AI 심볼 (호흡 + 회전) — 진입 시 fade-in이 한 번 추가로 재생 */}
@@ -265,7 +278,7 @@ export default function WhaTapAiWidget({
           )}
 
           {/* 시나리오 메시지 스택 */}
-          {messages && (
+          {!isUnavailable && messages && (
             <div className="flex flex-col gap-16px w-full">{messages}</div>
           )}
         </div>
@@ -274,7 +287,12 @@ export default function WhaTapAiWidget({
         <div className="flex flex-col items-center justify-center px-16px shrink-0 w-full">
           <div
             className="ai-input-wrapper relative bg-card flex flex-col gap-4px items-center justify-center p-12px shrink-0 rounded-8px transition-all duration-200 w-full"
-            style={{ border: hasInput ? "2px solid var(--color-brand-blue)" : "2px solid var(--color-brand-blue-bg-2)" }}
+            style={{
+              border: hasInput ? "2px solid var(--color-brand-blue)" : "2px solid var(--color-brand-blue-bg-2)",
+              opacity: isUnavailable ? 0.5 : 1,
+              pointerEvents: isUnavailable ? "none" : undefined,
+            }}
+            aria-disabled={isUnavailable || undefined}
           >
             {/* 첨부 파일 칩 행 (Figma 27087:3416) */}
             {attachments && attachments.length > 0 && (
@@ -286,10 +304,11 @@ export default function WhaTapAiWidget({
             )}
             <div className="flex gap-0 items-center p-2px w-full">
               <textarea
-                placeholder={inputPlaceholder}
+                placeholder={isUnavailable ? "지금은 WhaTap AI 를 사용할 수 없습니다" : inputPlaceholder}
                 rows={1}
                 value={effectiveValue}
                 readOnly={!editable}
+                disabled={isUnavailable}
                 onChange={editable ? (e) => setTyped(e.target.value) : undefined}
                 onKeyDown={editable ? handleKey : undefined}
                 className="ai-input-textarea w-full text-lg text-primary tracking-default leading-normal resize-none outline-none border-0 bg-transparent placeholder:text-disabled"

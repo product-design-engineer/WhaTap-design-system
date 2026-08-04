@@ -5,7 +5,9 @@
  * Lint 규칙 8개:
  *   1. broken-ref      (error)   — 깨진 {token.path} 참조
  *   2. missing-primary  (warning) — 필수 토큰 누락 (text-primary, brand-blue 등)
- *   3. contrast-ratio   (warning) — WCAG AA 4.5:1 미만
+ *   3. contrast-ratio   (error/warning) — WCAG
+ *        error   : tone-text-* on tone-surface-* < 4.5:1 (배지·칩 라벨 텍스트)
+ *        warning : text-* on #fff, indicator-* on tone-surface-* (도트 = 비텍스트 3:1)
  *   4. orphaned-tokens  (warning) — 정의됐지만 어디서도 참조되지 않은 색상
  *   5. missing-typography (warning) — Named typography pattern 에 필수 속성 누락
  *   6. section-order    (warning) — YAML/산문 섹션 순서 위반
@@ -131,15 +133,31 @@ for (const [label, path] of textTokenPairs) {
   }
 }
 
-// indicator-* vs tone-surface-* (배지)
+// tone-text-* vs tone-surface-* (배지·칩 라벨 텍스트) — error
+// 텍스트 전경은 indicator-* 가 아니라 tone-text-* 를 쓴다. indicator-* 는 도트·
+// 스트로크·차트 강조선용 고채도 색이라 같은 톤 surface 위 텍스트로는 AA 에 못 미친다.
 const TONES = ["critical", "warning", "info", "muted", "neutral"];
 for (const tone of TONES) {
-  const fg = flat[`colors.indicator-${tone}`];
   const bg = flat[`colors.tone-surface-${tone}`];
-  if (!fg || !bg || !isHexColor(fg) || !isHexColor(bg)) continue;
+  if (!bg || !isHexColor(bg)) continue;
+
+  const fg = flat[`colors.tone-text-${tone}`];
+  if (!fg || !isHexColor(fg)) {
+    error("contrast-ratio", `'colors.tone-text-${tone}' 누락 — tone-surface-${tone} 위 라벨 텍스트 색이 정의되지 않았습니다.`);
+    continue;
+  }
   const ratio = contrastRatio(fg, bg);
   if (ratio < WCAG_AA) {
-    warn("contrast-ratio", `배지 대비 미달: indicator-${tone} (${fg}) on tone-surface-${tone} (${bg}) = ${ratio.toFixed(2)}:1`);
+    error("contrast-ratio", `배지 텍스트 대비 미달: tone-text-${tone} (${fg}) on tone-surface-${tone} (${bg}) = ${ratio.toFixed(2)}:1 (최소 ${WCAG_AA}:1)`);
+  }
+
+  // indicator-* 는 도트/스트로크 = 비텍스트 그래픽. WCAG 1.4.11 기준 3:1.
+  const dot = flat[`colors.indicator-${tone}`];
+  if (dot && isHexColor(dot)) {
+    const dotRatio = contrastRatio(dot, bg);
+    if (dotRatio < WCAG_AA_LARGE) {
+      warn("contrast-ratio", `도트 대비 미달: indicator-${tone} (${dot}) on tone-surface-${tone} (${bg}) = ${dotRatio.toFixed(2)}:1 (비텍스트 최소 ${WCAG_AA_LARGE}:1)`);
+    }
   }
 }
 
@@ -220,7 +238,9 @@ const typoCount = Object.keys(flat).filter((k) => k.startsWith("typography.")).l
 const layoutCount = Object.keys(flat).filter((k) => k.startsWith("layout.")).length;
 const shapeCount = Object.keys(flat).filter((k) => k.startsWith("shapes.")).length;
 const compCount = Object.keys(flat).filter((k) => k.startsWith("components.")).length;
-const brokenCount = refs.filter(({ ref }) => !(ref in flat)).length;
+// Rule 1 과 같은 refExists 기준. `ref in flat` 만 보면 객체 참조
+// ({typography.pattern-body} → 하위 키만 존재)를 깨진 것으로 잘못 센다.
+const brokenCount = refs.filter(({ ref }) => !refExists(ref, flat)).length;
 
 info("token-summary", `총 ${Object.keys(flat).length} 토큰 | ${refs.length} 참조 (깨진: ${brokenCount}) | Colors ${colorCount} · Typography ${typoCount} · Layout ${layoutCount} · Shapes ${shapeCount} · Components ${compCount}`);
 

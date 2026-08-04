@@ -38,6 +38,14 @@
 import { useState } from "react";
 import AiAssistantButton from "./widget/AiAssistantButton";
 import HeaderPillButton from "./HeaderPillButton";
+
+/**
+ * 헤더 컨트롤(WhaTap AI · Docs · 고객지원) 공통 사이즈 — **DS 정책 단일 출처**.
+ * 48px 헤더 안에서 32px 는 상하 여백이 8px 밖에 남지 않아 바가 꽉 찬 인상을 준다.
+ * DS 사이즈 스케일에서 한 단계 아래인 `sm`(24px)을 헤더 기본으로 쓴다 — 28px 같은
+ * 스케일 밖 임의값을 만들지 않는다. 소비 레이어에서 개별 override 금지.
+ */
+const HEADER_CONTROL_SIZE = "sm" as const;
 import { IcDocs, IcSupport } from "./icons/HeaderIcons";
 import PageHeaderNotificationItem from "./PageHeaderNotificationItem";
 import PageHeaderProfileMenuItem from "./PageHeaderProfileMenuItem";
@@ -83,14 +91,14 @@ export default function PageHeader({
           {title}
         </p>
         <div className="flex items-center gap-8px">
-          <AiAssistantButton aiActive={aiActive} onClick={onAiToggle} />
-          <HeaderPillButton icon={<IcDocs />}>Docs</HeaderPillButton>
+          <AiAssistantButton size={HEADER_CONTROL_SIZE} aiActive={aiActive} onClick={onAiToggle} />
+          <HeaderPillButton size={HEADER_CONTROL_SIZE} icon={<IcDocs />}>Docs</HeaderPillButton>
         </div>
       </div>
 
       {/* 우측: 고객지원 + 알림 + 아바타 */}
       <div className="flex items-center gap-16px h-full shrink-0">
-        <HeaderPillButton icon={<IcSupport />}>고객지원</HeaderPillButton>
+        <HeaderPillButton size={HEADER_CONTROL_SIZE} icon={<IcSupport />}>고객지원</HeaderPillButton>
         <div className="flex items-center gap-16px">
           <div className="relative shrink-0 size-24px">
             <button

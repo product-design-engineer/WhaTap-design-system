@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DataTable } from "@whatap/design-system";
 import type { DataTableColumn } from "@whatap/design-system/DataTable";
@@ -160,4 +161,24 @@ export const InteractiveRows: StoryObj = {
       onRowClick={(row) => alert(`Clicked: ${row.instance} / SID ${row.sid}`)}
     />
   ),
+};
+
+/**
+ * Row 강조 (rowClassName) — **테이블 인라인 재구현 없이** 행 단위 강조.
+ * 클릭한 행을 선택 상태로 유지(surface-100 배경). `rowClassName` 은 기존 행 클래스에 append 되며,
+ * 문자열(전 행 공통) 또는 `(row, idx) => class` 함수를 받는다(하위호환 — 미지정 시 기존과 동일).
+ */
+export const RowHighlight: StoryObj = {
+  render: () => {
+    const [selected, setSelected] = useState(0);
+    return (
+      <DataTable<DbSessionRow>
+        columns={DB_COLS}
+        rows={DB_SESSIONS}
+        density="compact"
+        onRowClick={(_r, i) => setSelected(i)}
+        rowClassName={(_r, i) => (i === selected ? "bg-color-var-color-surface-100" : undefined)}
+      />
+    );
+  },
 };

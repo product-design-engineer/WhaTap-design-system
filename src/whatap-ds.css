@@ -114,6 +114,13 @@
     --color-indicator-critical: #E53935;
     --color-indicator-warning: #F0B400;
 
+    /* Tone Text — tone-surface 위 라벨 텍스트 (indicator 는 도트/스트로크 전용). */
+    --color-tone-text-critical: #B5302A;
+    --color-tone-text-warning: #8A6200;
+    --color-tone-text-info: #1B5CD9;
+    --color-tone-text-muted: #6E6E6E;
+    --color-tone-text-neutral: #6E6E6E;
+
     
     --color-whatap-blue: #004BE0;
     --color-whatap-purple: #8B52FF;
@@ -199,9 +206,37 @@
     --wds-header-px: var(--wds-page-px);  /* 헤더 좌·우 padding (= 페이지 거터) */
     --wds-content-px: var(--wds-page-px); /* 본문 콘텐츠 좌·우 거터 (= 페이지 거터, 헤더와 세로 정렬) */
     --wds-content-py: 16px;               /* 본문 콘텐츠 상·하 padding */
+
+
+    /* ──────────────────────────────────────────────────────────────────────
+     *  Spacing / Sizing Scale — 4px 그리드 (tokens.css 와 동기화).
+     *  치수(width/height/gap/padding)의 단일 출처. 유틸(h-*/w-*/size-*)이 점진적으로
+     *  이 토큰을 참조 (현재 바인딩: h-32px→--space-8, w-40px→--space-10).
+     *  네이밍은 Tailwind 정렬 — `--space-N` = 4px×N. 테마 무관.
+     * ────────────────────────────────────────────────────────────────────── */
+    --space-0: 0;
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-7: 28px;
+    --space-8: 32px;
+    --space-9: 36px;
+    --space-10: 40px;
+    --space-11: 44px;
+    --space-12: 48px;
   }
 
-/* ── preflight reset ────────────────────────────────────────────────────── */
+/* ── preflight reset (@layer base) ─────────────────────────────────────────
+ * 이 파일은 unlayered 로 import 되는데, preflight 의 전역 reset(margin/padding/
+ * border/button background 등)이 unlayered 이면 @layer 안의 Tailwind utility
+ * (py-[48px]·border-[#eaeaea]·bg-[#296CF2] 등)를 cascade 에서 이겨 소비자 페이지
+ * 스타일을 무력화한다(예: border-color 가 currentColor 검정으로, 버튼 배경이
+ * transparent 로). preflight 전체를 base 레이어로 내려 utility 가 정상 override
+ * 하도록 한다. (아래 utilities 섹션은 unlayered 유지 → DS 타이포 토큰 우선 보존.) */
+@layer base {
 *, ::after, ::before, ::backdrop, ::file-selector-button {
     box-sizing: border-box;
     margin: 0;
@@ -348,6 +383,8 @@
   [hidden]:where(:not([hidden="until-found"])) {
     display: none !important;
   }
+}
+/* ── /preflight (@layer base 끝) ──────────────────────────────────────────── */
 
 /* ── utilities (DS 계산값 기반 · 일반 CSS 클래스) ──────────────────────────── */
 .absolute { position: absolute; }
@@ -458,7 +495,7 @@
 .h-24px { height: 24px; }
 .h-28px { height: 28px; }
 .h-2px { height: 2px; }
-.h-32px { height: 32px; }
+.h-32px { height: var(--space-8); }
 .h-36px { height: 36px; }
 .h-40px { height: 40px; }
 .h-44px { height: 44px; }
@@ -614,6 +651,7 @@
 .py-2 { padding-block: calc(var(--spacing) * 2); }
 .py-2px { padding-block: 2px; }
 .py-32 { padding-block: calc(var(--spacing) * 32); }
+.py-3_5px { padding-block: 3.5px; }
 .py-3px { padding-block: 3px; }
 .py-4px { padding-block: 4px; }
 .py-60px { padding-block: 60px; }
@@ -714,7 +752,7 @@
 .w-20px { width: 20px; }
 .w-240px { width: 240px; }
 .w-28px { width: 28px; }
-.w-40px { width: 40px; }
+.w-40px { width: var(--space-10); }
 .w-42px { width: 42px; }
 .w-440px { width: 440px; }
 .w-6 { width: calc(var(--spacing) * 6); }

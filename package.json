@@ -33,7 +33,8 @@
     "storybook": "node scripts/build-design.mjs && storybook dev -p 5181 --no-open",
     "build-storybook": "node scripts/build-design.mjs && storybook build",
     "check:catalog": "node scripts/check-catalog-folders.mjs",
-    "test": "node scripts/check-catalog-folders.mjs && vitest run",
+    "lint:design": "node scripts/design-lint.js",
+    "test": "node scripts/check-catalog-folders.mjs && node scripts/design-lint.js && vitest run",
     "test:visual": "node scripts/visual-snap.mjs",
     "test:visual:update": "node scripts/visual-snap.mjs --update"
   },

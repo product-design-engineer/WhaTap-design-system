@@ -2,9 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SidebarProjectSwitcher } from "@whatap/design-system";
 
 /**
- * Stories for [[SidebarProjectSwitcher]] — Sidebar 상단 44px 프로젝트 스위처 행.
+ * Stories for [[SidebarProjectSwitcher]] — Sidebar 상단 40px 프로젝트 스위처 행.
  *
- * 제품 아이콘 + 그룹 라벨 + 프로젝트 라벨 + chevron.
+ * 제품 아이콘 + 그룹 라인("그룹" 칩 + 그룹명) + 프로젝트 라인("프로젝트" 칩 + 프로젝트명) + chevron.
+ * "[그룹]"·"[프로젝트]" 타입 접두사는 라벨이 아니라 `groupBadge`/`projectBadge` 칩으로 분리.
  * 240px 컨테이너로 감싸 실제 사이드바 맥락을 재현.
  */
 const meta: Meta<typeof SidebarProjectSwitcher> = {
@@ -29,9 +30,7 @@ type Story = StoryObj<typeof SidebarProjectSwitcher>;
 export const Default: Story = {
   args: {
     project: {
-      productIcon: "product-gpu.svg",
-      groupLabel: "[그룹] 운영",
-      projectLabel: "[프로젝트] K8s-GPU",
+      productIcon: "product-gpu.svg",      groupLabel: "그룹명",      projectLabel: "프로젝트명",
     },
   },
 };
@@ -40,9 +39,7 @@ export const Default: Story = {
 export const DbProject: Story = {
   args: {
     project: {
-      productIcon: "product-db.svg",
-      groupLabel: "[그룹] 프로덕션",
-      projectLabel: "[프로젝트] Oracle RAC",
+      productIcon: "product-db.svg",      groupLabel: "그룹명",      projectLabel: "프로젝트명",
     },
   },
 };
@@ -50,9 +47,7 @@ export const DbProject: Story = {
 /** 아이콘 없음 — 12px 스페이서. */
 export const NoIcon: Story = {
   args: {
-    project: {
-      groupLabel: "[그룹] 관리",
-      projectLabel: "[프로젝트] 설정 전",
+    project: {      groupLabel: "그룹명",      projectLabel: "프로젝트명",
     },
   },
 };
@@ -61,9 +56,7 @@ export const NoIcon: Story = {
 export const LongLabels: Story = {
   args: {
     project: {
-      productIcon: "product-app.svg",
-      groupLabel: "[그룹] 프로덕션 · 아시아태평양 리전",
-      projectLabel: "[프로젝트] my-very-long-application-name-prod-01",
+      productIcon: "product-app.svg",      groupLabel: "매우 긴 그룹명 · 아시아태평양 리전 · 추가 텍스트",      projectLabel: "my-very-long-application-name-prod-01",
     },
   },
 };

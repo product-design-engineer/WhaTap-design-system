@@ -58,6 +58,8 @@ export type DataTableRowProps<T> = {
   rowPadding: string;
   /** 행 클릭 핸들러. 없으면 hover 효과만. */
   onRowClick?: (row: T, idx: number) => void;
+  /** 행 단위 강조/커스텀 클래스 — 기본 행 클래스 뒤에 append (선택). */
+  className?: string;
 };
 
 export default function DataTableRow<T>({
@@ -70,10 +72,13 @@ export default function DataTableRow<T>({
   rowHeight,
   rowPadding,
   onRowClick,
+  className,
 }: DataTableRowProps<T>) {
   return (
     <div
-      className={`grid items-center border-t border-color-var-color-border-default ${rowPadding} ${onRowClick ? "cursor-pointer" : ""} hover-bg-surface-100`}
+      /* `group`: 행 hover 시에만 드러나는 자식(예: reveal="hover" 인 [[AiTriggerButton]])을
+         셀 안에 놓을 수 있게 한다. 자식이 opt-in 하지 않으면 시각적 변화 없음. */
+      className={`group grid items-center border-t border-color-var-color-border-default ${rowPadding} ${onRowClick ? "cursor-pointer" : ""} hover-bg-surface-100${className ? ` ${className}` : ""}`}
       style={{ gridTemplateColumns: gridTemplate }}
       onClick={onRowClick ? () => onRowClick(row, rowIndex) : undefined}
     >

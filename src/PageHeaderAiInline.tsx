@@ -89,7 +89,7 @@ export default function PageHeaderAiInline({
         >
           {title}
         </p>
-        <HeaderPillButton icon={<IcDocs />}>Docs</HeaderPillButton>
+        <HeaderPillButton size="sm" icon={<IcDocs />}>Docs</HeaderPillButton>
       </div>
 
       {/* 중앙: inline prompt (flex-grow + max/min-width cap, 좌측 타이틀·우측 chrome 잠식 방지) */}
@@ -110,7 +110,7 @@ export default function PageHeaderAiInline({
 
       {/* 우측 chrome: 고객지원 + 알림 + 아바타 (Docs 는 좌측 그룹) */}
       <div className="flex items-center gap-16px h-full shrink-0">
-        <HeaderPillButton icon={<IcSupport />}>고객지원</HeaderPillButton>
+        <HeaderPillButton size="sm" icon={<IcSupport />}>고객지원</HeaderPillButton>
         <div className="flex items-center gap-16px">
           <div className="shrink-0 size-24px flex items-center justify-center cursor-pointer">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">

@@ -33,7 +33,7 @@ export {
 
 // AI buttons (위젯 토글 · 송신 등 AI 전용 trigger)
 export { default as AiAssistantButton } from "./AiAssistantButton";
-export type { AiAssistantButtonProps } from "./AiAssistantButton";
+export type { AiAssistantButtonProps, AiAssistantButtonSize } from "./AiAssistantButton";
 export { default as AiSendButton } from "./AiSendButton";
 export type { AiSendButtonProps } from "./AiSendButton";
 
@@ -63,6 +63,9 @@ export type { EventRow, EventSeverity } from "./AiEventList";
 export { default as AiExecutionResult } from "./AiExecutionResult";
 export { default as AiInsightSection } from "./AiInsightSection";
 export { default as AiLoadingMessage } from "./AiLoadingMessage";
+export { default as AiAnswerSkeleton } from "./AiAnswerSkeleton";
+export { default as AiUnavailableNotice, AI_UNAVAILABLE_PRESETS } from "./AiUnavailableNotice";
+export type { AiUnavailableNoticeProps, AiUnavailableReason } from "./AiUnavailableNotice";
 export { default as AiMessageActions } from "./AiMessageActions";
 export { default as AiMigPlan } from "./AiMigPlan";
 export { default as AiReasoning } from "./AiReasoning";

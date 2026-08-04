@@ -81,7 +81,11 @@ export const WithOptionbar: Story = {
   },
 };
 
-/** 인터랙티브 — AI 토글로 widgetOpen 변동. */
+/**
+ * 인터랙티브 — 두 가지 접힘 트리거:
+ *  1. 헤더 WhaTap AI 버튼 → `widgetOpen` 토글, 위젯이 열리면 사이드바가 정책상 강제 Min(80px).
+ *  2. 로고 헤더 chevron → 위젯과 무관하게 사용자가 사이드바를 직접 접기/펴기(위젯 닫힘 상태에서).
+ */
 export const Interactive: Story = {
   args: {},
   render: () => {
@@ -97,7 +101,7 @@ export const Interactive: Story = {
           {open && (
             <div style={{ width: 480, background: "#fff", borderLeft: "1px solid #eaeaea", padding: 24 }}>
               <div style={{ fontFamily: "'Noto Sans', sans-serif", fontSize: 13, color: "#757575" }}>
-                AI 위젯 (이 자리에 WhaTapAiWidget). 헤더 AI 버튼 클릭으로 토글.
+                AI 위젯 (이 자리에 WhaTapAiWidget). 헤더 AI 버튼으로 토글. 로고 헤더 chevron 은 위젯과 별개로 사이드바를 접습니다.
               </div>
             </div>
           )}

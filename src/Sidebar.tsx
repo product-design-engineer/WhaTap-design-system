@@ -6,11 +6,12 @@
  * 가운데 본문(메뉴) 영역만 flex-1 로 늘어남:
  *   1. 48px 로고 헤더 (WhaTap 로고 · 검색 · 접기) — [[PageHeader]](48px) 와 동일 높이
  *   2. 40px 조직 스위처 ([[SubHeaderBar]] 40px 과 정렬)
- *   3. 44px 프로젝트 스위처
+ *   3. 40px 프로젝트 스위처
  *   4. 본문 (flex-1) — 40px 제품 레일 + 우측 메뉴 목록(+ 즐겨찾기 바)
  *   5. 24px 저작권 푸터
  * 모든 가변 데이터(`activeProduct`/`project`/`menu`/`org`)는 prop 주입, 기본값은
- * K8s-GPU 컨텍스트라 빈 호출과도 호환. `collapsed` 면 40px 제품 레일만 노출.
+ * K8s-GPU 컨텍스트라 빈 호출과도 호환. `collapsed`(Min, 80px) 면 40px 제품 레일 +
+ * 40px 아이콘 전용 메뉴 열만 노출 (라벨·자식·즐겨찾기 바·푸터 숨김).
  *
  * ## When to use
  * - 보통 단독으로 두지 않고 [[DashboardLayout]] 의 좌측 컬럼으로 조합.
@@ -21,11 +22,18 @@
  * - 제품 네비가 불필요한 관리 콘솔 → `hideProductRail`/`hideProjectSwitcher` 로 영역만 끔.
  *
  * ## Composition rules
- * - 폭은 `collapsed` 가 결정 (240px ↔ 40px), `transition-all duration-400` 로 애니메이션.
- *   AI 위젯 활성 시 항상 동기화(feedback-widget-sidebar-collapse) — [[DashboardLayout]] 이 전달.
+ * - 폭은 접힘 상태가 결정 (240px ↔ 80px), `transition-all duration-400` 로 애니메이션.
+ *   로고 헤더의 chevron 토글로 min/max 전환(내부 상태) — controlled(`collapsed`)/
+ *   uncontrolled(`defaultCollapsed`) 둘 다 지원. AI 위젯 활성 시엔 controlled 로
+ *   항상 동기화(feedback-widget-sidebar-collapse) — [[DashboardLayout]] 이 전달.
  * - 경계선·강조 배경은 토큰 binding (`--color-border-default` · `--color-brand-blue-bg`) — 인라인 hex 금지.
  * - 아이콘은 표준 경로(`/icons/*`) 참조 (Storybook/소비자 정적 서빙 동일).
  * - 메뉴는 `MenuItem[]` 트리로 주입 — `children` 유무로 단일/확장 항목이 갈림.
+ * - 제품 레일은 프로젝트 스위처가 이미 노출한 제품(`project.productIcon`)을 **중복 렌더하지 않음** —
+ *   현재 제품은 스위처가 대표하고 레일은 나머지 제품만 나열.
+ * - 아이콘 전용 표면은 이름을 hover 시 [[Tooltip]](placement right, portal+fixed 라 루트
+ *   `overflow-hidden` 에 안 잘림)으로 제공 — Min 메뉴 열 · 제품 레일 · 하단 유틸.
+ *   collapsed 조직/프로젝트 스위처만 네이티브 `title` 유지.
  *
  * @example
  * ```tsx
@@ -33,13 +41,14 @@
  *
  * <Sidebar
  *   activeProduct="app"
- *   project={{ productIcon: "product-app.svg", groupLabel: "[그룹] 운영", projectLabel: "[프로젝트] my-app" }}
+ *   project={{ productIcon: "product-app.svg", groupBadge: "그룹", groupLabel: "그룹명", projectBadge: "프로젝트", projectLabel: "프로젝트명" }}
  *   menu={customMenu}
- *   org={{ label: "[조직] 와탭랩스", icon: "whatap-symbol.svg" }}
+ *   org={{ label: "조직명", icon: "menu-workload.svg", badge: "조직" }}
  *   onOrgClick={openOrgPicker}
  * />
  * ```
  */
+import { useState } from "react";
 import SidebarLogoHeader from "./SidebarLogoHeader";
 import SidebarMenuItem from "./SidebarMenuItem";
 import SidebarOrgSwitcher from "./SidebarOrgSwitcher";
@@ -59,24 +68,26 @@ const NOTO_SANS = "'Noto Sans', 'Noto Sans KR', sans-serif";
 const NOTO_LIGHT = "'Noto Sans', sans-serif";
 const ROBOTO = "Roboto, sans-serif";
 
-const PRODUCT_ICONS = [
-  "product-app.svg",
-  "product-server.svg",
-  "product-k8s.svg",
-  "product-db.svg",
-  "product-log.svg",
-  "product-url.svg",
-  "product-cloud.svg",
-  "product-rum.svg",
-  "product-nms.svg",
-  "product-gpu.svg",
-  "product-metrics.svg",
+/** 제품 레일 항목 — label 은 아이콘 전용 레일의 hover 툴팁(title)으로 노출. */
+const PRODUCT_RAIL = [
+  { icon: "product-app.svg", label: "애플리케이션" },
+  { icon: "product-server.svg", label: "서버" },
+  { icon: "product-k8s.svg", label: "쿠버네티스" },
+  { icon: "product-db.svg", label: "데이터베이스" },
+  { icon: "product-log.svg", label: "로그" },
+  { icon: "product-url.svg", label: "URL" },
+  { icon: "product-cloud.svg", label: "클라우드" },
+  { icon: "product-rum.svg", label: "브라우저" },
+  { icon: "product-nms.svg", label: "네트워크" },
+  { icon: "product-gpu.svg", label: "GPU" },
+  { icon: "product-metrics.svg", label: "메트릭스" },
 ];
 
-const BOTTOM_RAIL_ICONS = [
-  "bottom-user-add.svg",
-  "bottom-theme.svg",
-  "bottom-fullscreen.svg",
+/** 레일 하단 유틸 항목 — label 은 hover 툴팁(title). */
+const BOTTOM_RAIL = [
+  { icon: "bottom-user-add.svg", label: "멤버 초대" },
+  { icon: "bottom-theme.svg", label: "테마 전환" },
+  { icon: "bottom-fullscreen.svg", label: "전체 화면" },
 ];
 
 export type MenuItem = {
@@ -95,9 +106,13 @@ export type MenuItem = {
 export type ProjectContext = {
   /** 사이드바 상단 프로젝트 스위처에 표시할 아이콘 파일명. 생략 시 아이콘 미표시 + 라벨 좌측 여백. */
   productIcon?: string;
-  /** [그룹] 라벨 (회색 라인) */
+  /** 그룹 타입 칩(badge) 텍스트 — 예: "그룹". "[그룹]" 같은 타입 접두사는 라벨이 아니라 이 칩으로 분리. 생략 시 칩 없음. */
+  groupBadge?: string;
+  /** 그룹명 (회색 라인) — 타입 접두사 없이 이름만. 접두사는 `groupBadge` 칩으로. */
   groupLabel: string;
-  /** [프로젝트] 라벨 (굵은 라인) */
+  /** 프로젝트 타입 칩(badge) 텍스트 — 예: "프로젝트". "[프로젝트]" 접두사는 라벨이 아니라 이 칩으로 분리. 생략 시 칩 없음. */
+  projectBadge?: string;
+  /** 프로젝트명 (굵은 라인) — 타입 접두사 없이 이름만. 접두사는 `projectBadge` 칩으로. */
   projectLabel: string;
 };
 
@@ -137,13 +152,15 @@ export const K8S_GPU_MENU: MenuItem[] = [
 
 const DEFAULT_PROJECT: ProjectContext = {
   productIcon: "product-gpu.svg",
-  groupLabel: "[그룹] 운영 ",
-  projectLabel: "[프로젝트] K8s-GPU",
+  groupLabel: "그룹명",
+  projectLabel: "프로젝트명",
 };
 
 /** 상단 조직 스위처 컨텍스트. `org={null}`이면 조직 스위처 숨김. `icon` 생략 시 심볼 미표시. */
 export type OrgContext = { label: string; icon?: string; badge?: string };
-const DEFAULT_ORG: OrgContext = { label: "[조직] 와탭랩스 대관", icon: "whatap-symbol.svg" };
+// 조직 스위처 기본값: 좌측은 조직 표현 아이콘(브랜드 심볼 아님), "조직" 타입은 badge 칩으로,
+// 슬롯 라벨은 조직명만. icon 은 로컬 세트 대체품(menu-workload) — 전용 org 아이콘 확보 시 교체.
+const DEFAULT_ORG: OrgContext = { label: "조직명", icon: "menu-workload.svg" };
 
 /**
  * 사이드바 컴포넌트.
@@ -152,9 +169,11 @@ const DEFAULT_ORG: OrgContext = { label: "[조직] 와탭랩스 대관", icon: "
  *   - `activeProduct` — 제품 레일 강조 (e.g. "gpu", "app")
  *   - `project`       — 프로젝트 스위처 컨텍스트(아이콘/그룹/프로젝트 라벨)
  *   - `menu`          — 메뉴 트리 데이터
- *   - `collapsed`     — true면 40px 제품 레일만 노출(컴팩트 로고 헤더 유지).
+ *   - `collapsed`     — (controlled) true면 Min(80px) — 제품 레일 + 아이콘 전용 메뉴 열.
  *                       AI 위젯 활성화 시 항상 동기화되어야 함(공통 정책,
  *                       feedback-widget-sidebar-collapse 참고).
+ *   - `defaultCollapsed` — (uncontrolled) 초기 접힘 상태. 로고 헤더 chevron 토글로 스스로 min/max 전환.
+ *   - `onCollapsedChange` — 토글 시 다음 접힘 상태 콜백(controlled 소비자용).
  *
  * 기본값은 현재 K8s-GPU 컨텍스트로 채워 기존 호출처와 호환.
  */
@@ -162,7 +181,9 @@ export default function Sidebar({
   activeProduct = "gpu",
   project = DEFAULT_PROJECT,
   menu = K8S_GPU_MENU,
-  collapsed = false,
+  collapsed,
+  defaultCollapsed = false,
+  onCollapsedChange,
   hideProjectSwitcher = false,
   org = DEFAULT_ORG,
   onOrgClick,
@@ -171,7 +192,16 @@ export default function Sidebar({
   activeProduct?: string;
   project?: ProjectContext;
   menu?: MenuItem[];
+  /**
+   * 접힘 상태 — **controlled**. 지정하면 min(80px)/max(240px)를 부모가 소유(AI 위젯 동기화 등,
+   * feedback-widget-sidebar-collapse). min 은 제품 레일(40px) + 아이콘 전용 메뉴 열(40px).
+   * 미지정 시 컴포넌트 내부 상태로 동작(uncontrolled).
+   */
   collapsed?: boolean;
+  /** **uncontrolled** 초기 접힘 상태. `collapsed` 미지정일 때만 유효. 기본 false(펼침). */
+  defaultCollapsed?: boolean;
+  /** 로고 헤더 토글 버튼 클릭 시 다음 접힘 상태로 호출. controlled 소비자는 이걸로 `collapsed`를 갱신. */
+  onCollapsedChange?: (collapsed: boolean) => void;
   /**
    * 상단 프로젝트 스위처(productIcon + groupLabel + projectLabel + chevron) 영역 숨김.
    * 프로젝트 컨텍스트가 없는 화면(엔터프라이즈 설정 전, 계정/관리 영역)에서 상단 스위처를 숨김.
@@ -185,23 +215,33 @@ export default function Sidebar({
   /** 좌측 40px 제품 레일(제품 아이콘 + 하단 유틸) 숨김. 모니터링 제품이 아닌 관리 콘솔 화면용. 기본 false. */
   hideProductRail?: boolean;
 }) {
-  const width = collapsed ? 40 : 240;
+  // controlled(`collapsed`) / uncontrolled(`defaultCollapsed`) 둘 다 지원 — Switch/Checkbox 패턴 동일.
+  const [internalCollapsed, setInternalCollapsed] = useState(defaultCollapsed);
+  const isCollapsed = collapsed ?? internalCollapsed;
+  const toggleCollapsed = () => {
+    const next = !isCollapsed;
+    if (collapsed === undefined) setInternalCollapsed(next);
+    onCollapsedChange?.(next);
+  };
+
+  // Min = 40px 제품 레일 + 40px 아이콘 전용 메뉴 열
+  const width = isCollapsed ? 80 : 240;
   return (
     <div
       className="flex flex-col items-start relative h-full shrink-0 transition-all duration-400 ease-in-out overflow-hidden"
       style={{ width }}
     >
-      {/* 48px 로고 헤더 */}
-      <SidebarLogoHeader collapsed={collapsed} width={width} />
+      {/* 48px 로고 헤더 — onToggle 로 min/max 인터랙션 제공 */}
+      <SidebarLogoHeader collapsed={isCollapsed} width={width} onToggle={toggleCollapsed} />
 
       {/* 40px 조직 스위처 — org=null이면 숨김, collapsed면 아이콘만 */}
       {org && (
-        <SidebarOrgSwitcher org={org} onClick={onOrgClick} collapsed={collapsed} />
+        <SidebarOrgSwitcher org={org} onClick={onOrgClick} collapsed={isCollapsed} />
       )}
 
-      {/* 44px 프로젝트 스위처 — hideProjectSwitcher면 숨김, collapsed면 아이콘만 */}
+      {/* 40px 프로젝트 스위처 — hideProjectSwitcher면 숨김, collapsed면 아이콘만 */}
       {!hideProjectSwitcher && (
-        <SidebarProjectSwitcher project={project} collapsed={collapsed} />
+        <SidebarProjectSwitcher project={project} collapsed={isCollapsed} />
       )}
 
       {/* 본문 (flex-1): 좌 40px 제품 레일 + (collapsed가 아닐 때만) 우 메뉴 목록 */}
@@ -210,30 +250,33 @@ export default function Sidebar({
         {!hideProductRail && (
         <div className="flex flex-col h-full items-start shrink-0 w-40px bg-card border-r border-color-var-color-border-default">
           <div className="flex flex-1 flex-col items-start min-h-0">
-            {PRODUCT_ICONS.map((name) => {
+            {/* 프로젝트 스위처가 현재 제품 아이콘을 이미 노출하므로 레일에서 같은 제품은 제외(중복 금지) */}
+            {PRODUCT_RAIL.filter(
+              ({ icon: name }) => hideProjectSwitcher || name !== project.productIcon,
+            ).map(({ icon: name, label }) => {
               const key = name.replace("product-", "").replace(".svg", "");
               const isActive = key === activeProduct;
-              return <ProductRailItem key={name} name={name} active={isActive} />;
+              return <ProductRailItem key={name} name={name} label={label} active={isActive} />;
             })}
           </div>
           <div className="flex flex-col items-start shrink-0">
-            {BOTTOM_RAIL_ICONS.map((name) => (
-              <BottomRailItem key={name} name={name} />
+            {BOTTOM_RAIL.map(({ icon: name, label }) => (
+              <BottomRailItem key={name} name={name} label={label} />
             ))}
           </div>
         </div>
         )}
 
-        {/* 우측 메뉴 목록 — collapsed면 통째로 숨김 */}
-        {!collapsed && (
+        {/* 우측 메뉴 목록 — collapsed면 아이콘 전용(iconOnly) 40px 열로 축소 */}
         <div className="flex flex-1 flex-col h-full items-stretch min-w-0">
           <div className="flex flex-1 flex-col items-stretch min-h-0 pr-px w-full bg-card border-r border-color-var-color-border-default">
             {menu.map((item) => (
-              <SidebarMenuItem key={item.label} item={item} />
+              <SidebarMenuItem key={item.label} item={item} iconOnly={isCollapsed} />
             ))}
           </div>
 
-          {/* 메뉴 영역 하단의 즐겨찾기/홈/사이트맵 바 */}
+          {/* 메뉴 영역 하단의 즐겨찾기/홈/사이트맵 바 — collapsed면 숨김 */}
+          {!isCollapsed && (
           <div className="flex h-32px items-center justify-between p-8px shrink-0 w-full bg-card border-r border-t border-color-var-color-border-default">
             <div className="flex gap-4px items-center w-73px">
               <img alt="" className="size-20px" src={icon("bar-home.svg")} />
@@ -242,12 +285,12 @@ export default function Sidebar({
             </div>
             <div className="h-12px shrink-0 w-78px" />
           </div>
+          )}
         </div>
-        )}
       </div>
 
       {/* 24px 저작권 푸터 — collapsed면 숨김 */}
-      {!collapsed && <SidebarCopyright />}
+      {!isCollapsed && <SidebarCopyright />}
     </div>
   );
 }

@@ -48,3 +48,17 @@ export const Interactive: Story = {
     return <Demo />;
   },
 };
+
+/**
+ * 사이즈 — `md`(32px, 기본) / `sm`(24px).
+ * `sm` 은 40px 배너([[AiSummaryBanner]])·툴바처럼 높이가 제한된 표면에 놓일 때 사용한다.
+ * 아이콘 14px · 라벨 12px 로 함께 줄어든다.
+ */
+export const Sizes: Story = {
+  render: () => (
+    <div className="flex items-center gap-3">
+      <AiAssistantButton size="md">심층 분석하기</AiAssistantButton>
+      <AiAssistantButton size="sm">심층 분석하기</AiAssistantButton>
+    </div>
+  ),
+};

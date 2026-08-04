@@ -22,6 +22,8 @@
  * - 정렬: 명시 `align` 이 최우선 → header 가 "No" 면 center → `numeric` 이면 right →
  *   그 외 text 는 left. `numeric=true` 셀은 Roboto numeric 폰트.
  * - 색·border 는 토큰(var(--color-border-default)/var(--color-surface-50)) 사용.
+ * - 행 강조: **테이블을 인라인 재구현하지 말고** `rowClassName`(문자열 또는 `(row,idx)=>class`)
+ *   으로 행 단위 클래스를 주입 — 기존 행 클래스에 append(하위호환). 강조 색은 토큰 클래스로.
  *
  * @example
  * ```tsx
@@ -61,6 +63,13 @@ export type DataTableProps<T> = {
   density?: "compact" | "default";
   /** 행 클릭 핸들러. 없으면 hover 효과만. */
   onRowClick?: (row: T, idx: number) => void;
+  /**
+   * 행 단위 강조/커스텀 클래스 (선택, 하위호환). 문자열(전 행 공통) 또는 `(row, idx) => class`.
+   * 기존 행 클래스(grid·border·hover)에 **append** 되므로 강조 배경 등은 소비자가 클래스로 주입.
+   * 선택 행 강조 예: `rowClassName={(_, i) => (i === selected ? "bg-color-var-color-surface-100" : undefined)}`
+   * (DS 제공 배경 클래스: `bg-color-var-color-surface-50/100`, `bg-color-var-color-brand-blue`. 소비 앱 자체 클래스도 가능.)
+   */
+  rowClassName?: string | ((row: T, idx: number) => string | undefined);
 };
 
 export default function DataTable<T>({
@@ -68,6 +77,7 @@ export default function DataTable<T>({
   rows,
   density = "default",
   onRowClick,
+  rowClassName,
 }: DataTableProps<T>) {
   /** 트랙 크기 — `width` 고정(px/CSS) 우선, 없으면 `flex`fr (기본 1fr). */
   const gridTemplate = columns
@@ -136,6 +146,7 @@ export default function DataTable<T>({
           rowHeight={tokens.rowHeight}
           rowPadding={tokens.rowPadding}
           onRowClick={onRowClick}
+          className={typeof rowClassName === "function" ? rowClassName(row, ri) : rowClassName}
         />
       ))}
     </div>

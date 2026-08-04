@@ -38,6 +38,7 @@
  * ```
  */
 import type { CSSProperties } from "react";
+import AiTriggerButton from "./AiTriggerButton";
 
 const CHART_HEIGHT = 96;
 const PAD_LEFT = 28;
@@ -58,6 +59,12 @@ export default function MiniLineChart({
   unit = "",
   /** stagger 진입 애니메이션 delay(ms). undefined면 애니메이션 없음 */
   delay,
+  /** WhaTap AI 트리거 — 지정 시 ⓘ 대신 AI 버튼 노출. 차트 컨텍스트를 콜백으로 전달. */
+  onAiTrigger,
+  /** AI 트리거 노출 방식: "always"(상시 표시, 숨쉬기로 시선 유도) | "hover"(카드 hover 시에만). 기본 always. */
+  aiTriggerReveal = "always",
+  /** AI 트리거 버튼 호버 설명(Tooltip). 페이지별 override 가능. 기본 "이 차트를 WhaTap AI로 분석". */
+  aiTriggerTooltip = "이 차트를 WhaTap AI로 분석",
 }: {
   title: string;
   values: number[];
@@ -67,6 +74,9 @@ export default function MiniLineChart({
   color?: string;
   unit?: string;
   delay?: number;
+  onAiTrigger?: (ctx: { metric: string; values: number[]; unit?: string; timeRange?: string }) => void;
+  aiTriggerReveal?: "always" | "hover";
+  aiTriggerTooltip?: string;
 }) {
   // ★ 정책 (feedback-chart-peak-alignment):
   //   SVG viewBox는 plot 영역 자체와 정확히 동일한 비율을 가짐 → 라인의 peak
@@ -102,7 +112,7 @@ export default function MiniLineChart({
 
   return (
     <div
-      className={`flex flex-col bg-card border border-color-var-color-border-default rounded-4px px-8px py-6px gap-2px min-w-0${delay !== undefined ? " ai-anim-in" : ""}`}
+      className={`group flex flex-col bg-card border border-color-var-color-border-default rounded-4px px-8px py-6px gap-2px min-w-0${delay !== undefined ? " ai-anim-in" : ""}`}
       style={delay !== undefined ? { animationDelay: `${delay}ms` } : undefined}
     >
       {/* 헤더 */}
@@ -115,7 +125,28 @@ export default function MiniLineChart({
           >
             {title}
           </span>
-          <InfoIcon />
+          {/* ⓘ 는 카드 hover 시에만 노출. whatap-ds.css 의 unlayered hover-reveal 클래스
+              (.group:hover .group-hover-opacity-100) 사용 — Tailwind 의 group-hover:opacity-100
+              (layered) 은 unlayered .opacity-0 에 cascade 에서 져서 동작하지 않는다.
+              onAiTrigger 지정 시 ⓘ 대신 WhaTap AI 버튼을 같은 hover-reveal 로 노출. */}
+          {onAiTrigger ? (
+            <AiTriggerButton
+              reveal={aiTriggerReveal}
+              tooltip={aiTriggerTooltip}
+              onClick={() =>
+                onAiTrigger({
+                  metric: title,
+                  values,
+                  unit,
+                  timeRange: xLabels && xLabels.length ? `${xLabels[0]}–${xLabels[xLabels.length - 1]}` : undefined,
+                })
+              }
+            />
+          ) : (
+            <span className="flex items-center cursor-pointer opacity-0 group-hover-opacity-100 transition-opacity">
+              <InfoIcon />
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-4px shrink-0">
           {showTopStat && (
@@ -169,7 +200,9 @@ export default function MiniLineChart({
           className="absolute"
           style={{ left: PAD_LEFT, right: PAD_RIGHT, top: PAD_TOP_PX, width: `calc(100% - ${PAD_LEFT + PAD_RIGHT}px)` }}
         >
-          {areaStr && <polyline points={areaStr} fill={color + "1f"} stroke="none" />}
+          {/* area fill: color 는 var(--token) 일 수 있어 hex 알파(+"1f") 를 붙이면 무효가 된다
+              (var(...)1f → 잘못된 색 → 회색 fallback). fillOpacity 로 ~12% 투명도를 준다. */}
+          {areaStr && <polyline points={areaStr} fill={color} fillOpacity={0.12} stroke="none" />}
           <polyline
             points={polyStr}
             fill="none"
