@@ -74,6 +74,7 @@ const TONE_COLORS: Record<ChipTone, { main: string; soft: string; fgSoft: string
 function variantStyle(variant: ChipVariant, tone: ChipTone): CSSProperties {
   const c = TONE_COLORS[tone];
   if (variant === "solid") {
+    // raw-color-ok: solid chip — tone 원색 배경 위 고정 흰색 전경.
     return { backgroundColor: c.main, color: "#fff", border: "1px solid transparent" };
   }
   if (variant === "outline") {

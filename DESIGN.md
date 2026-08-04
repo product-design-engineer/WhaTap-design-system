@@ -42,6 +42,11 @@ colors:
   brand-blue-soft:           "#3DA9FF"    # Color
   brand-blue-bg:             "#D6E1FF"    # Color
   brand-blue-bg-2:           "#C2D5FC"    # Color
+  brand-blue-tint:           "#eef4ff"    # Color — 가장 옅은 브랜드 틴트 (강조된 표 행/셀)
+
+  # Brand Alpha — 반투명. 아래 층이 배어나야 하는 자리 (불투명 brand-blue-bg 계열과 구분)
+  brand-blue-wash:           "rgba(41, 108, 242, 0.08)"   # Color — active/선택 행·버튼 배경
+  brand-blue-border-tint:    "rgba(41, 108, 242, 0.25)"   # Color — 틴트 표면의 경계선
 
   # Status
   status-success:            "#00B442"    # Color
@@ -108,7 +113,12 @@ colors:
   tone-text-neutral:         "#6E6E6E"    # Color
 
   # Backdrop scrim — 모달류 배경 딤. 역할이 하나이므로 토큰도 하나.
-  overlay-scrim:             "rgba(0, 0, 0, 0.5)"   # Color
+  overlay-scrim:             "rgba(0, 0, 0, 0.5)"        # Color
+  overlay-loading:           "rgba(255, 255, 255, 0.4)"  # Color — 컨트롤 위 로딩 막(버튼)
+
+  # Stage — 발표·캡처용 16:9 무대 chrome. 테마 무관 고정 어두움 (Stage 전용, 앱 표면 금지)
+  stage-backdrop:            "#0a0a14"                    # Color
+  stage-badge-bg:            "rgba(26, 26, 46, 0.85)"     # Color
 
   # AI Gradient
   ai-gradient-blue:          "#004BE0"    # Color
@@ -282,7 +292,11 @@ elevation:
   shadow-md:              "0 8px 24px rgba(0, 0, 0, 0.12)"   # 용도: 떠 있는 패널 — 드롭다운·토스트
   shadow-lg:              "0 12px 40px rgba(0, 0, 0, 0.2)"   # 용도: 모달·다이얼로그
   shadow-ring-hairline:   "0 0 0 1px rgba(0, 0, 0, 0.04)"    # 용도: md/lg 에 겹쳐 쓰는 1px 경계
+  shadow-xl:              "0 20px 60px rgba(0, 0, 0, 0.15)"  # 용도: 플로팅 위젯 — 가장 높이 뜬 표면
+  shadow-panel-slide:     "-10px 0 30px rgba(0, 0, 0, 0.06)" # 용도: 우측에서 밀려나온 슬라이드 패널
+  shadow-brand-glow:      "0 2px 8px rgba(41, 108, 242, 0.25)" # 용도: 선택된 컨트롤의 브랜드 강조
   scrim:                  "{colors.overlay-scrim}"           # Reference → rgba(0, 0, 0, 0.5)
+  gradient-ai-tint:       "linear-gradient(95deg, rgba(0, 75, 224, 0.08) 0%, rgba(139, 82, 255, 0.08) 100%)"
 
 # ── 6. Shapes ───────────────────────────────────────────
 

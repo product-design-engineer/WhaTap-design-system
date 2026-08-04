@@ -50,7 +50,7 @@ export default function AiClickCursor({
         width: size,
         height: size,
         zIndex: 999,
-        filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.2))",
+        filter: "drop-shadow(var(--shadow-sm))",
         ...style,
       }}
     />

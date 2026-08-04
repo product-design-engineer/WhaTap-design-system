@@ -133,7 +133,7 @@ function ToolBtn({
 function FileCard({ name, mime }: { name: string; mime: string }) {
   return (
     <div
-      className="flex flex-col gap-6px bg-white border border-cd3d3d3 rounded-8px p-10px"
+      className="flex flex-col gap-6px bg-card border border-cd3d3d3 rounded-8px p-10px"
       style={{ width: 140 }}
     >
       <p

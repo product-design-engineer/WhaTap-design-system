@@ -66,7 +66,7 @@ export function AiCard({
 }) {
   return (
     <div
-      className={`ai-anim-in flex flex-col w-full bg-white border border-color-var-color-border-default rounded-8px ${className}`}
+      className={`ai-anim-in flex flex-col w-full bg-card border border-color-var-color-border-default rounded-8px ${className}`}
       style={{ animationDelay: `${delay}ms`, padding, gap }}
     >
       {children}

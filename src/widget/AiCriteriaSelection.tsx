@@ -50,9 +50,9 @@ export type CriteriaOption = {
 };
 
 const TONE_BG: Record<CriterionGroup["tone"], string> = {
-  low: "#e8f4ff",
-  mid: "#fff7e0",
-  high: "#ffe8e8",
+  low: "var(--color-tone-surface-info)",
+  mid: "var(--color-tone-surface-warning)",
+  high: "var(--color-tone-surface-critical)",
   neutral: "var(--color-surface-100)",
 };
 const TONE_DOT: Record<CriterionGroup["tone"], string> = {
@@ -109,7 +109,7 @@ export default function AiCriteriaSelection({
   }, []);
   return (
     <div
-      className="ai-anim-in flex flex-col gap-12px w-full bg-white border border-color-var-color-border-default rounded-8px p-12px"
+      className="ai-anim-in flex flex-col gap-12px w-full bg-card border border-color-var-color-border-default rounded-8px p-12px"
       style={{ animationDelay: `${delay}ms` }}
     >
       <span

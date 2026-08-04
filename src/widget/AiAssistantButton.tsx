@@ -56,7 +56,7 @@ export default function AiAssistantButton({
     <button
       type={rest.type ?? "button"}
       aria-pressed={aiActive}
-      className={`ai-assistant-btn group flex items-center justify-center gap-4px ${spec.box} rounded-24px bg-white cursor-pointer relative overflow-visible${aiActive ? " is-active" : ""} ${className}`}
+      className={`ai-assistant-btn group flex items-center justify-center gap-4px ${spec.box} rounded-24px bg-card cursor-pointer relative overflow-visible${aiActive ? " is-active" : ""} ${className}`}
       {...rest}
     >
       <div className={`relative shrink-0 ${spec.icon} z-10`}>
@@ -74,6 +74,7 @@ export default function AiAssistantButton({
         />
       </div>
       <span
+        // raw-color-ok: hover/active 시 그라데이션 배경 위 라벨 — 컬러 위 고정 흰색.
         className={`${spec.text} tracking-default leading-none whitespace-nowrap relative z-10 transition-colors text-brand-blue group-hover-text-white group-_is-active-text-white`}
         style={{
           fontFamily: "var(--font-family-korean)",

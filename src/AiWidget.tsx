@@ -54,8 +54,8 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
 
   const containerStyle: React.CSSProperties =
     variant === "slide"
-      ? { borderLeft: "1px solid var(--color-border-default)", boxShadow: "-10px 0 30px rgba(0,0,0,0.06)" }
-      : { border: "1px solid var(--color-border-default)", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" };
+      ? { borderLeft: "1px solid var(--color-border-default)", boxShadow: "var(--shadow-panel-slide)" }
+      : { border: "1px solid var(--color-border-default)", boxShadow: "var(--shadow-xl)" };
 
   return (
     <div className={containerClass} style={containerStyle}>
@@ -134,6 +134,7 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
             </svg>
           </div>
           <button
+            // raw-color-ok: brand-blue 보내기 버튼 위 아이콘 — 컬러 위 고정 흰색.
             className="size-7 rounded-md flex items-center justify-center text-white cursor-pointer"
             style={{ background: "var(--color-brand-blue)" }}
             aria-label="보내기"

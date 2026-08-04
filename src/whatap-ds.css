@@ -69,8 +69,20 @@
     --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
     --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.2);
     --shadow-ring-hairline: 0 0 0 1px rgba(0, 0, 0, 0.04);
+    --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+    --shadow-panel-slide: -10px 0 30px rgba(0, 0, 0, 0.06);
+    --shadow-brand-glow: 0 2px 8px rgba(41, 108, 242, 0.25);
+    /* Brand alpha — 브랜드색 반투명(선택 워시·틴트 경계). 정의: tokens.css */
+    --color-brand-blue-wash: rgba(41, 108, 242, 0.08);
+    --color-brand-blue-border-tint: rgba(41, 108, 242, 0.25);
+    --gradient-ai-tint: linear-gradient(95deg, rgba(0, 75, 224, 0.08) 0%, rgba(139, 82, 255, 0.08) 100%);
+    /* Loading overlay — 컨트롤 위 반투명 막(버튼 로딩). */
+    --color-overlay-loading: rgba(255, 255, 255, 0.4);
     /* Backdrop scrim — 모달류 배경 딤. 역할이 하나이므로 토큰도 하나. */
     --color-overlay-scrim: rgba(0, 0, 0, 0.5);
+    /* Stage — 발표·캡처용 무대 chrome. 테마 무관 고정 어두움(Stage 전용). */
+    --color-stage-backdrop: #0a0a14;
+    --color-stage-badge-bg: rgba(26, 26, 46, 0.85);
     --gradient-brand: linear-gradient(90deg, var(--color-brand-blue), var(--color-whatap-purple));
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --default-transition-duration: 150ms;
@@ -86,6 +98,7 @@
     --color-brand-blue-soft: #3DA9FF;
     --color-brand-blue-bg: #D6E1FF;
     --color-brand-blue-bg-2: #C2D5FC;
+    --color-brand-blue-tint: #eef4ff; /* 가장 옅은 브랜드 틴트 — 강조된 표 행/셀 */
 
     
     --color-status-success: #00B442;
@@ -132,6 +145,13 @@
     
     --color-indicator-critical: #E53935;
     --color-indicator-warning: #F0B400;
+
+    /* Tone Surface — 위젯 분류/심각도 카드·배지 배경. 다크 오버라이드는 별건. 정의: tokens.css */
+    --color-tone-surface-critical: #ffe8e8;
+    --color-tone-surface-warning: #fff7e0;
+    --color-tone-surface-info: #e8f4ff;
+    --color-tone-surface-muted: #f1f2f4;
+    --color-tone-surface-neutral: #f1f2f4;
 
     /* Tone Text — tone-surface 위 라벨 텍스트 (indicator 는 도트/스트로크 전용). */
     --color-tone-text-critical: #B5302A;
@@ -444,6 +464,9 @@
 .border-t { border-top-width:1px;border-top-style:solid }
 .border-t-transparent { border-top-color: transparent; }
 .border-var-color-border-default { border-color: var(--color-border-default); }
+/* border-card — 카드/헤더 표면색 경계. 표면 위에 얹힌 도트·배지를 표면색 링으로
+   떼어내는 자리. border-white 와 달리 다크에서 표면과 함께 어두워진다. */
+.border-card { border-color: var(--color-card); }
 .border-white { border-color: var(--color-white); }
 .border-white-10 { border-color: color-mix(in srgb, #fff 10%, transparent);@supports (color: color-mix(in lab, red, red)) {border-color: color-mix(in oklab, var(--color-white) 10%, transparent);} }
 .bottom-0 { bottom: 0; }
@@ -1066,4 +1089,6 @@ html, body, #root {
   --color-brand-blue-bg: #1C2A46;
   --color-brand-blue-bg-2: #233357;
   --color-brand-blue-deep: #7FB0FF;
+  /* 강조 행 틴트 — 라이트값을 두면 밝은 배경 위 밝은 글자가 된다. 정의: tokens.css */
+  --color-brand-blue-tint: #16203A;
 }

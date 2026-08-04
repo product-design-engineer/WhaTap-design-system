@@ -46,7 +46,7 @@ const SIZE = {
 } as const;
 
 const STATUS_COLOR: Record<InstanceStatus, string> = {
-  ok: "#00C853",
+  ok: "var(--color-status-success)",
   warn: "var(--color-indicator-warning)",
   error: "var(--color-indicator-critical)",
   idle: "var(--color-border-divider)",

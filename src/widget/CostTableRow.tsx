@@ -44,7 +44,7 @@ export default function CostTableRow({
         !isFirst ? "border-t border-color-var-color-border-default" : ""
       }`}
       style={{
-        background: row.highlight ? "#eef4ff" : "#fff",
+        background: row.highlight ? "var(--color-brand-blue-tint)" : "var(--color-card)",
       }}
     >
       <div className="flex flex-col min-w-0">

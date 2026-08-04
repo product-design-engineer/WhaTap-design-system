@@ -82,6 +82,7 @@ function toneStyle(variant: ButtonVariant, tone: ButtonTone): CSSProperties {
     return {
       "--wds-btn-bg": c.main,
       "--wds-btn-bg-hover": c.hover,
+      // raw-color-ok: contained 버튼 — tone 원색 배경 위 고정 흰색 전경.
       "--wds-btn-fg": "#fff",
       "--wds-btn-border": "transparent",
     } as CSSProperties;
@@ -144,7 +145,7 @@ export default function Button({
         <span
           aria-hidden
           className="absolute inset-0 flex items-center justify-center"
-          style={{ background: "rgba(255,255,255,0.4)", backdropFilter: "blur(1px)" }}
+          style={{ background: "var(--color-overlay-loading)", backdropFilter: "blur(1px)" }}
         >
           <span
             style={{

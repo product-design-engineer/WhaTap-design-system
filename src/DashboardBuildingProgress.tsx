@@ -86,7 +86,9 @@ export default function DashboardBuildingProgress({
         className="size-36px rounded-full"
         style={{
           background: "conic-gradient(from 90deg, var(--color-whatap-blue), var(--color-whatap-purple), var(--color-whatap-blue))",
+          // raw-color-ok: mask 의 #000 은 색이 아니라 "불투명" 알파 지정 (도넛 구멍).
           mask: "radial-gradient(circle 15px at center, transparent 98%, #000 100%)",
+          // raw-color-ok: 위와 동일 — mask 알파 지정.
           WebkitMask: "radial-gradient(circle 15px at center, transparent 98%, #000 100%)",
           animation: "aiSymbolRotateSlow 1s linear infinite",
         }}
@@ -124,6 +126,7 @@ export default function DashboardBuildingProgress({
                 <circle cx="7" cy="7" r="6.5" fill="var(--color-status-success)" />
                 <path
                   d="M4 7l2 2 4-4"
+                  // raw-color-ok: status-success 원형 위 체크마크 — 컬러 위 고정 흰색.
                   stroke="#fff"
                   strokeWidth="1.4"
                   strokeLinecap="round"

@@ -48,7 +48,7 @@ export default function AiUsageChart({
   const HEIGHT = 96;
   return (
     <div
-      className="ai-anim-in flex flex-col gap-8px w-full bg-white border border-color-var-color-border-default rounded-8px p-12px"
+      className="ai-anim-in flex flex-col gap-8px w-full bg-card border border-color-var-color-border-default rounded-8px p-12px"
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="flex items-center justify-between">

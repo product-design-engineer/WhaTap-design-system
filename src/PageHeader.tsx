@@ -121,7 +121,7 @@ export default function PageHeader({
                 />
               </svg>
               {hasNotify && (
-                <span className="absolute top-1px right-1px size-7px rounded-full bg-ce5484d border border-white" />
+                <span className="absolute top-1px right-1px size-7px rounded-full bg-ce5484d border border-card" />
               )}
             </button>
             {hasNotify && notifyOpen && (
@@ -154,6 +154,7 @@ export default function PageHeader({
                   </linearGradient>
                 </defs>
                 <circle cx="12" cy="12" r="12" fill="url(#avatar-grad)" />
+                {/* raw-color-ok: 그라데이션 아바타 위 이니셜 — 컬러 위 고정 흰색. */}
                 <text x="12" y="17" textAnchor="middle" fontSize="13px" fontWeight="700" fill="#fff" fontFamily="Roboto, sans-serif">S</text>
               </svg>
             </button>

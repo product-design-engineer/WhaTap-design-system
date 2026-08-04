@@ -246,7 +246,21 @@ Soft 표면 위 텍스트는 대비가 검증된 짝 **`--color-tone-text-*`** �
 
 ❌ **status 원색을 배경으로 쓰지 마세요** — 그 위 텍스트 대비가 무너집니다. 원색은 도트·아이콘·채워진 컨트롤 전용입니다.
 
-⚠️ Soft 4색은 현재 **다크 오버라이드가 없습니다** (위젯 `tone-surface-*` 와 동일 취급). 다크 tone surface 는 5색을 한 번에 뒤집어야 정합이 맞으므로 별건으로 도입합니다.
+⚠️ Soft 4색은 현재 **다크 오버라이드가 없습니다** (위젯 `tone-surface-*` 와 동일 취급). 다크 tone surface 는 한 번에 뒤집어야 정합이 맞으므로 별건으로 도입합니다.
+
+## Tone Surface — CSS 변수로 승격됨
+
+위젯 분류/심각도 카드·배지의 배경입니다. `_tokens.ts`(`tokens.color.surface.*`)와 DESIGN.md 에는 있었지만 **CSS 변수가 없어서** 컴포넌트마다 `#ffe8e8` 같은 리터럴을 각자 복제하고 있었습니다. 이제 `--color-tone-surface-*` 로 참조하세요.
+
+| 토큰 | 값 | Tone(구 이름) |
+|---|---|---|
+| `--color-tone-surface-critical` | `#ffe8e8` | high |
+| `--color-tone-surface-warning` | `#fff7e0` | mid |
+| `--color-tone-surface-info` | `#e8f4ff` | low |
+| `--color-tone-surface-muted` | `#f1f2f4` | idle |
+| `--color-tone-surface-neutral` | `#f1f2f4` | neutral |
+
+위에 올리는 텍스트는 `--color-tone-text-*` (대비 검증된 짝). 다크 오버라이드는 아직 없고 — **이제 이 5줄만 고치면 전부 반영**되도록 한곳에 모았습니다.
 
 ## Elevation — 그림자도 토큰
 
@@ -257,12 +271,30 @@ Soft 표면 위 텍스트는 대비가 검증된 짝 **`--color-tone-text-*`** �
 | `--shadow-sm` | `0 1px 3px rgba(0,0,0,.25)` | 컨트롤 — switch/토글 knob |
 | `--shadow-md` | `0 8px 24px rgba(0,0,0,.12)` | 떠 있는 패널 — 드롭다운·토스트 |
 | `--shadow-lg` | `0 12px 40px rgba(0,0,0,.2)` | 모달·다이얼로그 |
+| `--shadow-xl` | `0 20px 60px rgba(0,0,0,.15)` | 플로팅 위젯 — 화면에서 가장 높이 뜬 표면 |
+| `--shadow-panel-slide` | `-10px 0 30px rgba(0,0,0,.06)` | 우측에서 밀려나온 슬라이드 패널(방향 있는 그림자) |
+| `--shadow-brand-glow` | `0 2px 8px rgba(41,108,242,.25)` | 선택된 컨트롤의 브랜드 강조 |
 | `--shadow-ring-hairline` | `0 0 0 1px rgba(0,0,0,.04)` | 단독으로 쓰지 않음 — md/lg 에 겹치는 1px 경계 |
 
 ```tsx
 // Toast — 패널 그림자 + hairline 경계
 boxShadow: "var(--shadow-md), var(--shadow-ring-hairline)",
 ```
+
+## 반투명 — 불투명 토큰과 언제 갈리나
+
+값이 아니라 **아래 층이 배어나야 하는지**로 고릅니다. 배어나야 하면 알파 토큰, 층을 덮어야 하면 불투명 토큰입니다.
+
+| 토큰 | 자리 |
+|---|---|
+| `--color-brand-blue-wash` (8%) | active/선택된 행·아이콘 버튼 배경 — 아래 표 줄무늬가 비쳐야 함 |
+| `--color-brand-blue-border-tint` (25%) | 틴트 표면(AI 제안 카드)의 경계선 |
+| `--gradient-ai-tint` | AI 제안/계획 카드의 blue→purple 틴트 배경 |
+| `--color-brand-blue-tint` (불투명 `#eef4ff`) | 강조된 표 행 — 아래가 비치면 안 되는 자리 |
+| `--color-brand-blue-bg` / `-bg-2` (불투명) | 배지·hover 표면 |
+| `--color-overlay-loading` | 버튼 로딩 막 — 컬러 버튼 위에 얹히므로 라이트/다크 모두 흰 워시 |
+
+**Stage 전용** — `--color-stage-backdrop` · `--color-stage-badge-bg` 는 발표·캡처용 16:9 무대의 캔버스 chrome입니다. 라이트박스처럼 무대를 띄우는 것이 목적이라 **테마와 무관하게 항상 어둡고**, `.dark` 오버라이드가 없습니다. ❌ 앱 표면에 쓰지 마세요.
 
 **Backdrop scrim** — 모달류 배경 딤은 역할이 하나이므로 토큰도 하나입니다: `--color-overlay-scrim` (`rgba(0,0,0,0.5)`). Modal · DsReadOnlyNotice 가 이 하나를 공유합니다. 컴포넌트마다 0.4/0.5 를 따로 적던 것을 통일한 결과입니다.
 

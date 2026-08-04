@@ -19,6 +19,7 @@
   --color-brand-blue-soft: #3DA9FF;
   --color-brand-blue-bg: #D6E1FF;
   --color-brand-blue-bg-2: #C2D5FC;
+  --color-brand-blue-tint: #eef4ff; /* 용도: 가장 옅은 브랜드 틴트 — 강조된 표 행/셀 배경 */
 
   /* Status */
   --color-status-success: #00B442;
@@ -81,9 +82,28 @@
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);     /* 용도: 떠 있는 패널 — 드롭다운·토스트 */
   --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.2);     /* 용도: 모달·다이얼로그 */
   --shadow-ring-hairline: 0 0 0 1px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);         /* 용도: 플로팅 위젯 — 화면에서 가장 높이 뜬 표면 */
+  --shadow-panel-slide: -10px 0 30px rgba(0, 0, 0, 0.06); /* 용도: 우측에서 밀려나온 슬라이드 패널(방향 있는 그림자) */
+  --shadow-brand-glow: 0 2px 8px rgba(41, 108, 242, 0.25); /* 용도: 선택된 컨트롤의 브랜드 강조 */
+
+  /* Brand alpha — 브랜드색 반투명. 표면에 얹혀 아래 층이 배어나야 하는 자리(선택 워시,
+     틴트 카드의 경계). 불투명 brand-blue-bg 계열과 달리 배경색과 섞인다. */
+  --color-brand-blue-wash: rgba(41, 108, 242, 0.08);        /* 용도: active/선택 행·버튼 배경 */
+  --color-brand-blue-border-tint: rgba(41, 108, 242, 0.25); /* 용도: 틴트 표면의 경계선 */
+  --gradient-ai-tint: linear-gradient(95deg, rgba(0, 75, 224, 0.08) 0%, rgba(139, 82, 255, 0.08) 100%);
+
+  /* Loading overlay — 컨트롤 위에 덮는 반투명 막(버튼 로딩). 컬러 버튼 위에 얹히므로
+     라이트/다크 모두 흰 워시가 맞다. */
+  --color-overlay-loading: rgba(255, 255, 255, 0.4);
 
   /* Backdrop scrim — 모달류 배경 딤. 값이 아니라 역할이 하나이므로 토큰도 하나. */
   --color-overlay-scrim: rgba(0, 0, 0, 0.5);
+
+  /* Stage — 발표·캡처용 16:9 무대(Stage)의 캔버스 chrome.
+     라이트/다크와 무관하게 항상 어둡다(라이트박스처럼 무대를 띄우는 것이 목적)이므로
+     `.dark` 오버라이드가 없다. 앱 표면에는 쓰지 말 것 — Stage 전용. */
+  --color-stage-backdrop: #0a0a14;
+  --color-stage-badge-bg: rgba(26, 26, 46, 0.85);
 
   --font-sans: "Noto Sans KR", "Noto Sans", ui-sans-serif, system-ui, sans-serif;
 
@@ -160,6 +180,16 @@
      도트·스트로크·차트 강조선 전용. tone-surface 위 텍스트로는 쓰지 않는다. */
   --color-indicator-critical: #E53935;
   --color-indicator-warning: #F0B400;
+
+  /* Tone Surface — 위젯 분류/심각도 카드·배지의 배경. tokens.color.surface TS 와 동일값.
+     지금까지 CSS 변수가 없어서 컴포넌트가 #ffe8e8 같은 리터럴을 각자 복제했다.
+     ⚠️ 다크 오버라이드 없음 — 5색을 한 번에 뒤집어야 정합이 맞으므로 별건.
+        그 작업은 이제 이 5줄만 고치면 되도록 여기로 모았다. */
+  --color-tone-surface-critical: #ffe8e8;
+  --color-tone-surface-warning: #fff7e0;
+  --color-tone-surface-info: #e8f4ff;
+  --color-tone-surface-muted: #f1f2f4;
+  --color-tone-surface-neutral: #f1f2f4;
 
   /* Tone Text — tone-surface 위 라벨 텍스트. tokens.color.toneText TS 와 동일값.
      indicator 를 텍스트로 쓰면 WCAG AA 4.5:1 미달이라 전경색을 분리했다. */
@@ -541,4 +571,8 @@ html, body, #root {
   --color-brand-blue-bg: #1C2A46;
   --color-brand-blue-bg-2: #233357;
   --color-brand-blue-deep: #7FB0FF;
+
+  /* 강조 행 틴트 — bg 보다 한 단계 옅게(덜 튀게). 라이트값(#eef4ff)을 그대로 두면
+     테마 적응 텍스트(text-primary)가 밝아지면서 밝은 배경 위 밝은 글자가 된다. */
+  --color-brand-blue-tint: #16203A;
 }

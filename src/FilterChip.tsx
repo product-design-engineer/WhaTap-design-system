@@ -77,6 +77,7 @@ export default function FilterChip({
   const selectedStyle: React.CSSProperties = selected
     ? {
         backgroundColor: "var(--color-brand-blue)",
+        // raw-color-ok: 선택된 chip — brand-blue 배경 위 고정 흰색 전경.
         color: "#fff",
         border: "1px solid var(--color-brand-blue)",
       }
@@ -122,6 +123,7 @@ export default function FilterChip({
           className="inline-flex shrink-0 items-center justify-center font-normal"
           style={{
             opacity: selected ? 0.85 : 1,
+            // raw-color-ok: 선택 시 brand-blue 배경 위 카운트 — 컬러 위 고정 흰색(85%).
             color: selected ? "rgba(255,255,255,0.85)" : "var(--color-text-tertiary)",
             marginInlineStart: 2,
           }}

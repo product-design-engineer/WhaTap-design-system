@@ -48,7 +48,7 @@ export default function AiSymbol({
       <path d="M52.2329 231.996L121.809 301.765L121.317 187.903L55.8028 124.18L0.652893 124.419L0.719801 139.915L52.0525 190.224L52.2329 231.996Z" fill={`url(#${id})`} />
       <defs>
         <linearGradient id={id} x1="50" y1="50" x2="260" y2="260" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#004BE0" />
+          <stop stopColor="var(--color-whatap-blue)" />
           <stop offset="1" stopColor="var(--color-whatap-purple)" />
         </linearGradient>
       </defs>

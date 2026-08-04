@@ -43,9 +43,9 @@ import ClassificationTableRow from "./ClassificationTableRow";
 export type ClassificationTone = "high" | "mid" | "low" | "idle" | "neutral";
 
 const TONE_BADGE: Record<ClassificationTone, { bg: string; dot: string; label: string }> = {
-  high:    { bg: "#ffe8e8", dot: "var(--color-indicator-critical)", label: "고활용" },
-  mid:     { bg: "#fff7e0", dot: "var(--color-indicator-warning)", label: "활용" },
-  low:     { bg: "#e8f4ff", dot: "var(--color-brand-blue)", label: "저활용" },
+  high:    { bg: "var(--color-tone-surface-critical)", dot: "var(--color-indicator-critical)", label: "고활용" },
+  mid:     { bg: "var(--color-tone-surface-warning)", dot: "var(--color-indicator-warning)", label: "활용" },
+  low:     { bg: "var(--color-tone-surface-info)", dot: "var(--color-brand-blue)", label: "저활용" },
   idle:    { bg: "var(--color-surface-100)", dot: "var(--color-text-tertiary)", label: "완전 유휴" },
   neutral: { bg: "var(--color-surface-100)", dot: "var(--color-text-tertiary)", label: "" },
 };
@@ -91,7 +91,7 @@ export default function AiClassificationTable({
       {warning && (
         <div
           className="flex items-start gap-6px rounded-6px px-10px py-6px"
-          style={{ background: "#fff7e0" }}
+          style={{ background: "var(--color-tone-surface-warning)" }}
         >
           <span className="text-base mt-1px">⚠️</span>
           <span

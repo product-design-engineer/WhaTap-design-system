@@ -184,7 +184,7 @@ export default function FilterDropdown({
     backgroundColor: "var(--color-card)",
     border: "1px solid var(--color-border-default)",
     borderRadius: 6,
-    boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+    boxShadow: "var(--shadow-md)",
     overflow: "hidden",
     display: isOpen ? "flex" : "none",
     flexDirection: "column",

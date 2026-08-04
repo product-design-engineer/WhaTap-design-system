@@ -37,7 +37,7 @@ export default function TimelineStepItem({
 }) {
   return (
     <div
-      className="flex items-center justify-between gap-8px bg-white border border-color-var-color-border-default rounded-6px px-12px h-36px cursor-pointer hover-bg-gray-50"
+      className="flex items-center justify-between gap-8px bg-card border border-color-var-color-border-default rounded-6px px-12px h-36px cursor-pointer hover-bg-gray-50"
     >
       <div className="flex items-center gap-8px min-w-0">
         {running ? (
@@ -48,6 +48,7 @@ export default function TimelineStepItem({
         ) : (
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
             <circle cx="7" cy="7" r="6.5" fill="var(--color-status-success)" />
+            {/* raw-color-ok: status-success 원형 위 체크마크 — 컬러 위 고정 흰색. */}
             <path d="M4 7l2 2 4-4" stroke="#fff" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         )}

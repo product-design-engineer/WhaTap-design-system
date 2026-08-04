@@ -49,13 +49,32 @@ const IGNORE = /raw-color-ok:/;
  * `var(--x, #hex)` 는 토큰이 단일 출처이고 hex 는 CSS 미로드 시 폴백이므로 우회가 아니다.
  * 주석의 hex 는 런타임 색이 아니라 설명 문구다. 둘을 지운 뒤 남은 것만 리터럴로 센다.
  */
-function strippable(line) {
-  let s = line;
-  // var(--token, #fallback) — 중첩 var() 대응을 위해 안쪽부터 반복 제거
-  for (let prev; prev !== s; ) {
-    prev = s;
-    s = s.replace(/var\([^()]*\)/g, "");
+/**
+ * `var(...)` 전체를 균형 괄호로 잘라낸다.
+ *
+ * 정규식 `var\([^()]*\)` 로는 폴백 안에 함수가 중첩된 경우
+ * (`var(--shadow-sm, 0 1px 3px rgba(0,0,0,.25))`) 를 못 잡는다 — 안쪽 `)` 에서
+ * 끊기거나 아예 매칭에 실패해 폴백의 rgba 가 위반으로 잡혔다.
+ */
+function stripVarCalls(s) {
+  for (let i = s.indexOf("var("); i !== -1; i = s.indexOf("var(", i)) {
+    let depth = 0;
+    let end = -1;
+    for (let j = i + 3; j < s.length; j++) {
+      if (s[j] === "(") depth++;
+      else if (s[j] === ")" && --depth === 0) {
+        end = j;
+        break;
+      }
+    }
+    if (end === -1) break; // 닫히지 않음(멀티라인) — 남은 부분은 그대로 검사
+    s = s.slice(0, i) + s.slice(end + 1);
   }
+  return s;
+}
+
+function strippable(line) {
+  let s = stripVarCalls(line);
   // 줄 주석 · 블록 주석 조각 · JSDoc 본문(` * …`)
   s = s.replace(/\/\*[^*]*\*+(?:[^/*][^*]*\*+)*\//g, "");
   s = s.replace(/\/\/.*$/, "");
