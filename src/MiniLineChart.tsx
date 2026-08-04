@@ -330,7 +330,7 @@ function MenuDots() {
     <button
       type="button"
       aria-label="더보기"
-      className="flex items-center justify-center size-16px rounded-2px cursor-pointer hover-bg-rgba-0-0-0-0_05 shrink-0"
+      className="flex items-center justify-center size-16px rounded-2px cursor-pointer hover-bg-surface-100 shrink-0"
     >
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
         <circle cx="7" cy="3" r="1" fill="var(--color-text-tertiary)" />

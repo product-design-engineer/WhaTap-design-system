@@ -246,7 +246,7 @@ Soft 표면 위 텍스트는 대비가 검증된 짝 **`--color-tone-text-*`** �
 
 ❌ **status 원색을 배경으로 쓰지 마세요** — 그 위 텍스트 대비가 무너집니다. 원색은 도트·아이콘·채워진 컨트롤 전용입니다.
 
-⚠️ Soft 4색은 현재 **다크 오버라이드가 없습니다** (위젯 `tone-surface-*` 와 동일 취급). 다크 tone surface 는 한 번에 뒤집어야 정합이 맞으므로 별건으로 도입합니다.
+Soft 4색은 tone surface 와 함께 **다크 반전됩니다** — 아래 *Tone Surface* 절의 표 참조.
 
 ## Tone Surface — CSS 변수로 승격됨
 
@@ -260,7 +260,24 @@ Soft 표면 위 텍스트는 대비가 검증된 짝 **`--color-tone-text-*`** �
 | `--color-tone-surface-muted` | `#f1f2f4` | idle |
 | `--color-tone-surface-neutral` | `#f1f2f4` | neutral |
 
-위에 올리는 텍스트는 `--color-tone-text-*` (대비 검증된 짝). 다크 오버라이드는 아직 없고 — **이제 이 5줄만 고치면 전부 반영**되도록 한곳에 모았습니다.
+위에 올리는 텍스트는 `--color-tone-text-*` (대비 검증된 짝).
+
+### 다크 반전 — 표면과 라벨을 함께 뒤집는다
+
+라이트 tone surface 는 "흰 카드 위 옅은 색 패널"이라, 값을 그대로 두면 다크에서 밝은 블록이 떠 눈을 때리고, **테마 적응 텍스트(`text-primary`)를 올리는 자리(Toast 본문·강조 행)에서는 밝은 배경 위 밝은 글자가 되어 읽을 수 없습니다.** 그래서 표면은 어둡게, 라벨은 같은 색조의 밝은 톤으로 짝을 맞춰 반전합니다.
+
+| tone | 다크 표면 | 다크 라벨 | 라벨 대비 | 도트 대비 |
+|---|---|---|---|---|
+| critical | `#3A2226` | `#FFA8A3` | 7.92:1 | 3.46:1 |
+| warning | `#33290F` | `#F5C860` | 9.09:1 | **7.67:1** |
+| info | `#16233D` | `#9CC0FF` | 8.49:1 | 3.37:1 |
+| muted / neutral | `#232932` | `#AEB5BF` | 7.08:1 | — |
+
+`--color-status-*-soft` 4색도 같은 값 체계로 반전됩니다 (Toast 본문 대비 11.9~13.1:1). 라이트에서 warning 도트가 1.75:1 로 lint 경고를 받는 조합이 다크에서는 7.67:1 로 오히려 개선됩니다.
+
+⚠️ **TS 토큰을 인라인 style 로 주입할 때는 `value`(hex) 가 아니라 `cssVar` 를 쓰세요.** `.dark` 는 CSS 변수만 재매핑하므로, hex 를 박으면 다크에서 뒤집히지 않습니다. `TONE_BG` / `TONE_TEXT` 는 이미 `cssVar` 기반입니다.
+
+❌ **라벨 텍스트에 `TONE_DOT`(indicator) 을 쓰지 마세요** — indicator 는 도트·스트로크용 고채도 색이라 같은 톤 표면 위 텍스트로는 AA 미달입니다(warning 1.75:1). 도트는 `TONE_DOT`, 라벨은 `TONE_TEXT`.
 
 ## Elevation — 그림자도 토큰
 

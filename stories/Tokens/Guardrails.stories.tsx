@@ -75,9 +75,18 @@ const GUARDRAILS: Guardrail[] = [
     name: "인라인 색 리터럴 금지",
     status: "auto",
     invariant:
-      "`src/` 컴포넌트는 토큰/유틸로만 색 표현. hex · rgb() · `bg-white`/`bg-black` 을 스캔해 **신규 위반은 exit 1 로 차단**한다(`npm test` 포함). 기존 위반은 `scripts/raw-color-baseline.json` 에 파일별 건수로 동결 — 줄일 수만 있고 늘릴 수 없다. 정당한 예외(컬러 위 흰색 전경)는 `// raw-color-ok: <이유>` 로 사유를 남긴다. 토큰 부재는 리터럴의 근거가 아니라 토큰 추가의 근거.",
+      "`src/` 컴포넌트는 토큰/유틸로만 색 표현. hex · rgb() · `bg-white`/`bg-black` · **값이 이름에 박힌 유틸**(`bg-ce5484d` · `border-cd3d3d3` · `bg-rgba-0-0-0-0_05` · `shadow-0_4px_16px_rgba-...`) 을 스캔해 **신규 위반은 exit 1 로 차단**한다(`npm test` 포함). 기존 위반 동결선은 **0건** — `scripts/raw-color-baseline.json` 이 파일별 건수를 기록하며, 줄일 수만 있고 늘릴 수 없다. 정당한 예외는 `// raw-color-ok: <이유>` 로 사유를 남긴다(실질적으로 컬러 위 고정 흰색 전경과 mask 알파 두 종류뿐). 토큰 부재는 리터럴의 근거가 아니라 토큰 추가의 근거.",
     prevents: "토큰 우회 raw color · 단일 출처 약화 · 다크에서만 깨지는 컴포넌트",
     command: "lint:tokens (scripts/check-no-raw-colors.mjs)",
+  },
+  {
+    id: "ds-policy-guard",
+    name: "런타임 정책 가드",
+    status: "policy",
+    invariant:
+      "CI 게이트가 잡지 못하는 **런타임 상태**를 화면에서 드러낸다 — 카드 없이 회색 바닥에 놓인 본문 블록 · `--color-bg`/`--color-card` 동일색 · 3층 이상 중첩 카드 · 인라인 색 리터럴. Storybook 은 자동 적용(`.storybook/preview.tsx`), 소비 앱은 dev 모드에서 `enableDsPolicyGuard()` 한 줄. 위반 요소에 빨간 점선 outline + 배지 + console 규칙. 예외는 `data-ds-policy-ok=\"<이유>\"`.",
+    prevents: "정적 스캔으로 볼 수 없는 층/표면 위반 · 라이트에서만 확인하고 넘어간 다크 깨짐",
+    command: "src/devPolicyGuard.ts (인지 전용 — 차단은 lint:tokens)",
   },
   {
     id: "docstring-standard",

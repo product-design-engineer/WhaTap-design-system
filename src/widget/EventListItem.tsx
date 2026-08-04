@@ -1,4 +1,4 @@
-import { TONE_DOT, TONE_BG, type Tone } from "./_tokens";
+import { TONE_DOT, TONE_BG, TONE_TEXT, type Tone } from "./_tokens";
 import type { EventSeverity, EventRow } from "./AiEventList";
 
 /**
@@ -81,7 +81,7 @@ export default function EventListItem({
         />
         <span
           className="text-xs tracking-default leading-none"
-          style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)", color: TONE_DOT[tone] }}
+          style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)", color: TONE_TEXT[tone] }}
         >
           {label}
         </span>

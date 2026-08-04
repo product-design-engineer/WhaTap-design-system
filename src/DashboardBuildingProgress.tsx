@@ -139,7 +139,7 @@ export default function DashboardBuildingProgress({
                 style={{ animation: "aiSymbolRotateSlow 0.9s linear infinite" }}
               />
             ) : (
-              <span className="size-12px rounded-full border border-cd3d3d3" />
+              <span className="size-12px rounded-full border border-strong" />
             )}
             {s}
           </li>

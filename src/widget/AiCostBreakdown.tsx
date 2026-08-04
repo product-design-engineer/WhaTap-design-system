@@ -115,7 +115,7 @@ export default function AiCostBreakdown({
         ))}
         {subtotal && (
           <div
-            className="grid items-center px-8px py-6px gap-4px border-t border-color-var-color-border-default bg-cf9f9f9"
+            className="grid items-center px-8px py-6px gap-4px border-t border-color-var-color-border-default bg-surface-50"
             style={{ gridTemplateColumns: "0.7fr 1.4fr 0.8fr 0.9fr 1fr" }}
           >
             <span

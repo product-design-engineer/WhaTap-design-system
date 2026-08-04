@@ -65,6 +65,7 @@
     --radius-xl: 0.75rem;
     --radius-full: 9999px;
     /* Elevation — 컴포넌트가 rgba 를 직접 적지 않도록 그림자도 토큰. 정의: tokens.css */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.08);
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
     --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
     --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.2);
@@ -83,6 +84,7 @@
     /* Stage — 발표·캡처용 무대 chrome. 테마 무관 고정 어두움(Stage 전용). */
     --color-stage-backdrop: #0a0a14;
     --color-stage-badge-bg: rgba(26, 26, 46, 0.85);
+    --shadow-stage: 0 20px 60px rgba(0, 0, 0, 0.45); /* 무대 전용 — elevation 스케일 밖. */
     --gradient-brand: linear-gradient(90deg, var(--color-brand-blue), var(--color-whatap-purple));
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --default-transition-duration: 150ms;
@@ -110,7 +112,7 @@
     --color-status-error-deep: #D03333;
 
     /* Status Soft — status 원색의 옅은 표면(토스트 배경·soft 칩/버튼·경고 배너).
-       위에 올리는 텍스트는 --color-tone-text-*. 다크 오버라이드는 별건. 정의: tokens.css */
+       위에 올리는 텍스트는 --color-tone-text-*. 다크는 .dark 블록에서 반전. 정의: tokens.css */
     --color-status-success-soft: #E8F8EE;
     --color-status-info-soft: #E8F0FE;
     --color-status-warning-soft: #FFF4E5;
@@ -146,7 +148,7 @@
     --color-indicator-critical: #E53935;
     --color-indicator-warning: #F0B400;
 
-    /* Tone Surface — 위젯 분류/심각도 카드·배지 배경. 다크 오버라이드는 별건. 정의: tokens.css */
+    /* Tone Surface — 위젯 분류/심각도 카드·배지 배경. 다크는 .dark 블록에서 반전. 정의: tokens.css */
     --color-tone-surface-critical: #ffe8e8;
     --color-tone-surface-warning: #fff7e0;
     --color-tone-surface-info: #e8f4ff;
@@ -431,15 +433,13 @@
 .align-bottom { vertical-align: bottom; }
 .align-top { vertical-align: top; }
 .appearance-none { appearance: none; }
-.bg-ce5484d { background-color: #e5484d; }
-.bg-cf5f6f8 { background-color: #f5f6f8; }
-.bg-cf9f9f9 { background-color: #f9f9f9; }
+/* 알림/위험 도트 — indicator 는 도트·스트로크 전용 고채도 슬롯. */
+.bg-indicator-critical { background-color: var(--color-indicator-critical); }
 .bg-color-var-color-border-divider { background-color: var(--color-border-divider); }
 .bg-color-var-color-border-soft { background-color: var(--color-border-soft); }
 .bg-color-var-color-brand-blue { background-color: var(--color-brand-blue); }
 .bg-color-var-color-surface-100 { background-color: var(--color-surface-100); }
 .bg-color-var-color-surface-50 { background-color: var(--color-surface-50); }
-.bg-rgba-0-0-0-0_05 { background-color: rgba(0,0,0,0.05); }
 .bg-transparent { background-color: transparent; }
 .bg-var-color-brand-blue-bg { background-color: var(--color-brand-blue-bg); }
 .bg-var-color-surface-50 { background-color: var(--color-surface-50); }
@@ -449,8 +449,7 @@
 .border-0 { border-width:0;border-style:solid }
 .border-1_5px { border-width:1.5px;border-style:solid }
 .border-b { border-bottom-width:1px;border-bottom-style:solid }
-.border-cd3d3d3 { border-color: #d3d3d3; }
-.border-ceaeaea { border-color: #eaeaea; }
+.border-strong { border-color: var(--color-border-strong); }
 .border-collapse { border-collapse: collapse; }
 .border-color-var-color-border-default { border-color: var(--color-border-default); }
 .border-color-var-color-border-divider { border-color: var(--color-border-divider); }
@@ -466,6 +465,7 @@
 .border-var-color-border-default { border-color: var(--color-border-default); }
 /* border-card — 카드/헤더 표면색 경계. 표면 위에 얹힌 도트·배지를 표면색 링으로
    떼어내는 자리. border-white 와 달리 다크에서 표면과 함께 어두워진다. */
+.border-default { border-color: var(--color-border-default); }
 .border-card { border-color: var(--color-card); }
 .border-white { border-color: var(--color-white); }
 .border-white-10 { border-color: color-mix(in srgb, #fff 10%, transparent);@supports (color: color-mix(in lab, red, red)) {border-color: color-mix(in oklab, var(--color-white) 10%, transparent);} }
@@ -557,13 +557,12 @@
 /* 반전 hover 표면 — 아이콘 버튼이 hover 시 어두워지는 패턴. 다크에서는 밝아진다
    (text-strong 이 뒤집히므로). 전경은 .group-hover-plus-stroke-invert 짝. */
 .hover-bg-invert:hover { background-color: var(--color-text-strong); }
-.hover-bg-cfafafa:hover { background-color: #fafafa; }
+.hover-bg-surface-50:hover { background-color: var(--color-surface-50); }
 .hover-bg-color-var-color-brand-blue-bg:hover { background-color: var(--color-brand-blue-bg); }
 .hover-bg-color-var-color-brand-blue-deep:hover { background-color: var(--color-brand-blue-deep); }
 .hover-bg-color-var-color-surface-100:hover { background-color: var(--color-surface-100); }
 .hover-bg-gray-100:hover { background-color: var(--color-gray-100); }
 .hover-bg-gray-50:hover { background-color: var(--color-gray-50); }
-.hover-bg-rgba-0-0-0-0_05:hover { background-color: rgba(0,0,0,0.05); }
 .hover-bg-var-color-brand-blue-bg-2:hover { background-color: var(--color-brand-blue-bg-2); }
 .hover-border-color-var-color-border-strong:hover { border-color: var(--color-border-strong); }
 .hover-border-color-var-color-brand-blue-bg:hover { border-color: var(--color-brand-blue-bg); }
@@ -729,10 +728,10 @@
 .select-none { -webkit-user-select: none;user-select: none; }
 .self-center { align-self: center; }
 .self-start { align-self: flex-start; }
-.shadow-0_1px_2px_rgba-0-0-0-0_08 { box-shadow: 0 1px 2px rgba(0,0,0,0.08) }
-.shadow-0_20px_60px_rgba-0-0-0-0_45 { box-shadow:0 20px 60px rgba(0,0,0,0.45) }
-.shadow-0_2px_8px_rgba-41-108-242-0_25 { box-shadow:0 2px 8px rgba(41,108,242,0.25) }
-.shadow-0_4px_16px_rgba-0-0-0-0_12 { box-shadow:0 4px 16px rgba(0,0,0,0.12) }
+.shadow-xs { box-shadow: var(--shadow-xs); }
+.shadow-stage { box-shadow: var(--shadow-stage); }
+.shadow-brand-glow { box-shadow: var(--shadow-brand-glow); }
+.shadow-md { box-shadow: var(--shadow-md); }
 .shrink-0 { flex-shrink: 0; }
 .size-10px { width: 10px;height: 10px; }
 .size-12px { width: 12px;height: 12px; }
@@ -1091,4 +1090,25 @@ html, body, #root {
   --color-brand-blue-deep: #7FB0FF;
   /* 강조 행 틴트 — 라이트값을 두면 밝은 배경 위 밝은 글자가 된다. 정의: tokens.css */
   --color-brand-blue-tint: #16203A;
+
+  /* Tone / Status 표면 다크 반전 — 표면은 어둡게, 그 위 라벨은 같은 색조의 밝은 톤으로
+     함께 뒤집는다. 대비 실측·근거는 tokens.css 주석 참조. */
+  --color-tone-surface-critical: #3A2226;
+  --color-tone-surface-warning: #33290F;
+  --color-tone-surface-info: #16233D;
+  --color-tone-surface-muted: #232932;
+  --color-tone-surface-neutral: #232932;
+
+  --color-tone-text-critical: #FFA8A3;
+  --color-tone-text-warning: #F5C860;
+  --color-tone-text-info: #9CC0FF;
+  --color-tone-text-success: #6FE0A0;
+  --color-tone-text-muted: #AEB5BF;
+  --color-tone-text-neutral: #AEB5BF;
+
+  --color-status-success-soft: #14301F;
+  --color-status-info-soft: #16233D;
+  --color-status-warning-soft: #33290F;
+  --color-status-error-soft: #3A2226;
+  --color-status-warning-soft-border: #4A3714;
 }

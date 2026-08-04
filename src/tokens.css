@@ -34,8 +34,7 @@
   /* Status Soft — status 원색의 옅은 *표면*. 토스트 배경 · soft 버튼/칩 · 경고 배너.
      위에 올리는 텍스트는 대비 검증된 짝 `--color-tone-text-*` 를 쓴다.
      ⚠️ status 원색을 배경으로 쓰지 말 것 — 그 위 텍스트 대비가 무너진다.
-     ⚠️ 다크 오버라이드 없음 — 기존 tone surface(widget/_tokens.ts)와 동일 취급.
-        다크 tone surface 는 5색을 한 번에 뒤집어야 하므로 별건으로 도입한다. */
+     다크 값은 파일 하단 `.dark` 블록에서 tone surface 와 함께 반전된다. */
   --color-status-success-soft: #E8F8EE;
   --color-status-info-soft: #E8F0FE;
   --color-status-warning-soft: #FFF4E5;
@@ -78,6 +77,7 @@
 
   /* Elevation — 층이 아니라 *떠 있는 높이*로 고른다. 컴포넌트가 rgba 를 직접 적지 않도록
      그림자도 토큰이다. hairline 은 그림자에 겹쳐 쓰는 1px 경계(토스트 등). */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.08);      /* 용도: 살짝 들린 것 — 활성 탭·세그먼트 */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);      /* 용도: 컨트롤 — switch/토글 knob */
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);     /* 용도: 떠 있는 패널 — 드롭다운·토스트 */
   --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.2);     /* 용도: 모달·다이얼로그 */
@@ -104,6 +104,8 @@
      `.dark` 오버라이드가 없다. 앱 표면에는 쓰지 말 것 — Stage 전용. */
   --color-stage-backdrop: #0a0a14;
   --color-stage-badge-bg: rgba(26, 26, 46, 0.85);
+  /* 무대가 어두운 backdrop 에서 떠 보이게 하는 강한 그림자 — elevation 스케일 밖(Stage 전용). */
+  --shadow-stage: 0 20px 60px rgba(0, 0, 0, 0.45);
 
   --font-sans: "Noto Sans KR", "Noto Sans", ui-sans-serif, system-ui, sans-serif;
 
@@ -183,8 +185,7 @@
 
   /* Tone Surface — 위젯 분류/심각도 카드·배지의 배경. tokens.color.surface TS 와 동일값.
      지금까지 CSS 변수가 없어서 컴포넌트가 #ffe8e8 같은 리터럴을 각자 복제했다.
-     ⚠️ 다크 오버라이드 없음 — 5색을 한 번에 뒤집어야 정합이 맞으므로 별건.
-        그 작업은 이제 이 5줄만 고치면 되도록 여기로 모았다. */
+     다크 값은 파일 하단 `.dark` 블록 — 표면과 라벨(tone-text)을 짝으로 반전한다. */
   --color-tone-surface-critical: #ffe8e8;
   --color-tone-surface-warning: #fff7e0;
   --color-tone-surface-info: #e8f4ff;
@@ -575,4 +576,36 @@ html, body, #root {
   /* 강조 행 틴트 — bg 보다 한 단계 옅게(덜 튀게). 라이트값(#eef4ff)을 그대로 두면
      테마 적응 텍스트(text-primary)가 밝아지면서 밝은 배경 위 밝은 글자가 된다. */
   --color-brand-blue-tint: #16203A;
+
+  /* ────────────────────────────────────────────────────────────────────────
+   *  Tone / Status 표면 — 다크 반전.
+   *
+   *  라이트 tone surface 는 "흰 카드 위 옅은 색 패널"이라, 값을 그대로 두면 다크에서
+   *  어두운 카드 위에 밝은 블록이 떠 눈을 때리고, **테마 적응 텍스트(text-primary)를
+   *  올리는 자리(Toast 본문·강조 행)에서는 밝은 배경 위 밝은 글자가 되어 읽을 수 없다.**
+   *  그래서 표면은 어둡게, 그 위 라벨(tone-text)은 같은 색조의 밝은 톤으로 함께 뒤집는다.
+   *
+   *  대비 실측 (WCAG): 라벨 7.1~9.1:1 · 도트(indicator) 3.4~7.7:1 (비텍스트 3:1 이상) ·
+   *  Toast 본문(text-primary #E9EBEE) 11.9~13.1:1. 라이트 warning 도트가 1.75:1 로
+   *  경고를 받던 조합이 다크에서는 7.67:1 로 오히려 개선된다.
+   * ──────────────────────────────────────────────────────────────────────── */
+  --color-tone-surface-critical: #3A2226;
+  --color-tone-surface-warning: #33290F;
+  --color-tone-surface-info: #16233D;
+  --color-tone-surface-muted: #232932;
+  --color-tone-surface-neutral: #232932;
+
+  --color-tone-text-critical: #FFA8A3;
+  --color-tone-text-warning: #F5C860;
+  --color-tone-text-info: #9CC0FF;
+  --color-tone-text-success: #6FE0A0;
+  --color-tone-text-muted: #AEB5BF;
+  --color-tone-text-neutral: #AEB5BF;
+
+  /* Status Soft — 토스트 배경·soft 칩/버튼·경고 배너. tone surface 와 같은 값 체계. */
+  --color-status-success-soft: #14301F;
+  --color-status-info-soft: #16233D;
+  --color-status-warning-soft: #33290F;
+  --color-status-error-soft: #3A2226;
+  --color-status-warning-soft-border: #4A3714;
 }

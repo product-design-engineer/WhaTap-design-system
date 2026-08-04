@@ -40,6 +40,12 @@ const SHOTS = [
   { id: "composite-sidebar--default", theme: "dark" },
   { id: "composite-pageheaderaiinline--default", theme: "dark" },
   { id: "composite-datatable--default-density", theme: "dark" },
+  // 위젯 tone/표면 — 라이트만 보고 넘어가면 다크에서 "밝은 배경 위 밝은 글자" 가 된다.
+  // 실제로 이 커버리지 부재로 강조 행·인라인 프롬프트의 다크 판독 불가를 두 번 놓쳤다.
+  { id: "primitives-ai-aitonebadge--all-tones", theme: "light" },
+  { id: "primitives-ai-aitonebadge--all-tones", theme: "dark" },
+  { id: "primitives-ai-costtablerow--highlight", theme: "dark" },
+  { id: "primitives-toast--warning", theme: "dark" },
 ];
 
 // 애니메이션·캐럿·transition 비활성화 (스냅샷 안정화)

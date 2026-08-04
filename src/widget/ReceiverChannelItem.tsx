@@ -63,7 +63,7 @@ export default function ReceiverChannelItem({
   return (
     <li
       className={`flex items-center gap-10px py-6px border-b border-color-var-color-surface-50 last-border-b-0 ${
-        interactive ? "cursor-pointer hover-bg-cfafafa" : ""
+        interactive ? "cursor-pointer hover-bg-surface-50" : ""
       }`}
       onClick={() => interactive && onToggle!(channelKey, !enabled)}
     >

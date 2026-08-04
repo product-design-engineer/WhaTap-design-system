@@ -8,6 +8,8 @@
  *   - hex 리터럴          #fff · #F5F5F5 · #ffffffcc
  *   - rgb()/rgba() 리터럴  rgb(255,255,255) · rgba(0,0,0,.5)
  *   - 색 유틸 클래스       bg-white · bg-black · text-white · border-white
+ *   - 값이 이름에 박힌 유틸 bg-ce5484d · border-cd3d3d3 · bg-rgba-0-0-0-0_05 ·
+ *                          shadow-0_4px_16px_rgba-0-0-0-0_12 (hex/rgba 검사의 사각지대였음)
  *
  * 예외 (위반 아님):
  *   1. `src/widget/_tokens.ts`      — 토큰 정의 원본(단일 출처 그 자체)
@@ -41,6 +43,25 @@ const EXEMPT_FILES = new Set(["src/widget/_tokens.ts"]);
 const HEX = /#[0-9a-fA-F]{3,8}\b/g;
 const RGB = /\brgba?\(\s*[\d.]/g;
 const UTIL = /\b(?:bg|text|border|fill|stroke)-(?:white|black)\b/g;
+
+/**
+ * 클래스명에 색값이 박힌 유틸 — hex/rgba 검사의 사각지대였다.
+ *
+ * `bg-ce5484d`(#e5484d) · `border-cd3d3d3` · `bg-rgba-0-0-0-0_05` ·
+ * `shadow-0_4px_16px_rgba-0-0-0-0_12` 처럼 **값이 이름 안에** 들어가면 hex/rgba
+ * 정규식에 걸리지 않는다. 이름만 다를 뿐 하드코딩이고, `.dark` 오버라이드가 없으므로
+ * 다크에서 그대로 남는다. → semantic 유틸(`bg-indicator-critical`·`border-strong`·
+ * `bg-surface-100`·`shadow-md` 등)을 쓰고, 없으면 whatap-ds.css 에 먼저 추가할 것.
+ *
+ * ⚠️ 선행 경계는 `\b` 로 잡지 못한다 — `shadow-0_1px_2px_rgba-0-0-0-0_08` 처럼 `_` 뒤에
+ *    오는 경우 `_` 와 `r` 이 모두 단어문자라 `\b` 가 성립하지 않고 규칙이 빠져나간다.
+ *    그래서 "영숫자가 아닌 것 뒤" 를 lookbehind 로 직접 명시한다.
+ */
+const CLASS_COLOR = /(?<![0-9a-z])(?:c[0-9a-f]{6}(?![0-9a-z])|rgba-[0-9][0-9a-z_-]*)/gi;
+
+/** elevation 이 이름에 박힌 유틸 — `shadow-0_20px_60px_...`. */
+const CLASS_SHADOW = /\bshadow-[0-9][0-9a-z_-]*/g;
+
 const IGNORE = /raw-color-ok:/;
 
 /**
@@ -98,6 +119,9 @@ const HINTS = [
   [/^#(296cf2)$/i, "var(--color-brand-blue)"],
   [/^bg-white$/i, "bg-card  (위젯 셸·본문·컨트롤 배경)"],
   [/^(bg|text|border)-black$/i, "무채색 토큰 사용 — 순수 검정은 팔레트에 없다"],
+  [/c[0-9a-f]{6}$/i, "값이 이름에 박힌 유틸 — semantic 유틸로 교체(bg-surface-100·border-strong·bg-indicator-critical 등)"],
+  [/^shadow-[0-9]/, "elevation 유틸 사용 — shadow-xs/sm/md/lg/xl/stage/brand-glow"],
+  [/rgba-[0-9]/, "값이 이름에 박힌 유틸 — semantic 유틸 또는 whatap-ds.css 에 토큰 기반 유틸 추가"],
 ];
 
 function hintFor(value) {
@@ -126,7 +150,7 @@ function scan() {
       if (IGNORE.test(line) || (i > 0 && IGNORE.test(lines[i - 1]))) return;
 
       const scanned = strippable(line);
-      for (const re of [HEX, RGB, UTIL]) {
+      for (const re of [HEX, RGB, UTIL, CLASS_COLOR, CLASS_SHADOW]) {
         re.lastIndex = 0;
         for (const m of scanned.matchAll(re)) {
           const value = m[0].replace(/\(\s*[\d.]$/, "(");

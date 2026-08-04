@@ -121,13 +121,13 @@ export default function PageHeader({
                 />
               </svg>
               {hasNotify && (
-                <span className="absolute top-1px right-1px size-7px rounded-full bg-ce5484d border border-card" />
+                <span className="absolute top-1px right-1px size-7px rounded-full bg-indicator-critical border border-card" />
               )}
             </button>
             {hasNotify && notifyOpen && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setNotifyOpen(false)} />
-                <div className="absolute right-0 top-32px z-50 min-w-260px rounded-8px border border-color-var-color-border-default bg-card py-4px shadow-0_4px_16px_rgba-0-0-0-0_12">
+                <div className="absolute right-0 top-32px z-50 min-w-260px rounded-8px border border-color-var-color-border-default bg-card py-4px shadow-md">
                   <div className="px-14px py-6px text-xs text-tertiary" style={{ fontFamily: "var(--font-family-korean)" }}>알림</div>
                   {notifications!.map((n) => (
                     <PageHeaderNotificationItem
@@ -161,7 +161,7 @@ export default function PageHeader({
             {profileMenu && profileMenu.length > 0 && profileOpen && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setProfileOpen(false)} />
-                <div className="absolute right-0 top-32px z-50 min-w-200px rounded-8px border border-color-var-color-border-default bg-card py-4px shadow-0_4px_16px_rgba-0-0-0-0_12">
+                <div className="absolute right-0 top-32px z-50 min-w-200px rounded-8px border border-color-var-color-border-default bg-card py-4px shadow-md">
                   {roleBadge && (
                     <div className="flex items-center gap-6px px-14px pt-8px pb-8px mb-2px border-b border-color-var-color-border-soft">
                       <span className="inline-flex items-center h-18px px-6px rounded-4px text-xs font-bold bg-var-color-brand-blue-bg text-color-var-color-brand-blue" style={{ fontFamily: "var(--font-family-korean)" }}>{roleBadge}</span>

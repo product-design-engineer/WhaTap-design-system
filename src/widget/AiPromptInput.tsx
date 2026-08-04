@@ -139,7 +139,7 @@ export default function AiPromptInput({
             {attachments.map((a, i) => (
               <div
                 key={i}
-                className="flex flex-col gap-4px bg-card border border-cd3d3d3 rounded-6px px-8px py-6px shrink-0"
+                className="flex flex-col gap-4px bg-card border border-strong rounded-6px px-8px py-6px shrink-0"
                 style={{ width: 100 }}
               >
                 <p
@@ -150,7 +150,7 @@ export default function AiPromptInput({
                   {a.name}
                 </p>
                 <span
-                  className="self-start text-xs text-tertiary bg-rgba-0-0-0-0_05 rounded-3px px-4px py-1px uppercase"
+                  className="self-start text-xs text-tertiary bg-surface-100 rounded-3px px-4px py-1px uppercase"
                   style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
                 >
                   {a.mime ?? "CSV"}

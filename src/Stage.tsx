@@ -50,7 +50,7 @@ export default function Stage({
         </div>
       )}
       <div
-        className="w-full max-w-1280px bg-cf5f6f8 rounded-lg overflow-hidden relative shadow-0_20px_60px_rgba-0-0-0-0_45"
+        className="w-full max-w-1280px bg-bg rounded-lg overflow-hidden relative shadow-stage"
         style={{ aspectRatio: "16 / 9" }}
       >
         {children}

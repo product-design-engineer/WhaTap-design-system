@@ -17,6 +17,7 @@ export {
 export {
   TONE_BG,
   TONE_DOT,
+  TONE_TEXT,
   TONE_LABEL,
       type Tone,
   type LegacyTone,

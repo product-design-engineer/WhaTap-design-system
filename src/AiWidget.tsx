@@ -93,7 +93,7 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
       <div className="flex-1 overflow-auto p-4 bg-card">
         {/* AI welcome message */}
         <div className="flex gap-2_5 mb-4">
-          <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 shadow-0_2px_8px_rgba-41-108-242-0_25" style={{ background: "linear-gradient(135deg, var(--color-brand-blue), var(--color-brand-blue-deep))" }}>
+          <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 shadow-brand-glow" style={{ background: "linear-gradient(135deg, var(--color-brand-blue), var(--color-brand-blue-deep))" }}>
             <AiSymbol size={14} />
           </div>
           <div className="flex-1 text-md leading-loose" style={{ color: "var(--color-text-body)" }}>

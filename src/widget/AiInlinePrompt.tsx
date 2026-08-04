@@ -237,7 +237,7 @@ export default function AiInlinePrompt({
         {attachments && attachments.length > 0 && attachments.map((a, i) => (
           <div
             key={i}
-            className="flex items-center gap-4px bg-var-color-surface-50 border border-cd3d3d3 rounded-4px px-6px shrink-0 h-20px max-w-120px"
+            className="flex items-center gap-4px bg-var-color-surface-50 border border-strong rounded-4px px-6px shrink-0 h-20px max-w-120px"
             title={a.name}
           >
             <span

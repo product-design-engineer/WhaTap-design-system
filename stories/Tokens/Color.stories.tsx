@@ -45,7 +45,7 @@ function Swatch({
   border?: boolean;
 }) {
   return (
-    <div className="flex items-stretch gap-3 p-3 border border-ceaeaea rounded-lg bg-white" style={{ fontFamily: "var(--font-family-korean)" }}>
+    <div className="flex items-stretch gap-3 p-3 border border-default rounded-lg bg-white" style={{ fontFamily: "var(--font-family-korean)" }}>
       <div
         className="rounded-md flex-shrink-0"
         style={{
@@ -76,7 +76,7 @@ function SwatchGrid({ children, minColumn = 320 }: { children: React.ReactNode; 
 
 function CompactSwatch({ token, hex }: { token: string; hex: string }) {
   return (
-    <div className="flex flex-col items-stretch gap-1 p-2 border border-ceaeaea rounded-md bg-white" style={{ fontFamily: "var(--font-family-numeric)" }}>
+    <div className="flex flex-col items-stretch gap-1 p-2 border border-default rounded-md bg-white" style={{ fontFamily: "var(--font-family-numeric)" }}>
       <div className="rounded h-12" style={{ background: hex }} />
       <div className="text-chart text-tertiary leading-none truncate" style={{ fontFamily: "var(--font-family-numeric)" }}>{token}</div>
       <div className="text-chart text-tertiary leading-none">{hex}</div>
@@ -116,26 +116,33 @@ export const Indicator: StoryObj = {
 
 /* ─── 3) Tone Pairing ──────────────────────────────── */
 
-/** **Surface + Indicator pairing** — 한 톤이 실제로 어떻게 보이는지 (배지 형태). */
+/**
+ * **Surface + Indicator + ToneText pairing** — 한 톤의 3역할이 실제로 어떻게 보이는지.
+ *
+ * 도트는 `indicator`(고채도), **라벨 텍스트는 `toneText`** 로 갈라 씁니다. indicator 를
+ * 텍스트로 쓰면 같은 톤 표면 위에서 WCAG AA 4.5:1 에 못 미칩니다(warning 은 1.75:1).
+ */
 export const TonePairing: StoryObj = {
   render: () => (
     <div className="flex flex-col gap-3 max-w-2xl">
       {INTENTS.map((intent) => {
         const surface = tokens.color.surface[intent];
         const indicator = tokens.color.indicator[intent];
+        const toneText = tokens.color.toneText[intent];
         const label = tokens.label[intent];
         return (
-          <div key={intent} className="flex items-center gap-4 p-3 border border-ceaeaea rounded-lg" style={{ background: surface.value, fontFamily: "var(--font-family-korean)" }}>
-            <div className="flex items-center gap-1_5 px-2 py-1 rounded-xl" style={{ background: "rgba(255,255,255,0.6)" }}>
+          // cssVar 로 주입 — value(hex) 를 쓰면 다크에서 뒤집히지 않는다.
+          <div key={intent} className="flex items-center gap-4 p-3 border border-default rounded-lg" style={{ background: surface.cssVar, fontFamily: "var(--font-family-korean)" }}>
+            <div className="flex items-center gap-1_5 px-2 py-1 rounded-xl bg-card">
               <div className="rounded-full" style={{ width: 6, height: 6, background: indicator.value }} />
-              <span className="text-xs leading-none" style={{ color: indicator.value, fontWeight: 500 }}>
+              <span className="text-xs leading-none" style={{ color: toneText.cssVar, fontWeight: 500 }}>
                 {label.value || `(${intent})`}
               </span>
             </div>
             <div className="flex-1 min-w-0 flex flex-col gap-0_5" style={{ fontFamily: "var(--font-family-numeric)" }}>
               <div className="text-sm text-primary font-bold">{intent}</div>
               <div className="text-chart text-tertiary">
-                surface {surface.value} · indicator {indicator.value} · label "{label.value}"
+                surface {surface.value} · indicator {indicator.value} · toneText {toneText.value}
               </div>
             </div>
           </div>

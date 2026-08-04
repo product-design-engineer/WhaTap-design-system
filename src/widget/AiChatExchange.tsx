@@ -123,7 +123,7 @@ function ToolBtn({
   return (
     <button
       aria-label={ariaLabel}
-      className="flex items-center justify-center size-20px rounded-4px cursor-pointer hover-bg-rgba-0-0-0-0_05 transition-colors"
+      className="flex items-center justify-center size-20px rounded-4px cursor-pointer hover-bg-surface-100 transition-colors"
     >
       {children}
     </button>
@@ -133,7 +133,7 @@ function ToolBtn({
 function FileCard({ name, mime }: { name: string; mime: string }) {
   return (
     <div
-      className="flex flex-col gap-6px bg-card border border-cd3d3d3 rounded-8px p-10px"
+      className="flex flex-col gap-6px bg-card border border-strong rounded-8px p-10px"
       style={{ width: 140 }}
     >
       <p
@@ -144,7 +144,7 @@ function FileCard({ name, mime }: { name: string; mime: string }) {
         {name}
       </p>
       <span
-        className="self-start text-sm text-tertiary bg-rgba-0-0-0-0_05 rounded-4px px-6px py-2px uppercase"
+        className="self-start text-sm text-tertiary bg-surface-100 rounded-4px px-6px py-2px uppercase"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
       >
         {mime}
@@ -156,7 +156,7 @@ function FileCard({ name, mime }: { name: string; mime: string }) {
 function ImagePreview({ src, alt }: { src: string; alt?: string }) {
   return (
     <div
-      className="rounded-8px overflow-hidden border border-cd3d3d3"
+      className="rounded-8px overflow-hidden border border-strong"
       style={{ width: 140, height: 140 }}
     >
       <img src={src} alt={alt ?? ""} className="w-full h-full object-cover" />
