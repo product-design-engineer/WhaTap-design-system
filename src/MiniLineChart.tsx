@@ -186,7 +186,7 @@ export default function MiniLineChart({
             top: PAD_TOP_PX,
             height: PLOT_H_PX,
             width: 0,
-            borderLeft: "0.8px dashed #222",
+            borderLeft: "0.8px dashed var(--color-text-primary)",
             opacity: 0.5,
           }}
         />

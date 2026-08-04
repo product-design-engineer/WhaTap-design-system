@@ -3,6 +3,23 @@ import { withThemeByClassName } from '@storybook/addon-themes';
 // No-Tailwind 내재화 CSS — 토큰(:root) + 유틸리티 클래스 + 키프레임 자체완결.
 // Tailwind 런타임 의존 0%. 소비자도 이 파일을 import.
 import '../src/whatap-ds.css';
+import { enableDsPolicyGuard } from '../src/devPolicyGuard';
+
+/**
+ * DS 정책 위반 런타임 가드 — 카탈로그를 보는 동안 위반이 빨간 outline + 배지로 드러난다.
+ * CI 게이트(`npm run lint:tokens`)가 잡지 못하는 런타임 상태(카드 없는 본문 블록,
+ * page·card 동일색, 3층 중첩)를 화면에서 즉시 인지시키는 것이 목적.
+ *
+ * ⚠️ **자동화 컨텍스트에서는 끈다.** 가드가 DOM(`data-ds-violation`)과 화면(outline·배지)을
+ * 바꾸므로, 켠 채로 두면 vitest 스토리 테스트가 실패하고 시각 스냅샷에 경보가 찍힌다.
+ *   - vitest 브라우저 러너: `__vitest_browser__` 감지
+ *   - 시각 스냅샷(scripts/visual-snap.mjs): URL 에 `dsGuard=off`
+ */
+if (typeof window !== 'undefined') {
+  const off = new URLSearchParams(window.location.search).get('dsGuard') === 'off';
+  const underTest = Boolean((globalThis as Record<string, unknown>).__vitest_browser__);
+  if (!off && !underTest) enableDsPolicyGuard();
+}
 
 /**
  * Storybook 10 preview — 모든 story 에 공통 적용되는 parameters / decorators.

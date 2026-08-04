@@ -56,7 +56,8 @@ const page = await ctx.newPage();
 let failed = 0, updated = 0, passed = 0;
 for (const { id, theme } of SHOTS) {
   const name = `${id}__${theme}`;
-  const url = `${BASE}/iframe.html?id=${id}&globals=theme:${theme}`;
+  // dsGuard=off — 정책 가드의 빨간 outline·배지가 스냅샷에 찍히지 않게 끈다.
+  const url = `${BASE}/iframe.html?id=${id}&globals=theme:${theme}&dsGuard=off`;
   try {
     await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
     await page.addStyleTag({ content: STABILIZE });

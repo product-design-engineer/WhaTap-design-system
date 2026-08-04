@@ -133,3 +133,7 @@ export { default as SettingsIcon } from "./icons/SettingsIcon";
 
 // Widget tokens / primitives / message cards
 export * from "./widget";
+
+/** 개발 전용 정책 가드 — 위반 요소에 outline·배지 표시. 프로덕션에서는 호출하지 않으면 된다. */
+export { enableDsPolicyGuard } from "./devPolicyGuard";
+export type { DsPolicyRule, DsPolicyGuardOptions } from "./devPolicyGuard";

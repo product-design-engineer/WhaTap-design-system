@@ -14,6 +14,9 @@
  *   2. `// raw-color-ok: <이유>`    — 같은 줄 또는 바로 윗줄에 사유를 남긴 경우.
  *                                     정당한 용도는 사실상 "컬러 위 흰색 전경" 하나뿐.
  *   3. 베이스라인에 등록된 기존 위반 — scripts/raw-color-baseline.json
+ *   4. `var(--token, #fallback)`     — 토큰이 단일 출처이고 hex 는 CSS 미로드 시 폴백.
+ *                                     토큰 우회가 아니므로 위반 아님.
+ *   5. 주석 안의 hex                 — 설명·TODO 문구. 런타임 색이 아니다.
  *
  * 베이스라인은 **동결선**이다. 신규 위반은 즉시 error(exit 1), 기존 위반은
  * 줄여나가되 늘릴 수 없다. 파일별 건수만 기록해 리팩터링(줄 이동)에 견딘다.
@@ -39,6 +42,27 @@ const HEX = /#[0-9a-fA-F]{3,8}\b/g;
 const RGB = /\brgba?\(\s*[\d.]/g;
 const UTIL = /\b(?:bg|text|border|fill|stroke)-(?:white|black)\b/g;
 const IGNORE = /raw-color-ok:/;
+
+/**
+ * 검사 대상만 남긴다 — 토큰 폴백과 주석은 정책 위반이 아니므로 제거.
+ *
+ * `var(--x, #hex)` 는 토큰이 단일 출처이고 hex 는 CSS 미로드 시 폴백이므로 우회가 아니다.
+ * 주석의 hex 는 런타임 색이 아니라 설명 문구다. 둘을 지운 뒤 남은 것만 리터럴로 센다.
+ */
+function strippable(line) {
+  let s = line;
+  // var(--token, #fallback) — 중첩 var() 대응을 위해 안쪽부터 반복 제거
+  for (let prev; prev !== s; ) {
+    prev = s;
+    s = s.replace(/var\([^()]*\)/g, "");
+  }
+  // 줄 주석 · 블록 주석 조각 · JSDoc 본문(` * …`)
+  s = s.replace(/\/\*[^*]*\*+(?:[^/*][^*]*\*+)*\//g, "");
+  s = s.replace(/\/\/.*$/, "");
+  s = s.replace(/^\s*\*.*$/, "");
+  s = s.replace(/\/\*.*$/, "");
+  return s;
+}
 
 /** 위반 1건이 왜 위반인지, 무엇으로 바꿔야 하는지 알려주는 힌트. */
 const HINTS = [
@@ -82,9 +106,10 @@ function scan() {
       // 같은 줄 또는 바로 윗줄의 사유 주석이면 면제
       if (IGNORE.test(line) || (i > 0 && IGNORE.test(lines[i - 1]))) return;
 
+      const scanned = strippable(line);
       for (const re of [HEX, RGB, UTIL]) {
         re.lastIndex = 0;
-        for (const m of line.matchAll(re)) {
+        for (const m of scanned.matchAll(re)) {
           const value = m[0].replace(/\(\s*[\d.]$/, "(");
           violations.push({ file: rel, line: i + 1, value, text: line.trim().slice(0, 100) });
         }

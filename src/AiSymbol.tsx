@@ -49,7 +49,7 @@ export default function AiSymbol({
       <defs>
         <linearGradient id={id} x1="50" y1="50" x2="260" y2="260" gradientUnits="userSpaceOnUse">
           <stop stopColor="#004BE0" />
-          <stop offset="1" stopColor="#8B52FF" />
+          <stop offset="1" stopColor="var(--color-whatap-purple)" />
         </linearGradient>
       </defs>
     </svg>
