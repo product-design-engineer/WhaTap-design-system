@@ -83,6 +83,16 @@ colors:
   tone-surface-muted:        "#f1f2f4"    # Color
   tone-surface-neutral:      "#f1f2f4"    # Color
 
+  # Tone Text (tone-surface 위 라벨 텍스트)
+  #  indicator-* 는 도트·스트로크·차트 강조선용 고채도 색이라 tone-surface 위
+  #  텍스트로 쓰면 WCAG AA 4.5:1 에 못 미친다. 텍스트 전경은 이 토큰을 쓴다.
+  #  (contrast-ratio 룰이 error 로 검사 — tone-surface-* 대비 4.5:1 이상)
+  tone-text-critical:        "#B5302A"    # Color
+  tone-text-warning:         "#8A6200"    # Color
+  tone-text-info:            "#1B5CD9"    # Color
+  tone-text-muted:           "#6E6E6E"    # Color
+  tone-text-neutral:         "#6E6E6E"    # Color
+
   # AI Gradient
   ai-gradient-blue:          "#004BE0"    # Color
   ai-gradient-purple:        "#8B52FF"    # Color
@@ -459,19 +469,19 @@ components:
   # ── AiToneBadge ──
   ai-tone-badge-critical:
     backgroundColor:      "{colors.tone-surface-critical}"  # Reference
-    textColor:            "{colors.indicator-critical}"     # Reference
+    textColor:            "{colors.tone-text-critical}"     # Reference
 
   ai-tone-badge-warning:
     backgroundColor:      "{colors.tone-surface-warning}"   # Reference
-    textColor:            "{colors.indicator-warning}"      # Reference
+    textColor:            "{colors.tone-text-warning}"      # Reference
 
   ai-tone-badge-info:
     backgroundColor:      "{colors.tone-surface-info}"      # Reference
-    textColor:            "{colors.indicator-info}"         # Reference
+    textColor:            "{colors.tone-text-info}"         # Reference
 
   ai-tone-badge-muted:
     backgroundColor:      "{colors.tone-surface-muted}"     # Reference
-    textColor:            "{colors.indicator-muted}"        # Reference
+    textColor:            "{colors.tone-text-muted}"        # Reference
 
 ---
 

@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: Lint, test, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # DESIGN.md 구조 · 깨진 토큰 참조 · WCAG 대비비. error 가 있으면 여기서 멈춘다.
+      - name: Lint DESIGN.md
+        run: pnpm lint:design
+
+      # 스토리 폴더와 title prefix 정합성.
+      - name: Check story catalog
+        run: pnpm check:catalog
+
+      # tokens.css → 생성 산출물. Storybook/Vitest 가 이 결과를 읽는다.
+      - name: Build design artifacts
+        run: pnpm build:design
+
+      # vitest 가 storybookTest 로 스토리를 실제 chromium 에서 렌더한다.
+      - name: Install Playwright chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build library
+        run: pnpm build:lib
+
+      - name: Build Storybook
+        run: pnpm build-storybook
+
+      - name: Upload Storybook artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook-static
+          path: storybook-static
+          retention-days: 7

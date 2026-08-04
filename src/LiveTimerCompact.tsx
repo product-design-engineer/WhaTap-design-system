@@ -32,7 +32,8 @@
  * - 옵션바 전체 행 구성 → [[OptionbarPage]].
  *
  * ## Composition rules
- * - 높이 32px 고정, pause(좌)·timer(우) 가 chained 보더로 한 알약처럼 붙음.
+ * - 높이는 `size` 로 결정 — `sm`(24px, **기본**) / `md`(32px). pause(좌)·timer(우) 가 chained 보더로 한 알약처럼 붙음.
+ * - `sm` 은 아이콘 16px · LIVE `text-sm` · 시각 `text-md` · 알약 14px 로 함께 내려가 32px 과 같은 비율을 유지.
  * - `durationLabel` 만 있으면 캘린더 자리에 #00B543 알약 표시. `showCalendar` 로
  *   캘린더 아이콘을 명시 제어(default: durationLabel 없을 때만 true).
  * - 색은 토큰(var(--color-status-success) 등) — LIVE 텍스트·progress fill 라이브 값 유지.
@@ -41,9 +42,43 @@
  * ```tsx
  * <LiveTimerCompact paused={paused} onTogglePause={togglePause} durationLabel="10분" />
  * <LiveTimerCompact time="12:01:35" refreshIntervalMs={3000} showCalendar onOpenCalendar={open} />
+ * <LiveTimerCompact size="sm" durationLabel="10분" />   // 24px — 40px 보조 행·컴팩트 옵션바
  * ```
  */
 import { useEffect, useRef, useState } from "react";
+
+export type LiveTimerCompactSize = "sm" | "md";
+
+/**
+ * 사이즈 스펙 — md(32px) 는 기존 값 verbatim, sm(24px) 은 한 단계 아래.
+ * 높이·아이콘·타이포·알약을 함께 내려 32px 대비 시각 비율을 유지한다.
+ */
+const SIZE = {
+  md: {
+    box: 32,
+    padding: 8,
+    icon: 20,
+    gap: "gap-6px",
+    live: "text-base",
+    liveLeading: "leading-px-16",
+    clock: "text-lg",
+    pill: 16,
+    pillFont: "var(--text-sm)",
+    calendar: 16,
+  },
+  sm: {
+    box: 24,
+    padding: 4,
+    icon: 16,
+    gap: "gap-4px",
+    live: "text-sm",
+    liveLeading: "leading-none",
+    clock: "text-md",
+    pill: 14,
+    pillFont: "var(--text-xs)",
+    calendar: 14,
+  },
+} as const;
 
 export default function LiveTimerCompact({
   /** 시계 표시 문자열. 미지정 시 시스템 시각으로 자동 갱신. */
@@ -58,6 +93,8 @@ export default function LiveTimerCompact({
   durationLabel,
   /** 캘린더 아이콘 표시 여부 (default: durationLabel 이 없을 때만 true). */
   showCalendar,
+  /** 사이즈 — sm(24px, **기본**) / md(32px). */
+  size = "sm",
 }: {
   time?: string;
   paused?: boolean;
@@ -66,7 +103,9 @@ export default function LiveTimerCompact({
   onOpenCalendar?: () => void;
   durationLabel?: string;
   showCalendar?: boolean;
+  size?: LiveTimerCompactSize;
 }) {
+  const spec = SIZE[size];
   const calendarVisible = showCalendar ?? !durationLabel;
   const [now, setNow] = useState(() => new Date());
   const [progress, setProgress] = useState(0);
@@ -98,7 +137,7 @@ export default function LiveTimerCompact({
       .join(":");
 
   return (
-    <div className="flex shrink-0" style={{ height: 32 }}>
+    <div className="flex shrink-0" style={{ height: spec.box }}>
       {/* Pause/play — 좌측 chained 보더 (top/left/bottom only) */}
       <div
         role="button"
@@ -113,8 +152,8 @@ export default function LiveTimerCompact({
         aria-label={paused ? "재생" : "일시정지"}
         className="flex items-center justify-center bg-card cursor-pointer"
         style={{
-          width: 32,
-          height: 32,
+          width: spec.box,
+          height: spec.box,
           borderTop: "1px solid rgb(173, 173, 173)",
           borderLeft: "1px solid rgb(173, 173, 173)",
           borderBottom: "1px solid rgb(173, 173, 173)",
@@ -122,11 +161,11 @@ export default function LiveTimerCompact({
         }}
       >
         {paused ? (
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <svg width={spec.icon} height={spec.icon} viewBox="0 0 20 20" fill="none">
             <path d="M6 4l10 6-10 6V4z" fill="var(--color-status-success)" />
           </svg>
         ) : (
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <svg width={spec.icon} height={spec.icon} viewBox="0 0 20 20" fill="none">
             <rect x="6" y="3" width="2.5" height="14" rx="0.5" fill="var(--color-status-success)" />
             <rect x="11.5" y="3" width="2.5" height="14" rx="0.5" fill="var(--color-status-success)" />
           </svg>
@@ -137,8 +176,8 @@ export default function LiveTimerCompact({
       <div
         className="flex flex-col justify-center bg-card relative overflow-hidden"
         style={{
-          height: 32,
-          padding: 8,
+          height: spec.box,
+          padding: spec.padding,
           border: "1px solid rgb(173, 173, 173)",
           borderRadius: "0px 4px 4px 0px",
         }}
@@ -153,15 +192,15 @@ export default function LiveTimerCompact({
             transition: "width 16ms linear",
           }}
         />
-        <div className="flex items-center gap-6px relative">
+        <div className={`flex items-center ${spec.gap} relative`}>
           <span
-            className="text-base font-medium text-status-success leading-px-16 whitespace-nowrap"
+            className={`${spec.live} ${spec.liveLeading} font-medium text-status-success whitespace-nowrap`}
             style={{ fontFamily: "var(--font-family-numeric)" }}
           >
             LIVE
           </span>
           <span
-            className="text-lg font-bold text-primary leading-none tracking-metric whitespace-nowrap"
+            className={`${spec.clock} font-bold text-primary leading-none tracking-metric whitespace-nowrap`}
             style={{ fontFamily: "var(--font-family-numeric)" }}
           >
             {display}
@@ -171,9 +210,9 @@ export default function LiveTimerCompact({
               className="inline-flex items-center justify-center px-5px rounded-2px text-white whitespace-nowrap shrink-0"
               style={{
                 background: "#00B543",
-                height: 16,
+                height: spec.pill,
                 fontFamily: "var(--font-family-numeric)",
-                fontSize: "var(--text-sm)",
+                fontSize: spec.pillFont,
                 fontWeight: "var(--font-weight-bold)",
                 lineHeight: 1,
               }}
@@ -183,8 +222,8 @@ export default function LiveTimerCompact({
           )}
           {calendarVisible && (
             <svg
-              width="16"
-              height="16"
+              width={spec.calendar}
+              height={spec.calendar}
               viewBox="0 0 16 16"
               fill="none"
               className="shrink-0 cursor-pointer"

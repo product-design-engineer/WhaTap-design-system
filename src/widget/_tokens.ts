@@ -129,6 +129,35 @@ export const tokens = {
       },
     },
     /**
+     * tone.surface 위에 올리는 라벨 텍스트 색.
+     *
+     * indicator 는 도트·스트로크용 고채도 색이라 같은 톤 surface 위 텍스트로 쓰면
+     * WCAG AA 4.5:1 에 못 미친다 (warning 은 1.75:1). 배지·칩 라벨은 이 토큰을 쓴다.
+     * design-lint 의 contrast-ratio 룰이 error 로 검사한다.
+     */
+    toneText: {
+      critical: {
+        value: "#B5302A",
+        description: "Critical 톤 라벨 텍스트 — tone.surface.critical 대비 5.25:1.",
+      },
+      warning: {
+        value: "#8A6200",
+        description: "Warning 톤 라벨 텍스트 — tone.surface.warning 대비 5.13:1.",
+      },
+      info: {
+        value: "#1B5CD9",
+        description: "Info 톤 라벨 텍스트 — tone.surface.info 대비 5.26:1. brand-blue-deep 과 동일값.",
+      },
+      muted: {
+        value: "#6E6E6E",
+        description: "Muted 톤 라벨 텍스트 — tone.surface.muted 대비 4.55:1.",
+      },
+      neutral: {
+        value: "#6E6E6E",
+        description: "Neutral 톤 라벨 텍스트 — tone.surface.neutral 대비 4.55:1.",
+      },
+    },
+    /**
      * 텍스트 색 hierarchy — 시각적 위계 4 단계.
      *
      * 본문 텍스트가 가장 흔하므로 primary 가 다른 색보다 압도적으로 많이 쓰임 (154 회).

@@ -123,6 +123,30 @@ tokens.font.weight.bold.value     // 700 — 강한 강조 (Caption · SectionHe
 | 큰 metric 숫자 (₩, %, count) | `numeric` | AiMigPlan total · KPI 카드 |
 | ISO date · hex 색상 코드 | `numeric` | 한국어 텍스트와 시각 구분 |
 
+## Spacing / Sizing Scale
+
+`--space-*` — 4px 그리드 기반 치수(width/height/gap/padding) 스케일. 색·타이포처럼 **단일 출처**를 두어, 유틸(`h-*`/`w-*`/`size-*`)이 점진적으로 `var(--space-*)` 를 참조. 네이밍은 Tailwind 정렬 — `--space-N` = 4px × N.
+
+| 토큰 | 값 | 대표 용도(illustrative) |
+|---|---:|---|
+| `--space-0` | 0 | 리셋 · gap 제거 |
+| `--space-1` | 4px | 최소 gap (아이콘-라벨) |
+| `--space-2` | 8px | 컴팩트 padding · 아이템 gap |
+| `--space-3` | 12px | 카드 내부 padding |
+| `--space-4` | 16px | 본문 콘텐츠 상·하 여백 |
+| `--space-5` | 20px | 중간 여백 |
+| `--space-6` | 24px | 큰 여백 · 제품 아이콘 크기 |
+| `--space-7` | 28px | 프로젝트 그룹 행 등 |
+| `--space-8` | 32px | **행 높이 표준** — 제품 레일 · 메뉴 행 · 하단 유틸 (`h-32px` 바인딩) ⭐ |
+| `--space-9` | 36px | — |
+| `--space-10` | 40px | 레일 폭 · 아이콘 칸 (`w-40px` 바인딩) · 조직/프로젝트 스위처 높이 · 서브헤더 행 |
+| `--space-11` | 44px | — (프로젝트 스위처가 40px 로 통일되며 용도 해제) |
+| `--space-12` | 48px | 헤더 · 로고 헤더 높이 |
+
+- **테마 무관** — `.dark` 오버라이드 없음 (타이포 스케일과 동일).
+- **바인딩 현황(점진 채택):** `h-32px → --space-8`, `w-40px → --space-10` 만 토큰 바인딩. 나머지 `h-*`/`w-*`/`size-*` 유틸은 아직 raw px — 필요 시 순차 바인딩.
+- 소스 오브 트루스: `src/tokens.css` → `src/whatap-ds.css` `:root` 동기화. (`src/widget/_tokens.ts` TS 미러는 미반영 — 필요 시 추가.)
+
 ## Text Color Hierarchy
 
 `tokens.color.text.*` — 텍스트 시각 위계 4 단계.

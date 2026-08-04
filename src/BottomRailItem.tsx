@@ -21,6 +21,7 @@
  * - 아이콘 파일명(`name`)만 주입 — 칸 크기(40px×32px)/hover 는 이 컴포넌트가 책임.
  * - hover 는 토큰 (`hover-bg-surface-100`) — 인라인 hex 금지.
  * - 아이콘은 표준 경로(`/icons/*`).
+ * - `label` 주입 시 액션 이름을 [[Tooltip]](placement right, portal 이라 잘림 없음)으로 노출.
  * - active 강조 없음 (ProductRailItem 과 차이) — 유틸 액션은 토글 상태가 아니라 즉시 실행.
  *
  * @example
@@ -31,23 +32,36 @@
  * ```
  */
 
+import Tooltip from "./Tooltip";
+
 const icon = (name: string) => `/icons/${name}`;
 
 export default function BottomRailItem({
   name,
+  label,
   onClick,
 }: {
   /** 유틸 아이콘 파일명 (e.g. "bottom-theme.svg"). 표준 경로(`/icons/*`)로 참조. */
   name: string;
+  /** 액션 이름 — 아이콘 전용 칸이라 hover 시 [[Tooltip]] 으로 노출. 미지정 시 툴팁 없음. */
+  label?: string;
   /** 클릭 핸들러. 미지정 시 정적. */
   onClick?: () => void;
 }) {
-  return (
+  const cell = (
     <div
       onClick={onClick}
       className="flex h-32px items-center justify-center shrink-0 w-40px cursor-pointer hover-bg-surface-100"
     >
-      <img alt="" className="size-20px" src={icon(name)} />
+      <img alt={label ?? ""} className="size-20px" src={icon(name)} />
     </div>
+  );
+
+  return label ? (
+    <Tooltip content={label} placement="right">
+      {cell}
+    </Tooltip>
+  ) : (
+    cell
   );
 }

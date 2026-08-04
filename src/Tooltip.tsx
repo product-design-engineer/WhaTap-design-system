@@ -16,10 +16,14 @@
  * - 모달 같은 무거운 컨테이너 → `Modal`
  *
  * ## Composition rules
- * - 토큰만 — bg는 #1E1E1E (text-strong) 톤, fg는 #FFF (시인성)
+ * - 토큰만 — bg `--color-text-strong` · fg `--color-bg` (테마 반전 대비) · 그림자 `--shadow-sm`. 리터럴 금지.
  * - 트리거는 children 한 개. 키보드(`Tab` focus + `Escape`) 지원
  * - 4 방향(top/right/bottom/left) — top default
  * - delay (hover 200ms / focus 즉시) 으로 spam 방지
+ * - 패널은 `createPortal` + `position: fixed` — 트리거 조상의 `overflow: hidden`
+ *   (예: [[Sidebar]] Min 모드)에 잘리지 않음. 좌표는 열릴 때 트리거 rect 로 계산,
+ *   스크롤/리사이즈 시 재계산.
+ * - 트리거가 행처럼 폭을 채워야 하면 `block` — 래퍼가 `flex + width:100%` 로 전환.
  *
  * @example
  * ```tsx
@@ -37,11 +41,13 @@ import {
   isValidElement,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   type ReactElement,
   type ReactNode,
 } from "react";
+import { createPortal } from "react-dom";
 
 export type TooltipPlacement = "top" | "right" | "bottom" | "left";
 
@@ -58,9 +64,25 @@ export type TooltipProps = {
   open?: boolean;
   /** 비활성 — disabled tooltip 일 때. */
   disabled?: boolean;
+  /** 트리거가 폭을 채우는 행(row)일 때 — 래퍼를 `flex + width:100%` 로 전환. default false(inline). */
+  block?: boolean;
 };
 
 const OFFSET_PX = 6;
+
+/** 트리거 rect 기준 fixed 좌표 — portal 패널이 조상 overflow 에 잘리지 않게 viewport 기준 배치. */
+function fixedPosition(rect: DOMRect, placement: TooltipPlacement): React.CSSProperties {
+  switch (placement) {
+    case "top":
+      return { top: rect.top - OFFSET_PX, left: rect.left + rect.width / 2, transform: "translate(-50%, -100%)" };
+    case "bottom":
+      return { top: rect.bottom + OFFSET_PX, left: rect.left + rect.width / 2, transform: "translate(-50%, 0)" };
+    case "left":
+      return { top: rect.top + rect.height / 2, left: rect.left - OFFSET_PX, transform: "translate(-100%, -50%)" };
+    case "right":
+      return { top: rect.top + rect.height / 2, left: rect.right + OFFSET_PX, transform: "translate(0, -50%)" };
+  }
+}
 
 export default function Tooltip({
   content,
@@ -69,13 +91,32 @@ export default function Tooltip({
   hoverDelayMs = 200,
   open: forcedOpen,
   disabled = false,
+  block = false,
 }: TooltipProps) {
   const id = useId();
   const [visible, setVisible] = useState(false);
   const timerRef = useRef<number | undefined>(undefined);
+  const wrapperRef = useRef<HTMLSpanElement>(null);
+  const [pos, setPos] = useState<React.CSSProperties | null>(null);
   const isOpen = forcedOpen ?? visible;
 
   useEffect(() => () => window.clearTimeout(timerRef.current), []);
+
+  // 열릴 때 트리거 rect 로 fixed 좌표 계산 — 스크롤/리사이즈 동안 추적
+  useLayoutEffect(() => {
+    if (!isOpen || disabled) return;
+    const update = () => {
+      const rect = wrapperRef.current?.getBoundingClientRect();
+      if (rect) setPos(fixedPosition(rect, placement));
+    };
+    update();
+    window.addEventListener("scroll", update, true);
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update, true);
+      window.removeEventListener("resize", update);
+    };
+  }, [isOpen, disabled, placement]);
 
   // Escape 시 닫기
   useEffect(() => {
@@ -127,55 +168,40 @@ export default function Tooltip({
     },
   } as Record<string, unknown>);
 
-  // wrapper: position 컨테이너
-  const wrapperStyle: React.CSSProperties = { position: "relative", display: "inline-flex" };
+  // wrapper: 트리거 rect 측정 기준. block 이면 행(row) 트리거가 폭을 채우도록 flex 전환.
+  const wrapperStyle: React.CSSProperties = block
+    ? { display: "flex", width: "100%" }
+    : { display: "inline-flex" };
 
-  // panel placement
+  // panel: portal + fixed — 조상 overflow-hidden(예: Sidebar Min)에 잘리지 않음.
+  // 색·그림자·타이포 전부 토큰 binding — 리터럴 금지.
+  const showPanel = isOpen && !disabled && pos !== null;
   const panelStyle: React.CSSProperties = {
-    position: "absolute",
+    position: "fixed",
+    ...(pos ?? { top: -9999, left: -9999 }),
     zIndex: 50,
     pointerEvents: "none",
     whiteSpace: "nowrap",
     backgroundColor: "var(--color-text-strong)",
-    color: "#fff",
+    color: "var(--color-bg)",
     borderRadius: 4,
     padding: "4px 8px",
     fontSize: "var(--text-sm)",
     lineHeight: "var(--leading-snug)",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-    opacity: isOpen && !disabled ? 1 : 0,
+    boxShadow: "var(--shadow-sm)",
+    opacity: showPanel ? 1 : 0,
     transition: "opacity 120ms",
   };
 
-  switch (placement) {
-    case "top":
-      panelStyle.bottom = `calc(100% + ${OFFSET_PX}px)`;
-      panelStyle.left = "50%";
-      panelStyle.transform = "translateX(-50%)";
-      break;
-    case "bottom":
-      panelStyle.top = `calc(100% + ${OFFSET_PX}px)`;
-      panelStyle.left = "50%";
-      panelStyle.transform = "translateX(-50%)";
-      break;
-    case "left":
-      panelStyle.right = `calc(100% + ${OFFSET_PX}px)`;
-      panelStyle.top = "50%";
-      panelStyle.transform = "translateY(-50%)";
-      break;
-    case "right":
-      panelStyle.left = `calc(100% + ${OFFSET_PX}px)`;
-      panelStyle.top = "50%";
-      panelStyle.transform = "translateY(-50%)";
-      break;
-  }
-
   return (
-    <span style={wrapperStyle}>
+    <span ref={wrapperRef} style={wrapperStyle}>
       {enhancedTrigger}
-      <span id={id} role="tooltip" style={panelStyle} aria-hidden={!isOpen}>
-        {content}
-      </span>
+      {createPortal(
+        <span id={id} role="tooltip" style={panelStyle} aria-hidden={!isOpen}>
+          {content}
+        </span>,
+        document.body,
+      )}
     </span>
   );
 }

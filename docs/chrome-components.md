@@ -84,13 +84,27 @@ export type OrgContext = { label: string; icon?: string; badge?: string }; // ba
 
 ## SubHeaderBar
 
-페이지 헤더(48px) 아래 **고정 40px** 보조 네비 행. 뒤로가기·브레드크럼·보조 액션 컨테이너. 사이드바 조직 스위처(40px)와 동일 높이라 좌/우 컬럼 2행이 정렬됩니다(헤더 48 → 보조 40 chrome 스케일).
+페이지 헤더(48px) 아래 **고정 40px** 보조 네비 행. 뒤로가기·브레드크럼·모드 탭·보조 액션 컨테이너. 사이드바 조직 스위처(40px)와 동일 높이라 좌/우 컬럼 2행이 정렬됩니다(헤더 48 → 보조 40 chrome 스케일).
+
+**슬롯 3개 전부 optional** — 환경에 따라 있는 것만 렌더됩니다.
 
 | Prop | Type | Default | 설명 |
 |---|---|---|---|
-| `children` | `ReactNode` | — | 좌측 내용 — 백 버튼(`<Button variant="basic" size="md">`) + 브레드크럼 |
+| `left` | `ReactNode` | — | 좌측 슬롯 — 백 버튼(`<Button variant="basic" size="md">`)·브레드크럼·모드 `Tabs` |
+| `children` | `ReactNode` | — | `left` 별칭(기존 사용처 호환). 둘 다 주면 `left` 우선 |
+| `center` | `ReactNode` | — | 가운데 슬롯 — 남는 폭을 차지하며 중앙 정렬(선택) |
 | `right` | `ReactNode` | — | 우측 정렬 보조 액션(선택) |
 | `className` | `string` | `""` | 루트 바 className 병합 |
+
+```tsx
+// 대시보드 모드 행 — 좌: 모드 탭 / 우: LIVE 타이머 + 툴바 아이콘
+<SubHeaderBar
+  left={<Tabs variant="large" items={MODES} value={mode} onChange={setMode} aria-label="대시보드 모드" />}
+  right={<><LiveTimerCompact durationLabel="30분" /><ToolbarIconButton icon={PRINT_ICON} label="인쇄" tooltipPlacement="bottom" /></>}
+/>
+```
+
+슬롯 내용은 **등록 컴포넌트 조합으로** — `Tabs` · `LiveTimerCompact` · `ToolbarIconButton` · `Button`. 반복/의미 구조를 인라인 JSX 로 짜지 않습니다. 좌우 padding 은 `--wds-header-px` 토큰 고정(헤더·사이드바와 세로 정렬).
 
 **높이 정책:** `h-[40px] box-border` 고정 — padding/border 가 높이를 부풀리지 않음. 페이지에서 `px py border-b` inline `<div>` 로 보조 행을 **재구현 금지**, 본 컴포넌트로 조립. (조직 스위처 40px 와 행 정렬 보장)
 
@@ -154,7 +168,7 @@ inline prompt 는 `max-w-[480px]` cap — 우측 chrome (고객지원·bell·ava
 
 ## OptionbarPage
 
-옵션바 통합 헤더 (PageHeader 바로 아래에 배치). 시간/인스턴스/DB/프리셋 + NewVersion 버튼.
+옵션바 통합 헤더 (PageHeader 바로 아래에 배치). 시간/인스턴스/DB/프리셋.
 
 | Prop | Type | Default |
 |---|---|---|
@@ -165,9 +179,11 @@ inline prompt 는 `max-w-[480px]` cap — 우측 chrome (고객지원·bell·ava
 | `instanceLabel` | `string` | `"DMX-3-12-949"` |
 | `instanceStatus` | `InstanceStatus` | `"ok"` |
 | `databaseLabel` | `string` | `"ORA11K"` |
-| `newVersionHref` | `string` | `"#"` |
-| `newVersionLabel` | `string` | `"신규 버전"` |
 | `presetLabel` | `string` | `"Default"` |
+| `layout` | `"inline" \| "stack"` | `"inline"` | 항목 배치 — `inline`(**기본**): 타이틀을 값 좌측에 나란히 + **행 높이 40px 고정** / `stack`: 타이틀 위·값 아래(`box-border` + `minHeight:40`, `size` 와 무관). 각 `OptionbarItem` 에 그대로 전달됨 |
+| `size` | `OptionbarSize` (`"sm" \| "md"`) | `"sm"` | 행 chrome 높이 — `sm` 24px(기본) / `md` 32px. `LiveTimerCompact` · `OptionbarInstanceSelector` · `OptionbarValueDisplay` · `PresetSelect` 에 일괄 전달되어 baseline 이 어긋나지 않음 |
+
+**24px(`sm`) 이 기본선:** 옵션바 컨트롤 4종(`OptionbarInstanceSelector` · `OptionbarValueDisplay` · `PresetSelect`) + `LiveTimerCompact` 는 모두 **기본 `size="sm"`(24px)**, `md`(32px) 는 세로 공간이 넉넉한 자리에서 명시적으로 올려 씁니다. 행 컨테이너 높이는 `size` 와 무관하게 40px 고정이며, 한 행에서는 **같은 size 로 통일**합니다.
 
 내부적으로 `OptionbarInstanceSelector` + `LiveTimerCompact` + `PresetSelect`를 조합합니다. 보통은 이 컴포넌트 하나만 쓰면 충분하고, 옵션바를 세부 커스터마이즈해야 할 때만 하위 셋을 직접 import 합니다.
 
@@ -501,9 +517,18 @@ const { aiActive, setAiActive, lastPrompt } = useWhaTapAi();
 - AI 위젯을 켤 때 **`DashboardLayout`의 `widgetOpen` prop** 한 곳으로 사이드바 축소 트리거 ([patterns.md](./patterns.md#2-sidebar-collapse-on-widget-open))
 - `DataTable`의 `align` / `numeric`을 명시 — 휴리스틱에 의존하지 말기
 - `MiniLineChart` 등 SVG 안의 `fontSize`에 반드시 `"px"` 붙이기
+- **옵션바는 기본값 그대로 쓰기** — `layout="inline"` + `size="sm"`(24px). 값을 바꿔야 할 이유가 있을 때만 명시
+- **한 행 안에서는 `size` 를 하나로 통일** — 행 단위로 `OptionbarPage size` 를 주면 하위 4종에 일괄 전달됨
+- 40px 라인을 쓰는 보조 행(`SubHeaderBar` · 사이드바 조직/프로젝트 스위처 · inline 옵션바)은 **컴포넌트로 조립** — 높이는 컨테이너가 고정하고 안의 컨트롤은 `size` 로만 조절
+- 읽기 전용 값을 시각적으로 구분해야 하면 `OptionbarValueDisplay display="chip"` — **무채색(neutral·soft) 고정**
 
 ❌ **Don't**
 
 - 페이지 별로 사이드바를 직접 import해서 다르게 렌더 — `DashboardLayout`에 prop으로 전달
 - AI 위젯이 열렸다고 PageHeader 일부를 hide — 절대 금지 ([patterns.md](./patterns.md#1-page-header-invariant))
 - `Stage` 컴포넌트를 실서비스 페이지에 사용 — 마케팅 데모 전용
+- 한 행에서 **컨트롤마다 다른 `size`** 를 주기 — baseline 이 어긋난다(LIVE 타이머만 24px, 셀렉터는 32px 같은 조합 금지)
+- 행 높이를 **padding 으로 만들기** — `size` 를 내리면 행까지 같이 줄어든다. 행은 고정 높이(40px), 안의 컨트롤만 `size` 로 조절
+- `px py border-b` **inline `<div>` 로 보조 행/툴바를 재구현** — `SubHeaderBar` 의 `left`/`center`/`right` 슬롯에 조립
+- 값 표시용 칩에 **상태 톤(primary/warning/critical/success)** 주기 — severity 로 오독된다. 값 칩은 `neutral` 만
+- `Chip` 을 데이터 값 강조에 남용 — `Chip` 의 용도는 severity·카테고리·상태이고, 읽기 전용 값 신호가 필요한 자리에만 `display="chip"` 으로 제한

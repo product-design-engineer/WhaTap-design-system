@@ -16,8 +16,9 @@
  * - 일반 텍스트/검색 입력 → [[TextField]].
  *
  * ## Composition rules
- * - 드롭다운 버튼 폭 `width`(기본 230px) + 32px 정사각 관리 버튼, 4px gap.
- * - 두 버튼 모두 32px height, border-divider + rounded 4 로 옵션바 baseline 통일.
+ * - 드롭다운 버튼 폭 `width`(기본 230px) + 정사각 관리 버튼, 4px gap.
+ * - 두 버튼 높이는 `size` — `sm`(24px, **기본**) / `md`(32px). border-divider + rounded 4 로
+ *   옵션바 baseline 통일 ([[LiveTimerCompact]] · [[OptionbarInstanceSelector]] 와 같은 라인).
  * - 라벨은 korean 폰트 + truncate. 색은 토큰(var(--color-border-divider) 등).
  *
  * @example
@@ -30,33 +31,45 @@
  * ```
  */
 
+export type PresetSelectSize = "sm" | "md";
+
+/** 사이즈 스펙 — md(32px) 는 기존 값 verbatim, sm(24px) 은 한 단계 아래. */
+const SIZE = {
+  md: { h: "h-32px", px: "px-10px", label: "text-md", caret: 14, box: "size-32px", manage: 16 },
+  sm: { h: "h-24px", px: "px-8px",  label: "text-base", caret: 12, box: "size-24px", manage: 14 },
+} as const;
+
 export default function PresetSelect({
   label,
   width = 230,
   onOpenList,
   onManage,
+  size = "sm",
 }: {
   label: string;
   /** dropdown 버튼 너비 (px). 기본 230. */
   width?: number;
   onOpenList?: () => void;
   onManage?: () => void;
+  /** 높이 — sm(24px, **기본**) / md(32px). */
+  size?: PresetSelectSize;
 }) {
+  const spec = SIZE[size];
   return (
     <div className="flex items-center gap-4px">
       <button
         type="button"
         onClick={onOpenList}
-        className="flex items-center justify-between h-32px px-10px bg-card border border-color-var-color-border-divider rounded-4px cursor-pointer hover-bg-surface-100"
+        className={`flex items-center justify-between ${spec.h} ${spec.px} bg-card border border-color-var-color-border-divider rounded-4px cursor-pointer hover-bg-surface-100`}
         style={{ width }}
       >
         <span
-          className="text-md text-primary truncate"
+          className={`${spec.label} text-primary truncate`}
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
         >
           {label}
         </span>
-        <svg width="14" height="14" viewBox="0 0 20 20" fill="var(--color-text-tertiary)">
+        <svg width={spec.caret} height={spec.caret} viewBox="0 0 20 20" fill="var(--color-text-tertiary)">
           <path d="M6.149 7.45L5.08 8.745l5.022 4.705 4.979-4.705-1.028-1.295-3.951 3.73z" />
         </svg>
       </button>
@@ -64,9 +77,9 @@ export default function PresetSelect({
         type="button"
         aria-label="프리셋 관리"
         onClick={onManage}
-        className="flex items-center justify-center size-32px bg-card border border-color-var-color-border-divider rounded-4px cursor-pointer hover-bg-surface-100"
+        className={`flex items-center justify-center ${spec.box} bg-card border border-color-var-color-border-divider rounded-4px cursor-pointer hover-bg-surface-100`}
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-text-tertiary)">
+        <svg width={spec.manage} height={spec.manage} viewBox="0 0 24 24" fill="var(--color-text-tertiary)">
           <path d="M2 22V2h16l4 4.051V22H2zM8 4H4v16h2v-8h12v8h2V6.873L17.164 4H16v4H8V4zm8 10H8v6h8v-6zM14 4h-4v2h4V4z" />
         </svg>
       </button>

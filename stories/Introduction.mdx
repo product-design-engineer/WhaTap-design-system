@@ -56,7 +56,7 @@ Tokens 는 leaf(누구도 import 안 함) · Primitives 는 Tokens 만 · Compos
 
 1. **인라인 색상 리터럴 금지** — `#E53935` 같은 hex 를 컴포넌트에 직접 쓰지 마세요. `tokens.css` 의 `:root` 변수나 `TONE_*` 토큰 참조. 새 톤은 토큰에 먼저 추가.
 2. **위젯 카드는 `<AiCard>` 로 감싼다** — 흰 배경 + 보더 + 8px 라운드 + 12px 패딩 + 진입 애니메이션은 `AiCard` 가 책임. div 를 새로 짜면 톤이 어긋남.
-3. **AI 위젯이 열려도 페이지 헤더는 그대로** — 사이드바는 240→40px 로 축소되지만, 헤더의 title / AI / Docs / 고객지원 / bell / avatar 는 절대 사라지지 않음.
+3. **AI 위젯이 열려도 페이지 헤더는 그대로** — 사이드바는 240→80px (Min) 로 축소되지만, 헤더의 title / AI / Docs / 고객지원 / bell / avatar 는 절대 사라지지 않음.
 4. **차트 텍스트는 단위까지** — SVG 안의 `<text fontSize>` 는 반드시 `"9px"` 처럼 단위를 붙임. 단위 없는 숫자는 viewBox 좌표로 계산되어 화면마다 크기가 달라짐.
 5. **DataTable density 기본 `default`** — header 12px / row 13px. compact (10/11) 는 100+ 행 raw log 한정. 셀 내 inline 폰트는 `text-md`(주) / `text-base`(부) 만 사용.
 

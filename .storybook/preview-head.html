@@ -1,0 +1,34 @@
+<!--
+  Storybook Docs 전용 스타일 — **배포물(src/whatap-ds.css)에 넣지 않는다.**
+  DS tarball 소비자에게 Storybook UI 스타일이 섞이면 안 되므로 preview-head 로만 주입.
+
+  목적: chrome 중심 DS 라 docs 안 프리뷰(SubHeaderBar 모드 행 1080px · OptionbarPage · Shell/Page 프리셋)가
+  Storybook 기본 1000px 컨테이너에서 잘려 가로 스크롤이 생기는 문제 해결.
+
+  하이브리드 방침:
+   - 산문(본문)은 읽기 폭 유지 — 1440px 캡. 한국어 설명 문단이 길어 전폭은 줄 길이가 과해진다.
+   - 스토리 프리뷰 · props 표는 max-width 해제 → 화면 폭을 그대로 사용.
+-->
+<style>
+  /* 본문 컨테이너 — 기본 1000px → 1440px 완화 */
+  .sbdocs.sbdocs-content {
+    max-width: 1440px;
+  }
+
+  /* 스토리 프리뷰 블록 — 전폭 사용(가로 스크롤 제거) */
+  .sbdocs .sbdocs-preview,
+  .sbdocs .docs-story {
+    max-width: none;
+  }
+
+  /* props 표 — 전폭 사용. size/layout 설명 셀의 불필요한 줄바꿈 감소 */
+  .sbdocs .docblock-argstable-body,
+  .sbdocs table.docblock-argstable {
+    max-width: none;
+  }
+
+  /* 넓은 표는 컨테이너 안에서만 스크롤 — 페이지 자체가 가로 스크롤되지 않게 */
+  .sbdocs .docblock-argstable-wrapper {
+    overflow-x: auto;
+  }
+</style>

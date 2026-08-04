@@ -2,9 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import ProductRailItem from "../../src/ProductRailItem";
 
 /**
- * Stories for [[ProductRailItem]] — Sidebar 좌측 40px 제품 레일의 한 항목(40px 정사각).
+ * Stories for [[ProductRailItem]] — Sidebar 좌측 40px 제품 레일의 한 항목(40px 폭 × 32px 높이).
  *
  * default / active(라이트블루 배경) 두 형태를 `name`/`active` 로 제어.
+ * 높이 32px 는 메뉴 행·하단 유틸과 통일(토큰 `--space-8`).
  * 40px 폭 레일 컨테이너로 감싸 실제 사이드바 제품 레일 맥락을 재현.
  */
 const meta: Meta<typeof ProductRailItem> = {

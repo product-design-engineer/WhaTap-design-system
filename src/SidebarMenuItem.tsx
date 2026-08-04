@@ -1,4 +1,5 @@
 import type { MenuItem } from "./Sidebar";
+import Tooltip from "./Tooltip";
 
 /**
  * SidebarMenuItem — Chrome / Foundation. [[Sidebar]] 본문 메뉴 트리의 한 항목(행).
@@ -8,8 +9,10 @@ import type { MenuItem } from "./Sidebar";
  * 세 형태 중 하나로 그린다:
  *   1. **단일 항목** (`children` 없음) — 아이콘 + 라벨 (caret 없음). `active` 면 라이트블루 배경 강조.
  *   2. **확장 항목** (`children` 배열 있음) — 아이콘 + 라벨 + caret(▾, `expanded` 면 180° 회전).
- *   3. **자식 목록** (`expanded` && children.length>0) — 들여쓴 하위 행(28px). `active` 자식은 bold.
- * collapsed(40px) 시 Sidebar 가 메뉴 영역 자체를 숨김 — 이 컴포넌트는 240px 펼침 전용.
+ *   3. **자식 목록** (`expanded` && children.length>0) — 들여쓴 하위 행(28px). `active` 자식은 bold + 라이트블루 배경(`--color-brand-blue-bg`) 강조 — 단일 항목과 동일 규칙.
+ * `iconOnly`(Min/collapsed 사이드바용) 면 라벨·caret·자식 없이 32px 행 중앙에 아이콘만 렌더.
+ * 자신 또는 자식 중 active 가 있으면 라이트블루 배경 강조, 라벨은 [[Tooltip]](placement right,
+ * portal 이라 Sidebar 루트 overflow-hidden 에 잘리지 않음)으로 대체.
  *
  * ## When to use
  * - [[Sidebar]] 가 `menu.map` 으로 항목마다 렌더하는 **기본 용법**. 보통 단독 사용하지 않음.
@@ -17,7 +20,7 @@ import type { MenuItem } from "./Sidebar";
  * - 메뉴 트리 1단계(부모 + children) 렌더 — 이 컴포넌트 하나가 부모 행 + 자식 목록을 모두 담당.
  *
  * ## When NOT to use
- * - **collapsed(40px) 제품 레일 아이콘** → [[ProductRailItem]] (40px 정사각, active 강조).
+ * - **제품 레일 아이콘** → [[ProductRailItem]] (40px 폭 × 32px 높이, active 강조).
  * - **레일 하단 유틸 아이콘** → [[BottomRailItem]] (40px×32px).
  * - **조직/프로젝트 스위처** → [[SidebarOrgSwitcher]] / [[SidebarProjectSwitcher]].
  * - **헤더/탭 등 비-사이드바 네비** → [[PageHeader]] / [[Tabs]] 등 해당 Chrome 컴포넌트.
@@ -25,6 +28,7 @@ import type { MenuItem } from "./Sidebar";
  *
  * ## Composition rules
  * - 데이터(`MenuItem`)만 주입 — 행 외형(높이 32px/28px · 들여쓰기 · active 강조)은 이 컴포넌트가 책임.
+ * - **글자 두께: 기본(비활성)=regular(`--font-weight-regular`), active 만 bold + `text-primary`.** 그룹 부모 라벨도 기본 regular.
  * - 색·배경은 토큰 (`--color-brand-blue-bg` · `text-primary/secondary` · `hover-bg-surface-100`) — 인라인 hex 금지.
  * - 펼침 토글은 데이터(`expanded`)로 제어 — 행 자체는 표현용(상태 비보유). 토글 콜백은 Sidebar 가 관리.
  * - 아이콘은 표준 경로(`/icons/*`).
@@ -40,8 +44,32 @@ const icon = (name: string) => `/icons/${name}`;
 const NOTO_SANS = "'Noto Sans', 'Noto Sans KR', sans-serif";
 const NOTO_LIGHT = "'Noto Sans', sans-serif";
 
-export default function SidebarMenuItem({ item }: { item: MenuItem }) {
+export default function SidebarMenuItem({
+  item,
+  iconOnly = false,
+}: {
+  item: MenuItem;
+  /** Min(collapsed) 사이드바용 — 라벨·caret·자식 숨기고 아이콘만 32px 행 중앙 렌더. 라벨은 [[Tooltip]]. */
+  iconOnly?: boolean;
+}) {
   const hasChildren = Array.isArray(item.children);
+
+  // 아이콘 전용 행 (Min 사이드바) — 자식 active 도 부모 아이콘 강조로 승격.
+  // 라벨은 우측 Tooltip — portal+fixed 라 Sidebar 루트 overflow-hidden 에 안 잘림.
+  if (iconOnly) {
+    const isActive = item.active || item.children?.some((c) => c.active);
+    return (
+      <Tooltip content={item.label} placement="right" block>
+        <div
+          onClick={item.onClick}
+          className="flex h-32px items-center justify-center overflow-clip shrink-0 w-full cursor-pointer hover-bg-surface-100"
+          style={isActive ? { backgroundColor: "var(--color-brand-blue-bg)" } : undefined}
+        >
+          <img alt={item.label} className="size-16px" src={icon(item.icon)} />
+        </div>
+      </Tooltip>
+    );
+  }
 
   // 단일 항목 (펼침/접힘 caret 없음, e.g. "보고서")
   if (!hasChildren) {
@@ -56,8 +84,12 @@ export default function SidebarMenuItem({ item }: { item: MenuItem }) {
         </div>
         <div className="flex gap-4px items-center shrink-0">
           <p
-            className={`text-md font-bold tracking-default whitespace-nowrap leading-none ${item.active ? "text-primary" : "text-secondary"}`}
-            style={{ fontFamily: NOTO_SANS }}
+            className={`text-md tracking-default whitespace-nowrap leading-none ${item.active ? "font-bold text-primary" : "text-secondary"}`}
+            style={
+              item.active
+                ? { fontFamily: NOTO_SANS }
+                : { fontFamily: NOTO_LIGHT, fontWeight: "var(--font-weight-regular)" }
+            }
           >
             {item.label}
           </p>
@@ -76,8 +108,8 @@ export default function SidebarMenuItem({ item }: { item: MenuItem }) {
               <img alt="" className="size-16px" src={icon(item.icon)} />
             </div>
             <p
-              className="text-md font-bold text-secondary tracking-default whitespace-nowrap leading-none text-left"
-              style={{ fontFamily: NOTO_SANS }}
+              className="text-md text-secondary tracking-default whitespace-nowrap leading-none text-left"
+              style={{ fontFamily: NOTO_LIGHT, fontWeight: "var(--font-weight-regular)" }}
             >
               {item.label}
             </p>
@@ -106,6 +138,7 @@ export default function SidebarMenuItem({ item }: { item: MenuItem }) {
                   ? "flex gap-4px h-28px items-center overflow-clip pl-28px pr-8px py-4px shrink-0 w-full cursor-pointer hover-bg-surface-100"
                   : "flex h-28px items-center overflow-clip pl-28px pr-8px py-4px shrink-0 w-full cursor-pointer hover-bg-surface-100"
               }
+              style={c.active ? { backgroundColor: "var(--color-brand-blue-bg)" } : undefined}
             >
               {c.active ? (
                 <p

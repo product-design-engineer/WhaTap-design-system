@@ -17,3 +17,7 @@ docs/DESIGN.md
 tests/visual/diff/
 # npm pack 임시 산출물 (static/public/releases/ 의 배포본만 커밋)
 /whatap-design-system-*.tgz
+.env*
+
+# 과거 배포 스냅샷 보관 (vircaai-designer-storybook 등) — 커밋 대상 아님
+.snapshots/

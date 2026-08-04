@@ -26,27 +26,40 @@
  */
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
+/** 사이즈 — `md`(32px, 기본, PageHeader 기준) / `sm`(24px, 40px 배너·툴바 안). */
+export type AiAssistantButtonSize = "md" | "sm";
+
 export type AiAssistantButtonProps = {
   /** 위젯 열림 상태 — true 면 `.is-active` 강조 그라데이션 활성. */
   aiActive?: boolean;
+  /** 사이즈. 기본 `"md"`(32px). 40px 이하 표면에는 `"sm"`(24px). */
+  size?: AiAssistantButtonSize;
   /** 버튼 라벨 (기본 "WhaTap AI"). */
   children?: ReactNode;
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children">;
 
+/** 사이즈별 규격 — 높이·좌우 패딩·아이콘·라벨 크기를 한 곳에서 관리. */
+const SIZE: Record<AiAssistantButtonSize, { box: string; icon: string; text: string }> = {
+  md: { box: "h-32px px-16px", icon: "size-16px", text: "text-md" },
+  sm: { box: "h-24px px-12px", icon: "size-14px", text: "text-base" },
+};
+
 export default function AiAssistantButton({
   aiActive = false,
+  size = "md",
   children = "WhaTap AI",
   className = "",
   ...rest
 }: AiAssistantButtonProps) {
+  const spec = SIZE[size];
   return (
     <button
       type={rest.type ?? "button"}
       aria-pressed={aiActive}
-      className={`ai-assistant-btn group flex items-center justify-center gap-4px h-32px px-16px rounded-24px bg-white cursor-pointer relative overflow-visible${aiActive ? " is-active" : ""} ${className}`}
+      className={`ai-assistant-btn group flex items-center justify-center gap-4px ${spec.box} rounded-24px bg-white cursor-pointer relative overflow-visible${aiActive ? " is-active" : ""} ${className}`}
       {...rest}
     >
-      <div className="relative shrink-0 size-16px z-10">
+      <div className={`relative shrink-0 ${spec.icon} z-10`}>
         <img
           alt=""
           aria-hidden
@@ -61,7 +74,7 @@ export default function AiAssistantButton({
         />
       </div>
       <span
-        className="text-md tracking-default leading-none whitespace-nowrap relative z-10 transition-colors text-brand-blue group-hover-text-white group-_is-active-text-white"
+        className={`${spec.text} tracking-default leading-none whitespace-nowrap relative z-10 transition-colors text-brand-blue group-hover-text-white group-_is-active-text-white`}
         style={{
           fontFamily: "var(--font-family-korean)",
           fontWeight: "var(--font-weight-medium)",

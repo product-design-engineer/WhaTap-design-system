@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import Sidebar, { MenuItem, ProjectContext, OrgContext } from "./Sidebar";
 
 /**
@@ -21,8 +21,9 @@ import Sidebar, { MenuItem, ProjectContext, OrgContext } from "./Sidebar";
  * - 좌측 네비만 필요 → [[Sidebar]] 단독 사용.
  *
  * ## Composition rules
- * - 공통 정책(feedback-widget-sidebar-collapse): `widgetOpen` 을 [[Sidebar]] 의
- *   `collapsed` 로 그대로 전달 — 위젯이 열리면 사이드바가 40px 로 최소화.
+ * - 공통 정책(feedback-widget-sidebar-collapse): 사이드바 접힘 = `widgetOpen || (사용자 chevron 접힘)`.
+ *   위젯이 열리면 정책상 항상 80px(Min, 레일+아이콘 메뉴)로 강제 최소화하고, 위젯이 닫혔을
+ *   땐 로고 헤더 chevron 으로 사용자가 자유롭게 접기/펴기(`defaultCollapsed`/`onCollapsedChange`).
  * - 공통 정책(feedback-page-header-invariant): `header` 는 위젯 행과 분리된 위쪽
  *   행이라 위젯 개폐와 무관하게 우측 컬럼 전폭을 유지 — 헤더는 절대 좁아지지 않음.
  * - `header`/`main`/`children` 슬롯만 주입. 레이아웃 구조(`flex` 골격)는 재구현 금지.
@@ -45,6 +46,8 @@ export default function DashboardLayout({
   header,
   main,
   widgetOpen = false,
+  defaultCollapsed = false,
+  onCollapsedChange,
   activeProduct,
   project,
   menu,
@@ -61,6 +64,13 @@ export default function DashboardLayout({
   /** 헤더 아래, widget과 같은 행. widget이 열리면 width로 밀려 좁아짐. */
   main?: ReactNode;
   widgetOpen?: boolean;
+  /**
+   * 사용자 접힘 초기값(uncontrolled) — 로고 헤더 chevron 으로 스스로 min/max 전환.
+   * 위젯이 열려 있으면(`widgetOpen`) 이 값과 무관하게 정책상 강제 collapse. 기본 false(펼침).
+   */
+  defaultCollapsed?: boolean;
+  /** chevron 토글 시 사용자 접힘 의도(다음 상태)를 알림 — 소비자가 접힘 상태를 추적하고 싶을 때. */
+  onCollapsedChange?: (collapsed: boolean) => void;
   activeProduct?: string;
   project?: ProjectContext;
   menu?: MenuItem[];
@@ -76,8 +86,15 @@ export default function DashboardLayout({
   /** 좌측 제품 레일 숨김 — Sidebar 로 passthrough. 관리 콘솔 등 제품 네비 불필요 화면용. */
   hideProductRail?: boolean;
 }) {
-  // 공통 정책 (feedback-widget-sidebar-collapse): 위젯이 열리면 사이드바 최소화
+  // 공통 정책 (feedback-widget-sidebar-collapse): 사이드바 접힘 = 위젯 강제 || 사용자 chevron 의도.
+  //   위젯이 열리면 항상 collapse, 닫혔을 땐 chevron 이 소유하는 사용자 상태를 따름.
   // 공통 정책 (feedback-page-header-invariant): 헤더는 widget 행과 분리 → 영향 없음
+  const [userCollapsed, setUserCollapsed] = useState(defaultCollapsed);
+  const collapsed = widgetOpen || userCollapsed;
+  const handleCollapsedChange = (next: boolean) => {
+    setUserCollapsed(next);
+    onCollapsedChange?.(next);
+  };
   return (
     <div className="flex h-full w-full bg-bg">
       <Sidebar
@@ -88,7 +105,8 @@ export default function DashboardLayout({
         onOrgClick={onOrgClick}
         hideProductRail={hideProductRail}
         menu={menu}
-        collapsed={widgetOpen}
+        collapsed={collapsed}
+        onCollapsedChange={handleCollapsedChange}
       />
       <div className="flex flex-col flex-1 min-w-0 h-full">
         {header}

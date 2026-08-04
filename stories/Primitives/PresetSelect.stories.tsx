@@ -40,3 +40,8 @@ export const NarrowWidth: Story = { args: { label: "Default", width: 160 } };
 export const LongLabel: Story = {
   args: { label: "Production · GPU 클러스터 · A100 80GB × 4 prod-mig-config", width: 230 },
 };
+
+/** `size="md"` — 32px(기본은 sm 24px). 드롭다운·관리 버튼이 함께 움직임. */
+export const SizeMedium: Story = {
+  args: { label: "Default", size: "md" },
+};

@@ -4,7 +4,8 @@ import { SidebarOrgSwitcher } from "@whatap/design-system";
 /**
  * Stories for [[SidebarOrgSwitcher]] — Sidebar 상단 40px 조직 스위처 행.
  *
- * 심볼 아이콘 + 라벨 + 옵션 뱃지 + chevron.
+ * 조직 아이콘 + 조직명 라벨 + "조직" 타입 칩(badge) + chevron.
+ * "[조직]" 같은 타입 접두사는 라벨이 아니라 badge 칩으로 분리 — 슬롯은 조직명만.
  * 240px 컨테이너로 감싸 실제 사이드바 맥락을 재현.
  */
 const meta: Meta<typeof SidebarOrgSwitcher> = {
@@ -25,23 +26,23 @@ const meta: Meta<typeof SidebarOrgSwitcher> = {
 export default meta;
 type Story = StoryObj<typeof SidebarOrgSwitcher>;
 
-/** 기본 — 아이콘 + 라벨. */
+/** 기본 — 조직 아이콘 + 조직명 + "조직" 칩. */
 export const Default: Story = {
   args: {
-    org: { label: "[조직] 와탭랩스 대관", icon: "whatap-symbol.svg" },
+    org: { label: "조직명", icon: "menu-workload.svg" },
   },
 };
 
-/** 뱃지 — 엔터프라이즈 컨텍스트 칩. */
+/** 등급 칩 — badge 로 조직 등급/컨텍스트(예: 엔터프라이즈)를 표현. */
 export const WithBadge: Story = {
   args: {
-    org: { label: "[조직] 와탭랩스", icon: "whatap-symbol.svg", badge: "엔터프라이즈" },
+    org: { label: "조직명", icon: "menu-workload.svg", badge: "엔터프라이즈" },
   },
 };
 
-/** 아이콘 없음 — 라벨 좌측 12px 스페이서. */
+/** 아이콘 없음 — 라벨 좌측 12px 스페이서. "조직" 칩은 유지. */
 export const NoIcon: Story = {
   args: {
-    org: { label: "[조직] 테스트 조직" },
+    org: { label: "테스트 조직" },
   },
 };

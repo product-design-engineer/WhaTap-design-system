@@ -5,11 +5,13 @@
  * 빌드 시 자동 생성한다. `build-storybook` 직전에 실행되어 staticDirs(docs → /design-system)
  * 로 서빙됨. DESIGN.md 는 직접 편집 금지 — 개별 .md 를 고치고 재생성.
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, copyFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const docs = join(dirname(fileURLToPath(import.meta.url)), "..", "docs");
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const docs = join(root, "docs");
+const src = join(root, "src");
 
 // Introduction 이 명시한 논리 순서.
 const ORDER = [
