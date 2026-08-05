@@ -149,7 +149,7 @@ export default function PageHeader({
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <defs>
                   <linearGradient id="avatar-grad" x1="0" y1="0" x2="24" y2="24">
-                    <stop stopColor="var(--color-palette-4fc3f7)" />
+                    <stop stopColor="var(--color-avatar-gradient-from)" />
                     <stop offset="1" stopColor="var(--color-brand-blue)" />
                   </linearGradient>
                 </defs>

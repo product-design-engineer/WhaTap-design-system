@@ -82,8 +82,8 @@ export default function AiUsageChart({
                 background: v === null
                   ? "var(--color-surface-100)"
                   : isHigh
-                    ? "var(--color-brand-blue-soft)"
-                    : "var(--color-palette-b7dbff)",
+                    ? "var(--color-chart-seq-4)"
+                    : "var(--color-chart-seq-2)",
                 animationDelay: `${barDelay}ms`,
               }}
               title={v === null ? "" : `${i}시 · ${v.toFixed(1)}%`}

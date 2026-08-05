@@ -45,7 +45,7 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 
 - UI 컴포넌트는 **Semantic 토큰만 참조**. Global 직접 참조 금지.
 - Component 토큰(3계층)은 variant×tone 조합이 복잡한 것만 선택 도입 (`--wds-btn-*`).
-- `--color-palette-*` (hex suffix) 는 차트 시리즈 전용 Global. 컴포넌트에서 직접 참조 가능 (차트 한정).
+- 차트 색은 **역할 토큰**으로 고른다 — `--color-chart-series-1..8`(계열 정체성, 고정 순서·순환 금지) · `--color-chart-seq-1..4`(크기/강도). 구 `--color-palette-{hex}` 36색은 폐지(값이 이름이라 선택 규칙이 없고 다크가 없었다). all-pairs 상한 3슬롯 — scatter/bubble/map/small-multiples 는 3계열까지, 그 이상은 facet. 팔레트 변경 시 dataviz `validate_palette.js` 재실행 필수(눈으로 판단 금지). 전문: `docs/tokens.md` → Chart.
 
 **🔒 페이지 좌·우 거터 — 단일 토큰 규칙 (`--wds-page-px`)**
 - 페이지의 좌·우 거터는 **단 하나의 토큰 `--wds-page-px`(24px)** 이 소유한다. 헤더(`--wds-header-px`)·옵션바·본문(`--wds-content-px`)은 모두 이 값을 **alias 로 참조** → 한 곳만 바꾸면 헤더·옵션바·테이블 가장자리가 함께 정렬된다.

@@ -54,7 +54,7 @@ export default function MiniLineChart({
   markerAt = 0.08,
   showTopStat = false,
   /** line/area 색상 (기본 라이브 토큰 blue) */
-  color = "var(--color-brand-blue-soft)",
+  color = "var(--color-chart-series-1)",
   /** Y축 및 peak 라벨에 붙는 단위 (예: "%", "K") */
   unit = "",
   /** stagger 진입 애니메이션 delay(ms). undefined면 애니메이션 없음 */

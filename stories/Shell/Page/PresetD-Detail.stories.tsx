@@ -67,7 +67,7 @@ const OverviewPanel = () => (
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24 }}>
       <MiniLineChart title="CPU Usage"    values={CPU_DATA}     unit="%" showTopStat />
       <MiniLineChart title="Memory"       values={MEM_DATA}     unit="%" showTopStat color="var(--color-whatap-purple)" />
-      <MiniLineChart title="Disk I/O"     values={DISK_DATA}    unit="MB/s" color="var(--color-palette-ff8800)" />
+      <MiniLineChart title="Disk I/O"     values={DISK_DATA}    unit="MB/s" color="var(--color-chart-series-2)" />
       <MiniLineChart title="Network"      values={NETWORK_DATA} unit="Mbps" color="var(--color-status-success)" />
     </div>
     <DataTable<TimeRow> columns={TIME_COLS} rows={TIME_ROWS} density="default" />

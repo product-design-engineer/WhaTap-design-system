@@ -41,10 +41,10 @@ import { createPortal } from "react-dom";
 export type ToastVariant = "success" | "info" | "warning" | "error";
 
 const VARIANT_COLOR: Record<ToastVariant, { dot: string; bg: string }> = {
-  success: { dot: "var(--color-status-success)",     bg: "var(--color-status-success-soft)" },
-  info:    { dot: "var(--color-brand-blue)",         bg: "var(--color-status-info-soft)" },
-  warning: { dot: "var(--color-palette-ff8800)",     bg: "var(--color-status-warning-soft)" },
-  error:   { dot: "var(--color-palette-f34747)",     bg: "var(--color-status-error-soft)" },
+  success: { dot: "var(--color-status-success)", bg: "var(--color-status-success-soft)" },
+  info:    { dot: "var(--color-brand-blue)",     bg: "var(--color-status-info-soft)" },
+  warning: { dot: "var(--color-status-warning)", bg: "var(--color-status-warning-soft)" },
+  error:   { dot: "var(--color-status-error)",   bg: "var(--color-status-error-soft)" },
 };
 
 export default function Toast({

@@ -61,7 +61,7 @@ export const DiskUsage: Story = {
     title: "[XOS] Disk Usage",
     values: [62, 62, 63, 63, 64, 64, 65],
     unit: "%",
-    color: "var(--color-palette-ff8800)",
+    color: "var(--color-chart-series-2)",
   },
 };
 

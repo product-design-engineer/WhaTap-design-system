@@ -73,6 +73,10 @@
   --color-logo-green: #80BA01;
   --color-logo-blue: #19A0E5;
 
+  /* Avatar gradient — 프로필 아바타의 그라데이션 시작 stop (끝은 brand-blue).
+     장식용 브랜드 그라데이션이라 테마와 무관하게 고정한다. 차트 색이 아니다. */
+  --color-avatar-gradient-from: #4FC3F7;
+
   /* AI gradient (preserved for compat) */
   --color-whatap-blue: #004BE0;
   --color-whatap-purple: #8B52FF;
@@ -233,51 +237,43 @@
   --font-family-numeric-kr: Roboto, "Noto Sans KR", sans-serif;
   --font-family-numeric-jp: Roboto, NotoSansJP, NotoSans, sans-serif;
   /* ──────────────────────────────────────────────────────────────────────
-   *  Extended Palette — Chart series / status / brand 추가 인라인 색.
-   *  Side-effect 없이 inline `color: "#hex"` 모두 token binding 으로 통일.
-   *  Hex-suffix 이름 (deterministic 매핑). Chart 데이터 변경 시 컴포넌트 보정 없이
-   *  팔레트만 갱신하면 됨.
+   *  Chart — 데이터 시각화 전용. **역할로 고른다: 정체성(series) vs 크기(seq).**
+   *
+   *  구 `--color-palette-{hex}` 36색을 대체한다. 그 팔레트는 값이 이름이라
+   *  "시리즈 색을 무엇으로 고르나" 에 답이 없었고(36색 중 실제 참조 4색),
+   *  `.dark` 오버라이드가 없어 차트 다크가 검증되지 않았다.
+   *
+   *  ## series — 계열 정체성 (categorical)
+   *  8슬롯 **고정 순서**. 1번부터 순서대로 배정하고 **순환하지 않는다**.
+   *  9번째 계열은 새 색을 만드는 게 아니라 "기타" 로 접거나 small multiples 로 쪼갠다.
+   *  색은 **엔티티를 따라간다** — 필터로 계열 수가 바뀌어도 남은 계열의 색은 그대로.
+   *  ⚠️ all-pairs 상한 3슬롯 — scatter·bubble·map·small-multiples 처럼 임의의 두 마크가
+   *     맞닿는 형태는 3계열까지. 그 이상은 facet 으로 쪼갠다(팔레트로 해결 불가).
+   *
+   *  ## seq — 크기/강도 (sequential)
+   *  한 색조의 단조 lightness 램프, 옅음→진함. 다크는 anchor 가 뒤집혀 어두움→밝음.
+   *
+   *  검증: dataviz validate_palette.js 6개 체크 전부 PASS.
+   *  라이트 최악 인접 CVD ΔE 9.5(deutan) · 정상시야 17.0 · 대비 전부 ≥3:1.
+   *  다크  최악 인접 CVD ΔE 9.6(deutan) · 정상시야 18.3 · 대비 전부 ≥3:1.
+   *  seq 램프는 단조 L · 인접 ΔL ≥0.06 · 옅은 끝 대비 ≥2:1 통과.
+   *
+   *  ❌ status 색을 "series 9" 로 쓰지 말 것 — 예약된 의미다.
+   *  ❌ 텍스트에 series 색을 쓰지 말 것 — 라벨·값은 text 토큰, 색은 마크가 담당.
    * ────────────────────────────────────────────────────────────────────── */
-  --color-palette-0078dc: #0078dc;
-  --color-palette-00beb8: #00beb8;
-  --color-palette-10b981: #10b981;
-  --color-palette-1b9bd0: #1b9bd0;
-  --color-palette-1f3c88: #1f3c88;
-  /* (2d2d2d → --color-text-body 로 collapse) */
-  --color-palette-2ec4b6: #2ec4b6;
-  --color-palette-3c4ec1: #3c4ec1;
-  --color-palette-4f65b5: #4f65b5;
-  --color-palette-4fc3f7: #4fc3f7;
-  --color-palette-57ca7e: #57ca7e;
-  --color-palette-5cc97d: #5cc97d;
-  --color-palette-71df8b: #71df8b;
-  --color-palette-81c784: #81c784;
-  --color-palette-85c2fa: #85c2fa;
-  --color-palette-a0a65a: #a0a65a;
-  --color-palette-a8d8ff: #a8d8ff;
-  --color-palette-b7dbff: #b7dbff;
-  --color-palette-ba68c8: #ba68c8;
-  --color-palette-c44cd8: #c44cd8;
-  --color-palette-d4f0e5: #d4f0e5;
-  --color-palette-dcefff: #dcefff;
-  --color-palette-e040b8: #e040b8;
-  --color-palette-e0d6f5: #e0d6f5;
-  /* (e53935 → --color-indicator-critical 로 collapse) */
-  --color-palette-e5564e: #e5564e;
-  --color-palette-e8d6f0: #e8d6f0;
-  /* (f0b400 → --color-indicator-warning 로 collapse) */
-  --color-palette-f34747: #f34747;
-  --color-palette-f5c84a: #f5c84a;
-  /* (f5f5f5 → --color-surface-50 로 collapse) */
-  --color-palette-fb88e1: #fb88e1;
-  --color-palette-ff8800: #ff8800;
-  --color-palette-ff8c2d: #ff8c2d;
-  --color-palette-ffa1a1: #ffa1a1;
-  --color-palette-ffb74d: #ffb74d;
-  --color-palette-ffc300: #ffc300;
-  --color-palette-ffc771: #ffc771;
-  --color-palette-ffe4cc: #ffe4cc;
-  --color-palette-fff176: #fff176;
+  --color-chart-series-1: #296CF2; /* blue */
+  --color-chart-series-2: #C75B1A; /* orange */
+  --color-chart-series-3: #00908A; /* teal */
+  --color-chart-series-4: #9A7B00; /* gold */
+  --color-chart-series-5: #B0349B; /* magenta */
+  --color-chart-series-6: #0E7A56; /* green */
+  --color-chart-series-7: #6B3FD4; /* violet */
+  --color-chart-series-8: #C93B34; /* red */
+
+  --color-chart-seq-1: #7AB8F0; /* 가장 옅음 */
+  --color-chart-seq-2: #4A97E8;
+  --color-chart-seq-3: #2472D8;
+  --color-chart-seq-4: #1A50B0; /* 가장 진함 */
 
   /* ──────────────────────────────────────────────────────────────────────
    *  Spacing / Sizing Scale — 4px 그리드. `--text-*` 와 동일한 "px 값 스케일 토큰" 방식.
@@ -616,4 +612,21 @@ html, body, #root {
   --color-status-warning-soft: #33290F;
   --color-status-error-soft: #3A2226;
   --color-status-warning-soft-border: #4A3714;
+
+  /* Chart — 같은 8색조를 **다크 표면(--color-card #181C22)용으로 다시 스텝**한 것.
+     자동 반전이 아니라 선택된 값이다(검증 근거는 :root 블록 주석 참조). */
+  --color-chart-series-1: #5B92F7;
+  --color-chart-series-2: #D9762E;
+  --color-chart-series-3: #1FA9A2;
+  --color-chart-series-4: #B08D14;
+  --color-chart-series-5: #CE4FB6;
+  --color-chart-series-6: #2FA97D;
+  --color-chart-series-7: #9A7DF0;
+  --color-chart-series-8: #E8635C;
+
+  /* seq — 다크에서는 anchor 가 뒤집힌다: 어두움(작음) → 밝음(큼). */
+  --color-chart-seq-1: #3A5480;
+  --color-chart-seq-2: #4C7CC4;
+  --color-chart-seq-3: #6BA3EE;
+  --color-chart-seq-4: #9BC8FF;
 }

@@ -349,41 +349,110 @@ export const WhaTapGradient: StoryObj = {
   ),
 };
 
-/* ─── Global (palette) ─────────────────────────────── */
+/* ─── Chart ────────────────────────────────────────── */
+
+const HUE_NAME = ["blue", "orange", "teal", "gold", "magenta", "green", "violet", "red"];
 
 /**
- * **`--color-palette-{hex}`** — 값이 이름인 Global 팔레트. **차트 시리즈 전용.**
+ * **`--color-chart-series-1..8`** — 계열 **정체성**(categorical). 구 `--color-palette-{hex}` 36색을 대체.
  *
- * 목록을 손으로 적지 않고 CSS 에서 긁어 오므로, 팔레트를 추가/제거하면 여기 자동 반영된다.
- * 의미가 명확해지는 색은 semantic 토큰으로 collapse 하는 것이 방향이다
- * (예: `palette-e53935` → `indicator-critical`).
+ * **1번부터 순서대로 배정하고 순환하지 않는다.** 순서 자체가 CVD 안전 장치이므로 바꾸지 않는다.
+ * 9번째 계열은 새 색을 만드는 게 아니라 "기타" 로 접거나 small multiples 로 쪼갠다.
+ * 색은 **엔티티를 따라간다** — 필터로 계열 수가 바뀌어도 남은 계열의 색은 그대로 유지한다.
+ *
+ * ⚠️ **all-pairs 상한 3슬롯.** scatter · bubble · choropleth · small-multiples 처럼 임의의 두
+ * 마크가 맞닿을 수 있는 형태는 3계열까지만 안전하다(측정값: 라이트 20.7 / 다크 16.5). 4번째를
+ * 넣으면 orange↔gold 가 정상시야 ΔE 11.0 로 무너진다 — 팔레트로 해결되지 않으므로 facet 으로 쪼갠다.
+ *
+ * 검증(dataviz `validate_palette.js`, 6개 체크 전부 PASS):
+ * 라이트 최악 인접 CVD ΔE 9.5(deutan) · 정상시야 17.0 · 대비 전부 ≥3:1.
+ * 다크 최악 인접 CVD ΔE 9.6(deutan) · 정상시야 18.3 · 대비 전부 ≥3:1.
  */
-export const ExtendedPalette: StoryObj = {
+export const ChartSeries: StoryObj = {
   render: () => {
-    const palette = useTokens("--color-palette-", NONE);
+    const series = useTokens("--color-chart-series-", NONE);
     return (
       <div className="flex flex-col gap-3">
         <div
           className="text-md text-secondary max-w-2xl"
           style={{ fontFamily: "var(--font-family-korean)" }}
         >
-          차트 시리즈 + brand ad-hoc 색 <strong>{palette.length}종</strong>. 컴포넌트에서 직접
-          참조 가능한 유일한 Global 토큰군(차트 한정)입니다.
+          계열 정체성 <strong>{series.length}슬롯</strong> — 고정 순서. 다크는 같은 색조를 다크
+          표면용으로 <strong>다시 스텝</strong>한 것(자동 반전 아님).
         </div>
         <div
           className="grid gap-2"
-          style={{ gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))" }}
+          style={{ gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))" }}
         >
-          {palette.map((e) => (
+          {series.map((e, i) => (
+            <div
+              key={e.name}
+              className="flex flex-col items-stretch gap-1 p-2 border border-default rounded-md bg-card"
+            >
+              {/* 선 + 막대 — 실제 마크로 보여야 판단이 된다 */}
+              <div className="flex items-end gap-1 h-12">
+                <div className="flex-1 rounded-2px" style={{ background: `var(${e.name})`, height: "100%" }} />
+                <div className="flex-1 rounded-2px" style={{ background: `var(${e.name})`, height: "60%" }} />
+                <div className="flex-1 rounded-2px" style={{ background: `var(${e.name})`, height: "35%" }} />
+              </div>
+              <div
+                className="text-chart text-tertiary leading-none truncate"
+                style={{ fontFamily: "var(--font-family-numeric)" }}
+              >
+                series-{i + 1} · {HUE_NAME[i] ?? ""}
+              </div>
+              <div
+                className="text-chart text-tertiary leading-none"
+                style={{ fontFamily: "var(--font-family-numeric)" }}
+              >
+                {e.value}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  },
+};
+
+/**
+ * **`--color-chart-seq-1..4`** — **크기/강도**(sequential). 한 색조의 단조 lightness 램프.
+ *
+ * 라이트는 옅음→진함, **다크는 anchor 가 뒤집혀** 어두움→밝음이다(자동 반전이 아니라 선택된 값).
+ * `AiUsageChart` 의 시간별 사용률 막대가 이 램프를 쓴다.
+ *
+ * ❌ 계열 구분에 seq 를 쓰지 말 것 — 순서가 없는 항목에 순서를 부여해 잘못 읽힌다.
+ * 검증: 단조 L · 인접 ΔL ≥ 0.06 · 옅은 끝 대비 ≥ 2:1 · 단일 색조 전부 PASS.
+ */
+export const ChartSequential: StoryObj = {
+  render: () => {
+    const seq = useTokens("--color-chart-seq-", NONE);
+    return (
+      <div className="flex flex-col gap-4">
+        <div
+          className="text-md text-secondary max-w-2xl"
+          style={{ fontFamily: "var(--font-family-korean)" }}
+        >
+          크기 램프 <strong>{seq.length}단</strong> — 낮음 → 높음.
+        </div>
+        {/* 램프 전체를 이어 붙여 단조성이 눈에 보이게 */}
+        <div className="flex rounded-md overflow-hidden border border-default" style={{ height: 40 }}>
+          {seq.map((e) => (
+            <div key={e.name} className="flex-1" style={{ background: `var(${e.name})` }} />
+          ))}
+        </div>
+        <div
+          className="grid gap-2"
+          style={{ gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))" }}
+        >
+          {seq.map((e, i) => (
             <div
               key={e.name}
               className="flex flex-col items-stretch gap-1 p-2 border border-default rounded-md bg-card"
               style={{ fontFamily: "var(--font-family-numeric)" }}
             >
-              <div className="rounded h-12" style={{ background: `var(${e.name})` }} />
-              <div className="text-chart text-tertiary leading-none truncate">
-                {tokenLabel(e.name).replace("color-palette-", "")}
-              </div>
+              <div className="rounded h-10" style={{ background: `var(${e.name})` }} />
+              <div className="text-chart text-tertiary leading-none">seq-{i + 1}</div>
               <div className="text-chart text-tertiary leading-none">{e.value}</div>
             </div>
           ))}

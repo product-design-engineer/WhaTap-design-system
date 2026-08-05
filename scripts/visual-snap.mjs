@@ -46,6 +46,12 @@ const SHOTS = [
   { id: "primitives-ai-aitonebadge--all-tones", theme: "dark" },
   { id: "primitives-ai-costtablerow--highlight", theme: "dark" },
   { id: "primitives-toast--warning", theme: "dark" },
+  // 차트 — series(정체성)·seq(크기) 램프. 라이트만 보면 다크 anchor 반전을 놓친다.
+  { id: "tokens-color--chart-series", theme: "light" },
+  { id: "tokens-color--chart-series", theme: "dark" },
+  { id: "primitives-ai-aiusagechart--hourly-gpu", theme: "light" },
+  { id: "primitives-ai-aiusagechart--hourly-gpu", theme: "dark" },
+  { id: "primitives-minilinechart--cpu-usage", theme: "light" },
 ];
 
 // 애니메이션·캐럿·transition 비활성화 (스냅샷 안정화)
