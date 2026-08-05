@@ -62,11 +62,19 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 | **Composite** | Primitives 를 1단계 조합 | Primitives 만 import. **Composite 끼리 import 금지** | 29 (Ai/ 포함) |
 | **Shell** | Composite + Primitives 를 최종 조립하는 진입점 | 모든 계층 import 가능 | 5 (DashboardLayout · Ai/Widget · Page A·B·D) |
 
-**Primitives** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, Switch, DataTable, MiniLineChart, LiveTimerCompact, AiCard, AiCaption … + **인라인 추출 Parts**(SidebarMenuItem · PageHeaderNotificationItem · PageHeaderProfileMenuItem · ProductRailItem · BottomRailItem · TabButton · CostBreakdownRow · ClassificationTableRow · CostTableRow · MigPlanRow · EventListItem · ReasoningStep · TimelineStepItem · CriteriaGroup · AiActionChip · AiAttachmentChip · AiQuickActionChip)
+**Primitives** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, Switch, DataTable, MiniLineChart, LiveTimerCompact, AiCard, AiCaption … + **인라인 추출 Parts**(SidebarMenuItem · PageHeaderNotificationItem · PageHeaderProfileMenuItem · ProductRailItem · BottomRailItem · TabButton · CostBreakdownRow · ClassificationTableRow · CostTableRow · MigPlanRow · EventListItem · ReasoningStep · TimelineStepItem · CriteriaGroup · ReceiverChannelItem · AiActionChip · AiAttachmentChip · AiQuickActionChip)
 
-**Composite** — FilterBar · PageHeader · PageHeaderAiInline · OptionbarPage · Sidebar(=SidebarMenuItem) · ThemeToggle · AiChatExchange · AiReasoning · InlinePrompt … + **추출 Parts**(DataTableRow · FilterDropdownOptionItem · FilterChipItem · CriteriaOptionButton · ReceiverChannelItem · ProposalSection · AiAlertRulePreview)
+**Composite** — FilterBar · PageHeader · PageHeaderAiInline · OptionbarPage · Sidebar(=SidebarMenuItem) · ThemeToggle · AiChatExchange · AiReasoning · InlinePrompt … + **추출 Parts**(DataTableRow · FilterDropdownOptionItem · FilterChipItem · CriteriaOptionButton · ProposalSection · AiAlertRulePreview)
 
 **Shell** — DashboardLayout(=Sidebar) · WhaTapAiWidget(`Shell/Ai/Widget`) · Page 합성 템플릿(A 기본 대시보드 · B AI 전용 · D 상세)
+
+> ⚠️ **미해결 — 추출 Parts 의 계층 판정.** 인라인에서 추출한 행/항목 Parts 중 일부는
+> 리프 프리미티브를 **런타임 합성**한다: `SidebarMenuItem`·`ProductRailItem`·`BottomRailItem`·
+> `AiTriggerButton` → [[Tooltip]], `ReceiverChannelItem` → [[Switch]]. 규칙대로 Composite 로
+> 승격하면 이들을 소비하는 부모(`Sidebar`·`AiReceiverChannels` 등 Composite)가
+> *Composite 끼리 import 금지* 에 걸려 Shell 까지 연쇄 승격된다 — 위젯 카드가 Shell 이 되는 것은
+> 의미상 틀리다. 현재는 **관행상 Primitives 에 두고 있다.** 규칙에 "Parts 는 리프 프리미티브
+> 1개 합성 허용" 예외를 명문화할지는 **결정 필요**(이 문서를 임의로 고치지 말 것).
 
 **신규 컴포넌트 추가 시 반드시 계층을 명시.** Composite 가 다른 Composite 를 import 하면 Shell 로 승격하거나 구조 분리. AI 전용이면 카탈로그 title 을 `<Layer>/Ai/<Name>` 으로 둔다.
 

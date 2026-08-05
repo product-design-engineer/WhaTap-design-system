@@ -52,6 +52,9 @@ const SHOTS = [
   { id: "primitives-ai-aiusagechart--hourly-gpu", theme: "light" },
   { id: "primitives-ai-aiusagechart--hourly-gpu", theme: "dark" },
   { id: "primitives-minilinechart--cpu-usage", theme: "light" },
+  // 수신 채널 — mock 토글을 Switch 프리미티브로 교체한 자리(라이트/다크 both).
+  { id: "composite-ai-aireceiverchannels--interactive", theme: "light" },
+  { id: "composite-ai-aireceiverchannels--interactive", theme: "dark" },
 ];
 
 // 애니메이션·캐럿·transition 비활성화 (스냅샷 안정화)

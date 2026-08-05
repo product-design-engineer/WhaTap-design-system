@@ -1,11 +1,11 @@
-import { TONE_DOT } from "./_tokens";
+import Switch from "../Switch";
 import type { ChannelKey, ChannelState } from "./AiReceiverChannels";
 
 /**
  * ReceiverChannelItem — [[AiReceiverChannels]] 의 단일 채널 행(`<li>`).
  *
  * ## Purpose
- * 알림 수신 채널 한 건을 한 줄로 렌더 — 이모지 아이콘 · 라벨(+유료 배지) · 보조 정보 · 토글 핀(mock).
+ * 알림 수신 채널 한 건을 한 줄로 렌더 — 이모지 아이콘 · 라벨(+유료 배지) · 보조 정보 · [[Switch]] 토글.
  * `AiReceiverChannels` 의 `channels.map(...)` 안에 인라인되어 있던 행 마크업을 그대로 추출한 것.
  *
  * ## When to use
@@ -17,9 +17,13 @@ import type { ChannelKey, ChannelState } from "./AiReceiverChannels";
  *
  * ## Composition rules
  * - 채널 데이터(`icon`/`label`/`detail`/`paid`)와 상태(`enabled`)만 주입 — 행 외형은 이 컴포넌트가 책임.
- * - 토글 핀 색은 tone 토큰(`TONE_DOT.low`) 사용, 인라인 hex 는 off 상태 트랙에만 한정.
- * - 토글은 visual mock — 실제 상태는 부모가 `enabled` 로 제어하고 클릭은 `onToggle` 로 위임.
- * - `onToggle` 미지정 시 행 클릭 비활성(read-only).
+ * - **토글은 [[Switch]] 프리미티브를 쓴다.** 예전에는 트랙·knob 을 손으로 그린 visual mock 이었는데,
+ *   즉시 반영 설정(수신 on/off)은 Switch 의 의도와 정확히 일치하고, mock 은 `role="switch"`·
+ *   `aria-checked`·키보드 조작이 전부 없었다. 색·치수·focus-visible 링도 Switch 가 소유한다.
+ * - `size="sm"`(40×22) — 2행 높이 행에 들어가는 컴팩트 단계. 행 높이를 밀지 않는다.
+ * - 행 전체도 클릭 가능하지만(마우스 편의), Switch 클릭이 행 핸들러로 **버블링하면 두 번 토글**되므로
+ *   Switch 래퍼에서 전파를 멈춘다. 키보드는 Switch 가 단독으로 받는다.
+ * - `onToggle` 미지정 시 read-only — 행 클릭 비활성 + Switch `disabled`.
  *
  * @example
  * ```tsx
@@ -105,17 +109,14 @@ export default function ReceiverChannelItem({
         )}
       </div>
 
-      {/* 토글 핀 (mock — visual only) */}
-      <span
-        className="shrink-0 relative inline-block w-28px h-16px rounded-full transition-colors"
-        style={{ background: enabled ? TONE_DOT.low : "var(--color-surface-200)" }}
-        aria-hidden
-      >
-        <span
-          data-ds-policy-ok="트랙(컬러/회색) 위 knob — Switch 프리미티브와 같은 고정 흰색"
-          // raw-color-ok: 트랙(컬러/회색) 위 knob — Switch 프리미티브와 같은 고정 흰색.
-          className="absolute top-2px size-12px rounded-full bg-white transition-left"
-          style={{ left: enabled ? 14 : 2 }}
+      {/* 토글 — Switch 프리미티브. 행 클릭과 이중 토글되지 않도록 전파를 멈춘다. */}
+      <span className="shrink-0 inline-flex" onClick={(e) => e.stopPropagation()}>
+        <Switch
+          size="sm"
+          checked={enabled}
+          disabled={!interactive}
+          onChange={(next) => onToggle?.(channelKey, next)}
+          label={`${label} 수신`}
         />
       </span>
     </li>
