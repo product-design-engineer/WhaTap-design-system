@@ -75,6 +75,28 @@ hover/focus 시 짧은 설명 표시. 트리거 1개를 wrap (cloneElement) 해�
 
 > **interactive 필터 칩 (클릭 토글)** 은 `FilterChip` — `Chip` 은 정적 라벨 전용.
 
+## TimeChip
+
+`Chip` md/soft/neutral 위에 **자형 규칙만** 얹은 조합 — 화면에 나가는 **시간값의 단일 표기**(Composite).
+날짜 · 구간 · 판정 기준 시각 · 차트 축 끝점이 전부 같은 크기·같은 자형으로 선다.
+
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `label` | `string` | — | 한글 접두 라벨(「구간」·「판정 기준」). 값만 세울 땐 생략 |
+| `value` | `string` | — | 시간값 본체 — `--font-family-numeric` + medium |
+| `note` | `string` | — | 꼬리말(「(화)」·「· 방금」) — korean |
+| `tone` | `"neutral" \| "warning"` | `"neutral"` | 낡은 값·주의가 필요한 시각은 warning |
+| `leadingIcon` | `ReactNode` | — | 값의 **성격**을 말할 때만(예: 스냅샷 셔터) |
+
+```tsx
+<TimeChip value="8월 11일" note="(화)" />
+<TimeChip label="구간" value="8월 9일 18:00 ~ 10:08" />
+<TimeChip label="판정 기준" value="10:08" note="· 방금" leadingIcon={<IcSnapshot size={12} />} />
+```
+
+**`size` 를 열지 않는다** — 화면마다 크기가 갈리면 이 컴포넌트가 존재할 이유가 없어진다.
+표기 규칙 전문(Do/Don't)은 [`patterns.md`](./patterns.md#12-시간-정보-표기--timechip-하나로) 참조.
+
 ## FilterChip
 
 `Chip` 의 **interactive 변형**. 다중 필터 진입점 — 클릭 토글, 우측 count, 닫기 가능.

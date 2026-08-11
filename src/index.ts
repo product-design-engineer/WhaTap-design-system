@@ -14,6 +14,8 @@ export { default as Checkbox } from "./Checkbox";
 export type { CheckboxProps, CheckboxSize } from "./Checkbox";
 export { default as Chip } from "./Chip";
 export type { ChipProps, ChipVariant, ChipTone, ChipSize } from "./Chip";
+export { default as TimeChip } from "./TimeChip";
+export type { TimeChipProps } from "./TimeChip";
 export { default as FilterChip } from "./FilterChip";
 export type { FilterChipProps } from "./FilterChip";
 export { default as FilterDropdown } from "./FilterDropdown";
