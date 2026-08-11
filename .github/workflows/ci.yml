@@ -6,6 +6,12 @@ on:
   push:
     branches: [main]
 
+# PR 은 뒤 커밋이 오면 앞 실행을 취소한다 — 무의미해진 실행이 그대로 비용이다.
+# main push 는 취소하지 않는다: 머지 커밋은 각자 독립적으로 검증돼야 한다.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 permissions:
   contents: read
 
@@ -28,6 +34,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # ── 정적 게이트 (빠른 것부터) ───────────────────────────────────────
       # DESIGN.md 구조 · 깨진 토큰 참조 · WCAG 대비비. error 가 있으면 여기서 멈춘다.
       - name: Lint DESIGN.md
         run: pnpm lint:design
@@ -36,11 +43,18 @@ jobs:
       - name: Check story catalog
         run: pnpm check:catalog
 
+      # 타입 오류를 빌드가 잡아주지 않는다 — tsup 의 DTS 빌드는 통과시킨다.
+      # 실측: tsc 오류 21건이 있는 상태에서 build:js 가 성공했다.
+      - name: Type check
+        run: pnpm typecheck
+
       # tokens.css → 생성 산출물. Storybook/Vitest 가 이 결과를 읽는다.
       - name: Build design artifacts
         run: pnpm build:design
 
+      # ── 렌더 기반 게이트 ────────────────────────────────────────────────
       # vitest 가 storybookTest 로 스토리를 실제 chromium 에서 렌더한다.
+      # pnpm test 안에 catalog · design-lint · raw-color · layer-deps · token-sync 가 포함된다.
       - name: Install Playwright chromium
         run: pnpm exec playwright install --with-deps chromium
 
@@ -52,6 +66,50 @@ jobs:
 
       - name: Build Storybook
         run: pnpm build-storybook
+
+      # 런타임 정책 감사와 시각 스냅샷은 **띄워진 Storybook** 을 대상으로 한다.
+      # dev 서버 대신 방금 만든 정적 빌드를 서빙한다 — 검사 대상이 배포물과 같아진다.
+      - name: Serve built Storybook
+        run: |
+          nohup python3 -m http.server 6006 --directory storybook-static > /tmp/storybook-serve.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:6006/index.json >/dev/null && exit 0
+            sleep 1
+          done
+          echo "Storybook 정적 서버가 뜨지 않았습니다"; exit 1
+
+      # 소스 스캔으로는 원리적으로 볼 수 없는 위반을 렌더된 DOM 에서 잡는다.
+      # 지금까지 로컬 실행에만 의존해 왔다 — CLAUDE.md 는 이것을 3중 게이트의 하나로
+      # 명시하는데 어느 워크플로도 부르지 않고 있었다.
+      - name: Runtime policy audit (light)
+        env:
+          BASE_URL: http://localhost:6006
+        run: pnpm audit:runtime
+
+      - name: Runtime policy audit (dark)
+        env:
+          BASE_URL: http://localhost:6006
+        run: pnpm audit:runtime:dark
+
+      # ⚠️ 비차단(continue-on-error). 기준선 PNG 가 **macOS 에서 생성**된 것이라
+      # ubuntu 의 폰트 렌더링과 허용치(0.5%)를 넘겨 상시 red 가 된다. 흔들리는 신호를
+      # 차단 게이트로 만들면 팀이 red 자체를 무시하게 된다.
+      # 차단으로 승격하려면: 기준선을 리눅스(이 워크플로 또는 Playwright 컨테이너)에서
+      # 재생성해 커밋하고 continue-on-error 를 제거한다.
+      - name: Visual snapshots (non-blocking)
+        id: visual
+        continue-on-error: true
+        env:
+          BASE_URL: http://localhost:6006
+        run: pnpm test:visual
+
+      - name: Upload visual diff
+        if: steps.visual.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diff
+          path: tests/visual/diff
+          retention-days: 7
 
       - name: Upload Storybook artifact
         uses: actions/upload-artifact@v4

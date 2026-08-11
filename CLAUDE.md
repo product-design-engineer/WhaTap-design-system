@@ -113,6 +113,13 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 3. **`npm run test:visual`** — 라이트/다크 스냅샷. 위젯 tone/표면을 포함해야 한다.
    위젯 커버리지가 없어서 "밝은 배경 위 밝은 글자" 판독 불가를 **두 번** 놓쳤다.
 
+> ⚠️ **"게이트가 있다"와 "CI 가 그걸 부른다"는 다른 말이다.** 2026-08-11 이전까지 위 2·3번은
+> **어느 워크플로도 부르지 않았고**, 이 문서만 "3중 게이트"라고 가르치고 있었다. 지금은 셋 다
+> PR CI 에 배선돼 있다 — 단 `test:visual` 은 **비차단**이다(기준선 PNG 가 macOS 산이라 ubuntu
+> 폰트와 허용치 0.5% 를 넘긴다. 차단 승격 조건은 기준선을 리눅스에서 재생성하는 것).
+> 이 부류의 재발은 **`guardrails-meta` 게이트**가 막는다 — 명부에서 `status: "auto"` 인 게이트가
+> PR 워크플로에서 도달 불가하면 빌드를 멈춘다. 명부는 `scripts/gate-roster.mjs`.
+
 **허용 예외는 2종뿐.** 그 외에 예외는 없다.
 
 - **컬러 배경 위 고정 흰색 전경** — contained 버튼 · solid chip · 그라데이션 헤더/아바타 · 원형 배지 안 체크 · switch knob. 테마와 무관하게 흰색이어야 하므로 유지한다.
@@ -144,7 +151,9 @@ style={{ background: tokens.color.surface.critical.value }}     // ❌ 라이트
 
 ## 스타일 — 일반 CSS (Tailwind 미사용 · 흔적 0)
 
-런타임 스타일은 외부 CSS 프레임워크 흔적이 0인 **자체 소유 일반 CSS** `src/whatap-ds.css` (= export `./style.css`·`./whatap-ds.css`). 내부에 `@layer`·`--tw-*`·`@property`·`.foo-\[…\]`(escape 클래스명) 없음. 유틸 클래스명은 escape 없는 일반 식별자(`gap-4px`·`hover-opacity-70` 등).
+런타임 스타일은 외부 CSS 프레임워크 흔적이 0인 **자체 소유 일반 CSS** `src/whatap-ds.css` (= export `./style.css`·`./whatap-ds.css`). 내부에 `--tw-*`·`@property`·`.foo-\[…\]`(escape 클래스명) 없음. 유틸 클래스명은 escape 없는 일반 식별자(`gap-4px`·`hover-opacity-70` 등).
+
+**`@layer base` 는 한 곳에 의도적으로 있다** — preflight 전역 reset 전용이다. 이 파일은 unlayered 로 import 되는데 reset 까지 unlayered 면 **소비자 쪽** utility 를 cascade 에서 이겨 소비 페이지 스타일을 무력화한다. 그래서 preflight 만 base 레이어로 내렸다(아래 utilities 섹션은 unlayered 유지). 프레임워크 산출물이 아니라 네이티브 cascade layer 다. `npm run lint:no-tailwind` 가 이 한 줄만 `/* no-tailwind-ok: … */` 로 면제하고 나머지 `@layer`·Tailwind 의존성·설정 파일·`--tw-*` 는 전부 차단한다(면제는 **줄 단위**라 새 `@layer` 는 그대로 잡힌다).
 
 - **소비자:** 진입점에서 `import "@whatap/design-system/style.css"` 한 줄. Tailwind·`@source`·PostCSS 불필요. 토큰만 필요하면 `tokens.css`(참조용 `:root`).
 - **`whatap-ds.css` 는 이제 hand-maintained 다.** `scripts/detailwind.mjs generate` 는 **최초 1회**(원본 escaped tsx → 일반 CSS) 변환용이었고, 그 이후 토큰·전역 규칙·신규 유틸은 **`whatap-ds.css` 를 직접 편집**한다. self-contained(:root 토큰 + preflight + utilities + 전역/keyframes/.dark). 진실 스냅샷 `scripts/frozen-whatap-ds.css`(미배포).

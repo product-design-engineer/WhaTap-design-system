@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Sidebar } from "@whatap/design-system";
-import type { MenuItem, ProjectContext } from "@whatap/design-system/Sidebar";
+import type { MenuItem, ProjectContext } from "@whatap/design-system";
 
 /**
  * Stories for [[Sidebar]] — WhaTap SaaS 좌측 240px 사이드바.

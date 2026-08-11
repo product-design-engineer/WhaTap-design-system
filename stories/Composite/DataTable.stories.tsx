@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DataTable } from "@whatap/design-system";
-import type { DataTableColumn } from "@whatap/design-system/DataTable";
+import type { DataTableColumn } from "@whatap/design-system";
 
 /**
  * Stories for [[DataTable]] — 모니터링 페이지의 재활용 generic 데이터 테이블.

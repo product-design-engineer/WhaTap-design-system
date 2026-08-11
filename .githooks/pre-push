@@ -1,0 +1,22 @@
+#!/bin/sh
+# pre-push — main 직접 push 차단.
+#
+# ⚠️ 이건 **로컬 보조 신호**다. 진짜 보호는 GitHub branch protection 이다.
+#    훅은 `--no-verify` 로 우회되고, 이 저장소를 새로 clone 한 사람에게는
+#    `pnpm install`(= prepare 스크립트)이 돌기 전까지 존재하지도 않는다.
+#
+# 로컬 브랜치명이 아니라 **git 이 stdin 으로 주는 원격 ref** 를 본다.
+# 브랜치명으로 판정하면 `git push origin feature:main` 우회가 그대로 뚫린다.
+#
+# stdin 형식: <local ref> <local sha> <remote ref> <remote sha>
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+  case "$remote_ref" in
+    refs/heads/main)
+      echo "✗ main 으로 직접 push 할 수 없습니다." >&2
+      echo "  → 브랜치를 만들고 PR 로 올리세요. CI 게이트가 PR 에서 돕니다." >&2
+      echo "  (원격 ref 기준 판정 — 'feature:main' 형태도 여기서 막힙니다.)" >&2
+      exit 1
+      ;;
+  esac
+done
+exit 0

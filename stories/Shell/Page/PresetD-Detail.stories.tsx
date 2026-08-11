@@ -6,7 +6,7 @@ import {
   DataTable, WhaTapAiWidget,
   type TabsItem,
 } from "@whatap/design-system";
-import type { DataTableColumn } from "@whatap/design-system/DataTable";
+import type { DataTableColumn } from "@whatap/design-system";
 
 /**
  * **프리셋 D — 상세 페이지.**

@@ -55,6 +55,19 @@ const SHOTS = [
   // 수신 채널 — mock 토글을 Switch 프리미티브로 교체한 자리(라이트/다크 both).
   { id: "composite-ai-aireceiverchannels--interactive", theme: "light" },
   { id: "composite-ai-aireceiverchannels--interactive", theme: "dark" },
+  // 토폴로지 — 캔버스는 --color-bg/--color-card 가 아닌 **자체 표면 층**(canvas<group<node)이라
+  // 다크를 따로 봐야 한다. 층 순서가 무너지면 노드가 바닥에 파묻혀 읽히지 않는다.
+  { id: "primitives-topology-topologynode--group-container", theme: "light" },
+  { id: "primitives-topology-topologynode--group-container", theme: "dark" },
+  { id: "primitives-topology-topologynode--leaf", theme: "light" },
+  { id: "primitives-topology-topologynode--leaf", theme: "dark" },
+  { id: "primitives-topology-topologyedge--stepped", theme: "light" },
+  { id: "primitives-topology-topologyedge--stepped", theme: "dark" },
+  { id: "primitives-topology-topologyedge--alert", theme: "dark" },
+  // 접힌 상태 — 그룹을 접으면 자식으로 향하던 엣지가 통째로 사라지던 버그가 있었다
+  // ("상세 숨김"이 "트래픽 없음"으로 읽혔다). 승격 동작을 스냅샷으로 고정한다.
+  { id: "composite-topology-topologycanvas--collapsed", theme: "light" },
+  { id: "composite-topology-topologycanvas--collapsed", theme: "dark" },
 ];
 
 // 애니메이션·캐럿·transition 비활성화 (스냅샷 안정화)

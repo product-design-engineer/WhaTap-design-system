@@ -4,7 +4,7 @@ import {
   DashboardLayout, PageHeader, OptionbarPage,
   DataTable, Chip, WhaTapAiWidget,
 } from "@whatap/design-system";
-import type { DataTableColumn } from "@whatap/design-system/DataTable";
+import type { DataTableColumn } from "@whatap/design-system";
 
 /**
  * **프리셋 A — 기본 대시보드.**
