@@ -73,6 +73,14 @@ export { default as AiReasoning } from "./AiReasoning";
 export { default as AiReceiverChannels } from "./AiReceiverChannels";
 export type { ChannelKey, ChannelState } from "./AiReceiverChannels";
 export { default as AiStepsTimeline } from "./AiStepsTimeline";
+export {
+  default as AiTargetMesh,
+  targetMeshDots,
+  meshScaleOf,
+  MESH_DOT_R,
+  MESH_CLUSTER_K,
+} from "./AiTargetMesh";
+export type { TargetMeshItem, MeshDot, MeshTone } from "./AiTargetMesh";
 export { default as AiToolCallStep } from "./AiToolCallStep";
 export { default as AiUsageChart } from "./AiUsageChart";
 export { default as AiUserBubble } from "./AiUserBubble";

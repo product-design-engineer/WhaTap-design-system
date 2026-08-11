@@ -206,6 +206,41 @@ export type ClassificationRow = {
 
 `null`은 데이터 없음(빈 막대). `highlightThreshold` 초과 막대는 강조.
 
+### AiTargetMesh
+
+대상 판정 결과의 군집 메시 — **점 하나 = 대상 하나**. 대상 종류마다 군집 하나이고 **군집 면적이 곧 대상 수**(반지름 ∝ √개수). 이상 점은 가운데부터, 수집 실패는 바깥 테두리부터 빈 점.
+
+```ts
+export type TargetMeshItem = {
+  short: string;      // 열 라벨 (짧게)
+  label: string;      // 문장·툴팁용 이름
+  total: number;
+  warning: number;
+  critical: number;
+  missing?: number;   // 수집이 끊겨 판정 못 한 수 — 바깥부터 빈 점
+  hint?: string;      // 툴팁 끝에 붙일 한 줄(추이 등)
+  iconSrc?: string;   // 16px 제품 아이콘 — 종류 식별은 점 모양이 아니라 이 아이콘이 맡는다
+};
+```
+
+| Prop | Default |
+|---|---|
+| `items: TargetMeshItem[]` | — |
+| `revealedCount?` | 전체 (앞에서부터 N개 군집만 점등 — 판정 진행 표시) |
+| `interactive` | `true` |
+| `onSelect?: (item) => void` | — |
+| `legend?: ReactNode` | 기본 문구 (`null` 로 끌 수 있으나 권장하지 않음) |
+
+함께 내보내는 것: `targetMeshDots(item, scale)`(같은 점 데이터를 다른 크기로 재사용 — 배경 오브제 등) · `meshScaleOf(items)` · `MESH_DOT_R` · `MESH_CLUSTER_K`.
+
+**규칙**
+- 열 폭은 군집 지름이 아니라 **1/N 등폭**. 지름에 맞추면 132개 열이 6개 열보다 두 배 넓어져 «어느 종류가 더 중요한가»로 잘못 읽힌다.
+- 대상 수가 상한(군집당 150점)을 넘으면 **점 하나가 여러 대상**을 뜻하도록 축척이 자동 전환되고, 범례가 «점 하나가 대상 N개»로 바뀐다. 축척은 **전 종류 공통** — 종류마다 다르면 면적 비교가 깨진다.
+- 종류 식별은 **아이콘**으로. 점을 종류마다 다른 도형으로 바꾸지 말 것 — 같은 개수가 다른 크기로 읽히고, 4.2px에서 도형은 구별되지 않는다.
+- 분모는 등록 수가 아니라 **판정된 수**(`total - missing`).
+- 애니메이션 클래스는 `whatap-ds.css` 의 `.wds-mesh-*`. `prefers-reduced-motion: reduce` 에서 정지.
+
+
 ---
 
 ## 메시지 카드 — 비용 분석

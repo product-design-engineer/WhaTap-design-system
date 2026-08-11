@@ -77,6 +77,7 @@ export type { HeaderPillButtonSize } from "./HeaderPillButton";
 export { default as ToolbarIconButton, ToolbarIcon } from "./ToolbarIconButton";
 export type { ToolbarIconButtonProps } from "./ToolbarIconButton";
 export { IcDocs, IcSupport } from "./icons/HeaderIcons";
+export { IcSnapshot } from "./icons/SnapshotIcon";
 export { default as SidebarLogoHeader } from "./SidebarLogoHeader";
 export { default as SidebarMenuItem } from "./SidebarMenuItem";
 export { default as SidebarOrgSwitcher } from "./SidebarOrgSwitcher";
@@ -127,6 +128,9 @@ export { default as CriteriaOptionButton } from "./widget/CriteriaOptionButton";
 export { default as ProposalSection } from "./widget/ProposalSection";
 export { default as AiActionChip } from "./widget/AiActionChip";
 export { default as AiAttachmentChip } from "./widget/AiAttachmentChip";
+
+// Topology — 노드-엣지 그래프(레이아웃 엔진 + 프리미티브)
+export * from "./topology";
 
 // Icons
 export { default as SettingsIcon } from "./icons/SettingsIcon";

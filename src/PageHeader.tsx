@@ -57,6 +57,7 @@ export default function PageHeader({
   title,
   aiActive = false,
   onAiToggle,
+  hideAi = false,
   profileMenu,
   roleBadge,
   notifications,
@@ -64,6 +65,14 @@ export default function PageHeader({
   title: string;
   aiActive?: boolean;
   onAiToggle?: () => void;
+  /**
+   * AI 진입점(WhaTap AI 버튼)을 숨긴다. 기본 false — 헤더 구성 불변 정책은 그대로다.
+   *
+   * **AI 모드 화면 전용 예외.** 화면 본문 자체가 대화인 화면(예: 전체 개요)에서는 이미
+   * AI 안에 들어와 있으므로 「AI 를 연다」는 진입점이 뜻을 잃는다. 진입점이 둘로 보이면
+   * 지금 하는 대화가 어느 쪽인지 알 수 없어진다. 위젯을 여는 화면에서는 켜지 않는다.
+   */
+  hideAi?: boolean;
   /** 우상단 아바타 클릭 시 드롭다운 메뉴(예: 엔터프라이즈 관리). 미지정이면 정적 아바타. */
   profileMenu?: ProfileMenuItem[];
   /** 프로필(아바타) 드롭다운 헤더에 표시할 역할(예: "OWNER"). 미지정이면 헤더 숨김. */
@@ -91,7 +100,7 @@ export default function PageHeader({
           {title}
         </p>
         <div className="flex items-center gap-8px">
-          <AiAssistantButton size={HEADER_CONTROL_SIZE} aiActive={aiActive} onClick={onAiToggle} />
+          {!hideAi && <AiAssistantButton size={HEADER_CONTROL_SIZE} aiActive={aiActive} onClick={onAiToggle} />}
           <HeaderPillButton size={HEADER_CONTROL_SIZE} icon={<IcDocs />}>Docs</HeaderPillButton>
         </div>
       </div>
