@@ -192,6 +192,7 @@
     --font-family-numeric-jp: Roboto, NotoSansJP, NotoSans, sans-serif;
     --text-chart: 9px;
     --text-md: 13px;
+    --font-weight-light: 300;
     --font-weight-regular: 400;
     --leading-none: 1;
 
@@ -226,6 +227,32 @@
     --color-chart-seq-2: #4A97E8;
     --color-chart-seq-3: #2472D8;
     --color-chart-seq-4: #1A50B0;
+
+    /* Topology — 노드-엣지 그래프 전용 역할 토큰(구조·상태). 차트 series/seq 로
+       대체 불가 — 의미 축이 다르다. 값 출처·금지사항: tokens.css */
+    --color-topology-canvas-from: #F1F6FB;
+    --color-topology-canvas-to: #C8D1E5;
+    --color-topology-grid-dot: #A6B4BF;
+    --color-topology-node-surface: #F6F8FD;
+    --color-topology-group-surface: #E3EBF8;
+    --color-topology-edge: #B6C4CE;
+    --color-topology-edge-alert: #FC679E;
+    --color-topology-port: #8B9BE1;
+    --color-topology-port-alert: #FC679E;
+    --color-topology-port-ok: #5BD388;
+
+    /* ── Component tokens: 아이콘 크기 스케일 · 툴바 컨트롤 높이 ──
+       tokens.css 에만 있고 **런타임 CSS 에는 없어서 미정의**였다. `ToolbarIconButton` 이
+       `width: var(--wds-toolbar-control-h)` 로 쓰는데 값이 없어 선언이 무효가 되고
+       auto(=컨테이너 폭)로 퍼졌다. tokens.css 는 참조용이라 런타임에 로드되지 않는다 —
+       여기에 없으면 존재하지 않는 것이다. 정의·근거: tokens.css */
+    --wds-icon-lg: 24px;
+    --wds-icon-md: 20px;
+    --wds-icon-sm: 16px;
+    --wds-icon-xs: 12px;
+    --wds-toolbar-icon: var(--wds-icon-sm);
+    --wds-toolbar-control-h: 32px;
+    --wds-toolbar-pill-h: 24px;
 
     /* ── Component tokens: DateTimeBlock ── */
     --wds-datetime-year-w: 28px;
@@ -266,7 +293,11 @@
  * (py-[48px]·border-[#eaeaea]·bg-[#296CF2] 등)를 cascade 에서 이겨 소비자 페이지
  * 스타일을 무력화한다(예: border-color 가 currentColor 검정으로, 버튼 배경이
  * transparent 로). preflight 전체를 base 레이어로 내려 utility 가 정상 override
- * 하도록 한다. (아래 utilities 섹션은 unlayered 유지 → DS 타이포 토큰 우선 보존.) */
+ * 하도록 한다. (아래 utilities 섹션은 unlayered 유지 → DS 타이포 토큰 우선 보존.)
+ *
+ * 네이티브 CSS cascade layer 다 — 프레임워크 산출물이 아니라 **소비자 스타일을 DS
+ * preflight 가 이기지 않게** 하려고 의도적으로 내린 레이어. */
+/* no-tailwind-ok: preflight 를 base 레이어로 내린 의도적 사용(위 주석 참조). */
 @layer base {
 *, ::after, ::before, ::backdrop, ::file-selector-button {
     box-sizing: border-box;
@@ -460,6 +491,7 @@
 .border-white-10 { border-color: color-mix(in srgb, #fff 10%, transparent);@supports (color: color-mix(in lab, red, red)) {border-color: color-mix(in oklab, var(--color-white) 10%, transparent);} }
 .bottom-0 { bottom: 0; }
 .bottom-1px { bottom: -1px; }
+.bottom-16px { bottom: 16px; }
 .bottom-5 { bottom: calc(var(--spacing) * 5); }
 .box-border { box-sizing: border-box; }
 .col-span-4 { grid-column: span 4 / span 4; }
@@ -483,6 +515,8 @@
 .flex-wrap { flex-wrap: wrap; }
 .font-bold { font-weight:700 }
 .font-medium { font-weight:500 }
+/* light(300) — text-2xl 이상 큰 문장 전용(작은 사이즈에서는 획이 끊긴다). */
+.font-light { font-weight:300 }
 .font-normal { font-weight:400 }
 .font-semibold { font-weight:600 }
 .gap-0 { gap: 0; }
@@ -586,6 +620,7 @@
 .leading-snug { line-height:var(--leading-snug) }
 .leading-tight { line-height:var(--leading-tight) }
 .left-0 { left: 0; }
+.left-16px { left: 16px; }
 .left-1-2 { left: calc(1 / 2 * 100%); }
 .list-decimal { list-style-type: decimal; }
 .list-disc { list-style-type: disc; }
@@ -612,6 +647,7 @@
 .mr-6px { margin-right: 6px; }
 .mt-1 { margin-top: var(--spacing); }
 .mt-1px { margin-top: 1px; }
+.mt-16px { margin-top: 16px; }
 .mt-2 { margin-top: calc(var(--spacing) * 2); }
 .mt-2px { margin-top: 2px; }
 .mt-3 { margin-top: calc(var(--spacing) * 3); }
@@ -640,6 +676,7 @@
 .p-10px { padding: 10px; }
 .p-12 { padding: calc(var(--spacing) * 12); }
 .p-12px { padding: 12px; }
+.p-16px { padding: 16px; }
 .p-2 { padding: calc(var(--spacing) * 2); }
 .p-2px { padding: 2px; }
 .p-3 { padding: calc(var(--spacing) * 3); }
@@ -819,6 +856,71 @@
 .bg-surface-200 { background-color: var(--color-surface-200); }
 .hover-bg-surface-100:hover { background-color: var(--color-surface-100); }
 .hover-bg-surface-200:hover { background-color: var(--color-surface-200); }
+
+/* ── 텍스트 색 위계 나머지 3단 ────────────────────────────────────────────────
+   tokens.css 가 `text-primary/secondary/tertiary/disabled` 4단을 utility 로 광고하는데
+   실제로는 primary 만 정의돼 있었다(primary 도 같은 이유로 뒤늦게 채워진 것). 나머지 3단은
+   정의가 없어 body 의 --color-text-primary 를 그대로 상속하고 있었다 —
+   secondary 123곳 · tertiary 170곳 · disabled 21곳이 의도한 색으로 렌더되지 않았다. */
+.text-secondary { color: var(--color-text-secondary); }
+.text-tertiary { color: var(--color-text-tertiary); }
+.text-disabled { color: var(--color-text-disabled); }
+
+/* font-family utility — tokens.css 의 Role Catalog(`numeric.metric`)가 지시하는 이름.
+   정의가 없어 수치 폰트가 적용되지 않고 있었다(11곳). */
+.font-numeric { font-family: var(--font-family-numeric); }
+.font-korean { font-family: var(--font-family-korean); }
+
+/* ── Topology — 캔버스·노드·엣지 표면/색 유틸 ─────────────────────────────────
+   색은 전부 토큰 참조. 컴포넌트가 인라인 style 로 색을 박지 않도록 여기서 클래스로 준다.
+   (좌표·크기는 레이아웃 엔진이 계산하는 데이터라 인라인으로 남는다 — 색이 아니다.) */
+.bg-topology-canvas {
+  background-image: linear-gradient(
+    135deg,
+    var(--color-topology-canvas-from),
+    var(--color-topology-canvas-to)
+  );
+}
+/* 도트 그리드는 **확대/축소되는 안쪽 레이어**에 얹는다 — 캔버스 겉면에 두면 줌해도
+   격자가 그대로라 배율감이 사라진다. */
+.bg-topology-grid {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    var(--color-topology-grid-dot) 1px,
+    transparent 0
+  );
+  background-size: 24px 24px;
+}
+/* 캔버스 여백을 끌어 이동한다는 신호. */
+.cursor-grab { cursor: grab; }
+.cursor-grab:active { cursor: grabbing; }
+/* 그룹 컨테이너 본문 위에 겹친 자식 노드가 클릭을 받도록 헤더만 되살린다. */
+.pointer-events-auto { pointer-events: auto; }
+/* 래퍼가 박스를 만들지 않게 — 절대배치 자식의 기준(containing block)을 바꾸지 않는다. */
+.display-contents { display: contents; }
+
+.bg-topology-node { background-color: var(--color-topology-node-surface); }
+.bg-topology-group { background-color: var(--color-topology-group-surface); }
+
+/* 노드 뱃지 배경 — tone 원색. 이 위 전경은 항상 고정 흰색(.text-white). */
+.bg-topology-tone-default { background-color: var(--color-brand-blue); }
+.bg-topology-tone-ok { background-color: var(--color-topology-port-ok); }
+.bg-topology-tone-alert { background-color: var(--color-topology-port-alert); }
+
+/* 뱃지의 잎(leaf) 모양 — 좌상단만 카드 반경, 우하단만 크게. */
+.rounded-topology-badge { border-radius: var(--radius-xl) 0 var(--radius-xl) 0; }
+
+/* SVG 채움/선 — fill·stroke 는 presentation attribute 대신 클래스로. */
+.fill-topology-port { fill: var(--color-topology-port); }
+.fill-topology-port-ok { fill: var(--color-topology-port-ok); }
+.fill-topology-port-alert { fill: var(--color-topology-port-alert); }
+.stroke-topology-edge { stroke: var(--color-topology-edge); }
+.stroke-topology-edge-alert { stroke: var(--color-topology-edge-alert); }
+.fill-text-tertiary { fill: var(--color-text-tertiary); }
+/* 미니맵 — 노드는 형태만, 현재 보이는 영역은 브랜드색 테두리로. */
+.fill-topology-node { fill: var(--color-topology-node-surface); }
+.fill-none { fill: none; }
+.stroke-topology-viewport { stroke: var(--color-brand-blue); }
 
 /* ── globals (keyframes · 컴포넌트 전역 클래스 · .dark) ────────────────────── */
 html, body, #root {
@@ -1018,6 +1120,69 @@ html, body, #root {
   pointer-events: none;
   animation: aiClickFadeIn 0.25s cubic-bezier(0.22, 1, 0.36, 1) both, aiClickTap 0.85s ease-in-out 0.25s infinite;
 }
+
+/* ─── AiTargetMesh — 대상 군집 메시 (manual) ─────────────────────────────────
+   점 하나 = 대상 하나(축척이 커지면 점 하나 = N개, 범례가 말한다). 판정이 끝난 종류만
+   군집이 켜지므로 이 오브제는 근거 오브제이면서 로딩 오브제를 겸한다 — 진행률이 곧
+   데이터라서 스피너처럼 의미 없이 도는 물체가 아니다. */
+.wds-mesh-cluster {
+  transition: opacity 520ms ease-out, transform 520ms ease-out;
+}
+
+/* 이상(위험·경고) 점 — 정상 점의 호흡보다 빠르게 깜빡여 작은 비율(20/228)이 눈에 걸리게.
+   r 을 함께 키운다: 개수가 적어 진하기만으로는 군집 안에서 존재감이 생기지 않는다. */
+@keyframes wdsMeshDotAlert {
+  0%, 100% { opacity: 1;    r: var(--dot-r); }
+  50%      { opacity: 0.45; r: calc(var(--dot-r) * 1.45); }
+}
+.wds-mesh-dot-alert { animation: wdsMeshDotAlert 1.9s ease-in-out infinite; }
+
+/* 정상 점 — 안쪽에서 바깥으로 번지는 파동. 진폭(--dot-o)과 지연을 중심 거리로 주므로
+   군집마다 한 방향으로 훑고 지나가는 물결이 된다. 기준값을 변수로 뺀 이유: 움직임을 끈
+   환경에서도 인라인 opacity 가 그대로 깊이감이 된다. */
+@keyframes wdsMeshDot {
+  0%, 100% { opacity: var(--dot-o); }
+  50%      { opacity: calc(var(--dot-o) * 0.45); }
+}
+.wds-mesh-dot { animation: wdsMeshDot 2.8s ease-in-out infinite; }
+
+/* 군집 열 = <button> — 누르면 그 종류를 묻는 질문이 나간다. 그런데 오브제가 완전히
+   평평해서 «누를 수 있다»는 신호가 없었다(툴팁뿐). 신호는 **hover/focus 에만** 준다:
+   상시 카드 표면·쉐도우를 얹으면 군집 6개가 stat-tile row(대시보드 어법)가 되고, 위젯
+   문맥에서 카드 표면은 이미 AiCard = «답변의 근거» 라는 뜻이어서 군집이 답변으로 읽힌다.
+   평상시엔 문장 뒤의 그림, 손이 닿으면 도구 — 표면이 상태를 말하는 게 아니라 가능성을 말한다.
+
+   padding 은 hover 때 넣지 않고 **항상** 둔다 — hover 에서 처음 넣으면 6열의 높이가
+   함께 밀려 오브제가 덜컥거린다. 표면만 나타나야 한다.
+   :disabled(판정 중)는 제외: 아직 누를 것이 아니고, 그때 표면이 뜨면 «준비됐다»는 거짓 신호다. */
+.wds-mesh-cluster-btn {
+  padding: 6px 4px;
+  border-radius: var(--radius-md);
+  transition: background-color .12s ease, box-shadow .12s ease, transform .12s ease;
+}
+
+.wds-mesh-cluster-btn:not(:disabled):hover {
+  background: var(--color-surface-100);
+  /* elevation 스케일의 가장 낮은 단(--shadow-xs) — 인라인 rgba 대신 토큰을 쓴다.
+     한 단만 올리는 이유: 그 이상은 «떠 있는 카드» 가 되고, 이 오브제는 카드가 아니다. */
+  box-shadow: var(--shadow-xs);
+  transform: translateY(-1px);
+}
+
+/* 컨트롤의 focus 는 ring — border 로 표현하지 않는다(입력 필드만 focus-border). */
+.wds-mesh-cluster-btn:focus-visible {
+  outline: 2px solid var(--color-brand-blue);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wds-mesh-dot-alert, .wds-mesh-dot { animation: none; }
+  .wds-mesh-cluster { transition: none; }
+  /* 표면·쉐도우는 남기고 움직임만 끈다 — 신호를 없애면 접근성이 되레 나빠진다. */
+  .wds-mesh-cluster-btn { transition: none; }
+  .wds-mesh-cluster-btn:not(:disabled):hover { transform: none; }
+}
+
 .wds-btn {
   background-color: var(--wds-btn-bg, transparent);
   color: var(--wds-btn-fg, inherit);
@@ -1116,4 +1281,17 @@ html, body, #root {
   --color-chart-seq-2: #4C7CC4;
   --color-chart-seq-3: #6BA3EE;
   --color-chart-seq-4: #9BC8FF;
+
+  /* Topology — 레퍼런스에 다크 시안이 없어 새로 설계한 값(반전 아님).
+     층 순서는 라이트와 동일: canvas < group < node. 정의: tokens.css */
+  --color-topology-canvas-from: #1A2130;
+  --color-topology-canvas-to: #10141C;
+  --color-topology-grid-dot: #39414F;
+  --color-topology-node-surface: #232A35;
+  --color-topology-group-surface: #191F29;
+  --color-topology-edge: #414B5A;
+  --color-topology-edge-alert: #FF77A8;
+  --color-topology-port: #8E9CDE;
+  --color-topology-port-alert: #FF77A8;
+  --color-topology-port-ok: #56C98A;
 }

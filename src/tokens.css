@@ -157,7 +157,12 @@
   --text-4xl: 32px;
   --text-5xl: 48px;
 
-  /* Font Weight — 3 단계 (font-{medium|bold} utility 값). */
+  /* Font Weight — 4 단계 (font-{light|medium|bold} utility 값).
+     light(300) 은 본문 running text 용이 아니라 **큰 사이즈 전용**이다 —
+     text-2xl(20px) 이상에서 문장을 낮은 대비로 흐르게 할 때만 쓴다.
+     작은 사이즈에 쓰면 획이 끊겨 가독성이 떨어지므로 text-lg 이하 금지.
+     (웹폰트 Noto Sans / Noto Sans KR 300 굵기가 로드돼 있어야 합성 굵기가 안 생긴다.) */
+  --font-weight-light: 300;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-bold: 700;
@@ -274,6 +279,31 @@
   --color-chart-seq-2: #4A97E8;
   --color-chart-seq-3: #2472D8;
   --color-chart-seq-4: #1A50B0; /* 가장 진함 */
+
+  /* ──────────────────────────────────────────────────────────────────────
+   *  Topology — 노드-엣지 그래프 전용 역할 토큰.
+   *
+   *  차트 토큰(series/seq)으로 대체 불가하다: series 는 **계열 정체성**(같은 지표의
+   *  서로 다른 계열)이고, 여기서 필요한 것은 **구조와 상태**(캔버스 바닥 · 연결선 ·
+   *  포트 · 경보 경로)다. 의미가 다른 축이라 재사용하면 "3번 계열 = 경보" 같은
+   *  거짓 등가가 생긴다.
+   *
+   *  값 출처: 레퍼런스 시안에서 픽셀 샘플링(중앙값)으로 추출. 눈대중 아님.
+   *  ❌ node/group surface 를 --color-card 로 대체하지 말 것 — 캔버스는 카드 위가
+   *     아니라 **자체 바닥(canvas)** 위에 노드를 띄우는 3번째 표면 층이다.
+   *  ❌ edge-alert 를 --color-status-error 로 대체하지 말 것 — 저 빨강은 텍스트/뱃지용
+   *     이라 얇은 1.5px 선에서 탁하게 죽는다(레퍼런스 로즈는 선 가시성용으로 고른 색).
+   * ────────────────────────────────────────────────────────────────────── */
+  --color-topology-canvas-from: #F1F6FB; /* 캔버스 그라데이션 시작(좌상) */
+  --color-topology-canvas-to: #C8D1E5;   /* 캔버스 그라데이션 끝(우하) */
+  --color-topology-grid-dot: #A6B4BF;    /* 배경 도트 그리드 */
+  --color-topology-node-surface: #F6F8FD; /* 노드 카드 표면 — 캔버스 위로 뜸 */
+  --color-topology-group-surface: #E3EBF8; /* 그룹 컨테이너 표면 — 노드보다 한 단 아래 */
+  --color-topology-edge: #B6C4CE;        /* 연결선 기본 */
+  --color-topology-edge-alert: #FC679E;  /* 경보 경로 강조 */
+  --color-topology-port: #8B9BE1;        /* 연결 포트 도트 기본 */
+  --color-topology-port-alert: #FC679E;  /* 경보 포트 */
+  --color-topology-port-ok: #5BD388;     /* 정상 포트 */
 
   /* ──────────────────────────────────────────────────────────────────────
    *  Spacing / Sizing Scale — 4px 그리드. `--text-*` 와 동일한 "px 값 스케일 토큰" 방식.
@@ -629,4 +659,19 @@ html, body, #root {
   --color-chart-seq-2: #4C7CC4;
   --color-chart-seq-3: #6BA3EE;
   --color-chart-seq-4: #9BC8FF;
+
+  /* Topology — **레퍼런스에 다크 시안이 없어 여기서 새로 설계한 값**이다(추출 아님).
+     라이트를 반전한 것이 아니라, 캔버스가 페이지 바닥(--color-bg #0E1116)보다 살짝
+     밝은 자체 표면이 되도록 다시 스텝했다. 층 순서는 라이트와 동일하게 유지:
+     canvas < group < node (노드가 가장 밝고 위로 뜬다). */
+  --color-topology-canvas-from: #1A2130;
+  --color-topology-canvas-to: #10141C;
+  --color-topology-grid-dot: #39414F;
+  --color-topology-node-surface: #232A35;
+  --color-topology-group-surface: #191F29;
+  --color-topology-edge: #414B5A;
+  --color-topology-edge-alert: #FF77A8; /* 어두운 바닥에서 얇은 선 가시성 확보 위해 라이트보다 밝게 */
+  --color-topology-port: #8E9CDE;
+  --color-topology-port-alert: #FF77A8;
+  --color-topology-port-ok: #56C98A;
 }
