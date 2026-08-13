@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { MenuItem } from "./Sidebar";
 import Tooltip from "./Tooltip";
 
@@ -8,7 +9,7 @@ import Tooltip from "./Tooltip";
  * 사이드바(240px 펼침 상태) 본문의 단일 메뉴 행을 렌더. `MenuItem` 데이터 한 건을 받아
  * 세 형태 중 하나로 그린다:
  *   1. **단일 항목** (`children` 없음) — 아이콘 + 라벨 (caret 없음). `active` 면 라이트블루 배경 강조.
- *   2. **확장 항목** (`children` 배열 있음) — 아이콘 + 라벨 + caret(▾, `expanded` 면 180° 회전).
+ *   2. **확장 항목** (`children` 배열 있음) — 아이콘 + 라벨 + caret(▾, 펼침이면 180° 회전). 행을 누르면 접히고 펴진다.
  *   3. **자식 목록** (`expanded` && children.length>0) — 들여쓴 하위 행(28px). `active` 자식은 bold + 라이트블루 배경(`--color-brand-blue-bg`) 강조 — 단일 항목과 동일 규칙.
  * `iconOnly`(Min/collapsed 사이드바용) 면 라벨·caret·자식 없이 32px 행 중앙에 아이콘만 렌더.
  * 자신 또는 자식 중 active 가 있으면 라이트블루 배경 강조, 라벨은 [[Tooltip]](placement right,
@@ -30,7 +31,12 @@ import Tooltip from "./Tooltip";
  * - 데이터(`MenuItem`)만 주입 — 행 외형(높이 32px/28px · 들여쓰기 · active 강조)은 이 컴포넌트가 책임.
  * - **글자 두께: 기본(비활성)=regular(`--font-weight-regular`), active 만 bold + `text-primary`.** 그룹 부모 라벨도 기본 regular.
  * - 색·배경은 토큰 (`--color-brand-blue-bg` · `text-primary/secondary` · `hover-bg-surface-100`) — 인라인 hex 금지.
- * - 펼침 토글은 데이터(`expanded`)로 제어 — 행 자체는 표현용(상태 비보유). 토글 콜백은 Sidebar 가 관리.
+ * - **펼침은 기본으로 이 컴포넌트가 갖는다.** `expanded` 는 «초기값» 이고, 부모 행을 누르면 스스로
+ *   접히고 펴진다. 호출부가 아무것도 주지 않아도 caret 이 동작한다 — caret 이 보이는데 눌리지 않으면
+ *   사용자는 화면이 고장난 것으로 읽는다.
+ * - **현재 위치에 따라 펼침을 통제해야 하면 `onToggle` 을 준다.** 주는 순간 제어 모드가 되어 펼침은
+ *   `expanded` 가 정하고 이 컴포넌트는 상태를 갖지 않는다. 「지금 보고 있는 화면의 부모는 항상
+ *   펼쳐 둔다」 같은 규칙은 그 화면이 알고 있으므로 호출부가 가져가는 것이 맞다.
  * - 아이콘은 표준 경로(`/icons/*`).
  * - 자식 행은 `pl-28px` 들여쓰기 — 부모 아이콘(20px) + gap(8px) 정렬.
  *
@@ -53,6 +59,17 @@ export default function SidebarMenuItem({
   iconOnly?: boolean;
 }) {
   const hasChildren = Array.isArray(item.children);
+
+  /* 펼침 상태 — 호출부가 `onToggle` 을 주면 제어 모드(펼침은 `expanded` 가 정함), 없으면 이 안에서
+     갖는다. `expanded` 는 그 경우 초기값이다. 값이 뒤에 바뀌어도 사용자가 손으로 접은 것을
+     되돌리지 않는다(그게 「사용자가 접었는데 라우팅 한 번에 다시 펴진다」를 막는다). */
+  const controlled = typeof item.onToggle === "function";
+  const [selfExpanded, setSelfExpanded] = useState(item.expanded ?? false);
+  const isExpanded = controlled ? (item.expanded ?? false) : selfExpanded;
+  const toggle = () => {
+    if (controlled) item.onToggle!(!isExpanded);
+    else setSelfExpanded((v) => !v);
+  };
 
   // 아이콘 전용 행 (Min 사이드바) — 자식 active 도 부모 아이콘 강조로 승격.
   // 라벨은 우측 Tooltip — portal+fixed 라 Sidebar 루트 overflow-hidden 에 안 잘림.
@@ -98,10 +115,15 @@ export default function SidebarMenuItem({
     );
   }
 
-  // 확장 가능 항목 (caret-down, expanded 면 180° 회전)
+  // 확장 가능 항목 (caret-down, 펼침이면 180° 회전) — 행을 누르면 토글
   return (
     <div className="contents">
-      <button className="flex flex-col items-start shrink-0 w-full cursor-pointer">
+      <button
+        type="button"
+        onClick={toggle}
+        aria-expanded={isExpanded}
+        className="flex flex-col items-start shrink-0 w-full cursor-pointer"
+      >
         <div className="flex h-32px items-center justify-between overflow-clip px-8px py-6px shrink-0 w-full hover-bg-surface-100">
           <div className="flex gap-4px items-start shrink-0">
             <div className="shrink-0 size-16px flex items-center justify-center">
@@ -121,13 +143,13 @@ export default function SidebarMenuItem({
               style={{
                 width: 8,
                 height: 5,
-                transform: item.expanded ? "rotate(180deg)" : undefined,
+                transform: isExpanded ? "rotate(180deg)" : undefined,
               }}
             />
           </div>
         </div>
       </button>
-      {item.expanded && (item.children?.length ?? 0) > 0 && (
+      {isExpanded && (item.children?.length ?? 0) > 0 && (
         <div className="flex flex-col items-start shrink-0 w-full">
           {item.children!.map((c) => (
             <div
