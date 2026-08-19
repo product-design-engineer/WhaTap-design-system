@@ -61,7 +61,21 @@ const meta: Meta = {
           "**프리셋 B — AI 전용 페이지.** Sidebar + PageHeaderAiInline + WhaTapAiWidget.\n\n" +
           "페이지 자체가 AI 중심. 헤더에서 바로 자연어 입력 → 위젯 즉시 열림 (1-step UX).\n\n" +
           "**포함 컴포넌트:** DashboardLayout · PageHeaderAiInline(AiInlinePrompt 내장) · WhaTapAiWidget\n\n" +
-          "**핵심 기능:** 롤링 placeholder + suggestion chip + 인라인 송신 → 위젯 활성화.",
+          "**핵심 기능:** 롤링 placeholder + suggestion chip + 인라인 송신 → 위젯 활성화.\n\n" +
+          "✅ **Do** — AI 진입은 버튼이 아니라 `AiInlinePrompt` 직접 주입(2-step → 1-step) · " +
+          "화면 본문 자체가 대화인 경우 `hideAi` 로 헤더 토글을 숨겨 진입점을 하나로 · " +
+          "질문 예시는 suggestion chip 으로 제시\n\n" +
+          "❌ **Don't** — AI 영역에 일반 TextField·Button 사용(`Ai...` 컴포넌트만) · " +
+          "진입점을 헤더 토글과 인라인 입력 둘 다 노출(어느 쪽이 지금 대화인지 알 수 없어진다) · " +
+          "chip 을 줄바꿈시키기(한 줄 invariant)\n\n" +
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          "## When to use\n" +
+          "- 자연어 질문이 화면의 **주 입력**인 AI 모드 화면 — 전체 개요·자연어 조회 진입 화면.\n" +
+          "- 무엇을 볼지 사용자가 미리 정하지 않고 AI 에게 맡기는 시작 화면.\n" +
+          "- 대화가 본문이라 헤더의 AI 진입점이 뜻을 잃는 화면(`hideAi` 로 진입점을 하나로).\n\n" +
+          "## When NOT to use\n" +
+          "- 표·차트가 본문이고 AI 는 보조인 화면 → 프리셋 A.\n" +
+          "- 위젯을 여는 일반 제품 화면에서 `hideAi` 를 켜는 것 — `hideAi` 는 페이지 성격으로 정하는 정적 값이고 `aiActive` 로 토글하지 않는다(patterns Part 2 #1).",
       },
     },
   },

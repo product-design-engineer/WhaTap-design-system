@@ -25,7 +25,32 @@ import {
  */
 const meta: Meta = {
   title: "Shell/Page/TopologyOverview",
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        component:
+          "**토폴로지 Overview 합성 템플릿 (Shell).** 조회 조건(TopologyToolbar) → 캔버스(TopologyCanvas + " +
+          "TopologyMinimap · TopologyZoomControl) → 하단 상세 드로어의 3단 구성. 레이아웃 엔진이 좌표를 " +
+          "소유하므로 페이지는 그래프 데이터와 뷰 상태만 들고 있다.\n\n" +
+          "✅ **Do** — 툴바·캔버스·미니맵·줌을 전부 controlled 로 쓰고 상태는 페이지 한 곳에 두기 · " +
+          "그래프는 `TopologyGraph` 형태로 넘기고 좌표 계산은 캔버스에 맡기기 · 접힌 그룹의 엣지는 " +
+          "엔진의 승격 결과를 그대로 그리기\n\n" +
+          "❌ **Don't** — 컨트롤 안에 상태 사본 두기(툴바와 캔버스가 서로 다른 뷰를 보게 된다) · " +
+          "노드/엣지 좌표를 페이지에서 직접 계산 · 여기서 인라인으로 새 UI 를 그리기" +
+          "(빠진 컴포넌트가 있다는 신호이므로 프리미티브로 추출할 것)\n\n" +
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          "## When to use\n" +
+          "- 서비스·노드 사이의 **호출 관계**를 그래프로 탐색하는 화면(토폴로지·의존 관계·연결 구조).\n" +
+          "- 노드가 많아 군집 접기/펼치기가 필요한 그래프 — 접힌 그룹의 엣지는 엔진이 승격해 준다.\n" +
+          "- 노드를 골라 하단 드로어에서 상세를 확인하는 탐색 동선.\n\n" +
+          "## When NOT to use\n" +
+          "- 관계가 아니라 목록·순위를 보는 것 → DataTable(프리셋 A).\n" +
+          "- 단일 대상의 시계열 지표 → 프리셋 D.\n" +
+          "- 좌표를 손으로 배치하는 커스텀 다이어그램 — 좌표는 레이아웃 엔진이 소유한다.",
+      },
+    },
+  },
 };
 export default meta;
 type Story = StoryObj;

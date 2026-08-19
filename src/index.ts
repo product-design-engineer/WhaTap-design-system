@@ -64,6 +64,7 @@ export type { InstanceStatus, OptionbarInstanceSelectorSize } from "./OptionbarI
 export { default as OptionbarItem } from "./OptionbarItem";
 export type { OptionbarSize } from "./OptionbarItem";
 export { default as OptionbarPage } from "./OptionbarPage";
+export type { OptionbarField } from "./OptionbarPage";
 export { default as OptionbarValueDisplay } from "./OptionbarValueDisplay";
 export type { OptionbarValueDisplaySize, OptionbarValueDisplayVariant } from "./OptionbarValueDisplay";
 export { default as PageHeader } from "./PageHeader";
