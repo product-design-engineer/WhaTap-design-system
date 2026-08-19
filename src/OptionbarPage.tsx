@@ -21,6 +21,13 @@
  * - 루트는 `flex-row items-end` 행, 항목 간 12px gap, 하단 border-default.
  * - 각 항목은 `OptionbarItem`(title + content) 으로 감싼다. 우측 정렬 그룹
  *   (프리셋)은 `ml-auto` 로 좌측 빈 공간을 흡수.
+ * - **필드 구성은 `items` 로 교체한다.** `items` 를 주면 기본 4항목(시간·인스턴스·데이터베이스·프리셋)
+ *   대신 준 목록만 렌더한다 — 페이지마다 다른 옵션(시작일·큐브 지표 등)을 이 행으로 표현할 때 쓴다.
+ *   `alignEnd: true` 인 항목은 `ml-auto` 우측 그룹으로 모인다(순서 유지).
+ * - `items` 의 `content` 는 **호출부가 만든다** — 행의 모든 컨트롤에 같은 `size` 를 넘겨야 baseline 이
+ *   맞는다(자동 주입하지 않는다: content 가 임의 노드라 prop 이름을 알 수 없다).
+ * - `items` 의 content 도 등록된 컴포넌트만 쓴다 — 값 표시는 [[OptionbarValueDisplay]],
+ *   선택은 [[PresetSelect]]·[[OptionbarInstanceSelector]]. 인라인 `<div>` 로 컨트롤 자작 금지.
  * - 모든 content chrome 은 `size` 한 값으로 높이를 맞춘다 — `md`(32px, 기본) / `sm`(24px).
  *   LIVE 타이머 · 인스턴스 셀렉터 · DB 값 · 프리셋 셀렉터에 그대로 전달되어 행 baseline 이 어긋나지 않는다.
  *   기본값은 `layout="inline"` + `size="sm"` — 40px 행 안에 24px 컨트롤(가장 컴팩트한 표준 조합).
@@ -38,8 +45,21 @@
  *   databaseLabel="ORA11K"
  *   presetLabel="Default"
  * />
+ *
+ * // 임의 필드 구성 — 시작일 · 인스턴스 · 큐브 지표
+ * <OptionbarPage
+ *   items={[
+ *     { title: "시작일", content: <OptionbarValueDisplay value="2026/08/19" size="sm" /> },
+ *     {
+ *       title: "인스턴스",
+ *       content: <OptionbarInstanceSelector title="" size="sm" label="dmx-rac19-1" status="ok" />,
+ *     },
+ *     { title: "큐브 지표", content: <PresetSelect label="Buffer Cache Hit" size="sm" /> },
+ *   ]}
+ * />
  * ```
  */
+import type { ReactNode } from "react";
 import OptionbarInstanceSelector, {
   type InstanceStatus,
 } from "./OptionbarInstanceSelector";
@@ -47,6 +67,19 @@ import LiveTimerCompact from "./LiveTimerCompact";
 import PresetSelect from "./PresetSelect";
 import OptionbarItem, { type OptionbarSize } from "./OptionbarItem";
 import OptionbarValueDisplay from "./OptionbarValueDisplay";
+
+/**
+ * 옵션바 단일 필드 스펙 — `items` 로 임의 필드를 구성할 때 쓴다.
+ * `content` 는 행의 다른 컨트롤과 같은 `size` 로 만들어 넘긴다(baseline 통일).
+ */
+export type OptionbarField = {
+  /** 라벨. 빈 문자열이면 라벨 행을 숨긴다([[OptionbarItem]] 규칙). */
+  title: string;
+  /** 값 컨트롤 — 등록된 옵션바 chrome 컴포넌트. */
+  content: ReactNode;
+  /** true 면 `ml-auto` 우측 그룹으로 모인다(기본 false = 좌측 그룹). */
+  alignEnd?: boolean;
+};
 
 export default function OptionbarPage({
   /** 시간 옵션 (live + duration tag) */
@@ -61,7 +94,12 @@ export default function OptionbarPage({
   databaseLabel = "ORA11K",
   /** 프리셋 옵션 */
   presetLabel = "Default",
-  /** 항목 배치 — inline(타이틀을 값 좌측에 나란히, **기본**) / stack(타이틀 위·값 아래) */
+  /**
+   * 필드 구성 교체 — 주면 기본 4항목(시간·인스턴스·데이터베이스·프리셋) 대신 이 목록만 렌더한다.
+   * 미지정(기본)이면 기존 동작 그대로.
+   */
+  items,
+  /** 항목 배치 — inline(타이틀을 값 좌측에, **기본**) / stack(타이틀 위·값 아래) / auto(행 폭으로 자동 전환) */
   layout = "inline",
   /** 행 전체 chrome 높이 — sm(24px, **기본**) / md(32px). 모든 하위 컨트롤에 일괄 전달. */
   size = "sm",
@@ -74,27 +112,26 @@ export default function OptionbarPage({
   instanceStatus?: InstanceStatus;
   databaseLabel?: string;
   presetLabel?: string;
-  layout?: "stack" | "inline";
+  items?: OptionbarField[];
+  layout?: "stack" | "inline" | "auto";
   size?: OptionbarSize;
 }) {
   // 좌·우 거터는 헤더(PageHeader·SubHeaderBar·PageHeaderAiInline)와 동일한 --wds-header-px 토큰으로 정렬.
   // inline 항목은 한 줄 가로 행 → 행 정렬은 center. stack 은 기존 items-end 유지.
-  const rowAlign = layout === "inline" ? "items-center" : "items-end";
+  // auto 는 항목 높이가 폭에 따라 1줄/2줄로 달라지므로 center 로 둔다(stack 처럼 밑줄 정렬하면
+  // 인라인으로 펴진 순간 라벨과 컨트롤의 baseline 이 어긋난다).
+  const rowAlign = layout === "stack" ? "items-end" : "items-center";
   // inline 행 높이는 **40px 고정**(`box-border`) — size(md 32px / sm 24px) 가 바뀌어도 행 높이는 불변.
   // 사이드바 스위처·SubHeaderBar 40px 라인과 정렬을 보장하려면 padding 기반이 아니라 고정 높이여야 한다.
   // stack 은 항목이 2줄(타이틀+값)이라 높이 고정 없이 py-8px 유지.
+  // auto 는 폭에 따라 1줄(인라인)↔2줄(스택)로 바뀌므로 높이를 고정하지 않는다.
   const rowBox = layout === "inline" ? "box-border" : "py-8px";
-  return (
-    <div
-      className={`flex flex-row ${rowAlign} gap-12px flex-wrap ${rowBox} bg-card border-b border-color-var-color-border-default`}
-      style={{
-        paddingInline: "var(--wds-header-px)",
-        // inline: 40px 고정선. minHeight 로 둬서 flex-wrap 이 일어나는 좁은 폭에서도 잘리지 않는다.
-        // (min-h-40px 유틸은 whatap-ds.css 에 없고 새 클래스 추가는 금지 → 인라인 style)
-        ...(layout === "inline" ? { minHeight: 40 } : null),
-      }}
-    >
-      <OptionbarItem title="시간" layout={layout}>
+  /* 기본 4항목도 items 와 같은 스펙으로 표현한다 — 렌더 경로를 하나로 두면
+     좌·우 그룹 마크업이 두 벌로 갈라지지 않는다(기본 경로 마크업은 종전과 동일). */
+  const fields: OptionbarField[] = items ?? [
+    {
+      title: "시간",
+      content: (
         <LiveTimerCompact
           size={size}
           time={liveTime}
@@ -102,29 +139,48 @@ export default function OptionbarPage({
           paused={paused}
           onTogglePause={onTogglePause}
         />
-      </OptionbarItem>
-
-      <OptionbarItem title="인스턴스" layout={layout}>
-        {/* title="" 로 내부 title 렌더 억제 (default "인스턴스"가 중복 표시되는 것 방지) */}
+      ),
+    },
+    {
+      title: "인스턴스",
+      // title="" 로 내부 title 렌더 억제 (default "인스턴스"가 중복 표시되는 것 방지)
+      content: (
         <OptionbarInstanceSelector
           title=""
           size={size}
           label={instanceLabel}
           status={instanceStatus}
         />
-      </OptionbarItem>
+      ),
+    },
+    { title: "데이터베이스", content: <OptionbarValueDisplay value={databaseLabel} size={size} /> },
+    // 프리셋은 우측 정렬 — ml-auto로 좌측 빈 공간 흡수
+    { title: "프리셋", content: <PresetSelect label={presetLabel} size={size} />, alignEnd: true },
+  ];
+  const leading = fields.filter((f) => !f.alignEnd);
+  const trailing = fields.filter((f) => f.alignEnd);
+  const renderField = (f: OptionbarField, i: number) => (
+    <OptionbarItem key={`${f.title}-${i}`} title={f.title} layout={layout}>
+      {f.content}
+    </OptionbarItem>
+  );
+  return (
+    <div
+      className={`wds-optionbar-row flex flex-row ${rowAlign} gap-12px flex-wrap ${rowBox} bg-card border-b border-color-var-color-border-default`}
+      style={{
+        paddingInline: "var(--wds-header-px)",
+        // inline: 40px 고정선. minHeight 로 둬서 flex-wrap 이 일어나는 좁은 폭에서도 잘리지 않는다.
+        // (min-h-40px 유틸은 whatap-ds.css 에 없고 새 클래스 추가는 금지 → 인라인 style)
+        ...(layout === "inline" ? { minHeight: 40 } : null),
+      }}
+    >
+      {leading.map(renderField)}
 
-      <OptionbarItem title="데이터베이스" layout={layout}>
-        <OptionbarValueDisplay value={databaseLabel} size={size} />
-      </OptionbarItem>
-
-      {/* 프리셋은 우측 정렬 — ml-auto로 좌측 빈 공간 흡수 */}
-      <div className={`ml-auto flex flex-row ${rowAlign} gap-12px flex-wrap`}>
-        <OptionbarItem title="프리셋" layout={layout}>
-          <PresetSelect label={presetLabel} size={size} />
-        </OptionbarItem>
-      </div>
+      {trailing.length > 0 && (
+        <div className={`ml-auto flex flex-row ${rowAlign} gap-12px flex-wrap`}>
+          {trailing.map(renderField)}
+        </div>
+      )}
     </div>
   );
 }
-

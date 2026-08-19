@@ -23,6 +23,11 @@ import type { ReactNode } from "react";
  * - children 은 같은 `size` chrome 으로 baseline 통일 (LiveTimerCompact · InstanceSelector 등, 기본 24px).
  * - `layout="inline"`(**기본**): 타이틀을 콘텐츠 좌측에 나란히(가로) 배치, chrome 높이 기준 수직 중앙 정렬.
  * - `layout="stack"`: 타이틀 위 / 콘텐츠 아래 세로 스택, gap 6px. 세로 폭이 넉넉한 자리에서만.
+ * - `layout="auto"`: **행의 가로 폭으로 자동 결정** — 넉넉하면 inline(라벨 좌측), 좁아지면 stack.
+ *   기준은 뷰포트가 아니라 행이 실제로 쓸 수 있는 폭이다(container query). 그래서 AI 위젯이
+ *   열려 행이 좁아지면 같은 화면에서도 라벨이 위로 접힌다. **부모 행에 `.wds-optionbar-row`
+ *   가 있어야 한다**([[OptionbarPage]] 는 이미 붙인다). 컨테이너가 없으면 stack 으로 남는다 —
+ *   폭을 모르는 상태에서 라벨을 옆에 두면 값이 잘리므로, 모를 때는 접는 쪽이 안전하다.
  *
  * @example
  * ```tsx
@@ -41,9 +46,26 @@ export default function OptionbarItem({
 }: {
   title: string;
   children: ReactNode;
-  /** inline: 타이틀을 콘텐츠 좌측에 나란히(**기본**) · stack: 타이틀 위·콘텐츠 아래 */
-  layout?: "stack" | "inline";
+  /** inline: 타이틀을 콘텐츠 좌측에 나란히(**기본**) · stack: 타이틀 위·콘텐츠 아래 · auto: 행 폭으로 자동 전환 */
+  layout?: "stack" | "inline" | "auto";
 }) {
+  /* auto — 배치를 JS 가 아니라 CSS(container query)가 정한다. JS 로 폭을 재면 위젯 열림·
+     사이드바 접힘마다 리렌더가 필요하고, 첫 페인트에서 한 번 틀린 배치가 보인다. */
+  if (layout === "auto") {
+    return (
+      <div className="wds-optionbar-item-auto">
+        {title && (
+          <div
+            className="text-base font-bold text-primary tracking-default leading-none shrink-0"
+            style={{ fontFamily: "var(--font-family-korean)" }}
+          >
+            {title}
+          </div>
+        )}
+        {children}
+      </div>
+    );
+  }
   if (layout === "inline") {
     return (
       <div className="flex flex-row items-center gap-6px">

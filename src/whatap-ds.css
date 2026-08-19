@@ -1192,6 +1192,29 @@ html, body, #root {
   outline: 2px solid var(--color-brand-blue);
   outline-offset: 2px;
 }
+/* 옵션바 항목 자동 배치 — 「폭이 넉넉하면 라벨을 값 왼쪽에」.
+   기준은 뷰포트가 아니라 **행이 실제로 쓸 수 있는 폭**이다(container query). 사이드바(240)와
+   AI 위젯(480)이 열리면 같은 화면에서도 행이 좁아지는데, 뷰포트 기준이면 그때도 라벨을 옆에
+   두려다 값이 잘린다. 행(.wds-optionbar-row)이 컨테이너이고 항목이 그 폭을 질의한다.
+   임계 880px 근거: 1440 화면에서 사이드바만 있을 때 행 폭 ≈ 1152 → 인라인,
+   위젯까지 열리면 ≈ 672 → 스택. 즉 위젯을 여는 순간 라벨이 위로 접힌다. */
+.wds-optionbar-row {
+  container-type: inline-size;
+  container-name: wds-optionbar;
+}
+.wds-optionbar-item-auto {
+  display: flex;
+  flex-direction: column;   /* 좁을 때: 라벨 위 · 값 아래 */
+  align-items: flex-start;
+  gap: 6px;
+}
+@container wds-optionbar (min-width: 880px) {
+  .wds-optionbar-item-auto {
+    flex-direction: row;    /* 넉넉할 때: 라벨 왼쪽 인라인 */
+    align-items: center;
+  }
+}
+
 /* 페이지 본문 콘텐츠 블록 — 좌·우 거터를 헤더·옵션바와 동일한 토큰으로 정렬. 인라인 padding 매직넘버 대체. */
 .wds-page-content {
   padding-block: var(--wds-content-py);
