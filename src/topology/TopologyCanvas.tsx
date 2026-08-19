@@ -2,13 +2,14 @@ import { useCallback, useMemo, useRef, type PointerEvent, type WheelEvent } from
 import TopologyNode from "./TopologyNode";
 import TopologyEdge from "./TopologyEdge";
 import TopologyPort from "./TopologyPort";
-import { layoutTopology, type TopologyGraph } from "./layout";
+import { layoutTopology, clampScale, type TopologyGraph } from "./layout";
 
 /** 캔버스 뷰포트 상태 — 이동(px) + 배율. */
 export type TopologyView = { x: number; y: number; scale: number };
 
-/** 배율 하한/상한 — 미니맵·줌 컨트롤과 공유하는 단일 출처. */
-export const TOPOLOGY_ZOOM = { min: 0.25, max: 2, step: 0.1 } as const;
+/* 배율 상수·clamp 는 `layout`(계층 없는 순수 모듈)이 소유한다 — 줌 컨트롤이 캔버스를
+   값으로 import 하지 않도록. 기존 호출부 호환을 위해 여기서 다시 내보낸다. */
+export { TOPOLOGY_ZOOM, clampScale } from "./layout";
 
 /**
  * TopologyCanvas — Composite. 그래프를 배치·라우팅해 그리고 pan/zoom 을 처리하는 뷰포트.
@@ -145,7 +146,4 @@ export default function TopologyCanvas({
   );
 }
 
-/** 배율을 허용 범위로 자른다 — 줌 컨트롤과 휠이 같은 규칙을 쓰도록 공개한다. */
-export function clampScale(scale: number): number {
-  return Math.min(TOPOLOGY_ZOOM.max, Math.max(TOPOLOGY_ZOOM.min, Math.round(scale * 100) / 100));
-}
+

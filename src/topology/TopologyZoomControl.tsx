@@ -1,4 +1,4 @@
-import { TOPOLOGY_ZOOM } from "./TopologyCanvas";
+import { TOPOLOGY_ZOOM } from "./layout";
 
 /**
  * TopologyZoomControl — Primitives. `− 17% +` 형태의 배율 조절 컨트롤.

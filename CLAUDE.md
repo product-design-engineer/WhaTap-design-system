@@ -10,7 +10,8 @@
   - `SKILL.md` — 본 디자인 시스템 사용 절차
   - `primitives.md` / `chrome-components.md` / `widget-components.md` — 컴포넌트 카탈로그 (텍스트 형태)
   - `tokens.md` — 토큰 정의 (CSS 변수 ↔ 디자인 의미)
-  - `patterns.md` — 합성 패턴 (페이지 레벨 컴포지션)
+  - `patterns.md` — **Part 1 인터랙션 패턴**(`P1`… 컴포넌트 횡단 시퀀스 — 파괴적 액션 확인 · 완료 통보 · 즉시반영 vs 폼제출) + **Part 2 구현 정책**(`1`… 기존 번호 유지). MCP `search_components` 가 이 파일을 함께 검색한다.
+  - `components.json` — **기계 판독 규칙 카탈로그(자동 생성 · 직접 편집 금지).** 컴포넌트별 Purpose · ✅Do · ❌Don't · Composition rules · props · 스토리 id. `scripts/build-components-json.mjs` 가 **소스 docstring + 스토리**에서 유도하고 MCP `get_component`·`get_do_dont` 가 이걸 읽는다 — Do/Don't 를 따로 손으로 쓰지 않는다(표기 단일화 규칙은 `docs/SKILL.md`). 강제: `pnpm lint:docstrings`.
   - `STORIES_ROADMAP.md` — Storybook 카탈로그 추가 작업 목록
 
 ## 카탈로그 — 단일 3-Layer 체계 (Primitives · Composite · Shell)
@@ -58,9 +59,9 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 
 | Layer | 역할 | 조합 규칙 | 수량(카탈로그) |
 |---|---|---|---|
-| **Primitives** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 | — | 65 (Ai/ 포함) |
-| **Composite** | Primitives 를 1단계 조합 | Primitives 만 import. **Composite 끼리 import 금지** | 29 (Ai/ 포함) |
-| **Shell** | Composite + Primitives 를 최종 조립하는 진입점 | 모든 계층 import 가능 | 5 (DashboardLayout · Ai/Widget · Page A·B·D) |
+| **Primitives** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 | — | 75 (Ai/ 포함) |
+| **Composite** | Primitives 를 1단계 조합 | Primitives 만 import. **Composite 끼리 import 금지** | 34 (Ai/ 포함) |
+| **Shell** | Composite + Primitives 를 최종 조립하는 진입점 | 모든 계층 import 가능 | 6 (DashboardLayout · Ai/Widget · Page A·B·D · TopologyOverview) |
 
 **Primitives** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, Switch, DataTable, MiniLineChart, LiveTimerCompact, AiCard, AiCaption … + **인라인 추출 Parts**(SidebarMenuItem · PageHeaderNotificationItem · PageHeaderProfileMenuItem · ProductRailItem · BottomRailItem · TabButton · CostBreakdownRow · ClassificationTableRow · CostTableRow · MigPlanRow · EventListItem · ReasoningStep · TimelineStepItem · CriteriaGroup · ReceiverChannelItem · AiActionChip · AiAttachmentChip · AiQuickActionChip)
 
@@ -210,6 +211,8 @@ style={{ background: tokens.color.surface.critical.value }}     // ❌ 라이트
 | 일시적 누름 상태 (텍스트 Bold 등) | *(미보유 — 필요 시 `Toggle` 신설)* | press/unpress |
 
 ❌ 약관 동의에 `Switch`, 즉시-적용 설정에 `Checkbox` 처럼 의도와 어긋난 선택 금지.
+
+> 근거·경계(실패 시 되돌리기, 저장 버튼 금지)는 `docs/patterns.md` → **P3. 즉시 반영 vs 폼 제출** 이 정본. 표만 여기 둔다.
 
 ## DataTable 종합 정책
 
