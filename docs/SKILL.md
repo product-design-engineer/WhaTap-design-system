@@ -78,6 +78,23 @@ DS는 **Tailwind를 쓰지 않습니다.** `style.css`(= `whatap-ds.css`)는 외
 - **새 색/뱃지/카드 스타일이 필요한가 싶다** → 먼저 [`tokens.md`](./tokens.md) + [`primitives.md`](./primitives.md)에서 재사용할 수 있는지 확인 (있을 확률 매우 높음)
 - **인라인 div 새로 짤까 고민된다** → [`patterns.md`](./patterns.md)의 Do/Don't부터 확인
 
+## 컴포넌트 규칙은 어디에 있나 — Do / Don't 단일 표기
+
+컴포넌트 하나를 쓰기 전에 읽어야 하는 것은 **그 컴포넌트의 Do/Don't** 다. 표기는 **하나**로 통일한다.
+
+**정본은 소스 docstring 4섹션이다** — `## Purpose` · `## When to use` · `## When NOT to use` · `## Composition rules` (+ `@example`). Do/Don't 를 따로 손으로 복제하지 않는다:
+
+| 출력 | 무엇에서 오나 |
+|---|---|
+| ✅ **Do** | `## Do` 가 있으면 그대로 · 없으면 `When to use` 불릿 |
+| ❌ **Don't** | `## Don't` 가 있으면 그대로 · 없으면 `When NOT to use` + `Composition rules` 의 **금지형 문장**(금지·말 것·안 된다…) |
+
+특별히 강조할 컴포넌트만 docstring 에 `## Do` / `## Don't` 를 명시해 승격한다(그 컴포넌트에서 실제로 사고가 났던 것들). 스토리 설명의 `✅ Do — … / ❌ Don't — …` 블록도 같은 표기이며 함께 수집된다.
+
+**기계 판독 출력:** [`components.json`](./components.json) — `scripts/build-components-json.mjs` 가 위 규칙대로 생성하고 `/design-system/components.json` 으로 서빙한다. MCP `get_component` 와 `get_do_dont` 가 이 파일을 읽는다. **직접 편집 금지** — docstring 을 고치고 재생성(`pnpm build:design`).
+
+> 이 배달 경로가 없던 동안, 소스에 잘 쓰인 「When NOT to use」는 소비 AI 에게 **존재하지 않는 정보**였다(MCP 는 title·import·스토리 URL 만 돌려줬다). 규칙을 쓰는 것과 전달되는 것은 다른 일이다.
+
 ## 디자인 시스템 구조
 
 트리는 **컴포넌트 3계층(Primitives · Composite · Shell)** 과 동일한 축. AI 전용 에셋은 별도 카테고리가 아니라 각 계층 안 **`Ai/` 하위그룹**.
@@ -195,7 +212,7 @@ export default function AiMyNewMessage({
 | [`chrome-components.md`](./chrome-components.md) | 19 종 — DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · Optionbar* · LiveTimerCompact · TimeRangeSelector · PresetSelect · Stage · Toast · AiSymbol · DataTable · FilterBar · MiniLineChart · EventWeekTimeMatrix · Button · DashboardBuildingProgress · WhaTapAiContext |
 | [`ai-entry.md`](./ai-entry.md) | AI 진입점 4 종 — AiAssistantButton · AiSendButton · AiInlinePrompt · AiPromptInput |
 | [`widget-components.md`](./widget-components.md) | WhaTapAiWidget + 20 종 Ai* 메시지 카드 |
-| [`patterns.md`](./patterns.md) | 합성 패턴 + Do/Don't (사이드바 collapse · 헤더 invariant · 차트 정렬 · SVG 단위 · DataTable density · 타이포 위계 · AI 카테고리 분리 등) |
+| [`patterns.md`](./patterns.md) | **Part 1 인터랙션 패턴** — 컴포넌트 횡단 시퀀스(파괴적 액션 확인 · 완료 통보 · 즉시반영 vs 폼제출). **Part 2 구현 정책** — 사이드바 collapse · 헤더 invariant · 차트 정렬 · SVG 단위 · DataTable density · 타이포 위계 · AI 카테고리 분리 등 |
 
 ## 동기화 정책
 

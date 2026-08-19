@@ -54,7 +54,11 @@ jobs:
 
       # ── 렌더 기반 게이트 ────────────────────────────────────────────────
       # vitest 가 storybookTest 로 스토리를 실제 chromium 에서 렌더한다.
-      # pnpm test 안에 catalog · design-lint · raw-color · layer-deps · token-sync 가 포함된다.
+      # pnpm test 안에 정적 게이트가 모두 포함된다:
+      #   catalog-folders · design-lint · raw-color · layer-deps · token-sync
+      #   · no-tailwind · guardrails-meta · no-cycle(eslint)
+      # 게이트를 워크플로에서 직접 부르지 않는다 — 배선을 고칠 곳이 package.json 한 곳이고,
+      # guardrails-meta 가 이 위임 고리를 따라 도달성을 검산한다.
       - name: Install Playwright chromium
         run: pnpm exec playwright install --with-deps chromium
 
