@@ -64,18 +64,20 @@ export default function CriteriaOptionButton({
       <button
         onClick={onClick}
         disabled={locked}
+        data-ds-policy-ok={selected ? "brand-blue 배경 위 전경 — 컬러 위 고정 흰색" : undefined}
         className="flex items-center justify-center h-32px px-12px rounded-6px text-base tracking-default border cursor-pointer whitespace-nowrap"
         style={{
           fontFamily: "var(--font-family-korean)",
           fontWeight: "var(--font-weight-medium)",
-          background: selected ? "var(--color-brand-blue)" : "#fff",
+          background: selected ? "var(--color-brand-blue)" : "var(--color-card)",
+          // raw-color-ok: 선택 시 brand-blue 배경 위 전경 — 컬러 위 고정 흰색.
           color: selected ? "#fff" : "var(--color-brand-blue)",
           borderColor: selected ? "var(--color-brand-blue)" : "var(--color-brand-blue)",
           opacity: dimmed ? 0.4 : 1,
           pointerEvents: locked ? "none" : "auto",
           transition: "background 180ms, color 180ms, opacity 180ms, transform 120ms",
           transform: selected ? "scale(1.02)" : "scale(1)",
-          boxShadow: selected ? "0 2px 8px rgba(41,108,242,0.25)" : "none",
+          boxShadow: selected ? "var(--shadow-brand-glow)" : "none",
         }}
       >
         {label}

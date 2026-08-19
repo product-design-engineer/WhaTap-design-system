@@ -71,7 +71,7 @@ export const FlexBoardBuild: Story = {
   args: {
     title: "전체 프로젝트 장애 통합 모니터링 보드 구성 중...",
     intervalMs: 760,
-    background: "#f1f2f4",
+    background: "var(--color-surface-100)",
     steps: [
       "프로젝트 알림 데이터 수집",
       "이벤트 타임라인 정렬",

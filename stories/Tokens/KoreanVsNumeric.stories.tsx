@@ -31,16 +31,16 @@ const GUIDANCE: { context: string; family: "korean" | "numeric"; reason: string 
 export const SelectionGuide: StoryObj = {
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 860, fontFamily: tokens.font.family.korean.value }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 100px 1fr", gap: 16, padding: "8px 16px", borderBottom: "1px solid #eaeaea", fontSize: 11, color: "#757575", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.3px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 100px 1fr", gap: 16, padding: "8px 16px", borderBottom: "1px solid var(--color-border-default)", fontSize: 11, color: "var(--color-text-tertiary)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.3px" }}>
         <span>Context</span>
         <span style={{ textAlign: "center" }}>Family</span>
         <span>Reason</span>
       </div>
       {GUIDANCE.map((g, i) => (
-        <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 100px 1fr", gap: 16, alignItems: "center", padding: "12px 16px", borderBottom: "1px solid #f5f5f5" }}>
-          <span style={{ fontSize: 13, color: "#222" }}>{g.context}</span>
-          <code style={{ textAlign: "center", fontFamily: "Roboto, monospace", fontSize: 12, color: g.family === "numeric" ? "#296CF2" : "#222", fontWeight: 700 }}>{g.family}</code>
-          <span style={{ fontSize: 12, color: "#4c4c4c", lineHeight: 1.4 }}>{g.reason}</span>
+        <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 100px 1fr", gap: 16, alignItems: "center", padding: "12px 16px", borderBottom: "1px solid var(--color-surface-50)" }}>
+          <span style={{ fontSize: 13, color: "var(--color-text-primary)" }}>{g.context}</span>
+          <code style={{ textAlign: "center", fontFamily: "Roboto, monospace", fontSize: 12, color: g.family === "numeric" ? "var(--color-brand-blue)" : "var(--color-text-primary)", fontWeight: 700 }}>{g.family}</code>
+          <span style={{ fontSize: 12, color: "var(--color-text-secondary)", lineHeight: 1.4 }}>{g.reason}</span>
         </div>
       ))}
     </div>
@@ -58,19 +58,19 @@ const SAMPLES = [
 export const NumericComparison: StoryObj = {
   render: () => (
     <div style={{ maxWidth: 720 }}>
-      <p style={{ fontSize: 13, color: "#4c4c4c", lineHeight: 1.5, marginBottom: 16, fontFamily: tokens.font.family.korean.value }}>
+      <p style={{ fontSize: 13, color: "var(--color-text-secondary)", lineHeight: 1.5, marginBottom: 16, fontFamily: tokens.font.family.korean.value }}>
         같은 숫자 텍스트를 두 폰트로 나란히 표시. <strong>numeric(Roboto)</strong> 이 자릿수 정렬 · 등폭 비례에서 시각적으로 더 안정적임이 확인됩니다.
       </p>
-      <div style={{ display: "grid", gridTemplateColumns: "120px 1fr 1fr", gap: 16, padding: "8px 16px", borderBottom: "1px solid #eaeaea", fontSize: 11, color: "#757575", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.3px", fontFamily: tokens.font.family.korean.value }}>
+      <div style={{ display: "grid", gridTemplateColumns: "120px 1fr 1fr", gap: 16, padding: "8px 16px", borderBottom: "1px solid var(--color-border-default)", fontSize: 11, color: "var(--color-text-tertiary)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.3px", fontFamily: tokens.font.family.korean.value }}>
         <span>Metric</span>
         <span>korean (Noto Sans)</span>
-        <span style={{ color: "#296CF2" }}>numeric (Roboto)</span>
+        <span style={{ color: "var(--color-brand-blue)" }}>numeric (Roboto)</span>
       </div>
       {SAMPLES.map((s, i) => (
-        <div key={i} style={{ display: "grid", gridTemplateColumns: "120px 1fr 1fr", gap: 16, alignItems: "center", padding: "10px 16px", borderBottom: "1px solid #f5f5f5" }}>
-          <span style={{ fontSize: 12, color: "#757575", fontFamily: tokens.font.family.korean.value }}>{s.label}</span>
-          <span style={{ fontFamily: tokens.font.family.korean.value, fontSize: 18, color: "#222", fontWeight: 700 }}>{s.value}</span>
-          <span style={{ fontFamily: tokens.font.family.numeric.value, fontSize: 18, color: "#222", fontWeight: 700 }}>{s.value}</span>
+        <div key={i} style={{ display: "grid", gridTemplateColumns: "120px 1fr 1fr", gap: 16, alignItems: "center", padding: "10px 16px", borderBottom: "1px solid var(--color-surface-50)" }}>
+          <span style={{ fontSize: 12, color: "var(--color-text-tertiary)", fontFamily: tokens.font.family.korean.value }}>{s.label}</span>
+          <span style={{ fontFamily: tokens.font.family.korean.value, fontSize: 18, color: "var(--color-text-primary)", fontWeight: 700 }}>{s.value}</span>
+          <span style={{ fontFamily: tokens.font.family.numeric.value, fontSize: 18, color: "var(--color-text-primary)", fontWeight: 700 }}>{s.value}</span>
         </div>
       ))}
     </div>

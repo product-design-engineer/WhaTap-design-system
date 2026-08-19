@@ -54,7 +54,7 @@ export default function MiniLineChart({
   markerAt = 0.08,
   showTopStat = false,
   /** line/area 색상 (기본 라이브 토큰 blue) */
-  color = "var(--color-brand-blue-soft)",
+  color = "var(--color-chart-series-1)",
   /** Y축 및 peak 라벨에 붙는 단위 (예: "%", "K") */
   unit = "",
   /** stagger 진입 애니메이션 delay(ms). undefined면 애니메이션 없음 */
@@ -186,7 +186,7 @@ export default function MiniLineChart({
             top: PAD_TOP_PX,
             height: PLOT_H_PX,
             width: 0,
-            borderLeft: "0.8px dashed #222",
+            borderLeft: "0.8px dashed var(--color-text-primary)",
             opacity: 0.5,
           }}
         />
@@ -330,7 +330,7 @@ function MenuDots() {
     <button
       type="button"
       aria-label="더보기"
-      className="flex items-center justify-center size-16px rounded-2px cursor-pointer hover-bg-rgba-0-0-0-0_05 shrink-0"
+      className="flex items-center justify-center size-16px rounded-2px cursor-pointer hover-bg-surface-100 shrink-0"
     >
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
         <circle cx="7" cy="3" r="1" fill="var(--color-text-tertiary)" />

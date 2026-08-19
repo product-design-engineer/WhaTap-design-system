@@ -1,0 +1,33 @@
+{
+  "_comment": "3-Layer 의존 방향 기존 위반 동결선. 신규는 차단되고 이 목록은 줄일 수만 있다. 해소 후 `node scripts/check-layer-deps.mjs --update` 로 갱신.",
+  "primitives-primitives": [
+    "src/BottomRailItem.tsx -> src/Tooltip.tsx",
+    "src/OptionbarValueDisplay.tsx -> src/Chip.tsx",
+    "src/ProductRailItem.tsx -> src/Tooltip.tsx",
+    "src/SidebarMenuItem.tsx -> src/Tooltip.tsx",
+    "src/topology/TopologyNode.tsx -> src/topology/TopologyCollapseToggle.tsx",
+    "src/widget/ReceiverChannelItem.tsx -> src/Switch.tsx"
+  ],
+  "reverse-type": [
+    "src/DataTableRow.tsx -> src/DataTable.tsx",
+    "src/PageHeaderNotificationItem.tsx -> src/PageHeader.tsx",
+    "src/PageHeaderProfileMenuItem.tsx -> src/PageHeader.tsx",
+    "src/SidebarMenuItem.tsx -> src/Sidebar.tsx",
+    "src/SidebarOrgSwitcher.tsx -> src/Sidebar.tsx",
+    "src/SidebarProjectSwitcher.tsx -> src/Sidebar.tsx",
+    "src/TabButton.tsx -> src/Tabs.tsx",
+    "src/widget/ClassificationTableRow.tsx -> src/widget/AiClassificationTable.tsx",
+    "src/widget/CostBreakdownRow.tsx -> src/widget/AiCostBreakdown.tsx",
+    "src/widget/CostTableRow.tsx -> src/widget/AiCostTable.tsx",
+    "src/widget/EventListItem.tsx -> src/widget/AiEventList.tsx",
+    "src/widget/ReceiverChannelItem.tsx -> src/widget/AiReceiverChannels.tsx",
+    "src/widget/TimelineStepItem.tsx -> src/widget/AiStepsTimeline.tsx"
+  ],
+  "composite-composite": [
+    "src/FilterBar.tsx -> src/FilterChipItem.tsx",
+    "src/FilterBar.tsx -> src/FilterDropdown.tsx",
+    "src/FilterDropdown.tsx -> src/FilterDropdownOptionItem.tsx",
+    "src/widget/AiCriteriaSelection.tsx -> src/widget/CriteriaOptionButton.tsx",
+    "src/widget/AiDashboardProposal.tsx -> src/widget/ProposalSection.tsx"
+  ]
+}

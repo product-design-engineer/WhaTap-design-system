@@ -9,10 +9,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
  * **그대로 옮긴 자산**입니다. 소스의 vanilla JS DOM-builder → React TSX 변환.
  *
  * 브랜드 색:
- * - Orange `#F25022`
- * - Yellow `#FFB902`
- * - Green  `#80BA01`
- * - Blue   `#19A0E5`
+ * - Orange `--color-logo-orange`
+ * - Yellow `--color-logo-yellow`
+ * - Green  `--color-logo-green`
+ * - Blue   `--color-logo-blue`
  *
  * 주의: 이 심볼은 AI Prototype 의 `<AiSymbol>` (보라 그라데이션 pinwheel, AI 응답 전용 마크) 과는
  * 별개입니다. WhaTap 회사·제품 브랜드를 식별할 때는 본 심볼, AI 기능 식별일 때는 `<AiSymbol>` 사용.
@@ -27,7 +27,18 @@ const meta: Meta = {
         component:
           "**WhaTap 브랜드 심볼 + Horizon 워드마크.** 4 컬러 바 (Orange/Yellow/Green/Blue) 로 구성된 회사 브랜드 마크. " +
           "이 카탈로그는 [`whatap-design-system-storybook`](https://whatap-design-system-storybook.vercel.app/?path=/story/foundation-whatap-symbol--symbol) 의 동일 항목을 AI Prototype Storybook 에 미러링한 것입니다. " +
-          "AI 기능 식별용 마크는 [Chrome/AiSymbol](?path=/story/chrome-aisymbol--default) — 별개의 보라 그라데이션 pinwheel.",
+          "AI 기능 식별용 마크는 [Chrome/AiSymbol](?path=/story/chrome-aisymbol--default) — 별개의 보라 그라데이션 pinwheel.\n\n" +
+          "✅ **Do** — 회사·제품 브랜드를 식별할 때만 사용(사이드바 로고 헤더 등) · 4 컬러 바 비율 그대로 스케일\n\n" +
+          "❌ **Don't** — AI 기능 표식으로 사용(그건 `AiSymbol`) · 컬러 바 색을 바꾸거나 일부만 쓰기 · " +
+          "심볼을 인라인 SVG 로 다시 그리기(브랜드 마크는 재구현 금지)\n\n" +
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          "## When to use\n" +
+          "- 회사·제품 브랜드를 식별하는 자리 — 사이드바 로고 헤더 · 로그인 화면 · 문서 표지.\n" +
+          "- 워드마크가 함께 필요하면 Horizon(심볼 + 워드마크) 가로 조합.\n\n" +
+          "## When NOT to use\n" +
+          "- AI 기능 식별 → `AiSymbol`(보라 그라데이션 pinwheel). 두 마크를 섞지 않는다.\n" +
+          "- 로딩·상태 인디케이터로 사용하지 말 것 — 브랜드 마크는 상태를 뜻하지 않는다.\n" +
+          "- 색·비율을 바꿔 쓰지 말 것(브랜드 토큰 고정).",
       },
     },
   },
@@ -46,17 +57,17 @@ function WhaTapSymbol({ size = 16 }: { size?: number }) {
       xmlns="http://www.w3.org/2000/svg"
       aria-label="WhaTap Symbol"
     >
-      <path fillRule="evenodd" clipRule="evenodd" d="M0 12.87H1.93V8.84H0V12.87Z" fill="#F25022" />
-      <path fillRule="evenodd" clipRule="evenodd" d="M3.54 12.87H5.47V4.51H3.54V12.87Z" fill="#FFB902" />
-      <path fillRule="evenodd" clipRule="evenodd" d="M7.09 12.87H9.02V0H7.09V12.87Z" fill="#80BA01" />
-      <path fillRule="evenodd" clipRule="evenodd" d="M12.56 0H15.46V1.93H12.56V12.87H10.63V0H12.56Z" fill="#19A0E5" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M0 12.87H1.93V8.84H0V12.87Z" fill="var(--color-logo-orange)" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M3.54 12.87H5.47V4.51H3.54V12.87Z" fill="var(--color-logo-yellow)" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M7.09 12.87H9.02V0H7.09V12.87Z" fill="var(--color-logo-green)" />
+      <path fillRule="evenodd" clipRule="evenodd" d="M12.56 0H15.46V1.93H12.56V12.87H10.63V0H12.56Z" fill="var(--color-logo-blue)" />
     </svg>
   );
 }
 
 /* ─── Horizon — 심볼 + 워드마크 가로형 (127x24 base, Figma 원본) ─── */
 
-function WhaTapHorizon({ height = 24, color = "#4C4C4C" }: { height?: number; color?: string }) {
+function WhaTapHorizon({ height = 24, color = "var(--color-text-secondary)" }: { height?: number; color?: string }) {
   const width = Math.round(height * (127 / 24));
   return (
     <svg
@@ -84,14 +95,14 @@ function WhaTapHorizon({ height = 24, color = "#4C4C4C" }: { height?: number; co
         <path fillRule="evenodd" clipRule="evenodd" d="M0 24H126.875V0H0V24Z" fill="white" />
       </mask>
       <g>
-        <path fillRule="evenodd" clipRule="evenodd" d="M0 19.297H2.894V13.266H0V19.297Z" fill="#F25022" />
-        <path fillRule="evenodd" clipRule="evenodd" d="M5.307 19.297H8.201V6.754H5.307V19.297Z" fill="#FFB902" />
-        <path fillRule="evenodd" clipRule="evenodd" d="M10.613 19.297H13.508V0H10.613V19.297Z" fill="#80BA01" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M0 19.297H2.894V13.266H0V19.297Z" fill="var(--color-logo-orange)" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M5.307 19.297H8.201V6.754H5.307V19.297Z" fill="var(--color-logo-yellow)" />
+        <path fillRule="evenodd" clipRule="evenodd" d="M10.613 19.297H13.508V0H10.613V19.297Z" fill="var(--color-logo-green)" />
         <path
           fillRule="evenodd"
           clipRule="evenodd"
           d="M18.814 0H23.156V2.894H18.814V19.297H15.92V0H18.814Z"
-          fill="#19A0E5"
+          fill="var(--color-logo-blue)"
         />
       </g>
     </svg>
@@ -101,20 +112,20 @@ function WhaTapHorizon({ height = 24, color = "#4C4C4C" }: { height?: number; co
 /* ─── 공통 sub-section 헬퍼 ─────────────────────────────── */
 
 const sectionStyle: React.CSSProperties = { marginBottom: 40 };
-const titleStyle: React.CSSProperties = { fontSize: 20, fontWeight: 700, marginBottom: 8, color: "#222" };
-const descStyle: React.CSSProperties = { fontSize: 14, color: "#757575", marginBottom: 20 };
+const titleStyle: React.CSSProperties = { fontSize: 20, fontWeight: 700, marginBottom: 8, color: "var(--color-text-primary)" };
+const descStyle: React.CSSProperties = { fontSize: 14, color: "var(--color-text-tertiary)", marginBottom: 20 };
 const gridStyle: React.CSSProperties = { display: "flex", gap: 32, alignItems: "flex-end", flexWrap: "wrap", marginBottom: 0 };
 const itemStyle: React.CSSProperties = { display: "flex", flexDirection: "column", alignItems: "center", gap: 8 };
 const boxStyle: React.CSSProperties = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  border: "1px dashed #eaeaea",
+  border: "1px dashed var(--color-border-default)",
   borderRadius: 4,
   padding: 12,
 };
-const labelStyle: React.CSSProperties = { fontSize: 11, color: "#757575", fontFamily: "monospace" };
-const darkStyle: React.CSSProperties = { background: "#222", padding: 24, borderRadius: 8 };
+const labelStyle: React.CSSProperties = { fontSize: 11, color: "var(--color-text-tertiary)", fontFamily: "monospace" };
+const darkStyle: React.CSSProperties = { background: "var(--color-text-primary)", padding: 24, borderRadius: 8 };
 
 /* ─── Story (소스의 단일 `Symbol` named export 그대로) ─────── */
 
@@ -129,7 +140,7 @@ export const Symbol: StoryObj = {
       <div style={sectionStyle}>
         <div style={titleStyle}>WhaTap Symbol</div>
         <div style={descStyle}>
-          4 개의 컬러 바로 구성된 WhaTap 심볼. Orange(#F25022) Yellow(#FFB902) Green(#80BA01) Blue(#19A0E5)
+          4 개의 컬러 바로 구성된 WhaTap 심볼. logo-orange · logo-yellow · logo-green · logo-blue (테마 무관 고정 브랜드 색)
         </div>
         <div style={gridStyle}>
           {[12, 16, 20, 24, 32, 48, 64].map((s) => (
@@ -168,20 +179,20 @@ export const Symbol: StoryObj = {
         <div style={darkStyle}>
           <div style={{ ...gridStyle, marginBottom: 0 }}>
             <div style={itemStyle}>
-              <div style={{ ...boxStyle, borderColor: "rgba(255,255,255,0.12)" }}><WhaTapSymbol size={24} /></div>
-              <span style={{ ...labelStyle, color: "#888" }}>24px</span>
+              <div style={{ ...boxStyle, borderColor: "var(--color-border-divider)" }}><WhaTapSymbol size={24} /></div>
+              <span style={{ ...labelStyle, color: "var(--color-gray-mid)" }}>24px</span>
             </div>
             <div style={itemStyle}>
-              <div style={{ ...boxStyle, borderColor: "rgba(255,255,255,0.12)" }}><WhaTapSymbol size={32} /></div>
-              <span style={{ ...labelStyle, color: "#888" }}>32px</span>
+              <div style={{ ...boxStyle, borderColor: "var(--color-border-divider)" }}><WhaTapSymbol size={32} /></div>
+              <span style={{ ...labelStyle, color: "var(--color-gray-mid)" }}>32px</span>
             </div>
             <div style={itemStyle}>
-              <div style={{ ...boxStyle, borderColor: "rgba(255,255,255,0.12)" }}><WhaTapHorizon height={24} color="#FFFFFF" /></div>
-              <span style={{ ...labelStyle, color: "#888" }}>Horizon 24</span>
+              <div style={{ ...boxStyle, borderColor: "var(--color-border-divider)" }}><WhaTapHorizon height={24} color="var(--color-text-inverse)" /></div>
+              <span style={{ ...labelStyle, color: "var(--color-gray-mid)" }}>Horizon 24</span>
             </div>
             <div style={itemStyle}>
-              <div style={{ ...boxStyle, borderColor: "rgba(255,255,255,0.12)" }}><WhaTapHorizon height={32} color="#FFFFFF" /></div>
-              <span style={{ ...labelStyle, color: "#888" }}>Horizon 32</span>
+              <div style={{ ...boxStyle, borderColor: "var(--color-border-divider)" }}><WhaTapHorizon height={32} color="var(--color-text-inverse)" /></div>
+              <span style={{ ...labelStyle, color: "var(--color-gray-mid)" }}>Horizon 32</span>
             </div>
           </div>
         </div>
@@ -192,23 +203,23 @@ export const Symbol: StoryObj = {
         <div style={titleStyle}>Color Specification</div>
         <div style={{ display: "flex", gap: 32, alignItems: "flex-end" }}>
           <div style={itemStyle}>
-            <div style={{ width: 12, height: 24, background: "#F25022", borderRadius: 1 }} />
-            <span style={labelStyle}>#F25022</span>
+            <div style={{ width: 12, height: 24, background: "var(--color-logo-orange)", borderRadius: 1 }} />
+            <span style={labelStyle}>logo-orange</span>
           </div>
           <div style={itemStyle}>
-            <div style={{ width: 12, height: 50, background: "#FFB902", borderRadius: 1 }} />
-            <span style={labelStyle}>#FFB902</span>
+            <div style={{ width: 12, height: 50, background: "var(--color-logo-yellow)", borderRadius: 1 }} />
+            <span style={labelStyle}>logo-yellow</span>
           </div>
           <div style={itemStyle}>
-            <div style={{ width: 12, height: 76, background: "#80BA01", borderRadius: 1 }} />
-            <span style={labelStyle}>#80BA01</span>
+            <div style={{ width: 12, height: 76, background: "var(--color-logo-green)", borderRadius: 1 }} />
+            <span style={labelStyle}>logo-green</span>
           </div>
           <div style={itemStyle}>
             <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              <div style={{ width: 20, height: 12, background: "#19A0E5", borderRadius: 1 }} />
-              <div style={{ width: 12, height: 64, background: "#19A0E5", borderRadius: 1 }} />
+              <div style={{ width: 20, height: 12, background: "var(--color-logo-blue)", borderRadius: 1 }} />
+              <div style={{ width: 12, height: 64, background: "var(--color-logo-blue)", borderRadius: 1 }} />
             </div>
-            <span style={labelStyle}>#19A0E5</span>
+            <span style={labelStyle}>logo-blue</span>
           </div>
         </div>
       </div>

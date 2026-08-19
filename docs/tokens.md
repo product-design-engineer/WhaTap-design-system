@@ -212,7 +212,8 @@ page/card 층을 지켜도, **카드 컴포넌트 내부**(위젯 셸·툴바 �
 | 차트 그리드 점선 | `--color-border-soft` | `#F0F0F0` | — |
 | 차트 baseline(축) 실선 | `--color-border-strong` | `#E6E6E6` | — |
 | 아이콘 `fill`/`stroke` (무채색) | `--color-text-tertiary` | `#757575` | — |
-| 시리즈 라인 색 | `--color-palette-*` | — | 하드코딩 금지 |
+| 시리즈 라인/막대 색 | `--color-chart-series-1..8` | 고정 순서 | 하드코딩 금지 |
+| 크기·강도 표현(사용률 막대 등) | `--color-chart-seq-1..4` | 옅음→진함 | 하드코딩 금지 |
 
 보더 토큰은 **네 개 모두 다크 오버라이드가 정의돼 있습니다** (`default #2A2F39` · `soft #21262E` · `strong #353B46` · `divider #4A515C`). 즉 토큰만 쓰면 다크는 공짜고, 하드코딩하면 그 컴포넌트만 라이트에 고정됩니다.
 
@@ -231,6 +232,133 @@ page/card 층을 지켜도, **카드 컴포넌트 내부**(위젯 셸·툴바 �
 - 토큰이 없다는 이유로 리터럴 사용 — 토큰 부재는 리터럴의 근거가 아니라 **토큰 추가 요청의 근거**다.
 
 > 예외는 하나뿐: **컬러 위에 얹는 흰색 전경**(브랜드 배경 위 텍스트·아이콘, `--wds-btn-fg`, 배지 안 `fill="#fff"`). 이건 테마와 무관하게 흰색이어야 하므로 유지한다.
+
+## Status — 원색 · Deep · Soft 3단
+
+`--color-status-*` 는 세 단계로 나뉩니다. **같은 의미의 색을 어느 자리에 쓰는지**가 단계를 결정합니다.
+
+| 단계 | 토큰 | 자리 |
+|---|---|---|
+| 원색 | `--color-status-{success,warning,error}` | 채워진 배경(contained 버튼·도트·알약), 아이콘 |
+| Deep | `--color-status-{warning,error}-deep` | 원색 배경의 **hover/pressed** (`--color-brand-blue-deep` 과 같은 역할) |
+| Soft | `--color-status-{success,info,warning,error}-soft` | 옅은 **표면** — 토스트 배경, soft 칩/버튼, 경고 배너 |
+
+Soft 표면 위 텍스트는 대비가 검증된 짝 **`--color-tone-text-*`** 를 씁니다 (`success` → `--color-tone-text-success` #007030). `warning-soft` 표면에 경계선이 필요하면 `--color-status-warning-soft-border`.
+
+❌ **status 원색을 배경으로 쓰지 마세요** — 그 위 텍스트 대비가 무너집니다. 원색은 도트·아이콘·채워진 컨트롤 전용입니다.
+
+Soft 4색은 tone surface 와 함께 **다크 반전됩니다** — 아래 *Tone Surface* 절의 표 참조.
+
+## Tone Surface — CSS 변수로 승격됨
+
+위젯 분류/심각도 카드·배지의 배경입니다. `_tokens.ts`(`tokens.color.surface.*`)와 DESIGN.md 에는 있었지만 **CSS 변수가 없어서** 컴포넌트마다 `#ffe8e8` 같은 리터럴을 각자 복제하고 있었습니다. 이제 `--color-tone-surface-*` 로 참조하세요.
+
+| 토큰 | 값 | Tone(구 이름) |
+|---|---|---|
+| `--color-tone-surface-critical` | `#ffe8e8` | high |
+| `--color-tone-surface-warning` | `#fff7e0` | mid |
+| `--color-tone-surface-info` | `#e8f4ff` | low |
+| `--color-tone-surface-muted` | `#f1f2f4` | idle |
+| `--color-tone-surface-neutral` | `#f1f2f4` | neutral |
+
+위에 올리는 텍스트는 `--color-tone-text-*` (대비 검증된 짝).
+
+### 다크 반전 — 표면과 라벨을 함께 뒤집는다
+
+라이트 tone surface 는 "흰 카드 위 옅은 색 패널"이라, 값을 그대로 두면 다크에서 밝은 블록이 떠 눈을 때리고, **테마 적응 텍스트(`text-primary`)를 올리는 자리(Toast 본문·강조 행)에서는 밝은 배경 위 밝은 글자가 되어 읽을 수 없습니다.** 그래서 표면은 어둡게, 라벨은 같은 색조의 밝은 톤으로 짝을 맞춰 반전합니다.
+
+| tone | 다크 표면 | 다크 라벨 | 라벨 대비 | 도트 대비 |
+|---|---|---|---|---|
+| critical | `#3A2226` | `#FFA8A3` | 7.92:1 | 3.46:1 |
+| warning | `#33290F` | `#F5C860` | 9.09:1 | **7.67:1** |
+| info | `#16233D` | `#9CC0FF` | 8.49:1 | 3.37:1 |
+| muted / neutral | `#232932` | `#AEB5BF` | 7.08:1 | — |
+
+`--color-status-*-soft` 4색도 같은 값 체계로 반전됩니다 (Toast 본문 대비 11.9~13.1:1). 라이트에서 warning 도트가 1.75:1 로 lint 경고를 받는 조합이 다크에서는 7.67:1 로 오히려 개선됩니다.
+
+⚠️ **TS 토큰을 인라인 style 로 주입할 때는 `value`(hex) 가 아니라 `cssVar` 를 쓰세요.** `.dark` 는 CSS 변수만 재매핑하므로, hex 를 박으면 다크에서 뒤집히지 않습니다. `TONE_BG` / `TONE_TEXT` 는 이미 `cssVar` 기반입니다.
+
+❌ **라벨 텍스트에 `TONE_DOT`(indicator) 을 쓰지 마세요** — indicator 는 도트·스트로크용 고채도 색이라 같은 톤 표면 위 텍스트로는 AA 미달입니다(warning 1.75:1). 도트는 `TONE_DOT`, 라벨은 `TONE_TEXT`.
+
+## Elevation — 그림자도 토큰
+
+층(surface)이 아니라 **떠 있는 높이**로 고릅니다. 컴포넌트가 `rgba(...)` 를 직접 적지 않도록 그림자에도 토큰이 있습니다.
+
+| 토큰 | 값 | 자리 |
+|---|---|---|
+| `--shadow-sm` | `0 1px 3px rgba(0,0,0,.25)` | 컨트롤 — switch/토글 knob |
+| `--shadow-md` | `0 8px 24px rgba(0,0,0,.12)` | 떠 있는 패널 — 드롭다운·토스트 |
+| `--shadow-lg` | `0 12px 40px rgba(0,0,0,.2)` | 모달·다이얼로그 |
+| `--shadow-xl` | `0 20px 60px rgba(0,0,0,.15)` | 플로팅 위젯 — 화면에서 가장 높이 뜬 표면 |
+| `--shadow-panel-slide` | `-10px 0 30px rgba(0,0,0,.06)` | 우측에서 밀려나온 슬라이드 패널(방향 있는 그림자) |
+| `--shadow-brand-glow` | `0 2px 8px rgba(41,108,242,.25)` | 선택된 컨트롤의 브랜드 강조 |
+| `--shadow-ring-hairline` | `0 0 0 1px rgba(0,0,0,.04)` | 단독으로 쓰지 않음 — md/lg 에 겹치는 1px 경계 |
+
+```tsx
+// Toast — 패널 그림자 + hairline 경계
+boxShadow: "var(--shadow-md), var(--shadow-ring-hairline)",
+```
+
+## 반투명 — 불투명 토큰과 언제 갈리나
+
+값이 아니라 **아래 층이 배어나야 하는지**로 고릅니다. 배어나야 하면 알파 토큰, 층을 덮어야 하면 불투명 토큰입니다.
+
+| 토큰 | 자리 |
+|---|---|
+| `--color-brand-blue-wash` (8%) | active/선택된 행·아이콘 버튼 배경 — 아래 표 줄무늬가 비쳐야 함 |
+| `--color-brand-blue-border-tint` (25%) | 틴트 표면(AI 제안 카드)의 경계선 |
+| `--gradient-ai-tint` | AI 제안/계획 카드의 blue→purple 틴트 배경 |
+| `--color-brand-blue-tint` (불투명 `#eef4ff`) | 강조된 표 행 — 아래가 비치면 안 되는 자리 |
+| `--color-brand-blue-bg` / `-bg-2` (불투명) | 배지·hover 표면 |
+| `--color-overlay-loading` | 버튼 로딩 막 — 컬러 버튼 위에 얹히므로 라이트/다크 모두 흰 워시 |
+
+**Stage 전용** — `--color-stage-backdrop` · `--color-stage-badge-bg` 는 발표·캡처용 16:9 무대의 캔버스 chrome입니다. 라이트박스처럼 무대를 띄우는 것이 목적이라 **테마와 무관하게 항상 어둡고**, `.dark` 오버라이드가 없습니다. ❌ 앱 표면에 쓰지 마세요.
+
+**Backdrop scrim** — 모달류 배경 딤은 역할이 하나이므로 토큰도 하나입니다: `--color-overlay-scrim` (`rgba(0,0,0,0.5)`). Modal · DsReadOnlyNotice 가 이 하나를 공유합니다. 컴포넌트마다 0.4/0.5 를 따로 적던 것을 통일한 결과입니다.
+
+## 반전 hover — 아이콘 버튼이 어두워지는 패턴
+
+hover 시 표면이 뒤집히는 아이콘 버튼(첨부 `+` 버튼 등)은 `black`/`white` 고정색이 아니라 반전 짝을 씁니다.
+
+```tsx
+<button className="group-plus bg-card hover-bg-invert">
+  <svg><line className="stroke-color-var-color-text-secondary group-hover-plus-stroke-invert" /></svg>
+</button>
+```
+
+`.hover-bg-invert` → `--color-text-strong` (다크에서는 밝아짐) · `.group-hover-plus-stroke-invert` → `--color-text-inverse`. 라이트/다크 모두 자동으로 대비가 맞습니다. ❌ `hover-bg-black` + `stroke-white` 조합은 다크에서 검정 위 흰색이 되어 문맥과 어긋납니다.
+
+
+## Chart — 색은 역할로 고른다 (series vs seq)
+
+구 `--color-palette-{hex}` 36색을 대체했습니다. 그 팔레트는 **값이 이름**이라 "시리즈 색을 무엇으로 고르나"에 답이 없었고(36색 중 실제 참조 4색), `.dark` 오버라이드가 없어 차트 다크가 검증되지 않았습니다.
+
+| 역할 | 토큰 | 무엇을 인코딩하나 |
+|---|---|---|
+| **series** (categorical) | `--color-chart-series-1..8` | **정체성** — 어느 계열인가 |
+| **seq** (sequential) | `--color-chart-seq-1..4` | **크기** — 얼마나 큰가 |
+
+**series 규칙**
+- **1번부터 순서대로 배정하고 순환하지 않습니다.** 순서 자체가 CVD 안전 장치이므로 바꾸지 않습니다.
+- 9번째 계열은 새 색을 만드는 게 아니라 "기타"로 접거나 small multiples 로 쪼갭니다.
+- **색은 엔티티를 따라갑니다** — 필터로 계열 수가 바뀌어도 남은 계열의 색은 그대로. 순위에 따라 색을 다시 칠하지 마세요.
+- ⚠️ **all-pairs 상한 3슬롯.** scatter · bubble · choropleth · small-multiples 처럼 임의의 두 마크가 맞닿는 형태는 **3계열까지**만 안전합니다(측정: 라이트 20.7 / 다크 16.5). 4번째를 넣으면 orange↔gold 가 정상시야 ΔE 11.0 으로 무너집니다 — **팔레트로 해결되지 않으므로** facet 으로 쪼갭니다.
+
+**seq 규칙** — 한 색조의 단조 lightness 램프. 라이트는 옅음→진함, **다크는 anchor 가 뒤집혀** 어두움→밝음입니다(자동 반전이 아니라 선택된 값). 순서 없는 항목에 seq 를 쓰면 없는 순서를 부여해 잘못 읽힙니다.
+
+**금지**
+- ❌ status 색을 "series 9"로 재사용 — 예약된 의미입니다.
+- ❌ 라벨·값 텍스트에 series 색 — 텍스트는 text 토큰, 색은 마크가 담당합니다.
+- ❌ 이중 축(dual-axis) 차트 — 스케일이 다른 두 지표는 차트를 둘로 나눕니다.
+
+**검증 근거** (dataviz `validate_palette.js`, 6개 체크):
+
+| | 최악 인접 CVD ΔE | 정상시야 최악 | 대비 |
+|---|---|---|---|
+| 라이트 | 9.5 (deutan) | 17.0 | 전부 ≥3:1 |
+| 다크 | 9.6 (deutan) | 18.3 | 전부 ≥3:1 |
+
+seq 램프는 단조 L · 인접 ΔL ≥ 0.06 · 옅은 끝 대비 ≥ 2:1 · 단일 색조 전부 통과. **팔레트를 바꿀 때는 눈으로 판단하지 말고 검증기를 다시 돌리세요.**
 
 ## 색상 — 토큰 외 hard-coded
 

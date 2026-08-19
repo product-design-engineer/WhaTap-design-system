@@ -1,4 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+// ⚠️ 목록을 여기에 적지 않는다. `scripts/check-guardrails-meta.mjs` 가 roster
+// (scripts/gate-roster.mjs)를 검사한 뒤 만든 **projection** 만 읽는다.
+// 하드코딩 리터럴이면 재생성이 늘 같은 값을 만들어 `git diff` 가 낡음을 볼 수 없다.
+import guardrailsData from "../../docs/guardrails.json";
 
 /**
  * Guardrails — WhaTap 디자인 시스템의 무결성 게이트.
@@ -33,8 +37,13 @@ type Guardrail = {
   status: Status;
   invariant: string;
   prevents: string;
+  /** 유도값 — 이 게이트를 부르는 pnpm 스크립트. */
   command: string;
+  /** 유도값 — PR 워크플로에서 실제로 도달 가능한가. */
+  inCI: boolean;
 };
+
+const GUARDRAILS = guardrailsData.gates as Guardrail[];
 
 const STATUS: Record<Status, { dot: string; label: string }> = {
   auto: { dot: "var(--color-status-success)", label: "자동" },
@@ -42,88 +51,6 @@ const STATUS: Record<Status, { dot: string; label: string }> = {
   planned: { dot: "var(--color-text-disabled)", label: "계획" },
 };
 
-const GUARDRAILS: Guardrail[] = [
-  {
-    id: "token-single-source",
-    name: "토큰 단일 출처",
-    status: "auto",
-    invariant:
-      "`tokens.css` 의 `:root` 가 모든 토큰을 항상 선언(순수 CSS). 런타임은 `whatap-ds.css` 의 :root 가 제공. 토큰 1값 변경 = 전 컴포넌트 반영.",
-    prevents: "토큰 분산/누락 · 보더·색이 사라지는 tree-shake",
-    command: "구조 (:root)",
-  },
-  {
-    id: "no-tailwind-plain-css",
-    name: "Tailwind 미사용 · 일반 CSS",
-    status: "auto",
-    invariant:
-      "런타임 스타일은 외부 CSS 프레임워크 의존 없는 일반 CSS(`whatap-ds.css`). 유틸 클래스명은 escape 없는 식별자(gap-4px·hover-opacity-70 등). 컴포넌트 className 변경 시 `node scripts/detailwind.mjs generate` 로 재생성 + 코드모드.",
-    prevents: "Tailwind 재도입 · CSS 내 프레임워크 흔적(@layer·--tw-*·escape 클래스명)",
-    command: "scripts/detailwind.mjs (generate)",
-  },
-  {
-    id: "catalog-build",
-    name: "카탈로그 합본 생성",
-    status: "auto",
-    invariant:
-      "`build:design` 가 docs 7종을 `DESIGN.md` 로 합본하고 `build-storybook`/`storybook` 직전 자동 실행. `/design-system/*.md` 로 서빙.",
-    prevents: "오래된/손편집 합본 · AI 컨텍스트 stale",
-    command: "scripts/build-design.mjs",
-  },
-  {
-    id: "raw-color",
-    name: "인라인 색 리터럴 금지",
-    status: "auto",
-    invariant:
-      "`src/` 컴포넌트는 토큰/유틸로만 색 표현. hex · rgb() · `bg-white`/`bg-black` 을 스캔해 **신규 위반은 exit 1 로 차단**한다(`npm test` 포함). 기존 위반은 `scripts/raw-color-baseline.json` 에 파일별 건수로 동결 — 줄일 수만 있고 늘릴 수 없다. 정당한 예외(컬러 위 흰색 전경)는 `// raw-color-ok: <이유>` 로 사유를 남긴다. 토큰 부재는 리터럴의 근거가 아니라 토큰 추가의 근거.",
-    prevents: "토큰 우회 raw color · 단일 출처 약화 · 다크에서만 깨지는 컴포넌트",
-    command: "lint:tokens (scripts/check-no-raw-colors.mjs)",
-  },
-  {
-    id: "docstring-standard",
-    name: "docstring 4섹션 표준",
-    status: "policy",
-    invariant:
-      "컴포넌트 docstring = Purpose / When to use / When NOT to use / Composition rules + `@example` (현재 58/58). autodocs prop 표와 함께 AI/사용자 1차 참조.",
-    prevents: "컴포넌트 오선택 · 사용 가이드 부재",
-    command: "(계획) docstring 커버리지 체크",
-  },
-  {
-    id: "catalog-sync",
-    name: "카탈로그 드리프트 방지",
-    status: "planned",
-    invariant:
-      "Introduction/docs 의 컴포넌트 수·목록이 실제 export(`src/index.ts`)·Storybook `index.json` 과 1:1 일치.",
-    prevents: "카탈로그 수/목록 드리프트 (예: Chrome 19↔20)",
-    command: "(계획) check-catalog-sync",
-  },
-  {
-    id: "ai-card-composition",
-    name: "AI 카드 = AiCard 합성",
-    status: "policy",
-    invariant:
-      "WhaTap AI 메시지 카드는 `AiCard` + Tone 토큰을 composition (인라인 카드 chrome·색 리터럴 금지).",
-    prevents: "톤/외형 어긋남 · 카드 재구현",
-    command: "patterns.md · 코드리뷰",
-  },
-  {
-    id: "consumer-react-dedupe",
-    name: "소비 React 단일화",
-    status: "policy",
-    invariant:
-      "`link:` 심링크 소비 앱은 vite `resolve.dedupe: ['react','react-dom']` 로 React 단일 인스턴스 강제(DS 자체 react 중복 방지).",
-    prevents: '"invalid hook call" (React 중복 로드)',
-    command: "AI-INTEGRATION.md 온보딩",
-  },
-  {
-    id: "chart-text-unit",
-    name: "차트 텍스트 단위",
-    status: "policy",
-    invariant: "SVG `<text fontSize>` 는 `\"9px\"` 처럼 단위 명시(단위 없는 값은 viewBox 좌표로 계산).",
-    prevents: "화면별 차트 텍스트 크기 변동",
-    command: "patterns.md (5 핵심 규칙)",
-  },
-];
 
 function Badge({ status }: { status: Status }) {
   const s = STATUS[status];
@@ -138,7 +65,7 @@ function Badge({ status }: { status: Status }) {
 function Guardrails() {
   const count = (st: Status) => GUARDRAILS.filter((g) => g.status === st).length;
   return (
-    <div className="flex flex-col gap-6 p-6 bg-white" style={{ fontFamily: "var(--font-family-korean)" }}>
+    <div className="flex flex-col gap-6 p-6 bg-card" style={{ fontFamily: "var(--font-family-korean)" }}>
       <header className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold text-primary tracking-display leading-tight">Guardrails</h1>
         <p className="text-base text-tertiary leading-normal max-w-2xl">
@@ -159,7 +86,7 @@ function Guardrails() {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-color-var-color-border-strong">
-              {["게이트", "상태", "불변식 (invariant)", "막는 것", "체크"].map((h) => (
+              {["게이트", "상태", "CI", "불변식 (invariant)", "막는 것", "체크"].map((h) => (
                 <th key={h} className="p-2 text-base font-bold text-secondary tracking-default align-bottom">{h}</th>
               ))}
             </tr>
@@ -169,6 +96,7 @@ function Guardrails() {
               <tr key={g.id} className="border-b border-color-var-color-border-default align-top">
                 <td className="p-2 text-md font-medium text-primary whitespace-nowrap">{g.name}</td>
                 <td className="p-2"><Badge status={g.status} /></td>
+                <td className="p-2 text-sm text-tertiary whitespace-nowrap">{g.inCI ? "돌고 있음" : "—"}</td>
                 <td className="p-2 text-base text-secondary leading-normal" style={{ maxWidth: 420 }}>{g.invariant}</td>
                 <td className="p-2 text-base text-tertiary leading-normal" style={{ maxWidth: 220 }}>{g.prevents}</td>
                 <td className="p-2 text-sm font-numeric text-tertiary leading-normal" style={{ maxWidth: 200 }}>{g.command}</td>

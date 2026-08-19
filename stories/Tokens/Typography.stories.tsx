@@ -22,16 +22,16 @@ export default meta;
 
 function TypeRow({ family, label, hex, description, sample }: { family: string; label: string; hex: string; description: string; sample: string }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8, padding: 16, border: "1px solid #eaeaea", borderRadius: 8, background: "#fff" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 8, padding: 16, border: "1px solid var(--color-border-default)", borderRadius: 8, background: "var(--color-card)" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
-        <div style={{ fontFamily: "'Noto Sans', sans-serif", fontWeight: 700, fontSize: 14, color: "#222" }}>{label}</div>
-        <div style={{ fontFamily: "Roboto, monospace", fontSize: 11, color: "#757575" }}>{hex}</div>
+        <div style={{ fontFamily: "'Noto Sans', sans-serif", fontWeight: 700, fontSize: 14, color: "var(--color-text-primary)" }}>{label}</div>
+        <div style={{ fontFamily: "Roboto, monospace", fontSize: 11, color: "var(--color-text-tertiary)" }}>{hex}</div>
       </div>
-      <div style={{ fontFamily: "'Noto Sans', sans-serif", fontSize: 12, color: "#4c4c4c", lineHeight: 1.4 }}>{description}</div>
-      <div style={{ borderTop: "1px solid #eaeaea", paddingTop: 12, marginTop: 4 }}>
-        <div style={{ fontFamily: family, fontSize: 22, color: "#222" }}>{sample}</div>
-        <div style={{ fontFamily: family, fontSize: 14, color: "#4c4c4c", marginTop: 4 }}>{sample}</div>
-        <div style={{ fontFamily: family, fontSize: 11, color: "#757575", marginTop: 4 }}>{sample}</div>
+      <div style={{ fontFamily: "'Noto Sans', sans-serif", fontSize: 12, color: "var(--color-text-secondary)", lineHeight: 1.4 }}>{description}</div>
+      <div style={{ borderTop: "1px solid var(--color-border-default)", paddingTop: 12, marginTop: 4 }}>
+        <div style={{ fontFamily: family, fontSize: 22, color: "var(--color-text-primary)" }}>{sample}</div>
+        <div style={{ fontFamily: family, fontSize: 14, color: "var(--color-text-secondary)", marginTop: 4 }}>{sample}</div>
+        <div style={{ fontFamily: family, fontSize: 11, color: "var(--color-text-tertiary)", marginTop: 4 }}>{sample}</div>
       </div>
     </div>
   );

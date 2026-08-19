@@ -92,9 +92,11 @@ export default function TimeRangeSelector({
           <DateTimeBlock parts={end} side="end" />
 
           <span
+            data-ds-policy-ok="success 알약 위 전경 — 컬러 배경 위 고정 흰색"
+            // raw-color-ok: success 알약 위 전경 — 컬러 배경 위 고정 흰색.
             className="flex items-center px-4px h-16px rounded-2px text-base font-bold text-white leading-none"
             style={{
-              background: "#00B543",
+              background: "var(--color-status-success)",
               fontFamily: "var(--font-family-numeric)",
             }}
           >
@@ -127,6 +129,7 @@ export default function TimeRangeSelector({
 function IcLiveTime() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      {/* raw-color-ok: 라이브 디자인시스템 SVG 원본 그대로 — 픽셀 일치 보장(CLAUDE.md 라이브 CSS 정책). */}
       <g transform="translate(2,2)" fill="#00C853">
         <path d="M10,0 C15.5228475,0 20,4.4771525 20,10 C20,15.5228475 15.5228475,20 10,20 C4.4771525,20 0,15.5228475 0,10 C0,4.4771525 4.4771525,0 10,0 Z M10,2 C5.581722,2 2,5.581722 2,10 C2,14.418278 5.581722,18 10,18 C14.418278,18 18,14.418278 18,10 C18,5.581722 14.418278,2 10,2 Z M8,6 L14,10 L8,14 L8,6 Z" />
       </g>

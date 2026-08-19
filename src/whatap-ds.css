@@ -64,7 +64,27 @@
     --radius-lg: 0.5rem;
     --radius-xl: 0.75rem;
     --radius-full: 9999px;
+    /* Elevation — 컴포넌트가 rgba 를 직접 적지 않도록 그림자도 토큰. 정의: tokens.css */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.08);
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.2);
+    --shadow-ring-hairline: 0 0 0 1px rgba(0, 0, 0, 0.04);
+    --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+    --shadow-panel-slide: -10px 0 30px rgba(0, 0, 0, 0.06);
+    --shadow-brand-glow: 0 2px 8px rgba(41, 108, 242, 0.25);
+    /* Brand alpha — 브랜드색 반투명(선택 워시·틴트 경계). 정의: tokens.css */
+    --color-brand-blue-wash: rgba(41, 108, 242, 0.08);
+    --color-brand-blue-border-tint: rgba(41, 108, 242, 0.25);
+    --gradient-ai-tint: linear-gradient(95deg, rgba(0, 75, 224, 0.08) 0%, rgba(139, 82, 255, 0.08) 100%);
+    /* Loading overlay — 컨트롤 위 반투명 막(버튼 로딩). */
+    --color-overlay-loading: rgba(255, 255, 255, 0.4);
+    /* Backdrop scrim — 모달류 배경 딤. 역할이 하나이므로 토큰도 하나. */
+    --color-overlay-scrim: rgba(0, 0, 0, 0.5);
+    /* Stage — 발표·캡처용 무대 chrome. 테마 무관 고정 어두움(Stage 전용). */
+    --color-stage-backdrop: #0a0a14;
+    --color-stage-badge-bg: rgba(26, 26, 46, 0.85);
+    --shadow-stage: 0 20px 60px rgba(0, 0, 0, 0.45); /* 무대 전용 — elevation 스케일 밖. */
     --gradient-brand: linear-gradient(90deg, var(--color-brand-blue), var(--color-whatap-purple));
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
     --default-transition-duration: 150ms;
@@ -80,11 +100,24 @@
     --color-brand-blue-soft: #3DA9FF;
     --color-brand-blue-bg: #D6E1FF;
     --color-brand-blue-bg-2: #C2D5FC;
+    --color-brand-blue-tint: #eef4ff; /* 가장 옅은 브랜드 틴트 — 강조된 표 행/셀 */
 
     
     --color-status-success: #00B442;
     --color-status-warning: #FFA012;
     --color-status-error: #f34646;
+
+    /* Status Deep — status 원색의 hover/pressed 단계 (contained 버튼 hover 배경). */
+    --color-status-warning-deep: #E08A0E;
+    --color-status-error-deep: #D03333;
+
+    /* Status Soft — status 원색의 옅은 표면(토스트 배경·soft 칩/버튼·경고 배너).
+       위에 올리는 텍스트는 --color-tone-text-*. 다크는 .dark 블록에서 반전. 정의: tokens.css */
+    --color-status-success-soft: #E8F8EE;
+    --color-status-info-soft: #E8F0FE;
+    --color-status-warning-soft: #FFF4E5;
+    --color-status-error-soft: #FDECEC;
+    --color-status-warning-soft-border: #FFE0B2;
 
     
     --color-surface-50: #F5F5F5;
@@ -115,14 +148,31 @@
     --color-indicator-critical: #E53935;
     --color-indicator-warning: #F0B400;
 
+    /* Tone Surface — 위젯 분류/심각도 카드·배지 배경. 다크는 .dark 블록에서 반전. 정의: tokens.css */
+    --color-tone-surface-critical: #ffe8e8;
+    --color-tone-surface-warning: #fff7e0;
+    --color-tone-surface-info: #e8f4ff;
+    --color-tone-surface-muted: #f1f2f4;
+    --color-tone-surface-neutral: #f1f2f4;
+
     /* Tone Text — tone-surface 위 라벨 텍스트 (indicator 는 도트/스트로크 전용). */
     --color-tone-text-critical: #B5302A;
     --color-tone-text-warning: #8A6200;
     --color-tone-text-info: #1B5CD9;
+    --color-tone-text-success: #007030;
     --color-tone-text-muted: #6E6E6E;
     --color-tone-text-neutral: #6E6E6E;
 
     
+    /* Brand logo — 회사 심볼 4색. 테마 무관 고정(로고는 리브랜딩되지 않음). 정의: tokens.css */
+    --color-logo-orange: #F25022;
+    --color-logo-yellow: #FFB902;
+    --color-logo-green: #80BA01;
+    --color-logo-blue: #19A0E5;
+
+    /* Avatar gradient — 프로필 아바타 그라데이션 시작 stop. 테마 무관 고정. 정의: tokens.css */
+    --color-avatar-gradient-from: #4FC3F7;
+
     --color-whatap-blue: #004BE0;
     --color-whatap-purple: #8B52FF;
     --color-whatap-purple-deep: #4F5BD5;
@@ -142,6 +192,7 @@
     --font-family-numeric-jp: Roboto, NotoSansJP, NotoSans, sans-serif;
     --text-chart: 9px;
     --text-md: 13px;
+    --font-weight-light: 300;
     --font-weight-regular: 400;
     --leading-none: 1;
 
@@ -160,42 +211,48 @@
     --leading-px-20: 20px;
 
     
-    --color-palette-0078dc: #0078dc;
-    --color-palette-00beb8: #00beb8;
-    --color-palette-10b981: #10b981;
-    --color-palette-1b9bd0: #1b9bd0;
-    --color-palette-1f3c88: #1f3c88;
-    --color-palette-2ec4b6: #2ec4b6;
-    --color-palette-3c4ec1: #3c4ec1;
-    --color-palette-4f65b5: #4f65b5;
-    --color-palette-4fc3f7: #4fc3f7;
-    --color-palette-57ca7e: #57ca7e;
-    --color-palette-5cc97d: #5cc97d;
-    --color-palette-71df8b: #71df8b;
-    --color-palette-81c784: #81c784;
-    --color-palette-85c2fa: #85c2fa;
-    --color-palette-a0a65a: #a0a65a;
-    --color-palette-a8d8ff: #a8d8ff;
-    --color-palette-b7dbff: #b7dbff;
-    --color-palette-ba68c8: #ba68c8;
-    --color-palette-c44cd8: #c44cd8;
-    --color-palette-d4f0e5: #d4f0e5;
-    --color-palette-dcefff: #dcefff;
-    --color-palette-e040b8: #e040b8;
-    --color-palette-e0d6f5: #e0d6f5;
-    --color-palette-e5564e: #e5564e;
-    --color-palette-e8d6f0: #e8d6f0;
-    --color-palette-f34747: #f34747;
-    --color-palette-f5c84a: #f5c84a;
-    --color-palette-fb88e1: #fb88e1;
-    --color-palette-ff8800: #ff8800;
-    --color-palette-ff8c2d: #ff8c2d;
-    --color-palette-ffa1a1: #ffa1a1;
-    --color-palette-ffb74d: #ffb74d;
-    --color-palette-ffc300: #ffc300;
-    --color-palette-ffc771: #ffc771;
-    --color-palette-ffe4cc: #ffe4cc;
-    --color-palette-fff176: #fff176;
+    /* Chart — 데이터 시각화 전용. 역할로 고른다: 정체성(series) vs 크기(seq).
+       구 --color-palette-{hex} 36색을 대체. 정의·검증 근거: tokens.css
+       series 는 고정 순서로 1번부터 배정하고 순환하지 않는다(all-pairs 상한 3슬롯). */
+    --color-chart-series-1: #296CF2;
+    --color-chart-series-2: #C75B1A;
+    --color-chart-series-3: #00908A;
+    --color-chart-series-4: #9A7B00;
+    --color-chart-series-5: #B0349B;
+    --color-chart-series-6: #0E7A56;
+    --color-chart-series-7: #6B3FD4;
+    --color-chart-series-8: #C93B34;
+
+    --color-chart-seq-1: #7AB8F0;
+    --color-chart-seq-2: #4A97E8;
+    --color-chart-seq-3: #2472D8;
+    --color-chart-seq-4: #1A50B0;
+
+    /* Topology — 노드-엣지 그래프 전용 역할 토큰(구조·상태). 차트 series/seq 로
+       대체 불가 — 의미 축이 다르다. 값 출처·금지사항: tokens.css */
+    --color-topology-canvas-from: #F1F6FB;
+    --color-topology-canvas-to: #C8D1E5;
+    --color-topology-grid-dot: #A6B4BF;
+    --color-topology-node-surface: #F6F8FD;
+    --color-topology-group-surface: #E3EBF8;
+    --color-topology-edge: #B6C4CE;
+    --color-topology-edge-alert: #FC679E;
+    --color-topology-port: #8B9BE1;
+    --color-topology-port-alert: #FC679E;
+    --color-topology-port-ok: #5BD388;
+
+    /* ── Component tokens: 아이콘 크기 스케일 · 툴바 컨트롤 높이 ──
+       tokens.css 에만 있고 **런타임 CSS 에는 없어서 미정의**였다. `ToolbarIconButton` 이
+       `width: var(--wds-toolbar-control-h)` 로 쓰는데 값이 없어 선언이 무효가 되고
+       auto(=컨테이너 폭)로 퍼졌다. tokens.css 는 참조용이라 런타임에 로드되지 않는다 —
+       여기에 없으면 존재하지 않는 것이다. 정의·근거: tokens.css */
+    --wds-icon-lg: 24px;
+    --wds-icon-md: 20px;
+    --wds-icon-sm: 16px;
+    --wds-icon-xs: 12px;
+    --wds-toolbar-icon: var(--wds-icon-sm);
+    --wds-toolbar-control-h: 32px;
+    --wds-toolbar-pill-h: 24px;
 
     /* ── Component tokens: DateTimeBlock ── */
     --wds-datetime-year-w: 28px;
@@ -236,7 +293,11 @@
  * (py-[48px]·border-[#eaeaea]·bg-[#296CF2] 등)를 cascade 에서 이겨 소비자 페이지
  * 스타일을 무력화한다(예: border-color 가 currentColor 검정으로, 버튼 배경이
  * transparent 로). preflight 전체를 base 레이어로 내려 utility 가 정상 override
- * 하도록 한다. (아래 utilities 섹션은 unlayered 유지 → DS 타이포 토큰 우선 보존.) */
+ * 하도록 한다. (아래 utilities 섹션은 unlayered 유지 → DS 타이포 토큰 우선 보존.)
+ *
+ * 네이티브 CSS cascade layer 다 — 프레임워크 산출물이 아니라 **소비자 스타일을 DS
+ * preflight 가 이기지 않게** 하려고 의도적으로 내린 레이어. */
+/* no-tailwind-ok: preflight 를 base 레이어로 내린 의도적 사용(위 주석 참조). */
 @layer base {
 *, ::after, ::before, ::backdrop, ::file-selector-button {
     box-sizing: border-box;
@@ -392,15 +453,13 @@
 .align-bottom { vertical-align: bottom; }
 .align-top { vertical-align: top; }
 .appearance-none { appearance: none; }
-.bg-ce5484d { background-color: #e5484d; }
-.bg-cf5f6f8 { background-color: #f5f6f8; }
-.bg-cf9f9f9 { background-color: #f9f9f9; }
+/* 알림/위험 도트 — indicator 는 도트·스트로크 전용 고채도 슬롯. */
+.bg-indicator-critical { background-color: var(--color-indicator-critical); }
 .bg-color-var-color-border-divider { background-color: var(--color-border-divider); }
 .bg-color-var-color-border-soft { background-color: var(--color-border-soft); }
 .bg-color-var-color-brand-blue { background-color: var(--color-brand-blue); }
 .bg-color-var-color-surface-100 { background-color: var(--color-surface-100); }
 .bg-color-var-color-surface-50 { background-color: var(--color-surface-50); }
-.bg-rgba-0-0-0-0_05 { background-color: rgba(0,0,0,0.05); }
 .bg-transparent { background-color: transparent; }
 .bg-var-color-brand-blue-bg { background-color: var(--color-brand-blue-bg); }
 .bg-var-color-surface-50 { background-color: var(--color-surface-50); }
@@ -410,8 +469,7 @@
 .border-0 { border-width:0;border-style:solid }
 .border-1_5px { border-width:1.5px;border-style:solid }
 .border-b { border-bottom-width:1px;border-bottom-style:solid }
-.border-cd3d3d3 { border-color: #d3d3d3; }
-.border-ceaeaea { border-color: #eaeaea; }
+.border-strong { border-color: var(--color-border-strong); }
 .border-collapse { border-collapse: collapse; }
 .border-color-var-color-border-default { border-color: var(--color-border-default); }
 .border-color-var-color-border-divider { border-color: var(--color-border-divider); }
@@ -425,10 +483,15 @@
 .border-t { border-top-width:1px;border-top-style:solid }
 .border-t-transparent { border-top-color: transparent; }
 .border-var-color-border-default { border-color: var(--color-border-default); }
+/* border-card — 카드/헤더 표면색 경계. 표면 위에 얹힌 도트·배지를 표면색 링으로
+   떼어내는 자리. border-white 와 달리 다크에서 표면과 함께 어두워진다. */
+.border-default { border-color: var(--color-border-default); }
+.border-card { border-color: var(--color-card); }
 .border-white { border-color: var(--color-white); }
 .border-white-10 { border-color: color-mix(in srgb, #fff 10%, transparent);@supports (color: color-mix(in lab, red, red)) {border-color: color-mix(in oklab, var(--color-white) 10%, transparent);} }
 .bottom-0 { bottom: 0; }
 .bottom-1px { bottom: -1px; }
+.bottom-16px { bottom: 16px; }
 .bottom-5 { bottom: calc(var(--spacing) * 5); }
 .box-border { box-sizing: border-box; }
 .col-span-4 { grid-column: span 4 / span 4; }
@@ -452,6 +515,8 @@
 .flex-wrap { flex-wrap: wrap; }
 .font-bold { font-weight:700 }
 .font-medium { font-weight:500 }
+/* light(300) — text-2xl 이상 큰 문장 전용(작은 사이즈에서는 획이 끊긴다). */
+.font-light { font-weight:300 }
 .font-normal { font-weight:400 }
 .font-semibold { font-weight:600 }
 .gap-0 { gap: 0; }
@@ -478,6 +543,9 @@
 .gap-inherit { gap: inherit; }
 .grid { display: grid; }
 .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* 반전 hover 짝 — .hover-bg-invert(표면) 와 함께 쓴다. 표면이 text-strong 으로
+   뒤집히므로 아이콘은 text-inverse. 라이트/다크 모두 자동 대비. */
+.group-plus:hover .group-hover-plus-stroke-invert { stroke: var(--color-text-inverse); }
 .group-plus:hover .group-hover-plus-stroke-white { stroke: var(--color-white); }
 .group.is-active .group-_is-active-opacity-0 { opacity: 0%; }
 .group.is-active .group-_is-active-opacity-100 { opacity: 100%; }
@@ -509,13 +577,15 @@
 .h-full { height: 100%; }
 .hidden { display: none; }
 .hover-bg-black:hover { background-color: var(--color-black); }
-.hover-bg-cfafafa:hover { background-color: #fafafa; }
+/* 반전 hover 표면 — 아이콘 버튼이 hover 시 어두워지는 패턴. 다크에서는 밝아진다
+   (text-strong 이 뒤집히므로). 전경은 .group-hover-plus-stroke-invert 짝. */
+.hover-bg-invert:hover { background-color: var(--color-text-strong); }
+.hover-bg-surface-50:hover { background-color: var(--color-surface-50); }
 .hover-bg-color-var-color-brand-blue-bg:hover { background-color: var(--color-brand-blue-bg); }
 .hover-bg-color-var-color-brand-blue-deep:hover { background-color: var(--color-brand-blue-deep); }
 .hover-bg-color-var-color-surface-100:hover { background-color: var(--color-surface-100); }
 .hover-bg-gray-100:hover { background-color: var(--color-gray-100); }
 .hover-bg-gray-50:hover { background-color: var(--color-gray-50); }
-.hover-bg-rgba-0-0-0-0_05:hover { background-color: rgba(0,0,0,0.05); }
 .hover-bg-var-color-brand-blue-bg-2:hover { background-color: var(--color-brand-blue-bg-2); }
 .hover-border-color-var-color-border-strong:hover { border-color: var(--color-border-strong); }
 .hover-border-color-var-color-brand-blue-bg:hover { border-color: var(--color-brand-blue-bg); }
@@ -550,6 +620,7 @@
 .leading-snug { line-height:var(--leading-snug) }
 .leading-tight { line-height:var(--leading-tight) }
 .left-0 { left: 0; }
+.left-16px { left: 16px; }
 .left-1-2 { left: calc(1 / 2 * 100%); }
 .list-decimal { list-style-type: decimal; }
 .list-disc { list-style-type: disc; }
@@ -576,6 +647,7 @@
 .mr-6px { margin-right: 6px; }
 .mt-1 { margin-top: var(--spacing); }
 .mt-1px { margin-top: 1px; }
+.mt-16px { margin-top: 16px; }
 .mt-2 { margin-top: calc(var(--spacing) * 2); }
 .mt-2px { margin-top: 2px; }
 .mt-3 { margin-top: calc(var(--spacing) * 3); }
@@ -604,6 +676,7 @@
 .p-10px { padding: 10px; }
 .p-12 { padding: calc(var(--spacing) * 12); }
 .p-12px { padding: 12px; }
+.p-16px { padding: 16px; }
 .p-2 { padding: calc(var(--spacing) * 2); }
 .p-2px { padding: 2px; }
 .p-3 { padding: calc(var(--spacing) * 3); }
@@ -681,10 +754,10 @@
 .select-none { -webkit-user-select: none;user-select: none; }
 .self-center { align-self: center; }
 .self-start { align-self: flex-start; }
-.shadow-0_1px_2px_rgba-0-0-0-0_08 { box-shadow: 0 1px 2px rgba(0,0,0,0.08) }
-.shadow-0_20px_60px_rgba-0-0-0-0_45 { box-shadow:0 20px 60px rgba(0,0,0,0.45) }
-.shadow-0_2px_8px_rgba-41-108-242-0_25 { box-shadow:0 2px 8px rgba(41,108,242,0.25) }
-.shadow-0_4px_16px_rgba-0-0-0-0_12 { box-shadow:0 4px 16px rgba(0,0,0,0.12) }
+.shadow-xs { box-shadow: var(--shadow-xs); }
+.shadow-stage { box-shadow: var(--shadow-stage); }
+.shadow-brand-glow { box-shadow: var(--shadow-brand-glow); }
+.shadow-md { box-shadow: var(--shadow-md); }
 .shrink-0 { flex-shrink: 0; }
 .size-10px { width: 10px;height: 10px; }
 .size-12px { width: 12px;height: 12px; }
@@ -719,6 +792,9 @@
 .text-left { text-align: left; }
 .text-lg { font-size:var(--text-lg);line-height:calc(1.75 / 1.125) }
 .text-md { font-size: var(--text-md); }
+/* text-primary — 컴포넌트가 오래 써온 클래스인데 정의가 없어 body 상속에 기대고 있었다.
+   실체를 부여해 반전 문맥 안에서도 의도대로 동작하게 한다. */
+.text-primary { color: var(--color-text-primary); }
 .text-right { text-align: right; }
 .text-sm { font-size:var(--text-sm);line-height:calc(1.25 / 0.875) }
 .text-status-success { color: var(--color-status-success); }
@@ -780,6 +856,71 @@
 .bg-surface-200 { background-color: var(--color-surface-200); }
 .hover-bg-surface-100:hover { background-color: var(--color-surface-100); }
 .hover-bg-surface-200:hover { background-color: var(--color-surface-200); }
+
+/* ── 텍스트 색 위계 나머지 3단 ────────────────────────────────────────────────
+   tokens.css 가 `text-primary/secondary/tertiary/disabled` 4단을 utility 로 광고하는데
+   실제로는 primary 만 정의돼 있었다(primary 도 같은 이유로 뒤늦게 채워진 것). 나머지 3단은
+   정의가 없어 body 의 --color-text-primary 를 그대로 상속하고 있었다 —
+   secondary 123곳 · tertiary 170곳 · disabled 21곳이 의도한 색으로 렌더되지 않았다. */
+.text-secondary { color: var(--color-text-secondary); }
+.text-tertiary { color: var(--color-text-tertiary); }
+.text-disabled { color: var(--color-text-disabled); }
+
+/* font-family utility — tokens.css 의 Role Catalog(`numeric.metric`)가 지시하는 이름.
+   정의가 없어 수치 폰트가 적용되지 않고 있었다(11곳). */
+.font-numeric { font-family: var(--font-family-numeric); }
+.font-korean { font-family: var(--font-family-korean); }
+
+/* ── Topology — 캔버스·노드·엣지 표면/색 유틸 ─────────────────────────────────
+   색은 전부 토큰 참조. 컴포넌트가 인라인 style 로 색을 박지 않도록 여기서 클래스로 준다.
+   (좌표·크기는 레이아웃 엔진이 계산하는 데이터라 인라인으로 남는다 — 색이 아니다.) */
+.bg-topology-canvas {
+  background-image: linear-gradient(
+    135deg,
+    var(--color-topology-canvas-from),
+    var(--color-topology-canvas-to)
+  );
+}
+/* 도트 그리드는 **확대/축소되는 안쪽 레이어**에 얹는다 — 캔버스 겉면에 두면 줌해도
+   격자가 그대로라 배율감이 사라진다. */
+.bg-topology-grid {
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    var(--color-topology-grid-dot) 1px,
+    transparent 0
+  );
+  background-size: 24px 24px;
+}
+/* 캔버스 여백을 끌어 이동한다는 신호. */
+.cursor-grab { cursor: grab; }
+.cursor-grab:active { cursor: grabbing; }
+/* 그룹 컨테이너 본문 위에 겹친 자식 노드가 클릭을 받도록 헤더만 되살린다. */
+.pointer-events-auto { pointer-events: auto; }
+/* 래퍼가 박스를 만들지 않게 — 절대배치 자식의 기준(containing block)을 바꾸지 않는다. */
+.display-contents { display: contents; }
+
+.bg-topology-node { background-color: var(--color-topology-node-surface); }
+.bg-topology-group { background-color: var(--color-topology-group-surface); }
+
+/* 노드 뱃지 배경 — tone 원색. 이 위 전경은 항상 고정 흰색(.text-white). */
+.bg-topology-tone-default { background-color: var(--color-brand-blue); }
+.bg-topology-tone-ok { background-color: var(--color-topology-port-ok); }
+.bg-topology-tone-alert { background-color: var(--color-topology-port-alert); }
+
+/* 뱃지의 잎(leaf) 모양 — 좌상단만 카드 반경, 우하단만 크게. */
+.rounded-topology-badge { border-radius: var(--radius-xl) 0 var(--radius-xl) 0; }
+
+/* SVG 채움/선 — fill·stroke 는 presentation attribute 대신 클래스로. */
+.fill-topology-port { fill: var(--color-topology-port); }
+.fill-topology-port-ok { fill: var(--color-topology-port-ok); }
+.fill-topology-port-alert { fill: var(--color-topology-port-alert); }
+.stroke-topology-edge { stroke: var(--color-topology-edge); }
+.stroke-topology-edge-alert { stroke: var(--color-topology-edge-alert); }
+.fill-text-tertiary { fill: var(--color-text-tertiary); }
+/* 미니맵 — 노드는 형태만, 현재 보이는 영역은 브랜드색 테두리로. */
+.fill-topology-node { fill: var(--color-topology-node-surface); }
+.fill-none { fill: none; }
+.stroke-topology-viewport { stroke: var(--color-brand-blue); }
 
 /* ── globals (keyframes · 컴포넌트 전역 클래스 · .dark) ────────────────────── */
 html, body, #root {
@@ -979,6 +1120,69 @@ html, body, #root {
   pointer-events: none;
   animation: aiClickFadeIn 0.25s cubic-bezier(0.22, 1, 0.36, 1) both, aiClickTap 0.85s ease-in-out 0.25s infinite;
 }
+
+/* ─── AiTargetMesh — 대상 군집 메시 (manual) ─────────────────────────────────
+   점 하나 = 대상 하나(축척이 커지면 점 하나 = N개, 범례가 말한다). 판정이 끝난 종류만
+   군집이 켜지므로 이 오브제는 근거 오브제이면서 로딩 오브제를 겸한다 — 진행률이 곧
+   데이터라서 스피너처럼 의미 없이 도는 물체가 아니다. */
+.wds-mesh-cluster {
+  transition: opacity 520ms ease-out, transform 520ms ease-out;
+}
+
+/* 이상(위험·경고) 점 — 정상 점의 호흡보다 빠르게 깜빡여 작은 비율(20/228)이 눈에 걸리게.
+   r 을 함께 키운다: 개수가 적어 진하기만으로는 군집 안에서 존재감이 생기지 않는다. */
+@keyframes wdsMeshDotAlert {
+  0%, 100% { opacity: 1;    r: var(--dot-r); }
+  50%      { opacity: 0.45; r: calc(var(--dot-r) * 1.45); }
+}
+.wds-mesh-dot-alert { animation: wdsMeshDotAlert 1.9s ease-in-out infinite; }
+
+/* 정상 점 — 안쪽에서 바깥으로 번지는 파동. 진폭(--dot-o)과 지연을 중심 거리로 주므로
+   군집마다 한 방향으로 훑고 지나가는 물결이 된다. 기준값을 변수로 뺀 이유: 움직임을 끈
+   환경에서도 인라인 opacity 가 그대로 깊이감이 된다. */
+@keyframes wdsMeshDot {
+  0%, 100% { opacity: var(--dot-o); }
+  50%      { opacity: calc(var(--dot-o) * 0.45); }
+}
+.wds-mesh-dot { animation: wdsMeshDot 2.8s ease-in-out infinite; }
+
+/* 군집 열 = <button> — 누르면 그 종류를 묻는 질문이 나간다. 그런데 오브제가 완전히
+   평평해서 «누를 수 있다»는 신호가 없었다(툴팁뿐). 신호는 **hover/focus 에만** 준다:
+   상시 카드 표면·쉐도우를 얹으면 군집 6개가 stat-tile row(대시보드 어법)가 되고, 위젯
+   문맥에서 카드 표면은 이미 AiCard = «답변의 근거» 라는 뜻이어서 군집이 답변으로 읽힌다.
+   평상시엔 문장 뒤의 그림, 손이 닿으면 도구 — 표면이 상태를 말하는 게 아니라 가능성을 말한다.
+
+   padding 은 hover 때 넣지 않고 **항상** 둔다 — hover 에서 처음 넣으면 6열의 높이가
+   함께 밀려 오브제가 덜컥거린다. 표면만 나타나야 한다.
+   :disabled(판정 중)는 제외: 아직 누를 것이 아니고, 그때 표면이 뜨면 «준비됐다»는 거짓 신호다. */
+.wds-mesh-cluster-btn {
+  padding: 6px 4px;
+  border-radius: var(--radius-md);
+  transition: background-color .12s ease, box-shadow .12s ease, transform .12s ease;
+}
+
+.wds-mesh-cluster-btn:not(:disabled):hover {
+  background: var(--color-surface-100);
+  /* elevation 스케일의 가장 낮은 단(--shadow-xs) — 인라인 rgba 대신 토큰을 쓴다.
+     한 단만 올리는 이유: 그 이상은 «떠 있는 카드» 가 되고, 이 오브제는 카드가 아니다. */
+  box-shadow: var(--shadow-xs);
+  transform: translateY(-1px);
+}
+
+/* 컨트롤의 focus 는 ring — border 로 표현하지 않는다(입력 필드만 focus-border). */
+.wds-mesh-cluster-btn:focus-visible {
+  outline: 2px solid var(--color-brand-blue);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wds-mesh-dot-alert, .wds-mesh-dot { animation: none; }
+  .wds-mesh-cluster { transition: none; }
+  /* 표면·쉐도우는 남기고 움직임만 끈다 — 신호를 없애면 접근성이 되레 나빠진다. */
+  .wds-mesh-cluster-btn { transition: none; }
+  .wds-mesh-cluster-btn:not(:disabled):hover { transform: none; }
+}
+
 .wds-btn {
   background-color: var(--wds-btn-bg, transparent);
   color: var(--wds-btn-fg, inherit);
@@ -988,6 +1192,29 @@ html, body, #root {
   outline: 2px solid var(--color-brand-blue);
   outline-offset: 2px;
 }
+/* 옵션바 항목 자동 배치 — 「폭이 넉넉하면 라벨을 값 왼쪽에」.
+   기준은 뷰포트가 아니라 **행이 실제로 쓸 수 있는 폭**이다(container query). 사이드바(240)와
+   AI 위젯(480)이 열리면 같은 화면에서도 행이 좁아지는데, 뷰포트 기준이면 그때도 라벨을 옆에
+   두려다 값이 잘린다. 행(.wds-optionbar-row)이 컨테이너이고 항목이 그 폭을 질의한다.
+   임계 880px 근거: 1440 화면에서 사이드바만 있을 때 행 폭 ≈ 1152 → 인라인,
+   위젯까지 열리면 ≈ 672 → 스택. 즉 위젯을 여는 순간 라벨이 위로 접힌다. */
+.wds-optionbar-row {
+  container-type: inline-size;
+  container-name: wds-optionbar;
+}
+.wds-optionbar-item-auto {
+  display: flex;
+  flex-direction: column;   /* 좁을 때: 라벨 위 · 값 아래 */
+  align-items: flex-start;
+  gap: 6px;
+}
+@container wds-optionbar (min-width: 880px) {
+  .wds-optionbar-item-auto {
+    flex-direction: row;    /* 넉넉할 때: 라벨 왼쪽 인라인 */
+    align-items: center;
+  }
+}
+
 /* 페이지 본문 콘텐츠 블록 — 좌·우 거터를 헤더·옵션바와 동일한 토큰으로 정렬. 인라인 padding 매직넘버 대체. */
 .wds-page-content {
   padding-block: var(--wds-content-py);
@@ -1038,4 +1265,56 @@ html, body, #root {
   --color-brand-blue-bg: #1C2A46;
   --color-brand-blue-bg-2: #233357;
   --color-brand-blue-deep: #7FB0FF;
+  /* 강조 행 틴트 — 라이트값을 두면 밝은 배경 위 밝은 글자가 된다. 정의: tokens.css */
+  --color-brand-blue-tint: #16203A;
+
+  /* Tone / Status 표면 다크 반전 — 표면은 어둡게, 그 위 라벨은 같은 색조의 밝은 톤으로
+     함께 뒤집는다. 대비 실측·근거는 tokens.css 주석 참조. */
+  --color-tone-surface-critical: #3A2226;
+  --color-tone-surface-warning: #33290F;
+  --color-tone-surface-info: #16233D;
+  --color-tone-surface-muted: #232932;
+  --color-tone-surface-neutral: #232932;
+
+  --color-tone-text-critical: #FFA8A3;
+  --color-tone-text-warning: #F5C860;
+  --color-tone-text-info: #9CC0FF;
+  --color-tone-text-success: #6FE0A0;
+  --color-tone-text-muted: #AEB5BF;
+  --color-tone-text-neutral: #AEB5BF;
+
+  --color-status-success-soft: #14301F;
+  --color-status-info-soft: #16233D;
+  --color-status-warning-soft: #33290F;
+  --color-status-error-soft: #3A2226;
+  --color-status-warning-soft-border: #4A3714;
+
+  /* Chart — 다크 표면용으로 다시 스텝한 값(자동 반전 아님). 정의: tokens.css */
+  --color-chart-series-1: #5B92F7;
+  --color-chart-series-2: #D9762E;
+  --color-chart-series-3: #1FA9A2;
+  --color-chart-series-4: #B08D14;
+  --color-chart-series-5: #CE4FB6;
+  --color-chart-series-6: #2FA97D;
+  --color-chart-series-7: #9A7DF0;
+  --color-chart-series-8: #E8635C;
+
+  /* seq — 다크는 anchor 가 뒤집힌다: 어두움(작음) → 밝음(큼). */
+  --color-chart-seq-1: #3A5480;
+  --color-chart-seq-2: #4C7CC4;
+  --color-chart-seq-3: #6BA3EE;
+  --color-chart-seq-4: #9BC8FF;
+
+  /* Topology — 레퍼런스에 다크 시안이 없어 새로 설계한 값(반전 아님).
+     층 순서는 라이트와 동일: canvas < group < node. 정의: tokens.css */
+  --color-topology-canvas-from: #1A2130;
+  --color-topology-canvas-to: #10141C;
+  --color-topology-grid-dot: #39414F;
+  --color-topology-node-surface: #232A35;
+  --color-topology-group-surface: #191F29;
+  --color-topology-edge: #414B5A;
+  --color-topology-edge-alert: #FF77A8;
+  --color-topology-port: #8E9CDE;
+  --color-topology-port-alert: #FF77A8;
+  --color-topology-port-ok: #56C98A;
 }

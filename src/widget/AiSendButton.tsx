@@ -60,13 +60,15 @@ export default function AiSendButton({
         } ${className}`}
         style={{
           backgroundColor: active ? "var(--color-brand-blue)" : "var(--color-surface-50)",
-          border: active ? "1px solid var(--color-brand-blue)" : "1px solid #d3d3d3",
+          border: active ? "1px solid var(--color-brand-blue)" : "1px solid var(--color-border-strong)",
         }}
         {...rest}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
           <path
             d="M8 12V4M8 4L4 8M8 4L12 8"
+            data-ds-policy-ok="활성 시 brand-blue 배경 위 화살표 — 컬러 위 고정 흰색"
+            // raw-color-ok: 활성 시 brand-blue 배경 위 화살표 — 컬러 위 고정 흰색.
             stroke={active ? "#fff" : "var(--color-text-disabled)"}
             strokeWidth="1.6"
             strokeLinecap="round"

@@ -15,7 +15,7 @@
  *
  * ## Composition rules
  * - 파일명(`name`)·MIME(`mime`)만 주입 — 칩 외형/truncate/배지는 이 컴포넌트가 책임 (표현용).
- * - 색·배경은 토큰(`bg-card` · `border-cd3d3d3` · `text-primary` · `text-tertiary` · `bg-rgba-0-0-0-0_05`) — 인라인 hex 금지.
+ * - 색·배경은 토큰(`bg-card` · `border-strong` · `text-primary` · `text-tertiary` · `bg-surface-100`) — 인라인 hex 금지.
  * - MIME 미지정 시 `"CSV"` 로 폴백 (부모 인라인 동작 그대로).
  *
  * @example
@@ -36,7 +36,7 @@ export default function AiAttachmentChip({
 }) {
   return (
     <div
-      className="flex flex-col gap-4px bg-card border border-cd3d3d3 rounded-6px px-8px py-6px shrink-0"
+      className="flex flex-col gap-4px bg-card border border-strong rounded-6px px-8px py-6px shrink-0"
       style={{ width: 100 }}
     >
       <p
@@ -47,7 +47,7 @@ export default function AiAttachmentChip({
         {name}
       </p>
       <span
-        className="self-start text-xs text-tertiary bg-rgba-0-0-0-0_05 rounded-3px px-4px py-1px uppercase"
+        className="self-start text-xs text-tertiary bg-surface-100 rounded-3px px-4px py-1px uppercase"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
       >
         {mime ?? "CSV"}

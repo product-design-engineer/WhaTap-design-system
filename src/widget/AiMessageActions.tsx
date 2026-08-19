@@ -101,10 +101,10 @@ function ActionBtn({
       onClick={onClick}
       className="flex items-center justify-center size-20px rounded-4px cursor-pointer transition-colors"
       style={{
-        background: active ? "rgba(41,108,242,0.08)" : "transparent",
+        background: active ? "var(--color-brand-blue-wash)" : "transparent",
       }}
       onMouseEnter={(e) => {
-        if (!active) (e.currentTarget as HTMLButtonElement).style.background = "rgba(0,0,0,0.05)";
+        if (!active) (e.currentTarget as HTMLButtonElement).style.background = "var(--color-surface-100)";
       }}
       onMouseLeave={(e) => {
         if (!active) (e.currentTarget as HTMLButtonElement).style.background = "transparent";

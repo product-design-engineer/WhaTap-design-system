@@ -30,7 +30,7 @@ export const High: Story = {
   args: {
     title: "즉시 조치",
     detail: "임계값 초과 — 알림 발송 대상",
-    background: "#ffe8e8",
+    background: "var(--color-tone-surface-critical)",
     dotColor: "var(--color-indicator-critical)",
   },
 };
@@ -39,7 +39,7 @@ export const Mid: Story = {
   args: {
     title: "관찰",
     detail: "경고 구간 — 추세 모니터링",
-    background: "#fff7e0",
+    background: "var(--color-tone-surface-warning)",
     dotColor: "var(--color-indicator-warning)",
   },
 };

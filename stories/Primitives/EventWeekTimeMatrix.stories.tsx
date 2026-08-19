@@ -74,7 +74,7 @@ export const Interactive: Story = {
       return (
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <EventWeekTimeMatrix weekdays={grid} onToggle={toggle} caption="셀 클릭으로 토글" />
-          <div style={{ fontSize: 12, color: "#4c4c4c" }}>
+          <div style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>
             현재 ON 셀: <strong>{onCount}</strong> / 168
           </div>
         </div>

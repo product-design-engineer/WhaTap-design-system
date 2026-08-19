@@ -16,7 +16,7 @@ const meta: Meta<typeof AiCaption> = {
     docs: {
       description: {
         component:
-          "**카드 sub-section 의 작은 라벨.** 11px 굵은 #757575 색 대문자 텍스트 + 0.3px tracking. " +
+          "**카드 sub-section 의 작은 라벨.** 11px 굵은 `--color-text-tertiary` 대문자 텍스트 + 0.3px tracking. " +
           "REASONING, COST ANALYSIS 같은 영문 키 라벨 또는 짧은 한국어 sub-heading 으로 사용. " +
           "카드 메인 헤딩이 필요할 때는 `AiSectionHeading` 사용.",
       },
@@ -50,13 +50,13 @@ export const InCardContext: Story = {
     <AiCard>
       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
         <AiCaption>REASONING</AiCaption>
-        <p style={{ fontSize: 13, color: "#222", lineHeight: 1.5, margin: 0 }}>
+        <p style={{ fontSize: 13, color: "var(--color-text-primary)", lineHeight: 1.5, margin: 0 }}>
           최근 5분 액티브 스레드 5종을 비교한 결과 httpc 가 압도적 dominant 입니다.
         </p>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 8 }}>
         <AiCaption>분류 결과</AiCaption>
-        <p style={{ fontSize: 13, color: "#222", lineHeight: 1.5, margin: 0 }}>
+        <p style={{ fontSize: 13, color: "var(--color-text-primary)", lineHeight: 1.5, margin: 0 }}>
           httpc — 즉시 조치 필요
         </p>
       </div>

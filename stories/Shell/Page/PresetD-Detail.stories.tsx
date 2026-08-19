@@ -6,7 +6,7 @@ import {
   DataTable, WhaTapAiWidget,
   type TabsItem,
 } from "@whatap/design-system";
-import type { DataTableColumn } from "@whatap/design-system/DataTable";
+import type { DataTableColumn } from "@whatap/design-system";
 
 /**
  * **프리셋 D — 상세 페이지.**
@@ -66,9 +66,9 @@ const OverviewPanel = () => (
   <div className="wds-page-content">
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24 }}>
       <MiniLineChart title="CPU Usage"    values={CPU_DATA}     unit="%" showTopStat />
-      <MiniLineChart title="Memory"       values={MEM_DATA}     unit="%" showTopStat color="#8B52FF" />
-      <MiniLineChart title="Disk I/O"     values={DISK_DATA}    unit="MB/s" color="#FF8800" />
-      <MiniLineChart title="Network"      values={NETWORK_DATA} unit="Mbps" color="#00B442" />
+      <MiniLineChart title="Memory"       values={MEM_DATA}     unit="%" showTopStat color="var(--color-whatap-purple)" />
+      <MiniLineChart title="Disk I/O"     values={DISK_DATA}    unit="MB/s" color="var(--color-chart-series-2)" />
+      <MiniLineChart title="Network"      values={NETWORK_DATA} unit="Mbps" color="var(--color-status-success)" />
     </div>
     <DataTable<TimeRow> columns={TIME_COLS} rows={TIME_ROWS} density="default" />
   </div>
@@ -143,7 +143,21 @@ const meta: Meta = {
           "**프리셋 D — 상세 페이지.** Sidebar + PageHeader + OptionbarPage + Tabs + MiniLineChart 그리드 + DataTable + WhaTapAiWidget.\n\n" +
           "인스턴스 상세, 서버 상세 등 하나의 대상을 탭으로 나눠 깊이 있게 보여주는 패턴.\n\n" +
           "**포함 컴포넌트:** DashboardLayout · PageHeader · OptionbarPage · Tabs · MiniLineChart · DataTable · WhaTapAiWidget\n\n" +
-          "**핵심 기능:** 탭 전환(개요/성능/이벤트) + 차트 2x2 그리드 + 시계열 테이블 + AI 위젯 토글.",
+          "**핵심 기능:** 탭 전환(개요/성능/이벤트) + 차트 2x2 그리드 + 시계열 테이블 + AI 위젯 토글.\n\n" +
+          "✅ **Do** — 하나의 대상을 탭으로 나눠 깊이 보여줄 때 채택 · 차트 색은 역할 토큰" +
+          "(`--color-chart-series-*`)으로 · DataTable density 는 `default` · 수치 컬럼은 `numeric` 으로 우측 정렬\n\n" +
+          "❌ **Don't** — 서로 다른 대상을 탭으로 묶기(탭은 한 대상의 단면이지 목록이 아니다) · " +
+          "차트에 팔레트 hex 직접 지정 · 100행 미만에 `compact` density 사용 · " +
+          "탭 콘텐츠를 카드 없이 회색 바닥에 배치\n\n" +
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          "## When to use\n" +
+          "- **하나의 대상**(인스턴스·서버·컨테이너·SQL)을 탭 단면으로 깊이 보는 상세 화면.\n" +
+          "- 목록에서 행을 클릭해 들어오는 드릴다운 도착지.\n" +
+          "- 지표 차트 그리드와 시계열 표를 같은 화면에서 함께 봐야 할 때.\n\n" +
+          "## When NOT to use\n" +
+          "- 서로 다른 대상을 나열·비교 → 프리셋 A(목록). 탭은 한 대상의 단면이지 목록이 아니다.\n" +
+          "- 화면 본문이 대화인 AI 모드 → 프리셋 B.\n" +
+          "- 대상 사이의 호출 관계를 보는 것 → Shell/Page/TopologyOverview.",
       },
     },
   },

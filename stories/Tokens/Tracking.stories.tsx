@@ -30,17 +30,17 @@ export const Tracking: StoryObj = {
         const upper = tr === "caps";
         const sample = upper ? "REASONING" : SAMPLE_KO;
         return (
-          <div key={tr} style={{ display: "flex", flexDirection: "column", gap: 8, padding: 16, border: "1px solid #eaeaea", borderRadius: 8, background: "#fff" }}>
+          <div key={tr} style={{ display: "flex", flexDirection: "column", gap: 8, padding: 16, border: "1px solid var(--color-border-default)", borderRadius: 8, background: "var(--color-card)" }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
-              <code style={{ fontFamily: "Roboto, monospace", fontSize: 12, color: "#222", fontWeight: 700 }}>{tr}</code>
-              <code style={{ fontFamily: "Roboto, monospace", fontSize: 11, color: "#757575" }}>{t.value}</code>
+              <code style={{ fontFamily: "Roboto, monospace", fontSize: 12, color: "var(--color-text-primary)", fontWeight: 700 }}>{tr}</code>
+              <code style={{ fontFamily: "Roboto, monospace", fontSize: 11, color: "var(--color-text-tertiary)" }}>{t.value}</code>
             </div>
-            <div style={{ fontSize: 11, color: "#4c4c4c", lineHeight: 1.5, fontFamily: tokens.font.family.korean.value }}>{t.description}</div>
-            <div style={{ padding: 12, background: "#f5f5f5", borderRadius: 4 }}>
-              <div style={{ fontFamily: tokens.font.family.korean.value, fontSize: 16, color: "#222", letterSpacing: t.value, textTransform: upper ? "uppercase" : "none", fontWeight: upper ? 700 : 400 }}>
+            <div style={{ fontSize: 11, color: "var(--color-text-secondary)", lineHeight: 1.5, fontFamily: tokens.font.family.korean.value }}>{t.description}</div>
+            <div style={{ padding: 12, background: "var(--color-surface-50)", borderRadius: 4 }}>
+              <div style={{ fontFamily: tokens.font.family.korean.value, fontSize: 16, color: "var(--color-text-primary)", letterSpacing: t.value, textTransform: upper ? "uppercase" : "none", fontWeight: upper ? 700 : 400 }}>
                 {sample}
               </div>
-              <div style={{ fontFamily: tokens.font.family.numeric.value, fontSize: 16, color: "#222", letterSpacing: t.value, marginTop: 4, textTransform: upper ? "uppercase" : "none", fontWeight: upper ? 700 : 400 }}>
+              <div style={{ fontFamily: tokens.font.family.numeric.value, fontSize: 16, color: "var(--color-text-primary)", letterSpacing: t.value, marginTop: 4, textTransform: upper ? "uppercase" : "none", fontWeight: upper ? 700 : 400 }}>
                 {upper ? "REASONING" : SAMPLE_EN}
               </div>
             </div>

@@ -22,7 +22,7 @@ const meta: Meta<typeof AiCard> = {
     docs: {
       description: {
         component:
-          "**AI 위젯 메시지의 표준 컨테이너.** 흰 배경 + #eaeaea 보더 + 8px 라운드 + 12px 패딩 + " +
+          "**AI 위젯 메시지의 표준 컨테이너.** `--color-card` 배경 + `--color-border-default` 보더 + 8px 라운드 + 12px 패딩 + " +
           "ai-anim-in 진입 애니메이션. 모든 AI 응답 메시지는 이 카드 안에 들어가며 stagger 효과는 " +
           "`delay` prop 으로 제어합니다. 자세한 사용·금지 규칙은 컴포넌트의 JSDoc 참고.",
       },
@@ -167,11 +167,11 @@ export const ZeroPadding: Story = {
   args: { padding: 0, gap: 0 },
   render: (args) => (
     <AiCard {...args}>
-      <div style={{ padding: 12, borderBottom: "1px solid #eaeaea" }}>
+      <div style={{ padding: 12, borderBottom: "1px solid var(--color-border-default)" }}>
         <AiCaption>HEADER 자체 패딩</AiCaption>
       </div>
       <div style={{ padding: 12 }}>
-        <span style={{ fontSize: 12, color: "#4c4c4c" }}>BODY 자체 패딩 — 카드 padding=0/gap=0</span>
+        <span style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>BODY 자체 패딩 — 카드 padding=0/gap=0</span>
       </div>
     </AiCard>
   ),

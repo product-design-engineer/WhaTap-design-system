@@ -8,12 +8,17 @@
  *   - hex 리터럴          #fff · #F5F5F5 · #ffffffcc
  *   - rgb()/rgba() 리터럴  rgb(255,255,255) · rgba(0,0,0,.5)
  *   - 색 유틸 클래스       bg-white · bg-black · text-white · border-white
+ *   - 값이 이름에 박힌 유틸 bg-ce5484d · border-cd3d3d3 · bg-rgba-0-0-0-0_05 ·
+ *                          shadow-0_4px_16px_rgba-0-0-0-0_12 (hex/rgba 검사의 사각지대였음)
  *
  * 예외 (위반 아님):
  *   1. `src/widget/_tokens.ts`      — 토큰 정의 원본(단일 출처 그 자체)
  *   2. `// raw-color-ok: <이유>`    — 같은 줄 또는 바로 윗줄에 사유를 남긴 경우.
  *                                     정당한 용도는 사실상 "컬러 위 흰색 전경" 하나뿐.
  *   3. 베이스라인에 등록된 기존 위반 — scripts/raw-color-baseline.json
+ *   4. `var(--token, #fallback)`     — 토큰이 단일 출처이고 hex 는 CSS 미로드 시 폴백.
+ *                                     토큰 우회가 아니므로 위반 아님.
+ *   5. 주석 안의 hex                 — 설명·TODO 문구. 런타임 색이 아니다.
  *
  * 베이스라인은 **동결선**이다. 신규 위반은 즉시 error(exit 1), 기존 위반은
  * 줄여나가되 늘릴 수 없다. 파일별 건수만 기록해 리팩터링(줄 이동)에 견딘다.
@@ -29,7 +34,14 @@ import { join, relative, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = join(ROOT, "src");
+/**
+ * 스캔 루트 — `src/` 뿐 아니라 **카탈로그(`stories/`)와 Storybook 설정도 포함**한다.
+ *
+ * 카탈로그가 리터럴을 쓰면 "디자인 시스템이 가르치는 예시" 자체가 정책 위반이 된다.
+ * 실제로 stories/ 가 검사 밖이던 동안 토큰 카탈로그가 tokens.css 의 hex 를 손으로
+ * 복제해 드리프트 위험을 안고 있었다(신규 토큰은 카탈로그에 누락).
+ */
+const SCAN_ROOTS = ["src", "stories", ".storybook"].map((d) => join(ROOT, d));
 const BASELINE_PATH = join(ROOT, "scripts", "raw-color-baseline.json");
 
 /** 토큰 정의 원본 — 여기서만 리터럴이 정당하다. */
@@ -38,7 +50,66 @@ const EXEMPT_FILES = new Set(["src/widget/_tokens.ts"]);
 const HEX = /#[0-9a-fA-F]{3,8}\b/g;
 const RGB = /\brgba?\(\s*[\d.]/g;
 const UTIL = /\b(?:bg|text|border|fill|stroke)-(?:white|black)\b/g;
+
+/**
+ * 클래스명에 색값이 박힌 유틸 — hex/rgba 검사의 사각지대였다.
+ *
+ * `bg-ce5484d`(#e5484d) · `border-cd3d3d3` · `bg-rgba-0-0-0-0_05` ·
+ * `shadow-0_4px_16px_rgba-0-0-0-0_12` 처럼 **값이 이름 안에** 들어가면 hex/rgba
+ * 정규식에 걸리지 않는다. 이름만 다를 뿐 하드코딩이고, `.dark` 오버라이드가 없으므로
+ * 다크에서 그대로 남는다. → semantic 유틸(`bg-indicator-critical`·`border-strong`·
+ * `bg-surface-100`·`shadow-md` 등)을 쓰고, 없으면 whatap-ds.css 에 먼저 추가할 것.
+ *
+ * ⚠️ 선행 경계는 `\b` 로 잡지 못한다 — `shadow-0_1px_2px_rgba-0-0-0-0_08` 처럼 `_` 뒤에
+ *    오는 경우 `_` 와 `r` 이 모두 단어문자라 `\b` 가 성립하지 않고 규칙이 빠져나간다.
+ *    그래서 "영숫자가 아닌 것 뒤" 를 lookbehind 로 직접 명시한다.
+ */
+const CLASS_COLOR = /(?<![0-9a-z])(?:c[0-9a-f]{6}(?![0-9a-z])|rgba-[0-9][0-9a-z_-]*)/gi;
+
+/** elevation 이 이름에 박힌 유틸 — `shadow-0_20px_60px_...`. */
+const CLASS_SHADOW = /\bshadow-[0-9][0-9a-z_-]*/g;
+
 const IGNORE = /raw-color-ok:/;
+
+/**
+ * 검사 대상만 남긴다 — 토큰 폴백과 주석은 정책 위반이 아니므로 제거.
+ *
+ * `var(--x, #hex)` 는 토큰이 단일 출처이고 hex 는 CSS 미로드 시 폴백이므로 우회가 아니다.
+ * 주석의 hex 는 런타임 색이 아니라 설명 문구다. 둘을 지운 뒤 남은 것만 리터럴로 센다.
+ */
+/**
+ * `var(...)` 전체를 균형 괄호로 잘라낸다.
+ *
+ * 정규식 `var\([^()]*\)` 로는 폴백 안에 함수가 중첩된 경우
+ * (`var(--shadow-sm, 0 1px 3px rgba(0,0,0,.25))`) 를 못 잡는다 — 안쪽 `)` 에서
+ * 끊기거나 아예 매칭에 실패해 폴백의 rgba 가 위반으로 잡혔다.
+ */
+function stripVarCalls(s) {
+  for (let i = s.indexOf("var("); i !== -1; i = s.indexOf("var(", i)) {
+    let depth = 0;
+    let end = -1;
+    for (let j = i + 3; j < s.length; j++) {
+      if (s[j] === "(") depth++;
+      else if (s[j] === ")" && --depth === 0) {
+        end = j;
+        break;
+      }
+    }
+    if (end === -1) break; // 닫히지 않음(멀티라인) — 남은 부분은 그대로 검사
+    s = s.slice(0, i) + s.slice(end + 1);
+  }
+  return s;
+}
+
+function strippable(line) {
+  let s = stripVarCalls(line);
+  // 줄 주석 · 블록 주석 조각 · JSDoc 본문(` * …`)
+  s = s.replace(/\/\*[^*]*\*+(?:[^/*][^*]*\*+)*\//g, "");
+  s = s.replace(/\/\/.*$/, "");
+  s = s.replace(/^\s*\*.*$/, "");
+  s = s.replace(/\/\*.*$/, "");
+  return s;
+}
 
 /** 위반 1건이 왜 위반인지, 무엇으로 바꿔야 하는지 알려주는 힌트. */
 const HINTS = [
@@ -55,6 +126,9 @@ const HINTS = [
   [/^#(296cf2)$/i, "var(--color-brand-blue)"],
   [/^bg-white$/i, "bg-card  (위젯 셸·본문·컨트롤 배경)"],
   [/^(bg|text|border)-black$/i, "무채색 토큰 사용 — 순수 검정은 팔레트에 없다"],
+  [/c[0-9a-f]{6}$/i, "값이 이름에 박힌 유틸 — semantic 유틸로 교체(bg-surface-100·border-strong·bg-indicator-critical 등)"],
+  [/^shadow-[0-9]/, "elevation 유틸 사용 — shadow-xs/sm/md/lg/xl/stage/brand-glow"],
+  [/rgba-[0-9]/, "값이 이름에 박힌 유틸 — semantic 유틸 또는 whatap-ds.css 에 토큰 기반 유틸 추가"],
 ];
 
 function hintFor(value) {
@@ -73,7 +147,7 @@ function walk(dir, out = []) {
 
 function scan() {
   const violations = [];
-  for (const file of walk(SRC)) {
+  for (const file of SCAN_ROOTS.filter(existsSync).flatMap((root) => walk(root))) {
     const rel = relative(ROOT, file);
     if (EXEMPT_FILES.has(rel)) continue;
 
@@ -82,9 +156,10 @@ function scan() {
       // 같은 줄 또는 바로 윗줄의 사유 주석이면 면제
       if (IGNORE.test(line) || (i > 0 && IGNORE.test(lines[i - 1]))) return;
 
-      for (const re of [HEX, RGB, UTIL]) {
+      const scanned = strippable(line);
+      for (const re of [HEX, RGB, UTIL, CLASS_COLOR, CLASS_SHADOW]) {
         re.lastIndex = 0;
-        for (const m of line.matchAll(re)) {
+        for (const m of scanned.matchAll(re)) {
           const value = m[0].replace(/\(\s*[\d.]$/, "(");
           violations.push({ file: rel, line: i + 1, value, text: line.trim().slice(0, 100) });
         }
@@ -114,13 +189,26 @@ if (args.includes("--list")) {
 }
 
 if (args.includes("--update")) {
+  // ⛔ 동결선은 0 에 도달했다. 되돌릴 수 없다 — `--update` 로 위반을 등록하는 길을 막는다.
+  //    (이 장치가 없으면 "일단 --update 해두고 나중에" 가 반복되며 정책이 서서히 녹는다.)
+  if (violations.length > 0) {
+    console.error(
+      `\n⛔ 베이스라인 갱신 거부 — 현재 위반 ${violations.length}건.\n\n` +
+        "  동결선은 이미 **0건**입니다. 위반을 베이스라인에 등록하는 것은\n" +
+        "  정책을 되돌리는 일이므로 허용하지 않습니다. 리터럴을 토큰으로 바꾸거나,\n" +
+        "  정당한 예외라면 `// raw-color-ok: <이유>` 로 사유를 남기세요.\n\n" +
+        "  토큰이 없어서 못 바꾸는 경우 → 토큰을 먼저 추가하세요.\n" +
+        "  토큰 부재는 리터럴의 근거가 아니라 토큰 추가의 근거입니다.\n"
+    );
+    process.exit(1);
+  }
   writeFileSync(
     BASELINE_PATH,
     JSON.stringify(
       {
         _comment:
-          "인라인 색 리터럴 기존 위반 동결선. 신규 위반은 차단되고, 이 수치는 줄일 수만 있다. " +
-          "리터럴을 토큰으로 치환한 뒤 `node scripts/check-no-raw-colors.mjs --update` 로 갱신.",
+          "인라인 색 리터럴 동결선 — **0 고정**. 위반 등록은 --update 가 거부한다. " +
+          "정당한 예외는 베이스라인이 아니라 `// raw-color-ok: <이유>` 로 표기한다.",
         total: violations.length,
         files: counts,
       },

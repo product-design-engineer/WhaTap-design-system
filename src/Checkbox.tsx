@@ -109,6 +109,8 @@ export default function Checkbox({
             width={spec.box - 4}
             height={spec.box - 4}
             fill="none"
+            data-ds-policy-ok="brand-blue 체크박스 위 체크마크 — 컬러 위 고정 흰색 전경"
+            // raw-color-ok: brand-blue 체크박스 위 체크마크 — 컬러 위 고정 흰색 전경.
             stroke="#fff"
             strokeWidth={2.2}
             strokeLinecap="round"
@@ -121,6 +123,8 @@ export default function Checkbox({
         {/* indeterminate: 가로 막대 */}
         {indeterminate && !checked && (
           <span
+            data-ds-policy-ok="brand-blue 체크박스 위 indeterminate 막대 — 컬러 위 고정 흰색"
+            // raw-color-ok: brand-blue 체크박스 위 indeterminate 막대 — 컬러 위 고정 흰색.
             className="block rounded-1_5px bg-white"
             style={{ width: spec.box - 6, height: 2 }}
             aria-hidden

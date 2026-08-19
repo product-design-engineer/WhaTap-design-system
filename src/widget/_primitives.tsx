@@ -9,7 +9,7 @@
  * `<AiCard>` 가 책임집니다. 색은 `tokens.color.*` 토큰만 사용.
  */
 import type { ReactNode } from "react";
-import { TONE_BG, TONE_DOT, TONE_LABEL, type Tone } from "./_tokens";
+import { TONE_BG, TONE_DOT, TONE_TEXT, TONE_LABEL, type Tone } from "./_tokens";
 
 /* ─────────────────────────────────────────────────────────────────────
  *  AiCard
@@ -66,7 +66,7 @@ export function AiCard({
 }) {
   return (
     <div
-      className={`ai-anim-in flex flex-col w-full bg-white border border-color-var-color-border-default rounded-8px ${className}`}
+      className={`ai-anim-in flex flex-col w-full bg-card border border-color-var-color-border-default rounded-8px ${className}`}
       style={{ animationDelay: `${delay}ms`, padding, gap }}
     >
       {children}
@@ -226,7 +226,7 @@ export function AiToneBadge({
       />
       <span
         className="text-xs tracking-default leading-none"
-        style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)", color: TONE_DOT[tone] }}
+        style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)", color: TONE_TEXT[tone] }}
       >
         {text}
       </span>

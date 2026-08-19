@@ -35,7 +35,7 @@ type Story = StoryObj<typeof ClassificationTableRow>;
 export const HighUtilization: Story = {
   args: {
     row: { gpu: 1, model: "A100", avg: "82%", max: "97%", min: "61%", pod: "train-1", tone: "high" },
-    badgeBg: "#ffe8e8",
+    badgeBg: "var(--color-tone-surface-critical)",
     badgeDot: "var(--color-indicator-critical)",
     badgeLabel: "고활용",
   },
@@ -44,7 +44,7 @@ export const HighUtilization: Story = {
 export const LowUtilization: Story = {
   args: {
     row: { gpu: 3, model: "A100", avg: "12%", max: "20%", min: "4%", pod: "infer-2", tone: "low" },
-    badgeBg: "#e8f4ff",
+    badgeBg: "var(--color-tone-surface-info)",
     badgeDot: "var(--color-brand-blue)",
     badgeLabel: "저활용",
   },

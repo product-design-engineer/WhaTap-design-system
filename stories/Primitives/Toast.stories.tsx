@@ -114,9 +114,9 @@ export const Interactive: Story = {
             style={{
               padding: "8px 16px",
               borderRadius: 4,
-              border: "1px solid #296CF2",
-              background: "#fff",
-              color: "#296CF2",
+              border: "1px solid var(--color-brand-blue)",
+              background: "var(--color-card)",
+              color: "var(--color-brand-blue)",
               fontFamily: "'Noto Sans', sans-serif",
               fontSize: 13,
               cursor: "pointer",

@@ -29,9 +29,9 @@ export const Default: Story = {
             padding: "8px 16px",
             fontSize: 13,
             borderRadius: 6,
-            border: "1px solid #eaeaea",
+            border: "1px solid var(--color-border-default)",
             cursor: "pointer",
-            backgroundColor: "#fff",
+            backgroundColor: "var(--color-card)",
             fontFamily: "var(--font-family-korean, sans-serif)",
           }}
         >
@@ -55,9 +55,9 @@ export const WithAttemptedAction: Story = {
             padding: "8px 16px",
             fontSize: 13,
             borderRadius: 6,
-            border: "1px solid #eaeaea",
+            border: "1px solid var(--color-border-default)",
             cursor: "pointer",
-            backgroundColor: "#fff",
+            backgroundColor: "var(--color-card)",
             fontFamily: "var(--font-family-korean, sans-serif)",
           }}
         >
@@ -66,6 +66,7 @@ export const WithAttemptedAction: Story = {
         <DsReadOnlyNotice
           open={open}
           onClose={() => setOpen(false)}
+          // raw-color-ok: 소비자가 시도한 *잘못된* override 를 보여주는 데모 문구.
           attemptedAction="--color-brand-blue 값을 #FF0000으로 override 시도"
         />
       </>

@@ -40,6 +40,34 @@ const SHOTS = [
   { id: "composite-sidebar--default", theme: "dark" },
   { id: "composite-pageheaderaiinline--default", theme: "dark" },
   { id: "composite-datatable--default-density", theme: "dark" },
+  // 위젯 tone/표면 — 라이트만 보고 넘어가면 다크에서 "밝은 배경 위 밝은 글자" 가 된다.
+  // 실제로 이 커버리지 부재로 강조 행·인라인 프롬프트의 다크 판독 불가를 두 번 놓쳤다.
+  { id: "primitives-ai-aitonebadge--all-tones", theme: "light" },
+  { id: "primitives-ai-aitonebadge--all-tones", theme: "dark" },
+  { id: "primitives-ai-costtablerow--highlight", theme: "dark" },
+  { id: "primitives-toast--warning", theme: "dark" },
+  // 차트 — series(정체성)·seq(크기) 램프. 라이트만 보면 다크 anchor 반전을 놓친다.
+  { id: "tokens-color--chart-series", theme: "light" },
+  { id: "tokens-color--chart-series", theme: "dark" },
+  { id: "primitives-ai-aiusagechart--hourly-gpu", theme: "light" },
+  { id: "primitives-ai-aiusagechart--hourly-gpu", theme: "dark" },
+  { id: "primitives-minilinechart--cpu-usage", theme: "light" },
+  // 수신 채널 — mock 토글을 Switch 프리미티브로 교체한 자리(라이트/다크 both).
+  { id: "composite-ai-aireceiverchannels--interactive", theme: "light" },
+  { id: "composite-ai-aireceiverchannels--interactive", theme: "dark" },
+  // 토폴로지 — 캔버스는 --color-bg/--color-card 가 아닌 **자체 표면 층**(canvas<group<node)이라
+  // 다크를 따로 봐야 한다. 층 순서가 무너지면 노드가 바닥에 파묻혀 읽히지 않는다.
+  { id: "primitives-topology-topologynode--group-container", theme: "light" },
+  { id: "primitives-topology-topologynode--group-container", theme: "dark" },
+  { id: "primitives-topology-topologynode--leaf", theme: "light" },
+  { id: "primitives-topology-topologynode--leaf", theme: "dark" },
+  { id: "primitives-topology-topologyedge--stepped", theme: "light" },
+  { id: "primitives-topology-topologyedge--stepped", theme: "dark" },
+  { id: "primitives-topology-topologyedge--alert", theme: "dark" },
+  // 접힌 상태 — 그룹을 접으면 자식으로 향하던 엣지가 통째로 사라지던 버그가 있었다
+  // ("상세 숨김"이 "트래픽 없음"으로 읽혔다). 승격 동작을 스냅샷으로 고정한다.
+  { id: "composite-topology-topologycanvas--collapsed", theme: "light" },
+  { id: "composite-topology-topologycanvas--collapsed", theme: "dark" },
 ];
 
 // 애니메이션·캐럿·transition 비활성화 (스냅샷 안정화)
@@ -56,7 +84,8 @@ const page = await ctx.newPage();
 let failed = 0, updated = 0, passed = 0;
 for (const { id, theme } of SHOTS) {
   const name = `${id}__${theme}`;
-  const url = `${BASE}/iframe.html?id=${id}&globals=theme:${theme}`;
+  // dsGuard=off — 정책 가드의 빨간 outline·배지가 스냅샷에 찍히지 않게 끈다.
+  const url = `${BASE}/iframe.html?id=${id}&globals=theme:${theme}&dsGuard=off`;
   try {
     await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
     await page.addStyleTag({ content: STABILIZE });

@@ -45,3 +45,36 @@ export const InlineVsStack: Story = {
     </div>
   ),
 };
+
+/**
+ * `layout="auto"` — **행 폭이 넉넉하면 라벨을 값 왼쪽에**, 좁아지면 위로 접는다.
+ *
+ * 판단 기준은 뷰포트가 아니라 **행이 실제로 쓸 수 있는 폭**(container query)이다. 아래 두 상자는
+ * 같은 컴포넌트이고 폭만 다르다 — 위(1040px)는 인라인, 아래(640px)는 스택으로 접힌다.
+ * 실제 화면에서는 AI 위젯(480px)이 열려 행이 좁아지는 순간 아래 모양이 된다.
+ */
+export const AutoLayout: Story = {
+  render: () => (
+    <div className="flex flex-col gap-24px">
+      {[1040, 640].map((w) => (
+        <div key={w} className="flex flex-col gap-6px">
+          <span className="text-sm text-tertiary">행 폭 {w}px</span>
+          <div
+            className="wds-optionbar-row flex flex-row items-center gap-12px flex-wrap bg-card"
+            style={{ width: w, padding: 8 }}
+          >
+            <OptionbarItem title="시작일" layout="auto">
+              <OptionbarValueDisplay value="2026 / 08 / 19" />
+            </OptionbarItem>
+            <OptionbarItem title="인스턴스" layout="auto">
+              <OptionbarValueDisplay value="dmx-rac19-1" />
+            </OptionbarItem>
+            <OptionbarItem title="시간" layout="auto">
+              <LiveTimerCompact durationLabel="10분" />
+            </OptionbarItem>
+          </div>
+        </div>
+      ))}
+    </div>
+  ),
+};

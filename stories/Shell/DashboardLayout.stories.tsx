@@ -31,12 +31,12 @@ type Story = StoryObj<typeof DashboardLayout>;
 
 const SampleMain = (
   <div style={{ padding: 24, fontFamily: "'Noto Sans', sans-serif" }}>
-    <div style={{ fontSize: 14, color: "#757575", marginBottom: 8 }}>Sample main content</div>
+    <div style={{ fontSize: 14, color: "var(--color-text-tertiary)", marginBottom: 8 }}>Sample main content</div>
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
       {[1, 2, 3, 4].map((i) => (
-        <div key={i} style={{ background: "#fff", border: "1px solid #eaeaea", borderRadius: 6, padding: 16 }}>
-          <div style={{ fontSize: 12, color: "#757575" }}>Panel {i}</div>
-          <div style={{ fontSize: 24, fontWeight: 700, color: "#222" }}>{i * 12.4}</div>
+        <div key={i} style={{ background: "var(--color-card)", border: "1px solid var(--color-border-default)", borderRadius: 6, padding: 16 }}>
+          <div style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>Panel {i}</div>
+          <div style={{ fontSize: 24, fontWeight: 700, color: "var(--color-text-primary)" }}>{i * 12.4}</div>
         </div>
       ))}
     </div>
@@ -60,8 +60,8 @@ export const WidgetOpen: Story = {
     header: <PageHeader title="DB / oracle_dnx" aiActive />,
     main: SampleMain,
     children: (
-      <div style={{ width: 480, background: "#fff", borderLeft: "1px solid #eaeaea", padding: 24 }}>
-        <div style={{ fontFamily: "'Noto Sans', sans-serif", fontSize: 13, color: "#757575" }}>(이 자리에 WhaTapAiWidget)</div>
+      <div style={{ width: 480, background: "var(--color-card)", borderLeft: "1px solid var(--color-border-default)", padding: 24 }}>
+        <div style={{ fontFamily: "'Noto Sans', sans-serif", fontSize: 13, color: "var(--color-text-tertiary)" }}>(이 자리에 WhaTapAiWidget)</div>
       </div>
     ),
   },
@@ -99,8 +99,8 @@ export const Interactive: Story = {
           main={SampleMain}
         >
           {open && (
-            <div style={{ width: 480, background: "#fff", borderLeft: "1px solid #eaeaea", padding: 24 }}>
-              <div style={{ fontFamily: "'Noto Sans', sans-serif", fontSize: 13, color: "#757575" }}>
+            <div style={{ width: 480, background: "var(--color-card)", borderLeft: "1px solid var(--color-border-default)", padding: 24 }}>
+              <div style={{ fontFamily: "'Noto Sans', sans-serif", fontSize: 13, color: "var(--color-text-tertiary)" }}>
                 AI 위젯 (이 자리에 WhaTapAiWidget). 헤더 AI 버튼으로 토글. 로고 헤더 chevron 은 위젯과 별개로 사이드바를 접습니다.
               </div>
             </div>

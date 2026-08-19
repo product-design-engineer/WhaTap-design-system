@@ -95,8 +95,16 @@ export type MenuItem = {
   label: string;
   /** 펼침/접힘이 있는 항목. 비어 있으면 단일 항목. */
   children?: { label: string; active?: boolean; onClick?: () => void }[];
-  /** 기본 펼침 여부. false면 chevron-down(접힘) 상태로 렌더. */
+  /**
+   * 펼침 여부. `onToggle` 이 없으면 «초기값» 이고 그 뒤로는 행을 눌러 사용자가 접고 편다.
+   * `onToggle` 을 주면 제어 모드가 되어 이 값이 현재 펼침을 그대로 정한다.
+   */
   expanded?: boolean;
+  /**
+   * 펼침 토글 요청. 주면 제어 모드 — 호출부가 `expanded` 를 갱신해야 화면이 바뀐다.
+   * 「지금 보고 있는 화면의 부모는 늘 펼쳐 둔다」처럼 라우팅이 펼침을 정할 때만 필요하다.
+   */
+  onToggle?: (expanded: boolean) => void;
   /** 단일 항목(child 없음) 일 때 active 강조 (라이트 블루 배경 + bold). */
   active?: boolean;
   /** 단일 항목 클릭 핸들러(네비게이션). 미지정 시 정적. */

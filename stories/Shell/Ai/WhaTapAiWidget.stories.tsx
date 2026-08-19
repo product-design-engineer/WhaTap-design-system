@@ -38,7 +38,7 @@ const meta: Meta<typeof WhaTapAiWidget> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ height: 720, position: "relative", background: "#f5f5f5", display: "flex", justifyContent: "flex-end" }}>
+      <div style={{ height: 720, position: "relative", background: "var(--color-surface-50)", display: "flex", justifyContent: "flex-end" }}>
         <Story />
       </div>
     ),
@@ -104,8 +104,8 @@ export const Interactive: Story = {
               onClick={() => setOpen(true)}
               style={{
                 position: "absolute", top: 12, right: 12, zIndex: 10,
-                padding: "6px 12px", border: "1px solid #296CF2", background: "#fff",
-                color: "#296CF2", borderRadius: 4, fontSize: 13, cursor: "pointer",
+                padding: "6px 12px", border: "1px solid var(--color-brand-blue)", background: "var(--color-card)",
+                color: "var(--color-brand-blue)", borderRadius: 4, fontSize: 13, cursor: "pointer",
               }}
             >
               위젯 열기

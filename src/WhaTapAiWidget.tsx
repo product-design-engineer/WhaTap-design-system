@@ -152,7 +152,7 @@ export default function WhaTapAiWidget({
       >
         <div
           className="rounded-full transition-colors duration-150"
-          style={{ width: 3, height: 32, backgroundColor: "rgba(0,0,0,0.12)" }}
+          style={{ width: 3, height: 32, backgroundColor: "var(--color-border-divider)" }}
         />
       </div>
 
@@ -165,13 +165,15 @@ export default function WhaTapAiWidget({
           className="flex h-40px items-center px-16px py-8px shrink-0 w-full relative overflow-visible z-10"
           style={{
             background:
-              "linear-gradient(138.94deg, rgb(0, 75, 224) 2.33%, rgb(139, 82, 255) 107.07%)",
+              "linear-gradient(138.94deg, var(--color-whatap-blue) 2.33%, var(--color-whatap-purple) 107.07%)",
           }}
         >
           <div className="flex flex-1 items-center justify-between min-w-0">
             <div className="flex gap-4px items-center shrink-0">
               <img alt="" className="size-16px" src="/icons/ai-header-symbol.svg" />
               <span
+                data-ds-policy-ok="AI 그라데이션 헤더 위 전경 — 컬러 배경 위 고정 흰색"
+                // raw-color-ok: AI 그라데이션 헤더 위 전경 — 컬러 배경 위 고정 흰색.
                 className="text-lg font-bold text-white tracking-default leading-px-20 whitespace-nowrap"
                 style={{ fontFamily: "var(--font-family-korean)" }}
               >
@@ -331,11 +333,11 @@ export default function WhaTapAiWidget({
                 <button
                   type="button"
                   aria-label="파일 또는 이미지 추가"
-                  className="group-plus flex items-center justify-center p-2px rounded-4px shrink-0 size-20px cursor-pointer border-0 bg-card hover-bg-black transition-colors"
+                  className="group-plus flex items-center justify-center p-2px rounded-4px shrink-0 size-20px cursor-pointer border-0 bg-card hover-bg-invert transition-colors"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-colors">
-                    <line x1="8" y1="3.33" x2="8" y2="12.67" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-white" strokeWidth="1.5" strokeLinecap="round" />
-                    <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-white" strokeWidth="1.5" strokeLinecap="round" />
+                    <line x1="8" y1="3.33" x2="8" y2="12.67" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-invert" strokeWidth="1.5" strokeLinecap="round" />
+                    <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-invert" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>
                 </button>
                 {/* 토큰 입출력 정보 (Figma 29424:19317) — plus 버튼 옆 pill */}
@@ -351,13 +353,17 @@ export default function WhaTapAiWidget({
                   className="ai-send-btn flex items-center justify-center rounded-4px shrink-0 size-24px cursor-pointer transition-colors disabled-cursor-not-allowed"
                   style={{
                     backgroundColor: hasInput ? "var(--color-brand-blue)" : "var(--color-surface-50)",
-                    border: hasInput ? "1px solid var(--color-brand-blue)" : "1px solid #d3d3d3",
+                    border: hasInput
+                      ? "1px solid var(--color-brand-blue)"
+                      : "1px solid var(--color-border-strong)",
                   }}
                   aria-label="전송"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path
                       d="M8 12V4M8 4L4 8M8 4L12 8"
+                      data-ds-policy-ok="활성 시 brand-blue 배경 위 전경 — 컬러 위 고정 흰색"
+                      // raw-color-ok: 활성 시 brand-blue 배경 위 전경 — 컬러 위 고정 흰색.
                       stroke={hasInput ? "#fff" : "var(--color-border-divider)"}
                       strokeWidth="1.6"
                       strokeLinecap="round"
@@ -401,7 +407,7 @@ function TokenUsageBadge({ inputTokens, outputTokens }: { inputTokens: number; o
       data-node-id="29424:19317"
     >
       <span
-        className="text-xs leading-none text-black whitespace-nowrap"
+        className="text-xs leading-none text-primary whitespace-nowrap"
         style={{ fontFamily: "var(--font-family-korean-inter)", fontWeight: "var(--font-weight-regular)" }}
       >
         토큰 입력 <strong style={{ fontWeight: "var(--font-weight-bold)" }}>{fmt(inputTokens)}</strong> · 출력{" "}

@@ -126,8 +126,8 @@ export default function AiMigPlan({
           className="flex items-center justify-between rounded-6px px-10px py-8px"
           style={{
             background:
-              "linear-gradient(95deg, rgba(0,75,224,0.06) 0%, rgba(139,82,255,0.06) 100%)",
-            border: "1px solid rgba(41,108,242,0.2)",
+              "var(--gradient-ai-tint)",
+            border: "1px solid var(--color-brand-blue-border-tint)",
           }}
         >
           <span

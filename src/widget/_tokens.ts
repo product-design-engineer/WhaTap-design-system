@@ -69,10 +69,18 @@ export type Tone = SemanticIntent | LegacyTone;
  *
  * - `value`: 실제 적용값 (CSS color, font-family stack 등)
  * - `description`: AI/사람이 이해 가능한 한 줄 사용 의도
+ * - `cssVar`: 같은 토큰의 CSS 변수 참조 (있는 경우)
+ *
+ * ## `value` vs `cssVar` — 언제 무엇을
+ * `value` 는 **라이트 테마의 실측 hex** 다. 카탈로그 표시·대비 계산·문서용.
+ * 런타임에 `style={{ background: ... }}` 로 주입할 때 `value` 를 쓰면 hex 가 그대로
+ * 박혀 **다크에서 뒤집히지 않는다** — 그 자리에는 `cssVar` 를 쓴다.
+ * (`.dark` 가 CSS 변수만 재매핑하는 구조이므로, 변수를 통과해야 테마가 따라온다.)
  */
 export interface Token<V = string> {
   readonly value: V;
   readonly description: string;
+  readonly cssVar?: string;
 }
 
 /* ─── Tokens ────────────────────────────────────────── */
@@ -86,22 +94,27 @@ export const tokens = {
     surface: {
       critical: {
         value: "#ffe8e8",
+        cssVar: "var(--color-tone-surface-critical)",
         description: "Critical 톤 카드 배경 — 시급한 문제·실패·이상치 메시지 컨테이너.",
       },
       warning: {
         value: "#fff7e0",
+        cssVar: "var(--color-tone-surface-warning)",
         description: "Warning 톤 카드 배경 — 주의·경계가 필요한 메시지.",
       },
       info: {
         value: "#e8f4ff",
+        cssVar: "var(--color-tone-surface-info)",
         description: "Info 톤 카드 배경 — 안내·정상·정보 전달 메시지.",
       },
       muted: {
         value: "#f1f2f4",
+        cssVar: "var(--color-tone-surface-muted)",
         description: "Muted 톤 카드 배경 — 비활성·idle 컨테이너.",
       },
       neutral: {
         value: "#f1f2f4",
+        cssVar: "var(--color-tone-surface-neutral)",
         description: "Neutral 톤 카드 배경 — 강조 없는 기본 placeholder.",
       },
     },
@@ -109,22 +122,27 @@ export const tokens = {
     indicator: {
       critical: {
         value: "#E53935",
+        cssVar: "var(--color-indicator-critical)",
         description: "Critical 톤 indicator — 위험·이상치 도트/스트로크/차트 강조선.",
       },
       warning: {
         value: "#F0B400",
+        cssVar: "var(--color-indicator-warning)",
         description: "Warning 톤 indicator — 경고 도트/스트로크/차트 강조선.",
       },
       info: {
         value: "#296CF2",
+        cssVar: "var(--color-brand-blue)",
         description: "Info 톤 indicator — 정보·안내 도트/스트로크/차트 강조선.",
       },
       muted: {
         value: "#757575",
+        cssVar: "var(--color-text-tertiary)",
         description: "Muted 톤 indicator — 비활성 도트/스트로크.",
       },
       neutral: {
         value: "#757575",
+        cssVar: "var(--color-text-tertiary)",
         description: "Neutral 톤 indicator — 기본 회색 도트/스트로크.",
       },
     },
@@ -138,22 +156,27 @@ export const tokens = {
     toneText: {
       critical: {
         value: "#B5302A",
+        cssVar: "var(--color-tone-text-critical)",
         description: "Critical 톤 라벨 텍스트 — tone.surface.critical 대비 5.25:1.",
       },
       warning: {
         value: "#8A6200",
+        cssVar: "var(--color-tone-text-warning)",
         description: "Warning 톤 라벨 텍스트 — tone.surface.warning 대비 5.13:1.",
       },
       info: {
         value: "#1B5CD9",
+        cssVar: "var(--color-tone-text-info)",
         description: "Info 톤 라벨 텍스트 — tone.surface.info 대비 5.26:1. brand-blue-deep 과 동일값.",
       },
       muted: {
         value: "#6E6E6E",
+        cssVar: "var(--color-tone-text-muted)",
         description: "Muted 톤 라벨 텍스트 — tone.surface.muted 대비 4.55:1.",
       },
       neutral: {
         value: "#6E6E6E",
+        cssVar: "var(--color-tone-text-neutral)",
         description: "Neutral 톤 라벨 텍스트 — tone.surface.neutral 대비 4.55:1.",
       },
     },
@@ -166,22 +189,27 @@ export const tokens = {
     text: {
       primary: {
         value: "#222",
+        cssVar: "var(--color-text-primary)",
         description: "본문 default · 헤딩 · 강조 텍스트. 가장 흔한 텍스트 색.",
       },
       secondary: {
         value: "#4c4c4c",
+        cssVar: "var(--color-text-secondary)",
         description: "보조 본문 · dim 텍스트 · sub-section 본문.",
       },
       tertiary: {
         value: "#757575",
+        cssVar: "var(--color-text-tertiary)",
         description: "라벨 · 메타 · placeholder · 캡션 부속 정보.",
       },
       disabled: {
         value: "#adadad",
+        cssVar: "var(--color-text-disabled)",
         description: "비활성 상태 텍스트 · 사용 불가 항목 표시.",
       },
       inverse: {
         value: "#FFFFFF",
+        cssVar: "var(--color-text-inverse)",
         description:
           "반전 전경 — text-strong 을 배경으로 깐 표면(툴팁 등) 위의 텍스트·아이콘. 이 용도에 --color-bg(페이지 배경)를 쓰지 말 것.",
       },
@@ -406,31 +434,49 @@ export const tokens = {
  */
 export const TONE_BG: Record<Tone, string> = {
   // 구 이름 → 새 값
-  high: tokens.color.surface.critical.value,
-  mid: tokens.color.surface.warning.value,
-  low: tokens.color.surface.info.value,
-  idle: tokens.color.surface.muted.value,
+  high: tokens.color.surface.critical.cssVar!,
+  mid: tokens.color.surface.warning.cssVar!,
+  low: tokens.color.surface.info.cssVar!,
+  idle: tokens.color.surface.muted.cssVar!,
   // 새 이름 (동의어로 같이 노출)
-  critical: tokens.color.surface.critical.value,
-  warning: tokens.color.surface.warning.value,
-  info: tokens.color.surface.info.value,
-  muted: tokens.color.surface.muted.value,
-  neutral: tokens.color.surface.neutral.value,
+  critical: tokens.color.surface.critical.cssVar!,
+  warning: tokens.color.surface.warning.cssVar!,
+  info: tokens.color.surface.info.cssVar!,
+  muted: tokens.color.surface.muted.cssVar!,
+  neutral: tokens.color.surface.neutral.cssVar!,
+};
+/**
+ * TONE_TEXT — tone surface 위 **라벨 텍스트** 색 (CSS 변수 참조 → 다크 자동 반전).
+ *
+ * ⚠️ 이 자리에 `TONE_DOT`(indicator) 을 쓰지 말 것. indicator 는 도트·스트로크용
+ * 고채도 색이라 같은 톤 surface 위 텍스트로는 WCAG AA 4.5:1 에 못 미친다
+ * (warning 은 1.75:1). 도트는 TONE_DOT, 라벨은 TONE_TEXT 로 갈라 쓴다.
+ */
+export const TONE_TEXT: Record<Tone, string> = {
+  high: tokens.color.toneText.critical.cssVar!,
+  mid: tokens.color.toneText.warning.cssVar!,
+  low: tokens.color.toneText.info.cssVar!,
+  idle: tokens.color.toneText.muted.cssVar!,
+  critical: tokens.color.toneText.critical.cssVar!,
+  warning: tokens.color.toneText.warning.cssVar!,
+  info: tokens.color.toneText.info.cssVar!,
+  muted: tokens.color.toneText.muted.cssVar!,
+  neutral: tokens.color.toneText.neutral.cssVar!,
 };
 
 /**
  * @deprecated `tokens.color.indicator[intent].value` 사용 권장.
  */
 export const TONE_DOT: Record<Tone, string> = {
-  high: tokens.color.indicator.critical.value,
-  mid: tokens.color.indicator.warning.value,
-  low: tokens.color.indicator.info.value,
-  idle: tokens.color.indicator.muted.value,
-  critical: tokens.color.indicator.critical.value,
-  warning: tokens.color.indicator.warning.value,
-  info: tokens.color.indicator.info.value,
-  muted: tokens.color.indicator.muted.value,
-  neutral: tokens.color.indicator.neutral.value,
+  high: tokens.color.indicator.critical.cssVar!,
+  mid: tokens.color.indicator.warning.cssVar!,
+  low: tokens.color.indicator.info.cssVar!,
+  idle: tokens.color.indicator.muted.cssVar!,
+  critical: tokens.color.indicator.critical.cssVar!,
+  warning: tokens.color.indicator.warning.cssVar!,
+  info: tokens.color.indicator.info.cssVar!,
+  muted: tokens.color.indicator.muted.cssVar!,
+  neutral: tokens.color.indicator.neutral.cssVar!,
 };
 
 /**

@@ -36,14 +36,22 @@ export default function Stage({
   children: ReactNode;
 }) {
   return (
-    <div className="min-h-screen flex items-center justify-center p-6" style={{ background: "#0a0a14" }}>
+    <div
+      className="min-h-screen flex items-center justify-center p-6"
+      style={{ background: "var(--color-stage-backdrop)" }}
+    >
       {badge && (
-        <div className="fixed top-4 right-4 z-1000 px-3_5 py-2 rounded-full text-sm font-semibold tracking-wider border border-white-10 text-white" style={{ background: "rgba(26, 26, 46, 0.85)" }}>
+        <div
+          data-ds-policy-ok="무대 backdrop(테마 무관 어두움) 위 배지 전경·경계 — 고정 흰색"
+          // raw-color-ok: 무대 backdrop(테마 무관 어두움) 위 배지 전경·경계 — 고정 흰색.
+          className="fixed top-4 right-4 z-1000 px-3_5 py-2 rounded-full text-sm font-semibold tracking-wider border border-white-10 text-white"
+          style={{ background: "var(--color-stage-badge-bg)" }}
+        >
           {badge}
         </div>
       )}
       <div
-        className="w-full max-w-1280px bg-cf5f6f8 rounded-lg overflow-hidden relative shadow-0_20px_60px_rgba-0-0-0-0_45"
+        className="w-full max-w-1280px bg-bg rounded-lg overflow-hidden relative shadow-stage"
         style={{ aspectRatio: "16 / 9" }}
       >
         {children}

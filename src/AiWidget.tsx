@@ -54,8 +54,8 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
 
   const containerStyle: React.CSSProperties =
     variant === "slide"
-      ? { borderLeft: "1px solid var(--color-border-default)", boxShadow: "-10px 0 30px rgba(0,0,0,0.06)" }
-      : { border: "1px solid var(--color-border-default)", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" };
+      ? { borderLeft: "1px solid var(--color-border-default)", boxShadow: "var(--shadow-panel-slide)" }
+      : { border: "1px solid var(--color-border-default)", boxShadow: "var(--shadow-xl)" };
 
   return (
     <div className={containerClass} style={containerStyle}>
@@ -93,7 +93,7 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
       <div className="flex-1 overflow-auto p-4 bg-card">
         {/* AI welcome message */}
         <div className="flex gap-2_5 mb-4">
-          <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 shadow-0_2px_8px_rgba-41-108-242-0_25" style={{ background: "linear-gradient(135deg, var(--color-brand-blue), var(--color-brand-blue-deep))" }}>
+          <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 shadow-brand-glow" style={{ background: "linear-gradient(135deg, var(--color-brand-blue), var(--color-brand-blue-deep))" }}>
             <AiSymbol size={14} />
           </div>
           <div className="flex-1 text-md leading-loose" style={{ color: "var(--color-text-body)" }}>
@@ -134,6 +134,8 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
             </svg>
           </div>
           <button
+            data-ds-policy-ok="brand-blue 보내기 버튼 위 아이콘 — 컬러 위 고정 흰색"
+            // raw-color-ok: brand-blue 보내기 버튼 위 아이콘 — 컬러 위 고정 흰색.
             className="size-7 rounded-md flex items-center justify-center text-white cursor-pointer"
             style={{ background: "var(--color-brand-blue)" }}
             aria-label="보내기"

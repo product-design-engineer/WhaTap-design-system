@@ -19,7 +19,7 @@ import type { NotificationItem } from "./PageHeader";
  * ## Composition rules
  * - 데이터(`NotificationItem`)와 `onClick` 만 주입 — 행 외형/도트/정렬은 이 컴포넌트가 책임.
  * - 드롭다운 닫기 등 상태 제어는 부모가 `onClick` 핸들러로 전달 (이 컴포넌트는 상태 비보유).
- * - 색·배경은 토큰/기정의 클래스 (`bg-ce5484d` · `text-primary` · `hover-bg-surface-100`) — 새 클래스 금지.
+ * - 색·배경은 토큰/기정의 클래스 (`bg-indicator-critical` · `text-primary` · `hover-bg-surface-100`) — 새 클래스 금지.
  *
  * @example
  * ```tsx
@@ -46,7 +46,7 @@ export default function PageHeaderNotificationItem({
       className="flex items-start gap-8px w-full text-left px-14px py-8px text-md text-primary tracking-default cursor-pointer hover-bg-surface-100 whitespace-nowrap"
       style={{ fontFamily: "var(--font-family-korean)" }}
     >
-      <span className="mt-6px size-6px rounded-full bg-ce5484d shrink-0" />
+      <span className="mt-6px size-6px rounded-full bg-indicator-critical shrink-0" />
       {item.label}
     </button>
   );

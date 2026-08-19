@@ -51,6 +51,8 @@ export default function AiChoiceButtons({
     >
       <button
         onClick={primary.onClick}
+        data-ds-policy-ok="brand-blue primary 버튼 위 라벨 — 컬러 위 고정 흰색"
+        // raw-color-ok: brand-blue primary 버튼 위 라벨 — 컬러 위 고정 흰색.
         className="flex items-center justify-center h-36px px-16px rounded-6px bg-color-var-color-brand-blue text-white text-md tracking-default cursor-pointer transition-colors hover-bg-color-var-color-brand-blue-deep"
         style={{
           fontFamily: "var(--font-family-korean)",
@@ -62,7 +64,7 @@ export default function AiChoiceButtons({
       </button>
       <button
         onClick={secondary.onClick}
-        className="flex items-center justify-center h-36px px-16px rounded-6px bg-white text-brand-blue text-md tracking-default border border-color-var-color-brand-blue cursor-pointer transition-colors hover-bg-color-var-color-brand-blue-bg"
+        className="flex items-center justify-center h-36px px-16px rounded-6px bg-card text-brand-blue text-md tracking-default border border-color-var-color-brand-blue cursor-pointer transition-colors hover-bg-color-var-color-brand-blue-bg"
         style={{
           fontFamily: "var(--font-family-korean)",
           fontWeight: "var(--font-weight-medium)",

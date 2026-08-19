@@ -230,14 +230,14 @@ export default function AiInlinePrompt({
   return (
     <div className="ai-inline-prompt-wrapper relative w-full">
       <div
-        className="ai-inline-prompt relative bg-white flex flex-row gap-6px items-center px-8px py-6px rounded-8px transition-colors duration-200 w-full"
+        className="ai-inline-prompt relative bg-card flex flex-row gap-6px items-center px-8px py-6px rounded-8px transition-colors duration-200 w-full"
         style={{ border: hasInput ? "1px solid var(--color-brand-blue)" : "1px solid var(--color-brand-blue-bg-2)" }}
       >
         {/* 첨부 chip — 같은 행 안에 inline compact (input 좌측 prefix) */}
         {attachments && attachments.length > 0 && attachments.map((a, i) => (
           <div
             key={i}
-            className="flex items-center gap-4px bg-var-color-surface-50 border border-cd3d3d3 rounded-4px px-6px shrink-0 h-20px max-w-120px"
+            className="flex items-center gap-4px bg-var-color-surface-50 border border-strong rounded-4px px-6px shrink-0 h-20px max-w-120px"
             title={a.name}
           >
             <span
@@ -315,11 +315,11 @@ export default function AiInlinePrompt({
           aria-label="파일 또는 이미지 추가"
           onClick={onAttachClick}
           disabled={disabled}
-          className="group-plus flex items-center justify-center p-2px rounded-4px shrink-0 size-20px cursor-pointer border-0 bg-white hover-bg-black transition-colors disabled-opacity-50 disabled-cursor-not-allowed"
+          className="group-plus flex items-center justify-center p-2px rounded-4px shrink-0 size-20px cursor-pointer border-0 bg-card hover-bg-invert transition-colors disabled-opacity-50 disabled-cursor-not-allowed"
         >
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
-            <line x1="8" y1="3.33" x2="8" y2="12.67" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-white" strokeWidth="1.5" strokeLinecap="round" />
-            <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-white" strokeWidth="1.5" strokeLinecap="round" />
+            <line x1="8" y1="3.33" x2="8" y2="12.67" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-invert" strokeWidth="1.5" strokeLinecap="round" />
+            <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-invert" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
         </button>
 
@@ -338,10 +338,10 @@ export default function AiInlinePrompt({
           aria-label="추천 질의"
           // input blur 방지: chip 의 mousedown 이 발생할 때 focus 가 input 에서 빠져나가지 않도록
           onMouseDown={(e) => e.preventDefault()}
-          className="ai-inline-prompt__dropdown absolute left-0 right-0 top-calc-100pct+4px z-50 bg-white rounded-8px p-8px flex flex-wrap gap-6px"
+          className="ai-inline-prompt__dropdown absolute left-0 right-0 top-calc-100pct+4px z-50 bg-card rounded-8px p-8px flex flex-wrap gap-6px"
           style={{
             border: "1px solid var(--color-border-default)",
-            boxShadow: "0 8px 24px rgba(0, 0, 0, 0.12)",
+            boxShadow: "var(--shadow-md)",
           }}
         >
           {suggestions!.map((s) => (
@@ -352,7 +352,7 @@ export default function AiInlinePrompt({
               aria-selected="false"
               onClick={() => handleSuggestionClick(s)}
               title={s.query}
-              className="flex items-center gap-6px bg-white border rounded-16px px-10px h-24px cursor-pointer transition-colors hover-bg-var-color-brand-blue-bg-2 hover-border-var-color-brand-blue"
+              className="flex items-center gap-6px bg-card border rounded-16px px-10px h-24px cursor-pointer transition-colors hover-bg-var-color-brand-blue-bg-2 hover-border-var-color-brand-blue"
               style={{ borderColor: "var(--color-border-default)" }}
             >
               {s.icon && <span className="shrink-0 flex items-center">{s.icon}</span>}

@@ -48,7 +48,8 @@ export type MenuItem = {
   icon: string;
   label: string;
   children?: { label: string; active?: boolean; onClick?: () => void }[]; // onClick: 하위 항목 네비게이션
-  expanded?: boolean;
+  expanded?: boolean;      // onToggle 없으면 «초기값» — 그 뒤엔 행을 눌러 사용자가 접고 편다
+  onToggle?: (expanded: boolean) => void; // 주면 제어 모드 — 호출부가 expanded 를 갱신해야 바뀐다
   active?: boolean;        // 단일 항목 active 강조
   onClick?: () => void;    // 단일 항목 클릭
 };
@@ -74,6 +75,7 @@ export type OrgContext = { label: string; icon?: string; badge?: string }; // ba
 | `hideProductRail` | `boolean` | `false` | 우측 제품 레일 숨김(테넌트 상위·계정 영역) |
 
 **메뉴 하위 항목 네비게이션:** `MenuItem.children[].onClick`으로 그룹(예: "관리 ▾") 하위 항목도 라우팅 진입점이 된다(`expanded: true` + 각 child `onClick`).
+**펼침은 컴포넌트가 갖는다:** 부모 행을 누르면 접히고 펴진다. `expanded` 는 초기값이므로 호출부는 아무것도 하지 않아도 된다. caret 이 보이는데 눌리지 않으면 사용자는 고장으로 읽으므로 이것이 기본 동작이다. 라우팅이 펼침을 정해야 할 때만 `onToggle` 을 주고(제어 모드) 호출부가 `expanded` 를 갱신한다. **메뉴 트리는 1단(부모 → 자식)까지다** — 「관리 → 구독 · 결제 → 화면들」 같은 3단은 만들 수 없으므로 중간 층을 없애고 자식 라벨이 스스로를 설명하게 쓴다.
 **스위처 컨텍스트 뱃지:** `org.badge`는 **토큰** 칩으로 렌더 — `bg-[var(--color-brand-blue-bg)] text-[color:var(--color-brand-blue)]`(하드코딩 hex 금지). `org.icon` 미지정 시 라벨 좌측은 **12px 스페이서**(빈 40px 박스 금지).
 
 `collapsed=true`일 때 사이드바는 제품 레일만 남기고 다 숨깁니다. AI 위젯이 열렸을 때의 표준 동작 — 보통 `DashboardLayout`이 자동으로 이 prop을 전달합니다.

@@ -101,7 +101,7 @@ export const Interactive: Story = {
       return (
         <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start" }}>
           <LiveTimerCompact paused={paused} onTogglePause={() => setPaused((p) => !p)} />
-          <span style={{ fontSize: 12, color: "#4c4c4c" }}>
+          <span style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>
             상태: <strong>{paused ? "일시정지" : "재생"}</strong> · 좌측 박스 클릭으로 토글
           </span>
         </div>

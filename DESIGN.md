@@ -42,11 +42,28 @@ colors:
   brand-blue-soft:           "#3DA9FF"    # Color
   brand-blue-bg:             "#D6E1FF"    # Color
   brand-blue-bg-2:           "#C2D5FC"    # Color
+  brand-blue-tint:           "#eef4ff"    # Color — 가장 옅은 브랜드 틴트 (강조된 표 행/셀)
+
+  # Brand Alpha — 반투명. 아래 층이 배어나야 하는 자리 (불투명 brand-blue-bg 계열과 구분)
+  brand-blue-wash:           "rgba(41, 108, 242, 0.08)"   # Color — active/선택 행·버튼 배경
+  brand-blue-border-tint:    "rgba(41, 108, 242, 0.25)"   # Color — 틴트 표면의 경계선
 
   # Status
   status-success:            "#00B442"    # Color
   status-warning:            "#FFA012"    # Color
   status-error:              "#f34646"    # Color
+
+  # Status Deep — hover/pressed 단계 (brand-blue-deep 과 같은 역할)
+  status-warning-deep:       "#E08A0E"    # Color
+  status-error-deep:         "#D03333"    # Color
+
+  # Status Soft — status 원색의 옅은 표면 (토스트 배경 · soft 칩/버튼 · 경고 배너)
+  #  위에 올리는 텍스트는 tone-text-* 를 쓴다. status 원색을 배경으로 쓰지 말 것.
+  status-success-soft:       "#E8F8EE"    # Color
+  status-info-soft:          "#E8F0FE"    # Color
+  status-warning-soft:       "#FFF4E5"    # Color
+  status-error-soft:         "#FDECEC"    # Color
+  status-warning-soft-border: "#FFE0B2"   # Color — warning-soft 표면의 경계선
 
   # Surface
   surface-50:                "#F5F5F5"    # Color
@@ -62,6 +79,7 @@ colors:
   text-secondary:            "#4c4c4c"    # Color — 보조 본문 · dim (75 callsite)
   text-tertiary:             "#757575"    # Color — 라벨 · 메타 · placeholder (63 callsite)
   text-disabled:             "#adadad"    # Color — 비활성 (6 callsite)
+  text-inverse:              "#FFFFFF"    # Color — text-strong 을 배경으로 깐 표면 위 전경 (툴팁 · 반전 hover)
 
   # Border
   border-default:            "#EAEAEA"    # Color
@@ -90,8 +108,17 @@ colors:
   tone-text-critical:        "#B5302A"    # Color
   tone-text-warning:         "#8A6200"    # Color
   tone-text-info:            "#1B5CD9"    # Color
+  tone-text-success:         "#007030"    # Color — status-success-soft 위 라벨 (원색은 대비 미달)
   tone-text-muted:           "#6E6E6E"    # Color
   tone-text-neutral:         "#6E6E6E"    # Color
+
+  # Backdrop scrim — 모달류 배경 딤. 역할이 하나이므로 토큰도 하나.
+  overlay-scrim:             "rgba(0, 0, 0, 0.5)"        # Color
+  overlay-loading:           "rgba(255, 255, 255, 0.4)"  # Color — 컨트롤 위 로딩 막(버튼)
+
+  # Stage — 발표·캡처용 16:9 무대 chrome. 테마 무관 고정 어두움 (Stage 전용, 앱 표면 금지)
+  stage-backdrop:            "#0a0a14"                    # Color
+  stage-badge-bg:            "rgba(26, 26, 46, 0.85)"     # Color
 
   # AI Gradient
   ai-gradient-blue:          "#004BE0"    # Color
@@ -102,6 +129,27 @@ colors:
   gray-mid:                  "#8b8b8b"    # Color
   gray-soft:                 "#a0a3a6"    # Color
   gray-pale:                 "#bdbdbd"    # Color
+
+  # Chart — Series (categorical) · 계열 정체성. 고정 순서, 1번부터 배정, 순환 금지.
+  #  ⚠️ all-pairs 상한 3슬롯 — scatter/bubble/map/small-multiples 는 3계열까지.
+  #  검증(dataviz validate_palette.js): 라이트 최악 인접 CVD ΔE 9.5 · 정상시야 17.0 · 대비 ≥3:1
+  chart-series-1:            "#296CF2"    # Color — blue
+  chart-series-2:            "#C75B1A"    # Color — orange
+  chart-series-3:            "#00908A"    # Color — teal
+  chart-series-4:            "#9A7B00"    # Color — gold
+  chart-series-5:            "#B0349B"    # Color — magenta
+  chart-series-6:            "#0E7A56"    # Color — green
+  chart-series-7:            "#6B3FD4"    # Color — violet
+  chart-series-8:            "#C93B34"    # Color — red
+
+  # Chart — Sequential · 크기/강도. 한 색조 단조 램프, 옅음→진함 (다크는 anchor 반전).
+  chart-seq-1:               "#7AB8F0"    # Color
+  chart-seq-2:               "#4A97E8"    # Color
+  chart-seq-3:               "#2472D8"    # Color
+  chart-seq-4:               "#1A50B0"    # Color
+
+  # Avatar gradient — 프로필 아바타 그라데이션 시작 stop (끝은 brand-blue). 테마 무관.
+  avatar-gradient-from:      "#4FC3F7"    # Color
 
   # Tone 메타데이터
   tone-types: [critical, warning, info, muted, neutral]
@@ -255,13 +303,29 @@ layout:
   widget-width:             "480px"    # Dimension
   stagger-delay-step:       "120ms"    # Dimension
 
-# ── 5. Shapes ───────────────────────────────────────────
+# ── 5. Elevation & Depth ────────────────────────────────
+#
+#  층(surface)이 아니라 *떠 있는 높이*로 고른다. 컴포넌트가 rgba 를 직접 적지 않도록
+#  그림자도 토큰이다. hairline 은 단독 그림자가 아니라 md/lg 에 겹쳐 쓰는 1px 경계.
+
+elevation:
+  shadow-sm:              "0 1px 3px rgba(0, 0, 0, 0.25)"    # 용도: 컨트롤 — switch/토글 knob
+  shadow-md:              "0 8px 24px rgba(0, 0, 0, 0.12)"   # 용도: 떠 있는 패널 — 드롭다운·토스트
+  shadow-lg:              "0 12px 40px rgba(0, 0, 0, 0.2)"   # 용도: 모달·다이얼로그
+  shadow-ring-hairline:   "0 0 0 1px rgba(0, 0, 0, 0.04)"    # 용도: md/lg 에 겹쳐 쓰는 1px 경계
+  shadow-xl:              "0 20px 60px rgba(0, 0, 0, 0.15)"  # 용도: 플로팅 위젯 — 가장 높이 뜬 표면
+  shadow-panel-slide:     "-10px 0 30px rgba(0, 0, 0, 0.06)" # 용도: 우측에서 밀려나온 슬라이드 패널
+  shadow-brand-glow:      "0 2px 8px rgba(41, 108, 242, 0.25)" # 용도: 선택된 컨트롤의 브랜드 강조
+  scrim:                  "{colors.overlay-scrim}"           # Reference → rgba(0, 0, 0, 0.5)
+  gradient-ai-tint:       "linear-gradient(95deg, rgba(0, 75, 224, 0.08) 0%, rgba(139, 82, 255, 0.08) 100%)"
+
+# ── 6. Shapes ───────────────────────────────────────────
 
 shapes:
   ai-card-rounded:          "8px"      # Dimension
   ai-card-border-color:     "{colors.border-default}"  # Reference → #EAEAEA
 
-# ── 6. Components ───────────────────────────────────────
+# ── 7. Components ───────────────────────────────────────
 
 components:
 

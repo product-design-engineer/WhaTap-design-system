@@ -14,6 +14,8 @@ export { default as Checkbox } from "./Checkbox";
 export type { CheckboxProps, CheckboxSize } from "./Checkbox";
 export { default as Chip } from "./Chip";
 export type { ChipProps, ChipVariant, ChipTone, ChipSize } from "./Chip";
+export { default as TimeChip } from "./TimeChip";
+export type { TimeChipProps } from "./TimeChip";
 export { default as FilterChip } from "./FilterChip";
 export type { FilterChipProps } from "./FilterChip";
 export { default as FilterDropdown } from "./FilterDropdown";
@@ -62,6 +64,7 @@ export type { InstanceStatus, OptionbarInstanceSelectorSize } from "./OptionbarI
 export { default as OptionbarItem } from "./OptionbarItem";
 export type { OptionbarSize } from "./OptionbarItem";
 export { default as OptionbarPage } from "./OptionbarPage";
+export type { OptionbarField } from "./OptionbarPage";
 export { default as OptionbarValueDisplay } from "./OptionbarValueDisplay";
 export type { OptionbarValueDisplaySize, OptionbarValueDisplayVariant } from "./OptionbarValueDisplay";
 export { default as PageHeader } from "./PageHeader";
@@ -77,6 +80,7 @@ export type { HeaderPillButtonSize } from "./HeaderPillButton";
 export { default as ToolbarIconButton, ToolbarIcon } from "./ToolbarIconButton";
 export type { ToolbarIconButtonProps } from "./ToolbarIconButton";
 export { IcDocs, IcSupport } from "./icons/HeaderIcons";
+export { IcSnapshot } from "./icons/SnapshotIcon";
 export { default as SidebarLogoHeader } from "./SidebarLogoHeader";
 export { default as SidebarMenuItem } from "./SidebarMenuItem";
 export { default as SidebarOrgSwitcher } from "./SidebarOrgSwitcher";
@@ -128,8 +132,15 @@ export { default as ProposalSection } from "./widget/ProposalSection";
 export { default as AiActionChip } from "./widget/AiActionChip";
 export { default as AiAttachmentChip } from "./widget/AiAttachmentChip";
 
+// Topology — 노드-엣지 그래프(레이아웃 엔진 + 프리미티브)
+export * from "./topology";
+
 // Icons
 export { default as SettingsIcon } from "./icons/SettingsIcon";
 
 // Widget tokens / primitives / message cards
 export * from "./widget";
+
+/** 개발 전용 정책 가드 — 위반 요소에 outline·배지 표시. 프로덕션에서는 호출하지 않으면 된다. */
+export { enableDsPolicyGuard } from "./devPolicyGuard";
+export type { DsPolicyRule, DsPolicyGuardOptions } from "./devPolicyGuard";

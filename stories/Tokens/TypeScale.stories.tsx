@@ -36,7 +36,7 @@ const SIZES = [
 export const ScaleOverview: StoryObj = {
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 4, maxWidth: 980 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "80px 80px 110px 1fr", gap: 16, padding: "8px 16px", borderBottom: "1px solid #eaeaea", fontSize: 11, color: "#757575", fontFamily: "'Noto Sans', sans-serif", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.3px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "80px 80px 110px 1fr", gap: 16, padding: "8px 16px", borderBottom: "1px solid var(--color-border-default)", fontSize: 11, color: "var(--color-text-tertiary)", fontFamily: "'Noto Sans', sans-serif", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.3px" }}>
         <span>토큰</span>
         <span>크기</span>
         <span>영역</span>
@@ -45,12 +45,12 @@ export const ScaleOverview: StoryObj = {
       {SIZES.map((s) => {
         const t = tokens.font.size[s.key];
         return (
-          <div key={s.key} style={{ display: "grid", gridTemplateColumns: "80px 80px 110px 1fr", gap: 16, alignItems: "center", padding: "12px 16px", borderBottom: "1px solid #f5f5f5" }}>
-            <code style={{ fontFamily: "Roboto, monospace", fontSize: 12, color: "#222" }}>{s.key}</code>
-            <span style={{ fontFamily: tokens.font.family.korean.value, fontSize: t.value, color: "#222", lineHeight: 1 }}>가나abc 123</span>
-            <span style={{ fontSize: 11, color: s.range === "Dense" ? "#296CF2" : "#8B52FF", fontWeight: 700, fontFamily: "'Noto Sans', sans-serif" }}>{s.range}</span>
-            <span style={{ fontSize: 12, color: "#4c4c4c", lineHeight: 1.4, fontFamily: "'Noto Sans', sans-serif" }}>
-              <strong style={{ color: "#222" }}>{t.value}</strong> — {t.description}
+          <div key={s.key} style={{ display: "grid", gridTemplateColumns: "80px 80px 110px 1fr", gap: 16, alignItems: "center", padding: "12px 16px", borderBottom: "1px solid var(--color-surface-50)" }}>
+            <code style={{ fontFamily: "Roboto, monospace", fontSize: 12, color: "var(--color-text-primary)" }}>{s.key}</code>
+            <span style={{ fontFamily: tokens.font.family.korean.value, fontSize: t.value, color: "var(--color-text-primary)", lineHeight: 1 }}>가나abc 123</span>
+            <span style={{ fontSize: 11, color: s.range === "Dense" ? "var(--color-brand-blue)" : "var(--color-whatap-purple)", fontWeight: 700, fontFamily: "'Noto Sans', sans-serif" }}>{s.range}</span>
+            <span style={{ fontSize: 12, color: "var(--color-text-secondary)", lineHeight: 1.4, fontFamily: "'Noto Sans', sans-serif" }}>
+              <strong style={{ color: "var(--color-text-primary)" }}>{t.value}</strong> — {t.description}
             </span>
           </div>
         );
@@ -61,11 +61,11 @@ export const ScaleOverview: StoryObj = {
 
 export const SideBySideComparison: StoryObj = {
   render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start", fontFamily: tokens.font.family.korean.value, color: "#222" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-start", fontFamily: tokens.font.family.korean.value, color: "var(--color-text-primary)" }}>
       {SIZES.map((s) => (
         <div key={s.key} style={{ display: "flex", alignItems: "baseline", gap: 16 }}>
-          <code style={{ width: 60, fontFamily: "Roboto, monospace", fontSize: 11, color: "#757575" }}>{s.key}</code>
-          <code style={{ width: 50, fontFamily: "Roboto, monospace", fontSize: 11, color: "#757575" }}>{tokens.font.size[s.key].value}</code>
+          <code style={{ width: 60, fontFamily: "Roboto, monospace", fontSize: 11, color: "var(--color-text-tertiary)" }}>{s.key}</code>
+          <code style={{ width: 50, fontFamily: "Roboto, monospace", fontSize: 11, color: "var(--color-text-tertiary)" }}>{tokens.font.size[s.key].value}</code>
           <span style={{ fontSize: tokens.font.size[s.key].value, lineHeight: 1 }}>가나다 WhaTap AI</span>
         </div>
       ))}

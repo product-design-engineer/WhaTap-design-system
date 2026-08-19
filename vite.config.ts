@@ -29,6 +29,16 @@ export default defineConfig({
   },
   test: {
     projects: [
+      // 순수 로직(브라우저 불필요) — topology 레이아웃 엔진 등. node 환경이라 빠르다.
+      // storybook 프로젝트와 분리해 둔 이유: 브라우저 프로바이더를 띄우지 않기 위함.
+      {
+        extends: true,
+        test: {
+          name: "unit",
+          environment: "node",
+          include: ["src/**/*.test.ts"],
+        },
+      },
       {
         extends: true,
         plugins: [

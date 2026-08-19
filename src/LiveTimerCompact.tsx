@@ -154,9 +154,9 @@ export default function LiveTimerCompact({
         style={{
           width: spec.box,
           height: spec.box,
-          borderTop: "1px solid rgb(173, 173, 173)",
-          borderLeft: "1px solid rgb(173, 173, 173)",
-          borderBottom: "1px solid rgb(173, 173, 173)",
+          borderTop: "1px solid var(--color-border-divider)",
+          borderLeft: "1px solid var(--color-border-divider)",
+          borderBottom: "1px solid var(--color-border-divider)",
           borderRadius: "4px 0px 0px 4px",
         }}
       >
@@ -178,7 +178,7 @@ export default function LiveTimerCompact({
         style={{
           height: spec.box,
           padding: spec.padding,
-          border: "1px solid rgb(173, 173, 173)",
+          border: "1px solid var(--color-border-divider)",
           borderRadius: "0px 4px 4px 0px",
         }}
       >
@@ -187,7 +187,7 @@ export default function LiveTimerCompact({
           className="absolute top-0 bottom-0 left-0 pointer-events-none"
           style={{
             width: `${progress * 100}%`,
-            backgroundColor: "rgb(0, 180, 66)",
+            backgroundColor: "var(--color-status-success)",
             opacity: 0.18,
             transition: "width 16ms linear",
           }}
@@ -207,9 +207,11 @@ export default function LiveTimerCompact({
           </span>
           {durationLabel && (
             <span
+              data-ds-policy-ok="녹색 알약 위 전경 — 컬러 배경 위 고정 흰색"
+              // raw-color-ok: 녹색 알약 위 전경 — 컬러 배경 위 고정 흰색.
               className="inline-flex items-center justify-center px-5px rounded-2px text-white whitespace-nowrap shrink-0"
               style={{
-                background: "#00B543",
+                background: "var(--color-status-success)",
                 height: spec.pill,
                 fontFamily: "var(--font-family-numeric)",
                 fontSize: spec.pillFont,

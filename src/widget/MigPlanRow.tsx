@@ -45,7 +45,7 @@ export default function MigPlanRow({
       className="grid items-center px-8px py-6px gap-4px border-t border-color-var-color-border-default"
       style={{
         gridTemplateColumns: "1.4fr 1.4fr 1fr",
-        background: highlight ? "#eef4ff" : "#fff",
+        background: highlight ? "var(--color-brand-blue-tint)" : "var(--color-card)",
       }}
     >
       <span

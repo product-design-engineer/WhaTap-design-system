@@ -99,7 +99,7 @@ export default function EventWeekTimeMatrix({
               }`}
               style={{
                 background: on ? "var(--color-brand-blue)" : "var(--color-surface-100)",
-                border: on ? "1px solid #1f57c8" : "1px solid #e0e1e3",
+                border: on ? "1px solid var(--color-brand-blue-deep)" : "1px solid var(--color-border-strong)",
               }}
               aria-label={`${dayLabels[d]} ${String(h).padStart(2, "0")}시 ${on ? "수신" : "미수신"}`}
               aria-pressed={on}
@@ -111,11 +111,11 @@ export default function EventWeekTimeMatrix({
       {/* 범례 */}
       <div className="flex items-center gap-10px mt-4px">
         <span className="flex items-center gap-4px">
-          <span className="inline-block w-12px h-10px rounded-2px" style={{ background: "var(--color-brand-blue)", border: "1px solid #1f57c8" }} />
+          <span className="inline-block w-12px h-10px rounded-2px" style={{ background: "var(--color-brand-blue)", border: "1px solid var(--color-brand-blue-deep)" }} />
           <span className="text-xs text-secondary">수신</span>
         </span>
         <span className="flex items-center gap-4px">
-          <span className="inline-block w-12px h-10px rounded-2px" style={{ background: "var(--color-surface-100)", border: "1px solid #e0e1e3" }} />
+          <span className="inline-block w-12px h-10px rounded-2px" style={{ background: "var(--color-surface-100)", border: "1px solid var(--color-border-strong)" }} />
           <span className="text-xs text-secondary">미수신</span>
         </span>
       </div>

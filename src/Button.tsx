@@ -71,8 +71,8 @@ const SIZE_CLASS: Record<ButtonSize, string> = {
 /** tone → CSS color (main / hover / soft surface). */
 const TONE_COLORS: Record<ButtonTone, { main: string; hover: string; soft: string }> = {
   primary:  { main: "var(--color-brand-blue)",     hover: "var(--color-brand-blue-deep)", soft: "var(--color-brand-blue-bg)" },
-  warning:  { main: "var(--color-status-warning)", hover: "#E08A0E",                       soft: "#FFF4E5" },
-  critical: { main: "var(--color-status-error)",   hover: "#D03333",                       soft: "#FDECEC" },
+  warning:  { main: "var(--color-status-warning)", hover: "var(--color-status-warning-deep)", soft: "var(--color-status-warning-soft)" },
+  critical: { main: "var(--color-status-error)",   hover: "var(--color-status-error-deep)",   soft: "var(--color-status-error-soft)" },
 };
 
 /** variant × tone → inline CSS custom property set (button 색 전체 결정). */
@@ -82,6 +82,7 @@ function toneStyle(variant: ButtonVariant, tone: ButtonTone): CSSProperties {
     return {
       "--wds-btn-bg": c.main,
       "--wds-btn-bg-hover": c.hover,
+      // raw-color-ok: contained 버튼 — tone 원색 배경 위 고정 흰색 전경.
       "--wds-btn-fg": "#fff",
       "--wds-btn-border": "transparent",
     } as CSSProperties;
@@ -123,6 +124,8 @@ export default function Button({
     <button
       type={rest.type ?? "button"}
       disabled={isDisabled}
+      // 소스의 raw-color-ok 와 짝 — 런타임 가드에도 사유를 알린다(contained 는 컬러 위 흰 전경).
+      data-ds-policy-ok={variant === "contained" ? "컬러 위 고정 흰색 전경(--wds-btn-fg)" : undefined}
       className={[
         "wds-btn",
         "inline-flex items-center justify-center rounded-4px border whitespace-nowrap select-none relative overflow-hidden",
@@ -144,7 +147,7 @@ export default function Button({
         <span
           aria-hidden
           className="absolute inset-0 flex items-center justify-center"
-          style={{ background: "rgba(255,255,255,0.4)", backdropFilter: "blur(1px)" }}
+          style={{ background: "var(--color-overlay-loading)", backdropFilter: "blur(1px)" }}
         >
           <span
             style={{

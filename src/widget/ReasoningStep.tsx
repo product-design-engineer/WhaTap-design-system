@@ -48,6 +48,8 @@ export default function ReasoningStep({
           <circle cx="6" cy="6" r="5.4" fill="var(--color-brand-blue)" />
           <path
             d="M3.5 6.1l1.8 1.8L8.5 4.5"
+            data-ds-policy-ok="컬러 원형 배지 위 체크마크 — 컬러 위 고정 흰색"
+            // raw-color-ok: 컬러 원형 배지 위 체크마크 — 컬러 위 고정 흰색.
             stroke="#fff"
             strokeWidth="1.4"
             strokeLinecap="round"

@@ -44,7 +44,7 @@ export default function CostTableRow({
         !isFirst ? "border-t border-color-var-color-border-default" : ""
       }`}
       style={{
-        background: row.highlight ? "#eef4ff" : "#fff",
+        background: row.highlight ? "var(--color-brand-blue-tint)" : "var(--color-card)",
       }}
     >
       <div className="flex flex-col min-w-0">
@@ -65,7 +65,7 @@ export default function CostTableRow({
         className="text-lg text-primary font-bold tracking-default leading-none"
         style={{
           fontFamily: "var(--font-family-numeric)",
-          color: row.highlight ? "var(--color-brand-blue)" : "#222",
+          color: row.highlight ? "var(--color-brand-blue)" : "var(--color-text-primary)",
         }}
       >
         {row.cost}

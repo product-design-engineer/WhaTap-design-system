@@ -11,7 +11,8 @@
 - [chrome-components.md](/design-system/chrome-components.md): Chrome 20
 - [ai-entry.md](/design-system/ai-entry.md): AI 진입 컴포넌트
 - [widget-components.md](/design-system/widget-components.md): AI 위젯 카드
-- [patterns.md](/design-system/patterns.md): 합성 패턴 + Do/Don't
+- [patterns.md](/design-system/patterns.md): Part 1 인터랙션 패턴(컴포넌트 횡단 시퀀스) + Part 2 구현 정책
+- [components.json](/design-system/components.json): **기계 판독 컴포넌트 규칙 카탈로그** — 컴포넌트별 Purpose · ✅Do · ❌Don't · Composition rules · props · 스토리 id. 자동 생성(소스 docstring + 스토리). 컴포넌트를 쓰기 전 참조할 단일 출처.
 
 ## 도구 (MCP)
 
@@ -23,4 +24,5 @@
 
 ## 규약
 
-- 단일 출처: 인라인 색 리터럴 금지(토큰 사용), 컴포넌트 재구현 금지(prop 조합). 모든 컴포넌트 docstring = Purpose/When to use/When NOT to use/Composition rules + @example.
+- 단일 출처: 인라인 색 리터럴 금지(토큰 사용), 컴포넌트 재구현 금지(prop 조합). 모든 컴포넌트 docstring = Purpose/When to use/When NOT to use/Composition rules + @example (`lint:docstrings` 게이트가 강제).
+- Do/Don't 는 별도 문서가 아니라 위 docstring 에서 유도된다(`## Do`/`## Don't` 명시 시 그대로). 표기 단일화 규칙: [SKILL.md](/design-system/SKILL.md#컴포넌트-규칙은-어디에-있나--do--dont-단일-표기).
