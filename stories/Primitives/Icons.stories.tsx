@@ -41,7 +41,9 @@ const meta: Meta = {
           "## When NOT to use\n" +
           "- AI 기능 표식 → `AiSymbol`(보라 그라데이션 pinwheel).\n" +
           "- 브랜드 마크 → `Primitives/WhaTap Symbol`.\n" +
-          "- 여기 없는 의미의 아이콘을 비슷한 것으로 대체하기 — 새로 필요하면 `src/icons/` 에 추가하고 이 카탈로그에 등록한다.",
+          "- 여기 없는 의미의 아이콘을 비슷한 것으로 대체하기 — 새로 필요하면 `src/icons/` 에 추가하고 이 카탈로그에 등록한다.\n\n" +
+          // 이 한 장이 대신 등재하는 이름들 — catalog-coverage 게이트가 이 선언을 읽는다.
+          "@covers IcDocs · IcSupport · IcSnapshot · SettingsIcon",
       },
     },
   },

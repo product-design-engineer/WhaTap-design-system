@@ -341,6 +341,14 @@ for (const sf of storyFiles) {
     do: dedupe(explicitDo.length ? explicitDo : [...fromStory.do, ...bullets(whenToUse)]),
     dont: dedupe(explicitDont.length ? explicitDont : [...fromStory.dont, ...derivedDont]),
     doDontSource: explicitDo.length || explicitDont.length ? "explicit" : fromStory.dont.length ? "story" : "derived",
+    /* 이 항목이 «대신 등재해 주는» 이름들. 아이콘처럼 prop 표면이 없는 것을 한 장에 묶을 때
+       스토리 설명에 `@covers A · B · C` 로 **명시**한다. 추론(본문에 이름이 있으면 등재로
+       인정)으로 두면 다른 컴포넌트 설명에 이름만 스쳐도 통과한다 — 실측으로 AiWidget 이
+       그렇게 새어 나갔다. */
+    covers: ((s.description ?? "").match(/@covers\s+([^\n]+)/)?.[1] ?? (docText.match(/@covers\s+([^\n]+)/)?.[1] ?? ""))
+      .split(/[·,]/)
+      .map((x) => x.trim())
+      .filter((x) => /^[A-Z][\w]*$/.test(x)),
     example: doc ? exampleOf(doc) : null,
     // meta 에 `component:` 가 없는 스토리(DataTable 등)도 있으므로 제목에서 유도한 이름으로 폴백.
     props: srcText ? propsOf(srcText, s.component ?? name) : [],

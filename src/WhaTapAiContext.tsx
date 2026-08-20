@@ -21,6 +21,8 @@
  * - `lastPrompt` 는 라우트 전이 시 chat 연속용 — 새 페이지에서 소비 후 `setLastPrompt(null)` 로 clear.
  * - 정책(feedback-common-components-catalog): chrome/위젯 상태는 공용 — 화면마다 재선언 금지.
  *
+ * @covers WhaTapAiProvider
+ *
  * @example
  * ```tsx
  * <WhaTapAiProvider>
