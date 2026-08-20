@@ -31,7 +31,7 @@ claude mcp add --transport http whatap-ds https://whatap-ds-mcp.vercel.app/mcp
 { "servers": { "whatap-ds": { "type": "http", "url": "https://whatap-ds-mcp.vercel.app/mcp" } } }
 ```
 
-**도구:** `get_design_catalog`(DESIGN.md 합본) · `list_components` · **`search_components`**(의도·키워드 검색 — 이름뿐 아니라 **규칙 본문**(Purpose · When to use · When NOT to use · Do/Don't · props · 스토리)까지 훑고, 관련 **패턴·정책**(`patterns.md`)을 함께 돌려준다. 컴포넌트 이름을 모를 때 여기서 시작: `"삭제 확인"` → Modal + 「P1 파괴적 액션 확인」) · **`get_component`**(그 컴포넌트의 Purpose · ✅Do · ❌Don't · Composition rules · props · @example · 스토리 — **쓰기 전에 먼저 호출**) · **`get_do_dont`**(전 컴포넌트의 Do/Don't 요약, `layer` 로 필터 — 작업 시작 시 한 번에 주입) · `get_tokens` · `get_preview_url`(배포 Storybook iframe/문서 URL).
+**도구:** `get_design_catalog`(DESIGN.md 합본) · `list_components` · **`search_components`**(의도·키워드 검색 — 이름뿐 아니라 **규칙 본문**(Purpose · When to use · When NOT to use · Do/Don't · props · 스토리)까지 훑고, 관련 **패턴·정책**(`patterns.md`)을 함께 돌려준다. 컴포넌트 이름을 모를 때 여기서 시작: `"삭제 확인"` → Modal + 「P1 파괴적 액션 확인」) · **`get_component`**(그 컴포넌트의 Purpose · ✅Do · ❌Don't · Composition rules · props · @example · 스토리 — **쓰기 전에 먼저 호출**) · **`get_do_dont`**(전 컴포넌트의 Do/Don't 요약, `layer` 로 필터 — 작업 시작 시 한 번에 주입) · **`get_tokens`**(토큰 카탈로그 — tier(Global/Semantic/Component)·group 필터, 값 + **다크 값** + 역할 + 유틸 클래스 + 쓰는 컴포넌트) · **`search_tokens`**(의도로 원자를 찾는다: `"경고 배경"` → `--color-status-warning-soft`(+유틸 `bg-status-warning-soft`·다크 값·금지 용도)) · `get_preview_url`(배포 Storybook iframe/문서 URL).
 
 > `get_component` 는 배포된 [`/design-system/components.json`](https://whatap-design-system-storybook.vercel.app/design-system/components.json) 을 읽습니다. 이 파일은 `pnpm build:design` 이 **소스 docstring + 스토리에서 생성**하므로 손으로 관리하는 문서가 아닙니다 — 규칙을 고치는 곳은 컴포넌트 docstring 하나입니다. (Storybook 이 재배포돼야 MCP 응답에 반영됩니다.)
 

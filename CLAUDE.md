@@ -12,6 +12,7 @@
   - `tokens.md` — 토큰 정의 (CSS 변수 ↔ 디자인 의미)
   - `patterns.md` — **Part 1 인터랙션 패턴**(`P1`… 컴포넌트 횡단 시퀀스 — 파괴적 액션 확인 · 완료 통보 · 즉시반영 vs 폼제출) + **Part 2 구현 정책**(`1`… 기존 번호 유지). MCP `search_components` 가 이 파일을 함께 검색한다.
   - `components.json` — **기계 판독 규칙 카탈로그(자동 생성 · 직접 편집 금지).** 컴포넌트별 Purpose · ✅Do · ❌Don't · Composition rules · props · 스토리 id. `scripts/build-components-json.mjs` 가 **소스 docstring + 스토리**에서 유도하고 MCP `get_component`·`get_do_dont` 가 이걸 읽는다 — Do/Don't 를 따로 손으로 쓰지 않는다(표기 단일화 규칙은 `docs/SKILL.md`). 강제: `pnpm lint:docstrings`.
+  - `tokens.json` — **기계 판독 토큰 카탈로그(자동 생성 · 직접 편집 금지).** 토큰별 tier·값·다크값·`@role`/`@use`/`@avoid`·유틸 클래스·사용 컴포넌트. `scripts/build-tokens-json.mjs` 가 **`whatap-ds.css` 의 선언 + 그 위 주석**에서 유도하고 MCP `get_tokens`·`search_tokens` 가 이걸 읽는다 — 의미를 다른 파일에 두지 않는다. 강제: `pnpm lint:token-docs`(전 토큰 `@role` 필수, 동결선 0).
   - `STORIES_ROADMAP.md` — Storybook 카탈로그 추가 작업 목록
 
 ## 카탈로그 — 단일 3-Layer 체계 (Primitives · Composite · Shell)
@@ -148,7 +149,7 @@ style={{ background: tokens.color.surface.critical.value }}     // ❌ 라이트
 **카탈로그는 값을 복제하지 않는다.** 토큰 스토리는 `stories/_useTokens.ts` 로 `:root` 를 런타임 열거해 계산값을 읽는다 → 토큰을 추가하면 자동 등장, 값을 바꾸면 자동 반영, 다크는 다크 값 표시. 카탈로그가 소유하는 것은 **값이 아니라 의미(용도 설명)** 뿐이다.
 
 **토큰이 없어서 리터럴을 쓴다는 것은 성립하지 않는다.** 토큰 부재는 리터럴의 근거가 아니라 **토큰 추가의 근거**다. 새 색이 필요하면:
-`tokens.css` → `whatap-ds.css`(:root + `.dark`) → `DESIGN.md` → 필요시 `_tokens.ts`(`value` + `cssVar`) 순으로 **먼저** 추가하고, 그 다음 컴포넌트가 참조한다. **값이 아니라 역할로 명명**한다(`--shadow-md` ⭕ / `--shadow-0-8-24` ❌).
+`tokens.css` → `whatap-ds.css`(:root + `.dark`, **선언 위에 `@role` 주석 필수** — 없으면 `lint:token-docs` 가 차단한다) → `DESIGN.md` → 필요시 `_tokens.ts`(`value` + `cssVar`) 순으로 **먼저** 추가하고, 그 다음 컴포넌트가 참조한다. **값이 아니라 역할로 명명**한다(`--shadow-md` ⭕ / `--shadow-0-8-24` ❌).
 
 ## 스타일 — 일반 CSS (Tailwind 미사용 · 흔적 0)
 

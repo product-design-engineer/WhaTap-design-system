@@ -66,6 +66,44 @@ async function fetchComponentDocs(): Promise<Map<string, ComponentDoc> | null> {
   }
 }
 
+/* ── 토큰 카탈로그 (tokens.json) ─────────────────────────────────────────────
+ * `scripts/build-tokens-json.mjs` 가 `whatap-ds.css` 의 선언 + 그 위 `@role/@use/@avoid`
+ * 주석에서 생성한다. 이게 없던 동안 `get_tokens` 는 tokens.md 산문을 그대로 돌려줬고,
+ * 런타임 토큰 197개 중 그 문서에 이름이라도 있는 것은 55개였다 — 컴포넌트는 고를 수 있는데
+ * 그 안을 채우는 원자를 고를 근거가 없었다. */
+type TokenDoc = {
+  name: string;
+  tier: "Global" | "Semantic" | "Component";
+  group: string;
+  value: string;
+  dark: string | null;
+  aliasOf: string | null;
+  role: string | null;
+  use: string | null;
+  avoid: string | null;
+  utilities: string[];
+  usedBy: string[];
+  related: string[];
+};
+
+async function fetchTokenDocs(): Promise<TokenDoc[] | null> {
+  try {
+    const r = await fetch(`${BASE}/design-system/tokens.json`, { cache: "no-store" });
+    if (!r.ok) return null;
+    const d = (await r.json()) as { tokens: TokenDoc[] };
+    return d.tokens ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** 토큰 한 줄 요약 — 이름·값·다크·역할. 소비자가 쓸 표면(유틸 클래스)을 반드시 붙인다. */
+function tokenLine(t: TokenDoc): string {
+  const util = t.utilities.length ? ` · 유틸 \`${t.utilities.slice(0, 3).join("` `")}\`` : "";
+  const dark = t.dark ? ` · 다크 \`${t.dark}\`` : " · 테마 불변";
+  return `- \`${t.name}\` (${t.tier}) — ${t.role ?? "(역할 미기술)"}\n  \`${t.value}\`${dark}${util}`;
+}
+
 const list = (items: string[]) => items.map((s) => `- ${s}`).join("\n");
 
 /** 규칙 섹션 — Do/Don't 를 먼저 둔다. AI 가 위에서부터 읽고 코드를 쓰기 시작하기 때문. */
@@ -100,9 +138,112 @@ const handler = createMcpHandler(
 
     server.tool(
       "get_tokens",
-      "WhaTap 디자인 시스템 토큰 카탈로그(색·타입·톤) 반환.",
-      {},
-      async () => text(await fetchText("/design-system/tokens.md")),
+      "토큰 카탈로그 — 이름 · 값 · 다크 값 · **역할/권장/금지** · 유틸 클래스 · 사용 컴포넌트. tier(Global/Semantic/Component) 또는 group('color-text', 'shadow-md' …)으로 좁힐 수 있다. 산문 전문이 필요하면 get_design_catalog.",
+      {
+        tier: z.enum(["Global", "Semantic", "Component", "all"]).optional()
+          .describe("계층 필터. UI 컴포넌트는 Semantic 만 참조해야 한다."),
+        group: z.string().optional().describe("그룹 접두(예: 'color-text', 'wds', 'shadow')"),
+      },
+      async ({ tier, group }) => {
+        const all = await fetchTokenDocs();
+        if (!all) return text(await fetchText("/design-system/tokens.md"));
+        const picked = all.filter(
+          (t) =>
+            (!tier || tier === "all" || t.tier === tier) &&
+            (!group || t.name.includes(group) || t.group.startsWith(group)),
+        );
+        if (!picked.length) return text(`조건에 맞는 토큰 없음 (tier=${tier ?? "all"} group=${group ?? "-"}).`);
+        const byTier = ["Semantic", "Component", "Global"].filter((x) => picked.some((t) => t.tier === x));
+        const out = [`# WhaTap 토큰 (${picked.length}${group ? ` · ${group}` : ""})`];
+        for (const x of byTier) {
+          out.push(``, `## ${x}`, ...picked.filter((t) => t.tier === x).map(tokenLine));
+        }
+        out.push(
+          ``,
+          `**규칙** — UI 컴포넌트는 Semantic 만 참조한다(Global 직접 참조 금지). 인라인 주입 시 TS 토큰은 \`.value\`(hex) 가 아니라 \`.cssVar\` 를 쓴다 — 다크가 따라오지 않는다.`,
+          `의도로 찾으려면 search_tokens("경고 배경"), 컴포넌트 규칙은 get_component.`,
+        );
+        return text(out.join("\n"));
+      },
+    );
+
+    server.tool(
+      "search_tokens",
+      "의도로 토큰을 찾는다 — '경고 배경', '카드 위 보조 텍스트', '모달 그림자', '표 수치 서체'. 역할·권장·금지 문구까지 검색하고, 그 토큰을 쓰는 유틸 클래스와 실제 사용 컴포넌트를 함께 돌려준다.",
+      { query: z.string().describe("하려는 일(의도) 또는 토큰 이름 일부") },
+      async ({ query }) => {
+        const all = await fetchTokenDocs();
+        if (!all) return text("토큰 카탈로그(tokens.json)를 불러오지 못했습니다. get_tokens 를 사용하세요.");
+        const q = query.trim().toLowerCase();
+        if (!q) return text("검색어가 비었습니다.");
+        const tokens = q.split(/\s+/).filter(Boolean);
+
+        /* 가중치 — 역할(role)이 가장 강하다. 이름 일치는 이미 아는 사람의 질의이고,
+           의도 질의는 role/use 에 걸린다. avoid 매칭도 싣는다 — 「쓰지 말 것」을 찾는
+           질의("본문에 쓰면 안 되는 색")에 답할 수 있어야 한다. */
+        const FIELDS: { key: string; w: number; of: (t: TokenDoc) => string[] }[] = [
+          { key: "role", w: 5, of: (t) => [t.role ?? ""] },
+          { key: "name", w: 4, of: (t) => [t.name, t.group] },
+          { key: "use", w: 4, of: (t) => [t.use ?? ""] },
+          { key: "avoid", w: 2, of: (t) => [t.avoid ?? ""] },
+          { key: "utility", w: 2, of: (t) => t.utilities },
+          { key: "usedBy", w: 1, of: (t) => t.usedBy },
+        ];
+        const score = (t: TokenDoc, needles: string[]) => {
+          let sc = 0;
+          const where = new Set<string>();
+          for (const n of needles) {
+            let best = 0;
+            for (const f of FIELDS)
+              for (const raw of f.of(t))
+                if (raw && raw.toLowerCase().includes(n)) {
+                  where.add(f.key);
+                  if (f.w > best) best = f.w;
+                }
+            if (!best) return null;
+            sc += best;
+          }
+          return { t, sc, where: [...where] };
+        };
+        let hits = all.map((t) => score(t, tokens)).filter((h): h is NonNullable<typeof h> => h !== null);
+        let mode = "";
+        if (!hits.length && tokens.length > 1) {
+          hits = all
+            .map((t) => {
+              const partial = tokens.map((n) => score(t, [n])).filter(Boolean) as NonNullable<ReturnType<typeof score>>[];
+              if (!partial.length) return null;
+              /* 덮은 낱말 수를 점수 앞에 둔다 — '보조 텍스트' 에서 «텍스트» 한 낱말만
+                 강하게 맞힌 토큰이 두 낱말을 약하게 맞힌 토큰보다 위로 오면 안 된다. */
+              return {
+                t,
+                sc: partial.reduce((a, b) => a + b.sc, 0),
+                covered: partial.length,
+                where: [...new Set(partial.flatMap((p) => p.where))],
+              };
+            })
+            .filter((h): h is NonNullable<typeof h> => h !== null);
+          mode = " · 부분 일치";
+        }
+        hits.sort(
+          (a, b) =>
+            ((b as { covered?: number }).covered ?? 1) - ((a as { covered?: number }).covered ?? 1) ||
+            b.sc - a.sc ||
+            a.t.name.localeCompare(b.t.name),
+        );
+        const top = hits.slice(0, 12);
+        if (!top.length)
+          return text(`'${query}' 토큰 결과 없음. 낱말을 줄여 보거나 get_tokens(group: 'color-text') 로 훑어보세요.`);
+
+        const out = [`# '${query}' 토큰 (${hits.length}${hits.length > top.length ? ` 중 상위 ${top.length}` : ""}${mode})`, ``];
+        for (const h of top) {
+          out.push(tokenLine(h.t) + `  \n  match: ${h.where.join("/")}`);
+          if (h.t.use) out.push(`  ✅ ${h.t.use}`);
+          if (h.t.avoid) out.push(`  ❌ ${h.t.avoid}`);
+          if (h.t.usedBy.length) out.push(`  쓰는 곳: ${h.t.usedBy.slice(0, 5).join(", ")}`);
+        }
+        out.push(``, `컴포넌트 선택은 search_components, 정책 전문은 get_design_catalog.`);
+        return text(out.join("\n"));
+      },
     );
 
     server.tool(
@@ -352,11 +493,35 @@ const handler = createMcpHandler(
             );
           }
         }
+        /* 토큰도 함께 — 컴포넌트를 골랐어도 그 안을 채울 원자를 모르면 인라인 hex 로 샌다.
+           질의가 이미 의도이므로 같은 낱말로 토큰 카탈로그를 훑어 상위 몇 개만 붙인다. */
+        const tokenHits: string[] = [];
+        try {
+          const all = await fetchTokenDocs();
+          if (all) {
+            const scored = all
+              .map((t) => {
+                const hay = `${t.name} ${t.role ?? ""} ${t.use ?? ""} ${t.utilities.join(" ")}`.toLowerCase();
+                const n = tokens.filter((q) => hay.includes(q)).length;
+                return { t, n };
+              })
+              .filter((x) => x.n > 0)
+              .sort((a, b) => b.n - a.n || a.t.name.localeCompare(b.t.name))
+              .slice(0, 4);
+            for (const { t } of scored) tokenHits.push(tokenLine(t));
+          }
+        } catch {
+          /* 토큰 카탈로그 미배포 — 컴포넌트/패턴 결과만 */
+        }
+
         if (patternHits.length) {
           out.push(``, `## 관련 패턴·정책 (${patternHits.length})`);
           for (const p of patternHits)
             out.push(`- **${p.heading}** — patterns.md${p.line ? `\n  ↳ ${p.line}` : ""}`);
           out.push(``, `패턴 전문은 get_design_catalog (DESIGN.md 합본) 의 Patterns 절.`);
+        }
+        if (tokenHits.length) {
+          out.push(``, `## 관련 토큰 (${tokenHits.length})`, ...tokenHits, ``, `토큰만 더 보려면 search_tokens("${query}").`);
         }
         out.push(``, `상세 규칙은 get_component(id · 또는 컴포넌트명), 프리뷰는 get_preview_url(storyId).`);
         return text(out.join("\n"));
