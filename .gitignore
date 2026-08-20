@@ -23,3 +23,5 @@ tests/visual/diff/
 
 # 과거 배포 스냅샷 보관 (vircaai-designer-storybook 등) — 커밋 대상 아님
 .snapshots/
+# 토큰 카탈로그 — build:design 이 whatap-ds.css 에서 생성
+docs/tokens.json

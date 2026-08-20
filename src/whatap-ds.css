@@ -15,230 +15,400 @@
     
 
     
+    /* @role preflight 기본 폰트 피처 */
     --default-font-feature-settings: normal;
+    /* @role preflight 기본 폰트 변형 */
     --default-font-variation-settings: normal;
+    /* @role preflight 고정폭 폰트 피처 */
     --default-mono-font-feature-settings: normal;
+    /* @role preflight 고정폭 폰트 변형 */
     --default-mono-font-variation-settings: normal;
 
     
+    /* @role Button 배경 (variant×tone 이 주입) | @use Button 내부 전용 | @avoid 호출부에서 직접 지정 */
     --wds-btn-bg: transparent;
+    /* @role Button 전경 | @use Button 내부 전용 */
     --wds-btn-fg: inherit;
+    /* @role Button 보더 | @use Button 내부 전용 */
     --wds-btn-border: transparent;
+    /* @role Button hover 배경 | @use Button 내부 전용 */
     --wds-btn-bg-hover: transparent;
+    /* @role 산세리프 폰트 스택 (Global) | @avoid 컴포넌트에서 직접 참조 (font-family-* 사용) */
     --font-sans: "Noto Sans KR", "Noto Sans", ui-sans-serif, system-ui, sans-serif;
+    /* @role 고정폭 폰트 스택 (Global) | @avoid 컴포넌트에서 직접 참조 */
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    /* @role 원시 회색 스케일 (Global) | @avoid 컴포넌트에서 직접 참조 (Semantic 토큰 사용) */
     --color-gray-50: oklch(98.5% 0.002 247.839);
+    /* @role 원시 회색 스케일 (Global) | @avoid 컴포넌트에서 직접 참조 */
     --color-gray-100: oklch(96.7% 0.003 264.542);
+    /* @role 고정 검정 (Global) | @use 오버레이 계산의 기준 | @avoid 테마 적응 전경 (text-primary 사용) */
     --color-black: #000;
+    /* @role 고정 흰색 (Global) | @use 컬러 면 위 고정 전경 · mask | @avoid 테마 적응 면 (bg-card 사용) */
     --color-white: #fff;
+    /* @role 간격 스케일의 기준 단위 (Global) | @use space-* 가 이 값의 배수 */
     --spacing: 0.25rem;
+    /* @role 콘텐츠 최대 폭 스케일 (Global) */
     --container-2xl: 42rem;
+    /* @role 콘텐츠 최대 폭 스케일 (Global) */
     --container-3xl: 48rem;
+    /* @role 타입 스케일 — 10px 마이크로 캡션 | @use 역할로 고른다(patterns 의 타이포 Role Catalog) | @avoid 같은 사이즈에서 weight 만 바꿔 위계 만들기 */
     --text-xs: 10px;
+    /* @role 해당 사이즈의 기본 행간 */
     --text-xs--line-height: calc(1 / 0.75);
+    /* @role 타입 스케일 — 11px 보조 메타 | @use 역할로 고른다(patterns 의 타이포 Role Catalog) | @avoid 같은 사이즈에서 weight 만 바꿔 위계 만들기 */
     --text-sm: 11px;
+    /* @role 해당 사이즈의 기본 행간 */
     --text-sm--line-height: calc(1.25 / 0.875);
+    /* @role 타입 스케일 — 12px 라벨·메타 | @use 역할로 고른다(patterns 의 타이포 Role Catalog) | @avoid 같은 사이즈에서 weight 만 바꿔 위계 만들기 */
     --text-base: 12px;
+    /* @role 해당 사이즈의 기본 행간 */
     --text-base--line-height: calc(1.5 / 1);
+    /* @role 타입 스케일 — 14px 섹션 헤더 | @use 역할로 고른다(patterns 의 타이포 Role Catalog) | @avoid 같은 사이즈에서 weight 만 바꿔 위계 만들기 */
     --text-lg: 14px;
+    /* @role 해당 사이즈의 기본 행간 */
     --text-lg--line-height: calc(1.75 / 1.125);
+    /* @role 타입 스케일 — 상위 제목 | @use 역할로 고른다(patterns 의 타이포 Role Catalog) | @avoid 같은 사이즈에서 weight 만 바꿔 위계 만들기 */
     --text-xl: 16px;
+    /* @role 타입 스케일 — 페이지 타이틀 | @use 역할로 고른다(patterns 의 타이포 Role Catalog) | @avoid 같은 사이즈에서 weight 만 바꿔 위계 만들기 */
     --text-2xl: 20px;
+    /* @role 해당 사이즈의 기본 행간 */
     --text-2xl--line-height: calc(2 / 1.5);
+    /* @role 타입 스케일 — 대형 제목 | @use 역할로 고른다(patterns 의 타이포 Role Catalog) | @avoid 같은 사이즈에서 weight 만 바꿔 위계 만들기 */
     --text-3xl: 24px;
+    /* @role 타입 스케일 — 대형 제목 | @use 역할로 고른다(patterns 의 타이포 Role Catalog) | @avoid 같은 사이즈에서 weight 만 바꿔 위계 만들기 */
     --text-4xl: 32px;
+    /* @role 타입 스케일 — 최대 제목 | @use 역할로 고른다(patterns 의 타이포 Role Catalog) | @avoid 같은 사이즈에서 weight 만 바꿔 위계 만들기 */
     --text-5xl: 48px;
+    /* @role 글자 굵기 — 본문 굵기 | @avoid 사이즈 없이 굵기만으로 위계 만들기 */
     --font-weight-normal: 400;
+    /* @role 글자 굵기 — 라벨·강조 굵기 | @avoid 사이즈 없이 굵기만으로 위계 만들기 */
     --font-weight-medium: 500;
+    /* @role 글자 굵기 — 준굵은 굵기 | @avoid 사이즈 없이 굵기만으로 위계 만들기 */
     --font-weight-semibold: 600;
+    /* @role 글자 굵기 — 제목·헤더 굵기 | @avoid 사이즈 없이 굵기만으로 위계 만들기 */
     --font-weight-bold: 700;
+    /* @role 자간 — 보정 없음 */
     --tracking-normal: 0em;
+    /* @role 자간 — 더 넓은 자간 */
     --tracking-wider: 0.05em;
+    /* @role 행간 — 좁은 행간 */
     --leading-tight: 1.2;
+    /* @role 행간 — 약간 좁은 행간 */
     --leading-snug: 1.3;
+    /* @role 행간 — 기본 행간 */
     --leading-normal: 1.4;
+    /* @role 행간 — 넉넉한 행간 */
     --leading-relaxed: 1.5;
+    /* @role 행간 — 가장 넓은 행간 */
     --leading-loose: 1.6;
+    /* @role 모서리 반경 — 기본 모서리 반경 */
     --radius-md: 0.375rem;
+    /* @role 모서리 반경 — 큰 모서리 반경 */
     --radius-lg: 0.5rem;
+    /* @role 모서리 반경 — 가장 큰 모서리 반경 */
     --radius-xl: 0.75rem;
+    /* @role 모서리 반경 — 완전 둥근 모서리(알약·도트) */
     --radius-full: 9999px;
     /* Elevation — 컴포넌트가 rgba 를 직접 적지 않도록 그림자도 토큰. 정의: tokens.css */
+    /* @role 고도(elevation) — 가장 얕은 그림자 | @use 띄워지는 표면의 깊이 | @avoid 값이 이름인 그림자 직접 정의 */
     --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.08);
+    /* @role 고도(elevation) — 얕은 그림자 | @use 띄워지는 표면의 깊이 | @avoid 값이 이름인 그림자 직접 정의 */
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
+    /* @role 고도(elevation) — 드롭다운·팝오버 그림자 | @use 띄워지는 표면의 깊이 | @avoid 값이 이름인 그림자 직접 정의 */
     --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
+    /* @role 고도(elevation) — 모달 그림자 | @use 띄워지는 표면의 깊이 | @avoid 값이 이름인 그림자 직접 정의 */
     --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.2);
+    /* @role 1px 링 형태의 미세 그림자 | @use 컨트롤 경계 보강 */
     --shadow-ring-hairline: 0 0 0 1px rgba(0, 0, 0, 0.04);
+    /* @role 고도(elevation) — 가장 깊은 그림자 | @use 띄워지는 표면의 깊이 | @avoid 값이 이름인 그림자 직접 정의 */
     --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.15);
+    /* @role 슬라이드 패널의 그림자 | @use AI 위젯 · 드로어 */
     --shadow-panel-slide: -10px 0 30px rgba(0, 0, 0, 0.06);
+    /* @role 브랜드 강조용 발광 그림자 | @use AI 진입 버튼 */
     --shadow-brand-glow: 0 2px 8px rgba(41, 108, 242, 0.25);
     /* Brand alpha — 브랜드색 반투명(선택 워시·틴트 경계). 정의: tokens.css */
+    /* @role 가장 옅은 브랜드 면 | @use 넓은 배경 강조 */
     --color-brand-blue-wash: rgba(41, 108, 242, 0.08);
+    /* @role 브랜드 옅은 경계 | @use 강조 블록 보더 */
     --color-brand-blue-border-tint: rgba(41, 108, 242, 0.25);
+    /* @role AI 영역 옅은 그라데이션 | @use AI 배너·카드 배경 */
     --gradient-ai-tint: linear-gradient(95deg, rgba(0, 75, 224, 0.08) 0%, rgba(139, 82, 255, 0.08) 100%);
     /* Loading overlay — 컨트롤 위 반투명 막(버튼 로딩). */
+    /* @role 로딩 중 화면을 덮는 반투명 면 | @use 로딩 오버레이 */
     --color-overlay-loading: rgba(255, 255, 255, 0.4);
     /* Backdrop scrim — 모달류 배경 딤. 역할이 하나이므로 토큰도 하나. */
+    /* @role 모달 뒤를 덮는 스크림 | @use Modal backdrop | @avoid 불투명 배경 대용 */
     --color-overlay-scrim: rgba(0, 0, 0, 0.5);
     /* Stage — 발표·캡처용 무대 chrome. 테마 무관 고정 어두움(Stage 전용). */
+    /* @role 시연 스테이지 배경 | @use 프로토타입 스테이지 전용 */
     --color-stage-backdrop: #0a0a14;
+    /* @role 스테이지 배지 배경 | @use 프로토타입 스테이지 전용 */
     --color-stage-badge-bg: rgba(26, 26, 46, 0.85);
+    /* @role 시연 스테이지 그림자 | @use 프로토타입 스테이지 전용 */
     --shadow-stage: 0 20px 60px rgba(0, 0, 0, 0.45); /* 무대 전용 — elevation 스케일 밖. */
+    /* @role 브랜드 그라데이션 | @use AI 진입 버튼 · 브랜드 헤더 */
     --gradient-brand: linear-gradient(90deg, var(--color-brand-blue), var(--color-whatap-purple));
+    /* @role 가감속 이징 곡선 */
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    /* @role 전환 기본 지속시간 */
     --default-transition-duration: 150ms;
+    /* @role 전환 기본 이징 */
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    /* @role preflight 기본 서체 */
     --default-font-family: var(--font-sans);
+    /* @role preflight 고정폭 기본 서체 */
     --default-mono-font-family: var(--font-mono);
 
     
 
     
+    /* @role 1차 브랜드색 · primary 액션 | @use contained 버튼 · 활성 탭 밑줄 · 링크 | @avoid 넓은 배경면 (tint/wash 사용) */
     --color-brand-blue: #296CF2;
+    /* @role 브랜드색의 어두운 단계 | @use hover/press 상태 */
     --color-brand-blue-deep: #1B5CD9;
+    /* @role 브랜드색의 연한 단계 | @use 차트 라인 · 보조 강조 */
     --color-brand-blue-soft: #3DA9FF;
+    /* @role 브랜드 배경면 | @use 진입 배너 · 안내 블록 */
     --color-brand-blue-bg: #D6E1FF;
+    /* @role 브랜드 배경면 두 번째 단계 | @use 그라데이션 짝 */
     --color-brand-blue-bg-2: #C2D5FC;
+    /* @role 브랜드색의 옅은 면 | @use 선택 행 · 강조 블록 배경 */
     --color-brand-blue-tint: #eef4ff; /* 가장 옅은 브랜드 틴트 — 강조된 표 행/셀 */
 
     
+    /* @role 정상 상태의 원색 | @use 성공 도트 · 정상 배지 */
     --color-status-success: #00B442;
+    /* @role 경고 상태의 원색 | @use 경고 도트·보더·아이콘 | @avoid 본문 텍스트 (대비 미달) */
     --color-status-warning: #FFA012;
+    /* @role 오류 상태의 원색 | @use 위험 도트·보더·아이콘 | @avoid 넓은 면 배경 (soft 사용) */
     --color-status-error: #f34646;
 
     /* Status Deep — status 원색의 hover/pressed 단계 (contained 버튼 hover 배경). */
+    /* @role 경고 원색 위 텍스트용 어두운 단계 | @use soft 배경 위 라벨 */
     --color-status-warning-deep: #E08A0E;
+    /* @role 오류 원색 위 텍스트용 어두운 단계 | @use soft 배경 위 라벨 */
     --color-status-error-deep: #D03333;
 
     /* Status Soft — status 원색의 옅은 표면(토스트 배경·soft 칩/버튼·경고 배너).
        위에 올리는 텍스트는 --color-tone-text-*. 다크는 .dark 블록에서 반전. 정의: tokens.css */
+    /* @role 정상의 넓은 면 배경 | @use 성공 칩·배너 배경 */
     --color-status-success-soft: #E8F8EE;
+    /* @role 정보의 넓은 면 배경 | @use 정보 배너 · 진행 바 트랙 */
     --color-status-info-soft: #E8F0FE;
+    /* @role 경고의 넓은 면 배경 | @use 경고 카드·칩 배경 */
     --color-status-warning-soft: #FFF4E5;
+    /* @role 오류의 넓은 면 배경 | @use 경고 배너 배경 · 위험 칩 배경 | @avoid 전경색으로 쓰기 */
     --color-status-error-soft: #FDECEC;
+    /* @role 경고 soft 면의 경계 | @use 경고 카드 보더 */
     --color-status-warning-soft-border: #FFE0B2;
 
     
+    /* @role hover·muted 한 단계 | @use 행 hover · 테이블 헤더 띠 | @avoid 페이지 배경 대용 */
     --color-surface-50: #F5F5F5;
+    /* @role hover·선택의 두 단계 | @use 선택 행 · 토글 트랙 */
     --color-surface-100: #F1F2F4;
+    /* @role 가장 진한 중성 면 | @use 데이터 없음 셀 · 비활성 블록 */
     --color-surface-200: #EAEAEA;
+    /* @role 앱 셸 바닥면 | @use 페이지 최하위 배경 | @avoid 전경색으로 쓰기 · 카드 배경 대용 */
     --color-bg: #F5F5F5;
+    /* @role 바닥 위에 쌓이는 카드/패널 면 | @use 테이블·차트·폼 섹션 블록 · 헤더 · 사이드바 | @avoid --color-bg 와 같은 값으로 만들기 (층이 사라진다) */
     --color-card: #FFFFFF;
 
     
+    /* @role 본문·제목 텍스트의 기본 전경색 | @use 표 셀 주 텍스트 · 카드 헤더 | @avoid 페이지 배경으로 쓰기 */
     --color-text-primary: #222;
+    /* @role 한 단계 낮춘 보조 텍스트 전경 | @use 라벨 · 부제 */
     --color-text-secondary: #4c4c4c;
+    /* @role 메타·캡션 텍스트 전경 | @use 시각 · 단위 · 부가 설명 | @avoid 본문 running text */
     --color-text-tertiary: #757575;
+    /* @role 비활성 컨트롤의 텍스트 전경 | @use disabled 버튼·입력 라벨 | @avoid 읽어야 하는 값 (대비 미달) */
     --color-text-disabled: #adadad;
+    /* @role 컬러/어두운 면 위 텍스트 전경 | @use contained 버튼 · 톤 배지 안 텍스트 */
     --color-text-inverse: #FFFFFF;
 
+    /* @role 본문보다 강조된 텍스트 전경 | @use 수치 강조 · 강조 라벨 */
     --color-text-strong: #1E1E1E;
+    /* @role 장문 본문 텍스트 전경 | @use 산문 블록 */
     --color-text-body: #2D2D2D;
+    /* @role 존재는 알리되 읽히지 않아도 되는 약한 텍스트 전경 | @use 플레이스홀더 · 빈 상태 문구 */
     --color-text-muted: #4C4C4C;
+    /* @role 가장 약한 텍스트 전경 | @use 구분용 보조 기호 · 마이크로 캡션 */
     --color-text-subtle: #757575;
 
     
+    /* @role 상시 경계선의 기본 | @use 카드·테이블·헤더 구분선 | @avoid focus 표현 (컨트롤은 ring, 입력은 focus-border) */
     --color-border-default: #EAEAEA;
+    /* @role 기본보다 약한 경계 | @use 차트 보조 그리드 · 내부 구획 */
     --color-border-soft: #F0F0F0;
+    /* @role 기본보다 강한 경계 | @use 입력 컨트롤 테두리 · 강조 구획 */
     --color-border-strong: #E6E6E6;
+    /* @role 항목 사이 구분선 | @use 목록 행 사이 · 차트 축선 */
     --color-border-divider: #ADADAD;
 
     
+    /* @role 위험 지표 도트 전용색 | @use 작은 도트·마커 | @avoid 텍스트 */
     --color-indicator-critical: #E53935;
+    /* @role 경고 지표 도트 전용색 | @use 작은 도트·마커 | @avoid 텍스트 (비텍스트 대비 기준으로 고른 색) */
     --color-indicator-warning: #F0B400;
 
     /* Tone Surface — 위젯 분류/심각도 카드·배지 배경. 다크는 .dark 블록에서 반전. 정의: tokens.css */
+    /* @role 위험 톤 카드·배지의 배경면 | @use AiCard · AiToneBadge 의 tone prop 이 참조 | @avoid 직접 인라인 주입 (tone prop 을 쓸 것) */
     --color-tone-surface-critical: #ffe8e8;
+    /* @role 경고 톤 카드·배지의 배경면 | @use AiCard · AiToneBadge 의 tone prop 이 참조 | @avoid 직접 인라인 주입 (tone prop 을 쓸 것) */
     --color-tone-surface-warning: #fff7e0;
+    /* @role 정보 톤 카드·배지의 배경면 | @use AiCard · AiToneBadge 의 tone prop 이 참조 | @avoid 직접 인라인 주입 (tone prop 을 쓸 것) */
     --color-tone-surface-info: #e8f4ff;
+    /* @role 약화 톤 카드·배지의 배경면 | @use AiCard · AiToneBadge 의 tone prop 이 참조 | @avoid 직접 인라인 주입 (tone prop 을 쓸 것) */
     --color-tone-surface-muted: #f1f2f4;
+    /* @role 중성 톤 카드·배지의 배경면 | @use AiCard · AiToneBadge 의 tone prop 이 참조 | @avoid 직접 인라인 주입 (tone prop 을 쓸 것) */
     --color-tone-surface-neutral: #f1f2f4;
 
     /* Tone Text — tone-surface 위 라벨 텍스트 (indicator 는 도트/스트로크 전용). */
+    /* @role 위험 톤 면 위의 전경색 | @use 같은 tone 의 surface 와 짝으로만 */
     --color-tone-text-critical: #B5302A;
+    /* @role 경고 톤 면 위의 전경색 | @use 같은 tone 의 surface 와 짝으로만 */
     --color-tone-text-warning: #8A6200;
+    /* @role 정보 톤 면 위의 전경색 | @use 같은 tone 의 surface 와 짝으로만 */
     --color-tone-text-info: #1B5CD9;
+    /* @role 정상 톤 면 위의 전경색 | @use 같은 tone 의 surface 와 짝으로만 */
     --color-tone-text-success: #007030;
+    /* @role 약화 톤 면 위의 전경색 | @use 같은 tone 의 surface 와 짝으로만 */
     --color-tone-text-muted: #6E6E6E;
+    /* @role 중성 톤 면 위의 전경색 | @use 같은 tone 의 surface 와 짝으로만 */
     --color-tone-text-neutral: #6E6E6E;
 
     
     /* Brand logo — 회사 심볼 4색. 테마 무관 고정(로고는 리브랜딩되지 않음). 정의: tokens.css */
+    /* @role 브랜드 심볼 4색 바의 orange 조각 | @use WhaTap Symbol 전용 | @avoid 일반 UI 색으로 전용 */
     --color-logo-orange: #F25022;
+    /* @role 브랜드 심볼 4색 바의 yellow 조각 | @use WhaTap Symbol 전용 | @avoid 일반 UI 색으로 전용 */
     --color-logo-yellow: #FFB902;
+    /* @role 브랜드 심볼 4색 바의 green 조각 | @use WhaTap Symbol 전용 | @avoid 일반 UI 색으로 전용 */
     --color-logo-green: #80BA01;
+    /* @role 브랜드 심볼 4색 바의 blue 조각 | @use WhaTap Symbol 전용 | @avoid 일반 UI 색으로 전용 */
     --color-logo-blue: #19A0E5;
 
     /* Avatar gradient — 프로필 아바타 그라데이션 시작 stop. 테마 무관 고정. 정의: tokens.css */
+    /* @role 아바타 그라데이션 시작색 | @use 프로필 아바타 */
     --color-avatar-gradient-from: #4FC3F7;
 
+    /* @role WhaTap 아이덴티티 블루 | @use 브랜드 표식 */
     --color-whatap-blue: #004BE0;
+    /* @role AI 아이덴티티 퍼플 | @use AI 심볼 · AI 진입 그라데이션 | @avoid 일반 액션 (AI 영역 전용) */
     --color-whatap-purple: #8B52FF;
+    /* @role AI 퍼플의 어두운 단계 | @use 그라데이션 끝점 */
     --color-whatap-purple-deep: #4F5BD5;
 
     
+    /* @role 중간 회색 원시값 | @avoid 컴포넌트에서 직접 참조 */
     --color-gray-mid: #8b8b8b;
+    /* @role 연한 회색 원시값 | @avoid 컴포넌트에서 직접 참조 */
     --color-gray-soft: #a0a3a6;
+    /* @role 가장 연한 회색 원시값 | @avoid 컴포넌트에서 직접 참조 */
     --color-gray-pale: #bdbdbd;
 
     
+    /* @role 한글 본문·라벨 기본 서체 | @use 한글이 섞인 모든 UI 텍스트 */
     --font-family-korean: "Noto Sans", "Noto Sans KR", sans-serif;
+    /* @role 수치 서체(자릿수 정렬) | @use 지표·표 수치 · 시각 | @avoid 한글 라벨 */
     --font-family-numeric: Roboto, "Noto Sans", sans-serif;
+    /* @role 코드·로그용 고정폭 서체 | @use SQL·로그 원문 */
     --font-family-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    /* @role 한글 전용 서체 변형 */
     --font-family-korean-kr-only: "Noto Sans KR", sans-serif;
+    /* @role 한글+라틴 혼용 서체 변형 */
     --font-family-korean-inter: Inter, "Noto Sans KR", sans-serif;
+    /* @role 수치 서체 한글 폴백 포함 변형 */
     --font-family-numeric-kr: Roboto, "Noto Sans KR", sans-serif;
+    /* @role 수치 서체 일본어 폴백 포함 변형 */
     --font-family-numeric-jp: Roboto, NotoSansJP, NotoSans, sans-serif;
+    /* @role 차트 안 축·라벨 전용 크기 | @use SVG/차트 오버레이 텍스트 | @avoid 본문 */
     --text-chart: 9px;
+    /* @role 타입 스케일 — 13px 표 행·카드 헤더 | @use 역할로 고른다(patterns 의 타이포 Role Catalog) | @avoid 같은 사이즈에서 weight 만 바꿔 위계 만들기 */
     --text-md: 13px;
+    /* @role 글자 굵기 — 가장 얇은 굵기 | @avoid 사이즈 없이 굵기만으로 위계 만들기 */
     --font-weight-light: 300;
+    /* @role 글자 굵기 — 본문 굵기(별칭) | @avoid 사이즈 없이 굵기만으로 위계 만들기 */
     --font-weight-regular: 400;
+    /* @role 행간 — 1 — 아이콘/한 줄 컨트롤 */
     --leading-none: 1;
 
     
+    /* @role 자간 — 제목용 좁은 자간 */
     --tracking-display: -0.3px;
+    /* @role 자간 — 지표 수치용 자간 */
     --tracking-metric: -0.2px;
+    /* @role 자간 — 기본 자간 */
     --tracking-default: -0.1px;
+    /* @role 자간 — 대문자 라벨용 넓은 자간 */
     --tracking-caps: 0.3px;
+    /* @role 자간 — 정밀 수치용 자간 */
     --tracking-precision: -0.48px;
 
     
+    /* @role 고정 px 행간 — 컨트롤 높이와 정렬할 때 | @use 버튼·칩·배지 내부 | @avoid 본문 (상대 행간 사용) */
     --leading-px-0: 0;
+    /* @role 고정 px 행간 — 컨트롤 높이와 정렬할 때 | @use 버튼·칩·배지 내부 | @avoid 본문 (상대 행간 사용) */
     --leading-px-12: 12px;
+    /* @role 고정 px 행간 — 컨트롤 높이와 정렬할 때 | @use 버튼·칩·배지 내부 | @avoid 본문 (상대 행간 사용) */
     --leading-px-16: 16px;
+    /* @role 고정 px 행간 — 컨트롤 높이와 정렬할 때 | @use 버튼·칩·배지 내부 | @avoid 본문 (상대 행간 사용) */
     --leading-px-18: 18px;
+    /* @role 고정 px 행간 — 컨트롤 높이와 정렬할 때 | @use 버튼·칩·배지 내부 | @avoid 본문 (상대 행간 사용) */
     --leading-px-20: 20px;
 
     
     /* Chart — 데이터 시각화 전용. 역할로 고른다: 정체성(series) vs 크기(seq).
        구 --color-palette-{hex} 36색을 대체. 정의·검증 근거: tokens.css
        series 는 고정 순서로 1번부터 배정하고 순환하지 않는다(all-pairs 상한 3슬롯). */
+    /* @role 차트 계열 1 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
     --color-chart-series-1: #296CF2;
+    /* @role 차트 계열 2 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
     --color-chart-series-2: #C75B1A;
+    /* @role 차트 계열 3 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
     --color-chart-series-3: #00908A;
+    /* @role 차트 계열 4 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
     --color-chart-series-4: #9A7B00;
+    /* @role 차트 계열 5 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
     --color-chart-series-5: #B0349B;
+    /* @role 차트 계열 6 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
     --color-chart-series-6: #0E7A56;
+    /* @role 차트 계열 7 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
     --color-chart-series-7: #6B3FD4;
+    /* @role 차트 계열 8 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
     --color-chart-series-8: #C93B34;
 
+    /* @role 순차 스케일 1 단계 (크기·강도) | @use 히트맵 · 농도 표현 | @avoid 계열 구분 (series 사용) */
     --color-chart-seq-1: #7AB8F0;
+    /* @role 순차 스케일 2 단계 (크기·강도) | @use 히트맵 · 농도 표현 | @avoid 계열 구분 (series 사용) */
     --color-chart-seq-2: #4A97E8;
+    /* @role 순차 스케일 3 단계 (크기·강도) | @use 히트맵 · 농도 표현 | @avoid 계열 구분 (series 사용) */
     --color-chart-seq-3: #2472D8;
+    /* @role 순차 스케일 4 단계 (크기·강도) | @use 히트맵 · 농도 표현 | @avoid 계열 구분 (series 사용) */
     --color-chart-seq-4: #1A50B0;
 
     /* Topology — 노드-엣지 그래프 전용 역할 토큰(구조·상태). 차트 series/seq 로
        대체 불가 — 의미 축이 다르다. 값 출처·금지사항: tokens.css */
+    /* @role 토폴로지 캔버스 배경 그라데이션 시작 */
     --color-topology-canvas-from: #F1F6FB;
+    /* @role 토폴로지 캔버스 배경 그라데이션 끝 */
     --color-topology-canvas-to: #C8D1E5;
+    /* @role 캔버스 격자 점 */
     --color-topology-grid-dot: #A6B4BF;
+    /* @role 노드 카드 면 */
     --color-topology-node-surface: #F6F8FD;
+    /* @role 그룹(접힘 가능) 컨테이너 면 */
     --color-topology-group-surface: #E3EBF8;
+    /* @role 엣지 기본 선색 */
     --color-topology-edge: #B6C4CE;
+    /* @role 이상 상태 엣지 선색 */
     --color-topology-edge-alert: #FC679E;
+    /* @role 포트 도트 기본 */
     --color-topology-port: #8B9BE1;
+    /* @role 포트 도트 이상 */
     --color-topology-port-alert: #FC679E;
+    /* @role 포트 도트 정상 */
     --color-topology-port-ok: #5BD388;
 
     /* ── Component tokens: 아이콘 크기 스케일 · 툴바 컨트롤 높이 ──
@@ -246,23 +416,37 @@
        `width: var(--wds-toolbar-control-h)` 로 쓰는데 값이 없어 선언이 무효가 되고
        auto(=컨테이너 폭)로 퍼졌다. tokens.css 는 참조용이라 런타임에 로드되지 않는다 —
        여기에 없으면 존재하지 않는 것이다. 정의·근거: tokens.css */
+    /* @role 아이콘 크기 4단 — 20px | @use 아이콘 컴포넌트 size prop | @avoid 4단 밖 임의 크기 */
     --wds-icon-lg: 24px;
+    /* @role 아이콘 크기 4단 — 16px 기본 | @use 아이콘 컴포넌트 size prop | @avoid 4단 밖 임의 크기 */
     --wds-icon-md: 20px;
+    /* @role 아이콘 크기 4단 — 14px | @use 아이콘 컴포넌트 size prop | @avoid 4단 밖 임의 크기 */
     --wds-icon-sm: 16px;
+    /* @role 아이콘 크기 4단 — 12px 보조 표식 | @use 아이콘 컴포넌트 size prop | @avoid 4단 밖 임의 크기 */
     --wds-icon-xs: 12px;
+    /* @role 툴바 아이콘 크기 | @use ToolbarIcon · ToolbarIconButton */
     --wds-toolbar-icon: var(--wds-icon-sm);
+    /* @role 툴바 컨트롤 높이 | @use 툴바 버튼·칩 높이 정렬 | @avoid 미정의 상태로 참조 (폭이 auto 로 퍼진 사고가 있었다) */
     --wds-toolbar-control-h: 32px;
+    /* @role 툴바 알약 높이 | @use 툴바 안 알약형 표시 */
     --wds-toolbar-pill-h: 24px;
 
     /* ── Component tokens: DateTimeBlock ── */
+    /* @role 연도 칸 폭 | @use DateTimeBlock */
     --wds-datetime-year-w: 28px;
+    /* @role 날짜/시각 입력 칸 폭 | @use DateTimeBlock */
     --wds-datetime-field-w: 16px;
+    /* @role 날짜 구분 기호 칸 폭 | @use DateTimeBlock */
     --wds-datetime-space-w: 6px;
 
     /* ── Component tokens: 페이지 좌·우 거터 (헤더·옵션바·본문 공통 단일 규칙) ── */
+    /* @role 페이지 좌·우 거터의 **단일 소유자** | @use 헤더·옵션바·본문이 alias 로 참조 | @avoid 페이지마다 다른 값 주기 */
     --wds-page-px: 24px;                  /* 페이지 좌·우 거터 — 헤더·옵션바·본문이 공유하는 단일 값 */
+    /* @role 헤더류 좌·우 패딩 (page-px alias) | @use PageHeader · SubHeaderBar · OptionbarPage */
     --wds-header-px: var(--wds-page-px);  /* 헤더 좌·우 padding (= 페이지 거터) */
+    /* @role 본문 콘텐츠 좌·우 패딩 (page-px alias) | @use .wds-page-content */
     --wds-content-px: var(--wds-page-px); /* 본문 콘텐츠 좌·우 거터 (= 페이지 거터, 헤더와 세로 정렬) */
+    /* @role 본문 콘텐츠 상·하 패딩 | @use .wds-page-content | @avoid 인라인 매직넘버 padding */
     --wds-content-py: 16px;               /* 본문 콘텐츠 상·하 padding */
 
 
@@ -272,18 +456,31 @@
      *  이 토큰을 참조 (현재 바인딩: h-32px→--space-8, w-40px→--space-10).
      *  네이밍은 Tailwind 정렬 — `--space-N` = 4px×N. 테마 무관.
      * ────────────────────────────────────────────────────────────────────── */
+    /* @role 간격 스케일 0단 | @use gap·padding·margin | @avoid 임의 px 매직넘버 */
     --space-0: 0;
+    /* @role 간격 스케일 1단 | @use gap·padding·margin | @avoid 임의 px 매직넘버 */
     --space-1: 4px;
+    /* @role 간격 스케일 2단 | @use gap·padding·margin | @avoid 임의 px 매직넘버 */
     --space-2: 8px;
+    /* @role 간격 스케일 3단 | @use gap·padding·margin | @avoid 임의 px 매직넘버 */
     --space-3: 12px;
+    /* @role 간격 스케일 4단 | @use gap·padding·margin | @avoid 임의 px 매직넘버 */
     --space-4: 16px;
+    /* @role 간격 스케일 5단 | @use gap·padding·margin | @avoid 임의 px 매직넘버 */
     --space-5: 20px;
+    /* @role 간격 스케일 6단 | @use gap·padding·margin | @avoid 임의 px 매직넘버 */
     --space-6: 24px;
+    /* @role 간격 스케일 7단 | @use gap·padding·margin | @avoid 임의 px 매직넘버 */
     --space-7: 28px;
+    /* @role 간격 스케일 8단 | @use gap·padding·margin | @avoid 임의 px 매직넘버 */
     --space-8: 32px;
+    /* @role 간격 스케일 9단 | @use gap·padding·margin | @avoid 임의 px 매직넘버 */
     --space-9: 36px;
+    /* @role 간격 스케일 10단 | @use gap·padding·margin | @avoid 임의 px 매직넘버 */
     --space-10: 40px;
+    /* @role 간격 스케일 11단 | @use gap·padding·margin | @avoid 임의 px 매직넘버 */
     --space-11: 44px;
+    /* @role 간격 스케일 12단 | @use gap·padding·margin | @avoid 임의 px 매직넘버 */
     --space-12: 48px;
   }
 

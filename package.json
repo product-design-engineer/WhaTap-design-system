@@ -26,7 +26,7 @@
     "src"
   ],
   "scripts": {
-    "build:design": "node scripts/build-design.mjs && node scripts/build-components-json.mjs",
+    "build:design": "node scripts/build-design.mjs && node scripts/build-components-json.mjs && node scripts/build-tokens-json.mjs",
     "build:js": "tsup",
     "build:lib": "pnpm build:js",
     "release": "node scripts/pack-release.mjs",
@@ -36,7 +36,7 @@
     "build:components-json": "node scripts/build-components-json.mjs",
     "lint:docstrings": "node scripts/check-docstrings.mjs",
     "lint:design": "node scripts/design-lint.js",
-    "test": "node scripts/check-catalog-folders.mjs && node scripts/check-docstrings.mjs && node scripts/check-wikilinks.mjs && node scripts/design-lint.js && node scripts/check-no-raw-colors.mjs && node scripts/check-layer-deps.mjs && node scripts/check-token-sync.mjs && node scripts/check-no-tailwind.mjs && node scripts/check-guardrails-meta.mjs && pnpm lint:cycles && vitest run",
+    "test": "node scripts/check-catalog-folders.mjs && node scripts/check-docstrings.mjs && node scripts/check-wikilinks.mjs && node scripts/check-token-docs.mjs && node scripts/check-catalog-coverage.mjs && node scripts/design-lint.js && node scripts/check-no-raw-colors.mjs && node scripts/check-layer-deps.mjs && node scripts/check-token-sync.mjs && node scripts/check-no-tailwind.mjs && node scripts/check-guardrails-meta.mjs && pnpm lint:cycles && vitest run",
     "test:visual": "node scripts/visual-snap.mjs",
     "test:visual:update": "node scripts/visual-snap.mjs --update",
     "lint:tokens": "node scripts/check-no-raw-colors.mjs",
@@ -49,7 +49,10 @@
     "lint:guardrails": "node scripts/check-guardrails-meta.mjs",
     "prepare": "git config core.hooksPath .githooks || true",
     "lint:cycles": "eslint src",
-    "lint:wikilinks": "node scripts/check-wikilinks.mjs"
+    "lint:wikilinks": "node scripts/check-wikilinks.mjs",
+    "build:tokens-json": "node scripts/build-tokens-json.mjs",
+    "lint:token-docs": "node scripts/check-token-docs.mjs",
+    "lint:coverage": "node scripts/check-catalog-coverage.mjs"
   },
   "peerDependencies": {
     "react": "^19.0.0",
