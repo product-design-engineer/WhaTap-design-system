@@ -201,6 +201,19 @@ export const GATE_ROSTER = [
       "스토리가 없어 **다섯 게이트에서 동시에 빠지는 컴포넌트** — audit:runtime(DOM 리터럴)·test:visual·lint:docstrings·lint:layers(계층 판정)·MCP. 실측 10종이 이 상태였고 그중 `ToolbarIconButton` 은 토큰 미정의로 폭이 1248px 로 퍼진 사고를 냈다",
   },
   {
+    id: "delivery",
+    name: "배달 — main 이 실제로 서빙된다",
+    status: "auto",
+    script: null,
+    pipeline: null,
+    justification:
+      "`.github/workflows/deploy.yml` 이 main push 마다 두 프로젝트(Storybook 카탈로그 · MCP 서버)를 프로덕션 배포하고, **배포 후 소비자가 받는 것을 직접 검증**한다 — `/design-system/components.json`·`tokens.json` 200 · MCP `tools/list` 에 4개 도구 존재 · components.json 안에 규칙 블록 존재(빈 산출물 200 을 잡는다). 시크릿이 없으면 조용히 skip 하지 않고 **실패**한다.",
+    invariant:
+      "머지된 것은 배달된다. Storybook 은 `build:design` 으로 `components.json`·`tokens.json` 을 생성해 `/design-system/*` 로 서빙하고, MCP 서버는 그것을 런타임에 fetch 한다 — 즉 **재배포 없이는 규칙이 바뀌지 않는다.**",
+    prevents:
+      "머지는 됐는데 소비자에게 도달하지 않는 상태 — 실측(2026-08-21): PR #6·#7 머지 후에도 프로덕션이 8/12 배포에 멈춰 있었고 두 카탈로그 JSON 이 404 라서 호스팅 MCP 가 «규칙 카탈로그를 불러오지 못했습니다» 를 돌려주고 있었다. 게이트 12종이 모두 초록이었는데도 배달은 0 이었다",
+  },
+  {
     id: "catalog-sync",
     name: "카탈로그 드리프트 방지",
     status: "planned",
