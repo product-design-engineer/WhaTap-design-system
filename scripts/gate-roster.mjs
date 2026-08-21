@@ -179,6 +179,28 @@ export const GATE_ROSTER = [
       "이름이 바뀌거나 지워진 컴포넌트를 가리키는 죽은 참조가 **MCP 응답에 그대로 실려** 소비 AI 가 없는 컴포넌트를 권하는 것 — 실측: `[[IcSearch]]`(아예 존재하지 않는 아이콘)가 docstring 에 남아 있었다",
   },
   {
+    id: "token-docs",
+    name: "토큰 의미 커버리지",
+    status: "auto",
+    script: "scripts/check-token-docs.mjs",
+    pipeline: null,
+    invariant:
+      "`whatap-ds.css` 의 **모든 토큰(197개)** 이 선언 위 줄에 `@role` 을 갖는다(`@use`/`@avoid` 는 선택, 그룹 공통은 `@group-role` 상속). 판정 대상은 생성 산출물 `docs/tokens.json` — 파싱을 두 번 구현하면 게이트와 배달물이 다른 것을 본다. 값과 의미를 다른 파일에 두지 않는다(`DESIGN.md` 가 그렇게 갈라졌다). 동결선 **0**.",
+    prevents:
+      "설명 없는 토큰이 늘어나 「무엇에 쓰는 것인가」를 도구가 답하지 못하는 상태 — 실측: 197개 중 문서에 이름이라도 있던 것이 55개(28%)뿐이었고, 답할 수 없으면 소비자는 hex 를 적는다(리터럴 0 정책이 토큰 부재로 새어 나간다)",
+  },
+  {
+    id: "catalog-coverage",
+    name: "공개 export 의 카탈로그 등재",
+    status: "auto",
+    script: "scripts/check-catalog-coverage.mjs",
+    pipeline: null,
+    invariant:
+      "`index.ts` 로 공개 export 되는 컴포넌트는 카탈로그에 있어야 한다 — 이름이 일치하는 스토리가 있거나, 어떤 항목이 `@covers <Name>` 으로 **명시 선언**해 묶어 등재해야 한다(본문에 이름이 스치면 통과하던 초안은 실측에서 새어 나갔다). 타입 전용 export 와 상수는 대상 아님. 동결 1건(`AiWidget` — 폐기 여부 결정 대기).",
+    prevents:
+      "스토리가 없어 **다섯 게이트에서 동시에 빠지는 컴포넌트** — audit:runtime(DOM 리터럴)·test:visual·lint:docstrings·lint:layers(계층 판정)·MCP. 실측 10종이 이 상태였고 그중 `ToolbarIconButton` 은 토큰 미정의로 폭이 1248px 로 퍼진 사고를 냈다",
+  },
+  {
     id: "catalog-sync",
     name: "카탈로그 드리프트 방지",
     status: "planned",

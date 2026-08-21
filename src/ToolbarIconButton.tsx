@@ -30,6 +30,8 @@ import Tooltip, { type TooltipPlacement } from "./Tooltip";
  * - 이모지·텍스트 글리프(`⚙`)를 아이콘 대신 쓰지 않는다 — 폰트에 따라 크기·정렬·색이 전부
  *   달라지고 크기 토큰이 적용되지 않는다.
  *
+ * @covers ToolbarIcon
+ *
  * @example
  * ```tsx
  * <ToolbarIconButton icon="icon-settings.svg" label="표시 설정" onClick={openSettings} />

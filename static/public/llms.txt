@@ -11,6 +11,7 @@
 - [chrome-components.md](/design-system/chrome-components.md): Chrome 20
 - [ai-entry.md](/design-system/ai-entry.md): AI 진입 컴포넌트
 - [widget-components.md](/design-system/widget-components.md): AI 위젯 카드
+- [tokens.json](/design-system/tokens.json): 기계 판독 토큰 카탈로그 — tier·값·다크값·역할·권장/금지·유틸 클래스 (MCP get_tokens/search_tokens 가 읽는 것)
 - [patterns.md](/design-system/patterns.md): Part 1 인터랙션 패턴(컴포넌트 횡단 시퀀스) + Part 2 구현 정책
 - [components.json](/design-system/components.json): **기계 판독 컴포넌트 규칙 카탈로그** — 컴포넌트별 Purpose · ✅Do · ❌Don't · Composition rules · props · 스토리 id. 자동 생성(소스 docstring + 스토리). 컴포넌트를 쓰기 전 참조할 단일 출처.
 
