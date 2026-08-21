@@ -143,7 +143,7 @@ Tokens → Primitives → Composite → Shell
 
 1. **인라인 색상 리터럴 금지.** `#E53935` 같은 hex를 컴포넌트에 직접 쓰지 마세요. [`tokens.md`](./tokens.md)의 `TONE_*` 또는 기존 톤을 재사용. 새 톤은 토큰에 먼저 추가.
 2. **위젯 카드는 `<AiCard>`로 감싼다.** 흰 배경 + `#eaeaea` 보더 + 8px 라운드 + 12px 패딩 + 진입 애니메이션은 [`primitives.md`](./primitives.md#aicard)가 책임집니다. div를 새로 짜면 톤이 어긋납니다.
-3. **AI 위젯이 열려도 페이지 헤더(48px)는 그대로.** 사이드바는 240→40px로 축소되지만, 헤더의 title/AI/Docs/고객지원/bell/avatar는 절대 사라지지 않습니다. ([`patterns.md`](./patterns.md#1-page-header-invariant))
+3. **AI 위젯이 열려도 페이지 헤더(48px)는 그대로.** 사이드바는 240→80px(제품 레일 40 + 아이콘 메뉴 40)로 축소되지만, 헤더의 title/AI/Docs/고객지원/bell/avatar는 절대 사라지지 않습니다. ([`patterns.md`](./patterns.md#1-page-header-invariant))
 4. **차트 텍스트는 단위까지.** SVG 안의 `<text fontSize>`는 반드시 `"9px"`처럼 단위를 붙입니다. 단위 없는 숫자는 viewBox 좌표로 계산되어 화면마다 크기가 달라집니다.
 5. **데이터 테이블 정렬.** 텍스트 컬럼은 좌측, 숫자 컬럼은 우측. `DataTable`의 `align` / `numeric` prop으로 명시.
 
