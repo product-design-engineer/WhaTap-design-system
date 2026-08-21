@@ -1,3 +1,4 @@
+import remarkGfm from 'remark-gfm';
 import type { StorybookConfig } from '@storybook/react-vite';
 
 /**
@@ -32,7 +33,18 @@ const config: StorybookConfig = {
     '@chromatic-com/storybook',
     '@storybook/addon-vitest',
     '@storybook/addon-a11y',
-    '@storybook/addon-docs',
+    // MDX 표를 렌더하려면 remark-gfm 이 필요하다. MDX3 는 GFM(표·취소선·자동링크)을
+    // **기본으로 켜지 않아서**, 마크다운 표가 파이프 문자 그대로 본문에 노출된다.
+    // 실측(2026-08-21): 배포된 Introduction 의 「프로젝트」 표가 `| | | |---|---| | 소스 …`
+    // 로 보이고 있었다 — 문서가 처음부터 그 상태였고 아무도 렌더 결과를 확인하지 않았다.
+    {
+      name: '@storybook/addon-docs',
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: { remarkPlugins: [remarkGfm] },
+        },
+      },
+    },
     '@storybook/addon-mcp',
     '@storybook/addon-themes',
   ],
