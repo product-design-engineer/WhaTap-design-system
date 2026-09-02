@@ -70,6 +70,11 @@ colors:
   surface-100:               "#F1F2F4"    # Color
   surface-200:               "#EAEAEA"    # Color
 
+  # Neutral Solid — 중립(무채색) 강조면. tone="tertiary" 버튼의 채움/hover.
+  #  위 전경은 고정 흰색(라이트 8.4:1 · 다크 10.3:1). 다크에서도 어두운 단계를 유지한다.
+  neutral-solid:             "#4C4C4C"    # Color — tertiary contained 배경
+  neutral-solid-deep:        "#333333"    # Color — tertiary contained hover
+
   # Text — 시각 위계 4단계
   text-strong:               "#1E1E1E"    # Color
   text-body:                 "#2D2D2D"    # Color

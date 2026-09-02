@@ -5,8 +5,13 @@
  * WhaTap 디자인 시스템의 표준 버튼. 모든 click trigger 가 이 컴포넌트로 통일되어야 함 — 인라인
  * `<button className="...">` 새로 짜지 말 것. 색/사이즈/상태 일관성은 이 컴포넌트가 보장.
  *
- * Spec: @whatap/wds Button-specs.md 기반 (Figma 5701-33519). 3 variant × 4 size × 3 tone +
+ * Spec: @whatap/wds Button-specs.md 기반 (Figma 5701-33519). 3 variant × 4 size × 4 tone +
  * disabled / loading / fullWidth.
+ *
+ * ## 위계 — variant 가 강조 단계, tone 이 색
+ * 강조 위계는 **variant** 가 담는다(contained=1차 CTA · outline=2차 · basic=3차 텍스트).
+ * `tone` 은 그 위의 **색 의미**다 — primary(브랜드) · tertiary(중립 무채색) · warning · critical.
+ * 그래서 "3차 강조"는 `variant="basic"`, "무채색"은 `tone="tertiary"` 로 각각 표현한다.
  *
  * ## 구현 노트 — 동적 variant×tone 색은 CSS custom property 로
  * runtime 에 조립되는 variant×tone 색은 정적 유틸 클래스로 표현할 수 없으므로,
@@ -16,6 +21,7 @@
  * ## When to use
  * - 사용자 액션 trigger (제출 / 적용 / 닫기 / 등록 등).
  * - Primary CTA, Secondary action, 위험 동작 (delete 등).
+ * - 색 의미가 없는 중립 액션 (취소 · 닫기 · 나중에 · 더보기) → `tone="tertiary"`.
  *
  * ## When NOT to use
  * - 링크 이동 → `<a>` 사용.
@@ -26,6 +32,9 @@
  * ## Composition rules
  * - 모든 색은 토큰 (`var(--color-brand-blue)` 등) — 인라인 hex 금지.
  * - 사이즈는 spec 4 단계만 — custom px 금지.
+ * - 한 화면의 CTA 는 contained primary 하나. 그 옆 취소/닫기는 **outline·basic tertiary** 로 —
+ *   취소에 tone="primary" 를 쓰면 파란 두 버튼이 CTA 자리를 다툰다.
+ * - 파괴적 액션 확인 대화의 취소도 tertiary. critical 은 실행 버튼 쪽만.
  * - loading=true → 자동 disabled + spinner overlay.
  *
  * @example
@@ -36,20 +45,23 @@
  * <Button variant="outline" tone="critical" size="md" disabled>
  *   삭제 (권한 없음)
  * </Button>
+ * <Button variant="outline" tone="tertiary" size="lg" onClick={onClose}>
+ *   취소
+ * </Button>
  * ```
  */
 import type { ButtonHTMLAttributes, CSSProperties, ReactNode } from "react";
 
 export type ButtonVariant = "basic" | "contained" | "outline";
 export type ButtonSize = "xl" | "lg" | "md" | "sm";
-export type ButtonTone = "primary" | "warning" | "critical";
+export type ButtonTone = "primary" | "tertiary" | "warning" | "critical";
 
 export type ButtonProps = {
   /** 시각 variant — basic(텍스트만) / contained(채움) / outline(보더). */
   variant?: ButtonVariant;
   /** 사이즈 (높이 px) — xl=36 · lg=32 · md=24 · sm=20. */
   size?: ButtonSize;
-  /** 톤 (색 테마) — primary(blue) · warning(orange) · critical(red). */
+  /** 톤 (색 테마) — primary(blue) · tertiary(중립 회색) · warning(orange) · critical(red). */
   tone?: ButtonTone;
   /** 로딩 상태 — true 면 자동 disabled + spinner. */
   loading?: boolean;
@@ -68,9 +80,25 @@ const SIZE_CLASS: Record<ButtonSize, string> = {
   sm: "h-20px px-8px text-sm gap-4px",
 };
 
-/** tone → CSS color (main / hover / soft surface). */
-const TONE_COLORS: Record<ButtonTone, { main: string; hover: string; soft: string }> = {
+/**
+ * tone → CSS color (main / hover / soft surface).
+ *
+ * `fg`·`border` 는 **outline·basic 에서 main 을 쓰면 안 되는 tone 만** 채운다(기본은 main).
+ * `tertiary` 가 그 경우다 — main(중립 강조면)은 contained 배경 전용으로 어둡게 고정돼 있어
+ * 다크에서 어두운 배경 위 어두운 글자가 된다. 그래서 전경은 테마 반전되는 text/border 토큰으로 뺀다.
+ */
+const TONE_COLORS: Record<
+  ButtonTone,
+  { main: string; hover: string; soft: string; fg?: string; border?: string }
+> = {
   primary:  { main: "var(--color-brand-blue)",     hover: "var(--color-brand-blue-deep)", soft: "var(--color-brand-blue-bg)" },
+  tertiary: {
+    main: "var(--color-neutral-solid)",
+    hover: "var(--color-neutral-solid-deep)",
+    soft: "var(--color-surface-100)",
+    fg: "var(--color-text-secondary)",
+    border: "var(--color-border-divider)",
+  },
   warning:  { main: "var(--color-status-warning)", hover: "var(--color-status-warning-deep)", soft: "var(--color-status-warning-soft)" },
   critical: { main: "var(--color-status-error)",   hover: "var(--color-status-error-deep)",   soft: "var(--color-status-error-soft)" },
 };
@@ -91,15 +119,15 @@ function toneStyle(variant: ButtonVariant, tone: ButtonTone): CSSProperties {
     return {
       "--wds-btn-bg": "var(--color-card)",
       "--wds-btn-bg-hover": c.soft,
-      "--wds-btn-fg": c.main,
-      "--wds-btn-border": c.main,
+      "--wds-btn-fg": c.fg ?? c.main,
+      "--wds-btn-border": c.border ?? c.main,
     } as CSSProperties;
   }
   // basic — text-only, hover 시만 soft 배경
   return {
     "--wds-btn-bg": "transparent",
     "--wds-btn-bg-hover": c.soft,
-    "--wds-btn-fg": c.main,
+    "--wds-btn-fg": c.fg ?? c.main,
     "--wds-btn-border": "transparent",
   } as CSSProperties;
 }

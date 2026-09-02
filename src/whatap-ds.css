@@ -210,6 +210,13 @@
     --color-surface-100: #F1F2F4;
     /* @role 가장 진한 중성 면 | @use 데이터 없음 셀 · 비활성 블록 */
     --color-surface-200: #EAEAEA;
+
+    /* Neutral Solid — 중립(무채색) 강조면. tone="tertiary" 버튼의 채움/hover 가 여기서 온다.
+       위에 올리는 전경은 고정 흰색(대비 라이트 8.4:1 · 다크 10.3:1). 다크는 .dark 에서 반전. 정의: tokens.css */
+    /* @role 중립 강조면의 원색 | @use tone="tertiary" contained 버튼 배경 | @avoid 텍스트 전경 (전경은 --color-text-secondary) */
+    --color-neutral-solid: #4C4C4C;
+    /* @role 중립 강조면의 hover/pressed 단계 | @use tone="tertiary" contained 버튼 hover 배경 */
+    --color-neutral-solid-deep: #333333;
     /* @role 앱 셸 바닥면 | @use 페이지 최하위 배경 | @avoid 전경색으로 쓰기 · 카드 배경 대용 */
     --color-bg: #F5F5F5;
     /* @role 바닥 위에 쌓이는 카드/패널 면 | @use 테이블·차트·폼 섹션 블록 · 헤더 · 사이드바 | @avoid --color-bg 와 같은 값으로 만들기 (층이 사라진다) */
@@ -1446,6 +1453,9 @@ html, body, #root {
   --color-surface-50: #14181E;
   --color-surface-100: #1B2026;
   --color-surface-200: #232932;
+  /* 중립 강조면 — 다크에서는 밝아지지 않는다(전경이 계속 흰색이므로 어두운 단계를 유지). 정의: tokens.css */
+  --color-neutral-solid: #3A414D;
+  --color-neutral-solid-deep: #4A515C;
   --color-border-default: #2A2F39;
   --color-border-soft: #21262E;
   --color-border-strong: #353B46;

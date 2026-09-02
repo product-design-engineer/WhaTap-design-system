@@ -32,7 +32,7 @@
  * ```tsx
  * <Modal open={open} onClose={close} title="삭제 확인" size="sm"
  *   footer={<>
- *     <Button onClick={close}>취소</Button>
+ *     <Button variant="basic" tone="tertiary" onClick={close}>취소</Button>
  *     <Button tone="critical" onClick={confirm}>삭제</Button>
  *   </>}>
  *   이 룰을 삭제하시겠습니까? 되돌릴 수 없습니다.
