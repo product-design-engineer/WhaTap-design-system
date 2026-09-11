@@ -30,6 +30,37 @@ export { default as ActionMenuItem } from "./ActionMenuItem";
 export type { ActionMenuItemProps, ActionMenuItemTone } from "./ActionMenuItem";
 export { default as ListRow } from "./ListRow";
 export type { ListRowProps } from "./ListRow";
+
+// ── Product-prototype 사본에서 이관(2026-09-11). 두 벌로 갈라져 있던 DS 를 Platform 하나로 모은다.
+export { default as Autocomplete } from "./Autocomplete";
+export type { AutocompleteProps, AutocompleteOption, AutocompleteSize } from "./Autocomplete";
+export { default as SelectPopover } from "./SelectPopover";
+export type {
+  SelectPopoverProps,
+  SelectPopoverGroup,
+  SelectPopoverOption,
+  SelectPopoverSize,
+} from "./SelectPopover";
+export { default as CardHead } from "./CardHead";
+export type { CardHeadProps, CardHeadTabs } from "./CardHead";
+export { default as HeatmapCell, heatmapScaleColor } from "./HeatmapCell";
+export type { HeatmapCellProps } from "./HeatmapCell";
+export { default as HeatmapLegend } from "./HeatmapLegend";
+export type { HeatmapLegendProps } from "./HeatmapLegend";
+export { default as Heatmap } from "./Heatmap";
+export type { HeatmapProps, HeatmapMode } from "./Heatmap";
+export { default as InstanceListItem } from "./InstanceListItem";
+export type { InstanceListItemProps, InstanceListItemStatus } from "./InstanceListItem";
+export { default as InstanceSelectPanel } from "./InstanceSelectPanel";
+export type { InstanceSelectPanelProps, InstanceSelectItem, InstanceSelectScope } from "./InstanceSelectPanel";
+export { default as MetricBarCell } from "./MetricBarCell";
+export type { MetricBarCellProps, MetricBarSegment } from "./MetricBarCell";
+export { default as LabeledField } from "./LabeledField";
+export type { LabeledFieldProps } from "./LabeledField";
+export { default as DatePicker } from "./DatePicker";
+export type { DatePickerProps, DatePickerSize } from "./DatePicker";
+export { default as OptionbarNewVersionButton } from "./OptionbarNewVersionButton";
+export { IcSearch } from "./icons/SearchIcon";
 export { default as KpiField } from "./KpiField";
 export type { KpiFieldProps } from "./KpiField";
 export { default as UsageGauge } from "./UsageGauge";

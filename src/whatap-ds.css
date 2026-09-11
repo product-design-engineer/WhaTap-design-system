@@ -252,6 +252,30 @@
     --color-border-strong: #E6E6E6;
     /* @role 항목 사이 구분선 | @use 목록 행 사이 · 차트 축선 */
     --color-border-divider: #ADADAD;
+    /* @role 입력 컨트롤의 상시 테두리 | @use TextField·Select·DatePicker·SelectPopover 가 한 줄에 설 때 공유하는 단일 출처 | @avoid 카드·패널 경계 (그건 --color-border-default) */
+    --color-border-control: #ADADAD;
+
+    /* Heatmap Scale — 강도 8단 순차 스케일.
+       차트 계열색(--color-chart-series-*)과 다른 축이다: 계열은 «누구인지», 이 스케일은 «얼마나»를 말한다.
+       값이 아니라 위치(0·20·40…100)로 이름 붙여 stop 을 바꿔도 참조가 안 깨진다. */
+    /* @role 강도 스케일 최저 stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-0: #1B69C6;
+    /* @role 강도 스케일 20% stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-20: #1F6AA0;
+    /* @role 강도 스케일 40% stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-40: #3CA549;
+    /* @role 강도 스케일 50% stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-50: #7FB139;
+    /* @role 강도 스케일 60% stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-60: #FABF39;
+    /* @role 강도 스케일 80% stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-80: #EF7B2A;
+    /* @role 강도 스케일 90% stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-90: #C3441E;
+    /* @role 강도 스케일 최고 stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-100: #99201A;
+    /* @role 강도 스케일 전체를 한 띠로 | @use HeatmapLegend 의 범례 막대 | @avoid 칸 하나의 배경 (그건 stop 하나) */
+    --gradient-heatmap-scale: linear-gradient(to right, var(--color-heatmap-0) 0%, var(--color-heatmap-20) 20%, var(--color-heatmap-40) 40%, var(--color-heatmap-50) 50%, var(--color-heatmap-60) 60%, var(--color-heatmap-80) 80%, var(--color-heatmap-90) 90%, var(--color-heatmap-100) 100%);
 
     
     /* @role 위험 지표 도트 전용색 | @use 작은 도트·마커 | @avoid 텍스트 */
@@ -679,6 +703,7 @@
 .border-color-var-color-border-divider { border-color: var(--color-border-divider); }
 .border-color-var-color-border-soft { border-color: var(--color-border-soft); }
 .border-color-var-color-border-strong { border-color: var(--color-border-strong); }
+.border-color-var-color-border-control { border-color: var(--color-border-control); }
 .border-color-var-color-brand-blue { border-color: var(--color-brand-blue); }
 .border-color-var-color-surface-50 { border-color: var(--color-surface-50); }
 .border-l { border-left-width:1px;border-left-style:solid }
@@ -1460,6 +1485,7 @@ html, body, #root {
   --color-border-soft: #21262E;
   --color-border-strong: #353B46;
   --color-border-divider: #4A515C;
+  --color-border-control: #4A515C;
   --color-text-primary: #E9EBEE;
   --color-text-secondary: #B7BDC6;
   --color-text-tertiary: #8B929C;
