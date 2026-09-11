@@ -312,7 +312,7 @@
 
   /* ──────────────────────────────────────────────────────────────────────
    *  Spacing / Sizing Scale — 4px 그리드. `--text-*` 와 동일한 "px 값 스케일 토큰" 방식.
-   *  치수(width/height/gap/padding)의 단일 출처. 유틸(h-*/w-*/size-*)이 점진적으로
+   *  치수(width/height/gap/padding)의 단일 출처. 유틸(h-* · w-* · size-*)이 점진적으로
    *  이 토큰을 참조 (현재 바인딩: h-32px→--space-8, w-40px→--space-10).
    *  네이밍은 Tailwind 정렬 — `--space-N` = 4px×N (space-8=32px, space-10=40px).
    *  테마 무관 → `.dark` 오버라이드 없음.

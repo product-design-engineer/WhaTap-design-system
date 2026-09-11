@@ -483,7 +483,7 @@
 
     /* ──────────────────────────────────────────────────────────────────────
      *  Spacing / Sizing Scale — 4px 그리드 (tokens.css 와 동기화).
-     *  치수(width/height/gap/padding)의 단일 출처. 유틸(h-*/w-*/size-*)이 점진적으로
+     *  치수(width/height/gap/padding)의 단일 출처. 유틸(h-* · w-* · size-*)이 점진적으로
      *  이 토큰을 참조 (현재 바인딩: h-32px→--space-8, w-40px→--space-10).
      *  네이밍은 Tailwind 정렬 — `--space-N` = 4px×N. 테마 무관.
      * ────────────────────────────────────────────────────────────────────── */
@@ -1035,7 +1035,9 @@
 .top-2px { top: 2px; }
 .top-32px { top: 32px; }
 .top-4 { top: calc(var(--spacing) * 4); }
-.top-calc-100pct+4px { top: calc(100% + 4px); }
+/* 이름에 `+` 를 넣으면 형제 결합자로 파싱돼 규칙이 통째로 죽는다(`.a + 4px` 는 선택자가 아니다).
+   실제로 AiInlinePrompt 드롭다운의 top 오프셋이 안 먹고 있었다 — 빌드 경고로만 새어 나왔다. */
+.top-full-4px { top: calc(100% + 4px); }
 .tracking-caps { letter-spacing:var(--tracking-caps) }
 .tracking-default { letter-spacing:var(--tracking-default) }
 .tracking-display { letter-spacing:var(--tracking-display) }
