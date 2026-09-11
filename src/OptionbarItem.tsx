@@ -36,8 +36,14 @@ import type { ReactNode } from "react";
  * </OptionbarItem>
  * ```
  */
-/** 옵션바 행 chrome 공용 사이즈 — md(32px, 기본) / sm(24px). 행의 모든 컨트롤이 이 값을 공유한다. */
-export type OptionbarSize = "sm" | "md";
+/**
+ * 옵션바 행 chrome 공용 사이즈 — 행의 모든 컨트롤이 이 값을 공유한다.
+ *
+ * 컨트롤 공통 스케일(feedback-control-size-scale)을 그대로 따른다 — sm 24 / md 28 / lg 32.
+ * `lg` 는 Product-prototype 사본에만 있던 값이라 이관하며 합쳤다(2026-09-11). 한쪽에만 있으면
+ * 같은 옵션바가 repo 마다 다른 높이로 선다.
+ */
+export type OptionbarSize = "sm" | "md" | "lg";
 
 export default function OptionbarItem({
   title,

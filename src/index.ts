@@ -102,7 +102,7 @@ export { default as DashboardBuildingProgress } from "./DashboardBuildingProgres
 export type { DashboardBuildingProgressProps } from "./DashboardBuildingProgress";
 export { default as DashboardLayout } from "./DashboardLayout";
 export { default as DataTable } from "./DataTable";
-export type { DataTableColumn, DataTableProps } from "./DataTable";
+export type { DataTableColumn, DataTableProps, DataTableSort } from "./DataTable";
 export { default as Pagination } from "./Pagination";
 export type { PaginationProps } from "./Pagination";
 export { default as EventWeekTimeMatrix } from "./EventWeekTimeMatrix";

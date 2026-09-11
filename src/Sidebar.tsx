@@ -94,7 +94,16 @@ export type MenuItem = {
   icon: string;
   label: string;
   /** 펼침/접힘이 있는 항목. 비어 있으면 단일 항목. */
-  children?: { label: string; active?: boolean; onClick?: () => void }[];
+  children?: {
+    label: string;
+    active?: boolean;
+    onClick?: () => void;
+    /**
+     * 이 항목이 하위 묶음의 **제목**임을 뜻한다 — 누를 수 없고, 뒤따르는 형제들이 그 묶음의
+     * 구성원이라 한 단계 더 들여쓴다. 메뉴가 3단(제품 > 묶음 > 화면)인 제품(DB 분석 등)에서 쓴다.
+     */
+    group?: boolean;
+  }[];
   /**
    * 펼침 여부. `onToggle` 이 없으면 «초기값» 이고 그 뒤로는 행을 눌러 사용자가 접고 편다.
    * `onToggle` 을 주면 제어 모드가 되어 이 값이 현재 펼침을 그대로 정한다.

@@ -1,30 +1,32 @@
 /**
- * LiveTimerCompact — http://localhost:5180/application/slider 의 LIVE 타이머 (32px)
+ * LiveTimerCompact — http://localhost:5180/application/slider 의 LIVE 타이머 (sm 24px · md 32px)
  * 마크업/SVG/색상값 verbatim 복제. 모든 페이지의 LIVE 시간 선택자 공용.
  *
  * Exact-design (라이브 application/slider, 5/16):
  *   ┌──────┬──────────────────────────┐
- *   │ ▌▌  │▓LIVE▓ 12:01:35  [📅]     │   ← 박스 전체 fill polling progress
+ *   │ ▌▌  │ LIVE  12:01:35  [📅]     │
  *   └──────┴──────────────────────────┘
- *     배경 fill: opacity 0.18 녹색이 좌→우로 채워지며 cycle 마다 0% 리셋
+ *     기본은 배경이 없다 — 녹색 progress fill 은 기본 off 다. LIVE 텍스트 뒤에 옅은 색 띠가
+ *     깔리면 배지가 "칩"처럼 읽혀서, 정작 상태를 말하는 색(초록/회색)이 배경에 묻힌다.
+ *     라이브 화면의 polling cycle 연출이 필요한 자리에서만 `showPollingProgress` 로 켠다.
  *
  *   * pause = 녹색 ▌▌ (또는 paused 시 ▶ 재생 모드)
  *   * 좌측 박스 (pause): chained 보더 4px 0 0 4px, border-top/left/bottom 만 (right 없음)
  *   * 우측 박스 (timer): chained 보더 0 4px 4px 0, 4면 보더
- *   * progress: 0% → 100% 를 refreshIntervalMs 동안 채움, 도달 시 0% 리셋 (polling fire)
- *   * paused=true → 시계 + progress 정지
+ *   * paused=true → 시계 정지 (LIVE → STOP), progress 도 정지
  *   * durationLabel: 우측 캘린더 자리에 녹색 알약 태그 ("10분", "30분" 등).
  *     캘린더 아이콘과 동시 표시도 가능 — 필요 시 calendar prop 으로 제어.
  *
  * ## Purpose
- * LIVE 모니터링의 현재 시각 + polling 진행을 32px compact 박스로 표시.
+ * LIVE 모니터링의 현재 시각을 compact 박스로 표시.
  * 좌측 pause/play 버튼(`onTogglePause`) + 우측 타이머 박스(LIVE 배지 + 시각 + 선택적
  * duration 알약/달력)로 구성. `time` 미지정 시 시스템 시각으로 자동 tick 하며,
- * `refreshIntervalMs`(기본 5000ms) 주기로 배경 progress fill 이 좌→우로 채워지고 cycle
- * 마다 리셋된다. `paused=true` 면 시계·progress 모두 정지.
+ * `paused=true` 면 시계가 멈추고 배지가 STOP 으로 바뀐다.
+ * `refreshIntervalMs` 는 폴링 주기 값이며, `showPollingProgress` 를 켰을 때만
+ * 배경 progress fill 의 한 cycle 길이로도 쓰인다(끈 상태에선 시각 표현 없음).
  *
  * ## When to use
- * - 옵션바 "시간" 항목에서 LIVE 현재 시각 + polling cycle 을 compact 하게 보여줄 때.
+ * - 옵션바 "시간" 항목에서 LIVE 현재 시각을 compact 하게 보여줄 때.
  * - [[OptionbarPage]] 의 시간 슬롯 등 세로 공간이 한정된 자리.
  *
  * ## When NOT to use
@@ -32,29 +34,34 @@
  * - 옵션바 전체 행 구성 → [[OptionbarPage]].
  *
  * ## Composition rules
- * - 높이는 `size` 로 결정 — `sm`(24px, **기본**) / `md`(32px). pause(좌)·timer(우) 가 chained 보더로 한 알약처럼 붙음.
- * - `sm` 은 아이콘 16px · LIVE `text-sm` · 시각 `text-md` · 알약 14px 로 함께 내려가 32px 과 같은 비율을 유지.
- * - `durationLabel` 만 있으면 캘린더 자리에 #00B543 알약 표시. `showCalendar` 로
- *   캘린더 아이콘을 명시 제어(default: durationLabel 없을 때만 true).
- * - 색은 토큰(var(--color-status-success) 등) — LIVE 텍스트·progress fill 라이브 값 유지.
+ * - 높이는 `size` 로 결정 — `sm`(24px) / `md`(32px, **기본**). pause(좌)·timer(우) 가
+ *   chained 보더로 한 알약처럼 붙음.
+ * - `sm` 은 아이콘 16px · LIVE `text-sm` · 시각 `text-md` · 알약 14px 로 함께 내려가 32px 과
+ *   같은 비율을 유지. 옵션바 24px 기본선에 맞출 때 쓴다([[OptionbarPage]] 는 `size="sm"` 을
+ *   명시로 내려주므로 옵션바 baseline 은 이 컴포넌트 기본값과 무관하게 24px 로 정렬된다).
+ * - `durationLabel` 만 있으면 캘린더 자리에 녹색(`--color-status-success`) 알약 표시.
+ *   `showCalendar` 로 캘린더 아이콘을 명시 제어(default: durationLabel 없을 때만 true).
+ * - 색은 토큰(var(--color-status-success) 등). 기본값에서는 배지 뒤에 배경을 깔지 않는다.
  *
  * @example
  * ```tsx
  * <LiveTimerCompact paused={paused} onTogglePause={togglePause} durationLabel="10분" />
  * <LiveTimerCompact time="12:01:35" refreshIntervalMs={3000} showCalendar onOpenCalendar={open} />
- * <LiveTimerCompact size="sm" durationLabel="10분" />   // 24px — 40px 보조 행·컴팩트 옵션바
+ * <LiveTimerCompact size="sm" durationLabel="10분" />          // 24px — 40px 보조 행·컴팩트 옵션바 (기본 lg=32px)
+ * <LiveTimerCompact showPollingProgress refreshIntervalMs={5000} />  // polling fill 연출 opt-in
  * ```
  */
 import { useEffect, useRef, useState } from "react";
 
-export type LiveTimerCompactSize = "sm" | "md";
+export type LiveTimerCompactSize = "sm" | "md" | "lg";
 
 /**
  * 사이즈 스펙 — md(32px) 는 기존 값 verbatim, sm(24px) 은 한 단계 아래.
  * 높이·아이콘·타이포·알약을 함께 내려 32px 대비 시각 비율을 유지한다.
  */
+/* 컨트롤 공통 스케일 (feedback-control-size-scale) — sm 24 / md 28 / lg 32. */
 const SIZE = {
-  md: {
+  lg: {
     box: 32,
     padding: 8,
     icon: 20,
@@ -65,6 +72,18 @@ const SIZE = {
     pill: 16,
     pillFont: "var(--text-sm)",
     calendar: 16,
+  },
+  md: {
+    box: 28,
+    padding: 6,
+    icon: 18,
+    gap: "gap-4px",
+    live: "text-sm",
+    liveLeading: "leading-none",
+    clock: "text-md",
+    pill: 15,
+    pillFont: "var(--text-xs)",
+    calendar: 15,
   },
   sm: {
     box: 24,
@@ -85,7 +104,7 @@ export default function LiveTimerCompact({
   time,
   paused = false,
   onTogglePause,
-  /** polling 한 cycle (ms). 기본 5000ms. */
+  /** polling 한 cycle (ms). 기본 5000ms. `showPollingProgress` 시 fill 한 cycle 길이. */
   refreshIntervalMs = 5000,
   /** 캘린더 클릭 핸들러. */
   onOpenCalendar,
@@ -93,8 +112,14 @@ export default function LiveTimerCompact({
   durationLabel,
   /** 캘린더 아이콘 표시 여부 (default: durationLabel 이 없을 때만 true). */
   showCalendar,
-  /** 사이즈 — sm(24px, **기본**) / md(32px). */
-  size = "sm",
+  /** 사이즈 — sm(24px) / md(32px, **기본**). */
+  size = "lg",
+  /**
+   * polling progress fill(옅은 녹색이 좌→우) 노출 여부. **기본 false.**
+   * 켜면 refreshIntervalMs 동안 0→100% 를 채우고 cycle 마다 리셋한다(폴링 fire 시점 연출).
+   * 기본값이 off 인 이유는 아래 렌더 주석 참고 — 배지가 "칩"처럼 읽히는 부작용 때문.
+   */
+  showPollingProgress = false,
 }: {
   time?: string;
   paused?: boolean;
@@ -104,6 +129,7 @@ export default function LiveTimerCompact({
   durationLabel?: string;
   showCalendar?: boolean;
   size?: LiveTimerCompactSize;
+  showPollingProgress?: boolean;
 }) {
   const spec = SIZE[size];
   const calendarVisible = showCalendar ?? !durationLabel;
@@ -115,6 +141,12 @@ export default function LiveTimerCompact({
     if (paused) {
       lastTickRef.current = Date.now();
       return;
+    }
+    if (!showPollingProgress) {
+      /* 시계만 tick 한다 — progress fill 이 없으면 60ms 보간이 필요 없다.
+         refreshIntervalMs 는 폴링 주기 API 로 남아 있다(호출부 다수가 넘긴다). */
+      const id = setInterval(() => setNow(new Date()), 1000);
+      return () => clearInterval(id);
     }
     const TICK_MS = 60; // 60ms tick → CSS transition (16ms linear) 와 자연 보간
     const id = setInterval(() => {
@@ -128,7 +160,7 @@ export default function LiveTimerCompact({
       });
     }, TICK_MS);
     return () => clearInterval(id);
-  }, [paused, refreshIntervalMs]);
+  }, [paused, refreshIntervalMs, showPollingProgress]);
 
   const display =
     time ??
@@ -154,9 +186,9 @@ export default function LiveTimerCompact({
         style={{
           width: spec.box,
           height: spec.box,
-          borderTop: "1px solid var(--color-border-divider)",
-          borderLeft: "1px solid var(--color-border-divider)",
-          borderBottom: "1px solid var(--color-border-divider)",
+          borderTop: "1px solid var(--color-border-control)",
+          borderLeft: "1px solid var(--color-border-control)",
+          borderBottom: "1px solid var(--color-border-control)",
           borderRadius: "4px 0px 0px 4px",
         }}
       >
@@ -172,32 +204,49 @@ export default function LiveTimerCompact({
         )}
       </div>
 
-      {/* Timer box — 우측 chained 보더 (4면), polling progress (배경 full-fill) + 텍스트 */}
+      {/* Timer box — 우측 chained 보더 (4면) + 텍스트. progress fill 은 opt-in. */}
       <div
         className="flex flex-col justify-center bg-card relative overflow-hidden"
         style={{
           height: spec.box,
           padding: spec.padding,
-          border: "1px solid var(--color-border-divider)",
+          border: "1px solid var(--color-border-control)",
           borderRadius: "0px 4px 4px 0px",
         }}
       >
-        {/* Polling progress — 박스 전체 영역을 좌→우로 채우는 fill (텍스트 뒤 배경) */}
-        <div
-          className="absolute top-0 bottom-0 left-0 pointer-events-none"
-          style={{
-            width: `${progress * 100}%`,
-            backgroundColor: "var(--color-status-success)",
-            opacity: 0.18,
-            transition: "width 16ms linear",
-          }}
-        />
+        {/* Polling progress — 박스 전체 영역을 좌→우로 채우는 fill (텍스트 뒤 배경).
+            **기본 off**: LIVE 텍스트 뒤에 옅은 색 띠가 깔리면 배지가 "칩"처럼 읽혀서,
+            정작 상태를 말하는 색(초록/회색)이 배경에 묻힌다. 폴링 cycle 자체를 보여주는 것이
+            화면의 목적일 때만 showPollingProgress 로 켠다. */}
+        {showPollingProgress && (
+          <div
+            className="absolute top-0 bottom-0 left-0 pointer-events-none"
+            style={{
+              width: `${progress * 100}%`,
+              backgroundColor: "var(--color-status-success)",
+              opacity: 0.18,
+              transition: "width 16ms linear",
+            }}
+          />
+        )}
         <div className={`flex items-center ${spec.gap} relative`}>
+          {/* 배지는 **라이브성 주장**이다 — 정지 상태에서 "LIVE" 를 띄우면 지나간 스냅샷을
+              지금 상황으로 오해하게 만든다(장애 대응에서 가장 비싼 오해). paused 면 STOP. */}
           <span
-            className={`${spec.live} ${spec.liveLeading} font-medium text-status-success whitespace-nowrap`}
-            style={{ fontFamily: "var(--font-family-numeric)" }}
+            className={`${spec.live} ${spec.liveLeading} font-medium whitespace-nowrap`}
+            /* LIVE↔STOP 은 상태 전환이므로 색이 즉시 튀지 않게 한다 — 눌렀을 때 무엇이 바뀌었는지
+               눈으로 따라갈 수 있어야 한다. 색은 클래스가 아니라 토큰 인라인으로 준다 —
+               `.text-tertiary` 유틸은 whatap-ds.css 에 없어서(등록 클래스만 사용) 조용히 무시된다. */
+            style={{
+              fontFamily: "var(--font-family-numeric)",
+              color: paused ? "var(--color-text-tertiary)" : "var(--color-status-success)",
+              transition: "color 240ms ease",
+              /* 애니메이션 없음 — ai-symbol-pulse 는 box-shadow 글로우라 텍스트에 걸면
+                 사각 헤일로가 배경처럼 깔린다(원형 AI 심볼 전용). 배경은 투명. */
+              background: "transparent",
+            }}
           >
-            LIVE
+            {paused ? "STOP" : "LIVE"}
           </span>
           <span
             className={`${spec.clock} font-bold text-primary leading-none tracking-metric whitespace-nowrap`}
@@ -211,7 +260,9 @@ export default function LiveTimerCompact({
               // raw-color-ok: 녹색 알약 위 전경 — 컬러 배경 위 고정 흰색.
               className="inline-flex items-center justify-center px-5px rounded-2px text-white whitespace-nowrap shrink-0"
               style={{
-                background: "var(--color-status-success)",
+                /* 기간 배지도 같은 이유로 정지 상태에선 초록(라이브 색)을 쓰지 않는다. */
+                background: paused ? "var(--color-text-tertiary)" : "var(--color-status-success)",
+                transition: "background-color 240ms ease",
                 height: spec.pill,
                 fontFamily: "var(--font-family-numeric)",
                 fontSize: spec.pillFont,

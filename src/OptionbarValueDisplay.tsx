@@ -29,13 +29,15 @@
  */
 import Chip from "./Chip";
 
-export type OptionbarValueDisplaySize = "sm" | "md";
+export type OptionbarValueDisplaySize = "sm" | "md" | "lg";
 /** 표현 방식 — text(평문, 기본) / chip(무채색 [[Chip]]). */
 export type OptionbarValueDisplayVariant = "text" | "chip";
 
 /** 사이즈 스펙 — md(32px) 는 기존 값 verbatim, sm(24px) 은 한 단계 아래. */
+/* 컨트롤 공통 스케일 (feedback-control-size-scale) — sm 24 / md 28 / lg 32. */
 const SIZE = {
-  md: { h: "h-32px", text: "text-md", chip: "md" },
+  lg: { h: "h-32px", text: "text-md", chip: "md" },
+  md: { h: "h-28px", text: "text-base", chip: "md" },
   sm: { h: "h-24px", text: "text-base", chip: "sm" },
 } as const;
 

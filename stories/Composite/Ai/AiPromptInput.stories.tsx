@@ -23,8 +23,6 @@ const meta: Meta<typeof AiPromptInput> = {
   argTypes: {
     value:           { control: "text",    description: "Controlled value. 미지정 시 editable mode." },
     placeholder:     { control: "text" },
-    tokenInput:      { control: "number" },
-    tokenOutput:     { control: "number" },
     showSendCursor:  { control: "boolean" },
     disabled:        { control: "boolean" },
     caption:         { control: "text" },
@@ -74,7 +72,7 @@ export const WithCursor: Story = {
 
 /** Custom Token Counts — 토큰 pill 가변. */
 export const CustomTokens: Story = {
-  args: { value: "분석 요청", tokenInput: 12450, tokenOutput: 1820 },
+  args: { value: "분석 요청", usagePill: <>남은 질문 약 <strong>12회</strong></> },
 };
 
 /** No Caption — 하단 안내 텍스트 제거 (특수 컨텍스트). */
