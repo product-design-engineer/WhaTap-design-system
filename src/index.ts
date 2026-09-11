@@ -24,6 +24,12 @@ export type {
   FilterDropdownOption,
   FilterDropdownPlacement,
 } from "./FilterDropdown";
+export { default as ActionMenu } from "./ActionMenu";
+export type { ActionMenuProps, ActionMenuAction, ActionMenuPlacement } from "./ActionMenu";
+export { default as ActionMenuItem } from "./ActionMenuItem";
+export type { ActionMenuItemProps, ActionMenuItemTone } from "./ActionMenuItem";
+export { default as ListRow } from "./ListRow";
+export type { ListRowProps } from "./ListRow";
 export { default as KpiField } from "./KpiField";
 export type { KpiFieldProps } from "./KpiField";
 export { default as UsageGauge } from "./UsageGauge";
