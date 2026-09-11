@@ -37,7 +37,7 @@
  * ```
  */
 import type { ButtonHTMLAttributes, MouseEventHandler, ReactNode } from "react";
-import Tooltip, { type TooltipPlacement } from "./Tooltip";
+import Tooltip, { type TooltipPlacement } from "../Tooltip";
 
 /** 위젯 헤더 심볼과 동일한 DS 키프레임 재사용 (breathing 2.4s + 저속 회전 8s). */
 const AI_SYMBOL_ANIMATION =

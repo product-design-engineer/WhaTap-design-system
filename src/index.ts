@@ -24,6 +24,18 @@ export type {
   FilterDropdownOption,
   FilterDropdownPlacement,
 } from "./FilterDropdown";
+export { default as KpiField } from "./KpiField";
+export type { KpiFieldProps } from "./KpiField";
+export { default as UsageGauge } from "./UsageGauge";
+export type { UsageGaugeProps, UsageGaugeTone } from "./UsageGauge";
+export { default as MemberUsageBar } from "./MemberUsageBar";
+export type { MemberUsageBarProps } from "./MemberUsageBar";
+export { default as FilterSelect } from "./FilterSelect";
+export type { FilterSelectProps } from "./FilterSelect";
+export { default as Notice } from "./Notice";
+export type { NoticeProps, NoticeTone, NoticeVariant } from "./Notice";
+export { default as EmptyState } from "./EmptyState";
+export type { EmptyStateProps, EmptyStateSize } from "./EmptyState";
 export { default as Modal } from "./Modal";
 export type { ModalProps, ModalSize } from "./Modal";
 export { default as Select } from "./Select";
@@ -42,9 +54,9 @@ export type { ThemeToggleProps, ThemeMode } from "./ThemeToggle";
 // Chrome — 대시보드 쉘
 export { default as AiSummaryBanner } from "./AiSummaryBanner";
 export type { AiSummaryBannerProps, AiSummaryBannerTone } from "./AiSummaryBanner";
-export { default as AiSymbol } from "./AiSymbol";
-export { default as AiTriggerButton } from "./AiTriggerButton";
-export type { AiTriggerButtonProps } from "./AiTriggerButton";
+export { default as AiSymbol } from "./widget/AiSymbol";
+export { default as AiTriggerButton } from "./widget/AiTriggerButton";
+export type { AiTriggerButtonProps } from "./widget/AiTriggerButton";
 export { default as Button } from "./Button";
 export type { ButtonProps, ButtonVariant, ButtonSize, ButtonTone } from "./Button";
 export { default as FilterBar } from "./FilterBar";
@@ -54,6 +66,8 @@ export type { DashboardBuildingProgressProps } from "./DashboardBuildingProgress
 export { default as DashboardLayout } from "./DashboardLayout";
 export { default as DataTable } from "./DataTable";
 export type { DataTableColumn, DataTableProps } from "./DataTable";
+export { default as Pagination } from "./Pagination";
+export type { PaginationProps } from "./Pagination";
 export { default as EventWeekTimeMatrix } from "./EventWeekTimeMatrix";
 export type { EventWeekTimeMatrixProps } from "./EventWeekTimeMatrix";
 export { default as LiveTimerCompact } from "./LiveTimerCompact";
@@ -98,8 +112,8 @@ export type { ToastVariant } from "./Toast";
 // AI Widget shell + context
 export { default as WhaTapAiWidget } from "./WhaTapAiWidget";
 export { default as AiWidget } from "./AiWidget";
-export { WhaTapAiProvider, useWhaTapAi } from "./WhaTapAiContext";
-export type { LastPrompt } from "./WhaTapAiContext";
+export { WhaTapAiProvider, useWhaTapAi } from "./widget/WhaTapAiContext";
+export type { LastPrompt } from "./widget/WhaTapAiContext";
 export type { WidgetAction } from "./WhaTapAiWidget";
 
 // Policy
@@ -116,7 +130,7 @@ export { default as TabButton } from "./TabButton";
 export { default as ProductRailItem } from "./ProductRailItem";
 export { default as BottomRailItem } from "./BottomRailItem";
 export { default as FilterChipItem } from "./FilterChipItem";
-export { default as AiQuickActionChip } from "./AiQuickActionChip";
+export { default as AiQuickActionChip } from "./widget/AiQuickActionChip";
 //   WhaTap AI parts (src/widget)
 export { default as CostBreakdownRow } from "./widget/CostBreakdownRow";
 export { default as ClassificationTableRow } from "./widget/ClassificationTableRow";

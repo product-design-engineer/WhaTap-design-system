@@ -38,7 +38,7 @@
  * ```
  */
 import type { CSSProperties } from "react";
-import AiTriggerButton from "./AiTriggerButton";
+import AiTriggerButton from "./widget/AiTriggerButton";
 
 const CHART_HEIGHT = 96;
 const PAD_LEFT = 28;

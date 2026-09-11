@@ -37,7 +37,7 @@
  * ```
  */
 import { useEffect, useState, type ReactNode } from "react";
-import AiSymbol from "./AiSymbol";
+import AiSymbol from "./widget/AiSymbol";
 
 /** 배경 톤 — 정보성(기본) / 무채색. 값은 토큰 단일 출처. */
 export type AiSummaryBannerTone = "info" | "neutral";
