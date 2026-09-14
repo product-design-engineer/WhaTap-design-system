@@ -73,6 +73,8 @@ export { default as Notice } from "./Notice";
 export type { NoticeProps, NoticeTone, NoticeVariant } from "./Notice";
 export { default as EmptyState } from "./EmptyState";
 export type { EmptyStateProps, EmptyStateSize } from "./EmptyState";
+export { default as ExtensionPanel } from "./ExtensionPanel";
+export type { ExtensionPanelProps } from "./ExtensionPanel";
 export { default as Modal } from "./Modal";
 export type { ModalProps, ModalSize } from "./Modal";
 export { default as Select } from "./Select";
