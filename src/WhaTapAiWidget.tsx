@@ -59,6 +59,7 @@ export default function WhaTapAiWidget({
   onFullscreen,
   user = "Wha-tap Kim",
   pageHighlight = "애플리케이션 대시보드",
+  intro,
   actions = ["현재 상태 요약", "이상 징후 진단", "슬로우 트랜잭션 분석"],
   messages,
   inputValue,
@@ -87,6 +88,13 @@ export default function WhaTapAiWidget({
    */
   titleBadge?: import("react").ReactNode;
   pageHighlight?: string;
+  /**
+   * 환영 문단 전체를 갈아끼운다. 주면 `user`·`pageHighlight` 로 조립하는 기본 문장을 쓰지 않는다.
+   *
+   * 기본 문장은 한국어로 고정돼 있어, 영문 화면이나 «분석» 이라는 말이 맞지 않는 제품에서는
+   * `pageHighlight` 만 바꿔서는 해결되지 않는다. 그럴 때 문단을 통째로 받는다.
+   */
+  intro?: import("react").ReactNode;
   actions?: WidgetAction[];
   messages?: import("react").ReactNode;
   inputValue?: string;
@@ -292,24 +300,28 @@ export default function WhaTapAiWidget({
                     animationDelay: "150ms",
                   }}
                 >
-                  <span
-                    className="font-bold text-lg tracking-default leading-none"
-                    style={{ fontFamily: "var(--font-family-korean)" }}
-                  >
-                    {user}
-                  </span>
-                  <span className="text-md leading-normal whitespace-pre-wrap">
-                    님, 안녕하세요. WhaTap AI입니다.{"\n"}
-                  </span>
-                  <span
-                    className="font-bold text-lg tracking-default leading-none"
-                    style={{ fontFamily: "var(--font-family-korean)" }}
-                  >
-                    {pageHighlight}
-                  </span>
-                  <span className="text-md leading-normal whitespace-pre-wrap">
-                    {" "}분석을 함께 하겠습니다. 무엇부터 살펴볼까요?
-                  </span>
+                  {intro ?? (
+                    <>
+                      <span
+                        className="font-bold text-lg tracking-default leading-none"
+                        style={{ fontFamily: "var(--font-family-korean)" }}
+                      >
+                        {user}
+                      </span>
+                      <span className="text-md leading-normal whitespace-pre-wrap">
+                        님, 안녕하세요. WhaTap AI입니다.{"\n"}
+                      </span>
+                      <span
+                        className="font-bold text-lg tracking-default leading-none"
+                        style={{ fontFamily: "var(--font-family-korean)" }}
+                      >
+                        {pageHighlight}
+                      </span>
+                      <span className="text-md leading-normal whitespace-pre-wrap">
+                        {" "}분석을 함께 하겠습니다. 무엇부터 살펴볼까요?
+                      </span>
+                    </>
+                  )}
                 </p>
 
                 {/* 액션 칩 */}

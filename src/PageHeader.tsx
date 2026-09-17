@@ -165,7 +165,7 @@ export default function PageHeader({
 
       {/* 우측: 고객지원 + 알림 + 아바타 */}
       <div className="flex items-center gap-16px h-full shrink-0">
-        <HeaderPillButton size={HEADER_CONTROL_SIZE} icon={<IcSupport />}>고객지원</HeaderPillButton>
+        {!hideSupport && <HeaderPillButton size={HEADER_CONTROL_SIZE} icon={<IcSupport />}>고객지원</HeaderPillButton>}
         <div className="flex items-center gap-16px">
           <div className="relative shrink-0 size-24px">
             <button
