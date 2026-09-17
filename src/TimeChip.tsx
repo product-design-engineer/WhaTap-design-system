@@ -55,8 +55,8 @@ export type TimeChipProps = {
 
 export default function TimeChip({ label, value, note, tone = "neutral", leadingIcon, className }: TimeChipProps) {
   return (
-    <Chip size="md" variant="soft" tone={tone} leadingIcon={leadingIcon} className={className}>
-      {label && <span style={{ fontFamily: "var(--font-family-korean)" }}>{label}</span>}
+    <Chip size="md" variant="soft" tone={tone} leadingIcon={leadingIcon} className={className} noTruncate>
+      {label && <span style={{ fontFamily: "var(--font-family-korean)" }}>{label}{" "}</span>}
       <span style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}>
         {value}
       </span>

@@ -53,6 +53,10 @@ export type ChipProps = {
   children: ReactNode;
   /** 외부 className 추가. */
   className?: string;
+  /** 클릭 핸들러. */
+  onClick?: () => void;
+  /** 내용 잘림 방지. true 면 truncate 를 적용하지 않는다. TimeChip 처럼 내용 길이에 종속되어야 하는 경우. */
+  noTruncate?: boolean;
 };
 
 /* ─── style maps ─────────────────────────────────────── */
@@ -93,13 +97,15 @@ export default function Chip({
   onClose,
   children,
   className = "",
+  onClick,
+  noTruncate = false,
 }: ChipProps) {
   const spec = SIZE[size];
 
   return (
     <span
       data-ds-policy-ok={variant === "solid" ? "tone 원색 배경 위 고정 흰색 전경" : undefined}
-      className={`inline-flex items-center font-medium ${spec.text} ${className}`}
+      className={`inline-flex items-center shrink-0 font-medium ${spec.text} ${className}`}
       style={{
         height: spec.h,
         paddingInline: spec.padX,
@@ -115,7 +121,7 @@ export default function Chip({
           {leadingIcon}
         </span>
       )}
-      <span className="truncate">{children}</span>
+      <span className={noTruncate ? "whitespace-nowrap" : "truncate"}>{children}</span>
       {closable && (
         <button
           type="button"

@@ -15,7 +15,7 @@
  * │                                                                  │
  * │ <textarea>  placeholder 또는 입력 텍스트                         │
  * │                                                                  │
- * │ [+ attach] [usagePill]                        [⬆ AiSendButton] │
+ * │ [+ attach] [토큰 입력 N · 출력 M]              [⬆ AiSendButton] │
  * └────────────────────────────────────────────────────────────────┘
  * AI 응답은 정확하지 않을 수 있습니다. 중요한 결정은 반드시 확인해 주세요.  ← 하단 caption
  * ```
@@ -34,8 +34,7 @@
  * - 시연 시나리오에서 placeholder 만 보여주려면 controlled 로 빈 문자열 고정 + readOnly 효과.
  *
  * ## Composition rules
- * - 입력창 옆 알약은 [[UsagePill]] — 내용은 `usagePill` 로 호출측이 정한다(재원 이름 · 남은 질문
- *   횟수 따위). 주지 않으면 알약 자체가 서지 않는다. 토큰 카운트를 그리던 자리다(2026-08-26 삭제).
+ * - 토큰 pill (`tokenInput` / `tokenOutput`) 는 [[TokenUsageBadge]] (Figma 29424:19317) — pill 형 inline.
  * - 송신 버튼은 [[AiSendButton]] (24×24 squared) — input 텍스트 있으면 활성 자동 전환.
  * - 첨부 chip 행은 `attachments` prop 있을 때만 노출. mime 미지정 시 "CSV" 로 fallback.
  * - 캡션 "AI 응답은 정확하지 않을 수 있습니다…" 는 prototype 전역 정책 — 임의로 제거하지 말 것.
@@ -48,11 +47,12 @@
  *   onChange={setText}
  *   onSubmit={(v) => sendToAi(v)}
  *   placeholder="어떤 작업을 함께 할까요?"
- *   usagePill={<>남은 질문 약 <strong>12회</strong></>}
+ *   tokenInput={3395}
+ *   tokenOutput={181}
  * />
  * ```
  */
-import { useState, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import AiSendButton from "./AiSendButton";
 
 export type AiPromptAttachment = {
@@ -73,15 +73,10 @@ export type AiPromptInputProps = {
   placeholder?: string;
   /** 입력 영역 위에 노출할 첨부 chip. */
   attachments?: AiPromptAttachment[];
-  /**
-   * pill 내용 교체. 주면 토큰 수 대신 이 내용이 그 자리에 선다(껍데기는 그대로).
-   *
-   * 토큰 수는 «개발이 보는 값» 이다. 과금 단위가 토큰이 아닌 제품에서는 사용자가 그 숫자로
-   * 할 수 있는 판단이 없다. 그 자리에 «이 질문이 무엇으로 나가는가»(재원 · 잔량)를 세우면
-   * 같은 칸이 사용자에게 쓸모를 갖는다. 둘을 나란히 두지 말 것 — 단위가 둘이 되는 순간
-   * 사람이 환산을 계산하기 시작한다.
-   */
-  usagePill?: ReactNode;
+  /** 토큰 입력 카운트 (Figma 29424:19317 pill). */
+  tokenInput?: number;
+  /** 토큰 출력 카운트. */
+  tokenOutput?: number;
   /** 송신 버튼 위에 시연용 자동 클릭 ripple 표시. */
   showSendCursor?: boolean;
   /** 송신 버튼 클릭에 사용자 정의 핸들러 (시연용 onClick 직접 트리거). 없으면 textarea value 로 onSubmit. */
@@ -92,6 +87,14 @@ export type AiPromptInputProps = {
   onAttachClick?: () => void;
   /** disabled — 전체 입력 차단 (AI 응답 진행 중 등). */
   disabled?: boolean;
+  /**
+   * Inline suggestion (ghost text). 입력이 비어 있을 때 흐린 글자로 추천 문구를 보여 준다.
+   * 사용자가 **End · Tab · →(오른쪽 화살표)** 키를 누르면 추천 문구가 실제 입력값으로 채워진다.
+   * placeholder 와 동시에 주면 suggestion 이 우선한다.
+   */
+  suggestion?: string;
+  /** suggestion 을 수락했을 때 호출. 수락된 문자열이 인자로 들어온다. */
+  onSuggestionAccept?: (v: string) => void;
 };
 
 const DEFAULT_CAPTION = "AI 응답은 정확하지 않을 수 있습니다. 중요한 결정은 반드시 확인해 주세요.";
@@ -102,17 +105,42 @@ export default function AiPromptInput({
   onSubmit,
   placeholder = "어떤 작업을 함께 할까요?",
   attachments,
+  tokenInput = 3395,
+  tokenOutput = 181,
   showSendCursor = false,
   onSendClick,
-  usagePill,
   caption = DEFAULT_CAPTION,
   onAttachClick,
   disabled = false,
+  suggestion,
+  onSuggestionAccept,
 }: AiPromptInputProps) {
   const editable = value === undefined;
   const [typed, setTyped] = useState("");
   const effectiveValue = editable ? typed : value;
   const hasInput = effectiveValue.trim().length > 0;
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  /** suggestion 이 보이는 조건: 입력이 비어 있고 suggestion 문자열이 있을 때. */
+  const showSuggestion = !hasInput && !!suggestion;
+
+  const acceptSuggestion = () => {
+    if (!suggestion) return;
+    if (editable) {
+      setTyped(suggestion);
+    } else if (onChange) {
+      onChange(suggestion);
+    }
+    onSuggestionAccept?.(suggestion);
+    /* 수락 직후 커서를 끝으로 보낸다. */
+    requestAnimationFrame(() => {
+      const ta = textareaRef.current;
+      if (ta) {
+        ta.selectionStart = ta.selectionEnd = suggestion.length;
+        ta.focus();
+      }
+    });
+  };
 
   const submit = () => {
     if (!hasInput || disabled) return;
@@ -125,17 +153,52 @@ export default function AiPromptInput({
   };
 
   const handleKey = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    /* suggestion 수락: End · Tab · → (입력이 비어 있을 때) */
+    if (showSuggestion && (e.key === "End" || e.key === "Tab" || e.key === "ArrowRight")) {
+      e.preventDefault();
+      acceptSuggestion();
+      return;
+    }
     if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
       e.preventDefault();
       submit();
     }
   };
 
+  /* Glow 속도 — 폭이 넓을수록 느리게. 400px 기준 5s, 800px 기준 10s. */
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [glowDuration, setGlowDuration] = useState(5);
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      const w = entry.contentRect.width;
+      const dur = Math.max(3, Math.min(10, (w / 400) * 5));
+      setGlowDuration(dur);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  const glowStyle = { animationDuration: `${glowDuration}s` };
+
   return (
     <div className="flex flex-col items-center justify-center w-full">
+      {/* Glow 래퍼 — 항상 2px padding 을 유지해서 레이아웃이 밀리지 않는다.
+          입력 중일 때만 glow 클래스가 붙어 그라데이션이 보인다. 롤백은 클래스 제거. */}
       <div
-        className="ai-input-wrapper relative bg-card flex flex-col gap-4px items-center justify-center p-12px shrink-0 rounded-8px transition-all duration-200 w-full"
-        style={{ border: hasInput ? "2px solid var(--color-brand-blue)" : "2px solid var(--color-brand-blue-bg-2)" }}
+        ref={wrapRef}
+        className={`w-full rounded-10px p-2px${hasInput ? " ai-input-glow-wrap" : ""}`}
+        style={{ position: "relative", background: hasInput ? "transparent" : "var(--color-brand-blue-bg-2)" }}
+      >
+        {hasInput && (
+          <>
+            <div className="ai-input-glow-spread" style={glowStyle} />
+            <div className="ai-input-glow-line" style={glowStyle} />
+            <div className="ai-input-glow-blur" style={glowStyle} />
+          </>
+        )}
+        <div
+          className="ai-input-wrapper relative bg-card flex flex-col gap-4px items-center justify-center p-12px shrink-0 rounded-8px transition-all duration-200 w-full"
       >
         {/* 첨부 chip 행 — Figma 27087:3416 */}
         {attachments && attachments.length > 0 && (
@@ -164,10 +227,31 @@ export default function AiPromptInput({
           </div>
         )}
 
-        {/* textarea */}
-        <div className="flex gap-0 items-center p-2px w-full">
+        {/* textarea + ghost suggestion overlay */}
+        <div className="flex gap-0 items-center p-2px w-full" style={{ position: "relative" }}>
+          {/* ghost text — suggestion 이 있고 입력이 비어 있을 때만 보인다. */}
+          {showSuggestion && (
+            <div
+              aria-hidden
+              className="ai-input-textarea w-full text-lg tracking-default leading-normal pointer-events-none"
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                padding: "2px",
+                fontFamily: "var(--font-family-korean)",
+                fontWeight: "var(--font-weight-regular)",
+                color: "var(--color-text-disabled)",
+                whiteSpace: "pre-wrap",
+                minHeight: 20,
+              }}
+            >
+              {suggestion}
+            </div>
+          )}
           <textarea
-            placeholder={placeholder}
+            ref={textareaRef}
+            placeholder={showSuggestion ? undefined : placeholder}
             rows={1}
             value={effectiveValue}
             readOnly={!editable}
@@ -182,10 +266,12 @@ export default function AiPromptInput({
             onKeyDown={editable || onChange ? handleKey : undefined}
             className="ai-input-textarea w-full text-lg text-primary tracking-default leading-normal resize-none outline-none border-0 bg-transparent placeholder:text-disabled"
             style={{
+              position: "relative",
               fontFamily: "var(--font-family-korean)",
               fontWeight: "var(--font-weight-regular)",
               minHeight: 20,
               maxHeight: 120,
+              background: "transparent",
             }}
           />
         </div>
@@ -205,7 +291,7 @@ export default function AiPromptInput({
                 <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-invert" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
             </button>
-            {usagePill !== undefined && usagePill !== null && <UsagePill>{usagePill}</UsagePill>}
+            <TokenUsageBadge inputTokens={tokenInput} outputTokens={tokenOutput} />
           </div>
           <div className="flex gap-8px items-center shrink-0">
             <AiSendButton
@@ -215,6 +301,7 @@ export default function AiPromptInput({
             />
           </div>
         </div>
+      </div>
       </div>
 
       {/* 하단 caption */}
@@ -233,13 +320,13 @@ export default function AiPromptInput({
 }
 
 /**
- * UsagePill — 입력창 옆 알약 한 칸. 내용은 호출측이 정한다(`usagePill`).
+ * TokenUsageBadge — AI 입출력 토큰 사용량 pill (Figma 29424:19317).
  *
- * 토큰 카운트를 그리던 자리다(2026-08-26 삭제). 토큰은 개발이 보는 값이라 사용자가 그 숫자로
- * 할 수 있는 판단이 없고, 과금 단위가 토큰이 아닌 제품에서는 쓰지 않는 단위를 상시로 띄우게 된다.
- * 줄 것이 없으면 그리지 않는다.
+ * "토큰 입력 N · 출력 M" 형태. bg var(--color-surface-50) / radius 24px / px 8 / py 4 / 10px text, 숫자 bold.
+ * AiPromptInput 의 내부 sub-component.
  */
-function UsagePill({ children }: { children: ReactNode }) {
+function TokenUsageBadge({ inputTokens, outputTokens }: { inputTokens: number; outputTokens: number }) {
+  const fmt = (n: number) => n.toLocaleString("en-US");
   return (
     <div
       className="inline-flex items-center px-8px py-4px rounded-24px shrink-0"
@@ -250,7 +337,9 @@ function UsagePill({ children }: { children: ReactNode }) {
         className="text-xs leading-none text-primary whitespace-nowrap"
         style={{ fontFamily: "Inter, 'Noto Sans KR', sans-serif", fontWeight: "var(--font-weight-regular)" }}
       >
-        {children}
+        토큰 입력 <strong style={{ fontWeight: "var(--font-weight-bold)" }}>{fmt(inputTokens)}</strong>
+        {" · 출력 "}
+        <strong style={{ fontWeight: "var(--font-weight-bold)" }}>{fmt(outputTokens)}</strong>
       </span>
     </div>
   );

@@ -1953,3 +1953,98 @@ html, body, #root {
 @media (min-width: 1024px) {
   .wds-landing-header-product { display: inline-flex; }
 }
+
+  gap: var(--wds-card-gap);
+}
+
+/* ── AI 입력창 Glow Effect ─────────────────────────────────────────────────
+   입력 중일 때 4면 보더를 따라 스펙트럼 빛줄기가 회전한다.
+   conic-gradient 를 회전시켜 테두리를 따라 흐르는 효과를 만든다.
+   .ai-input-glow-wrap > .ai-input-wrapper 구조. 롤백은 래퍼 클래스 제거. */
+.ai-input-glow-wrap {
+  position: relative;
+  overflow: visible;
+}
+.ai-input-glow-wrap > .ai-input-wrapper,
+.rounded-10px > .ai-input-wrapper {
+  border: none !important;
+}
+/* 4면 회전 보더 — conic-gradient 가 테두리를 따라 돈다. */
+/* 스펙트럼 코어 — 약 10px 구간만 선명하게, 나머지는 넓게 블러로 사라진다. */
+.ai-input-glow-line {
+  position: absolute;
+  inset: -1px;
+  border-radius: 10px;
+  background: conic-gradient(
+    from var(--glow-angle, 0deg),
+    transparent 0%,
+    #296cf210 1%,
+    #3b82f630 2%,
+    #8b5cf6cc 3%,
+    #296cf2 3.5%,
+    #3b82f6cc 4%,
+    #8b5cf630 5%,
+    #296cf210 6%,
+    transparent 8%,
+    transparent 100%
+  );
+  animation: aiGlowSpin 5s linear infinite;
+  z-index: 0;
+}
+/* 넓은 블러 후광 — 코어 주변으로 넓게 퍼진다. */
+.ai-input-glow-spread {
+  position: absolute;
+  inset: -1px;
+  border-radius: 10px;
+  background: conic-gradient(
+    from var(--glow-angle, 0deg),
+    transparent 0%,
+    #296cf240 1%,
+    #3b82f640 3%,
+    #8b5cf640 5%,
+    #296cf240 6%,
+    #3b82f640 8%,
+    #8b5cf620 12%,
+    transparent 18%,
+    transparent 100%
+  );
+  animation: aiGlowSpin 5s linear infinite;
+  filter: blur(8px);
+  z-index: 0;
+}
+/* 안쪽을 파내서 보더만 남긴다 — wrapper 가 위에 올라 가린다. */
+.ai-input-glow-wrap > .ai-input-wrapper {
+  position: relative;
+  z-index: 1;
+}
+/* 외곽 블러 글로우 */
+.ai-input-glow-blur {
+  position: absolute;
+  inset: -5px;
+  border-radius: 14px;
+  background: conic-gradient(
+    from var(--glow-angle, 0deg),
+    transparent 0%,
+    #296cf2 4%,
+    #3b82f6 8%,
+    #8b5cf6 13%,
+    #296cf2 18%,
+    #3b82f6 22%,
+    transparent 27%,
+    transparent 100%
+  );
+  animation: aiGlowSpin 5s linear infinite;
+  filter: blur(16px);
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: -1;
+}
+@property --glow-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes aiGlowSpin {
+  0% { --glow-angle: 0deg; }
+  100% { --glow-angle: 360deg; }
+}
