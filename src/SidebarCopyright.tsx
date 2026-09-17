@@ -26,17 +26,30 @@
  * <SidebarCopyright year={2026} />
  * ```
  */
+import type { ReactNode } from "react";
 
 const ROBOTO = "Roboto, sans-serif";
 
-export default function SidebarCopyright({ year = 2026 }: { year?: number }) {
+export default function SidebarCopyright({
+  year = 2026,
+  text,
+}: {
+  year?: number;
+  /**
+   * 문구 전체를 갈아 끼운다. 미지정이면 `Copyright {year} WhaTap`.
+   *
+   * 저작권 주체가 다른 제품(별도 랜딩을 가진 TF 등)이 쓴다. 문구만 바꾸는 자리이므로
+   * 높이(24px)와 타이포는 그대로 둔다 — 여기가 길어지면 사이드바 높이 계산이 어긋난다.
+   */
+  text?: ReactNode;
+}) {
   return (
     <div className="flex h-24px items-center p-8px shrink-0 w-full bg-card border-r border-t border-color-var-color-border-default">
       <p
         className="text-sm text-tertiary whitespace-nowrap leading-none"
         style={{ fontFamily: ROBOTO, fontWeight: "var(--font-weight-regular)" }}
       >
-        Copyright {year} WhaTap
+        {text ?? `Copyright ${year} WhaTap`}
       </p>
     </div>
   );

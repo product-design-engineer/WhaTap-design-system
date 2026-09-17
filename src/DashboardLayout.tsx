@@ -55,6 +55,8 @@ export default function DashboardLayout({
   org,
   onOrgClick,
   hideProductRail = false,
+  footerText,
+  onLogoClick,
 }: {
   children?: ReactNode;
   /** 우측 컬럼 최상단(48px PageHeader 자리). 위젯과 같은 행이 아니라 그 위 →
@@ -85,6 +87,10 @@ export default function DashboardLayout({
   onOrgClick?: () => void;
   /** 좌측 제품 레일 숨김 — Sidebar 로 passthrough. 관리 콘솔 등 제품 네비 불필요 화면용. */
   hideProductRail?: boolean;
+  /** [[Sidebar]] 로 그대로 넘긴다 — 하단 저작권 문구 override. */
+  footerText?: ReactNode;
+  /** [[Sidebar]] 로 그대로 넘긴다 — 로고 클릭(랜딩이 따로 있는 제품에서만). */
+  onLogoClick?: () => void;
 }) {
   // 공통 정책 (feedback-widget-sidebar-collapse): 사이드바 접힘 = 위젯 강제 || 사용자 chevron 의도.
   //   위젯이 열리면 항상 collapse, 닫혔을 땐 chevron 이 소유하는 사용자 상태를 따름.
@@ -104,6 +110,8 @@ export default function DashboardLayout({
         org={org}
         onOrgClick={onOrgClick}
         hideProductRail={hideProductRail}
+        footerText={footerText}
+        onLogoClick={onLogoClick}
         menu={menu}
         collapsed={collapsed}
         onCollapsedChange={handleCollapsedChange}

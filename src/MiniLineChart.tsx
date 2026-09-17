@@ -55,6 +55,7 @@ export default function MiniLineChart({
   showTopStat = false,
   /** line/area 색상 (기본 라이브 토큰 blue) */
   color = "var(--color-chart-series-1)",
+  areaColor,
   /** Y축 및 peak 라벨에 붙는 단위 (예: "%", "K") */
   unit = "",
   /** stagger 진입 애니메이션 delay(ms). undefined면 애니메이션 없음 */
@@ -72,6 +73,14 @@ export default function MiniLineChart({
   markerAt?: number;
   showTopStat?: boolean;
   color?: string;
+  /**
+   * 선 아래 면의 색. 미지정이면 `color` 를 12% 투명도로 깐다(기본 동작).
+   *
+   * 지정하면 **그 색을 그대로** 쓴다 — 선과 면을 다른 계열로 두어야 할 때(면은 중립,
+   * 선만 강조 등)를 위한 것이다. hex 를 이어 붙여 알파를 만들지 않는다
+   * (`color + "1f"` 같은 방식은 토큰 var() 에는 통하지 않고 다크에서 깨진다).
+   */
+  areaColor?: string;
   unit?: string;
   delay?: number;
   onAiTrigger?: (ctx: { metric: string; values: number[]; unit?: string; timeRange?: string }) => void;
@@ -202,7 +211,15 @@ export default function MiniLineChart({
         >
           {/* area fill: color 는 var(--token) 일 수 있어 hex 알파(+"1f") 를 붙이면 무효가 된다
               (var(...)1f → 잘못된 색 → 회색 fallback). fillOpacity 로 ~12% 투명도를 준다. */}
-          {areaStr && <polyline points={areaStr} fill={color} fillOpacity={0.12} stroke="none" />}
+          {areaStr && (
+            <polyline
+              points={areaStr}
+              fill={areaColor ?? color}
+              /* areaColor 를 명시했으면 그 색 그대로 — 투명도까지 호출측이 정한 것으로 본다. */
+              fillOpacity={areaColor ? 1 : 0.12}
+              stroke="none"
+            />
+          )}
           <polyline
             points={polyStr}
             fill="none"

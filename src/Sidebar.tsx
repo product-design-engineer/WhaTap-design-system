@@ -48,7 +48,7 @@
  * />
  * ```
  */
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import SidebarLogoHeader from "./SidebarLogoHeader";
 import SidebarMenuItem from "./SidebarMenuItem";
 import SidebarOrgSwitcher from "./SidebarOrgSwitcher";
@@ -205,6 +205,8 @@ export default function Sidebar({
   org = DEFAULT_ORG,
   onOrgClick,
   hideProductRail = false,
+  footerText,
+  onLogoClick,
 }: {
   activeProduct?: string;
   project?: ProjectContext;
@@ -231,6 +233,13 @@ export default function Sidebar({
   onOrgClick?: () => void;
   /** 좌측 40px 제품 레일(제품 아이콘 + 하단 유틸) 숨김. 모니터링 제품이 아닌 관리 콘솔 화면용. 기본 false. */
   hideProductRail?: boolean;
+  /** 하단 저작권 문구 override — [[SidebarCopyright]] 로 넘어간다. 저작권 주체가 다른 제품용. */
+  footerText?: ReactNode;
+  /**
+   * 로고 클릭 — 주입 시에만 로고가 버튼이 된다([[SidebarLogoHeader]]).
+   * 랜딩이 따로 있는 제품에서만 준다. 제품 화면의 로고는 표지이지 이동 수단이 아니다.
+   */
+  onLogoClick?: () => void;
 }) {
   // controlled(`collapsed`) / uncontrolled(`defaultCollapsed`) 둘 다 지원 — Switch/Checkbox 패턴 동일.
   const [internalCollapsed, setInternalCollapsed] = useState(defaultCollapsed);
@@ -249,7 +258,7 @@ export default function Sidebar({
       style={{ width }}
     >
       {/* 48px 로고 헤더 — onToggle 로 min/max 인터랙션 제공 */}
-      <SidebarLogoHeader collapsed={isCollapsed} width={width} onToggle={toggleCollapsed} />
+      <SidebarLogoHeader collapsed={isCollapsed} width={width} onToggle={toggleCollapsed} onLogoClick={onLogoClick} />
 
       {/* 40px 조직 스위처 — org=null이면 숨김, collapsed면 아이콘만 */}
       {org && (
@@ -307,7 +316,7 @@ export default function Sidebar({
       </div>
 
       {/* 24px 저작권 푸터 — collapsed면 숨김 */}
-      {!isCollapsed && <SidebarCopyright />}
+      {!isCollapsed && <SidebarCopyright text={footerText} />}
     </div>
   );
 }
