@@ -239,35 +239,70 @@ function harvestMarkers(text) {
 
 /* ── barrel: 컴포넌트 이름 → 소스 파일 ────────────────────────────────────── */
 
+/**
+ * 배럴에서 `이름 → 소스파일` 과 `이름 → 이 이름을 export 한 배럴 집합` 을 함께 만든다.
+ *
+ * ⚠️ `importFrom` 을 **파일 위치**(`src/widget/` 로 시작하는가)로 계산하면 안 된다.
+ * `src/widget/` 에 살지만 widget 배럴이 export 하지 않는 컴포넌트가 13종 있었고,
+ * 카탈로그가 `@whatap/design-system/widget` 에서 가져오라고 가르치고 있었다 —
+ * 그대로 따라 쓰면 import 가 실패한다. 진실은 파일 위치가 아니라 **배럴이 무엇을 내보내는가** 다.
+ */
 function barrelMap() {
   const map = new Map();
-  for (const barrel of ["src/index.ts", "src/widget/index.ts"]) {
-    const p = join(root, barrel);
-    if (!existsSync(p)) continue;
-    const src = readFileSync(p, "utf8");
-    const base = dirname(p);
-    const re = /export\s*\{\s*default as ([A-Za-z_$][\w$]*)\s*\}\s*from\s*"(\.[^"]+)"/g;
-    let m;
-    while ((m = re.exec(src))) {
+  const exportedBy = new Map();     // 컴포넌트 이름 → Set<"root"|"widget">
+  const exportedFile = new Map();   // 소스 파일(절대경로) → Set<"root"|"widget">
+  const mark = (key, owner, sink) => {
+    if (!sink.has(key)) sink.set(key, new Set());
+    sink.get(key).add(owner);
+  };
+
+  /**
+   * 배럴 하나를 훑는다. `export * from "./x"` 는 **한 겹 더 들어간다** —
+   * 루트 배럴이 `export * from "./topology"` 로 8종을 재수출하고 있어서,
+   * 재귀하지 않으면 그것들이 "어느 배럴에도 없음"으로 잘못 잡힌다.
+   * owner 는 바깥 배럴로 유지한다(소비자가 실제로 import 하는 진입점이므로).
+   */
+  const scan = (file, owner, seen = new Set()) => {
+    if (!existsSync(file) || seen.has(file)) return;
+    seen.add(file);
+    const src = readFileSync(file, "utf8");
+    const base = dirname(file);
+    const resolve = (spec) => {
       for (const ext of [".tsx", ".ts"]) {
-        const f = join(base, m[2] + ext);
-        if (existsSync(f)) { map.set(m[1], f); break; }
+        const f = join(base, spec + ext);
+        if (existsSync(f)) return f;
       }
+      const idx = join(base, spec, "index.ts");
+      return existsSync(idx) ? idx : null;
+    };
+
+    // export { default as X } from "./X"
+    for (const m of src.matchAll(/export\s*\{\s*default as ([A-Za-z_$][\w$]*)\s*\}\s*from\s*"(\.[^"]+)"/g)) {
+      const f = resolve(m[2]);
+      mark(m[1], owner, exportedBy);
+      if (f) { if (!map.has(m[1])) map.set(m[1], f); mark(f, owner, exportedFile); }
     }
-    // 이름 있는 export (추출 Parts 다수)
-    const re2 = /export\s*\{([^}]+)\}\s*from\s*"(\.[^"]+)"/g;
-    while ((m = re2.exec(src))) {
+    // export { A, B, type C } from "./X"  (추출 Parts 다수)
+    for (const m of src.matchAll(/export\s*\{([^}]+)\}\s*from\s*"(\.[^"]+)"/g)) {
+      const f = resolve(m[2]);
+      if (f) mark(f, owner, exportedFile);
       for (const raw of m[1].split(",")) {
         const nm = raw.replace(/\btype\b/, "").trim().split(/\s+as\s+/).pop();
-        if (!nm || !/^[A-Z]/.test(nm) || map.has(nm)) continue;
-        for (const ext of [".tsx", ".ts"]) {
-          const f = join(base, m[2] + ext);
-          if (existsSync(f)) { map.set(nm, f); break; }
-        }
+        if (!nm || !/^[A-Z]/.test(nm)) continue;
+        mark(nm, owner, exportedBy);
+        if (f && !map.has(nm)) map.set(nm, f);
       }
     }
-  }
-  return map;
+    // export * from "./x" — 한 겹 재귀 (owner 유지)
+    for (const m of src.matchAll(/export\s*\*\s*from\s*"(\.[^"]+)"/g)) {
+      const f = resolve(m[1]);
+      if (f) scan(f, owner, seen);
+    }
+  };
+
+  scan(join(root, "src/index.ts"), "root");
+  scan(join(root, "src/widget/index.ts"), "widget");
+  return { map, exportedBy, exportedFile };
 }
 
 /** barrel 에 없는 컴포넌트를 위한 폴백 — 파일명이 컴포넌트명인 src 파일. */
@@ -279,7 +314,18 @@ function fileByName(name) {
 /* ── 조립 ─────────────────────────────────────────────────────────────────── */
 
 const storyFiles = walk(join(root, "stories")).filter((f) => f.endsWith(".stories.tsx"));
-const barrel = barrelMap();
+const { map: barrel, exportedBy, exportedFile } = barrelMap();
+/** 이름 → 없으면 소스파일로 되짚어 실제 진입점을 고른다. 어느 배럴도 안 내보내면 null. */
+function importEntry(name, srcFile) {
+  const owners = exportedBy.get(name) ?? (srcFile ? exportedFile.get(srcFile) : null);
+  if (!owners) return null;
+  // 위젯 배럴이 실제로 내보내면 그쪽을 가르친다 — `.`(루트) / `./widget` 분리가 의미를 갖는 자리.
+  // 루트 배럴이 위젯까지 한 번에 노출하므로 둘 다 유효하지만, AI 위젯 자산은 전용 진입점이 정본.
+  if (owners.has("widget")) return "@whatap/design-system/widget";
+  if (owners.has("root")) return "@whatap/design-system";
+  return null;
+}
+
 const components = [];
 const gaps = [];
 
@@ -327,9 +373,10 @@ for (const sf of storyFiles) {
     docsUrl: `/?path=/docs/${slugify(s.title)}--docs`,
     sourceFile: srcFile ? rel(srcFile) : null,
     storyFile: s.file,
-    importFrom: srcFile && rel(srcFile).startsWith("src/widget/")
-      ? "@whatap/design-system/widget"
-      : "@whatap/design-system",
+    // 배럴이 실제로 export 하는 진입점. 둘 다면 루트(= 위젯까지 한 번에 노출하는 배럴)를 쓴다.
+    // 이름으로 못 찾으면 **소스 파일**로 되짚는다 — 표시명과 export 이름이 다른 경우가 있다
+    // (`Primitives/Ai/Context` 의 export 는 WhaTapAiProvider·useWhaTapAi).
+    importFrom: importEntry(name, srcFile),
     // 스토리 설명이 없으면 docstring Purpose 로 채운다 — 소비 AI 에게 한 줄 요약이 늘 있게.
     summary: descIntro ?? (doc ? section(doc, "Purpose").split(/(?<=[.。])\s|\n\n/)[0].replace(/\s+/g, " ").trim() : null),
     // 소스 docstring 이 없는 합성 템플릿은 스토리 설명의 도입부가 Purpose 를 겸한다.

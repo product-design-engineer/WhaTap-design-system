@@ -1,5 +1,5 @@
-import AiSymbol from "./AiSymbol";
-import AiQuickActionChip from "./AiQuickActionChip";
+import AiSymbol from "./widget/AiSymbol";
+import AiQuickActionChip from "./widget/AiQuickActionChip";
 
 interface AiWidgetProps {
   open?: boolean;

@@ -108,7 +108,7 @@ export const Confirmation: Story = {
             description="이 작업은 되돌릴 수 없습니다. 룰에 묶인 변경 이력은 보존됩니다."
             footer={
               <>
-                <Button variant="basic" onClick={() => setOpen(false)}>
+                <Button variant="basic" tone="tertiary" onClick={() => setOpen(false)}>
                   취소
                 </Button>
                 <Button
@@ -150,7 +150,7 @@ export const FormDialog: Story = {
             description="메트릭·임계값·심각도를 조정합니다."
             footer={
               <>
-                <Button variant="basic" onClick={() => setOpen(false)}>
+                <Button variant="basic" tone="tertiary" onClick={() => setOpen(false)}>
                   취소
                 </Button>
                 <Button variant="contained" onClick={() => setOpen(false)}>
@@ -238,7 +238,7 @@ export const LongContent: Story = {
             title="변경 이력"
             description="이 룰의 30일 변경 audit log"
             footer={
-              <Button variant="basic" onClick={() => setOpen(false)}>
+              <Button variant="basic" tone="tertiary" onClick={() => setOpen(false)}>
                 닫기
               </Button>
             }

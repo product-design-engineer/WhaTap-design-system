@@ -33,12 +33,10 @@ const meta: Meta<typeof WhaTapAiWidget> = {
     actions: { description: "Landing 의 추천 액션 (string[]).", control: "object" },
     inputPlaceholder: { description: "입력창 placeholder.", control: "text" },
     showLanding: { description: "Landing 화면 노출 (messages 없을 때).", control: "boolean" },
-    tokenInput: { description: "입력 토큰 카운트 — 헤더 옆 pill.", control: "number" },
-    tokenOutput: { description: "출력 토큰 카운트.", control: "number" },
   },
   decorators: [
     (Story) => (
-      <div style={{ height: 720, position: "relative", background: "var(--color-surface-50)", display: "flex", justifyContent: "flex-end" }}>
+      <div style={{ height: 720, position: "relative", background: "var(--color-bg)", display: "flex", justifyContent: "flex-end" }}>
         <Story />
       </div>
     ),

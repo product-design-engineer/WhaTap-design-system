@@ -17,9 +17,9 @@
  *
  * ## Composition rules
  * - 드롭다운 버튼 폭 `width`(기본 230px) + 정사각 관리 버튼, 4px gap.
- * - 두 버튼 높이는 `size` — `sm`(24px, **기본**) / `md`(32px). border-divider + rounded 4 로
+ * - 두 버튼 높이는 `size` — `sm`(24px, **기본**) / `md`(32px). `--color-border-control` + `--radius-control` 로
  *   옵션바 baseline 통일 ([[LiveTimerCompact]] · [[OptionbarInstanceSelector]] 와 같은 라인).
- * - 라벨은 korean 폰트 + truncate. 색은 토큰(var(--color-border-divider) 등).
+ * - 라벨은 korean 폰트 + truncate. 색은 토큰(var(--color-border-control) 등).
  *
  * @example
  * ```tsx
@@ -31,12 +31,15 @@
  * ```
  */
 
-export type PresetSelectSize = "sm" | "md";
+export type PresetSelectSize = "sm" | "md" | "lg";
 
 /** 사이즈 스펙 — md(32px) 는 기존 값 verbatim, sm(24px) 은 한 단계 아래. */
+/* 컨트롤 공통 스케일 (feedback-control-size-scale) — sm 24 / md 28 / lg 32.
+   글자는 [[TextField]] 사다리와 같다: sm text-sm / md text-base / lg text-md. */
 const SIZE = {
-  md: { h: "h-32px", px: "px-10px", label: "text-md", caret: 14, box: "size-32px", manage: 16 },
-  sm: { h: "h-24px", px: "px-8px",  label: "text-base", caret: 12, box: "size-24px", manage: 14 },
+  lg: { h: "h-32px", px: "px-10px", label: "text-md", caret: 14, box: "size-32px", manage: 16 },
+  md: { h: "h-28px", px: "px-10px", label: "text-base", caret: 14, box: "size-28px", manage: 16 },
+  sm: { h: "h-24px", px: "px-8px",  label: "text-sm", caret: 12, box: "size-24px", manage: 14 },
 } as const;
 
 export default function PresetSelect({
@@ -60,7 +63,7 @@ export default function PresetSelect({
       <button
         type="button"
         onClick={onOpenList}
-        className={`flex items-center justify-between ${spec.h} ${spec.px} bg-card border border-color-var-color-border-divider rounded-4px cursor-pointer hover-bg-surface-100`}
+        className={`flex items-center justify-between ${spec.h} ${spec.px} bg-card border border-color-var-color-border-control rounded-control cursor-pointer hover-bg-surface-100`}
         style={{ width }}
       >
         <span
@@ -77,7 +80,7 @@ export default function PresetSelect({
         type="button"
         aria-label="프리셋 관리"
         onClick={onManage}
-        className={`flex items-center justify-center ${spec.box} bg-card border border-color-var-color-border-divider rounded-4px cursor-pointer hover-bg-surface-100`}
+        className={`flex items-center justify-center ${spec.box} bg-card border border-color-var-color-border-control rounded-control cursor-pointer hover-bg-surface-100`}
       >
         <svg width={spec.manage} height={spec.manage} viewBox="0 0 24 24" fill="var(--color-text-tertiary)">
           <path d="M2 22V2h16l4 4.051V22H2zM8 4H4v16h2v-8h12v8h2V6.873L17.164 4H16v4H8V4zm8 10H8v6h8v-6zM14 4h-4v2h4V4z" />

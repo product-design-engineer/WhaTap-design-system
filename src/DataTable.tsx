@@ -51,15 +51,42 @@ export type DataTableColumn<T> = {
   /** 고정 트랙 너비 — 정형 컬럼(No / 시각 / 상태 / 액션 등). number=px, string=CSS 길이. */
   width?: number | string;
   align?: "left" | "right" | "center";
+  /**
+   * 헤더를 눌러 이 컬럼으로 정렬할 수 있음. `sort`·`onSortChange` 와 함께 쓴다.
+   * 정렬은 표가 하지 않는다 — 어느 컬럼으로 어느 방향인지만 알리고, 실제 재정렬은 호출측 몫이다.
+   * (서버 정렬·페이지네이션과 섞일 때 표가 자기 판단으로 순서를 바꾸면 화면과 데이터가 어긋난다.)
+   */
+  sortable?: boolean;
   /** true면 Roboto numeric font (수치 컬럼) */
   numeric?: boolean;
   /** 커스텀 셀 렌더러 — render 가 있으면 key 무시 */
   render?: (row: T, idx: number) => ReactNode;
+  /**
+   * 셀이 잘렸을 때 [[Tooltip]] 으로 보여줄 **전체 값**.
+   *
+   * 미지정이면 문자열 셀은 자기 값을 그대로 쓴다. `render` 로 만든 셀(뱃지·강조가 섞인 셀)은
+   * 텍스트를 자동으로 알 수 없으므로 여기에 원문을 넘겨야 한다 — 안 넘기면 잘린 값을 확인할
+   * 방법이 사라진다.
+   *
+   * 툴팁은 **실제로 넘칠 때만** 뜬다(scrollWidth 측정). 안 잘린 셀까지 뜨면 표를 훑는 동안
+   * 툴팁이 계속 튀어나와 방해만 된다.
+   */
+  tooltip?: (row: T, idx: number) => ReactNode;
 };
+
+/** 정렬 상태 — 어느 컬럼(key)을 어느 방향으로. */
+export type DataTableSort = { key: string; dir: "asc" | "desc" };
 
 export type DataTableProps<T> = {
   columns: DataTableColumn<T>[];
   rows: T[];
+  /** 현재 정렬 상태. `sortable` 컬럼 헤더에 방향 표식이 뜬다. */
+  sort?: DataTableSort;
+  /**
+   * 정렬 변경 콜백. 같은 컬럼을 다시 누르면 방향이 뒤집혀 들어온다.
+   * 미지정이면 헤더는 눌리지 않는다(표식만 표시).
+   */
+  onSortChange?: (next: DataTableSort) => void;
   density?: "compact" | "default";
   /** 행 클릭 핸들러. 없으면 hover 효과만. */
   onRowClick?: (row: T, idx: number) => void;
@@ -76,6 +103,8 @@ export default function DataTable<T>({
   columns,
   rows,
   density = "default",
+  sort,
+  onSortChange,
   onRowClick,
   rowClassName,
 }: DataTableProps<T>) {
@@ -119,18 +148,47 @@ export default function DataTable<T>({
         className={`grid items-center bg-color-var-color-surface-50 ${tokens.rowPadding}`}
         style={{ gridTemplateColumns: gridTemplate }}
       >
-        {columns.map((c, ci) => (
-          <span
-            key={ci}
-            className={`${tokens.headerText} tracking-default leading-none truncate`}
-            style={{
-              fontFamily: "var(--font-family-korean)",
-              textAlign: colAlign(c),
-            }}
-          >
-            {c.header}
-          </span>
-        ))}
+        {columns.map((c, ci) => {
+          const active = sort?.key === c.key;
+          const clickable = !!(c.sortable && onSortChange);
+          const align = colAlign(c);
+          return (
+            <span
+              key={ci}
+              role={clickable ? "button" : undefined}
+              tabIndex={clickable ? 0 : undefined}
+              aria-sort={
+                c.sortable ? (active ? (sort!.dir === "asc" ? "ascending" : "descending") : "none") : undefined
+              }
+              onClick={
+                clickable
+                  ? () => onSortChange!({ key: c.key, dir: active && sort!.dir === "desc" ? "asc" : "desc" })
+                  : undefined
+              }
+              onKeyDown={
+                clickable
+                  ? (e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        onSortChange!({ key: c.key, dir: active && sort!.dir === "desc" ? "asc" : "desc" });
+                      }
+                    }
+                  : undefined
+              }
+              className={`${tokens.headerText} tracking-default leading-none truncate flex items-center gap-4px${
+                clickable ? " cursor-pointer hover-text-color-var-color-text-primary" : ""
+              }${active ? " text-primary" : ""}`}
+              style={{
+                fontFamily: "var(--font-family-korean)",
+                textAlign: align,
+                justifyContent: align === "right" ? "flex-end" : align === "center" ? "center" : "flex-start",
+              }}
+            >
+              {c.header}
+              {c.sortable && <SortCaret dir={active ? sort!.dir : undefined} />}
+            </span>
+          );
+        })}
       </div>
 
       {/* 데이터 행 */}
@@ -150,5 +208,34 @@ export default function DataTable<T>({
         />
       ))}
     </div>
+  );
+}
+
+/**
+ * 정렬 방향 표식 — 활성 컬럼만 진하고, 정렬 가능한 나머지는 옅게 남아 「여기도 누를 수 있다」를 말한다.
+ * 표식을 활성 컬럼에만 그리면 어느 헤더가 눌리는지 눌러 보기 전엔 알 수 없다.
+ */
+function SortCaret({ dir }: { dir?: "asc" | "desc" }) {
+  return (
+    <svg
+      width="10"
+      height="10"
+      viewBox="0 0 12 12"
+      fill="none"
+      aria-hidden
+      className="shrink-0"
+      style={{
+        transform: dir === "asc" ? "rotate(180deg)" : undefined,
+        opacity: dir ? 1 : 0.35,
+      }}
+    >
+      <path
+        d="M3 4.5 L6 7.5 L9 4.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }

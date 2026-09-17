@@ -74,6 +74,15 @@
       "inCI": true
     },
     {
+      "id": "ai-widget-boundary",
+      "name": "AI 위젯 경계",
+      "status": "auto",
+      "invariant": "카탈로그가 `Primitives/Ai/`·`Composite/Ai/` 로 분류한 컴포넌트의 소스는 `src/widget/` 트리에 있어야 하고(Shell 은 CLAUDE.md 가 두 트리를 모두 허용), 역방향으로 `src/widget/` 에 사는 컴포넌트의 스토리는 `Ai/` 하위그룹이어야 한다. 덧붙여 `components.json` 의 `importFrom` 은 **배럴이 실제로 export 하는 진입점**이어야 한다.",
+      "prevents": "카탈로그 분류와 소스 트리의 드리프트(`catalog-folders` 는 `stories/` 안만 보므로 원리적으로 볼 수 없다 — 실측 4종: AiSymbol·AiTriggerButton·AiQuickActionChip·WhaTapAiContext) · **소비 AI 가 따라 쓰면 실패하는 import 안내**(`importFrom` 을 파일 위치로 계산하던 동안 widget 배럴이 내보내지 않는 13종을 `/widget` 에서 가져오라고 가르쳤다)",
+      "command": "test (scripts/check-ai-boundary.mjs)",
+      "inCI": true
+    },
+    {
       "id": "runtime-policy-audit",
       "name": "런타임 리터럴 감사",
       "status": "auto",

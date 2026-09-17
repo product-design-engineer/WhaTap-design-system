@@ -59,6 +59,8 @@ export default function SidebarMenuItem({
   iconOnly?: boolean;
 }) {
   const hasChildren = Array.isArray(item.children);
+  /* 3단 메뉴(묶음 제목이 있는 경우) 의 화면 행은 한 단계 더 들여쓴다. */
+  const leafPad = item.children?.some((c) => c.group) ? "pl-38px" : "pl-28px";
 
   /* 펼침 상태 — 호출부가 `onToggle` 을 주면 제어 모드(펼침은 `expanded` 가 정함), 없으면 이 안에서
      갖는다. `expanded` 는 그 경우 초기값이다. 값이 뒤에 바뀌어도 사용자가 손으로 접은 것을
@@ -151,14 +153,29 @@ export default function SidebarMenuItem({
       </button>
       {isExpanded && (item.children?.length ?? 0) > 0 && (
         <div className="flex flex-col items-start shrink-0 w-full">
-          {item.children!.map((c) => (
+          {/* 묶음 제목이 하나라도 있으면 화면 행은 한 단계 더 들어간다(3단 메뉴). */}
+          {item.children!.map((c) =>
+            c.group ? (
+              /* 묶음 제목 — 누를 수 없고, 뒤따르는 형제가 이 묶음의 구성원이다. */
+              <div
+                key={c.label}
+                className="flex h-28px items-center overflow-clip pl-18px pr-8px py-4px shrink-0 w-full"
+              >
+                <p
+                  className="text-md font-medium text-tertiary tracking-default whitespace-nowrap leading-none"
+                  style={{ fontFamily: NOTO_SANS }}
+                >
+                  {c.label}
+                </p>
+              </div>
+            ) : (
             <div
               key={c.label}
               onClick={c.onClick}
               className={
                 c.active
-                  ? "flex gap-4px h-28px items-center overflow-clip pl-28px pr-8px py-4px shrink-0 w-full cursor-pointer hover-bg-surface-100"
-                  : "flex h-28px items-center overflow-clip pl-28px pr-8px py-4px shrink-0 w-full cursor-pointer hover-bg-surface-100"
+                  ? `flex gap-4px h-28px items-center overflow-clip ${leafPad} pr-8px py-4px shrink-0 w-full cursor-pointer hover-bg-surface-100`
+                  : `flex h-28px items-center overflow-clip ${leafPad} pr-8px py-4px shrink-0 w-full cursor-pointer hover-bg-surface-100`
               }
               style={c.active ? { backgroundColor: "var(--color-brand-blue-bg)" } : undefined}
             >
@@ -180,7 +197,8 @@ export default function SidebarMenuItem({
                 </div>
               )}
             </div>
-          ))}
+            )
+          )}
         </div>
       )}
     </div>

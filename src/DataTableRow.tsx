@@ -1,5 +1,6 @@
-import type { CSSProperties, ReactNode } from "react";
+import { useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { DataTableColumn } from "./DataTable";
+import Tooltip from "./Tooltip";
 
 /**
  * DataTableRow — [[DataTable]] 본문의 단일 데이터 행(row) + 셀(cell) 렌더.
@@ -86,23 +87,84 @@ export default function DataTableRow<T>({
         const content: ReactNode = c.render
           ? c.render(row, rowIndex)
           : ((row as Record<string, unknown>)[c.key] as ReactNode);
-        const style: CSSProperties = {
-          fontFamily: c.numeric
-            ? "Roboto, 'Noto Sans', sans-serif"
-            : "'Noto Sans', 'Noto Sans KR', sans-serif",
-          textAlign: colAlign(c),
-        };
+        /* 툴팁 원문: 명시 `tooltip` 우선 → 없으면 문자열 셀은 자기 값 → render 셀은 없음. */
+        const tip: ReactNode = c.tooltip
+          ? c.tooltip(row, rowIndex)
+          : typeof content === "string" || typeof content === "number"
+            ? content
+            : undefined;
         return (
-          <span
+          <Cell
             key={ci}
-            className={`${rowText} ${rowHeight} tracking-default truncate min-w-0`}
-            style={style}
-            title={typeof content === "string" ? content : undefined}
+            align={colAlign(c)}
+            numeric={c.numeric}
+            rowText={rowText}
+            rowHeight={rowHeight}
+            tip={tip}
           >
             {content}
-          </span>
+          </Cell>
         );
       })}
     </div>
+  );
+}
+
+/**
+ * 셀 하나 — 넘치면 [[Tooltip]] 으로 전체 값을 보여준다.
+ *
+ * 네이티브 `title` 을 쓰지 않는다: 등장까지 1초 이상 걸리고 위치·타이포가 제품과 다르다.
+ * 잘린 값을 확인할 유일한 수단이라 지연이 곧 기능 없음과 같다(ToolbarIconButton 과 같은 이유).
+ *
+ * `disabled` 를 pointer enter 시점에 측정한다 — 열 너비는 컨테이너 크기·density·이웃 열에 따라
+ * 바뀌므로 렌더 시점에 계산해 두면 리사이즈 후 틀린다. 측정은 hover 당 한 번뿐이다.
+ */
+function Cell({
+  children,
+  tip,
+  align,
+  numeric,
+  rowText,
+  rowHeight,
+}: {
+  children: ReactNode;
+  tip: ReactNode;
+  align: "left" | "right" | "center";
+  numeric?: boolean;
+  rowText: string;
+  rowHeight: string;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [clipped, setClipped] = useState(false);
+
+  const style: CSSProperties = {
+    fontFamily: numeric ? "Roboto, 'Noto Sans', sans-serif" : "'Noto Sans', 'Noto Sans KR', sans-serif",
+    textAlign: align,
+  };
+  const text = (
+    <span
+      ref={ref}
+      className={`${rowText} ${rowHeight} tracking-default truncate min-w-0 w-full`}
+      style={style}
+    >
+      {children}
+    </span>
+  );
+
+  /* 툴팁으로 보여줄 값 자체가 없으면 래퍼를 씌우지 않는다(빈 툴팁·불필요한 DOM 방지). */
+  if (tip == null || tip === "") return text;
+
+  return (
+    <span
+      className="min-w-0 flex"
+      onPointerEnter={() => {
+        const el = ref.current;
+        setClipped(!!el && el.scrollWidth > el.clientWidth + 1);
+      }}
+    >
+      <Tooltip content={tip} disabled={!clipped} block>
+        {text}
+      </Tooltip>
+    </span>
   );
 }

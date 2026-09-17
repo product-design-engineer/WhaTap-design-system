@@ -252,6 +252,18 @@ Soft 표면 위 텍스트는 대비가 검증된 짝 **`--color-tone-text-*`** �
 
 Soft 4색은 tone surface 와 함께 **다크 반전됩니다** — 아래 *Tone Surface* 절의 표 참조.
 
+## Neutral Solid — 중립 강조면 (`tone="tertiary"`)
+
+색 의미가 **없는** 액션(취소·닫기·나중에·더보기)에도 채워진 버튼이 필요합니다. status 원색을 쓰면 없는 의미가 생기고, `surface-*` 는 흰 글자를 받을 만큼 어둡지 않습니다. 그래서 무채색 원색을 따로 둡니다.
+
+| 토큰 | 라이트 | 다크 | 자리 |
+|---|---|---|---|
+| `--color-neutral-solid` | `#4C4C4C` | `#3A414D` | `tone="tertiary"` contained 버튼 배경 |
+| `--color-neutral-solid-deep` | `#333333` | `#4A515C` | 그 hover/pressed |
+
+- 위 전경은 **고정 흰색** — 대비 라이트 8.4:1 · 다크 10.3:1. 그래서 다크에서도 밝아지지 않고 어두운 단계를 유지합니다(밝히면 흰 글자가 깨집니다).
+- ❌ **전경색으로 쓰지 마세요.** outline/basic tertiary 의 글자·보더는 테마 반전되는 `--color-text-secondary` · `--color-border-divider` 를 씁니다 — `neutral-solid` 를 글자에 쓰면 다크에서 어두운 배경 위 어두운 글자가 됩니다.
+
 ## Tone Surface — CSS 변수로 승격됨
 
 위젯 분류/심각도 카드·배지의 배경입니다. `_tokens.ts`(`tokens.color.surface.*`)와 DESIGN.md 에는 있었지만 **CSS 변수가 없어서** 컴포넌트마다 `#ffe8e8` 같은 리터럴을 각자 복제하고 있었습니다. 이제 `--color-tone-surface-*` 로 참조하세요.

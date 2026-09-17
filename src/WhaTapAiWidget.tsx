@@ -23,7 +23,7 @@
  * - editable mode: `inputValue` 미지정이면 내부 state 로 사용자가 직접 입력, `onSubmit`
  *   은 입력값이 있을 때만 Enter(shift 제외)/전송 버튼으로 호출. `inputValue` 지정 시 readOnly 데모.
  * - `scrollSignal` 이 바뀔 때마다 본문을 부드럽게 최하단으로 자동 스크롤(메시지 추가 후 반영).
- * - 색·경계는 토큰 binding (`--color-brand-blue` / `--color-brand-blue-bg-2` 등). 토큰 pill 은 내부 TokenUsageBadge.
+ * - 색·경계는 토큰 binding (`--color-brand-blue` / `--color-brand-blue-bg-2` 등).
  * - `showLanding=true` 일 때만 인사말+칩 렌더, `messages` 는 그 아래 시나리오 스택으로 누적.
  *
  * @example
@@ -68,20 +68,26 @@ export default function WhaTapAiWidget({
   showSendCursor = false,
   onSubmit,
   inputPlaceholder = "어떤 작업을 함께 할까요?",
-  tokenInput = 3395,
-  tokenOutput = 181,
   unavailable,
+  inputCaption,
+  usagePill,
+  titleBadge,
 }: {
   open: boolean;
   onClose?: () => void;
   onNewSession?: () => void;
   onFullscreen?: () => void;
   user?: string;
+  /**
+   * 헤더 제목 「WhaTap AI」 옆에 서는 뱃지. 이 대화가 «무엇으로 나가는가» 를 상시로 말한다
+   * (재원 이름 — 무료 · plan 이름).
+   *
+   * 잔량은 여기 적지 않는다. 종류와 잔량은 다른 축이고, 잔량은 «보내는 자리»(입력창 pill)에
+   * 붙어야 뜻이 선다. 헤더에 숫자까지 넣으면 위젯 꼭대기가 과금 계기판이 된다.
+   */
+  titleBadge?: import("react").ReactNode;
   pageHighlight?: string;
   actions?: WidgetAction[];
-  /** 토큰 사용량 표시 (Figma 29424:19317) — 모델 선택기 대체 */
-  tokenInput?: number;
-  tokenOutput?: number;
   messages?: import("react").ReactNode;
   inputValue?: string;
   showLanding?: boolean;
@@ -101,6 +107,21 @@ export default function WhaTapAiWidget({
   onSubmit?: (value: string) => void;
   /** 입력창 placeholder 문구. 시나리오별 시작 prompt 안내에 사용. */
   inputPlaceholder?: string;
+  /**
+   * 입력창 아래 caption. 기본은 정확성 고지 한 줄이고, 그 줄에 «이 질문이 어떻게 나가는가» 에
+   * 해당하는 사실(범위 · 재원 따위)을 덧붙일 때만 넘긴다.
+   *
+   * 자리를 새로 만들지 않고 이 줄을 여는 이유는, 그런 사실이 붙어야 하는 곳이 «보내는 자리» 이기
+   * 때문이다. 대화 위쪽에 두면 대화가 길어질 때 위로 사라지고, 액션 칩 줄에 두면 «누르면 질문이
+   * 나간다» 는 뜻과 섞인다. 기본 고지는 지우지 말 것 — 늘 붙어 있어야 한다.
+   */
+  inputCaption?: import("react").ReactNode;
+  /**
+   * 입력창 pill 내용 교체. 주면 토큰 수 대신 이 내용이 그 자리에 선다(껍데기는 그대로).
+   * 토큰 수는 개발이 보는 값이라, 과금 단위가 토큰이 아닌 제품에서는 사용자가 그 숫자로 할 수
+   * 있는 판단이 없다. 둘을 나란히 두지 말 것 — 단위가 둘이 되면 사람이 환산을 계산한다.
+   */
+  usagePill?: import("react").ReactNode;
   /**
    * 값이 있으면 특정 사유로 AI 사용이 불가한 상태 — 랜딩/시나리오 대신
    * [[AiUnavailableNotice]] 안내를 본문에 노출하고 입력창을 비활성화합니다.
@@ -179,6 +200,29 @@ export default function WhaTapAiWidget({
               >
                 WhaTap AI
               </span>
+              {/* 재원 뱃지 — 제목 바로 옆. 그라데이션 위라 색은 흰색 계열로 고정한다.
+                  반투명 흰 배경 위 흰 글자여서 배경색을 갈아 끼우지 않아도 두 상태가 구분된다. */}
+              {titleBadge && (
+                <span
+                  data-ds-policy-ok="AI 그라데이션 헤더 위 전경 — 컬러 배경 위 고정 흰색"
+                  // raw-color-ok: AI 그라데이션 헤더 위 전경 — 컬러 배경 위 고정 흰색.
+                  className="inline-flex items-center h-18px rounded-24px text-xs text-white whitespace-nowrap shrink-0"
+                  style={{
+                    fontFamily: "var(--font-family-korean)",
+                    fontWeight: "var(--font-weight-medium)",
+                    // raw-color-ok: AI 그라데이션 헤더 위 반투명 흰 알약 — 컬러 배경 위 고정 흰색.
+                    background: "rgba(255,255,255,0.22)",
+                    /* 좌우 여백은 토큰으로 — 6px 은 4px 스케일 위에 없던 값이었다. 알약 안에
+                       글자만 있던 때는 좁아도 됐지만, 지금은 꺾쇠가 같이 들어간다. */
+                    paddingInline: "var(--space-2)",
+                    /* 제목과의 사이 — 종전 `ml-2px` 는 토큰이 아니었다. 컨테이너 `gap-4px` 에
+                       이 값이 더해져 제목 ↔ 칩 사이가 8px 이 된다. */
+                    marginLeft: "var(--space-1)",
+                  }}
+                >
+                  {titleBadge}
+                </span>
+              )}
             </div>
             <div className="flex gap-8px items-center shrink-0">
               <button
@@ -341,7 +385,8 @@ export default function WhaTapAiWidget({
                   </svg>
                 </button>
                 {/* 토큰 입출력 정보 (Figma 29424:19317) — plus 버튼 옆 pill */}
-                <TokenUsageBadge inputTokens={tokenInput} outputTokens={tokenOutput} />
+                {/* 재원 pill — 줄 것이 없으면 아무것도 그리지 않는다(빈 알약을 두지 않는다). */}
+                {usagePill !== undefined && usagePill !== null && <UsagePill>{usagePill}</UsagePill>}
               </div>
               <div className="flex gap-8px items-center shrink-0">
                 {/* 전송 버튼 — input에 텍스트가 있으면 활성(blue) */}
@@ -380,10 +425,10 @@ export default function WhaTapAiWidget({
           </div>
           <div className="flex gap-0 items-center justify-end px-0 py-4px shrink-0 w-full">
             <p
-              className="text-base text-disabled tracking-normal leading-none whitespace-nowrap"
+              className={`text-base text-disabled tracking-normal ${inputCaption ? "leading-normal text-right" : "leading-none whitespace-nowrap"}`}
               style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
             >
-              AI 응답은 정확하지 않을 수 있습니다. 중요한 결정은 반드시 확인해 주세요.
+              {inputCaption ?? "AI 응답은 정확하지 않을 수 있습니다. 중요한 결정은 반드시 확인해 주세요."}
             </p>
           </div>
         </div>
@@ -393,13 +438,16 @@ export default function WhaTapAiWidget({
 }
 
 /**
- * TokenUsageBadge — AI 입출력 토큰 사용량 pill (Figma 29424:19317).
+ * UsagePill — 입력창 옆 알약 한 칸. 「이 질문이 어떻게 나가는가」 를 말한다.
  *
- * "토큰 입력 3,395 · 출력 181" 형태. bg var(--color-surface-50) / radius 24px / px 8 / py 4 / 10px text,
- * 숫자만 bold. 모델 선택기 (Claude Opus 4) 자리에 대체 표시.
+ * 2026-08-26 에 토큰 카운트(「토큰 입력 3,395 · 출력 181」)를 지웠다. 그 숫자는 개발이 보는
+ * 값이라 사용자가 그것으로 할 수 있는 판단이 없었고, 과금 단위가 토큰이 아닌 제품에서는 화면이
+ * 쓰지 않는 단위를 상시로 띄우고 있는 셈이었다. 알약 껍데기만 남기고 내용은 호출측이 정한다
+ * (`usagePill`) — 재원 이름 · 남은 질문 횟수처럼 그 화면의 단위로 적는 자리다.
+ *
+ * 줄 것이 없으면 이 알약 자체를 그리지 않는다. 빈 알약은 「무언가 있어야 하는데 비었다」 로 읽힌다.
  */
-function TokenUsageBadge({ inputTokens, outputTokens }: { inputTokens: number; outputTokens: number }) {
-  const fmt = (n: number) => n.toLocaleString("en-US");
+function UsagePill({ children }: { children: import("react").ReactNode }) {
   return (
     <div
       className="inline-flex items-center px-8px py-4px rounded-24px shrink-0"
@@ -410,8 +458,7 @@ function TokenUsageBadge({ inputTokens, outputTokens }: { inputTokens: number; o
         className="text-xs leading-none text-primary whitespace-nowrap"
         style={{ fontFamily: "var(--font-family-korean-inter)", fontWeight: "var(--font-weight-regular)" }}
       >
-        토큰 입력 <strong style={{ fontWeight: "var(--font-weight-bold)" }}>{fmt(inputTokens)}</strong> · 출력{" "}
-        <strong style={{ fontWeight: "var(--font-weight-bold)" }}>{fmt(outputTokens)}</strong>
+        {children}
       </span>
     </div>
   );

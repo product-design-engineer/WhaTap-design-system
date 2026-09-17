@@ -1,5 +1,5 @@
 {
-  "_comment": "3-Layer 의존 방향 기존 위반 동결선. 신규는 차단되고 이 목록은 줄일 수만 있다. 해소 후 `node scripts/check-layer-deps.mjs --update` 로 갱신.",
+  "_comment": "3-Layer 의존 방향 기존 위반 동결선. 신규는 차단되고 이 목록은 줄일 수만 있다. 해소 후 `node scripts/check-layer-deps.mjs --update` 로 갱신. 2026-09-11 — Product-prototype 사본에서 이관한 CardHead·InstanceSelectPanel 의 Tabs import 2건을 승인받아 손으로 추가했다(--update 는 늘리는 방향을 거부한다). 사본에는 이 게이트가 없어 드러나지 않았을 뿐 이관 전부터 있던 구조이고, 이미 동결된 FilterBar -> FilterDropdown 과 같은 모양이다. 공개 API 를 깨지 않기 위해 재구조화 대신 동결을 택했다 — 「Composite 끼리 import 금지」 규칙 자체의 결정은 CLAUDE.md 의 미해결 항목으로 남아 있다.",
   "primitives-primitives": [
     "src/BottomRailItem.tsx -> src/Tooltip.tsx",
     "src/OptionbarValueDisplay.tsx -> src/Chip.tsx",
@@ -24,9 +24,11 @@
     "src/widget/TimelineStepItem.tsx -> src/widget/AiStepsTimeline.tsx"
   ],
   "composite-composite": [
+    "src/CardHead.tsx -> src/Tabs.tsx",
     "src/FilterBar.tsx -> src/FilterChipItem.tsx",
     "src/FilterBar.tsx -> src/FilterDropdown.tsx",
     "src/FilterDropdown.tsx -> src/FilterDropdownOptionItem.tsx",
+    "src/InstanceSelectPanel.tsx -> src/Tabs.tsx",
     "src/widget/AiCriteriaSelection.tsx -> src/widget/CriteriaOptionButton.tsx",
     "src/widget/AiDashboardProposal.tsx -> src/widget/ProposalSection.tsx"
   ]

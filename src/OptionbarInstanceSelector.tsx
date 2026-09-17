@@ -17,7 +17,7 @@
  * - 일반 텍스트/검색 입력 → [[TextField]].
  *
  * ## Composition rules
- * - 폭 `width`(기본 180px), minHeight 은 `size` 로 결정(sm 24px 기본 / md 32px), 1px border-divider + rounded 2.
+ * - 폭은 `width`(기본 180px) 또는 `fullWidth`(부모 폭 채우기). minHeight 은 `size` 로 결정(sm 24 / md 28 / lg 32), 1px `--color-border-control` + `--radius-control` (컨트롤 공통).
  * - `sm` 은 padding·dot·chevron·라벨 타이포가 함께 내려가 32px 과 같은 비율을 유지
  *   ([[LiveTimerCompact]] `size="sm"` 과 같은 24px 라인).
  * - status → dot 색은 `STATUS_COLOR` 매핑(ok #00C853 / warn·error·idle 토큰) 고정.
@@ -37,12 +37,15 @@
  * ```
  */
 export type InstanceStatus = "ok" | "warn" | "error" | "idle";
-export type OptionbarInstanceSelectorSize = "sm" | "md";
+export type OptionbarInstanceSelectorSize = "sm" | "md" | "lg";
 
 /** 사이즈 스펙 — md(32px) 는 기존 값 verbatim, sm(24px) 은 한 단계 아래. */
+/* 컨트롤 공통 스케일 (feedback-control-size-scale) — sm 24 / md 28 / lg 32.
+   글자는 [[TextField]] 사다리와 같다: sm text-sm / md text-base / lg text-md. */
 const SIZE = {
-  md: { minHeight: 32, padding: "5px 4px 5px 8px", dot: "size-8px", label: "text-md", chevronBox: 20, chevron: 16 },
-  sm: { minHeight: 24, padding: "3px 2px 3px 6px", dot: "size-6px", label: "text-base", chevronBox: 16, chevron: 14 },
+  lg: { minHeight: 32, padding: "5px 4px 5px 8px", dot: "size-8px", label: "text-md", chevronBox: 20, chevron: 16 },
+  md: { minHeight: 28, padding: "4px 4px 4px 8px", dot: "size-8px", label: "text-base", chevronBox: 18, chevron: 16 },
+  sm: { minHeight: 24, padding: "3px 2px 3px 6px", dot: "size-6px", label: "text-sm", chevronBox: 16, chevron: 14 },
 } as const;
 
 const STATUS_COLOR: Record<InstanceStatus, string> = {
@@ -55,6 +58,7 @@ const STATUS_COLOR: Record<InstanceStatus, string> = {
 export default function OptionbarInstanceSelector({
   title = "인스턴스",
   width = 180,
+  fullWidth = false,
   label,
   status = "ok",
   open = false,
@@ -62,7 +66,13 @@ export default function OptionbarInstanceSelector({
   size = "sm",
 }: {
   title?: string;
+  /** 고정 폭(px). `fullWidth` 가 참이면 무시된다. */
   width?: number;
+  /**
+   * 부모 폭 채우기 — [[TextField]]·[[Select]] `fullWidth` 와 같은 뜻.
+   * 옵션바처럼 폭이 정해진 자리는 `width`, 패널 안에서 줄을 채워야 하는 자리는 이쪽.
+   */
+  fullWidth?: boolean;
   /** 선택된 인스턴스 라벨 (예: "DMX-3-12-949") */
   label: string;
   status?: InstanceStatus;
@@ -73,7 +83,7 @@ export default function OptionbarInstanceSelector({
 }) {
   const spec = SIZE[size];
   return (
-    <div className="flex flex-col gap-6px">
+    <div className={`flex flex-col gap-6px${fullWidth ? " w-full" : ""}`}>
       {title && (
         <div
           className="text-base font-bold text-primary tracking-default leading-none"
@@ -82,11 +92,11 @@ export default function OptionbarInstanceSelector({
           {title}
         </div>
       )}
-      <div style={{ width, position: "relative" }}>
+      <div style={{ width: fullWidth ? "100%" : width, position: "relative" }}>
         <button
           type="button"
           onClick={onToggle}
-          className="flex items-center justify-between w-full bg-card border border-color-var-color-border-divider rounded-2px cursor-pointer hover-opacity-70 transition-shadow"
+          className="flex items-center justify-between w-full bg-card border border-color-var-color-border-control rounded-control cursor-pointer hover-opacity-70 transition-shadow"
           style={{
             minHeight: spec.minHeight,
             padding: spec.padding,

@@ -7,9 +7,11 @@
  * 48px 높이 invariant 유지. 좌측 타이틀 + 중앙 inline prompt(max 480px) + 우측 chrome(고객지원/벨/아바타).
  *
  * ## 차이 (vs PageHeader)
- * - ❌ AiAssistantButton (WhaTap AI 토글) — 제거
  * - ✅ AiInlinePrompt — 중앙, flex-grow + max-w-[480px]
- * - 좌측 그룹: Title + Docs — Docs 는 Title 바로 우측에 인접 배치
+ * - ⚖️ AiAssistantButton (WhaTap AI 토글) — `onAiToggle` 주입 시에만 렌더(기본 없음).
+ *      실제 제품 헤더(액티브 트랜잭션 등)는 **토글 pill 과 prompt 를 함께** 둔다:
+ *      prompt 는 "새로 묻기", pill 은 "이미 열린 위젯 닫기/다시 열기" 라 서로 대체되지 않는다.
+ * - 좌측 그룹: Title + (AI pill) + Docs — Docs 는 Title 바로 우측에 인접 배치
  * - 우측 chrome: 고객지원 / 🔔 / Avatar — Docs 제외, 유지
  *
  * ## When to use
@@ -37,6 +39,7 @@
 import AiInlinePrompt, {
   type AiPromptSuggestion,
 } from "./widget/AiInlinePrompt";
+import AiAssistantButton from "./widget/AiAssistantButton";
 import HeaderPillButton from "./HeaderPillButton";
 import { IcDocs, IcSupport } from "./icons/HeaderIcons";
 
@@ -59,6 +62,10 @@ export type PageHeaderAiInlineProps = {
   onPromptSelectSuggestion?: (s: AiPromptSuggestion) => void;
   /** Storybook / 시연용 — 마운트 시 dropdown 강제 펼침. */
   promptDefaultOpen?: boolean;
+  /** WhaTap AI 토글 pill 활성 상태. `onAiToggle` 없이는 pill 자체가 렌더되지 않는다. */
+  aiActive?: boolean;
+  /** WhaTap AI 토글 pill 클릭 — 주입 시에만 pill 이 나타난다(미주입이면 기존 prompt-only 헤더). */
+  onAiToggle?: () => void;
 };
 
 export default function PageHeaderAiInline({
@@ -71,6 +78,8 @@ export default function PageHeaderAiInline({
   onPromptSubmit,
   onPromptSelectSuggestion,
   promptDefaultOpen = false,
+  aiActive,
+  onAiToggle,
 }: PageHeaderAiInlineProps) {
   return (
     <div
@@ -89,7 +98,10 @@ export default function PageHeaderAiInline({
         >
           {title}
         </p>
-        <HeaderPillButton size="sm" icon={<IcDocs />}>Docs</HeaderPillButton>
+        <div className="flex items-center gap-8px shrink-0">
+          {onAiToggle && <AiAssistantButton size="sm" aiActive={aiActive} onClick={onAiToggle} />}
+          <HeaderPillButton size="sm" icon={<IcDocs />}>Docs</HeaderPillButton>
+        </div>
       </div>
 
       {/* 중앙: inline prompt (flex-grow + max/min-width cap, 좌측 타이틀·우측 chrome 잠식 방지) */}

@@ -15,7 +15,7 @@
  * │                                                                  │
  * │ <textarea>  placeholder 또는 입력 텍스트                         │
  * │                                                                  │
- * │ [+ attach] [토큰 입력 N · 출력 M]              [⬆ AiSendButton] │
+ * │ [+ attach] [usagePill]                        [⬆ AiSendButton] │
  * └────────────────────────────────────────────────────────────────┘
  * AI 응답은 정확하지 않을 수 있습니다. 중요한 결정은 반드시 확인해 주세요.  ← 하단 caption
  * ```
@@ -34,7 +34,8 @@
  * - 시연 시나리오에서 placeholder 만 보여주려면 controlled 로 빈 문자열 고정 + readOnly 효과.
  *
  * ## Composition rules
- * - 토큰 pill (`tokenInput` / `tokenOutput`) 는 [[TokenUsageBadge]] (Figma 29424:19317) — pill 형 inline.
+ * - 입력창 옆 알약은 [[UsagePill]] — 내용은 `usagePill` 로 호출측이 정한다(재원 이름 · 남은 질문
+ *   횟수 따위). 주지 않으면 알약 자체가 서지 않는다. 토큰 카운트를 그리던 자리다(2026-08-26 삭제).
  * - 송신 버튼은 [[AiSendButton]] (24×24 squared) — input 텍스트 있으면 활성 자동 전환.
  * - 첨부 chip 행은 `attachments` prop 있을 때만 노출. mime 미지정 시 "CSV" 로 fallback.
  * - 캡션 "AI 응답은 정확하지 않을 수 있습니다…" 는 prototype 전역 정책 — 임의로 제거하지 말 것.
@@ -47,8 +48,7 @@
  *   onChange={setText}
  *   onSubmit={(v) => sendToAi(v)}
  *   placeholder="어떤 작업을 함께 할까요?"
- *   tokenInput={3395}
- *   tokenOutput={181}
+ *   usagePill={<>남은 질문 약 <strong>12회</strong></>}
  * />
  * ```
  */
@@ -73,10 +73,15 @@ export type AiPromptInputProps = {
   placeholder?: string;
   /** 입력 영역 위에 노출할 첨부 chip. */
   attachments?: AiPromptAttachment[];
-  /** 토큰 입력 카운트 (Figma 29424:19317 pill). */
-  tokenInput?: number;
-  /** 토큰 출력 카운트. */
-  tokenOutput?: number;
+  /**
+   * pill 내용 교체. 주면 토큰 수 대신 이 내용이 그 자리에 선다(껍데기는 그대로).
+   *
+   * 토큰 수는 «개발이 보는 값» 이다. 과금 단위가 토큰이 아닌 제품에서는 사용자가 그 숫자로
+   * 할 수 있는 판단이 없다. 그 자리에 «이 질문이 무엇으로 나가는가»(재원 · 잔량)를 세우면
+   * 같은 칸이 사용자에게 쓸모를 갖는다. 둘을 나란히 두지 말 것 — 단위가 둘이 되는 순간
+   * 사람이 환산을 계산하기 시작한다.
+   */
+  usagePill?: ReactNode;
   /** 송신 버튼 위에 시연용 자동 클릭 ripple 표시. */
   showSendCursor?: boolean;
   /** 송신 버튼 클릭에 사용자 정의 핸들러 (시연용 onClick 직접 트리거). 없으면 textarea value 로 onSubmit. */
@@ -97,10 +102,9 @@ export default function AiPromptInput({
   onSubmit,
   placeholder = "어떤 작업을 함께 할까요?",
   attachments,
-  tokenInput = 3395,
-  tokenOutput = 181,
   showSendCursor = false,
   onSendClick,
+  usagePill,
   caption = DEFAULT_CAPTION,
   onAttachClick,
   disabled = false,
@@ -201,7 +205,7 @@ export default function AiPromptInput({
                 <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-invert" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
             </button>
-            <TokenUsageBadge inputTokens={tokenInput} outputTokens={tokenOutput} />
+            {usagePill !== undefined && usagePill !== null && <UsagePill>{usagePill}</UsagePill>}
           </div>
           <div className="flex gap-8px items-center shrink-0">
             <AiSendButton
@@ -229,13 +233,13 @@ export default function AiPromptInput({
 }
 
 /**
- * TokenUsageBadge — AI 입출력 토큰 사용량 pill (Figma 29424:19317).
+ * UsagePill — 입력창 옆 알약 한 칸. 내용은 호출측이 정한다(`usagePill`).
  *
- * "토큰 입력 N · 출력 M" 형태. bg var(--color-surface-50) / radius 24px / px 8 / py 4 / 10px text, 숫자 bold.
- * AiPromptInput 의 내부 sub-component.
+ * 토큰 카운트를 그리던 자리다(2026-08-26 삭제). 토큰은 개발이 보는 값이라 사용자가 그 숫자로
+ * 할 수 있는 판단이 없고, 과금 단위가 토큰이 아닌 제품에서는 쓰지 않는 단위를 상시로 띄우게 된다.
+ * 줄 것이 없으면 그리지 않는다.
  */
-function TokenUsageBadge({ inputTokens, outputTokens }: { inputTokens: number; outputTokens: number }) {
-  const fmt = (n: number) => n.toLocaleString("en-US");
+function UsagePill({ children }: { children: ReactNode }) {
   return (
     <div
       className="inline-flex items-center px-8px py-4px rounded-24px shrink-0"
@@ -246,9 +250,7 @@ function TokenUsageBadge({ inputTokens, outputTokens }: { inputTokens: number; o
         className="text-xs leading-none text-primary whitespace-nowrap"
         style={{ fontFamily: "Inter, 'Noto Sans KR', sans-serif", fontWeight: "var(--font-weight-regular)" }}
       >
-        토큰 입력 <strong style={{ fontWeight: "var(--font-weight-bold)" }}>{fmt(inputTokens)}</strong>
-        {" · 출력 "}
-        <strong style={{ fontWeight: "var(--font-weight-bold)" }}>{fmt(outputTokens)}</strong>
+        {children}
       </span>
     </div>
   );
