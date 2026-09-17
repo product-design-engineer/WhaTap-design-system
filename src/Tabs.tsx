@@ -8,6 +8,9 @@
  * ## When to use
  * - 페이지 안 본문 섹션 전환 (large variant — 룰 편집기·인시던트 상세)
  * - 작은 토글 그룹 (segmented variant — 시간 단위·정렬 기준)
+ * - **카드 안 뷰 전환** (segmented variant — [[CardHead]] 의 지표군 탭 등). 카드 안은 페이지
+ *   섹션이 아니다. `large` 의 밑줄은 컨테이너 폭을 가로질러야 뜻을 갖는데, 카드 머리 한 줄에
+ *   두면 줄 가운데 토막으로 남아 끝나다 만 구분선처럼 읽힌다.
  *
  * ## When NOT to use
  * - 글로벌 라우팅 → `Sidebar` + react-router
@@ -23,8 +26,8 @@
  * ## variant 비교
  * | variant     | 모양                                              | 사용 |
  * |-------------|---------------------------------------------------|------|
- * | `large`     | 라벨 + 하단 underline (활성), 라벨 사이 여백 큼   | 페이지 본문 섹션 |
- * | `segmented` | 둥근 박스 안 segment, 활성 = 흰 배경 + 그림자     | 시간 단위 등 compact |
+ * | `large`     | 라벨 + 하단 underline (활성), 라벨 사이 여백 큼   | 페이지 본문 섹션 — 밑줄이 컨테이너를 가로지를 때만 |
+ * | `segmented` | 둥근 박스 안 segment, 활성 = 흰 배경 + 그림자     | 시간 단위 등 compact · **카드 안 뷰 전환** |
  *
  * @example
  * ```tsx
@@ -48,7 +51,7 @@ import { useId, useRef, type KeyboardEvent, type ReactNode } from "react";
 import TabButton from "./TabButton";
 
 export type TabsVariant = "large" | "segmented";
-export type TabsSize = "sm" | "md" | "lg";
+export type TabsSize = "sm" | "md" | "lg" | "xl";
 
 export type TabsItem = {
   /** 고유 식별자 — onChange 가 받는 값. */
@@ -80,10 +83,13 @@ export type TabsProps = {
   className?: string;
 };
 
+/* 컨트롤 공통 스케일 (feedback-control-size-scale) — sm 24 / md 28 / lg 32 / xl 40.
+   같은 줄에 서는 TextField·Select·DatePicker 와 이름이 같은 높이를 가리킨다. */
 const SIZE = {
   sm: { h: 24, padX: 10, gap: 4, text: "text-sm" },
-  md: { h: 32, padX: 14, gap: 6, text: "text-base" },
-  lg: { h: 40, padX: 18, gap: 8, text: "text-md" },
+  md: { h: 28, padX: 12, gap: 6, text: "text-base" },
+  lg: { h: 32, padX: 14, gap: 6, text: "text-base" },
+  xl: { h: 40, padX: 18, gap: 8, text: "text-md" },
 } as const;
 
 export default function Tabs({
@@ -91,7 +97,7 @@ export default function Tabs({
   value,
   onChange,
   variant = "large",
-  size = "md",
+  size = "lg",
   fullWidth = false,
   "aria-label": ariaLabel,
   className = "",

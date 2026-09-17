@@ -42,21 +42,27 @@ const NOTO_LIGHT = "'Noto Sans', sans-serif";
 export default function SidebarProjectSwitcher({
   project,
   collapsed = false,
+  onClick,
 }: {
   project: ProjectContext;
   /** true면 부모 폭 40px 높이 행 — 제품 아이콘만 중앙 표시. */
   collapsed?: boolean;
+  /**
+   * 스위처를 눌렀을 때. 이벤트를 그대로 넘긴다 — 호출측이 `currentTarget` 의 위치를 재서
+   * 목록 패널을 그 자리에 띄우는 일이 흔하다(앵커 계산은 DS 가 아니라 화면의 몫이다).
+   */
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
   if (collapsed) {
     return project.productIcon ? (
-      <button title={project.projectLabel} className="flex items-center justify-center shrink-0 h-40px w-full cursor-pointer bg-card border-r border-b border-color-var-color-border-default">
+      <button type="button" onClick={onClick} title={project.projectLabel} className="flex items-center justify-center shrink-0 h-40px w-full cursor-pointer bg-card border-r border-b border-color-var-color-border-default">
         <img alt={project.projectLabel} className="size-24px" src={icon(project.productIcon)} />
       </button>
     ) : null;
   }
 
   return (
-    <button className="flex items-start shrink-0 cursor-pointer">
+    <button type="button" onClick={onClick} className="flex items-start shrink-0 cursor-pointer">
       <div className="flex h-40px items-center justify-between pr-8px w-240px bg-card border-b border-r border-color-var-color-border-default">
         {project.productIcon ? (
           <div className="flex items-center justify-center shrink-0 size-40px">
@@ -67,22 +73,25 @@ export default function SidebarProjectSwitcher({
         )}
         {/* 2줄(그룹명/프로젝트명) 세로 gap 0 — 행 높이 40px 안에서 두 줄을 붙여 배치 */}
         <div className="flex flex-1 flex-col gap-0 items-start justify-center min-w-0 leading-none text-left whitespace-nowrap">
-          <div className="flex items-center gap-4px w-full min-w-0">
-            {project.groupBadge && (
-              <span
-                className="shrink-0 inline-flex items-center h-16px px-4px rounded-4px text-xs font-bold whitespace-nowrap bg-var-color-brand-blue-bg text-color-var-color-brand-blue"
-                style={{ fontFamily: NOTO_SANS }}
+          {/* 그룹 계층이 없는 제품은 이 줄을 아예 그리지 않는다 — 빈 회색 줄은 「이름이 비었다」로 읽힌다. */}
+          {(project.groupLabel || project.groupBadge) && (
+            <div className="flex items-center gap-4px w-full min-w-0">
+              {project.groupBadge && (
+                <span
+                  className="shrink-0 inline-flex items-center h-16px px-4px rounded-4px text-xs font-bold whitespace-nowrap bg-var-color-brand-blue-bg text-color-var-color-brand-blue"
+                  style={{ fontFamily: NOTO_SANS }}
+                >
+                  {project.groupBadge}
+                </span>
+              )}
+              <p
+                className="text-base text-secondary overflow-hidden text-ellipsis min-w-0 tracking-normal"
+                style={{ fontFamily: NOTO_LIGHT, fontWeight: "var(--font-weight-regular)" }}
               >
-                {project.groupBadge}
-              </span>
-            )}
-            <p
-              className="text-base text-secondary overflow-hidden text-ellipsis min-w-0 tracking-normal"
-              style={{ fontFamily: NOTO_LIGHT, fontWeight: "var(--font-weight-regular)" }}
-            >
-              {project.groupLabel}
-            </p>
-          </div>
+                {project.groupLabel}
+              </p>
+            </div>
+          )}
           <div className="flex items-center gap-4px w-full min-w-0">
             {project.projectBadge && (
               <span

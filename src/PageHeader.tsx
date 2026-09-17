@@ -47,6 +47,7 @@ import HeaderPillButton from "./HeaderPillButton";
  */
 const HEADER_CONTROL_SIZE = "sm" as const;
 import { IcDocs, IcSupport } from "./icons/HeaderIcons";
+import AiInlinePrompt, { type AiPromptSuggestion } from "./widget/AiInlinePrompt";
 import PageHeaderNotificationItem from "./PageHeaderNotificationItem";
 import PageHeaderProfileMenuItem from "./PageHeaderProfileMenuItem";
 
@@ -58,6 +59,14 @@ export default function PageHeader({
   aiActive = false,
   onAiToggle,
   hideAi = false,
+  hideDocs = false,
+  hideSupport = false,
+  aiPrompt = false,
+  aiPromptPlaceholder,
+  aiPromptPlaceholders,
+  aiPromptSuggestions,
+  onAiPromptSubmit,
+  onAiPromptSelectSuggestion,
   profileMenu,
   roleBadge,
   notifications,
@@ -73,6 +82,36 @@ export default function PageHeader({
    * 지금 하는 대화가 어느 쪽인지 알 수 없어진다. 위젯을 여는 화면에서는 켜지 않는다.
    */
   hideAi?: boolean;
+  /**
+   * Docs 버튼을 숨긴다. **기본 false — 제품 화면에서는 끄지 않는다.**
+   *
+   * 48px 헤더의 구성(타이틀 · AI 진입점 · Docs · 고객지원 · 알림 · 아바타)은 제품 화면에서
+   * **불변**이다(소비앱 정책). 이 스위치는 문서 체계가 아예 없는 화면 — 별도 랜딩을 가진
+   * 제품(URL 모니터링 등)의 셸 — 을 위한 것이다. 「이 화면엔 지금 문서가 없으니 잠깐 끄자」는
+   * 쓰임이 아니다. 그렇게 쓰면 같은 제품 안에서 헤더가 화면마다 달라진다.
+   */
+  hideDocs?: boolean;
+  /** 고객지원 버튼을 숨긴다. 기준은 `hideDocs` 와 같다 — 제품 화면에서는 끄지 않는다. */
+  hideSupport?: boolean;
+  /**
+   * 헤더에 [[AiInlinePrompt]] 를 **직접** 얹는다(1-step 입력). 기본 false.
+   *
+   * `hideAi`(토글 pill 숨김)와 짝이다 — 본문이 대화인 화면이 아니라 **헤더가 유일한 AI
+   * 진입점**인 제품에서, 버튼을 눌러 위젯을 여는 2-step 대신 바로 묻게 한다.
+   * pill(`onAiToggle`)과 함께 켜지 않는다: 진입점이 둘로 보이면 지금 하는 말이 어디로
+   * 가는지 모호해진다.
+   */
+  aiPrompt?: boolean;
+  /** `aiPrompt` 의 placeholder. 정적 1문장. */
+  aiPromptPlaceholder?: string;
+  /** `aiPrompt` 의 롤링 placeholder — 제품별 핵심 prompt 배열. 입력이 비면 순환, 입력 시 정지. */
+  aiPromptPlaceholders?: string[];
+  /** `aiPrompt` 의 제안 칩. focus 시 floating dropdown 으로 뜬다. */
+  aiPromptSuggestions?: AiPromptSuggestion[];
+  /** `aiPrompt` 송신. */
+  onAiPromptSubmit?: (v: string) => void;
+  /** `aiPrompt` 제안 칩 선택. */
+  onAiPromptSelectSuggestion?: (s: AiPromptSuggestion) => void;
   /** 우상단 아바타 클릭 시 드롭다운 메뉴(예: 엔터프라이즈 관리). 미지정이면 정적 아바타. */
   profileMenu?: ProfileMenuItem[];
   /** 프로필(아바타) 드롭다운 헤더에 표시할 역할(예: "OWNER"). 미지정이면 헤더 숨김. */
@@ -101,9 +140,28 @@ export default function PageHeader({
         </p>
         <div className="flex items-center gap-8px">
           {!hideAi && <AiAssistantButton size={HEADER_CONTROL_SIZE} aiActive={aiActive} onClick={onAiToggle} />}
-          <HeaderPillButton size={HEADER_CONTROL_SIZE} icon={<IcDocs />}>Docs</HeaderPillButton>
+          {!hideDocs && (
+            <HeaderPillButton size={HEADER_CONTROL_SIZE} icon={<IcDocs />}>Docs</HeaderPillButton>
+          )}
         </div>
       </div>
+
+      {/* 가운데: AI 인라인 프롬프트 — `aiPrompt` 일 때만. 헤더가 유일한 AI 진입점인 제품에서
+          2-step(버튼 → 위젯) 대신 바로 묻게 한다. 좌우 그룹 사이를 flex-1 로 채우되 폭을
+          묶어 둔다 — 타이틀이 길어져도 입력이 밀려 찌그러지지 않는다. */}
+      {aiPrompt && (
+        <div className="flex-1 flex justify-center min-w-0" style={{ paddingInline: 24 }}>
+          <div className="w-full" style={{ maxWidth: 520 }}>
+            <AiInlinePrompt
+              placeholder={aiPromptPlaceholder}
+              rollingPlaceholders={aiPromptPlaceholders}
+              suggestions={aiPromptSuggestions}
+              onSubmit={onAiPromptSubmit}
+              onSelectSuggestion={onAiPromptSelectSuggestion}
+            />
+          </div>
+        </div>
+      )}
 
       {/* 우측: 고객지원 + 알림 + 아바타 */}
       <div className="flex items-center gap-16px h-full shrink-0">
@@ -164,7 +222,7 @@ export default function PageHeader({
                 </defs>
                 <circle cx="12" cy="12" r="12" fill="url(#avatar-grad)" />
                 {/* raw-color-ok: 그라데이션 아바타 위 이니셜 — 컬러 위 고정 흰색. */}
-                <text x="12" y="17" textAnchor="middle" fontSize="13px" fontWeight="700" fill="#fff" fontFamily="Roboto, sans-serif">S</text>
+                <text x="12" y="17" textAnchor="middle" fontSize="13px" fontWeight="700" data-ds-policy-ok="그라데이션 아바타 위 이니셜 — 컬러 위 고정 흰색" fill="#fff" fontFamily="Roboto, sans-serif">S</text>
               </svg>
             </button>
             {profileMenu && profileMenu.length > 0 && profileOpen && (

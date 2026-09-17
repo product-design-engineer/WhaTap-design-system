@@ -37,6 +37,7 @@ export default function SidebarLogoHeader({
   collapsed = false,
   width = 240,
   onToggle,
+  onLogoClick,
 }: {
   /** true면 심볼(24px)만, false면 풀 로고(126×24). */
   collapsed?: boolean;
@@ -44,6 +45,14 @@ export default function SidebarLogoHeader({
   width?: number;
   /** 접기/펴기 토글 핸들러. 주입 시 헤더에 사이드바(패널) 토글 버튼을 렌더(미주입 시 로고 전용). */
   onToggle?: () => void;
+  /**
+   * 로고를 눌렀을 때. 주입하면 로고가 **버튼이 된다**(접근성 이름 「WhaTap 홈으로」).
+   *
+   * 미주입이 기본이다 — 제품 화면에서 로고는 「지금 어느 제품인가」를 말하는 표지이지
+   * 이동 수단이 아니다. 누를 수 있게 해 두면 사이드바 최상단에 «아무 데도 안 가는 버튼»이
+   * 하나 생긴다. 랜딩이 따로 있는 제품(URL 모니터링 등)에서만 준다.
+   */
+  onLogoClick?: () => void;
 }) {
   const toggleButton = onToggle ? (
     <button
@@ -63,6 +72,12 @@ export default function SidebarLogoHeader({
     </button>
   ) : null;
 
+  const logo = collapsed ? (
+    <img alt="WhaTap" src={icon("whatap-symbol.svg")} style={{ width: 24, height: 24 }} />
+  ) : (
+    <img alt="WhaTap" src={icon("whatap-logo.svg")} style={{ width: 126, height: 24 }} />
+  );
+
   return (
     <div
       className="flex items-center h-48px box-border shrink-0 bg-card border-r border-b border-color-var-color-border-default"
@@ -73,18 +88,19 @@ export default function SidebarLogoHeader({
         gap: collapsed ? 8 : 0,
       }}
     >
-      {collapsed ? (
-        <img
-          alt="WhaTap"
-          src={icon("whatap-symbol.svg")}
-          style={{ width: 24, height: 24 }}
-        />
+      {/* onLogoClick 이 있으면 로고를 버튼으로 감싼다 — 없으면 그냥 그림이다(누를 수 없는 표지). */}
+      {onLogoClick ? (
+        <button
+          type="button"
+          onClick={onLogoClick}
+          aria-label="WhaTap 홈으로"
+          title="WhaTap 홈으로"
+          className="flex items-center cursor-pointer bg-transparent border-0 p-0"
+        >
+          {logo}
+        </button>
       ) : (
-        <img
-          alt="WhaTap"
-          src={icon("whatap-logo.svg")}
-          style={{ width: 126, height: 24 }}
-        />
+        logo
       )}
       {toggleButton}
     </div>

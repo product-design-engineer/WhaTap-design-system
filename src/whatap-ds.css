@@ -210,6 +210,13 @@
     --color-surface-100: #F1F2F4;
     /* @role 가장 진한 중성 면 | @use 데이터 없음 셀 · 비활성 블록 */
     --color-surface-200: #EAEAEA;
+
+    /* Neutral Solid — 중립(무채색) 강조면. tone="tertiary" 버튼의 채움/hover 가 여기서 온다.
+       위에 올리는 전경은 고정 흰색(대비 라이트 8.4:1 · 다크 10.3:1). 다크는 .dark 에서 반전. 정의: tokens.css */
+    /* @role 중립 강조면의 원색 | @use tone="tertiary" contained 버튼 배경 | @avoid 텍스트 전경 (전경은 --color-text-secondary) */
+    --color-neutral-solid: #4C4C4C;
+    /* @role 중립 강조면의 hover/pressed 단계 | @use tone="tertiary" contained 버튼 hover 배경 */
+    --color-neutral-solid-deep: #333333;
     /* @role 앱 셸 바닥면 | @use 페이지 최하위 배경 | @avoid 전경색으로 쓰기 · 카드 배경 대용 */
     --color-bg: #F5F5F5;
     /* @role 바닥 위에 쌓이는 카드/패널 면 | @use 테이블·차트·폼 섹션 블록 · 헤더 · 사이드바 | @avoid --color-bg 와 같은 값으로 만들기 (층이 사라진다) */
@@ -245,6 +252,60 @@
     --color-border-strong: #E6E6E6;
     /* @role 항목 사이 구분선 | @use 목록 행 사이 · 차트 축선 */
     --color-border-divider: #ADADAD;
+    /* @role 입력 컨트롤의 상시 테두리 | @use TextField·Select·DatePicker·SelectPopover 가 한 줄에 설 때 공유하는 단일 출처 | @avoid 카드·패널 경계 (그건 --color-border-default) */
+    --color-border-control: #ADADAD;
+    /* @role 입력 컨트롤의 모서리 | @use --color-border-control 과 한 벌로 컨트롤 외곽을 정한다 | @avoid 카드·패널 모서리 (그건 --radius-md/lg) */
+    --radius-control: 4px;
+
+    /* Product Identity — 제품을 알아보게 하는 색. 좌측 제품 레일 · 보고서 종류 목록 · 범례가 공유한다.
+       테마로 바뀌지 않는다: 이 색은 «상태» 가 아니라 «누구인지» 라서, 다크에서 다른 색이 되면
+       같은 제품이 화면마다 달라 보인다. 그래서 .dark 재매핑이 없다(차트 계열색과 다른 점이다 —
+       계열색은 배경 위 가독이 목적이고, 이쪽은 정체성이 목적이다).
+       면을 채우는 데 쓰지 않는다. 아이콘·점·4px 표식처럼 작은 자리에만 쓴다. */
+    /* @role 애플리케이션 제품 식별색 | @use 제품 아이콘·레일·범례 점 | @avoid 넓은 면 배경 · 본문 텍스트 */
+    --color-product-apm: #00B0E2;
+    /* @role 서버 제품 식별색 | @use 제품 아이콘·레일·범례 점 | @avoid 넓은 면 배경 · 본문 텍스트 */
+    --color-product-server: #00C5B1;
+    /* @role 쿠버네티스 제품 식별색 | @use 제품 아이콘·레일·범례 점 | @avoid 넓은 면 배경 · 본문 텍스트 */
+    --color-product-k8s: #4485FF;
+    /* @role 데이터베이스 제품 식별색 | @use 제품 아이콘·레일·범례 점 | @avoid 넓은 면 배경 · 본문 텍스트 */
+    --color-product-db: #936CE7;
+    /* @role 로그 제품 식별색 | @use 제품 아이콘·레일·범례 점 | @avoid 넓은 면 배경 · 본문 텍스트 */
+    --color-product-log: #D75EF5;
+    /* @role 브라우저 제품 식별색 | @use 제품 아이콘·레일·범례 점 | @avoid 넓은 면 배경 · 본문 텍스트 */
+    --color-product-browser: #45B96E;
+    /* @role 클라우드 제품 식별색 | @use 제품 아이콘·레일·범례 점 | @avoid 넓은 면 배경 · 본문 텍스트 */
+    --color-product-cloud: #0085CF;
+    /* @role URL 제품 식별색 | @use 제품 아이콘·레일·범례 점 | @avoid 넓은 면 배경 · 본문 텍스트 */
+    --color-product-url: #8BCD00;
+    /* @role 컨테이너 제품 식별색 | @use 제품 아이콘·레일·범례 점 | @avoid 넓은 면 배경 · 본문 텍스트 */
+    --color-product-container: #FF9900;
+    /* @role GPU 제품 식별색 | @use 제품 아이콘·레일·범례 점 | @avoid 넓은 면 배경 · 본문 텍스트 */
+    --color-product-gpu: #0054DA;
+    /* @role 게이지 제품 식별색 | @use 제품 아이콘·레일·범례 점 | @avoid 넓은 면 배경 · 본문 텍스트 */
+    --color-product-gauge: #B443DD;
+
+    /* Heatmap Scale — 강도 8단 순차 스케일.
+       차트 계열색(--color-chart-series-*)과 다른 축이다: 계열은 «누구인지», 이 스케일은 «얼마나»를 말한다.
+       값이 아니라 위치(0·20·40…100)로 이름 붙여 stop 을 바꿔도 참조가 안 깨진다. */
+    /* @role 강도 스케일 최저 stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-0: #1B69C6;
+    /* @role 강도 스케일 20% stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-20: #1F6AA0;
+    /* @role 강도 스케일 40% stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-40: #3CA549;
+    /* @role 강도 스케일 50% stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-50: #7FB139;
+    /* @role 강도 스케일 60% stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-60: #FABF39;
+    /* @role 강도 스케일 80% stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-80: #EF7B2A;
+    /* @role 강도 스케일 90% stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-90: #C3441E;
+    /* @role 강도 스케일 최고 stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
+    --color-heatmap-100: #99201A;
+    /* @role 강도 스케일 전체를 한 띠로 | @use HeatmapLegend 의 범례 막대 | @avoid 칸 하나의 배경 (그건 stop 하나) */
+    --gradient-heatmap-scale: linear-gradient(to right, var(--color-heatmap-0) 0%, var(--color-heatmap-20) 20%, var(--color-heatmap-40) 40%, var(--color-heatmap-50) 50%, var(--color-heatmap-60) 60%, var(--color-heatmap-80) 80%, var(--color-heatmap-90) 90%, var(--color-heatmap-100) 100%);
 
     
     /* @role 위험 지표 도트 전용색 | @use 작은 도트·마커 | @avoid 텍스트 */
@@ -452,7 +513,7 @@
 
     /* ──────────────────────────────────────────────────────────────────────
      *  Spacing / Sizing Scale — 4px 그리드 (tokens.css 와 동기화).
-     *  치수(width/height/gap/padding)의 단일 출처. 유틸(h-*/w-*/size-*)이 점진적으로
+     *  치수(width/height/gap/padding)의 단일 출처. 유틸(h-* · w-* · size-*)이 점진적으로
      *  이 토큰을 참조 (현재 바인딩: h-32px→--space-8, w-40px→--space-10).
      *  네이밍은 Tailwind 정렬 — `--space-N` = 4px×N. 테마 무관.
      * ────────────────────────────────────────────────────────────────────── */
@@ -672,6 +733,7 @@
 .border-color-var-color-border-divider { border-color: var(--color-border-divider); }
 .border-color-var-color-border-soft { border-color: var(--color-border-soft); }
 .border-color-var-color-border-strong { border-color: var(--color-border-strong); }
+.border-color-var-color-border-control { border-color: var(--color-border-control); }
 .border-color-var-color-brand-blue { border-color: var(--color-brand-blue); }
 .border-color-var-color-surface-50 { border-color: var(--color-surface-50); }
 .border-l { border-left-width:1px;border-left-style:solid }
@@ -788,7 +850,8 @@
 .hover-border-color-var-color-brand-blue-bg:hover { border-color: var(--color-brand-blue-bg); }
 .hover-border-color-var-color-brand-blue-deep:hover { border-color: var(--color-brand-blue-deep); }
 .hover-border-var-color-brand-blue:hover { border-color: var(--color-brand-blue); }
-.hover-brightness-95:hover { filter: ; }
+/* 위와 같은 빈 선언이었다 — hover 시 아무 일도 일어나지 않았다. */
+.hover-brightness-95:hover { filter: brightness(0.95); }
 .hover-opacity-100:hover { opacity: 100%; }
 .hover-opacity-70:hover { opacity: 70%; }
 .hover-opacity-80:hover { opacity: 80%; }
@@ -941,6 +1004,7 @@
 .rounded-2px { border-radius: 2px; }
 .rounded-3px { border-radius: 3px; }
 .rounded-4px { border-radius: 4px; }
+.rounded-control { border-radius: var(--radius-control); }
 .rounded-5px { border-radius: 5px; }
 .rounded-6px { border-radius: 6px; }
 .rounded-8px { border-radius: 8px; }
@@ -1003,7 +1067,9 @@
 .top-2px { top: 2px; }
 .top-32px { top: 32px; }
 .top-4 { top: calc(var(--spacing) * 4); }
-.top-calc-100pct+4px { top: calc(100% + 4px); }
+/* 이름에 `+` 를 넣으면 형제 결합자로 파싱돼 규칙이 통째로 죽는다(`.a + 4px` 는 선택자가 아니다).
+   실제로 AiInlinePrompt 드롭다운의 top 오프셋이 안 먹고 있었다 — 빌드 경고로만 새어 나왔다. */
+.top-full-4px { top: calc(100% + 4px); }
 .tracking-caps { letter-spacing:var(--tracking-caps) }
 .tracking-default { letter-spacing:var(--tracking-default) }
 .tracking-display { letter-spacing:var(--tracking-display) }
@@ -1016,8 +1082,12 @@
 .transition-opacity { transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms }
 .transition-shadow { transition-property:box-shadow;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms }
 .transition-transform { transition-property: transform, translate, scale, rotate;transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);transition-duration: 150ms; }
-.translate-x-0 { translate: ; }
-.translate-x-full { translate: ; }
+/* 값이 비어 있었다(`translate: ;`) — 빈 선언은 파서가 버리므로 규칙이 아무 일도 하지 않는다.
+   AiWidget 의 slide 열림/닫힘이 이 두 클래스에 걸려 있어서, Tailwind 가 같은 이름을 만들어 주는
+   소비자에서만 우연히 동작하고 DS 단독(Storybook)에서는 패널이 움직이지 않았다.
+   detailwind 변환이 값을 못 옮긴 자리로 보인다. */
+.translate-x-0 { translate: 0; }
+.translate-x-full { translate: 100%; }
 .truncate { overflow: hidden;text-overflow: ellipsis;white-space: nowrap; }
 .uppercase { text-transform: uppercase; }
 .w-12px { width: 12px; }
@@ -1118,6 +1188,46 @@
 .fill-topology-node { fill: var(--color-topology-node-surface); }
 .fill-none { fill: none; }
 .stroke-topology-viewport { stroke: var(--color-brand-blue); }
+
+/* Product-prototype 사본에서 이관(2026-09-17). CardHead 가 .wds-field-row-inline 을 쓰는데
+   CSS 가 따라오지 않아 meta 슬롯이 늘 세로로 쌓이고 있었다 — 컴포넌트만 옮기고 그것이
+   기대는 CSS 를 두고 온 자리다. Select 의 .wds-field 도 같은 체계에 걸린다. */
+/* ── 필드 라벨 배치 — 부모가 넉넉하면 인라인 (feedback-field-inline-label) ────────────
+   부모에 `.wds-field-row*` 를 붙이면 그 폭을 컨테이너로 삼아, 넉넉할 때 라벨이 컨트롤 좌측으로
+   붙고 좁아지면 다시 위로 쌓인다. 뷰포트가 아니라 **부모 폭** 기준이라 사이드바 접힘·패널
+   분할 같은 레이아웃 변화에도 그대로 따라간다.
+   컨테이너 선언이 없으면 질의가 성립하지 않아 세로 배치로 남는다(안전한 기본값).
+
+   임계값은 **줄에 든 필드가 인라인으로 설 때 필요한 폭**에 맞춰 고른다. 하나로 통일하면
+   3필드 조건 바에 맞춘 값이 2필드 줄에는 너무 높아 영영 안 펴진다.
+     .wds-field-row-sm      400px  — 필드 2개 (라벨 짧은 세그먼트 토글 등)
+     .wds-field-row         720px  — 필드 3개 이상 (페이지 조건 바)
+     .wds-field-row-inline  질의 없음 — 계약상 한 줄인 자리(카드 머리 등)는 늘 인라인 */
+.wds-field-row,
+.wds-field-row-sm { container-type: inline-size; }
+
+/* 폭과 무관하게 늘 인라인. 자기 계약상 **한 줄인 자리** 전용 — 카드 머리([[CardHead]] meta 슬롯)
+   처럼 줄이 늘어나면 그 자리가 성립하지 않는 곳. 질의를 쓰지 않으므로 컨테이너 선언도 없다. */
+.wds-field-row-inline .wds-field.wds-field {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.wds-field-row-inline .wds-field.wds-field > :first-child { flex: 0 0 auto; white-space: nowrap; }
+.wds-field-row-inline .wds-field.wds-field > :last-child { flex: 0 1 auto; min-width: 0; }
+
+@container (min-width: 400px) {
+  /* 유틸(.flex-col)과 같은 단일 클래스라 클래스명을 두 번 써서 우선순위를 올린다. */
+  .wds-field-row-sm .wds-field.wds-field { flex-direction: row; align-items: center; gap: 8px; }
+  .wds-field-row-sm .wds-field.wds-field > :first-child { flex: 0 0 auto; white-space: nowrap; }
+  .wds-field-row-sm .wds-field.wds-field > :last-child { flex: 1 1 auto; min-width: 0; }
+}
+
+@container (min-width: 720px) {
+  .wds-field.wds-field { flex-direction: row; align-items: center; gap: 8px; }
+  .wds-field.wds-field > :first-child { flex: 0 0 auto; white-space: nowrap; }
+  .wds-field.wds-field > :last-child { flex: 1 1 auto; min-width: 0; }
+}
 
 /* ── globals (keyframes · 컴포넌트 전역 클래스 · .dark) ────────────────────── */
 html, body, #root {
@@ -1446,10 +1556,14 @@ html, body, #root {
   --color-surface-50: #14181E;
   --color-surface-100: #1B2026;
   --color-surface-200: #232932;
+  /* 중립 강조면 — 다크에서는 밝아지지 않는다(전경이 계속 흰색이므로 어두운 단계를 유지). 정의: tokens.css */
+  --color-neutral-solid: #3A414D;
+  --color-neutral-solid-deep: #4A515C;
   --color-border-default: #2A2F39;
   --color-border-soft: #21262E;
   --color-border-strong: #353B46;
   --color-border-divider: #4A515C;
+  --color-border-control: #4A515C;
   --color-text-primary: #E9EBEE;
   --color-text-secondary: #B7BDC6;
   --color-text-tertiary: #8B929C;

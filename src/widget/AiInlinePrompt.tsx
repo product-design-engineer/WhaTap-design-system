@@ -338,7 +338,7 @@ export default function AiInlinePrompt({
           aria-label="추천 질의"
           // input blur 방지: chip 의 mousedown 이 발생할 때 focus 가 input 에서 빠져나가지 않도록
           onMouseDown={(e) => e.preventDefault()}
-          className="ai-inline-prompt__dropdown absolute left-0 right-0 top-calc-100pct+4px z-50 bg-card rounded-8px p-8px flex flex-wrap gap-6px"
+          className="ai-inline-prompt__dropdown absolute left-0 right-0 top-full-4px z-50 bg-card rounded-8px p-8px flex flex-wrap gap-6px"
           style={{
             border: "1px solid var(--color-border-default)",
             boxShadow: "var(--shadow-md)",

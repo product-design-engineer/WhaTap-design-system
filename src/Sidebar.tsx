@@ -48,7 +48,7 @@
  * />
  * ```
  */
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import SidebarLogoHeader from "./SidebarLogoHeader";
 import SidebarMenuItem from "./SidebarMenuItem";
 import SidebarOrgSwitcher from "./SidebarOrgSwitcher";
@@ -94,7 +94,16 @@ export type MenuItem = {
   icon: string;
   label: string;
   /** 펼침/접힘이 있는 항목. 비어 있으면 단일 항목. */
-  children?: { label: string; active?: boolean; onClick?: () => void }[];
+  children?: {
+    label: string;
+    active?: boolean;
+    onClick?: () => void;
+    /**
+     * 이 항목이 하위 묶음의 **제목**임을 뜻한다 — 누를 수 없고, 뒤따르는 형제들이 그 묶음의
+     * 구성원이라 한 단계 더 들여쓴다. 메뉴가 3단(제품 > 묶음 > 화면)인 제품(DB 분석 등)에서 쓴다.
+     */
+    group?: boolean;
+  }[];
   /**
    * 펼침 여부. `onToggle` 이 없으면 «초기값» 이고 그 뒤로는 행을 눌러 사용자가 접고 편다.
    * `onToggle` 을 주면 제어 모드가 되어 이 값이 현재 펼침을 그대로 정한다.
@@ -116,8 +125,14 @@ export type ProjectContext = {
   productIcon?: string;
   /** 그룹 타입 칩(badge) 텍스트 — 예: "그룹". "[그룹]" 같은 타입 접두사는 라벨이 아니라 이 칩으로 분리. 생략 시 칩 없음. */
   groupBadge?: string;
-  /** 그룹명 (회색 라인) — 타입 접두사 없이 이름만. 접두사는 `groupBadge` 칩으로. */
-  groupLabel: string;
+  /**
+   * 그룹명 (회색 라인) — 타입 접두사 없이 이름만. 접두사는 `groupBadge` 칩으로.
+   *
+   * **선택이다**(2026-09-17). 프로젝트가 최상위인 제품(URL 모니터링 등)에는 그룹 계층 자체가
+   * 없다. 그런 곳에서 빈 문자열을 넣게 하면 회색 줄이 자리만 차지하고 사람은 「이름이
+   * 비었나」로 읽는다. 생략하면 **그 줄을 그리지 않고** 프로젝트명 한 줄로 선다.
+   */
+  groupLabel?: string;
   /** 프로젝트 타입 칩(badge) 텍스트 — 예: "프로젝트". "[프로젝트]" 접두사는 라벨이 아니라 이 칩으로 분리. 생략 시 칩 없음. */
   projectBadge?: string;
   /** 프로젝트명 (굵은 라인) — 타입 접두사 없이 이름만. 접두사는 `projectBadge` 칩으로. */
@@ -196,6 +211,10 @@ export default function Sidebar({
   org = DEFAULT_ORG,
   onOrgClick,
   hideProductRail = false,
+  hideUtilityBar = false,
+  onProjectClick,
+  footerText,
+  onLogoClick,
 }: {
   activeProduct?: string;
   project?: ProjectContext;
@@ -222,6 +241,20 @@ export default function Sidebar({
   onOrgClick?: () => void;
   /** 좌측 40px 제품 레일(제품 아이콘 + 하단 유틸) 숨김. 모니터링 제품이 아닌 관리 콘솔 화면용. 기본 false. */
   hideProductRail?: boolean;
+  /**
+   * 레일 **하단 유틸**(테마·전체화면·홈)만 숨긴다. 제품 레일 자체는 남는다 —
+   * 전체를 끄려면 `hideProductRail`. 셸이 그 기능을 다른 곳에서 제공하는 제품용. 기본 false.
+   */
+  hideUtilityBar?: boolean;
+  /** 프로젝트 스위처 클릭 — 이벤트를 그대로 넘긴다(앵커 계산은 화면의 몫). */
+  onProjectClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  /** 하단 저작권 문구 override — [[SidebarCopyright]] 로 넘어간다. 저작권 주체가 다른 제품용. */
+  footerText?: ReactNode;
+  /**
+   * 로고 클릭 — 주입 시에만 로고가 버튼이 된다([[SidebarLogoHeader]]).
+   * 랜딩이 따로 있는 제품에서만 준다. 제품 화면의 로고는 표지이지 이동 수단이 아니다.
+   */
+  onLogoClick?: () => void;
 }) {
   // controlled(`collapsed`) / uncontrolled(`defaultCollapsed`) 둘 다 지원 — Switch/Checkbox 패턴 동일.
   const [internalCollapsed, setInternalCollapsed] = useState(defaultCollapsed);
@@ -240,7 +273,7 @@ export default function Sidebar({
       style={{ width }}
     >
       {/* 48px 로고 헤더 — onToggle 로 min/max 인터랙션 제공 */}
-      <SidebarLogoHeader collapsed={isCollapsed} width={width} onToggle={toggleCollapsed} />
+      <SidebarLogoHeader collapsed={isCollapsed} width={width} onToggle={toggleCollapsed} onLogoClick={onLogoClick} />
 
       {/* 40px 조직 스위처 — org=null이면 숨김, collapsed면 아이콘만 */}
       {org && (
@@ -249,7 +282,7 @@ export default function Sidebar({
 
       {/* 40px 프로젝트 스위처 — hideProjectSwitcher면 숨김, collapsed면 아이콘만 */}
       {!hideProjectSwitcher && (
-        <SidebarProjectSwitcher project={project} collapsed={isCollapsed} />
+        <SidebarProjectSwitcher project={project} collapsed={isCollapsed} onClick={onProjectClick} />
       )}
 
       {/* 본문 (flex-1): 좌 40px 제품 레일 + (collapsed가 아닐 때만) 우 메뉴 목록 */}
@@ -267,11 +300,13 @@ export default function Sidebar({
               return <ProductRailItem key={name} name={name} label={label} active={isActive} />;
             })}
           </div>
-          <div className="flex flex-col items-start shrink-0">
-            {BOTTOM_RAIL.map(({ icon: name, label }) => (
-              <BottomRailItem key={name} name={name} label={label} />
-            ))}
-          </div>
+          {!hideUtilityBar && (
+            <div className="flex flex-col items-start shrink-0">
+              {BOTTOM_RAIL.map(({ icon: name, label }) => (
+                <BottomRailItem key={name} name={name} label={label} />
+              ))}
+            </div>
+          )}
         </div>
         )}
 
@@ -298,7 +333,7 @@ export default function Sidebar({
       </div>
 
       {/* 24px 저작권 푸터 — collapsed면 숨김 */}
-      {!isCollapsed && <SidebarCopyright />}
+      {!isCollapsed && <SidebarCopyright text={footerText} />}
     </div>
   );
 }

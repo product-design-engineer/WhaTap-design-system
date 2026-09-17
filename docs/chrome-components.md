@@ -385,13 +385,15 @@ export type DataTableProps<T> = {
 
 ## Button
 
-표준 클릭 trigger primitive. 3 variant × 4 size × 3 tone + loading/fullWidth.
+표준 클릭 trigger primitive. 3 variant × 4 size × 4 tone + loading/fullWidth.
+
+**위계는 variant, 색 의미는 tone.** contained=1차 CTA · outline=2차 · basic=3차 텍스트. `tone` 은 그 위의 색 의미 — `tertiary` 는 색 의미가 없는 중립 무채색(취소·닫기·나중에·더보기).
 
 | Prop | Type | Default | 설명 |
 |---|---|---|---|
 | `variant` | `"basic" \| "contained" \| "outline"` | — | basic(텍스트만) · contained(채움) · outline(보더) |
 | `size` | `"sm" \| "md" \| "lg" \| "xl"` | — | sm=20 · md=24 · lg=32 · xl=36px |
-| `tone` | `"primary" \| "warning" \| "critical"` | `"primary"` | 색 테마 |
+| `tone` | `"primary" \| "tertiary" \| "warning" \| "critical"` | `"primary"` | 색 의미 — primary(브랜드 블루) · tertiary(중립 회색) · warning · critical |
 | `loading` | `boolean` | `false` | 자동 disabled + spinner |
 | `fullWidth` | `boolean` | `false` | 컨테이너 폭 100% |
 | `children` | `ReactNode` | — | 라벨 |
@@ -400,7 +402,7 @@ export type DataTableProps<T> = {
 ```tsx
 <Button variant="contained" tone="primary" size="md" onClick={apply}>적용</Button>
 <Button variant="outline" tone="critical" size="sm" loading={deleting}>삭제</Button>
-<Button variant="basic" size="sm">취소</Button>
+<Button variant="outline" tone="tertiary" size="md">취소</Button>   {/* 중립 — CTA 와 경쟁하지 않는다 */}
 ```
 
 **Button vs 다른 진입점:**

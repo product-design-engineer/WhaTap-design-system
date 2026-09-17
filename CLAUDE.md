@@ -35,6 +35,7 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 - AI 진입점·AI 응답 UI 는 **`Ai...` 카테고리만** 사용 (AiInlinePrompt / AiSendButton / AiAssistantButton)
 - 일반 폼/검색은 TextField·Button
 - 페이지의 AI 진입점은 **버튼 대신 AiInlinePrompt 직접 주입 (2-step → 1-step)**
+- **카탈로그 분류와 소스 트리는 같이 움직인다** — `Primitives/Ai/`·`Composite/Ai/` 로 분류했으면 소스도 `src/widget/` 에 둔다(Shell 은 위 표대로 두 트리 허용). 강제: `pnpm lint:ai-boundary`. `check-catalog-folders` 는 `stories/` 안만 보므로 이 축을 볼 수 없다 — 실제로 4종이 카탈로그는 `Ai/`, 소스는 루트인 상태로 있었다. 같은 게이트가 `components.json` 의 `importFrom` 이 **배럴이 실제로 export 하는 진입점**인지도 검산한다.
 
 ## 아키텍처 — 2-Tier Token + 3-Layer Component
 

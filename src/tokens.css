@@ -47,6 +47,11 @@
   --color-surface-100: #F1F2F4; /* 용도: 중간 보조 표면 — active row, 트랙(progress/skeleton), 선택 강조 */
   --color-surface-200: #EAEAEA; /* 용도: 가장 진한 보조 표면 — switch off 트랙, 구분 블록, 무채색 채움 */
 
+  /* Neutral Solid — 중립(무채색) 강조면. tone="tertiary" 버튼의 채움/hover.
+     위 전경은 고정 흰색(라이트 8.4:1 · 다크 10.3:1). 다크 값은 하단 `.dark` 블록에서 반전. */
+  --color-neutral-solid: #4C4C4C;      /* 용도: tertiary contained 버튼 배경 */
+  --color-neutral-solid-deep: #333333; /* 용도: tertiary contained 버튼 hover */
+
   /* Base surface (semantic) — page background + card.
      페이지는 회색, 카드는 흰색 — 콘텐츠가 카드로 "쌓여" 보이도록 하는 기준 대비.
      다크 값은 파일 하단 `.dark` 블록에서 오버라이드. */
@@ -307,7 +312,7 @@
 
   /* ──────────────────────────────────────────────────────────────────────
    *  Spacing / Sizing Scale — 4px 그리드. `--text-*` 와 동일한 "px 값 스케일 토큰" 방식.
-   *  치수(width/height/gap/padding)의 단일 출처. 유틸(h-*/w-*/size-*)이 점진적으로
+   *  치수(width/height/gap/padding)의 단일 출처. 유틸(h-* · w-* · size-*)이 점진적으로
    *  이 토큰을 참조 (현재 바인딩: h-32px→--space-8, w-40px→--space-10).
    *  네이밍은 Tailwind 정렬 — `--space-N` = 4px×N (space-8=32px, space-10=40px).
    *  테마 무관 → `.dark` 오버라이드 없음.
@@ -580,6 +585,10 @@ html, body, #root {
   --color-surface-50: #14181E;
   --color-surface-100: #1B2026;
   --color-surface-200: #232932;
+
+  /* 중립 강조면 — 전경이 계속 흰색이므로 다크에서도 어두운 단계를 유지한다. */
+  --color-neutral-solid: #3A414D;
+  --color-neutral-solid-deep: #4A515C;
 
   /* Borders */
   --color-border-default: #2A2F39;
