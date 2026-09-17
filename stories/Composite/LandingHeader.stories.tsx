@@ -68,9 +68,28 @@ const meta: Meta<typeof LandingHeader> = {
 export default meta;
 type Story = StoryObj<typeof LandingHeader>;
 
-/** 로고 자리 표시 — 카탈로그에서는 실제 에셋 대신 텍스트로 둔다. */
-const Wordmark = () => <span style={{ fontSize: 18, fontWeight: 700 }}>WhaTap</span>;
-const Symbol = () => <span style={{ fontSize: 18, fontWeight: 700 }}>W</span>;
+/**
+ * 로고 에셋 — `SidebarLogoHeader` 와 같은 표준 경로를 쓴다(`static/icons` → `/icons`).
+ * 다크에서는 원본이 어두워 보이지 않으므로 반전 필터를 건다. 이 반전은 페이지가 테마를
+ * 소유하기 때문에 소비앱 쪽 관심사이고, 여기서는 카탈로그가 보여주기 위해 흉내만 낸다.
+ */
+const icon = (name: string) => `/icons/${name}`;
+
+const Wordmark = ({ dark = false }: { dark?: boolean }) => (
+  <img
+    src={icon("whatap-logo.svg")}
+    alt="WhaTap"
+    style={{ height: 20, display: "block", filter: dark ? "brightness(0) invert(1)" : "none" }}
+  />
+);
+
+const Symbol = ({ dark = false }: { dark?: boolean }) => (
+  <img
+    src={icon("whatap-symbol.svg")}
+    alt="WhaTap"
+    style={{ height: 24, display: "block", filter: dark ? "brightness(0) invert(1)" : "none" }}
+  />
+);
 
 const NAV = [
   { label: "Blog", href: "/blog" },
@@ -85,8 +104,8 @@ export const Default: Story = {
       const [theme, setTheme] = useState<"light" | "dark">("light");
       return (
         <LandingHeader
-          logo={<Wordmark />}
-          logoCompact={<Symbol />}
+          logo={<Wordmark dark={theme === "dark"} />}
+          logoCompact={<Symbol dark={theme === "dark"} />}
           productLabel="URL Monitoring"
           nav={NAV}
           currentPath="/resource"
@@ -94,6 +113,59 @@ export const Default: Story = {
           signIn={{ label: "Sign in", href: "/login" }}
           cta={{ label: "Get started free", href: "/signup" }}
         />
+      );
+    };
+    return <Demo />;
+  },
+};
+
+/**
+ * **Sticky + blur** — 이 컴포넌트의 핵심 동작. 캔버스를 스크롤해 확인한다.
+ *
+ * 헤더는 `position: sticky; top: 0` 로 상단에 붙어 있고, 배경이 반투명
+ * (`--color-header-translucent`)이라 **본문이 헤더 밑으로 지나가는 것이 비쳐 보인다.**
+ * 거기에 `backdrop-filter: blur(10px)` 이 걸려, 비치는 본문이 흐려져 헤더 위의 글자가
+ * 읽히는 대비를 유지한다.
+ *
+ * 불투명한 `--color-card` 를 쓰면 이 효과가 사라진다 — 헤더가 본문을 잘라먹는 띠처럼 보이고,
+ * 페이지가 어디까지 스크롤됐는지 단서가 없어진다. 마케팅 페이지에서 헤더가 «떠 있다»는
+ * 인상은 이 반투명 + blur 조합에서 나온다.
+ *
+ * `z-index: 50` 은 본문의 떠 있는 요소(카드 그림자·패럴랙스 배경)보다 위에 두기 위한 값이다.
+ */
+export const StickyAndBlur: Story = {
+  render: () => {
+    const Demo = () => {
+      const [theme, setTheme] = useState<"light" | "dark">("light");
+      return (
+        <div style={{ height: 520, overflowY: "auto", background: "var(--color-bg)" }}>
+          <LandingHeader
+            logo={<Wordmark dark={theme === "dark"} />}
+            logoCompact={<Symbol dark={theme === "dark"} />}
+            productLabel="URL Monitoring"
+            nav={NAV}
+            themeToggle={<ThemeToggle value={theme} onChange={setTheme} applyTo={null} />}
+            signIn={{ label: "Sign in", href: "/login" }}
+            cta={{ label: "Get started free", href: "/signup" }}
+          />
+          {/* 헤더 밑으로 지나갈 본문 — 색이 있는 블록이라야 비치는 것이 보인다. */}
+          <div style={{ padding: 24, display: "flex", flexDirection: "column", gap: 16 }}>
+            {Array.from({ length: 8 }, (_, i) => (
+              <div
+                key={i}
+                style={{
+                  height: 120,
+                  borderRadius: 16,
+                  background:
+                    i % 2 === 0
+                      ? "linear-gradient(90deg, var(--color-brand-blue), var(--color-whatap-purple))"
+                      : "var(--color-card)",
+                  border: "1px solid var(--color-border-default)",
+                }}
+              />
+            ))}
+          </div>
+        </div>
       );
     };
     return <Demo />;
