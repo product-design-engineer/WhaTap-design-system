@@ -2036,6 +2036,10 @@ html, body, #root {
   pointer-events: none;
   z-index: -1;
 }
+/* `@property` 는 Tailwind 산출물이 아니라 **네이티브 CSS 기능**이다 — 커스텀 속성에 타입을
+   주어야 브라우저가 각도를 «보간» 한다. 없으면 --glow-angle 이 문자열로 취급돼 0deg→360deg 가
+   중간값 없이 튀고, 회전이 아니라 깜빡임이 된다. conic-gradient 각도 애니메이션의 유일한 방법이다. */
+/* no-tailwind-ok: 각도 보간을 위한 네이티브 @property — 프레임워크 산출물이 아니다(위 주석 참조). */
 @property --glow-angle {
   syntax: "<angle>";
   initial-value: 0deg;
