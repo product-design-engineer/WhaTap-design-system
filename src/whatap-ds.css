@@ -1954,9 +1954,6 @@ html, body, #root {
   .wds-landing-header-product { display: inline-flex; }
 }
 
-  gap: var(--wds-card-gap);
-}
-
 /* ── AI 입력창 Glow Effect ─────────────────────────────────────────────────
    입력 중일 때 4면 보더를 따라 스펙트럼 빛줄기가 회전한다.
    conic-gradient 를 회전시켜 테두리를 따라 흐르는 효과를 만든다.
