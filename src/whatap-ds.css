@@ -222,6 +222,9 @@
     /* @role 바닥 위에 쌓이는 카드/패널 면 | @use 테이블·차트·폼 섹션 블록 · 헤더 · 사이드바 | @avoid --color-bg 와 같은 값으로 만들기 (층이 사라진다) */
     --color-card: #FFFFFF;
 
+  /* @role 본문이 비치는 떠 있는 표면 | @use 마케팅 랜딩의 sticky 헤더·그 모바일 시트 (backdrop-filter 와 함께) | @avoid 제품 화면의 헤더·카드 — 불투명해야 하는 표면은 --color-card */
+  --color-header-translucent: rgba(255, 255, 255, 0.82);
+
     
     /* @role 본문·제목 텍스트의 기본 전경색 | @use 표 셀 주 텍스트 · 카드 헤더 | @avoid 페이지 배경으로 쓰기 */
     --color-text-primary: #222;
@@ -1551,6 +1554,8 @@ html, body, #root {
   }
 }
 .dark, [data-theme="dark"] {
+  --color-header-translucent: rgba(10, 14, 23, 0.7);
+
   --color-bg: #0E1116;
   --color-card: #181C22;
   --color-surface-50: #14181E;
@@ -1628,4 +1633,150 @@ html, body, #root {
   --color-topology-port: #8E9CDE;
   --color-topology-port-alert: #FF77A8;
   --color-topology-port-ok: #56C98A;
+}
+
+/* ── LandingHeader ────────────────────────────────────────────────────────────
+   마케팅 랜딩의 sticky 상단 바. DS 안에서 **뷰포트 미디어쿼리를 쓰는 유일한 컴포넌트**다.
+   제품 화면은 사이드바·AI 위젯이 열리고 닫혀 행 폭이 변하므로 컨테이너 쿼리를 쓰지만
+   (`.wds-optionbar-item-auto` 참고), 랜딩 헤더는 셸 없이 뷰포트 전폭을 쓰므로 뷰포트가
+   곧 가용 폭이다.
+
+   임계 두 개:
+     640px  — 아래에서는 nav 를 햄버거 시트로 접고 로고를 심볼만 남긴다.
+     1024px — 아래에서는 제품 라벨("URL Monitoring")을 숨긴다. CTA 두 개가 들어갈 자리를
+              뺏기 때문이다. 실제로 이 라벨 때문에 모바일에서 CTA 가 눌리지 않았다.
+   ────────────────────────────────────────────────────────────────────────── */
+.wds-landing-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  padding-inline: 12px;
+  background: var(--color-header-translucent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border-default);
+}
+.wds-landing-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1080px;
+  margin-inline: auto;
+}
+.wds-landing-header-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  text-decoration: none;
+  color: var(--color-text-strong);
+}
+.wds-landing-header-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--color-border-default);
+}
+.wds-landing-header-product {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text-tertiary);
+}
+.wds-landing-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.wds-landing-header-nav {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  margin-right: 4px;
+}
+.wds-landing-header-navlink {
+  padding: 8px 10px;
+  border-radius: 10px;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color .15s;
+}
+.wds-landing-header-navlink:hover,
+.wds-landing-header-navlink[aria-current="page"] {
+  color: var(--color-text-strong);
+}
+/* 아이콘 버튼(테마·햄버거) — 640 이상에서 햄버거만 사라진다. */
+.wds-landing-header-iconbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border-default);
+  background: transparent;
+  cursor: pointer;
+}
+.wds-landing-header-signin {
+  display: inline-flex;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 8px 6px;
+  border-radius: 10px;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+}
+.wds-landing-header-cta {
+  display: inline-flex;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 9px 10px;
+  border-radius: 10px;
+  color: #fff; /* raw-color-ok: 그라디언트 위 전경 — 테마와 무관하게 흰색 고정 */
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  background: linear-gradient(90deg, var(--color-brand-blue), var(--color-whatap-purple));
+  transition: opacity .15s;
+}
+.wds-landing-header-cta:hover { opacity: .9; }
+/* 640px 경계 토글 — 로고(워드마크/심볼)와 테마 토글(전체/축약)이 이 쌍으로 갈린다.
+   DS 에 반응형 유틸이 없어 컴포넌트 스코프로 둔다. 이름에 wds- 를 붙이지 않는 것은
+   LandingHeader 안에서만 쓰이는 지역 클래스이기 때문이다(전역 유틸로 오인 방지는
+   상위 .wds-landing-header 스코프가 담당). */
+.wds-landing-header .sm-only { display: none; }
+.wds-landing-header .sm-hidden { display: inline-flex; }
+
+/* 모바일 시트 — 헤더 하단에 붙어 펼쳐진다. */
+.wds-landing-header-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px 14px;
+  background: var(--color-header-translucent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border-default);
+}
+
+@media (min-width: 640px) {
+  .wds-landing-header { padding-inline: 32px; }
+  .wds-landing-header-actions { gap: 12px; }
+  .wds-landing-header-nav { display: inline-flex; }
+  .wds-landing-header-signin { padding-inline: 10px; }
+  .wds-landing-header-cta { padding-inline: 16px; }
+  .wds-landing-header-menubtn,
+  .wds-landing-header-sheet { display: none; }
+  .wds-landing-header .sm-only { display: inline-flex; }
+  .wds-landing-header .sm-hidden { display: none; }
+}
+@media (min-width: 1024px) {
+  .wds-landing-header-product { display: inline-flex; }
 }

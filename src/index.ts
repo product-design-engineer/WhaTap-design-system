@@ -120,6 +120,8 @@ export { default as OptionbarPage } from "./OptionbarPage";
 export type { OptionbarField } from "./OptionbarPage";
 export { default as OptionbarValueDisplay } from "./OptionbarValueDisplay";
 export type { OptionbarValueDisplaySize, OptionbarValueDisplayVariant } from "./OptionbarValueDisplay";
+export { default as LandingHeader } from "./LandingHeader";
+export type { LandingHeaderProps, LandingHeaderNavItem, LandingHeaderAction } from "./LandingHeader";
 export { default as PageHeader } from "./PageHeader";
 export type { ProfileMenuItem, NotificationItem } from "./PageHeader";
 export { default as PageHeaderAiInline } from "./PageHeaderAiInline";
