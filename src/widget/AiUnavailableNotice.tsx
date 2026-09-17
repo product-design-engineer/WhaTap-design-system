@@ -136,6 +136,13 @@ export interface AiUnavailableNoticeProps {
   actionLabel?: string;
   /** 액션 버튼 클릭 핸들러. `actionLabel` 이 있어도 핸들러가 없으면 버튼은 렌더되지 않습니다. */
   onAction?: () => void;
+  /**
+   * 액션 버튼 크기. 기본 `md`(h-24px).
+   *
+   * 소비 제품이 버튼 높이를 한 값으로 통일해 두는 경우가 많아 `Button` 의 기본 크기를 그대로
+   * 따른다. 같은 표면의 랜딩 칩([[AiActionChip]])이 32px 이므로 그쪽에 맞추려면 `lg` 를 넘긴다.
+   */
+  actionSize?: "sm" | "md" | "lg" | "xl";
 }
 
 export default function AiUnavailableNotice({
@@ -146,6 +153,7 @@ export default function AiUnavailableNotice({
   description,
   actionLabel,
   onAction,
+  actionSize = "md",
 }: AiUnavailableNoticeProps) {
   const preset = reason ? AI_UNAVAILABLE_PRESETS[reason] : undefined;
   const tone: SemanticIntent = intent ?? preset?.intent ?? "muted";
@@ -188,7 +196,7 @@ export default function AiUnavailableNotice({
 
       {/* 액션 버튼 */}
       {showAction && (
-        <Button variant="contained" tone="primary" size="md" onClick={onAction}>
+        <Button variant="contained" tone="primary" size={actionSize} onClick={onAction}>
           {resolvedActionLabel}
         </Button>
       )}

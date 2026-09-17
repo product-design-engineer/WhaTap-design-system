@@ -54,7 +54,13 @@ export type AiTriggerButtonProps = {
   reveal?: "always" | "hover";
   /** 심볼 px 크기. 기본 13 (제목 옆 인라인 기준). */
   size?: number;
-  /** 접근성 라벨(`aria-label`). 기본 "WhaTap AI". */
+  /**
+   * 접근성 라벨(`aria-label`). 주지 않으면 `tooltip` 문자열을 쓰고, 그것도 없으면 "WhaTap AI".
+   *
+   * 기본값을 "WhaTap AI" 로 못 박아 두면 차트가 여럿인 화면에서 버튼 이름이 전부 같아진다 —
+   * 스크린리더 사용자에게는 「WhaTap AI」가 대여섯 개 늘어설 뿐 어느 차트의 것인지 알 수 없다.
+   * 툴팁은 이미 그 구분을 담고 있으므로(「이 차트를 …」) 그것을 이름으로 쓴다.
+   */
   label?: string;
   /** 숨쉬기+회전 애니메이션. `false` 면 정적 — prefers-reduced-motion 대응 스위치로도 사용. 기본 true. */
   animate?: boolean;
@@ -68,18 +74,21 @@ export default function AiTriggerButton({
   onClick,
   reveal = "always",
   size = 13,
-  label = "WhaTap AI",
+  label,
   animate = true,
   tooltip,
   tooltipPlacement = "right",
   className = "",
   ...rest
 }: AiTriggerButtonProps) {
+  /* 이름이 겹치지 않도록 tooltip 을 물려받는다 — 위 `label` 주석 참조. */
+  const ariaLabel = label ?? (typeof tooltip === "string" ? tooltip : "WhaTap AI");
+
   const btn = (
     <button
       {...rest}
       type={rest.type ?? "button"}
-      aria-label={label}
+      aria-label={ariaLabel}
       onClick={onClick}
       className={`flex items-center cursor-pointer${
         reveal === "hover" ? " opacity-0 group-hover-opacity-100 transition-opacity" : ""

@@ -249,9 +249,15 @@ export default function MiniLineChart({
                 transform: "translate(-50%, -100%)",
               }}
             >
+              {/* peak 라벨에 배경을 깐다 — 최고점이 plot 좌상단에 가까우면 라벨이 Y축 눈금 위로
+                  올라앉아 「10082%」처럼 두 수치가 한 덩어리로 읽힌다. 배경 없이 색만 바꾸면
+                  겹친 자리에서 어느 글자가 어느 수치인지 여전히 구분되지 않는다. */}
               <span
-                className="text-xs font-bold text-primary leading-none whitespace-nowrap"
-                style={{ fontFamily: "var(--font-family-numeric)" }}
+                className="text-xs font-bold text-primary leading-none whitespace-nowrap bg-card rounded-2px"
+                style={{
+                  fontFamily: "var(--font-family-numeric)",
+                  padding: "1px 3px",
+                }}
               >
                 {formatPeak(max) + unit}
               </span>

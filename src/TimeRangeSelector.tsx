@@ -17,7 +17,7 @@
  * - 일반 텍스트/숫자 입력 → [[TextField]].
  *
  * ## Composition rules
- * - 단일 border-divider + rounded 4 박스, LIVE 버튼과 datetime 영역을 1px divider 로 분할.
+ * - 단일 `--color-border-control` + `--radius-control` 박스, LIVE 버튼과 datetime 영역을 1px divider 로 분할.
  * - `start`/`end` 는 padding 무관 date parts 입력, 표시 시 `pad2`/`pad4` 자동 적용.
  * - duration 태그는 #00B543 알약. 아이콘은 라이브 SVG·토큰 색 그대로.
  *
@@ -64,7 +64,7 @@ export default function TimeRangeSelector({
           {title}
         </div>
       )}
-      <div className="flex items-stretch border border-color-var-color-border-divider rounded-4px bg-card overflow-hidden">
+      <div className="flex items-stretch border border-color-var-color-border-control rounded-control bg-card overflow-hidden">
         {/* Live 토글 */}
         <button
           type="button"

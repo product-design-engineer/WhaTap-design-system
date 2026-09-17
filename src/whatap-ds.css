@@ -254,6 +254,8 @@
     --color-border-divider: #ADADAD;
     /* @role 입력 컨트롤의 상시 테두리 | @use TextField·Select·DatePicker·SelectPopover 가 한 줄에 설 때 공유하는 단일 출처 | @avoid 카드·패널 경계 (그건 --color-border-default) */
     --color-border-control: #ADADAD;
+    /* @role 입력 컨트롤의 모서리 | @use --color-border-control 과 한 벌로 컨트롤 외곽을 정한다 | @avoid 카드·패널 모서리 (그건 --radius-md/lg) */
+    --radius-control: 4px;
 
     /* Product Identity — 제품을 알아보게 하는 색. 좌측 제품 레일 · 보고서 종류 목록 · 범례가 공유한다.
        테마로 바뀌지 않는다: 이 색은 «상태» 가 아니라 «누구인지» 라서, 다크에서 다른 색이 되면
@@ -848,7 +850,8 @@
 .hover-border-color-var-color-brand-blue-bg:hover { border-color: var(--color-brand-blue-bg); }
 .hover-border-color-var-color-brand-blue-deep:hover { border-color: var(--color-brand-blue-deep); }
 .hover-border-var-color-brand-blue:hover { border-color: var(--color-brand-blue); }
-.hover-brightness-95:hover { filter: ; }
+/* 위와 같은 빈 선언이었다 — hover 시 아무 일도 일어나지 않았다. */
+.hover-brightness-95:hover { filter: brightness(0.95); }
 .hover-opacity-100:hover { opacity: 100%; }
 .hover-opacity-70:hover { opacity: 70%; }
 .hover-opacity-80:hover { opacity: 80%; }
@@ -1001,6 +1004,7 @@
 .rounded-2px { border-radius: 2px; }
 .rounded-3px { border-radius: 3px; }
 .rounded-4px { border-radius: 4px; }
+.rounded-control { border-radius: var(--radius-control); }
 .rounded-5px { border-radius: 5px; }
 .rounded-6px { border-radius: 6px; }
 .rounded-8px { border-radius: 8px; }
@@ -1078,8 +1082,12 @@
 .transition-opacity { transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms }
 .transition-shadow { transition-property:box-shadow;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms }
 .transition-transform { transition-property: transform, translate, scale, rotate;transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);transition-duration: 150ms; }
-.translate-x-0 { translate: ; }
-.translate-x-full { translate: ; }
+/* 값이 비어 있었다(`translate: ;`) — 빈 선언은 파서가 버리므로 규칙이 아무 일도 하지 않는다.
+   AiWidget 의 slide 열림/닫힘이 이 두 클래스에 걸려 있어서, Tailwind 가 같은 이름을 만들어 주는
+   소비자에서만 우연히 동작하고 DS 단독(Storybook)에서는 패널이 움직이지 않았다.
+   detailwind 변환이 값을 못 옮긴 자리로 보인다. */
+.translate-x-0 { translate: 0; }
+.translate-x-full { translate: 100%; }
 .truncate { overflow: hidden;text-overflow: ellipsis;white-space: nowrap; }
 .uppercase { text-transform: uppercase; }
 .w-12px { width: 12px; }
@@ -1180,6 +1188,46 @@
 .fill-topology-node { fill: var(--color-topology-node-surface); }
 .fill-none { fill: none; }
 .stroke-topology-viewport { stroke: var(--color-brand-blue); }
+
+/* Product-prototype 사본에서 이관(2026-09-17). CardHead 가 .wds-field-row-inline 을 쓰는데
+   CSS 가 따라오지 않아 meta 슬롯이 늘 세로로 쌓이고 있었다 — 컴포넌트만 옮기고 그것이
+   기대는 CSS 를 두고 온 자리다. Select 의 .wds-field 도 같은 체계에 걸린다. */
+/* ── 필드 라벨 배치 — 부모가 넉넉하면 인라인 (feedback-field-inline-label) ────────────
+   부모에 `.wds-field-row*` 를 붙이면 그 폭을 컨테이너로 삼아, 넉넉할 때 라벨이 컨트롤 좌측으로
+   붙고 좁아지면 다시 위로 쌓인다. 뷰포트가 아니라 **부모 폭** 기준이라 사이드바 접힘·패널
+   분할 같은 레이아웃 변화에도 그대로 따라간다.
+   컨테이너 선언이 없으면 질의가 성립하지 않아 세로 배치로 남는다(안전한 기본값).
+
+   임계값은 **줄에 든 필드가 인라인으로 설 때 필요한 폭**에 맞춰 고른다. 하나로 통일하면
+   3필드 조건 바에 맞춘 값이 2필드 줄에는 너무 높아 영영 안 펴진다.
+     .wds-field-row-sm      400px  — 필드 2개 (라벨 짧은 세그먼트 토글 등)
+     .wds-field-row         720px  — 필드 3개 이상 (페이지 조건 바)
+     .wds-field-row-inline  질의 없음 — 계약상 한 줄인 자리(카드 머리 등)는 늘 인라인 */
+.wds-field-row,
+.wds-field-row-sm { container-type: inline-size; }
+
+/* 폭과 무관하게 늘 인라인. 자기 계약상 **한 줄인 자리** 전용 — 카드 머리([[CardHead]] meta 슬롯)
+   처럼 줄이 늘어나면 그 자리가 성립하지 않는 곳. 질의를 쓰지 않으므로 컨테이너 선언도 없다. */
+.wds-field-row-inline .wds-field.wds-field {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.wds-field-row-inline .wds-field.wds-field > :first-child { flex: 0 0 auto; white-space: nowrap; }
+.wds-field-row-inline .wds-field.wds-field > :last-child { flex: 0 1 auto; min-width: 0; }
+
+@container (min-width: 400px) {
+  /* 유틸(.flex-col)과 같은 단일 클래스라 클래스명을 두 번 써서 우선순위를 올린다. */
+  .wds-field-row-sm .wds-field.wds-field { flex-direction: row; align-items: center; gap: 8px; }
+  .wds-field-row-sm .wds-field.wds-field > :first-child { flex: 0 0 auto; white-space: nowrap; }
+  .wds-field-row-sm .wds-field.wds-field > :last-child { flex: 1 1 auto; min-width: 0; }
+}
+
+@container (min-width: 720px) {
+  .wds-field.wds-field { flex-direction: row; align-items: center; gap: 8px; }
+  .wds-field.wds-field > :first-child { flex: 0 0 auto; white-space: nowrap; }
+  .wds-field.wds-field > :last-child { flex: 1 1 auto; min-width: 0; }
+}
 
 /* ── globals (keyframes · 컴포넌트 전역 클래스 · .dark) ────────────────────── */
 html, body, #root {

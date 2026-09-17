@@ -16,8 +16,9 @@
  * - 여러 줄 본문 → `Textarea` (추후 추가, multiline=true 옵션으로 검토)
  *
  * ## Composition rules
- * - 색·테두리는 토큰 (border-default · brand-blue focus · status-error invalid)
+ * - 색·테두리는 토큰 (border-control · brand-blue focus · status-error invalid)
  * - 사이즈 sm(24px) / md(28px) / lg(32px) — 다른 form primitives 와 정렬
+ *   (히어로 전용 xl(40px) / 2xl(48px) 은 `size` prop 설명 참고)
  * - 좌/우 슬롯(아이콘, 단위) — leadingIcon / trailingNode
  * - helper / error 메시지 — helperText + invalid
  * - controlled 우선 (value + onChange). uncontrolled 도 지원 (defaultValue)
@@ -42,16 +43,18 @@
  */
 import { useId, type InputHTMLAttributes, type ReactNode } from "react";
 
-export type TextFieldSize = "sm" | "md" | "lg";
+export type TextFieldSize = "sm" | "md" | "lg" | "xl" | "2xl";
 
 export type TextFieldProps = {
   /** 상단 라벨. 미입력 시 라벨 영역 생략. */
   label?: ReactNode;
   /**
-   * 사이즈 — sm=24px / md=28px / **lg=32px (default)**.
+   * 사이즈 — sm=24px / md=28px / **lg=32px (default)** / xl=40px / 2xl=48px.
    *
    * 페이지 헤더의 FilterBar 검색 input 이 가장 흔한 사용처라 lg 가 default.
    * Modal 안의 dense form 필드라면 `size="md"` 를 명시.
+   * xl·2xl 은 **한 화면에 이 입력만 있는 경우**(로그인 착지의 AI 프롬프트, 검색 전용 히어로)용 —
+   * 툴바·목록 안에서는 쓰지 않는다(한 줄 컨트롤 높이 32px 규약을 깨뜨린다).
    */
   size?: TextFieldSize;
   /** 좌측 슬롯 — 검색 아이콘 등 작은 ReactNode. */
@@ -80,13 +83,28 @@ export type TextFieldProps = {
   className?: string;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "value" | "onChange">;
 
+/* padXEnd — 우측에 슬롯(clear × · trailingNode)이 있을 때의 오른쪽 여백.
+   슬롯 자체가 이미 여백을 갖고 있어서 padX 를 그대로 두면 오른쪽만 과하게 벌어진다.
+   특히 xl·2xl 처럼 padX 가 큰 사이즈에서 눈에 띈다. */
 const SIZE = {
-  sm: { h: 24, padX: 8, gap: 6, text: "text-sm" },
-  md: { h: 28, padX: 10, gap: 8, text: "text-base" },
-  lg: { h: 32, padX: 12, gap: 8, text: "text-md" },
+  sm: { h: 24, padX: 8, padXEnd: 6, gap: 6, text: "text-sm" },
+  md: { h: 28, padX: 10, padXEnd: 6, gap: 8, text: "text-base" },
+  lg: { h: 32, padX: 12, padXEnd: 8, gap: 8, text: "text-md" },
+  xl: { h: 40, padX: 14, padXEnd: 8, gap: 10, text: "text-lg" },
+  "2xl": { h: 48, padX: 16, padXEnd: 8, gap: 12, text: "" },
 } as const;
 
-const CLEAR_ICON_SIZE: Record<TextFieldSize, number> = { sm: 10, md: 12, lg: 12 };
+/* 2xl 의 글자 크기(16px)는 유틸 클래스가 아니라 스케일 토큰을 인라인으로 적용한다 —
+   whatap-ds.css 에 `.text-xl` 유틸이 없어(토큰 `--text-xl` 만 존재) 클래스로 쓰면 조용히 무시된다.
+   매직넘버가 아닌 토큰 참조이므로 정책 위반이 아니며, outer wrapper 에 두면
+   preflight 의 `input { font: inherit }` 덕분에 label·input 이 함께 따라온다. */
+const FONT_SIZE_VAR: Partial<Record<TextFieldSize, string>> = { "2xl": "var(--text-xl)" };
+
+/* 필드 라벨은 컨트롤 높이와 무관하게 11px 고정 (feedback-control-size-scale).
+   라벨은 컨트롤이 24px 이든 32px 이든 라벨이다 — 높이에 묶으면 값 글자와 같은 무게가 된다. */
+const FIELD_LABEL_CLASS = "text-sm font-medium";
+
+const CLEAR_ICON_SIZE: Record<TextFieldSize, number> = { sm: 10, md: 12, lg: 12, xl: 16, "2xl": 16 };
 
 export default function TextField({
   label,
@@ -114,26 +132,29 @@ export default function TextField({
     ? "var(--color-border-default)"
     : invalid
     ? "var(--color-status-error)"
-    : "var(--color-border-strong)";
+    : "var(--color-border-control)";
   const focusBorder = invalid ? "var(--color-status-error)" : "var(--color-brand-blue)";
 
   return (
     <div
-      className={`inline-flex flex-col gap-1_5 ${fullWidth ? "w-full" : ""} ${className}`}
+      className={`wds-field inline-flex flex-col gap-1_5 ${fullWidth ? "w-full" : ""} ${className}`}
+      style={{ fontSize: FONT_SIZE_VAR[size] }}
     >
       {label !== undefined && label !== null && (
         <label
           htmlFor={inputId}
-          className={`${spec.text} font-medium ${disabled ? "text-tertiary" : "text-primary"}`}
+          className={`${FIELD_LABEL_CLASS} ${disabled ? "text-tertiary" : "text-primary"}`}
         >
           {label}
         </label>
       )}
       <div
-        className={`relative inline-flex items-center rounded-md bg-card transition-colors`}
+        className={`relative inline-flex items-center rounded-control bg-card transition-colors`}
         style={{
           height: spec.h,
-          paddingInline: spec.padX,
+          paddingLeft: spec.padX,
+          // 우측 슬롯이 있으면 여백을 줄인다(슬롯이 자기 여백을 갖는다).
+          paddingRight: trailingNode || (clearable && value) ? spec.padXEnd : spec.padX,
           gap: spec.gap,
           border: `1px solid ${borderColor}`,
           opacity: disabled ? 0.6 : 1,

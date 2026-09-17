@@ -83,6 +83,10 @@ export type SelectProps = {
   className?: string;
 } & Omit<SelectHTMLAttributes<HTMLSelectElement>, "size" | "value" | "onChange">;
 
+/* 필드 라벨은 컨트롤 높이와 무관하게 11px 고정 (feedback-control-size-scale).
+   라벨은 컨트롤이 24px 이든 32px 이든 라벨이다 — 높이에 묶으면 값 글자와 같은 무게가 된다. */
+const FIELD_LABEL_CLASS = "text-sm font-medium";
+
 const SIZE = {
   sm: { h: 24, padX: 8, gap: 6, text: "text-sm" },
   md: { h: 28, padX: 10, gap: 8, text: "text-base" },
@@ -119,22 +123,22 @@ export default function Select({
     ? "var(--color-border-default)"
     : invalid
     ? "var(--color-status-error)"
-    : "var(--color-border-strong)";
+    : "var(--color-border-control)";
 
   return (
     <div
-      className={`inline-flex flex-col gap-1_5 ${fullWidth ? "w-full" : ""} ${className}`}
+      className={`wds-field inline-flex flex-col gap-1_5 ${fullWidth ? "w-full" : ""} ${className}`}
     >
       {label !== undefined && label !== null && (
         <label
           htmlFor={selectId}
-          className={`${spec.text} font-medium ${disabled ? "text-tertiary" : "text-primary"}`}
+          className={`${FIELD_LABEL_CLASS} ${disabled ? "text-tertiary" : "text-primary"}`}
         >
           {label}
         </label>
       )}
       <div
-        className="relative inline-flex items-center rounded-md bg-card transition-colors"
+        className="relative inline-flex items-center rounded-control bg-card transition-colors"
         style={{
           height: spec.h,
           paddingInline: spec.padX,
