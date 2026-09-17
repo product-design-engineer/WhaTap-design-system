@@ -125,8 +125,14 @@ export type ProjectContext = {
   productIcon?: string;
   /** 그룹 타입 칩(badge) 텍스트 — 예: "그룹". "[그룹]" 같은 타입 접두사는 라벨이 아니라 이 칩으로 분리. 생략 시 칩 없음. */
   groupBadge?: string;
-  /** 그룹명 (회색 라인) — 타입 접두사 없이 이름만. 접두사는 `groupBadge` 칩으로. */
-  groupLabel: string;
+  /**
+   * 그룹명 (회색 라인) — 타입 접두사 없이 이름만. 접두사는 `groupBadge` 칩으로.
+   *
+   * **선택이다**(2026-09-17). 프로젝트가 최상위인 제품(URL 모니터링 등)에는 그룹 계층 자체가
+   * 없다. 그런 곳에서 빈 문자열을 넣게 하면 회색 줄이 자리만 차지하고 사람은 「이름이
+   * 비었나」로 읽는다. 생략하면 **그 줄을 그리지 않고** 프로젝트명 한 줄로 선다.
+   */
+  groupLabel?: string;
   /** 프로젝트 타입 칩(badge) 텍스트 — 예: "프로젝트". "[프로젝트]" 접두사는 라벨이 아니라 이 칩으로 분리. 생략 시 칩 없음. */
   projectBadge?: string;
   /** 프로젝트명 (굵은 라인) — 타입 접두사 없이 이름만. 접두사는 `projectBadge` 칩으로. */
@@ -205,6 +211,8 @@ export default function Sidebar({
   org = DEFAULT_ORG,
   onOrgClick,
   hideProductRail = false,
+  hideUtilityBar = false,
+  onProjectClick,
   footerText,
   onLogoClick,
 }: {
@@ -233,6 +241,13 @@ export default function Sidebar({
   onOrgClick?: () => void;
   /** 좌측 40px 제품 레일(제품 아이콘 + 하단 유틸) 숨김. 모니터링 제품이 아닌 관리 콘솔 화면용. 기본 false. */
   hideProductRail?: boolean;
+  /**
+   * 레일 **하단 유틸**(테마·전체화면·홈)만 숨긴다. 제품 레일 자체는 남는다 —
+   * 전체를 끄려면 `hideProductRail`. 셸이 그 기능을 다른 곳에서 제공하는 제품용. 기본 false.
+   */
+  hideUtilityBar?: boolean;
+  /** 프로젝트 스위처 클릭 — 이벤트를 그대로 넘긴다(앵커 계산은 화면의 몫). */
+  onProjectClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   /** 하단 저작권 문구 override — [[SidebarCopyright]] 로 넘어간다. 저작권 주체가 다른 제품용. */
   footerText?: ReactNode;
   /**
@@ -267,7 +282,7 @@ export default function Sidebar({
 
       {/* 40px 프로젝트 스위처 — hideProjectSwitcher면 숨김, collapsed면 아이콘만 */}
       {!hideProjectSwitcher && (
-        <SidebarProjectSwitcher project={project} collapsed={isCollapsed} />
+        <SidebarProjectSwitcher project={project} collapsed={isCollapsed} onClick={onProjectClick} />
       )}
 
       {/* 본문 (flex-1): 좌 40px 제품 레일 + (collapsed가 아닐 때만) 우 메뉴 목록 */}
@@ -285,11 +300,13 @@ export default function Sidebar({
               return <ProductRailItem key={name} name={name} label={label} active={isActive} />;
             })}
           </div>
-          <div className="flex flex-col items-start shrink-0">
-            {BOTTOM_RAIL.map(({ icon: name, label }) => (
-              <BottomRailItem key={name} name={name} label={label} />
-            ))}
-          </div>
+          {!hideUtilityBar && (
+            <div className="flex flex-col items-start shrink-0">
+              {BOTTOM_RAIL.map(({ icon: name, label }) => (
+                <BottomRailItem key={name} name={name} label={label} />
+              ))}
+            </div>
+          )}
         </div>
         )}
 

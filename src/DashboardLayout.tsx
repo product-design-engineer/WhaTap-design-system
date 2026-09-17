@@ -55,6 +55,8 @@ export default function DashboardLayout({
   org,
   onOrgClick,
   hideProductRail = false,
+  hideUtilityBar = false,
+  onProjectClick,
   footerText,
   onLogoClick,
 }: {
@@ -87,6 +89,10 @@ export default function DashboardLayout({
   onOrgClick?: () => void;
   /** 좌측 제품 레일 숨김 — Sidebar 로 passthrough. 관리 콘솔 등 제품 네비 불필요 화면용. */
   hideProductRail?: boolean;
+  /** [[Sidebar]] 로 그대로 넘긴다 — 레일 하단 유틸(테마·전체화면·홈)만 숨김. */
+  hideUtilityBar?: boolean;
+  /** [[Sidebar]] 로 그대로 넘긴다 — 프로젝트 스위처 클릭(앵커 계산은 화면의 몫). */
+  onProjectClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   /** [[Sidebar]] 로 그대로 넘긴다 — 하단 저작권 문구 override. */
   footerText?: ReactNode;
   /** [[Sidebar]] 로 그대로 넘긴다 — 로고 클릭(랜딩이 따로 있는 제품에서만). */
@@ -110,6 +116,8 @@ export default function DashboardLayout({
         org={org}
         onOrgClick={onOrgClick}
         hideProductRail={hideProductRail}
+        hideUtilityBar={hideUtilityBar}
+        onProjectClick={onProjectClick}
         footerText={footerText}
         onLogoClick={onLogoClick}
         menu={menu}
