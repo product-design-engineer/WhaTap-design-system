@@ -73,6 +73,11 @@ export type AiPromptInputProps = {
   placeholder?: string;
   /** 입력 영역 위에 노출할 첨부 chip. */
   attachments?: AiPromptAttachment[];
+  /**
+   * 입력창 왼쪽 알약 자리의 내용. 주면 토큰 배지 대신 이것이 선다.
+   * 껍데기(회색 알약)는 여기서 그린다 — 호출측은 그 안의 글자만 정한다.
+   */
+  usagePill?: ReactNode;
   /** 토큰 입력 카운트 (Figma 29424:19317 pill). */
   tokenInput?: number;
   /** 토큰 출력 카운트. */
@@ -105,6 +110,7 @@ export default function AiPromptInput({
   onSubmit,
   placeholder = "어떤 작업을 함께 할까요?",
   attachments,
+  usagePill,
   tokenInput = 3395,
   tokenOutput = 181,
   showSendCursor = false,
@@ -291,7 +297,11 @@ export default function AiPromptInput({
                 <line x1="3.33" y1="8" x2="12.67" y2="8" className="stroke-color-var-color-text-secondary group-hover-plus-stroke-invert" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
             </button>
-            <TokenUsageBadge inputTokens={tokenInput} outputTokens={tokenOutput} />
+            {usagePill !== undefined && usagePill !== null ? (
+              <UsagePill>{usagePill}</UsagePill>
+            ) : (
+              <TokenUsageBadge inputTokens={tokenInput} outputTokens={tokenOutput} />
+            )}
           </div>
           <div className="flex gap-8px items-center shrink-0">
             <AiSendButton
@@ -315,6 +325,28 @@ export default function AiPromptInput({
           </p>
         </div>
       )}
+    </div>
+  );
+}
+
+/**
+ * UsagePill — 입력창 옆 알약 한 칸. 내용은 호출측이 정한다(`usagePill`).
+ *
+ * 껍데기를 DS 가 그리는 이유 — 호출측이 배경까지 칠하면 알약이 두 겹으로 보인다.
+ */
+function UsagePill({ children }: { children: ReactNode }) {
+  return (
+    <div
+      className="inline-flex items-center px-8px py-4px rounded-24px shrink-0"
+      style={{ backgroundColor: "var(--color-surface-50)" }}
+      data-node-id="29424:19317"
+    >
+      <span
+        className="text-xs leading-none text-primary whitespace-nowrap"
+        style={{ fontFamily: "Inter, 'Noto Sans KR', sans-serif", fontWeight: "var(--font-weight-regular)" }}
+      >
+        {children}
+      </span>
     </div>
   );
 }
