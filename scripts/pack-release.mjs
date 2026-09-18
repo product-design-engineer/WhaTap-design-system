@@ -32,6 +32,50 @@ if (pkg.private === true) {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
+// 최신성 게이트 — **origin/main 을 포함하지 않는 브랜치에서는 릴리스하지 않는다.**
+//
+// 왜: 릴리스 커밋은 기능 브랜치 위에 얹힌다(main 직접 푸시를 훅이 막으므로). 그런데 그
+// 브랜치가 다른 기능 브랜치와 갈려 있으면 **자기 브랜치 것만 담긴 tarball** 이 나가고,
+// 버전 번호는 정상으로 올라가므로 겉으로는 아무 문제가 없어 보인다.
+//
+// 실제로 두 번 일어났다.
+//   0.1.3 — 공통 조상에서 갈라져 나와, 커밋 메시지가 말한 「이 브랜치가 더한 것」의
+//           대부분(마케팅 토큰 73종 · Breadcrumb · Multiline …)이 빠진 채 패키징됐다.
+//   0.1.5 — 같은 경로로 한 번 더. 0.1.4 를 추월하며 같은 것들이 또 빠졌다.
+//
+// 버전이 내용을 보증하지 못하면 소비앱은 「받았는데 없다」를 겪는다. 그래서 «담겼는가» 를
+// 사람 판단에 맡기지 않고 여기서 막는다 — git 이 아는 사실(조상 관계)로 판정한다.
+//
+// 우회: RELEASE_ALLOW_BEHIND=1 (main 이 없는 초기 클론 · 의도적 hotfix 브랜치 등).
+//       우회했으면 무엇이 빠졌는지 스스로 확인할 책임이 생긴다.
+// ────────────────────────────────────────────────────────────────────────────
+if (process.env.RELEASE_ALLOW_BEHIND !== "1") {
+  const git = (args) => {
+    try {
+      return execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim();
+    } catch {
+      return null;
+    }
+  };
+  // origin/main 이 로컬에 없으면(얕은 클론 등) 판정하지 않는다 — 없는 것을 근거로 막지 않는다.
+  const hasRef = git(["rev-parse", "--verify", "--quiet", "refs/remotes/origin/main"]);
+  if (hasRef) {
+    git(["fetch", "--quiet", "origin", "main"]);
+    const behind = git(["rev-list", "--count", "HEAD..origin/main"]);
+    if (behind && behind !== "0") {
+      const missing = git(["log", "--oneline", "--no-decorate", "-8", "HEAD..origin/main"]) ?? "";
+      console.error(`\n✖ origin/main 보다 ${behind}커밋 뒤처져 있습니다 — 릴리스를 멈춥니다.`);
+      console.error("  이대로 pack 하면 아래 커밋의 내용이 **빠진 tarball** 이 나갑니다.");
+      console.error("  버전 번호는 정상으로 올라가므로 겉으로는 드러나지 않습니다(0.1.3 · 0.1.5 가 그랬습니다).\n");
+      console.error(missing.split("\n").map((l) => `    ${l}`).join("\n"));
+      console.error("\n  고치는 법: git merge origin/main  후 다시 실행하세요.");
+      console.error("  의도적으로 뒤처진 상태에서 내야 하면 RELEASE_ALLOW_BEHIND=1.\n");
+      process.exit(1);
+    }
+  }
+}
+
+// ────────────────────────────────────────────────────────────────────────────
 // 시크릿 스캔 게이트 — npm 이 실제로 동봉할 파일만 검사.
 // 구조적 자격증명·private key·.env 동봉 = 하드 차단(오탐 거의 0).
 // "secret/token" 같은 일반 키워드는 디자인 토큰 오탐이라 리뷰 경고만(차단 X).
