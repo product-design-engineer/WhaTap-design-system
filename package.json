@@ -26,7 +26,7 @@
     "src"
   ],
   "scripts": {
-    "build:design": "node scripts/build-design.mjs && node scripts/build-components-json.mjs && node scripts/build-tokens-json.mjs",
+    "build:design": "node scripts/build-design.mjs && node scripts/build-components-json.mjs && node scripts/build-tokens-json.mjs && node scripts/build-policies-json.mjs",
     "build:js": "tsup",
     "build:lib": "pnpm build:js",
     "release": "node scripts/pack-release.mjs",
@@ -53,7 +53,8 @@
     "build:tokens-json": "node scripts/build-tokens-json.mjs",
     "lint:token-docs": "node scripts/check-token-docs.mjs",
     "lint:coverage": "node scripts/check-catalog-coverage.mjs",
-    "lint:ai-boundary": "node scripts/check-ai-boundary.mjs"
+    "lint:ai-boundary": "node scripts/check-ai-boundary.mjs",
+    "build:policies-json": "node scripts/build-policies-json.mjs"
   },
   "peerDependencies": {
     "react": "^19.0.0",

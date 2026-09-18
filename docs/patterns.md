@@ -180,6 +180,12 @@ WhaTap AI Assistant 화면을 만들면서 누적된 **반복되는 규칙**들�
 </DashboardLayout>
 ```
 
+✅ [[DashboardLayout]] 에 `widgetOpen` 만 넘긴다 — 내부에서 [[Sidebar]] 의 `collapsed` 를 처리한다
+✅ 접힘 폭은 **80px** 이다 — 40px 은 «레일 폭»이지 사이드바 폭이 아니다(문서 4곳이 이 둘을 혼동하고 있었다)
+
+❌ 페이지별로 [[Sidebar]] 를 따로 import 해 `collapsed` 를 수동 관리 — 위젯을 닫았을 때 어느 상태로 돌아갈지 알 수 없어진다
+❌ 위젯이 열렸을 때 사이드바를 **완전히** 숨기기 — 다른 제품으로의 이동 경로가 사라진다
+
 ---
 
 ## 3. SVG Text Must Include Units
@@ -205,6 +211,11 @@ WhaTap AI Assistant 화면을 만들면서 누적된 **반복되는 규칙**들�
 ```
 
 `MiniLineChart`, `AiUsageChart` 등 차트 컴포넌트 안에서 이 규칙을 위반하면 dashboard 카드 크기에 따라 텍스트가 거대해지거나 사라진다.
+
+✅ `fontSize="9px"` — 단위를 문자열로 붙인다
+
+❌ `fontSize="9"` — 문자열이어도 단위가 없으면 user-space units 다
+❌ `fontSize={9}` — 숫자 리터럴. 같은 값이 viewBox 마다 다른 크기로 렌더된다
 
 ---
 
@@ -286,6 +297,16 @@ row height ≈ 33-36px (default density) 기준:
 
 위젯 내 메시지 카드(`AiClassificationTable`, `AiCostBreakdown` 등)도 동일한 정렬·너비 정책을 따른다.
 
+✅ 새 표는 `density="default"` 로 시작한다 — `compact` 는 채택에 별도 근거가 필요하다
+✅ 숫자 컬럼에 `numeric: true` — 우측 정렬 + 자형이 함께 따라온다
+✅ 정형 컬럼은 `width`(px 고정) · 가변 컬럼은 `flex`(fr)
+✅ 셀 안 주 텍스트는 **override 하지 않는다** — 표가 이미 `text-md text-primary` 를 준다
+
+❌ `compact` 를 일반 모니터링 표에 — 11px 한글 가독성을 희생하는 값이라 100+ 행 raw log 전용이다
+❌ default density 셀 안에 `text-sm`·`text-xs` — compact 시절 잔재다. 한 단계 작은 부 텍스트는 `text-base` 다
+❌ 셀 안에 `lg`(28-32px) 컴포넌트 — row(33-36px)를 압도한다
+❌ `width` 와 `flex` 를 같은 컬럼에 — `width` 가 이기므로 `flex` 는 거짓말이 된다
+
 ---
 
 ## 5. Chart Peak Alignment
@@ -301,6 +322,12 @@ row height ≈ 33-36px (default density) 기준:
 
 **How.** SVG plot 영역을 absolute 배치하고 같은 컨테이너 안에서 HTML overlay도 absolute. **둘 다 같은 plot 좌표계(left/top)를 공유**해 peak의 픽셀 위치를 계산. `MiniLineChart`가 이 방식으로 구현되어 있다 — 새 차트를 만들 때 패턴을 따라가세요.
 
+✅ SVG plot 과 HTML overlay 가 **같은 컨테이너·같은 좌표계**를 공유한다
+✅ peak 라벨에 배경을 깐다 — 최고점이 Y축 눈금과 겹치면 두 수치가 한 덩어리로 읽힌다
+
+❌ 두 좌표계를 따로 계산 — 몇 px 어긋나고, 사용자는 어색함을 느끼지만 원인을 짚지 못한다
+❌ 겹침을 색만 바꿔 해결 — 겹친 자리에서 어느 글자가 어느 수치인지 여전히 구분되지 않는다
+
 ---
 
 ## 6. Card 외형은 AiCard에 위임
@@ -315,6 +342,12 @@ row height ≈ 33-36px (default density) 기준:
 **Why.** 보더 색(`#eaeaea`), 라운드(8px), 패딩(12px), 진입 애니메이션(`.ai-anim-in`), gap(8px) — 다섯 가지가 모든 카드에서 일치해야 위젯이 단정해 보인다. 한 번이라도 직접 `<div className="bg-white border ...">`를 작성하면 1px 어긋남이 시각적으로 잡힌다.
 
 **How.** [`primitives.md`](./primitives.md#aicard) 참조. 새 카드 컴포넌트를 만들 때 첫 줄이 `<AiCard delay={delay}>` 가 아니라면 멈추고 다시 생각하세요.
+
+✅ 새 위젯 카드의 첫 줄은 `<AiCard delay={delay}>` 다
+✅ 외형(보더·라운드 8px·패딩 12px·진입 애니메이션·gap 8px)은 전부 [[AiCard]] 에 맡긴다
+
+❌ 위젯 안에서 `<div className="bg-card border …">` 로 카드를 직접 짜기 — 한 번이라도 하면 1px 어긋남이 눈에 잡힌다
+❌ 위젯 카드에 자체 패딩·라운드를 덧붙이기 — 값이 두 곳에서 정해지면 다음 조정 때 한쪽만 바뀐다
 
 ---
 
@@ -334,6 +367,16 @@ row height ≈ 33-36px (default density) 기준:
 **Why.** 디자인 결정이 코드 전반에 흩어지면, 톤을 한 번 조정하기 위해 grep으로 hex를 찾아 다녀야 한다. 토큰으로 중앙화하면 `_tokens.ts` 한 파일 수정으로 위젯 전체가 따라온다.
 
 **How.** 새 색이 필요하다면 — 토큰에 먼저 추가하고 컴포넌트에서 import. 5단계 `Tone`을 늘리는 것보다 토큰 외 색상(예: 차트 전용 색)을 별도 named export로 두는 게 보통 옳다.
+
+✅ 새 색은 **토큰을 먼저 추가**한 뒤 참조한다 — 토큰 부재는 리터럴의 근거가 아니라 토큰 추가의 근거다
+✅ TS 토큰을 인라인 주입할 때는 `.cssVar` — `.dark` 는 CSS 변수만 재매핑한다
+✅ 값이 아니라 **역할**로 명명한다 (`--shadow-md` ⭕ / `--shadow-0-8-24` ❌)
+
+❌ `#E53935` · `rgba(0,0,0,.5)` 같은 리터럴
+❌ `bg-white` · `text-black` 처럼 **값이 박힌 유틸 클래스**
+❌ `bg-ce5484d` 처럼 **값이 이름에 들어간 유틸** — 이름만 다를 뿐 같은 위반이다
+❌ `.value`(hex)를 인라인 주입 — 라이트 값이 박혀 다크가 따라오지 않는다
+❌ 색 리터럴을 prop 기본값으로 굳히기(`bodyBg = "#fff"`) — 호출부로 위반이 번식한다
 
 ---
 
@@ -362,6 +405,13 @@ row height ≈ 33-36px (default density) 기준:
 
 데모/녹화용이 아닌 일반 응답에서도 적용 — 사용자 인지 부담을 낮춘다.
 
+✅ 한 응답 안에서 `0 → 120 → 240 → 360 …` 으로 증가시킨다
+✅ `prefers-reduced-motion` 에서는 애니메이션을 끈다
+
+❌ 모든 카드에 `delay={0}` — 정보량이 한꺼번에 쏟아져 어디부터 볼지 길을 잃는다
+❌ 카드가 하나인데 지연을 주기 — 그건 흐름이 아니라 그냥 느린 것이다
+❌ 표의 행·목록 항목에 stagger — 동종 반복에는 읽는 순서가 없다
+
 ---
 
 ## 9. 새 컴포넌트를 만들기 전 체크리스트
@@ -378,6 +428,14 @@ row height ≈ 33-36px (default density) 기준:
 3. 위 둘이 다 안 되는 진짜 새 패턴인가? → 그러면 `widget/Ai<Name>.tsx`를 만들되, **반드시 `AiCard` + 토큰 + primitive 조합**으로
 
 추가한 컴포넌트는 같은 PR에서 [`widget-components.md`](./widget-components.md)에 등록.
+
+✅ 기존 컴포넌트의 **prop 확장**으로 되는지 먼저 본다 — 같은 외형·다른 데이터인 경우가 매우 흔하다
+✅ 반복되거나 의미 단위가 분명한 구조(목록 행·카드·셀·항목)는 **컴포넌트로 추출**한다 — 추출이 기본이다
+✅ 새 컴포넌트는 계층 명시 + docstring 4섹션 + 스토리 + `index.ts` export 를 **같은 PR 에서** 갖춘다
+
+❌ 프리미티브로 조립되는 것을 새 컴포넌트로 — 페이지에서 직접 조립하면 된다
+❌ 스토리 없이 추가 — 계층 판정이 story title prefix 라서 **게이트 5곳에서 동시에 빠진다**
+❌ `map` 안에 구조를 인라인으로 펼치기 — 인라인 허용은 재사용 없는 1회성 레이아웃 래퍼뿐이다
 
 ---
 
@@ -402,6 +460,14 @@ row height ≈ 33-36px (default density) 기준:
 **Why.** 한국어는 영문보다 가독성 향상이 weight 보다 size 에 더 의존. 같은 사이즈에서 medium ↔ bold 만 바꾸는 것은 위계가 흐릿. 사이즈 + weight 둘 다 조합 시 정보 우선순위가 분명해짐.
 
 **How.** 토큰 utility 클래스 (`text-md font-bold`, whatap-ds.css 제공) 만 사용. 직접 `style={{ fontSize: 13, fontWeight: 700 }}` 금지 — 토큰 외 값은 차후 토큰 변경 시 누락됨.
+
+✅ **사이즈 + weight 를 함께** 조합해 위계를 만든다
+✅ 크기를 직접 고르지 말고 **역할**로 고른다 — `heading.section` · `body.label` · `numeric.metric` 등 Role Catalog
+✅ 유틸 클래스만 쓴다 (`text-md font-bold`)
+
+❌ 같은 사이즈에서 weight 만 바꿔 위계를 만들기 — 한국어는 가독성이 weight 보다 size 에 더 의존한다
+❌ `style={{ fontSize: 13, fontWeight: 700 }}` — 토큰 밖 값은 다음 토큰 변경에서 누락된다
+❌ 본문(running text)에서 굵기를 오르내리기 — 그건 위계가 아니라 잡음이다
 
 ---
 
@@ -487,6 +553,14 @@ Product-SaaS 안에서 어떤 구현을 선택할지 갈릴 때, 다음 순서�
 3. **Exact design**: 디자인 명세에 정확히 부합해야 한다. 픽셀/색/폰트를 임의로 근사하지 않는다 — 토큰/Figma 노드를 확인.
 
 세 가지 모두 동시에 만족하지 않는 변경은 **머지하지 말고 디자인/엔지니어링 리뷰**.
+
+✅ 라이브 라우트 본문을 고치기보다 **더하는(additive) 쪽**을 먼저 찾는다
+✅ 한 페이지 전용으로 보이는 것도 **다른 페이지에서 쓸 수 있는 모양**으로 만든다
+✅ 픽셀·색·폰트는 토큰이나 Figma 노드를 **확인**한다
+
+❌ 한 페이지 전용 hack — 곧 다른 페이지로 누수된다
+❌ 「거의 같으니」로 값을 근사하기 — 근사값은 토큰 체계 밖에 남아 다음 조정에서 빠진다
+❌ 이 우선순위로 `severity: must` 를 뒤집기 — 불변으로 선언된 것은 「정확한 디자인」을 이유로 깨지 않는다
 
 ---
 
