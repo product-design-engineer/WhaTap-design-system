@@ -201,6 +201,17 @@ export const GATE_ROSTER = [
       "설명 없는 토큰이 늘어나 「무엇에 쓰는 것인가」를 도구가 답하지 못하는 상태 — 실측: 197개 중 문서에 이름이라도 있던 것이 55개(28%)뿐이었고, 답할 수 없으면 소비자는 hex 를 적는다(리터럴 0 정책이 토큰 부재로 새어 나간다)",
   },
   {
+    id: "policy-docs",
+    name: "전역 정책의 「언제 / 판정」",
+    status: "auto",
+    script: "scripts/check-policy-docs.mjs",
+    pipeline: null,
+    invariant:
+      "`docs/patterns.md` 의 **모든 전역 정책(16개)** 이 `<!-- @policy id · severity · applies -->` 메타와 **When to use · When NOT to use · ✅ 1개 · ❌ 1개** 를 갖는다. 판정 대상은 생성 산출물 `docs/policies.json` — 파싱을 두 번 구현하면 게이트와 배달물이 다른 것을 본다. 동결선 **0**.",
+    prevents:
+      "규칙과 근거만 쌓이고 「언제 걸리는가」가 비는 상태 — 실측: When to use 0/16 · Do 3/16 인 채로 몇 달을 지났고, 그 결과 PageHeader 의 hideDocs·hideSupport 를 열 때 판단 근거가 문서에 없어 컴포넌트 docstring 에만 적혔다(「헤더는 불변」과 「끌 수 있다」의 경계가 어디에도 없었다)",
+  },
+  {
     id: "catalog-coverage",
     name: "공개 export 의 카탈로그 등재",
     status: "auto",
