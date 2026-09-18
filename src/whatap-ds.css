@@ -1859,10 +1859,12 @@ html, body, #root {
   gap: 10px;
   color: var(--color-text-tertiary);
 }
+/* 모바일에서 4px 은 너무 붙어 버튼 사이 경계가 읽히지 않았다. 터치 타깃이 서로 맞닿아
+   잘못 누르기도 쉽다. 8px 로 벌리고 640 이상에서 12px 로 간다. */
 .wds-landing-header-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 }
 .wds-landing-header-nav {
   display: none;
@@ -1881,7 +1883,10 @@ html, body, #root {
 .wds-landing-header-navlink[aria-current="page"] {
   color: var(--color-text-strong);
 }
-/* 아이콘 버튼(테마·햄버거) — 640 이상에서 햄버거만 사라진다. */
+/* 아이콘 버튼(테마·햄버거) — 640 이상에서 햄버거만 사라진다.
+   `color` 를 반드시 준다. 안에 든 아이콘이 stroke="currentColor" 로 그려지는데, 버튼이
+   색을 정하지 않으면 body 기본값(near-black)을 상속해 **다크에서 검은 아이콘이 검은 헤더
+   위에 놓인다.** 옆의 nav 링크는 색을 명시해 멀쩡한데 이 버튼만 안 보였다. */
 .wds-landing-header-iconbtn {
   display: inline-flex;
   align-items: center;
@@ -1892,13 +1897,22 @@ html, body, #root {
   border-radius: 10px;
   border: 1px solid var(--color-border-default);
   background: transparent;
+  color: var(--color-text-strong);
   cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.wds-landing-header-iconbtn:hover {
+  background: var(--color-surface-50);
+  border-color: var(--color-border-strong, var(--color-border-default));
+}
+.wds-landing-header-iconbtn[aria-expanded="true"] {
+  background: var(--color-surface-50);
 }
 .wds-landing-header-signin {
   display: inline-flex;
   flex-shrink: 0;
   white-space: nowrap;
-  padding: 8px 6px;
+  padding: 8px 8px;
   border-radius: 10px;
   color: var(--color-text-secondary);
   text-decoration: none;
@@ -1924,7 +1938,12 @@ html, body, #root {
 .wds-landing-header .sm-only { display: none; }
 .wds-landing-header .sm-hidden { display: inline-flex; }
 
-/* 모바일 시트 — 헤더 하단에 붙어 펼쳐진다. */
+/* 모바일 시트 — 헤더 하단에 붙어 펼쳐진다.
+   배경은 **불투명**(`--color-card`)이다. 헤더 바는 본문이 지나가는 것이 보여야 맞지만,
+   시트는 읽어야 하는 면이라 같은 반투명 토큰을 쓰면 뒤 본문 글자가 메뉴 글자와 겹쳐
+   둘 다 읽히지 않는다. 실제로 그렇게 나왔다.
+   z-index 는 헤더(50)보다 아래지만 본문 위 — 형제가 아니라 헤더 자식이라 헤더의 스태킹
+   컨텍스트를 그대로 탄다. 그림자로 떠 있는 면임을 표시한다. */
 .wds-landing-header-sheet {
   position: absolute;
   left: 0;
@@ -1933,10 +1952,9 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   padding: 8px 12px 14px;
-  background: var(--color-header-translucent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: var(--color-card);
   border-bottom: 1px solid var(--color-border-default);
+  box-shadow: var(--shadow-md, 0 8px 24px rgba(0, 0, 0, 0.18));
 }
 
 @media (min-width: 640px) {
