@@ -1313,6 +1313,49 @@ html, body, #root {
   background-color: #d6e1ff;
   border-color: #d6e1ff;
 }
+/* AI 입력창 Glow Effect — 입력 중일 때 상단에 무지개 스펙트럼 빛줄기가 흐른다.
+   .ai-input-glow-wrap > .ai-input-wrapper 구조로 감싼다. 롤백은 래퍼 클래스 제거. */
+.ai-input-glow-wrap {
+  position: relative;
+  overflow: visible;
+}
+/* 래퍼가 보더 역할이므로 내부 wrapper 의 보더는 항상 제거한다. */
+.ai-input-glow-wrap > .ai-input-wrapper,
+.rounded-10px > .ai-input-wrapper {
+  border: none !important;
+}
+/* 상단 스펙트럼 라인 */
+.ai-input-glow-line {
+  position: absolute;
+  top: 0;
+  left: 8px;
+  right: 8px;
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #ef4444, #f59e0b, #22c55e, #3b82f6);
+  background-size: 300% 100%;
+  animation: aiGlowFlow 4s linear infinite;
+}
+/* 상단 블러 글로우 — 라인 위로 번지는 빛 */
+.ai-input-glow-blur {
+  position: absolute;
+  top: -6px;
+  left: 8px;
+  right: 8px;
+  height: 14px;
+  border-radius: 7px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #ef4444, #f59e0b, #22c55e, #3b82f6);
+  background-size: 300% 100%;
+  animation: aiGlowFlow 4s linear infinite;
+  filter: blur(10px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+@keyframes aiGlowFlow {
+  0%   { background-position: 0% 0; }
+  100% { background-position: 300% 0; }
+}
+
 .ai-input-textarea {
   field-sizing: content;
   scrollbar-width: thin;
@@ -1707,7 +1750,8 @@ html, body, #root {
   transition: color .15s;
 }
 .wds-landing-header-navlink:hover,
-.wds-landing-header-navlink[aria-current="page"] {
+.wds-landing-header-navlink[aria-current="page"],
+.wds-landing-header-navlink[aria-expanded="true"] {
   color: var(--color-text-strong);
 }
 /* 아이콘 버튼(테마·햄버거) — 640 이상에서 햄버거만 사라진다.
@@ -1797,4 +1841,78 @@ html, body, #root {
 }
 @media (min-width: 1024px) {
   .wds-landing-header-product { display: inline-flex; }
+}
+
+/* ── WebCtaButton — 마케팅 CTA ─────────────────────────── */
+
+.wds-web-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--radius-web-pill, 99px);
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s, color 0.2s;
+  border: 1px solid transparent;
+}
+
+/* variant: filled (1차 CTA) */
+.wds-web-cta--filled {
+  background-color: var(--color-brand-blue-web, var(--color-brand-blue));
+  color: #fff;
+}
+.wds-web-cta--filled:hover {
+  background-color: var(--color-brand-blue-web-deep, var(--color-brand-blue-deep));
+  box-shadow: 0 4px 16px rgba(0, 75, 224, 0.3);
+}
+
+/* variant: outline (2차 CTA) */
+.wds-web-cta--outline {
+  background-color: transparent;
+  border-color: var(--color-brand-blue-web, var(--color-brand-blue));
+  color: var(--color-brand-blue-web, var(--color-brand-blue));
+}
+.wds-web-cta--outline:hover {
+  background-color: rgba(0, 75, 224, 0.06);
+}
+
+/* variant: white (어두운 배경 위) */
+.wds-web-cta--white {
+  background-color: #fff;
+  color: var(--color-brand-blue-web, var(--color-brand-blue));
+}
+.wds-web-cta--white:hover {
+  background-color: #eaeaea;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18), 0 18px 44px rgba(255, 255, 255, 0.32);
+}
+
+/* size */
+.wds-web-cta--sm { height: 36px; padding: 0 16px; font-size: 14px; }
+.wds-web-cta--md { height: 50px; padding: 0 24px; font-size: 16px; }
+.wds-web-cta--lg { height: 60px; padding: 0 28px; font-size: 20px; }
+
+/* 화살표 아이콘 */
+.wds-web-cta-arrow { flex-shrink: 0; transition: transform 0.2s; }
+.wds-web-cta:hover .wds-web-cta-arrow { transform: translateX(3px); }
+.wds-web-cta--sm .wds-web-cta-arrow { width: 16px; height: 16px; }
+.wds-web-cta--md .wds-web-cta-arrow { width: 18px; height: 18px; }
+.wds-web-cta--lg .wds-web-cta-arrow { width: 20px; height: 20px; }
+
+/* 라벨 */
+.wds-web-cta-label { display: inline-flex; align-items: center; }
+
+/* 반응형 */
+@media screen and (max-width: 991px) {
+  .wds-web-cta--md { height: 44px; font-size: 15px; }
+  .wds-web-cta--lg { height: 48px; font-size: 16px; }
+  .wds-web-cta-arrow { width: 16px !important; height: 16px !important; }
+}
+@media screen and (max-width: 767px) {
+  .wds-web-cta--md { height: 40px; font-size: 14px; }
+  .wds-web-cta--lg { height: 44px; padding: 0 20px; font-size: 15px; gap: 6px; }
+  .wds-web-cta-arrow { width: 14px !important; height: 14px !important; }
 }

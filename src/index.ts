@@ -98,6 +98,8 @@ export { default as AiTriggerButton } from "./widget/AiTriggerButton";
 export type { AiTriggerButtonProps } from "./widget/AiTriggerButton";
 export { default as Button } from "./Button";
 export type { ButtonProps, ButtonVariant, ButtonSize, ButtonTone } from "./Button";
+export { default as WebCtaButton } from "./WebCtaButton";
+export type { WebCtaButtonProps, WebCtaVariant, WebCtaSize } from "./WebCtaButton";
 export { default as FilterBar } from "./FilterBar";
 export type { FilterBarProps, FilterBarDropdownConfig, FilterBarSize } from "./FilterBar";
 export { default as DashboardBuildingProgress } from "./DashboardBuildingProgress";

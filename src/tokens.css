@@ -95,6 +95,14 @@
   --radius-full: 9999px;
   --color-white: #fff;
 
+  /* Radius — 마케팅(web) 계열. 제품 UI 는 2px/4px 가 주력이지만 마케팅은 좀 더 넉넉하다. */
+  --radius-web-xs: 4px;
+  --radius-web-sm: 8px;
+  --radius-web-md: 12px;
+  --radius-web-lg: 16px;
+  --radius-web-pill: 99px;
+  --radius-web-circle: 50%;
+
   /* Elevation — 층이 아니라 *떠 있는 높이*로 고른다. 컴포넌트가 rgba 를 직접 적지 않도록
      그림자도 토큰이다. hairline 은 그림자에 겹쳐 쓰는 1px 경계(토스트 등). */
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.08);      /* 용도: 살짝 들린 것 — 활성 탭·세그먼트 */
