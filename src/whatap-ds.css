@@ -80,6 +80,26 @@
     --text-4xl: 32px;
     /* @role 타입 스케일 — 최대 제목 | @use 역할로 고른다(patterns 의 타이포 Role Catalog) | @avoid 같은 사이즈에서 weight 만 바꿔 위계 만들기 */
     --text-5xl: 48px;
+
+    /* Marketing Type Scale — 마케팅 사이트(whatap.io/ko) 전용 */
+    --text-marketing-display: 56px;
+    --text-marketing-h1: 58px;
+    --text-marketing-h2: 48px;
+    --text-marketing-h3: 40px;
+    --text-marketing-h4: 32px;
+    --text-marketing-h5: 28px;
+    --text-marketing-h6: 24px;
+    --text-marketing-lead: 22px;
+    --text-marketing-body: 20px;
+    --text-marketing-body-sm: 16px;
+    --text-marketing-caption: 14px;
+    --text-marketing-nav: 18px;
+    /* Marketing Line Height */
+    --leading-marketing-display: 1.2;
+    --leading-marketing-heading: 1.3;
+    --leading-marketing-body: 1.6;
+    --leading-marketing-button: 1.5;
+
     /* @role 글자 굵기 — 본문 굵기 | @avoid 사이즈 없이 굵기만으로 위계 만들기 */
     --font-weight-normal: 400;
     /* @role 글자 굵기 — 라벨·강조 굵기 | @avoid 사이즈 없이 굵기만으로 위계 만들기 */
@@ -1863,7 +1883,11 @@ html, body, #root {
 /* variant: filled (1차 CTA) */
 .wds-web-cta--filled {
   background-color: var(--color-brand-blue-web, var(--color-brand-blue));
-  color: #fff;
+  color: var(--color-text-inverse);
+}
+.wds-web-cta--filled .wds-web-cta-label,
+.wds-web-cta--filled .wds-web-cta-arrow {
+  color: var(--color-text-inverse);
 }
 .wds-web-cta--filled:hover {
   background-color: var(--color-brand-blue-web-deep, var(--color-brand-blue-deep));
@@ -1875,6 +1899,10 @@ html, body, #root {
   background-color: transparent;
   border-color: var(--color-brand-blue-web, var(--color-brand-blue));
   color: var(--color-brand-blue-web, var(--color-brand-blue));
+}
+.wds-web-cta--outline .wds-web-cta-label,
+.wds-web-cta--outline .wds-web-cta-arrow {
+  color: inherit;
 }
 .wds-web-cta--outline:hover {
   background-color: rgba(0, 75, 224, 0.06);
@@ -1915,4 +1943,165 @@ html, body, #root {
   .wds-web-cta--md { height: 40px; font-size: 14px; }
   .wds-web-cta--lg { height: 44px; padding: 0 20px; font-size: 15px; gap: 6px; }
   .wds-web-cta-arrow { width: 14px !important; height: 14px !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ *  Marketing Hero Banner — 마케팅 사이트 히어로 배너 레이아웃 + dark/light
+ *
+ *  구조:
+ *    .wds-hero-banner(.--dark | .--light)
+ *      .wds-hero-banner-content   (텍스트 + CTA 영역)
+ *        .wds-hero-banner-heading (헤드라인)
+ *        .wds-hero-banner-sub     (서브텍스트)
+ *        .wds-hero-banner-cta     (버튼 그룹)
+ *      .wds-hero-banner-visual    (그래픽 에셋 / iframe 영역)
+ * ═══════════════════════════════════════════════════════════════════ */
+
+/* 공통 레이아웃 */
+.wds-hero-banner {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 3%;
+}
+
+.wds-hero-banner-content {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  min-width: 520px;
+  height: 100%;
+  padding-left: 40px;
+  z-index: 1;
+}
+
+.wds-hero-banner-heading {
+  font-size: var(--text-marketing-display);
+  font-weight: 600;
+  line-height: var(--leading-marketing-display);
+  margin: 0;
+}
+
+.wds-hero-banner-sub {
+  font-size: var(--text-marketing-lead);
+  line-height: var(--leading-marketing-body);
+  margin: 0;
+}
+
+.wds-hero-banner-cta {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.wds-hero-banner-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 50%;
+  padding-right: 40px;
+  overflow: visible;
+  margin-left: auto;
+}
+
+/* ── Dark variant ── (어두운 배경: ai-slide, GPU) */
+.wds-hero-banner--dark .wds-hero-banner-heading {
+  color: var(--color-text-inverse);
+}
+.wds-hero-banner--dark .wds-hero-banner-sub {
+  color: #b0b8c8;
+}
+
+/* dark — filled CTA: 흰 배경 + 검정 라벨 */
+.wds-hero-banner--dark .wds-web-cta--filled {
+  background-color: var(--color-text-inverse);
+  color: #000;
+}
+.wds-hero-banner--dark .wds-web-cta--filled .wds-web-cta-label,
+.wds-hero-banner--dark .wds-web-cta--filled .wds-web-cta-arrow {
+  color: #000;
+}
+.wds-hero-banner--dark .wds-web-cta--filled:hover {
+  background-color: #eaeaea;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, .18), 0 18px 44px rgba(255, 255, 255, .32);
+}
+
+/* dark — outline CTA: 흰 보더 + 흰 라벨 */
+.wds-hero-banner--dark .wds-web-cta--outline {
+  border-color: var(--color-text-inverse);
+  color: var(--color-text-inverse);
+  background-color: transparent;
+}
+.wds-hero-banner--dark .wds-web-cta--outline .wds-web-cta-label,
+.wds-hero-banner--dark .wds-web-cta--outline .wds-web-cta-arrow {
+  color: var(--color-text-inverse);
+}
+.wds-hero-banner--dark .wds-web-cta--outline:hover {
+  background-color: rgba(255, 255, 255, .1);
+}
+
+/* ── Light variant ── (밝은 배경: LLM, 와탭 모니터링) */
+.wds-hero-banner--light .wds-hero-banner-heading {
+  color: var(--color-text-primary);
+}
+.wds-hero-banner--light .wds-hero-banner-sub {
+  color: var(--color-text-secondary);
+}
+
+/* light — filled CTA: 브랜드 블루 배경 + 흰 라벨 */
+.wds-hero-banner--light .wds-web-cta--filled {
+  background-color: var(--color-brand-blue-web, var(--color-brand-blue));
+  color: var(--color-text-inverse);
+}
+.wds-hero-banner--light .wds-web-cta--filled .wds-web-cta-label,
+.wds-hero-banner--light .wds-web-cta--filled .wds-web-cta-arrow {
+  color: var(--color-text-inverse);
+}
+.wds-hero-banner--light .wds-web-cta--filled:hover {
+  background-color: var(--color-brand-blue-web-deep, var(--color-brand-blue-deep));
+  box-shadow: 0 4px 16px rgba(0, 75, 224, 0.3);
+}
+
+/* light — outline CTA: 브랜드 블루 보더 + 보더 동일 라벨 */
+.wds-hero-banner--light .wds-web-cta--outline {
+  border-color: var(--color-brand-blue-web, var(--color-brand-blue));
+  color: var(--color-brand-blue-web, var(--color-brand-blue));
+  background-color: transparent;
+}
+.wds-hero-banner--light .wds-web-cta--outline .wds-web-cta-label,
+.wds-hero-banner--light .wds-web-cta--outline .wds-web-cta-arrow {
+  color: var(--color-brand-blue-web, var(--color-brand-blue));
+}
+.wds-hero-banner--light .wds-web-cta--outline:hover {
+  background-color: rgba(0, 75, 224, 0.06);
+}
+
+/* ── AI variant ── (AI 슬라이드 전용 — 자체 CTA 스타일, 텍스트만 제어) */
+.wds-hero-banner--ai .wds-hero-banner-heading {
+  color: var(--color-text-inverse);
+}
+.wds-hero-banner--ai .wds-hero-banner-sub {
+  color: #b0b8c8;
+}
+.wds-hero-banner--ai .wds-web-cta-label,
+.wds-hero-banner--ai .wds-web-cta-arrow {
+  color: var(--color-text-inverse);
+}
+
+/* 반응형 */
+@media screen and (max-width: 991px) {
+  .wds-hero-banner-content { min-width: 0; padding-left: 24px; }
+  .wds-hero-banner-visual { padding-right: 24px; }
+  .wds-hero-banner-heading { font-size: 48px; }
+  .wds-hero-banner-sub { font-size: 18px; }
+}
+@media screen and (max-width: 767px) {
+  .wds-hero-banner { flex-direction: column; padding-top: 5%; }
+  .wds-hero-banner-content { padding-left: 16px; padding-right: 16px; }
+  .wds-hero-banner-visual { max-width: 100%; padding: 0 16px; }
+  .wds-hero-banner-heading { font-size: 38px; white-space: normal; }
+  .wds-hero-banner-sub { font-size: 16px; white-space: normal; }
 }

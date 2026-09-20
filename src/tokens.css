@@ -16,6 +16,9 @@
   /* Brand primary */
   --color-brand-blue: #296CF2;
   --color-brand-blue-deep: #1B5CD9;
+  /* Marketing web — 마케팅 사이트 CTA·링크 전용. 제품 UI 브랜드 블루와 별개 */
+  --color-brand-blue-web: #296CF2;
+  --color-brand-blue-web-deep: #1B5CD9;
   --color-brand-blue-soft: #3DA9FF;
   --color-brand-blue-bg: #D6E1FF;
   --color-brand-blue-bg-2: #C2D5FC;
@@ -95,6 +98,66 @@
   --radius-full: 9999px;
   --color-white: #fff;
 
+  /* ── Marketing Web Surfaces — 마케팅 사이트 다크 섹션·푸터·CTA 배너 배경.
+     제품 UI 의 --color-bg/card 와 별개. 마케팅은 페이지 내에서 밝음↔어둠이 교차하므로
+     section 단위로 적용하는 표면 토큰이 필요하다. */
+  --color-web-surface-dark: #181c20;          /* 다크 섹션 배경 (지원 환경 등) */
+  --color-web-surface-darker: #0f1318;        /* 푸터 배경 */
+  --color-web-surface-cta: #0f1724;           /* CTA 배너 그라데이션 시작 */
+  --color-web-surface-cta-mid: #1a2744;       /* CTA 배너 그라데이션 중간 */
+  --color-web-surface-cta-end: #1e1a3a;       /* CTA 배너 그라데이션 끝 */
+
+  /* Marketing Web Text on Dark — 다크 표면 위 텍스트 계층. */
+  --color-web-text-on-dark: #fff;
+  --color-web-text-on-dark-muted: rgba(255, 255, 255, 0.6);
+  --color-web-text-on-dark-subtle: rgba(255, 255, 255, 0.45);
+  --color-web-text-on-dark-faint: rgba(255, 255, 255, 0.3);
+
+  /* Marketing Web Borders on Dark */
+  --color-web-border-on-dark: rgba(255, 255, 255, 0.12);
+  --color-web-border-on-dark-hover: rgba(255, 255, 255, 0.3);
+  --color-web-border-on-dark-active: rgba(255, 255, 255, 0.4);
+
+  /* Marketing Web Interactive on Dark — 다크 표면의 pill·버튼·태그 배경. */
+  --color-web-fill-on-dark: rgba(255, 255, 255, 0.08);
+  --color-web-fill-on-dark-hover: rgba(255, 255, 255, 0.12);
+
+  /* Marketing Web Accent on Dark — 다크 표면 위 카테고리 태그 (배경 + 전경 쌍).
+     원색을 낮은 불투명도로 깔고, 전경은 같은 색조의 파스텔. */
+  --color-web-accent-mint-bg: rgba(16, 185, 129, 0.15);
+  --color-web-accent-mint-fg: #6ee7b7;
+  --color-web-accent-light-blue-bg: rgba(59, 130, 246, 0.15);
+  --color-web-accent-light-blue-fg: #93c5fd;
+  --color-web-accent-light-purple-bg: rgba(168, 85, 247, 0.15);
+  --color-web-accent-light-purple-fg: #c4b5fd;
+  --color-web-accent-magenta-bg: rgba(236, 72, 153, 0.18);
+  --color-web-accent-magenta-fg: #f9a8d4;
+  --color-web-accent-indigo-bg: rgba(99, 102, 241, 0.18);
+  --color-web-accent-indigo-fg: #a5b4fc;
+  --color-web-accent-orange-bg: rgba(249, 115, 22, 0.18);
+  --color-web-accent-orange-fg: #fdba74;
+  --color-web-accent-blue-bg: rgba(59, 130, 246, 0.18);
+  --color-web-accent-blue-fg: #93c5fd;
+  --color-web-accent-green-bg: rgba(34, 197, 94, 0.18);
+  --color-web-accent-green-fg: #86efac;
+  --color-web-accent-purple-bg: rgba(168, 85, 247, 0.18);
+  --color-web-accent-purple-fg: #c4b5fd;
+  --color-web-accent-light-green-bg: rgba(34, 197, 94, 0.15);
+  --color-web-accent-light-green-fg: #86efac;
+  --color-web-accent-teal-bg: rgba(20, 184, 166, 0.18);
+  --color-web-accent-teal-fg: #5eead4;
+  --color-web-accent-cyan-bg: rgba(6, 182, 212, 0.18);
+  --color-web-accent-cyan-fg: #67e8f9;
+
+  /* Marketing Web Glow — CTA 배너 브랜드 글로우 (radial gradient 구성 요소). */
+  --color-web-glow-blue: rgba(41, 108, 242, 0.2);
+  --color-web-glow-purple: rgba(139, 82, 255, 0.1);
+
+  /* Marketing Web Shadows */
+  --shadow-web-card: 0 1px 4px rgba(0, 0, 0, 0.06);
+  --shadow-web-card-hover: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --shadow-web-featured: 0 2px 8px rgba(0, 0, 0, 0.06);
+
   /* Radius — 마케팅(web) 계열. 제품 UI 는 2px/4px 가 주력이지만 마케팅은 좀 더 넉넉하다. */
   --radius-web-xs: 4px;
   --radius-web-sm: 8px;
@@ -172,6 +235,28 @@
   --text-3xl: 24px;
   --text-4xl: 32px;
   --text-5xl: 48px;
+
+  /* Marketing Type Scale — 마케팅 사이트(whatap.io/ko) 전용.
+     제품 UI 스케일(--text-*)과 별개. 데스크탑 기준값이며 반응형 축소는 소비앱 CSS 에서 한다.
+     font-weight 와 leading 은 기존 공용 토큰을 쓴다(--font-weight-*, --leading-*). */
+  --text-marketing-display: 56px;   /* 히어로 헤드라인 */
+  --text-marketing-h1: 58px;        /* 제품 히어로 */
+  --text-marketing-h2: 48px;        /* 섹션 제목 */
+  --text-marketing-h3: 40px;        /* 서브섹션 */
+  --text-marketing-h4: 32px;        /* 피처 제목 */
+  --text-marketing-h5: 28px;        /* 카드 제목 */
+  --text-marketing-h6: 24px;        /* 소제목 */
+  --text-marketing-lead: 22px;      /* 히어로 서브텍스트 */
+  --text-marketing-body: 20px;      /* 본문 */
+  --text-marketing-body-sm: 16px;   /* 본문 소 */
+  --text-marketing-caption: 14px;   /* 캡션 */
+  --text-marketing-nav: 18px;       /* 네비게이션 */
+
+  /* Marketing Line Height — 마케팅 사이트 전용 leading. */
+  --leading-marketing-display: 1.2;  /* 헤드라인 */
+  --leading-marketing-heading: 1.3;  /* 제목 */
+  --leading-marketing-body: 1.6;     /* 본문 */
+  --leading-marketing-button: 1.5;   /* 버튼 */
 
   /* Font Weight — 4 단계 (font-{light|medium|bold} utility 값).
      light(300) 은 본문 running text 용이 아니라 **큰 사이즈 전용**이다 —
