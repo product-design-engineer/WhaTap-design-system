@@ -52,7 +52,7 @@
  * />
  * ```
  */
-import { useState, type KeyboardEvent, type ReactNode } from "react";
+import { useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import AiSendButton from "./AiSendButton";
 
 export type AiPromptAttachment = {
@@ -92,6 +92,14 @@ export type AiPromptInputProps = {
   onAttachClick?: () => void;
   /** disabled — 전체 입력 차단 (AI 응답 진행 중 등). */
   disabled?: boolean;
+  /**
+   * Inline suggestion (ghost text). 입력이 비어 있을 때 흐린 글자로 추천 문구를 보여 준다.
+   * 사용자가 **End · Tab · →(오른쪽 화살표)** 키를 누르면 추천 문구가 실제 입력값으로 채워진다.
+   * placeholder 와 동시에 주면 suggestion 이 우선한다.
+   */
+  suggestion?: string;
+  /** suggestion 을 수락했을 때 호출. 수락된 문자열이 인자로 들어온다. */
+  onSuggestionAccept?: (v: string) => void;
 };
 
 const DEFAULT_CAPTION = "AI 응답은 정확하지 않을 수 있습니다. 중요한 결정은 반드시 확인해 주세요.";
@@ -108,11 +116,35 @@ export default function AiPromptInput({
   caption = DEFAULT_CAPTION,
   onAttachClick,
   disabled = false,
+  suggestion,
+  onSuggestionAccept,
 }: AiPromptInputProps) {
   const editable = value === undefined;
   const [typed, setTyped] = useState("");
   const effectiveValue = editable ? typed : value;
   const hasInput = effectiveValue.trim().length > 0;
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  /** suggestion 이 보이는 조건: 입력이 비어 있고 suggestion 문자열이 있을 때. */
+  const showSuggestion = !hasInput && !!suggestion;
+
+  const acceptSuggestion = () => {
+    if (!suggestion) return;
+    if (editable) {
+      setTyped(suggestion);
+    } else if (onChange) {
+      onChange(suggestion);
+    }
+    onSuggestionAccept?.(suggestion);
+    /* 수락 직후 커서를 끝으로 보낸다. */
+    requestAnimationFrame(() => {
+      const ta = textareaRef.current;
+      if (ta) {
+        ta.selectionStart = ta.selectionEnd = suggestion.length;
+        ta.focus();
+      }
+    });
+  };
 
   const submit = () => {
     if (!hasInput || disabled) return;
@@ -125,6 +157,12 @@ export default function AiPromptInput({
   };
 
   const handleKey = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    /* suggestion 수락: End · Tab · → (입력이 비어 있을 때) */
+    if (showSuggestion && (e.key === "End" || e.key === "Tab" || e.key === "ArrowRight")) {
+      e.preventDefault();
+      acceptSuggestion();
+      return;
+    }
     if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
       e.preventDefault();
       submit();
@@ -133,9 +171,20 @@ export default function AiPromptInput({
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
+      {/* Glow 래퍼 — 항상 2px padding 을 유지해서 레이아웃이 밀리지 않는다.
+          입력 중일 때만 glow 클래스가 붙어 그라데이션이 보인다. 롤백은 클래스 제거. */}
       <div
-        className="ai-input-wrapper relative bg-card flex flex-col gap-4px items-center justify-center p-12px shrink-0 rounded-8px transition-all duration-200 w-full"
-        style={{ border: hasInput ? "2px solid var(--color-brand-blue)" : "2px solid var(--color-brand-blue-bg-2)" }}
+        className={`w-full rounded-10px p-2px${hasInput ? " ai-input-glow-wrap" : ""}`}
+        style={{ position: "relative", background: hasInput ? "transparent" : "var(--color-brand-blue-bg-2)" }}
+      >
+        {hasInput && (
+          <>
+            <div className="ai-input-glow-line" />
+            <div className="ai-input-glow-blur" />
+          </>
+        )}
+        <div
+          className="ai-input-wrapper relative bg-card flex flex-col gap-4px items-center justify-center p-12px shrink-0 rounded-8px transition-all duration-200 w-full"
       >
         {/* 첨부 chip 행 — Figma 27087:3416 */}
         {attachments && attachments.length > 0 && (
@@ -164,10 +213,31 @@ export default function AiPromptInput({
           </div>
         )}
 
-        {/* textarea */}
-        <div className="flex gap-0 items-center p-2px w-full">
+        {/* textarea + ghost suggestion overlay */}
+        <div className="flex gap-0 items-center p-2px w-full" style={{ position: "relative" }}>
+          {/* ghost text — suggestion 이 있고 입력이 비어 있을 때만 보인다. */}
+          {showSuggestion && (
+            <div
+              aria-hidden
+              className="ai-input-textarea w-full text-lg tracking-default leading-normal pointer-events-none"
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                padding: "2px",
+                fontFamily: "var(--font-family-korean)",
+                fontWeight: "var(--font-weight-regular)",
+                color: "var(--color-text-disabled)",
+                whiteSpace: "pre-wrap",
+                minHeight: 20,
+              }}
+            >
+              {suggestion}
+            </div>
+          )}
           <textarea
-            placeholder={placeholder}
+            ref={textareaRef}
+            placeholder={showSuggestion ? undefined : placeholder}
             rows={1}
             value={effectiveValue}
             readOnly={!editable}
@@ -182,10 +252,12 @@ export default function AiPromptInput({
             onKeyDown={editable || onChange ? handleKey : undefined}
             className="ai-input-textarea w-full text-lg text-primary tracking-default leading-normal resize-none outline-none border-0 bg-transparent placeholder:text-disabled"
             style={{
+              position: "relative",
               fontFamily: "var(--font-family-korean)",
               fontWeight: "var(--font-weight-regular)",
               minHeight: 20,
               maxHeight: 120,
+              background: "transparent",
             }}
           />
         </div>
@@ -215,6 +287,7 @@ export default function AiPromptInput({
             />
           </div>
         </div>
+      </div>
       </div>
 
       {/* 하단 caption */}
