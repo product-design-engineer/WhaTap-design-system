@@ -220,16 +220,21 @@ export default function MiniMultiLineChart({
             width: 1,
           }}
         />
-        {/* Mid horizontal grid */}
-        <div
-          className="absolute bg-color-var-color-border-soft"
-          style={{
-            left: PAD_LEFT,
-            right: PAD_RIGHT,
-            top: `calc(${PAD_TOP}px + (100% - ${PAD_TOP + PAD_BOTTOM}px) * 0.5)`,
-            height: 1,
-          }}
-        />
+        {/* Y축 수평 그리드 라인 — 모든 tick 위치에 점선 */}
+        {yTicks.map((ratio) => (
+          <div
+            key={`grid-${ratio}`}
+            className="absolute"
+            style={{
+              left: PAD_LEFT,
+              right: PAD_RIGHT,
+              top: `calc(${PAD_TOP}px + (100% - ${PAD_TOP + PAD_BOTTOM}px) * ${1 - ratio})`,
+              height: 0,
+              borderTop: "1px dashed var(--color-border-default)",
+              opacity: 0.5,
+            }}
+          />
+        ))}
 
         {/* SVG — plot 영역에만 absolute 배치 */}
         <svg

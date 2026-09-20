@@ -110,8 +110,7 @@ function toneStyle(variant: ButtonVariant, tone: ButtonTone): CSSProperties {
     return {
       "--wds-btn-bg": c.main,
       "--wds-btn-bg-hover": c.hover,
-      // raw-color-ok: contained 버튼 — tone 원색 배경 위 고정 흰색 전경.
-      "--wds-btn-fg": "#fff",
+      "--wds-btn-fg": "var(--color-text-inverse)",
       "--wds-btn-border": "transparent",
     } as CSSProperties;
   }

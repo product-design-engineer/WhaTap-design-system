@@ -84,8 +84,7 @@ export default function InstanceListItem({
             height: 16,
             flex: "0 0 auto",
             background: "var(--color-brand-blue)",
-            // raw-color-ok: 브랜드 블루로 채운 원형 배지 안 전경 — 테마와 무관하게 흰색이어야 한다.
-            color: "#fff",
+            color: "var(--color-text-inverse)",
           }}
         >
           {clusterLabel}
