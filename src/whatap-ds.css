@@ -1923,6 +1923,12 @@ html, body, #root {
 .wds-web-cta--md { height: 50px; padding: 0 24px; font-size: 16px; }
 .wds-web-cta--lg { height: 60px; padding: 0 28px; font-size: 20px; }
 
+/* 모서리 — rect(4px), 기본은 pill(99px) */
+.wds-web-cta--rect { border-radius: var(--radius-web-xs, 4px); }
+/* 너비 — hug(콘텐츠 맞춤, 기본) · full(100%) */
+.wds-web-cta--hug { width: auto; align-self: flex-start; }
+.wds-web-cta--full { width: 100%; justify-content: center; }
+
 /* 화살표 아이콘 */
 .wds-web-cta-arrow { flex-shrink: 0; transition: transform 0.2s; }
 .wds-web-cta:hover .wds-web-cta-arrow { transform: translateX(3px); }
@@ -1943,6 +1949,38 @@ html, body, #root {
   .wds-web-cta--md { height: 40px; font-size: 14px; }
   .wds-web-cta--lg { height: 44px; padding: 0 20px; font-size: 15px; gap: 6px; }
   .wds-web-cta-arrow { width: 14px !important; height: 14px !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ *  Marketing Pill — 마케팅 탭·필터 pill 공용 스타일
+ * ═══════════════════════════════════════════════════════════════════ */
+
+.wds-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-web-pill, 99px);
+  background: var(--color-card);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--text-marketing-body-sm, 16px);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  transition: background 0.25s, color 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+.wds-pill:hover {
+  border-color: var(--color-border-strong);
+  color: var(--color-text-primary);
+}
+.wds-pill[aria-selected="true"] {
+  background: var(--color-text-primary);
+  border-color: var(--color-text-primary);
+  color: var(--color-text-inverse);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════

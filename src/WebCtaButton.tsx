@@ -57,12 +57,18 @@ import type { ReactNode, AnchorHTMLAttributes, ElementType } from "react";
 
 export type WebCtaVariant = "filled" | "outline" | "white";
 export type WebCtaSize = "sm" | "md" | "lg";
+export type WebCtaRounded = "pill" | "rect";
+export type WebCtaWidth = "hug" | "full";
 
 export type WebCtaButtonProps = {
   /** 시각 variant. filled=채움(1차), outline=보더(2차), white=흰색(어두운 배경). */
   variant?: WebCtaVariant;
   /** 사이즈 — sm(36px) · md(50px) · lg(60px). */
   size?: WebCtaSize;
+  /** 모서리 — pill(99px, 기본) · rect(4px). */
+  rounded?: WebCtaRounded;
+  /** 너비 — hug(콘텐츠 맞춤, 기본) · full(부모 100%). */
+  width?: WebCtaWidth;
   /** 오른쪽 화살표 표시 여부. 기본 true. */
   arrow?: boolean;
   /** 이동 목적지. */
@@ -96,6 +102,8 @@ function ArrowIcon() {
 export default function WebCtaButton({
   variant = "filled",
   size = "lg",
+  rounded = "pill",
+  width = "hug",
   arrow = true,
   href,
   renderAs: Tag = "a",
@@ -107,6 +115,8 @@ export default function WebCtaButton({
     "wds-web-cta",
     `wds-web-cta--${variant}`,
     `wds-web-cta--${size}`,
+    rounded === "rect" ? "wds-web-cta--rect" : "",
+    `wds-web-cta--${width}`,
     className,
   ].filter(Boolean).join(" ");
 
