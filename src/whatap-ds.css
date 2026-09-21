@@ -1891,7 +1891,6 @@ html, body, #root {
 }
 .wds-web-cta--filled:hover {
   background-color: var(--color-brand-blue-web-deep, var(--color-brand-blue-deep));
-  box-shadow: 0 4px 16px rgba(0, 75, 224, 0.3);
 }
 
 /* variant: outline (2차 CTA) */
@@ -1915,7 +1914,6 @@ html, body, #root {
 }
 .wds-web-cta--white:hover {
   background-color: #eaeaea;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18), 0 18px 44px rgba(255, 255, 255, 0.32);
 }
 
 /* size */
@@ -2073,7 +2071,6 @@ html, body, #root {
 }
 .wds-hero-banner--dark .wds-web-cta--filled:hover {
   background-color: #eaeaea;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, .18), 0 18px 44px rgba(255, 255, 255, .32);
 }
 
 /* dark — outline CTA: 흰 보더 + 흰 라벨 */
@@ -2109,7 +2106,6 @@ html, body, #root {
 }
 .wds-hero-banner--light .wds-web-cta--filled:hover {
   background-color: var(--color-brand-blue-web-deep, var(--color-brand-blue-deep));
-  box-shadow: 0 4px 16px rgba(0, 75, 224, 0.3);
 }
 
 /* light — outline CTA: 브랜드 블루 보더 + 보더 동일 라벨 */
