@@ -2580,14 +2580,24 @@ html, body, #root {
   line-height: 1;
   letter-spacing: 0.02em;
   white-space: nowrap;
-  background-color: var(--color-web-chip-bg, rgba(0, 75, 224, 0.08));
-  color: var(--color-web-chip-text, var(--color-brand-blue-web, #004be0));
+  background-color: var(--_chip-bg, rgba(0, 75, 224, 0.08));
+  color: var(--_chip-color, var(--color-brand-blue-web, #004be0));
 }
 .wds-web-service-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
 }
+/* 제품별 컬러 */
+.wds-web-service-chip[data-service="APM"]        { --_chip-bg: rgba(0, 176, 226, 0.10); --_chip-color: var(--color-product-apm, #00B0E2); }
+.wds-web-service-chip[data-service="Server"]     { --_chip-bg: rgba(0, 197, 177, 0.10); --_chip-color: var(--color-product-server, #00C5B1); }
+.wds-web-service-chip[data-service="Kubernetes"] { --_chip-bg: rgba(68, 133, 255, 0.10); --_chip-color: var(--color-product-k8s, #4485FF); }
+.wds-web-service-chip[data-service="Database"]   { --_chip-bg: rgba(147, 108, 231, 0.10); --_chip-color: var(--color-product-db, #936CE7); }
+.wds-web-service-chip[data-service="Log"]        { --_chip-bg: rgba(215, 94, 245, 0.10); --_chip-color: var(--color-product-log, #D75EF5); }
+.wds-web-service-chip[data-service="Browser"]    { --_chip-bg: rgba(69, 185, 110, 0.10); --_chip-color: var(--color-product-browser, #45B96E); }
+.wds-web-service-chip[data-service="URL"]        { --_chip-bg: rgba(139, 205, 0, 0.10); --_chip-color: var(--color-product-url, #8BCD00); }
+.wds-web-service-chip[data-service="Network"]    { --_chip-bg: rgba(0, 133, 207, 0.10); --_chip-color: var(--color-product-cloud, #0085CF); }
+.wds-web-service-chip[data-service="GPU"]        { --_chip-bg: rgba(0, 84, 218, 0.10); --_chip-color: var(--color-product-gpu, #0054DA); }
 
 /* ── 스크롤 리빌 — 뷰포트 진입 시 fade-in + slide-up ── */
 .wds-web-scroll-reveal {
