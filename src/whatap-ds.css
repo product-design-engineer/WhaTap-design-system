@@ -2552,6 +2552,20 @@ html, body, #root {
   gap: 12px;
   margin-top: 16px;
 }
+/* CTA 배너(다크 배경) 안 outline 버튼 — 흰 보더 + 흰 텍스트 */
+.wds-web-cta-banner .wds-web-cta--outline {
+  border-color: var(--color-web-border-on-dark, rgba(255, 255, 255, 0.3));
+  color: var(--color-web-text-on-dark);
+  background-color: transparent;
+}
+.wds-web-cta-banner .wds-web-cta--outline .wds-web-cta-label,
+.wds-web-cta-banner .wds-web-cta--outline .wds-web-cta-arrow {
+  color: var(--color-web-text-on-dark);
+}
+.wds-web-cta-banner .wds-web-cta--outline:hover {
+  border-color: var(--color-web-border-on-dark-active, rgba(255, 255, 255, 0.6));
+  background-color: rgba(255, 255, 255, 0.08);
+}
 
 /* ── 스크롤 리빌 — 뷰포트 진입 시 fade-in + slide-up ── */
 .wds-web-scroll-reveal {
