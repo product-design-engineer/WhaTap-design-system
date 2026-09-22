@@ -2567,6 +2567,28 @@ html, body, #root {
   background-color: rgba(255, 255, 255, 0.08);
 }
 
+/* ── 서비스 유형 칩 — 마케팅 카드 태그 ── */
+/* @role 서비스 유형 라벨 | @use 사례·리소스 카드 태그 */
+.wds-web-service-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  background-color: var(--color-web-chip-bg, rgba(0, 75, 224, 0.08));
+  color: var(--color-web-chip-text, var(--color-brand-blue-web, #004be0));
+}
+.wds-web-service-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
 /* ── 스크롤 리빌 — 뷰포트 진입 시 fade-in + slide-up ── */
 .wds-web-scroll-reveal {
   opacity: 0;
