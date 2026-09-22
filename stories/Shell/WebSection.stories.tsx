@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { WebCtaButton } from "@whatap/design-system";
 
 /**
  * Stories for wds-web-section — 마케팅 페이지 섹션 레이아웃 + 톤 + 타이포그래피.
@@ -274,32 +275,8 @@ export const CtaBanner: Story = {
           <h3 className="wds-web-cta-banner-heading">지금 바로 시작하세요</h3>
           <p className="wds-web-cta-banner-sub">WhaTap 모니터링으로 서비스 안정성을 높여보세요.</p>
           <div className="wds-web-cta-banner-actions">
-            <a href="#" style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "14px 32px",
-              fontSize: 16,
-              fontWeight: 500,
-              borderRadius: "var(--radius-web-pill, 99px)",
-              background: "var(--color-brand-blue-web, var(--color-brand-blue))",
-              color: "var(--color-web-text-on-dark)",
-              border: "1px solid transparent",
-              textDecoration: "none",
-            }}>무료 체험</a>
-            <a href="#" style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "14px 32px",
-              fontSize: 16,
-              fontWeight: 500,
-              borderRadius: "var(--radius-web-pill, 99px)",
-              background: "transparent",
-              color: "var(--color-web-text-on-dark)",
-              border: "1px solid var(--color-web-border-on-dark, rgba(255,255,255,0.3))",
-              textDecoration: "none",
-            }}>도입 문의</a>
+            <WebCtaButton href="#" variant="white" size="lg">무료 체험</WebCtaButton>
+            <WebCtaButton href="#" variant="outline" size="lg">도입 문의</WebCtaButton>
           </div>
         </div>
       </div>
