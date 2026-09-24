@@ -2660,6 +2660,69 @@ html, body, #root {
   color: inherit;
 }
 
+/* ── 검색 입력 필드 — 돋보기 + input + clear ── */
+/* @role 목록 필터링 검색 | @use 제품 플랫폼·리소스·사례 목록 */
+.wds-web-search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 48px;
+  border: 1px solid var(--gray-200, #e5e5e5);
+  border-radius: var(--radius-web-md, 10px);
+  background: var(--white, #fff);
+  transition: border-color 0.15s;
+}
+.wds-web-search-field:focus-within {
+  border-color: var(--gray-600, #666);
+}
+.wds-web-search-field--sm { height: 40px; }
+.wds-web-search-field--lg { height: 52px; }
+
+.wds-web-search-field-icon {
+  flex-shrink: 0;
+  margin-left: 14px;
+  color: var(--gray-400, #999);
+  pointer-events: none;
+}
+.wds-web-search-field-input {
+  flex: 1;
+  height: 100%;
+  border: none;
+  background: transparent;
+  padding: 0 12px;
+  font-size: var(--text-marketing-body-sm, 15px);
+  line-height: var(--leading-marketing-body, 1.6);
+  color: var(--black, #111);
+  outline: none;
+  font-family: inherit;
+  min-width: 0;
+}
+.wds-web-search-field--lg .wds-web-search-field-input {
+  font-size: var(--text-marketing-body, 17px);
+}
+.wds-web-search-field-input::placeholder {
+  color: var(--gray-400, #999);
+}
+.wds-web-search-field-clear {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 50%;
+  background: var(--gray-100, #f5f5f5);
+  color: var(--gray-500, #777);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s;
+}
+.wds-web-search-field-clear:hover {
+  background: var(--gray-200, #e5e5e5);
+}
+
 /* ── 스크롤 리빌 — 뷰포트 진입 시 fade-in + slide-up ── */
 .wds-web-scroll-reveal {
   opacity: 0;

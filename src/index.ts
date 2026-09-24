@@ -114,6 +114,8 @@ export { default as WebDateLabel } from "./WebDateLabel";
 export type { WebDateLabelProps, WebDateLabelSize } from "./WebDateLabel";
 export { default as WebBreadcrumb } from "./WebBreadcrumb";
 export type { WebBreadcrumbProps, WebBreadcrumbItem } from "./WebBreadcrumb";
+export { default as WebSearchField } from "./WebSearchField";
+export type { WebSearchFieldProps, WebSearchFieldSize } from "./WebSearchField";
 export { default as FilterBar } from "./FilterBar";
 export type { FilterBarProps, FilterBarDropdownConfig, FilterBarSize } from "./FilterBar";
 export { default as DashboardBuildingProgress } from "./DashboardBuildingProgress";
