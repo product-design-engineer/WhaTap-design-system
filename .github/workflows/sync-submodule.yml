@@ -1,0 +1,57 @@
+name: Sync DS submodule → Prototype repo
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout prototype repo
+        uses: actions/checkout@v4
+        with:
+          repository: product-design-engineer/WhaTap-Product-prototype
+          token: ${{ secrets.SUBMODULE_PAT }}
+          submodules: true
+          fetch-depth: 0
+
+      - name: Update DS submodule to latest main
+        run: |
+          cd packages/design-system
+          git fetch origin main
+          git checkout origin/main
+          cd ../..
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet packages/design-system; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create PR
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          BRANCH="chore/ds-submodule-update-$(date +%Y%m%d-%H%M%S)"
+          git checkout -b "$BRANCH"
+          git add packages/design-system
+          DS_SHA=$(git -C packages/design-system rev-parse --short HEAD)
+          DS_MSG=$(git -C packages/design-system log -1 --pretty=%s)
+          git commit -m "chore: DS submodule 업데이트 ($DS_SHA: $DS_MSG)"
+          git push origin "$BRANCH"
+          gh pr create \
+            --repo product-design-engineer/WhaTap-Product-prototype \
+            --title "chore: DS submodule 자동 업데이트 ($DS_SHA)" \
+            --body "DS main 브랜치가 업데이트되어 submodule을 자동 갱신합니다.
+
+          **DS 커밋:** \`$DS_SHA\` — $DS_MSG
+
+          > 이 PR은 GitHub Actions에 의해 자동 생성되었습니다." \
+            --base main
+        env:
+          GH_TOKEN: ${{ secrets.SUBMODULE_PAT }}
