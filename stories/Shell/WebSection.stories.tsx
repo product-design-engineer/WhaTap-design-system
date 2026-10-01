@@ -18,7 +18,17 @@ const meta: Meta = {
           "**마케팅 페이지 섹션 레이아웃 CSS 컴포넌트.** " +
           "`.wds-web-section` + 톤(`--tone-lavender` / `--tone-dark` 등) + " +
           "`.wds-web-section-container` + `.wds-web-section-wrap` 으로 68페이지 공통 뼈대를 조립한다. " +
-          "타이포그래피는 `.wds-web-heading-2` · `.wds-web-p1` · `.wds-web-p2`.",
+          "타이포그래피는 `.wds-web-heading-2` · `.wds-web-p1` · `.wds-web-p2`." +
+          "\n\n" +
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          "## When to use\n" +
+          "- 마케팅 페이지 본문을 **섹션 단위로 쌓을 때의 공통 뼈대** — 래퍼 · 컨테이너 · 패딩 · 헤더 · 톤 배경.\n" +
+          "- 섹션마다 배경 톤(lavender · dark 등)을 번갈아 리듬을 만들 때.\n" +
+          "- 섹션 제목·본문 타이포를 `.wds-web-heading-*` · `.wds-web-p*` 로 맞출 때.\n" +
+          "\n## When NOT to use\n" +
+          "- 제품(SaaS) 페이지 본문 → `.wds-page-content` + `bg-card` 블록(Base surface 2단 규칙).\n" +
+          "- 섹션 안에서 패딩·최대폭을 인라인 숫자로 다시 지정 — 컨테이너가 소유한다.\n" +
+          "- 전환 유도 배너 → `.wds-web-cta-banner`(Shell/Web · CtaBanner).",
       },
     },
   },

@@ -14,7 +14,16 @@ const meta: Meta = {
       description: {
         component:
           "**마케팅 서비스 유형 칩.** `.wds-web-service-chip` — 22px 높이, brand-blue soft 톤. " +
-          "사례·리소스 카드의 타이틀 아래에서 서비스 유형을 표시한다.",
+          "사례·리소스 카드의 타이틀 아래에서 서비스 유형을 표시한다." +
+          "\n\n" +
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          "## When to use\n" +
+          "- 마케팅 사례·리소스 카드에서 **어떤 서비스에 관한 글인지** 표시하는 읽기 전용 라벨(`case-list`).\n" +
+          "- 카드 하나에 서비스 유형이 여러 개면 `.wds-web-service-chips` 로 묶는다.\n" +
+          "\n## When NOT to use\n" +
+          "- 누르면 목록이 바뀌는 탭·필터 → `.wds-pill` 또는 FilterChip — 이 칩은 클릭 동작이 없다.\n" +
+          "- 제품(SaaS) 화면의 상태·분류 라벨 → Chip.\n" +
+          "- data-service 에 없는 임의 서비스명 — 제품 컬러 매핑이 없으므로 먼저 CSS 에 등록한다.",
       },
     },
   },

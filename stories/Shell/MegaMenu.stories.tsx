@@ -16,7 +16,16 @@ const meta: Meta = {
         component:
           "**마케팅 GNB 서비스 메가 메뉴 CSS 컴포넌트.** " +
           "`.wds-mega-menu` + `.wds-mega-menu--divided` 로 4컬럼 카테고리 그리드를 조립한다. " +
-          "컬럼 사이 세로 구분선(Divided)이 기본이며, Light 배경에서 사용한다.",
+          "컬럼 사이 세로 구분선(Divided)이 기본이며, Light 배경에서 사용한다." +
+          "\n\n" +
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          "## When to use\n" +
+          "- 마케팅 GNB(LandingHeader)에서 **서비스 목록을 카테고리별 4컬럼으로 펼치는 드롭다운**(`Gnb`).\n" +
+          "- 항목이 많아 한 줄 드롭다운으로는 훑기 어려운 제품·솔루션 탐색 메뉴.\n" +
+          "\n## When NOT to use\n" +
+          "- 제품(SaaS) 내비게이션 → Sidebar · ProductRailItem.\n" +
+          "- 항목이 몇 개뿐인 메뉴 → 일반 드롭다운(ActionMenuItem 등).\n" +
+          "- GNB 밖(본문)에서 카테고리 그리드를 보여 주는 용도 — 섹션 레이아웃은 `.wds-web-section`.",
       },
     },
   },
