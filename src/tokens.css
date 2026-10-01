@@ -88,6 +88,15 @@
      장식용 브랜드 그라데이션이라 테마와 무관하게 고정한다. 차트 색이 아니다. */
   --color-avatar-gradient-from: #4FC3F7;
 
+  /* Flag — CountryFlag 국기 고유색. 국가 표장이라 테마와 무관하게 고정한다(.dark 재매핑 없음).
+     UI 색이 아니다 — 국기 밖에서 쓰지 말 것. */
+  --color-flag-red: #D80027;      /* 적색 — 태극 적·성조기 줄·히노마루 공용 */
+  --color-flag-blue-kr: #0052B4;  /* 태극기 태극 청색 */
+  --color-flag-blue-us: #2E52B2;  /* 성조기 칸톤 청색 */
+  --color-flag-field: #F0F0F0;    /* 흰 바탕 — 성조기·일장기 */
+  --color-flag-field-kr: #FFFFFF; /* 태극기 흰 바탕 */
+  --color-flag-ink: #000000;      /* 태극기 4괘 흑색 */
+
   /* AI gradient (preserved for compat) */
   --color-whatap-blue: #004BE0;
   --color-whatap-purple: #8B52FF;

@@ -393,6 +393,20 @@
     /* @role 아바타 그라데이션 시작색 | @use 프로필 아바타 */
     --color-avatar-gradient-from: #4FC3F7;
 
+    /* Flag — 국기 고유색. 테마 무관 고정(.dark 재매핑 없음). 정의: tokens.css */
+    /* @role 국기 고유색 — 적색 — 태극 적·성조기 줄·히노마루 공용 | @use CountryFlag 안에서만 | @avoid 국기 밖 UI 색 (그쪽은 --color-status-* · --color-brand-*) */
+    --color-flag-red: #D80027;
+    /* @role 국기 고유색 — 태극기 태극 청색 | @use CountryFlag 안에서만 | @avoid 국기 밖 UI 색 (그쪽은 --color-status-* · --color-brand-*) */
+    --color-flag-blue-kr: #0052B4;
+    /* @role 국기 고유색 — 성조기 칸톤 청색 | @use CountryFlag 안에서만 | @avoid 국기 밖 UI 색 (그쪽은 --color-status-* · --color-brand-*) */
+    --color-flag-blue-us: #2E52B2;
+    /* @role 국기 고유색 — 흰 바탕 — 성조기·일장기 | @use CountryFlag 안에서만 | @avoid 국기 밖 UI 색 (그쪽은 --color-status-* · --color-brand-*) */
+    --color-flag-field: #F0F0F0;
+    /* @role 국기 고유색 — 태극기 흰 바탕 | @use CountryFlag 안에서만 | @avoid 국기 밖 UI 색 (그쪽은 --color-status-* · --color-brand-*) */
+    --color-flag-field-kr: #FFFFFF;
+    /* @role 국기 고유색 — 태극기 4괘 흑색 | @use CountryFlag 안에서만 | @avoid 국기 밖 UI 색 (그쪽은 --color-status-* · --color-brand-*) */
+    --color-flag-ink: #000000;
+
     /* @role WhaTap 아이덴티티 블루 | @use 브랜드 표식 */
     --color-whatap-blue: #004BE0;
     /* @role AI 아이덴티티 퍼플 | @use AI 심볼 · AI 진입 그라데이션 | @avoid 일반 액션 (AI 영역 전용) */

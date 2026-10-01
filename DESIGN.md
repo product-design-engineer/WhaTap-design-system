@@ -156,6 +156,14 @@ colors:
   # Avatar gradient — 프로필 아바타 그라데이션 시작 stop (끝은 brand-blue). 테마 무관.
   avatar-gradient-from:      "#4FC3F7"    # Color
 
+  # Flag — CountryFlag 국기 고유색. 국가 표장이라 테마 무관 고정. 국기 밖 사용 금지.
+  flag-red:                  "#D80027"    # Color — 적색 — 태극 적·성조기 줄·히노마루 공용
+  flag-blue-kr:              "#0052B4"    # Color — 태극기 태극 청색
+  flag-blue-us:              "#2E52B2"    # Color — 성조기 칸톤 청색
+  flag-field:                "#F0F0F0"    # Color — 흰 바탕 — 성조기·일장기
+  flag-field-kr:             "#FFFFFF"    # Color — 태극기 흰 바탕
+  flag-ink:                  "#000000"    # Color — 태극기 4괘 흑색
+
   # Tone 메타데이터
   tone-types: [critical, warning, info, muted, neutral]
   tone-legacy-alias:
