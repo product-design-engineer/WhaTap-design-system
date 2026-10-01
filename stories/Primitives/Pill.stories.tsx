@@ -54,7 +54,7 @@ export const Default: Story = {
  *  선택됨 hover: inset 0 0 0 1px white 20% 내부 하이라이트. */
 export const HoverStates: Story = {
   render: () => (
-    <div style={{ display: "flex", gap: 10, padding: 20, background: "#fff", borderRadius: 8 }}>
+    <div style={{ display: "flex", gap: 10, padding: 20, background: "var(--color-card)", borderRadius: 8 }}>
       <button type="button" className="wds-pill" aria-selected="false">
         기본 — hover 해보세요
       </button>
@@ -73,7 +73,7 @@ export const RecommendedServiceTabs: Story = {
       gap: 10,
       flexWrap: "wrap",
       padding: 20,
-      background: "#fff",
+      background: "var(--color-card)",
       borderRadius: 8,
     }}>
       <button type="button" className="wds-pill" aria-selected="true">

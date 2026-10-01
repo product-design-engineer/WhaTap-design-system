@@ -48,9 +48,9 @@ export default function ActiveTransactionArc({
         </div>
         <div className="flex flex-col gap-3px">
           <p className="text-sm text-gray-mid leading-snug" style={{ fontFamily: "var(--font-family-numeric)" }}>Elapsed</p>
-          <LegendDot color="#F34747" label="very slow" />
-          <LegendDot color="#FFA012" label="slow" />
-          <LegendDot color="#3DA9FF" label="normal" />
+          <LegendDot color="var(--color-chart-speed-very-slow)" label="very slow" />
+          <LegendDot color="var(--color-chart-speed-slow)" label="slow" />
+          <LegendDot color="var(--color-chart-speed-normal)" label="normal" />
         </div>
       </div>
       {/* center: arc chart */}

@@ -72,12 +72,12 @@ const DemoContentDark = () => (
       <div key={i} style={{
         height: 180,
         borderRadius: 12,
-        background: "rgba(255,255,255,0.06)",
-        border: "1px solid rgba(255,255,255,0.1)",
+        background: "var(--color-web-fill-on-dark)",
+        border: "1px solid var(--color-web-border-on-dark)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        color: "rgba(255,255,255,0.3)",
+        color: "var(--color-web-text-on-dark-faint)",
         fontSize: 14,
       }}>
         카드 {i + 1}
@@ -131,9 +131,9 @@ export const ToneVariants: Story = {
     <div>
       {([
         ["(없음 — 투명)", ""],
-        ["lavender (#f9fafe)", "wds-web-section--tone-lavender"],
+        ["lavender", "wds-web-section--tone-lavender"],
         ["gray (surface-50)", "wds-web-section--tone-gray"],
-        ["mist (#f5f6f9)", "wds-web-section--tone-mist"],
+        ["mist", "wds-web-section--tone-mist"],
         ["sky (surface-blue)", "wds-web-section--tone-sky"],
       ] as const).map(([label, cls]) => (
         <section key={label} className={`wds-web-section ${cls}`}>

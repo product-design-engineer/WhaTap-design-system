@@ -502,6 +502,16 @@
     /* @role 순차 스케일 4 단계 (크기·강도) | @use 히트맵 · 농도 표현 | @avoid 계열 구분 (series 사용) */
     --color-chart-seq-4: #1A50B0;
 
+    /* Chart — Speed · APM 응답 속도 등급. 다크 재매핑 없음(정적 아이콘과 일치). 정의: tokens.css */
+    /* @role 응답 속도 등급 — 정상 | @use 액티브 트랜잭션 Arc·히트맵·speed 범례 | @avoid 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
+    --color-chart-speed-normal: #3DA9FF;
+    /* @role 응답 속도 등급 — 느림 | @use 액티브 트랜잭션 Arc·히트맵·speed 범례 | @avoid 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
+    --color-chart-speed-slow: #FFA012;
+    /* @role 응답 속도 등급 — 매우 느림 | @use 액티브 트랜잭션 Arc·히트맵·speed 범례 | @avoid 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
+    --color-chart-speed-very-slow: #F34747;
+    /* @role SVG 필터 그림자 색 | @use feDropShadow 의 floodColor (불투명도는 floodOpacity 로) | @avoid CSS 그림자 (그쪽은 --shadow-*) */
+    --color-shadow-flood: #000000;
+
     /* Topology — 노드-엣지 그래프 전용 역할 토큰(구조·상태). 차트 series/seq 로
        대체 불가 — 의미 축이 다르다. 값 출처·금지사항: tokens.css */
     /* @role 토폴로지 캔버스 배경 그라데이션 시작 */
@@ -597,6 +607,32 @@
     /* @role 간격 스케일 12단 | @use gap·padding·margin | @avoid 임의 px 매직넘버 */
     --space-12: 48px;
 
+    /* Marketing Web Surfaces on Dark — 다크 섹션·CTA 배너. 정의: tokens.css. 마케팅의 다크 섹션은
+       테마와 무관하게 항상 어둡다(.dark 재매핑 없음). 이전에는 tokens.css 에만 있어서
+       tokens.css 를 함께 import 하지 않는 소비처(Storybook·tgz 단독)에서 배경이 비었다. */
+    /* @role 마케팅 다크 섹션 배경 | @use wds-web-section--tone-dark · 다크 배경 위 WebCtaButton white | @avoid 제품(SaaS) 다크 모드 표면 (그쪽은 .dark 가 --color-bg/card 를 재매핑) */
+    --color-web-surface-dark: #181c20;
+    /* @role 마케팅 CTA 배너 그라데이션 시작 | @use wds-web-cta-banner 배경 | @avoid 일반 카드·섹션 배경 */
+    --color-web-surface-cta: #0f1724;
+    /* @role 마케팅 CTA 배너 그라데이션 중간 | @use wds-web-cta-banner 배경 | @avoid 일반 카드·섹션 배경 */
+    --color-web-surface-cta-mid: #1a2744;
+    /* @role 마케팅 CTA 배너 그라데이션 끝 | @use wds-web-cta-banner 배경 | @avoid 일반 카드·섹션 배경 */
+    --color-web-surface-cta-end: #1e1a3a;
+    /* @role 마케팅 다크 표면 위 1차 텍스트 | @use tone-dark 섹션·CTA 배너의 제목 | @avoid 밝은 표면 위 텍스트 (그쪽은 --color-text-*) */
+    --color-web-text-on-dark: #fff;
+    /* @role 마케팅 다크 표면 위 보조 텍스트 | @use tone-dark 섹션·CTA 배너의 본문 | @avoid 밝은 표면 위 텍스트 (그쪽은 --color-text-*) */
+    --color-web-text-on-dark-muted: rgba(255, 255, 255, 0.6);
+    /* @role 마케팅 CTA 배너 브랜드 글로우(파랑) | @use wds-web-cta-banner 의 radial gradient | @avoid 일반 그림자 (그쪽은 --shadow-*) */
+    --color-web-glow-blue: rgba(41, 108, 242, 0.2);
+    /* @role 마케팅 CTA 배너 브랜드 글로우(보라) | @use wds-web-cta-banner 의 radial gradient | @avoid 일반 그림자 (그쪽은 --shadow-*) */
+    --color-web-glow-purple: rgba(139, 82, 255, 0.1);
+
+    /* @role 마케팅 다크 표면 위 옅은 채움 | @use tone-dark 섹션 안 카드·플레이스홀더 바탕 | @avoid 밝은 표면 위 채움 (그쪽은 --color-surface-*) */
+    --color-web-fill-on-dark: rgba(255, 255, 255, 0.08);
+    /* @role 마케팅 다크 표면 위 경계선 | @use tone-dark 섹션 안 카드 보더 | @avoid 밝은 표면 위 보더 (그쪽은 --color-border-*) */
+    --color-web-border-on-dark: rgba(255, 255, 255, 0.12);
+    /* @role 마케팅 다크 표면 위 가장 약한 텍스트 | @use 플레이스홀더·비활성 라벨 | @avoid 본문 (그쪽은 --color-web-text-on-dark-muted) */
+    --color-web-text-on-dark-faint: rgba(255, 255, 255, 0.3);
 
     /* Marketing Web Landing — 해외 URL 모니터링 랜딩 표면. 정의: tokens.css · 다크 값은 .dark 블록 */
     /* @role 랜딩 전경의 RGB 트리플 | @use rgba(var(--color-web-landing-fg-rgb), 알파) 로 본문·보더·아이콘 알파 합성 | @avoid 제품 화면 전경 (그쪽은 --color-text-*) */
@@ -1348,6 +1384,31 @@ html, body, #root {
   50% {
     box-shadow: 0 4px 20px rgba(41, 108, 242, 0.6), 0 0 30px rgba(27, 92, 217, 0.35);
   }
+}
+/* 회전만 — pulse 는 box-shadow 를 애니메이션하므로 작은 심볼(16px)에서는 사각 헤일로가 배경처럼 보인다.
+   배경이 있는 표면(배너·툴바)에서 쓴다. 이전에는 tokens.css 에만 있어 tokens.css 를 함께 불러오지 않는
+   소비처(Storybook·tgz 단독)에서 회전이 빠졌다. */
+.ai-symbol-spin {
+  animation: ai-symbol-spin 10s linear infinite;
+}
+/* 스켈레톤 — 응답 대기 자리표시자. 좌→우 shimmer. reduced-motion 이면 정적. (tokens.css 와 동일) */
+@keyframes aiSkeletonShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.ai-skeleton {
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-100) 25%,
+    var(--color-surface-50) 37%,
+    var(--color-surface-100) 63%
+  );
+  background-size: 200% 100%;
+  animation: aiSkeletonShimmer 1.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ai-skeleton { animation: none; }
 }
 .ai-symbol-anim {
   animation: ai-symbol-spin 10s linear infinite, ai-symbol-pulse 3s ease-in-out infinite;

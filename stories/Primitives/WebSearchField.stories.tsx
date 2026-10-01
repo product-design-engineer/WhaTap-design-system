@@ -53,15 +53,15 @@ export const Sizes: Story = {
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 400 }}>
         <div>
-          <div style={{ marginBottom: 4, fontSize: 13, color: "#999" }}>sm (40px)</div>
+          <div style={{ marginBottom: 4, fontSize: 13, color: "var(--color-text-tertiary)" }}>sm (40px)</div>
           <WebSearchField value={v1} onChange={setV1} size="sm" placeholder="모바일 필터" />
         </div>
         <div>
-          <div style={{ marginBottom: 4, fontSize: 13, color: "#999" }}>md (48px, 기본)</div>
+          <div style={{ marginBottom: 4, fontSize: 13, color: "var(--color-text-tertiary)" }}>md (48px, 기본)</div>
           <WebSearchField value={v2} onChange={setV2} size="md" placeholder="리소스 검색" />
         </div>
         <div>
-          <div style={{ marginBottom: 4, fontSize: 13, color: "#999" }}>lg (52px)</div>
+          <div style={{ marginBottom: 4, fontSize: 13, color: "var(--color-text-tertiary)" }}>lg (52px)</div>
           <WebSearchField value={v3} onChange={setV3} size="lg" placeholder="리소스 찾기" />
         </div>
       </div>
@@ -90,10 +90,10 @@ export const InResourceList: Story = {
     return (
       <div style={{ maxWidth: 480 }}>
         <WebSearchField value={v} onChange={setV} size="lg" placeholder="리소스 찾기" />
-        <ul style={{ marginTop: 16, padding: "0 0 0 20px", fontSize: 15, color: "#333" }}>
+        <ul style={{ marginTop: 16, padding: "0 0 0 20px", fontSize: 15, color: "var(--color-text-primary)" }}>
           {filtered.length > 0
             ? filtered.map((i) => <li key={i} style={{ marginBottom: 8 }}>{i}</li>)
-            : <li style={{ color: "#999" }}>결과 없음</li>}
+            : <li style={{ color: "var(--color-text-tertiary)" }}>결과 없음</li>}
         </ul>
       </div>
     );

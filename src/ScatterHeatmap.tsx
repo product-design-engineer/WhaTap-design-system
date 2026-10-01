@@ -41,7 +41,11 @@ export type ScatterHeatmapProps = {
 
 const DEFAULT_Y = [100, 80, 60, 40, 20, 0];
 const DEFAULT_X = ["13:38", "13:40", "13:42", "13:44", "13:46", "13:48", "13:50"];
-const TONE_COLOR = ["#3DA9FF", "#FFA012", "#F34747"] as const;
+const TONE_COLOR = [
+  "var(--color-chart-speed-normal)",
+  "var(--color-chart-speed-slow)",
+  "var(--color-chart-speed-very-slow)",
+] as const;
 
 export default function ScatterHeatmap({
   dots,
@@ -60,14 +64,14 @@ export default function ScatterHeatmap({
           {/* horizontal gridlines */}
           <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
             {Array.from({ length: 11 }).map((_, i) => (
-              <div key={i} className={`h-px w-full ${i === 10 ? "bg-[#757575]" : ""}`} style={i < 10 ? { borderBottom: "1px dashed #f0f0f0" } : undefined} />
+              <div key={i} className="h-px w-full" style={i < 10 ? { borderBottom: "1px dashed var(--color-border-soft)" } : { background: "var(--color-text-tertiary)" }} />
             ))}
           </div>
           {/* vertical gridlines */}
           <div className="absolute inset-0 flex justify-between pointer-events-none">
-            <div className="w-px h-full bg-[#757575]" />
+            <div className="w-px h-full" style={{ background: "var(--color-text-tertiary)" }} />
             {Array.from({ length: 22 }).map((_, i) => (
-              <div key={i} className="w-px h-full" style={{ borderRight: "1px dashed #f0f0f0" }} />
+              <div key={i} className="w-px h-full" style={{ borderRight: "1px dashed var(--color-border-soft)" }} />
             ))}
           </div>
           {/* dots */}
@@ -88,7 +92,7 @@ export default function ScatterHeatmap({
         <div className="flex items-start justify-between shrink-0 w-full" style={{ height: 15, padding: "0 16px" }}>
           {xLabels.map((label, i) => (
             <div key={i} className="flex flex-col items-center">
-              <div className="w-px bg-[#757575]" style={{ height: 3 }} />
+              <div className="w-px" style={{ height: 3, background: "var(--color-text-tertiary)" }} />
               <span className="text-base text-primary text-center leading-none whitespace-nowrap" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}>{label}</span>
             </div>
           ))}

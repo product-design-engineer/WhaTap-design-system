@@ -153,6 +153,14 @@ colors:
   chart-seq-3:               "#2472D8"    # Color
   chart-seq-4:               "#1A50B0"    # Color
 
+  # Chart — Speed · APM 응답 속도 등급(계열 아님). speed-bullet 아이콘과 같은 값 — 다크 재매핑 없음.
+  chart-speed-normal:        "#3DA9FF"    # Color — 정상
+  chart-speed-slow:          "#FFA012"    # Color — 느림
+  chart-speed-very-slow:     "#F34747"    # Color — 매우 느림
+
+  # Shadow flood — SVG feDropShadow 의 그림자 색(불투명도는 floodOpacity). 테마 무관.
+  shadow-flood:              "#000000"    # Color
+
   # Avatar gradient — 프로필 아바타 그라데이션 시작 stop (끝은 brand-blue). 테마 무관.
   avatar-gradient-from:      "#4FC3F7"    # Color
 

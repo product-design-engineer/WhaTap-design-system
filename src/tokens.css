@@ -406,6 +406,16 @@
   --color-chart-seq-3: #2472D8;
   --color-chart-seq-4: #1A50B0; /* 가장 진함 */
 
+  /* Chart — Speed · APM 응답 속도 3단계(normal / slow / very slow). 계열(series)이 아니라 **등급**이다.
+     액티브 트랜잭션 Arc·히트맵·speed-bullet 아이콘(static/icons)이 같은 세 값을 쓴다 — 아이콘이 정적 SVG 라
+     다크에서도 재매핑하지 않는다(아이콘과 어긋나지 않게). status 토큰과 값이 비슷해도 대용 금지. */
+  --color-chart-speed-normal: #3DA9FF;    /* 정상 */
+  --color-chart-speed-slow: #FFA012;      /* 느림 */
+  --color-chart-speed-very-slow: #F34747; /* 매우 느림 */
+
+  /* Shadow flood — SVG 필터(feDropShadow)의 그림자 색. CSS box-shadow 는 --shadow-* 를 쓴다. 테마 무관. */
+  --color-shadow-flood: #000000;
+
   /* ──────────────────────────────────────────────────────────────────────
    *  Topology — 노드-엣지 그래프 전용 역할 토큰.
    *

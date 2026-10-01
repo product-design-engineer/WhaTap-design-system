@@ -62,17 +62,17 @@ export const AllServices: Story = {
 /** 카드 컨텍스트 — 타이틀 아래 배치. */
 export const InCardContext: Story = {
   render: () => (
-    <div style={{ maxWidth: 360, borderRadius: 8, overflow: "hidden", background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,0.08)" }}>
-      <div style={{ aspectRatio: "16/9", background: "#f5f6f9" }} />
+    <div style={{ maxWidth: 360, borderRadius: 8, overflow: "hidden", background: "var(--color-card)", boxShadow: "var(--shadow-xs)" }}>
+      <div style={{ aspectRatio: "16/9", background: "var(--color-surface-100)" }} />
       <div style={{ padding: "12px 16px", display: "flex", flexDirection: "column", gap: 8 }}>
-        <div style={{ fontSize: 16, fontWeight: 600, lineHeight: 1.5, color: "#181c20" }}>
+        <div style={{ fontSize: 16, fontWeight: 600, lineHeight: 1.5, color: "var(--color-text-primary)" }}>
           에이블씨엔씨, K-뷰티를 대표하는 브랜드는 와탭을 이렇게 활용합니다
         </div>
         <div className="wds-web-service-chips">
           <span className="wds-web-service-chip" data-service="APM">APM</span>
           <span className="wds-web-service-chip" data-service="Database">Database</span>
         </div>
-        <time style={{ fontSize: 12, color: "#aaa" }}>2024-11-06</time>
+        <time style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>2024-11-06</time>
       </div>
     </div>
   ),
