@@ -39,6 +39,41 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 
 ## 아키텍처 — 2-Tier Token + 3-Layer Component
 
+### 🔒 도메인 접두어 — 3-Prefix 네이밍 컨벤션
+
+> **이 정책은 불변(immutable)입니다. 신규 CSS 클래스 · 토큰 · 컴포넌트 추가 시 반드시 준수.**
+
+모든 DS 에셋(CSS 클래스 · 토큰 · TSX 컴포넌트)은 **소비 도메인**에 따라 3개 접두어 중 하나를 쓴다. 사람과 AI 모두 클래스명만 보고 도메인 경계를 즉시 판별할 수 있어야 한다.
+
+| Prefix | 도메인 | 의미 | 토큰 예 | 클래스 예 | TSX 예 |
+|---|---|---|---|---|---|
+| **`wds-web-`** | 마케팅 (www) | 로그인 전 · 공개 페이지 | `--color-web-*`, `--text-web-*`, `--radius-web-*` | `wds-web-mega-menu`, `wds-web-hero-banner`, `wds-web-cta` | `WebCtaButton`, `LandingHeader` |
+| **`wds-chart-`** | 데이터 시각화 | 차트 · 그래프 · 게이지 · 히트맵 | `--color-chart-series-*`, `--color-chart-seq-*` | `wds-chart-mini-line`, `wds-chart-heatmap`, `wds-chart-arc` | `MiniLineChart`, `Heatmap`, `ScatterHeatmap` |
+| **`wds-`** | SaaS (app) | 로그인 후 · 제품 UI (기본값) | `--color-*`, `--wds-btn-*` | `wds-sidebar`, `wds-page-header` | `Sidebar`, `PageHeader`, `Button` |
+
+**규칙:**
+
+1. **접두어는 소비 도메인이 결정한다.** 컴포넌트의 기술 특성(CSS-only vs TSX, Primitives vs Composite)이 아니라 **어디서 쓰이는가**가 기준이다.
+2. **기본값은 `wds-`(SaaS).** 130+ 기존 컴포넌트는 변경하지 않는다. 마케팅과 차트가 소수이므로 소수 쪽에 표식을 붙인다.
+3. **토큰과 클래스 접두어가 정렬돼야 한다.** `wds-web-*` 클래스 안에서는 `--color-web-*` · `--*-web-*` 토큰을 쓴다. `wds-chart-*` 클래스 안에서는 `--color-chart-*` 토큰을 쓴다. 교차 참조는 lint 위반이다.
+4. **경계 위반 lint.** 정규식 한 줄로 잡는다:
+   - 마케팅 컴포넌트가 SaaS 전용 레이아웃 토큰(`--wds-page-px` 등)을 참조 → 위반
+   - SaaS 컴포넌트가 `--color-web-*` 를 참조 → 위반
+   - 일반 UI 에서 `--color-chart-series-*` 를 끌어다 씀 → 위반
+5. **Storybook 카탈로그 그룹.** 마케팅 컴포넌트는 `Shell/Web · *` 또는 `Primitives/Web · *` 로 묶는다. 차트는 기존 계층(Primitives/Composite) 내에서 이름에 `Chart` 가 드러나면 충분하다.
+
+**현재 이름 → 정책 정렬 대상 (마이그레이션):**
+
+| 현재 | → 정책 정렬 | 비고 |
+|---|---|---|
+| `wds-mega-menu` | `wds-web-mega-menu` | 마케팅 GNB 메가 메뉴 |
+| `wds-hero-banner` | `wds-web-hero-banner` | 마케팅 히어로 배너 |
+| `wds-landing-header` | `wds-web-landing-header` | 마케팅 공개 페이지 헤더 |
+| `wds-web-cta` | 그대로 | 이미 정렬됨 |
+| `MiniLineChart` 등 차트 | CSS 클래스에 `wds-chart-` 적용 | TSX 컴포넌트명은 유지 |
+
+> 마이그레이션은 **별도 PR** 로 진행한다. 이 문서에 정책을 명문화하는 것과 실제 리네이밍은 분리한다.
+
 ### 토큰 2계층
 
 | Tier | 역할 | 명명 규칙 | 예 |

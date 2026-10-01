@@ -60,6 +60,7 @@ colors:
   # Status Soft — status 원색의 옅은 표면 (토스트 배경 · soft 칩/버튼 · 경고 배너)
   #  위에 올리는 텍스트는 tone-text-* 를 쓴다. status 원색을 배경으로 쓰지 말 것.
   status-success-soft:       "#E8F8EE"    # Color
+  status-info:               "#296CF2"    # Color — 정보 상태 인디케이터 (다크 #5B92F7)
   status-info-soft:          "#E8F0FE"    # Color
   status-warning-soft:       "#FFF4E5"    # Color
   status-error-soft:         "#FDECEC"    # Color
@@ -205,8 +206,24 @@ colors:
   chart-seq-3:               "#2472D8"    # Color
   chart-seq-4:               "#1A50B0"    # Color
 
+  # Chart — Speed · APM 응답 속도 등급(계열 아님). speed-bullet 아이콘과 같은 값 — 다크 재매핑 없음.
+  chart-speed-normal:        "#3DA9FF"    # Color — 정상
+  chart-speed-slow:          "#FFA012"    # Color — 느림
+  chart-speed-very-slow:     "#F34747"    # Color — 매우 느림
+
+  # Shadow flood — SVG feDropShadow 의 그림자 색(불투명도는 floodOpacity). 테마 무관.
+  shadow-flood:              "#000000"    # Color
+
   # Avatar gradient — 프로필 아바타 그라데이션 시작 stop (끝은 brand-blue). 테마 무관.
   avatar-gradient-from:      "#4FC3F7"    # Color
+
+  # Flag — CountryFlag 국기 고유색. 국가 표장이라 테마 무관 고정. 국기 밖 사용 금지.
+  flag-red:                  "#D80027"    # Color — 적색 — 태극 적·성조기 줄·히노마루 공용
+  flag-blue-kr:              "#0052B4"    # Color — 태극기 태극 청색
+  flag-blue-us:              "#2E52B2"    # Color — 성조기 칸톤 청색
+  flag-field:                "#F0F0F0"    # Color — 흰 바탕 — 성조기·일장기
+  flag-field-kr:             "#FFFFFF"    # Color — 태극기 흰 바탕
+  flag-ink:                  "#000000"    # Color — 태극기 4괘 흑색
 
   # Tone 메타데이터
   tone-types: [critical, warning, info, muted, neutral]

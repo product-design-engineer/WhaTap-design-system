@@ -2,7 +2,7 @@
 //
 // 두 가지를 본다.
 //
-//   R1. **참조되는 토큰이 런타임에 실재하는가**
+//   R1. **참조되는 토큰이 런타임에 실재하는가** — TSX 와 whatap-ds.css 안의 참조 모두
 //       컴포넌트가 `var(--x)` 로 쓰는 토큰이 `whatap-ds.css`(=런타임에 실제 로드되는 CSS)에
 //       정의돼 있어야 한다. `tokens.css` 는 **참조용이라 런타임에 로드되지 않는다** —
 //       거기에만 있으면 존재하지 않는 것과 같다.
@@ -82,6 +82,36 @@ for (const f of sources) {
       missing.get(name).push(`${f}:${i + 1}`);
     }
   });
+}
+
+/* ── R1 (CSS). whatap-ds.css **안에서** 참조하는데 런타임 정의가 없는 토큰 ─────────
+   위 루프는 .ts/.tsx 의 var() 만 본다. CSS 규칙이 참조하는 토큰은 그 빈틈으로 샜다 —
+   실측(2026-10-01): `.wds-web-section--tone-dark` 의 `--color-web-surface-dark` 등 11종이
+   tokens.css 에만 있었고, tokens.css 를 함께 불러오지 않는 Storybook · tgz 단독 소비처에서
+   다크 섹션 배경 · CTA 배너 그라데이션이 비었다. saas · www 는 tokens.css 를 함께 import 해서
+   가려졌다.
+   지역 변수는 두 경우만 통과시킨다:
+     · 컴포넌트가 인라인 style 로 주입하는 변수 — TSX 에 `"--x":` 형태로 값이 실린다.
+     · 소비처가 채우는 슬롯 — CSS 에 폴백을 명시한다: var(--x, <기본값>). */
+const injected = new Set();
+for (const f of sources) {
+  const raw = fs.readFileSync(f, "utf8");
+  for (const m of raw.matchAll(/["'`](--[\w-]+)["'`]\s*:/g)) injected.add(m[1]);
+}
+{
+  const css = fs.readFileSync(RUNTIME_CSS, "utf8").replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, " "));
+  css.split("\n").forEach((line, i) => {
+    for (const m of line.matchAll(/var\(\s*(--[\w-]+)/g)) {
+      refCount++;
+      const name = m[1];
+      const after = line.slice(m.index + m[0].length);
+      if (/^\s*,/.test(after)) continue;
+      if (runtime.has(name) || injected.has(name)) continue;
+      if (!missing.has(name)) missing.set(name, []);
+      missing.get(name).push(`${RUNTIME_CSS}:${i + 1}`);
+    }
+  });
+  scannedFiles++;
 }
 
 /* ── R2. 두 파일이 공유하는 토큰의 값 불일치 ───────────────────────────── */

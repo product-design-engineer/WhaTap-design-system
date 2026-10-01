@@ -270,7 +270,7 @@ export default function AiPromptInput({
                   : undefined
             }
             onKeyDown={editable || onChange ? handleKey : undefined}
-            className="ai-input-textarea w-full text-lg text-primary tracking-default leading-normal resize-none outline-none border-0 bg-transparent placeholder:text-disabled"
+            className="ai-input-textarea w-full text-lg text-primary tracking-default leading-normal resize-none outline-none border-0 bg-transparent placeholder-text-disabled"
             style={{
               position: "relative",
               fontFamily: "var(--font-family-korean)",

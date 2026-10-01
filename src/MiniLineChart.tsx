@@ -182,11 +182,21 @@ export default function MiniLineChart({
           className="absolute w-1px bg-color-var-color-border-divider"
           style={{ left: PAD_LEFT, top: PAD_TOP_PX, height: PLOT_H_PX }}
         />
-        {/* 중간 horizontal grid line */}
-        <div
-          className="absolute h-1px bg-color-var-color-border-soft"
-          style={{ left: PAD_LEFT, right: PAD_RIGHT, top: PAD_TOP_PX + PLOT_H_PX * 0.5 }}
-        />
+        {/* Y축 수평 그리드 라인 — 모든 tick 위치에 점선 */}
+        {yTicks.map((ratio) => (
+          <div
+            key={`grid-${ratio}`}
+            className="absolute"
+            style={{
+              left: PAD_LEFT,
+              right: PAD_RIGHT,
+              top: PAD_TOP_PX + PLOT_H_PX * (1 - ratio),
+              height: 0,
+              borderTop: "1px dashed var(--color-border-default)",
+              opacity: 0.5,
+            }}
+          />
+        ))}
         {/* 좌측 검정 점선 reference */}
         <div
           className="absolute"

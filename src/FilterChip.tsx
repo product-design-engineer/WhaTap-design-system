@@ -77,8 +77,7 @@ export default function FilterChip({
   const selectedStyle: React.CSSProperties = selected
     ? {
         backgroundColor: "var(--color-brand-blue)",
-        // raw-color-ok: 선택된 chip — brand-blue 배경 위 고정 흰색 전경.
-        color: "#fff",
+        color: "var(--color-text-inverse)",
         border: "1px solid var(--color-brand-blue)",
       }
     : {

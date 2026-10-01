@@ -271,7 +271,7 @@ export default function AiInlinePrompt({
             onKeyDown={editable || onChange ? handleKey : undefined}
             aria-expanded={dropdownOpen}
             aria-haspopup={hasSuggestions ? "listbox" : undefined}
-            className="ai-inline-prompt__input block w-full h-20px min-w-0 p-0 text-base text-primary tracking-default leading-20px outline-none border-0 bg-transparent placeholder:text-disabled disabled-cursor-not-allowed"
+            className="ai-inline-prompt__input block w-full h-20px min-w-0 p-0 text-base text-primary tracking-default leading-20px outline-none border-0 bg-transparent placeholder-text-disabled disabled-cursor-not-allowed"
             style={{
               fontFamily: "var(--font-family-korean)",
               fontWeight: "var(--font-weight-regular)",

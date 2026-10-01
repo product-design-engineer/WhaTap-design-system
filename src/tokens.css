@@ -16,6 +16,9 @@
   /* Brand primary */
   --color-brand-blue: #296CF2;
   --color-brand-blue-deep: #1B5CD9;
+  /* Marketing web — 마케팅 사이트 CTA·링크 전용. 제품 UI 브랜드 블루와 별개 */
+  --color-brand-blue-web: #296CF2;
+  --color-brand-blue-web-deep: #1B5CD9;
   --color-brand-blue-soft: #3DA9FF;
   --color-brand-blue-bg: #D6E1FF;
   --color-brand-blue-bg-2: #C2D5FC;
@@ -36,6 +39,7 @@
      ⚠️ status 원색을 배경으로 쓰지 말 것 — 그 위 텍스트 대비가 무너진다.
      다크 값은 파일 하단 `.dark` 블록에서 tone surface 와 함께 반전된다. */
   --color-status-success-soft: #E8F8EE;
+  --color-status-info: #296CF2;   /* 정보 상태의 점·아이콘·짧은 강조 (넓은 면은 -soft) */
   --color-status-info-soft: #E8F0FE;
   --color-status-warning-soft: #FFF4E5;
   --color-status-error-soft: #FDECEC;
@@ -85,6 +89,15 @@
      장식용 브랜드 그라데이션이라 테마와 무관하게 고정한다. 차트 색이 아니다. */
   --color-avatar-gradient-from: #4FC3F7;
 
+  /* Flag — CountryFlag 국기 고유색. 국가 표장이라 테마와 무관하게 고정한다(.dark 재매핑 없음).
+     UI 색이 아니다 — 국기 밖에서 쓰지 말 것. */
+  --color-flag-red: #D80027;      /* 적색 — 태극 적·성조기 줄·히노마루 공용 */
+  --color-flag-blue-kr: #0052B4;  /* 태극기 태극 청색 */
+  --color-flag-blue-us: #2E52B2;  /* 성조기 칸톤 청색 */
+  --color-flag-field: #F0F0F0;    /* 흰 바탕 — 성조기·일장기 */
+  --color-flag-field-kr: #FFFFFF; /* 태극기 흰 바탕 */
+  --color-flag-ink: #000000;      /* 태극기 4괘 흑색 */
+
   /* AI gradient (preserved for compat) */
   --color-whatap-blue: #004BE0;
   --color-whatap-purple: #8B52FF;
@@ -95,6 +108,90 @@
   --radius-full: 9999px;
   --color-white: #fff;
   --color-black: #000;
+
+  /* ── Marketing Web Surfaces — 마케팅 사이트 다크 섹션·푸터·CTA 배너 배경.
+     제품 UI 의 --color-bg/card 와 별개. 마케팅은 페이지 내에서 밝음↔어둠이 교차하므로
+     section 단위로 적용하는 표면 토큰이 필요하다. */
+  --color-web-surface-dark: #181c20;          /* 다크 섹션 배경 (지원 환경 등) */
+  --color-web-surface-darker: #0f1318;        /* 푸터 배경 */
+  --color-web-surface-cta: #0f1724;           /* CTA 배너 그라데이션 시작 */
+  --color-web-surface-cta-mid: #1a2744;       /* CTA 배너 그라데이션 중간 */
+  --color-web-surface-cta-end: #1e1a3a;       /* CTA 배너 그라데이션 끝 */
+
+  /* Marketing Web Text on Dark — 다크 표면 위 텍스트 계층. */
+  --color-web-text-on-dark: #fff;
+  --color-web-text-on-dark-muted: rgba(255, 255, 255, 0.6);
+  --color-web-text-on-dark-subtle: rgba(255, 255, 255, 0.45);
+  --color-web-text-on-dark-faint: rgba(255, 255, 255, 0.3);
+
+  /* Marketing Web Borders on Dark */
+  --color-web-border-on-dark: rgba(255, 255, 255, 0.12);
+  --color-web-border-on-dark-hover: rgba(255, 255, 255, 0.3);
+  --color-web-border-on-dark-active: rgba(255, 255, 255, 0.4);
+
+  /* Marketing Web Interactive on Dark — 다크 표면의 pill·버튼·태그 배경. */
+  --color-web-fill-on-dark: rgba(255, 255, 255, 0.08);
+  --color-web-fill-on-dark-hover: rgba(255, 255, 255, 0.12);
+
+  /* Marketing Web Accent on Dark — 다크 표면 위 카테고리 태그 (배경 + 전경 쌍).
+     원색을 낮은 불투명도로 깔고, 전경은 같은 색조의 파스텔. */
+  --color-web-accent-mint-bg: rgba(16, 185, 129, 0.15);
+  --color-web-accent-mint-fg: #6ee7b7;
+  --color-web-accent-light-blue-bg: rgba(59, 130, 246, 0.15);
+  --color-web-accent-light-blue-fg: #93c5fd;
+  --color-web-accent-light-purple-bg: rgba(168, 85, 247, 0.15);
+  --color-web-accent-light-purple-fg: #c4b5fd;
+  --color-web-accent-magenta-bg: rgba(236, 72, 153, 0.18);
+  --color-web-accent-magenta-fg: #f9a8d4;
+  --color-web-accent-indigo-bg: rgba(99, 102, 241, 0.18);
+  --color-web-accent-indigo-fg: #a5b4fc;
+  --color-web-accent-orange-bg: rgba(249, 115, 22, 0.18);
+  --color-web-accent-orange-fg: #fdba74;
+  --color-web-accent-blue-bg: rgba(59, 130, 246, 0.18);
+  --color-web-accent-blue-fg: #93c5fd;
+  --color-web-accent-green-bg: rgba(34, 197, 94, 0.18);
+  --color-web-accent-green-fg: #86efac;
+  --color-web-accent-purple-bg: rgba(168, 85, 247, 0.18);
+  --color-web-accent-purple-fg: #c4b5fd;
+  --color-web-accent-light-green-bg: rgba(34, 197, 94, 0.15);
+  --color-web-accent-light-green-fg: #86efac;
+  --color-web-accent-teal-bg: rgba(20, 184, 166, 0.18);
+  --color-web-accent-teal-fg: #5eead4;
+  --color-web-accent-cyan-bg: rgba(6, 182, 212, 0.18);
+  --color-web-accent-cyan-fg: #67e8f9;
+
+  /* Marketing Web Glow — CTA 배너 브랜드 글로우 (radial gradient 구성 요소). */
+  --color-web-glow-blue: rgba(41, 108, 242, 0.2);
+  --color-web-glow-purple: rgba(139, 82, 255, 0.1);
+
+  /* Marketing Web Shadows */
+  --shadow-web-card: 0 1px 4px rgba(0, 0, 0, 0.06);
+  --shadow-web-card-hover: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --shadow-web-featured: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+  /* Marketing Web Landing — 해외 URL 모니터링 랜딩(www /newer/products/url) 표면.
+     URL-product_Prototype 의 src/theme.css · src/index.css 에만 있던 값을 옮겨 왔다(2026-09-30).
+     랜딩은 라이트/다크를 [data-theme] 로 바꾸므로 다크 값은 아래 .dark 블록에 있다.
+     헤더 반투명 면은 이미 있는 --color-header-translucent 를 쓴다(값이 같다). */
+  --color-web-landing-fg-rgb: 30, 30, 30;     /* 전경 RGB 트리플 — rgba(var(), a) 로 알파 합성 */
+  --color-web-landing-surface-alt: #f4f6fa;   /* 섹션 교대 배경 (마케팅 리듬, 제품 --color-bg 와 별개 축) */
+  --color-web-landing-input-bg: #ffffff;      /* URL 입력칸 배경 */
+  --color-web-landing-danger: #c81e1e;        /* 에러 문구 — 근백색 카드 위 AA 대비 */
+  --shadow-web-landing-focus: 0 0 0 3px rgba(41, 108, 242, 0.18);  /* 그라데이션 입력칸 포커스 링 */
+  --color-web-landing-live-ring: rgba(52, 211, 153, 0.5);          /* LIVE 점 펄스 링 시작 */
+  --color-web-landing-live-ring-fade: rgba(52, 211, 153, 0);       /* LIVE 점 펄스 링 끝(투명) */
+  --shadow-web-landing-cta-glow: 0 0 0 0 rgba(41, 108, 242, 0.45), 0 4px 18px rgba(41, 108, 242, 0.25);     /* CTA 글로우 루프 시작 */
+  --shadow-web-landing-cta-glow-peak: 0 0 0 11px rgba(41, 108, 242, 0), 0 6px 24px rgba(41, 108, 242, 0.38); /* CTA 글로우 루프 정점 */
+  --shadow-web-landing-cta-glow-end: 0 0 0 0 rgba(41, 108, 242, 0), 0 4px 18px rgba(41, 108, 242, 0.25);    /* CTA 글로우 루프 끝 */
+  --shadow-web-landing-cta-still: 0 4px 18px rgba(41, 108, 242, 0.28);  /* 동작 줄이기 설정일 때의 정지 글로우 */
+
+  /* Radius — 마케팅(web) 계열. 제품 UI 는 2px/4px 가 주력이지만 마케팅은 좀 더 넉넉하다. */
+  --radius-web-xs: 4px;
+  --radius-web-sm: 8px;
+  --radius-web-md: 12px;
+  --radius-web-lg: 16px;
+  --radius-web-pill: 99px;
+  --radius-web-circle: 50%;
 
   /* Elevation — 층이 아니라 *떠 있는 높이*로 고른다. 컴포넌트가 rgba 를 직접 적지 않도록
      그림자도 토큰이다. hairline 은 그림자에 겹쳐 쓰는 1px 경계(토스트 등). */
@@ -165,6 +262,28 @@
   --text-3xl: 24px;
   --text-4xl: 32px;
   --text-5xl: 48px;
+
+  /* Marketing Type Scale — 마케팅 사이트(whatap.io/ko) 전용.
+     제품 UI 스케일(--text-*)과 별개. 데스크탑 기준값이며 반응형 축소는 소비앱 CSS 에서 한다.
+     font-weight 와 leading 은 기존 공용 토큰을 쓴다(--font-weight-*, --leading-*). */
+  --text-web-display: 56px;   /* 히어로 헤드라인 */
+  --text-web-h1: 58px;        /* 제품 히어로 */
+  --text-web-h2: 48px;        /* 섹션 제목 */
+  --text-web-h3: 40px;        /* 서브섹션 */
+  --text-web-h4: 32px;        /* 피처 제목 */
+  --text-web-h5: 28px;        /* 카드 제목 */
+  --text-web-h6: 24px;        /* 소제목 */
+  --text-web-lead: 22px;      /* 히어로 서브텍스트 */
+  --text-web-body: 20px;      /* 본문 */
+  --text-web-body-sm: 16px;   /* 본문 소 */
+  --text-web-caption: 14px;   /* 캡션 */
+  --text-web-nav: 18px;       /* 네비게이션 */
+
+  /* Marketing Line Height — 마케팅 사이트 전용 leading. */
+  --leading-web-display: 1.2;  /* 헤드라인 */
+  --leading-web-heading: 1.3;  /* 제목 */
+  --leading-web-body: 1.6;     /* 본문 */
+  --leading-web-button: 1.5;   /* 버튼 */
 
   /* Font Weight — 4 단계 (font-{light|medium|bold} utility 값).
      light(300) 은 본문 running text 용이 아니라 **큰 사이즈 전용**이다 —
@@ -246,8 +365,7 @@
   --color-web-gray-800: #313131;
   --color-web-gray-900: #212121;
 
-  --color-brand-blue-web: #296cfe;
-  --color-brand-blue-web-deep: #0e53e8;
+  /* --color-brand-blue-web · -deep 은 위(브랜드 블록)에 정의 — 정본 brand-blue 와 같은 값을 쓴다. */
   --color-brand-blue-bright: #4485ff;
   --color-web-slate-500: #383d47;
   --color-web-slate-400: #4d525c;
@@ -304,13 +422,8 @@
   --leading-web-normal: 1.5;
   --leading-web-relaxed: 1.6;
 
-  --radius-web-xs: 4px;
-  --radius-web-sm: 8px;
-  --radius-web-md: 12px;
-  --radius-web-lg: 16px;
-  --radius-web-circle: 100%;
+  /* --radius-web-* · --shadow-web-card 는 위(마케팅 radius·shadow 블록)에 정의 — 중복 선언 금지. */
 
-  --shadow-web-card: 0 4px 4px #0000001a;
   --shadow-web-raised: 0 2px 5px #00000026;
   --shadow-web-overlay: 0 8px 16px #0003;
   --shadow-focus-ring: 0 0 0 3px #296cfe40;
@@ -379,6 +492,16 @@
   --color-chart-seq-2: #4A97E8;
   --color-chart-seq-3: #2472D8;
   --color-chart-seq-4: #1A50B0; /* 가장 진함 */
+
+  /* Chart — Speed · APM 응답 속도 3단계(normal / slow / very slow). 계열(series)이 아니라 **등급**이다.
+     액티브 트랜잭션 Arc·히트맵·speed-bullet 아이콘(static/icons)이 같은 세 값을 쓴다 — 아이콘이 정적 SVG 라
+     다크에서도 재매핑하지 않는다(아이콘과 어긋나지 않게). status 토큰과 값이 비슷해도 대용 금지. */
+  --color-chart-speed-normal: #3DA9FF;    /* 정상 */
+  --color-chart-speed-slow: #FFA012;      /* 느림 */
+  --color-chart-speed-very-slow: #F34747; /* 매우 느림 */
+
+  /* Shadow flood — SVG 필터(feDropShadow)의 그림자 색. CSS box-shadow 는 --shadow-* 를 쓴다. 테마 무관. */
+  --color-shadow-flood: #000000;
 
   /* ──────────────────────────────────────────────────────────────────────
    *  Topology — 노드-엣지 그래프 전용 역할 토큰.
@@ -676,6 +799,12 @@ html, body, #root {
 .dark, [data-theme="dark"] {
   --color-header-translucent: rgba(10, 14, 23, 0.7);
 
+  /* Marketing Web Landing — 다크 값. 라이트 정의와 설명은 :root 의 같은 이름. */
+  --color-web-landing-fg-rgb: 255, 255, 255;
+  --color-web-landing-surface-alt: #0d1320;
+  --color-web-landing-input-bg: #0e1320;
+  --color-web-landing-danger: #ff8a8a;
+
   /* Base surface — page → 한 단계씩 올라오는 표면 */
   --color-bg: #0E1116;
   --color-card: #181C22;
@@ -744,6 +873,7 @@ html, body, #root {
 
   /* Status Soft — 토스트 배경·soft 칩/버튼·경고 배너. tone surface 와 같은 값 체계. */
   --color-status-success-soft: #14301F;
+  --color-status-info: #5B92F7;
   --color-status-info-soft: #16233D;
   --color-status-warning-soft: #33290F;
   --color-status-error-soft: #3A2226;

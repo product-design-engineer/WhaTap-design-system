@@ -253,8 +253,7 @@ export default function DsReadOnlyNotice({
             onClick={onClose}
             style={{
               backgroundColor: "var(--color-brand-blue, #296CF2)",
-              // raw-color-ok: brand-blue 버튼 위 전경 — 컬러 배경 위 고정 흰색.
-              color: "#fff",
+              color: "var(--color-text-inverse)",
               border: "none",
               borderRadius: 6,
               padding: "6px 20px",

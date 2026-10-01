@@ -173,7 +173,7 @@ export default function TextField({
           disabled={disabled}
           aria-invalid={invalid || undefined}
           aria-describedby={helperId}
-          className={`min-w-0 flex-1 border-0 bg-transparent p-0 outline-none ${spec.text} text-primary placeholder:text-tertiary`}
+          className={`min-w-0 flex-1 border-0 bg-transparent p-0 outline-none ${spec.text} text-primary placeholder-text-tertiary`}
           {...rest}
         />
         {clearable && !disabled && value !== undefined && value !== "" && (
