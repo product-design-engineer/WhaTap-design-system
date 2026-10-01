@@ -75,7 +75,7 @@ export default function StatCard({
 
   return (
     <div
-      className="flex items-center gap-[8px] bg-card border border-[var(--color-border-default)] rounded-[4px] px-[12px] py-[8px] flex-1 min-w-0"
+      className="flex items-center gap-8px bg-card border border-color-var-color-border-default rounded-4px px-12px py-8px flex-1 min-w-0"
       style={style}
     >
       {/* 좌측 톤 인디케이터 */}
@@ -87,7 +87,7 @@ export default function StatCard({
       {/* 라벨 + 값 */}
       <div className="flex flex-col min-w-0">
         <span className="text-sm text-tertiary truncate leading-tight">{label}</span>
-        <div className="flex items-baseline gap-[4px]">
+        <div className="flex items-baseline gap-4px">
           <span
             className="text-xl font-bold text-primary leading-none"
             style={{ fontFamily: "var(--font-family-numeric)" }}
@@ -99,7 +99,7 @@ export default function StatCard({
           )}
           {trend && (
             <span
-              className="text-xs leading-none ml-[2px]"
+              className="text-xs leading-none ml-2px"
               style={{ color: TREND_COLORS[trend] }}
             >
               {TREND_ARROWS[trend]}

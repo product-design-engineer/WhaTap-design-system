@@ -135,16 +135,16 @@ export default function HexGrid({
   const lastRowShift = lastRowLen < cols ? ((cols - lastRowLen) * (hexW + gap)) / 2 : 0;
 
   return (
-    <div className="flex flex-col bg-card border border-[var(--color-border-default)] rounded-[4px] px-[8px] py-[6px] h-full">
-      <div className="flex items-center justify-between mb-[4px] shrink-0">
+    <div className="flex flex-col bg-card border border-color-var-color-border-default rounded-4px px-8px py-6px h-full">
+      <div className="flex items-center justify-between mb-4px shrink-0">
         <span className="text-md font-medium text-secondary">GPU Map</span>
-        <div className="flex items-center gap-[8px]">
-          <div className="flex items-center gap-[4px]">
-            <div className="rounded-[2px]" style={{ width: 8, height: 8, background: TONE_FILL.active }} />
+        <div className="flex items-center gap-8px">
+          <div className="flex items-center gap-4px">
+            <div className="rounded-2px" style={{ width: 8, height: 8, background: TONE_FILL.active }} />
             <span className="text-sm text-tertiary">Active</span>
           </div>
-          <div className="flex items-center gap-[4px]">
-            <div className="rounded-[2px]" style={{ width: 8, height: 8, background: TONE_FILL.idle }} />
+          <div className="flex items-center gap-4px">
+            <div className="rounded-2px" style={{ width: 8, height: 8, background: TONE_FILL.idle }} />
             <span className="text-sm text-tertiary">Idle</span>
           </div>
         </div>

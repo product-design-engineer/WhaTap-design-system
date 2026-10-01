@@ -268,7 +268,7 @@ export default function ActiveTransactionSpeedWidget({
         <div className="flex-1 min-w-0 relative">
           {/* Top counts */}
           <div
-            className="absolute left-1/2 -translate-x-1/2 flex gap-6px items-center bg-card px-6px py-1px rounded-4px"
+            className="absolute left-1-2 -translate-x-1-2 flex gap-6px items-center bg-card px-6px py-1px rounded-4px"
             style={{ top: -2, zIndex: 10, opacity: 0.9 }}
           >
             <span
@@ -301,7 +301,7 @@ export default function ActiveTransactionSpeedWidget({
           </div>
           {/* Center sum */}
           <div
-            className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
+            className="absolute left-1-2 -translate-x-1-2 flex items-center justify-center"
             style={{ top: 18, zIndex: 10 }}
           >
             <span

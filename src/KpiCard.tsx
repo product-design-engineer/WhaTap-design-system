@@ -41,7 +41,7 @@ export default function KpiCard({ title, value, unit, delay }: KpiCardProps) {
 
   return (
     <div
-      className="flex flex-col bg-card border border-[var(--color-border-default)] rounded-[4px] px-[12px] py-[8px] h-full"
+      className="flex flex-col bg-card border border-color-var-color-border-default rounded-4px px-12px py-8px h-full"
       style={style}
     >
       <span className="text-md font-medium text-secondary truncate shrink-0">{title}</span>

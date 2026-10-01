@@ -114,7 +114,7 @@ export default function Toast({
               onAction?.();
               onClose?.();
             }}
-            className="text-md text-brand-blue tracking-default leading-none cursor-pointer hover:underline shrink-0"
+            className="text-md text-brand-blue tracking-default leading-none cursor-pointer hover-underline shrink-0"
             style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}
           >
             {actionLabel}
