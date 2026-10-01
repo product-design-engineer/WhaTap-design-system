@@ -3,28 +3,35 @@
  *
  * ## Purpose
  * 언어 선택기·로케일 표시 등에서 국기를 렌더링.
- * flag-icons(lipis/flag-icons) 기반 정밀 SVG.
+ * Untitled UI Flag Icons(MIT) 기반 정밀 SVG(아래 FLAGS 주석 참고).
  *
  * ## When to use
  * - GNB 언어 드롭다운
  * - 로케일 선택 UI
  *
+ * ## When NOT to use
+ * - 국가·지역 데이터를 나타내는 차트·지도 범례 → 차트 색 토큰(`--color-chart-*`)으로 표현한다.
+ * - 지원하지 않는 코드(ko · en · ja 외) — 없는 코드는 아무것도 렌더하지 않으므로 텍스트 라벨로 대체한다.
+ * - 국기 색을 다른 UI 에 가져다 쓰기 — `--color-flag-*` 는 국기 안에서만 쓴다.
+ *
  * ## Composition rules
- * - 기본 크기 20×15(4:3), `size` prop으로 조정
+ * - 비율 30×20(3:2). `size` 는 너비(px)이고 높이는 2/3 로 따라온다.
+ * - `size` 를 생략하면 부모를 100% 채운다 — 단독 배치에서는 항상 `size` 를 준다.
  * - 둥근 모서리(border-radius 2px) 기본 적용
- * - 코드는 ISO 3166-1 alpha-2 소문자
+ * - 코드는 **언어 코드**(ISO 639-1 소문자: ko · en · ja) — 국가 코드(kr · us · jp)가 아니다.
+ * - 색은 `--color-flag-*` 토큰 — 국가 표장이라 테마와 무관하게 고정(.dark 재매핑 없음).
  *
  * @example
  * ```tsx
- * <CountryFlag code="ko" />
+ * <CountryFlag code="ko" size={20} />
  * <CountryFlag code="en" size={24} />
- * <CountryFlag code="ja" />
+ * <CountryFlag code="ja" size={20} />
  * ```
  */
 
 export type CountryFlagProps = {
   code: string;
-  /** 가로 크기(px). 세로는 3:4 비율. 기본 20. */
+  /** 가로 크기(px). 세로는 2/3(30×20 비율). 생략하면 부모를 100% 채운다. */
   size?: number;
 };
 

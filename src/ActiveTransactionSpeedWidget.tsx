@@ -9,11 +9,22 @@
  * ## When to use
  * - Application 대시보드의 실시간 트래픽 요약
  *
+ * ## When NOT to use
+ * - 지금 실행 중인 트랜잭션의 **분포**(normal/slow/very slow 비율)를 보여 줄 때 → [[ActiveTransactionArc]].
+ * - 시간에 따른 처리량 추이 → [[MiniLineChart]] · [[MiniMultiLineChart]] — 이 위젯은 흐름 연출이지 시계열이 아니다.
+ * - 실데이터 없이 장식으로 흘리기 — 숫자가 움직이면 사용자는 실측으로 읽는다. 데모·캡처에서는 `paused` 로 멈춘다.
+ *
  * ## Composition rules
  * - 외부 아이콘 의존: `/icons/speed-bullet-{tone}.svg`, `/icons/speed-bar-{tone}.svg`
  *   (소비 앱의 public 폴더에 배치)
  * - 색은 DS 토큰 — hex 금지
  * - `compact` 모드로 좁은 카드(Flex 보드 등) 대응
+ *
+ * @example
+ * ```tsx
+ * <ActiveTransactionSpeedWidget onOpenDetail={() => openDrawer("active-tx")} />
+ * <ActiveTransactionSpeedWidget compact baseRps={40} baseTps={42} />
+ * ```
  */
 import { useEffect, useMemo, useRef, useState } from "react";
 
