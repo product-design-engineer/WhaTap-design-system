@@ -193,7 +193,9 @@ export default function GpuStatusBar({ categories, max: maxProp }: GpuStatusBarP
                         style={{ background: posColor }}
                       />
                       <span
-                        className="absolute text-sm text-inverse whitespace-nowrap"
+                        data-ds-policy-ok="차트 계열 색 막대 안 라벨 — 컬러 위 고정 흰색"
+                        // raw-color-ok: 차트 계열 색으로 채운 막대 안 라벨 — 컬러 위 고정 흰색 전경.
+                        className="absolute text-sm text-white whitespace-nowrap"
                         style={{
                           left: "50%",
                           top: "50%",

@@ -868,6 +868,7 @@
 .bottom-5 { bottom: calc(var(--spacing) * 5); }
 .box-border { box-sizing: border-box; }
 .col-span-4 { grid-column: span 4 / span 4; }
+.cursor-inherit { cursor: inherit; }
 .cursor-default { cursor: default; }
 .cursor-not-allowed { cursor: not-allowed; }
 .cursor-pointer { cursor: pointer; }
@@ -958,6 +959,9 @@
 .hover-bg-invert:hover { background-color: var(--color-text-strong); }
 .hover-bg-surface-50:hover { background-color: var(--color-surface-50); }
 .hover-underline:hover { text-decoration-line: underline; }
+/* placeholder 색 — preflight 의 ::placeholder(currentColor 50%, @layer base)보다 이 unlayered 규칙이 이긴다. */
+.placeholder-text-disabled::placeholder { color: var(--color-text-disabled); }
+.placeholder-text-tertiary::placeholder { color: var(--color-text-tertiary); }
 .hover-bg-color-var-color-brand-blue-bg:hover { background-color: var(--color-brand-blue-bg); }
 .hover-bg-color-var-color-brand-blue-deep:hover { background-color: var(--color-brand-blue-deep); }
 .hover-bg-color-var-color-surface-100:hover { background-color: var(--color-surface-100); }
@@ -1032,6 +1036,7 @@
 .ml-4px { margin-left: 4px; }
 .ml-auto { margin-left: auto; }
 .mr-1 { margin-right: var(--spacing); }
+.mr-4px { margin-right: 4px; }
 .mr-6px { margin-right: 6px; }
 .mt-1 { margin-top: var(--spacing); }
 .mt-1px { margin-top: 1px; }
@@ -1106,6 +1111,7 @@
 .px-8px { padding-inline: 8px; }
 .py-0_5 { padding-block: calc(var(--spacing) * 0.5); }
 .py-1 { padding-block: var(--spacing); }
+.py-24px { padding-block: 24px; }
 .py-10px { padding-block: 10px; }
 .py-12px { padding-block: 12px; }
 .py-1_5 { padding-block: calc(var(--spacing) * 1.5); }
@@ -1130,6 +1136,7 @@
 .rounded-1_5px { border-radius: 1.5px; }
 .rounded-24px { border-radius: 24px; }
 .rounded { border-radius: 0.25rem; }
+.rounded-1px { border-radius: 1px; }
 .rounded-2px { border-radius: 2px; }
 .rounded-3px { border-radius: 3px; }
 .rounded-4px { border-radius: 4px; }

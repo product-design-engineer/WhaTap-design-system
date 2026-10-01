@@ -369,7 +369,7 @@ export default function WhaTapAiWidget({
                 disabled={isUnavailable}
                 onChange={editable ? (e) => setTyped(e.target.value) : undefined}
                 onKeyDown={editable ? handleKey : undefined}
-                className="ai-input-textarea w-full text-lg text-primary tracking-default leading-normal resize-none outline-none border-0 bg-transparent placeholder:text-disabled"
+                className="ai-input-textarea w-full text-lg text-primary tracking-default leading-normal resize-none outline-none border-0 bg-transparent placeholder-text-disabled"
                 style={{
                   fontFamily: "var(--font-family-korean)",
                   fontWeight: "var(--font-weight-regular)",

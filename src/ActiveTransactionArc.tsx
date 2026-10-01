@@ -42,12 +42,12 @@ export default function ActiveTransactionArc({
       {/* left: Max TX + Elapsed legend */}
       <div className="flex flex-col shrink-0 min-w-0 justify-between" style={{ width: 72 }}>
         <div className="flex flex-col min-w-0">
-          <p className="text-sm text-gray-mid leading-none" style={{ fontFamily: "var(--font-family-numeric)" }}>Max TX</p>
+          <p className="text-sm text-tertiary leading-none" style={{ fontFamily: "var(--font-family-numeric)" }}>Max TX</p>
           <p className="text-sm text-primary mt-4px leading-tight truncate" title={maxTx.name} style={{ fontFamily: "var(--font-family-numeric)" }}>{maxTx.name}</p>
           <p className="text-2xl text-primary mt-4px leading-none" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}>{maxTx.value}</p>
         </div>
         <div className="flex flex-col gap-3px">
-          <p className="text-sm text-gray-mid leading-snug" style={{ fontFamily: "var(--font-family-numeric)" }}>Elapsed</p>
+          <p className="text-sm text-tertiary leading-snug" style={{ fontFamily: "var(--font-family-numeric)" }}>Elapsed</p>
           <LegendDot color="var(--color-chart-speed-very-slow)" label="very slow" />
           <LegendDot color="var(--color-chart-speed-slow)" label="slow" />
           <LegendDot color="var(--color-chart-speed-normal)" label="normal" />
@@ -72,7 +72,7 @@ export default function ActiveTransactionArc({
       {/* right: Agent stats */}
       <div className="flex flex-col shrink-0 justify-between" style={{ width: 44 }}>
         <div className="flex flex-col">
-          <p className="text-sm text-gray-mid leading-none" style={{ fontFamily: "var(--font-family-numeric)" }}>Agent</p>
+          <p className="text-sm text-tertiary leading-none" style={{ fontFamily: "var(--font-family-numeric)" }}>Agent</p>
           <p className="text-sm text-primary mt-4px leading-none" style={{ fontFamily: "var(--font-family-numeric)" }}>Active</p>
           <p className="text-2xl text-primary text-right mt-2px leading-none" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}>{agent.active}</p>
         </div>
