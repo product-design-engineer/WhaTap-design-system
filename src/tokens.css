@@ -255,24 +255,24 @@
   /* Marketing Type Scale — 마케팅 사이트(whatap.io/ko) 전용.
      제품 UI 스케일(--text-*)과 별개. 데스크탑 기준값이며 반응형 축소는 소비앱 CSS 에서 한다.
      font-weight 와 leading 은 기존 공용 토큰을 쓴다(--font-weight-*, --leading-*). */
-  --text-marketing-display: 56px;   /* 히어로 헤드라인 */
-  --text-marketing-h1: 58px;        /* 제품 히어로 */
-  --text-marketing-h2: 48px;        /* 섹션 제목 */
-  --text-marketing-h3: 40px;        /* 서브섹션 */
-  --text-marketing-h4: 32px;        /* 피처 제목 */
-  --text-marketing-h5: 28px;        /* 카드 제목 */
-  --text-marketing-h6: 24px;        /* 소제목 */
-  --text-marketing-lead: 22px;      /* 히어로 서브텍스트 */
-  --text-marketing-body: 20px;      /* 본문 */
-  --text-marketing-body-sm: 16px;   /* 본문 소 */
-  --text-marketing-caption: 14px;   /* 캡션 */
-  --text-marketing-nav: 18px;       /* 네비게이션 */
+  --text-web-display: 56px;   /* 히어로 헤드라인 */
+  --text-web-h1: 58px;        /* 제품 히어로 */
+  --text-web-h2: 48px;        /* 섹션 제목 */
+  --text-web-h3: 40px;        /* 서브섹션 */
+  --text-web-h4: 32px;        /* 피처 제목 */
+  --text-web-h5: 28px;        /* 카드 제목 */
+  --text-web-h6: 24px;        /* 소제목 */
+  --text-web-lead: 22px;      /* 히어로 서브텍스트 */
+  --text-web-body: 20px;      /* 본문 */
+  --text-web-body-sm: 16px;   /* 본문 소 */
+  --text-web-caption: 14px;   /* 캡션 */
+  --text-web-nav: 18px;       /* 네비게이션 */
 
   /* Marketing Line Height — 마케팅 사이트 전용 leading. */
-  --leading-marketing-display: 1.2;  /* 헤드라인 */
-  --leading-marketing-heading: 1.3;  /* 제목 */
-  --leading-marketing-body: 1.6;     /* 본문 */
-  --leading-marketing-button: 1.5;   /* 버튼 */
+  --leading-web-display: 1.2;  /* 헤드라인 */
+  --leading-web-heading: 1.3;  /* 제목 */
+  --leading-web-body: 1.6;     /* 본문 */
+  --leading-web-button: 1.5;   /* 버튼 */
 
   /* Font Weight — 4 단계 (font-{light|medium|bold} utility 값).
      light(300) 은 본문 running text 용이 아니라 **큰 사이즈 전용**이다 —

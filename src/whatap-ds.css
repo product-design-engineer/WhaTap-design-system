@@ -82,23 +82,39 @@
     --text-5xl: 48px;
 
     /* Marketing Type Scale — 마케팅 사이트(whatap.io/ko) 전용 */
-    --text-marketing-display: 56px;
-    --text-marketing-h1: 58px;
-    --text-marketing-h2: 48px;
-    --text-marketing-h3: 40px;
-    --text-marketing-h4: 32px;
-    --text-marketing-h5: 28px;
-    --text-marketing-h6: 24px;
-    --text-marketing-lead: 22px;
-    --text-marketing-body: 20px;
-    --text-marketing-body-sm: 16px;
-    --text-marketing-caption: 14px;
-    --text-marketing-nav: 18px;
+    /* @role 마케팅 타입 스케일 — 히어로 헤드라인 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-* / 타이포 Role Catalog) */
+    --text-web-display: 56px;
+    /* @role 마케팅 타입 스케일 — 제품 히어로 제목 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-* / 타이포 Role Catalog) */
+    --text-web-h1: 58px;
+    /* @role 마케팅 타입 스케일 — 섹션 제목 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-* / 타이포 Role Catalog) */
+    --text-web-h2: 48px;
+    /* @role 마케팅 타입 스케일 — 서브섹션 제목 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-* / 타이포 Role Catalog) */
+    --text-web-h3: 40px;
+    /* @role 마케팅 타입 스케일 — 피처 제목 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-* / 타이포 Role Catalog) */
+    --text-web-h4: 32px;
+    /* @role 마케팅 타입 스케일 — 카드 제목 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-* / 타이포 Role Catalog) */
+    --text-web-h5: 28px;
+    /* @role 마케팅 타입 스케일 — 소제목 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-* / 타이포 Role Catalog) */
+    --text-web-h6: 24px;
+    /* @role 마케팅 타입 스케일 — 히어로 서브텍스트 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-* / 타이포 Role Catalog) */
+    --text-web-lead: 22px;
+    /* @role 마케팅 타입 스케일 — 본문 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-* / 타이포 Role Catalog) */
+    --text-web-body: 20px;
+    /* @role 마케팅 타입 스케일 — 본문 소 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-* / 타이포 Role Catalog) */
+    --text-web-body-sm: 16px;
+    /* @role 마케팅 타입 스케일 — 캡션 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-* / 타이포 Role Catalog) */
+    --text-web-caption: 14px;
+    /* @role 마케팅 타입 스케일 — GNB 메뉴 라벨 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-* / 타이포 Role Catalog) */
+    --text-web-nav: 18px;
     /* Marketing Line Height */
-    --leading-marketing-display: 1.2;
-    --leading-marketing-heading: 1.3;
-    --leading-marketing-body: 1.6;
-    --leading-marketing-button: 1.5;
+    /* @role 마케팅 행간 — 헤드라인 행간 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-*--line-height) */
+    --leading-web-display: 1.2;
+    /* @role 마케팅 행간 — 제목 행간 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-*--line-height) */
+    --leading-web-heading: 1.3;
+    /* @role 마케팅 행간 — 본문 행간 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-*--line-height) */
+    --leading-web-body: 1.6;
+    /* @role 마케팅 행간 — 버튼 라벨 행간 | @use wds-web-* 클래스 안에서만 | @avoid 제품(SaaS) 화면 (그쪽은 --text-*--line-height) */
+    --leading-web-button: 1.5;
 
     /* @role 글자 굵기 — 본문 굵기 | @avoid 사이즈 없이 굵기만으로 위계 만들기 */
     --font-weight-normal: 400;
@@ -1994,7 +2010,7 @@ html, body, #root {
   background: var(--color-card);
   cursor: pointer;
   font-family: inherit;
-  font-size: var(--text-marketing-body-sm, 16px);
+  font-size: var(--text-web-body-sm, 16px);
   font-weight: 500;
   color: var(--color-text-secondary);
   white-space: nowrap;
@@ -2054,15 +2070,15 @@ html, body, #root {
 }
 
 .wds-hero-banner-heading {
-  font-size: var(--text-marketing-display);
+  font-size: var(--text-web-display);
   font-weight: 600;
-  line-height: var(--leading-marketing-display);
+  line-height: var(--leading-web-display);
   margin: 0;
 }
 
 .wds-hero-banner-sub {
-  font-size: var(--text-marketing-lead);
-  line-height: var(--leading-marketing-body);
+  font-size: var(--text-web-lead);
+  line-height: var(--leading-web-body);
   margin: 0;
 }
 
@@ -2377,7 +2393,7 @@ html, body, #root {
 }
 
 /* ── 타이포그래피 — 마케팅 텍스트 계층 (wds-web-*) ──
-   토큰: --text-marketing-display(56) · h1(58) · h2(48) · h3(40) · h4(32)
+   토큰: --text-web-display(56) · h1(58) · h2(48) · h3(40) · h4(32)
          · h5(28) · h6(24) · lead(22) · body(20) · body-sm(16) · caption(14) · nav(18)
    line-height: display(1.2) · heading(1.3) · body(1.6) · button(1.5)
    ────────────────────────────────────────────────────────────── */
@@ -2386,71 +2402,71 @@ html, body, #root {
 .wds-web-display {
   color: var(--color-text-primary);
   margin: 0;
-  font-size: var(--text-marketing-display);
+  font-size: var(--text-web-display);
   font-weight: var(--font-weight-semibold, 600);
-  line-height: var(--leading-marketing-display);
+  line-height: var(--leading-web-display);
 }
 
 /* @role 마케팅 h1 | @use 페이지 최상위 타이틀 */
 .wds-web-heading-1 {
   color: var(--color-text-primary);
   margin: 0;
-  font-size: var(--text-marketing-h1);
+  font-size: var(--text-web-h1);
   font-weight: var(--font-weight-semibold, 600);
-  line-height: var(--leading-marketing-heading);
+  line-height: var(--leading-web-heading);
 }
 
 /* @role 마케팅 h2 | @use 각 섹션의 타이틀 */
 .wds-web-heading-2 {
   color: var(--color-text-primary);
   margin: 0;
-  font-size: var(--text-marketing-h2);
+  font-size: var(--text-web-h2);
   font-weight: var(--font-weight-semibold, 600);
-  line-height: var(--leading-marketing-heading);
+  line-height: var(--leading-web-heading);
 }
 
 /* @role 마케팅 h3 | @use 서브섹션·카드 타이틀 */
 .wds-web-heading-3 {
   color: var(--color-text-primary);
   margin: 0;
-  font-size: var(--text-marketing-h3);
+  font-size: var(--text-web-h3);
   font-weight: var(--font-weight-semibold, 600);
-  line-height: var(--leading-marketing-heading);
+  line-height: var(--leading-web-heading);
 }
 
 /* @role 마케팅 h4 | @use 카드 헤더·기능 블록 타이틀 */
 .wds-web-heading-4 {
   color: var(--color-text-primary);
   margin: 0;
-  font-size: var(--text-marketing-h4);
+  font-size: var(--text-web-h4);
   font-weight: var(--font-weight-semibold, 600);
-  line-height: var(--leading-marketing-heading);
+  line-height: var(--leading-web-heading);
 }
 
 /* @role 마케팅 h5 | @use 소형 카드·뱃지 타이틀 */
 .wds-web-heading-5 {
   color: var(--color-text-primary);
   margin: 0;
-  font-size: var(--text-marketing-h5);
+  font-size: var(--text-web-h5);
   font-weight: var(--font-weight-semibold, 600);
-  line-height: var(--leading-marketing-heading);
+  line-height: var(--leading-web-heading);
 }
 
 /* @role 마케팅 h6 | @use 캡션 헤딩·레이블 */
 .wds-web-heading-6 {
   color: var(--color-text-primary);
   margin: 0;
-  font-size: var(--text-marketing-h6);
+  font-size: var(--text-web-h6);
   font-weight: var(--font-weight-semibold, 600);
-  line-height: var(--leading-marketing-heading);
+  line-height: var(--leading-web-heading);
 }
 
 /* @role 마케팅 리드 텍스트 | @use 헤딩 아래 서브카피 */
 .wds-web-lead {
   color: var(--color-text-primary);
   margin: 0;
-  font-size: var(--text-marketing-lead);
-  line-height: var(--leading-marketing-body);
+  font-size: var(--text-web-lead);
+  line-height: var(--leading-web-body);
 }
 
 /* @role 마케팅 섹션 리드 (p1) | @use 섹션 헤더 아래 설명 */
@@ -2458,8 +2474,8 @@ html, body, #root {
   color: var(--color-text-primary);
   white-space: pre-wrap;
   margin: 0;
-  font-size: var(--text-marketing-h6);
-  line-height: var(--leading-marketing-body);
+  font-size: var(--text-web-h6);
+  line-height: var(--leading-web-body);
   overflow: hidden;
 }
 
@@ -2468,34 +2484,34 @@ html, body, #root {
   color: var(--color-text-primary);
   white-space: pre-wrap;
   margin: 0;
-  font-size: var(--text-marketing-body);
+  font-size: var(--text-web-body);
   font-weight: var(--font-weight-regular, 400);
-  line-height: var(--leading-marketing-body);
+  line-height: var(--leading-web-body);
 }
 
 /* @role 마케팅 소형 본문 | @use 보조 설명·푸터 */
 .wds-web-body-sm {
   color: var(--color-text-primary);
   margin: 0;
-  font-size: var(--text-marketing-body-sm);
+  font-size: var(--text-web-body-sm);
   font-weight: var(--font-weight-regular, 400);
-  line-height: var(--leading-marketing-body);
+  line-height: var(--leading-web-body);
 }
 
 /* @role 마케팅 캡션 | @use 메타·날짜·태그 */
 .wds-web-caption {
   color: var(--color-text-tertiary);
   margin: 0;
-  font-size: var(--text-marketing-caption);
+  font-size: var(--text-web-caption);
   font-weight: var(--font-weight-regular, 400);
-  line-height: var(--leading-marketing-body);
+  line-height: var(--leading-web-body);
 }
 
 /* @role 마케팅 네비게이션 | @use GNB·탭·필터 라벨 */
 .wds-web-nav {
-  font-size: var(--text-marketing-nav);
+  font-size: var(--text-web-nav);
   font-weight: var(--font-weight-medium, 500);
-  line-height: var(--leading-marketing-heading);
+  line-height: var(--leading-web-heading);
 }
 
 /* ── 톤 — 섹션 배경색 ──
@@ -2567,15 +2583,15 @@ html, body, #root {
 .wds-web-cta-banner-heading {
   color: var(--color-web-text-on-dark);
   margin: 0;
-  font-size: var(--text-marketing-h3);
+  font-size: var(--text-web-h3);
   font-weight: var(--font-weight-semibold, 600);
-  line-height: var(--leading-marketing-heading);
+  line-height: var(--leading-web-heading);
 }
 .wds-web-cta-banner-sub {
   color: var(--color-web-text-on-dark-muted);
   margin: 0;
-  font-size: var(--text-marketing-body);
-  line-height: var(--leading-marketing-body);
+  font-size: var(--text-web-body);
+  line-height: var(--leading-web-body);
 }
 .wds-web-cta-banner-actions {
   display: flex;
@@ -2650,7 +2666,7 @@ html, body, #root {
   display: inline-flex;
   align-items: center;
   color: var(--color-web-text-caption, var(--gray-600, #666));
-  font-size: var(--text-marketing-caption, 13px);
+  font-size: var(--text-web-caption, 13px);
   line-height: 1.4;
   white-space: nowrap;
 }
@@ -2677,13 +2693,13 @@ html, body, #root {
   gap: 4px;
   padding-block: 4px;
   color: var(--color-web-text-caption, var(--gray-400, #999));
-  font-size: var(--text-marketing-caption, 13px);
+  font-size: var(--text-web-caption, 13px);
   line-height: 1.4;
   white-space: nowrap;
 }
 .wds-web-date-label--md {
   gap: 5px;
-  font-size: var(--text-marketing-body-sm, 15px);
+  font-size: var(--text-web-body-sm, 15px);
 }
 .wds-web-date-label-icon {
   flex-shrink: 0;
@@ -2720,15 +2736,15 @@ html, body, #root {
   border: none;
   background: transparent;
   padding: 0 12px;
-  font-size: var(--text-marketing-body-sm, 15px);
-  line-height: var(--leading-marketing-body, 1.6);
+  font-size: var(--text-web-body-sm, 15px);
+  line-height: var(--leading-web-body, 1.6);
   color: var(--black, #111);
   outline: none;
   font-family: inherit;
   min-width: 0;
 }
 .wds-web-search-field--lg .wds-web-search-field-input {
-  font-size: var(--text-marketing-body, 17px);
+  font-size: var(--text-web-body, 17px);
 }
 .wds-web-search-field-input::placeholder {
   color: var(--gray-400, #999);
@@ -2767,24 +2783,24 @@ html, body, #root {
 /* ── 반응형 — 태블릿 ── */
 @media screen and (max-width: 991px) {
   .wds-web-breadcrumb { height: 36px; }
-  .wds-web-breadcrumb-item { font-size: var(--text-marketing-caption, 12px); }
+  .wds-web-breadcrumb-item { font-size: var(--text-web-caption, 12px); }
   .wds-web-section-container { padding-inline: 30px; }
   .wds-web-section-wrap { padding-top: 80px; padding-bottom: 80px; }
   .wds-web-section-wrap.\--small-padding { padding-top: 40px; padding-bottom: 40px; }
   .wds-web-section-header { width: 100%; margin-bottom: 32px; }
   /* 타이포 — 각 단계가 한 단계 아래 토큰으로 축소 */
-  .wds-web-display   { font-size: var(--text-marketing-h1); }
-  .wds-web-heading-1 { font-size: var(--text-marketing-h2); }
-  .wds-web-heading-2 { font-size: var(--text-marketing-h3); }
-  .wds-web-heading-3 { font-size: var(--text-marketing-h4); }
-  .wds-web-heading-4 { font-size: var(--text-marketing-h5); }
-  .wds-web-heading-5 { font-size: var(--text-marketing-h6); }
-  .wds-web-heading-6 { font-size: var(--text-marketing-lead); }
-  .wds-web-lead      { font-size: var(--text-marketing-body); }
-  .wds-web-p1        { font-size: var(--text-marketing-nav); }
-  .wds-web-p1.lead   { font-size: var(--text-marketing-body); }
-  .wds-web-p2        { font-size: var(--text-marketing-body-sm); }
-  .wds-web-body-sm   { font-size: var(--text-marketing-caption); }
+  .wds-web-display   { font-size: var(--text-web-h1); }
+  .wds-web-heading-1 { font-size: var(--text-web-h2); }
+  .wds-web-heading-2 { font-size: var(--text-web-h3); }
+  .wds-web-heading-3 { font-size: var(--text-web-h4); }
+  .wds-web-heading-4 { font-size: var(--text-web-h5); }
+  .wds-web-heading-5 { font-size: var(--text-web-h6); }
+  .wds-web-heading-6 { font-size: var(--text-web-lead); }
+  .wds-web-lead      { font-size: var(--text-web-body); }
+  .wds-web-p1        { font-size: var(--text-web-nav); }
+  .wds-web-p1.lead   { font-size: var(--text-web-body); }
+  .wds-web-p2        { font-size: var(--text-web-body-sm); }
+  .wds-web-body-sm   { font-size: var(--text-web-caption); }
   .wds-web-cta-banner-inner { padding: 60px 0; }
   .wds-web-cta-banner-heading { font-size: 28px; }
 }
@@ -2798,18 +2814,18 @@ html, body, #root {
   .wds-web-section-header { margin-bottom: 24px; }
   .wds-web-section-heading-wrap { margin-bottom: 4px; }
   /* 타이포 — 2단계 축소 */
-  .wds-web-display   { font-size: var(--text-marketing-h2); }
-  .wds-web-heading-1 { font-size: var(--text-marketing-h3); }
-  .wds-web-heading-2 { font-size: var(--text-marketing-h4); }
-  .wds-web-heading-3 { font-size: var(--text-marketing-h5); }
-  .wds-web-heading-4 { font-size: var(--text-marketing-h6); }
-  .wds-web-heading-5 { font-size: var(--text-marketing-lead); }
-  .wds-web-heading-6 { font-size: var(--text-marketing-body); }
-  .wds-web-lead      { font-size: var(--text-marketing-body-sm); }
-  .wds-web-p1        { font-size: var(--text-marketing-body-sm); }
-  .wds-web-p1.lead   { font-size: var(--text-marketing-nav); }
-  .wds-web-p2        { font-size: var(--text-marketing-caption); }
-  .wds-web-body-sm   { font-size: var(--text-marketing-caption); }
+  .wds-web-display   { font-size: var(--text-web-h2); }
+  .wds-web-heading-1 { font-size: var(--text-web-h3); }
+  .wds-web-heading-2 { font-size: var(--text-web-h4); }
+  .wds-web-heading-3 { font-size: var(--text-web-h5); }
+  .wds-web-heading-4 { font-size: var(--text-web-h6); }
+  .wds-web-heading-5 { font-size: var(--text-web-lead); }
+  .wds-web-heading-6 { font-size: var(--text-web-body); }
+  .wds-web-lead      { font-size: var(--text-web-body-sm); }
+  .wds-web-p1        { font-size: var(--text-web-body-sm); }
+  .wds-web-p1.lead   { font-size: var(--text-web-nav); }
+  .wds-web-p2        { font-size: var(--text-web-caption); }
+  .wds-web-body-sm   { font-size: var(--text-web-caption); }
   .wds-web-caption   { font-size: 12px; }
   .wds-web-cta-banner-inner { padding: 48px 0; gap: 12px; }
   .wds-web-cta-banner-heading { font-size: 24px; }
