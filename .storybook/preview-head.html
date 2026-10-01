@@ -2,33 +2,174 @@
   Storybook Docs 전용 스타일 — **배포물(src/whatap-ds.css)에 넣지 않는다.**
   DS tarball 소비자에게 Storybook UI 스타일이 섞이면 안 되므로 preview-head 로만 주입.
 
-  목적: chrome 중심 DS 라 docs 안 프리뷰(SubHeaderBar 모드 행 1080px · OptionbarPage · Shell/Page 프리셋)가
-  Storybook 기본 1000px 컨테이너에서 잘려 가로 스크롤이 생기는 문제 해결.
-
-  하이브리드 방침:
-   - 산문(본문)은 읽기 폭 유지 — 1440px 캡. 한국어 설명 문단이 길어 전폭은 줄 길이가 과해진다.
-   - 스토리 프리뷰 · props 표는 max-width 해제 → 화면 폭을 그대로 사용.
+  두 가지를 한다.
+   ① 폭 — chrome 중심 DS 라 docs 안 프리뷰가 기본 1000px 컨테이너에서 잘린다.
+   ② 조판 — 사람이 읽는 산문의 제목 위계 · 문단 · 불릿 들여쓰기 규칙.
 -->
 <style>
-  /* 본문 컨테이너 — 기본 1000px → 1440px 완화 */
-  .sbdocs.sbdocs-content {
-    max-width: 1440px;
-  }
+  /* ══════════════════════════════════════════════════════════════════════
+     ① 폭 — 하이브리드
+        산문(본문)은 읽기 폭 유지(1440px 캡). 한국어 설명 문단이 길어 전폭은 줄 길이가 과해진다.
+        스토리 프리뷰 · props 표는 max-width 해제 → 화면 폭을 그대로 사용.
+     ══════════════════════════════════════════════════════════════════════ */
+  .sbdocs.sbdocs-content { max-width: 1440px; }
 
-  /* 스토리 프리뷰 블록 — 전폭 사용(가로 스크롤 제거) */
   .sbdocs .sbdocs-preview,
-  .sbdocs .docs-story {
-    max-width: none;
-  }
+  .sbdocs .docs-story { max-width: none; }
 
-  /* props 표 — 전폭 사용. size/layout 설명 셀의 불필요한 줄바꿈 감소 */
   .sbdocs .docblock-argstable-body,
-  .sbdocs table.docblock-argstable {
-    max-width: none;
-  }
+  .sbdocs table.docblock-argstable { max-width: none; }
 
   /* 넓은 표는 컨테이너 안에서만 스크롤 — 페이지 자체가 가로 스크롤되지 않게 */
-  .sbdocs .docblock-argstable-wrapper {
-    overflow-x: auto;
+  .sbdocs .docblock-argstable-wrapper { overflow-x: auto; }
+
+  /* ══════════════════════════════════════════════════════════════════════
+     ② 조판 — 제목 위계 · 문단 · 불릿
+
+     원칙 셋.
+
+     (a) **위계는 크기가 아니라 «간격»이 만든다.**
+         제목 위 여백 ≫ 아래 여백. 제목이 아래 본문에 붙어 있어야 「이 제목의 내용」으로
+         읽힌다. 위아래가 같으면 제목이 어느 덩어리에 속하는지 눈이 판단을 못 한다.
+
+     (c) **읽기 폭은 컨테이너 폭과 다르다.**
+         컨테이너는 1440px 이지만 산문은 그보다 좁아야 한다. 한 줄이 100자를 넘으면
+         눈이 다음 줄 첫 글자를 못 찾는다(줄 되돌림 실패). 표·코드·프리뷰는 예외 —
+         그건 훑는 것이지 읽는 것이 아니다.
+
+     (b) **불릿은 들여쓰기로 계층을 말한다.**
+         단계마다 마커가 바뀌고 들여쓰기가 늘어난다. 같은 모양이 반복되면 사람은
+         2단계와 3단계를 구분하지 못한다.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  /* ── 제목 ────────────────────────────────────────────────────────────── */
+
+  /* H1 — 페이지당 하나. 문서의 이름이다. 아래에 구분선을 두어 본문과 확실히 끊는다. */
+  .sbdocs.sbdocs-content h1 {
+    font-size: 30px;
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--color-border-default);
   }
+
+  /* H2 — 장(章). 위 여백을 크게 주어 «여기서 화제가 바뀐다»를 공백으로 말한다. */
+  .sbdocs.sbdocs-content h2 {
+    font-size: 22px;
+    line-height: 1.35;
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    margin: 56px 0 14px;
+  }
+
+  /* H3 — 절(節). H2 의 절반 간격. 위계 차이가 간격 비로 드러난다(56 : 28). */
+  .sbdocs.sbdocs-content h3 {
+    font-size: 17px;
+    line-height: 1.4;
+    font-weight: 700;
+    margin: 28px 0 10px;
+  }
+
+  /* H4 — 더 내려가면 제목이 아니라 문단 머리다. 크기를 본문과 같게 두고 굵기로만 구분. */
+  .sbdocs.sbdocs-content h4 {
+    font-size: 15px;
+    line-height: 1.5;
+    font-weight: 700;
+    margin: 20px 0 6px;
+  }
+
+  /* 연속한 제목 사이에는 큰 여백이 필요 없다 — 사이에 본문이 없으므로 화제 전환이 아니다. */
+  .sbdocs.sbdocs-content h2 + h3,
+  .sbdocs.sbdocs-content h3 + h4 { margin-top: 12px; }
+
+  /* 문서 첫 제목은 위 여백을 지운다(컨테이너 패딩과 이중이 된다). */
+  .sbdocs.sbdocs-content > h1:first-child,
+  .sbdocs.sbdocs-content > h2:first-child { margin-top: 0; }
+
+  /* ── 문단 ────────────────────────────────────────────────────────────── */
+
+  .sbdocs.sbdocs-content p {
+    font-size: 15px;
+    line-height: 1.75;          /* 한국어는 라틴보다 자간이 빽빽해 행간이 더 필요하다. */
+    margin: 0 0 14px;
+    max-width: 78ch;            /* 읽기 폭. 컨테이너(1440px)와 별개다 — 위 원칙 (c). */
+  }
+
+  /* ── 불릿 ────────────────────────────────────────────────────────────── */
+
+  .sbdocs.sbdocs-content ul,
+  .sbdocs.sbdocs-content ol {
+    margin: 0 0 16px;
+    padding-left: 22px;         /* 마커가 본문 왼쪽 밖에 서도록 — 글줄 시작선이 가지런해진다. */
+    max-width: 78ch;
+  }
+
+  .sbdocs.sbdocs-content li {
+    font-size: 15px;
+    line-height: 1.75;
+    margin: 0 0 6px;            /* 항목 사이 숨 — 붙어 있으면 한 덩어리로 읽힌다. */
+    padding-left: 2px;
+  }
+
+  /* 항목 안 문단은 위 여백을 지운다(마커와 첫 줄이 어긋난다). */
+  .sbdocs.sbdocs-content li > p { margin: 0 0 6px; max-width: none; }
+  .sbdocs.sbdocs-content li > p:last-child { margin-bottom: 0; }
+
+  /* 중첩 — 단계마다 마커를 바꾼다. 같은 모양이 반복되면 깊이를 못 읽는다(원칙 b). */
+  .sbdocs.sbdocs-content ul { list-style-type: disc; }
+  .sbdocs.sbdocs-content ul ul { list-style-type: "– "; }
+  .sbdocs.sbdocs-content ul ul ul { list-style-type: "· "; }
+
+  /* 중첩 목록은 위아래 여백을 줄인다 — 부모 항목에 붙어 있어야 그 항목의 하위로 읽힌다. */
+  .sbdocs.sbdocs-content li > ul,
+  .sbdocs.sbdocs-content li > ol {
+    margin: 6px 0 8px;
+    padding-left: 20px;
+  }
+
+  /* ✅ / ❌ 로 시작하는 항목 — 마커를 지운다. 기호 자체가 마커다(불릿과 겹치면 둘이 싸운다). */
+  .sbdocs.sbdocs-content li.wds-verdict { list-style: none; margin-left: -22px; }
+
+  /* ── 인용 · 보조 ─────────────────────────────────────────────────────── */
+
+  /* blockquote — 본문 옆에 서는 주석. 좌측 띠로 «본문이 아님»을 말한다. */
+  .sbdocs.sbdocs-content blockquote {
+    margin: 16px 0;
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
+    max-width: 78ch;
+  }
+  .sbdocs.sbdocs-content blockquote p:last-child { margin-bottom: 0; }
+
+  /* 구분선 — 장 사이를 가르는 자리. 위아래 여백이 H2 의 위 여백과 겹치지 않게 한다. */
+  .sbdocs.sbdocs-content hr {
+    margin: 48px 0 0;
+    border: 0;
+    border-top: 1px solid var(--color-border-soft);
+  }
+  .sbdocs.sbdocs-content hr + h2 { margin-top: 40px; }
+
+  /* ── 표 · 코드 ───────────────────────────────────────────────────────── */
+
+  /* 표는 읽는 것이 아니라 훑는 것이라 읽기 폭 제한을 받지 않는다(원칙 c). */
+  .sbdocs.sbdocs-content table:not(.docblock-argstable) {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 18px;
+  }
+  .sbdocs.sbdocs-content table:not(.docblock-argstable) th,
+  .sbdocs.sbdocs-content table:not(.docblock-argstable) td {
+    padding: 8px 12px;
+    vertical-align: top;
+  }
+
+  .sbdocs.sbdocs-content :not(pre) > code {
+    font-size: 0.92em;          /* 코드 폰트가 본문보다 커 보이는 것을 보정. */
+    padding: 1px 5px;
+  }
+
+  .sbdocs.sbdocs-content pre { margin: 0 0 18px; }
 </style>

@@ -25,3 +25,5 @@ tests/visual/diff/
 .snapshots/
 # 토큰 카탈로그 — build:design 이 whatap-ds.css 에서 생성
 docs/tokens.json
+# 생성물 — scripts/build-policies-json.mjs. 정본은 docs/patterns.md.
+docs/policies.json

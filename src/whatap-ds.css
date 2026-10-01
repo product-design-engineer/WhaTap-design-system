@@ -424,6 +424,179 @@
     /* @role 가장 연한 회색 원시값 | @avoid 컴포넌트에서 직접 참조 */
     --color-gray-pale: #bdbdbd;
 
+    /* ── Marketing (whatap.io) ───────────────────────────────────────────
+       출처: 원본 whatap.webflow.shared.6bf899832.min.css 에서 추출.
+       마케팅 사이트(apps/www)가 소비앱으로 붙으면서 정본으로 흡수한 값이다.
+       제품 UI 에서는 쓰지 않는다 — 밀도·대비 기준이 다른 계열이다. */
+
+    /* @role 마케팅 회색 스케일의 가장 옅은 단계 | @use 섹션 바탕 | @avoid 제품 UI */
+    --color-web-gray-10: #fafafa;
+    /* @role 마케팅 회색 100 | @use 카드 경계·구분선 | @avoid 제품 UI */
+    --color-web-gray-100: #eeeeee;
+    /* @role 마케팅 회색 200 | @use 입력 테두리·비활성 면 | @avoid 제품 UI */
+    --color-web-gray-200: #e0e0e0;
+    /* @role 마케팅 회색 400 | @use 보조 아이콘·플레이스홀더 | @avoid 본문 텍스트 (대비 미달) */
+    --color-web-gray-400: #9e9e9e;
+    /* @role 마케팅 회색 600 | @use 캡션·메타 텍스트 | @avoid 제품 UI */
+    --color-web-gray-600: #616161;
+    /* @role 마케팅 회색 700 | @use 본문 보조 텍스트 | @avoid 제품 UI */
+    --color-web-gray-700: #424242;
+    /* @role 마케팅 회색 800 | @use 소제목 | @avoid 제품 UI */
+    --color-web-gray-800: #313131;
+    /* @role 마케팅 회색 900 | @use 제목·강조 본문 | @avoid 제품 UI */
+    --color-web-gray-900: #212121;
+
+    /* @role 마케팅 사이트의 브랜드 파랑 | @use whatap.io CTA·링크 | @avoid 제품 UI (--color-brand-blue 사용) */
+    --color-brand-blue-web: #296CF2;
+    /* @role 마케팅 브랜드 파랑의 hover 단계 | @use whatap.io 버튼 hover | @avoid 제품 UI */
+    --color-brand-blue-web-deep: #1B5CD9;
+    /* @role 마케팅 브랜드 파랑의 밝은 단계 | @use 그라데이션 짝·보조 강조 | @avoid 본문 텍스트 */
+    --color-brand-blue-bright: #4485ff;
+    /* @role 짙은 청회색 | @use 마케팅 푸터·다크 섹션 바탕 | @avoid 제품 UI */
+    --color-web-slate-500: #383d47;
+    /* @role 짙은 청회색의 연한 단계 | @use 다크 섹션 위 보조 텍스트 | @avoid 제품 UI */
+    --color-web-slate-400: #4d525c;
+    /* @role 가장 옅은 청회색 면 | @use 사례 썸네일이 비어 있을 때의 바탕 | @avoid 텍스트 */
+    --color-web-slate-tint: #f7fafc;
+
+    /* Accent — 제품·카테고리를 색으로 구분하는 계열. 상태색(status)과 혼동하지 말 것. */
+    /* @role 카테고리 구분 초록 | @use 제품 아이콘·태그 | @avoid 성공 상태 (--color-status-success 사용) */
+    --color-accent-green: #45b96e;
+    /* @role 카테고리 구분 연두 | @use 제품 아이콘·태그 | @avoid 본문 텍스트 (대비 미달) */
+    --color-accent-lime: #8bcd00;
+    /* @role 카테고리 구분 보라 | @use 제품 아이콘·태그 | @avoid 상태 표시 */
+    --color-accent-purple: #936ce7;
+    /* @role 카테고리 구분 보라의 옅은 단계 | @use 배지 배경 | @avoid 텍스트 */
+    --color-accent-purple-pale: #e8e1ff;
+    /* @role 카테고리 구분 자홍 | @use 제품 아이콘·태그 | @avoid 상태 표시 */
+    --color-accent-magenta: #d75ef5;
+    /* @role 카테고리 구분 주황 | @use 제품 아이콘·태그 | @avoid 경고 상태 (--color-status-warning 사용) */
+    --color-accent-orange: #ff9900;
+    /* @role 카테고리 구분 남색 | @use 제품 아이콘·태그 | @avoid 링크 (브랜드 파랑과 혼동) */
+    --color-accent-indigo: #0085cf;
+    /* @role 카테고리 구분 청록 | @use 제품 아이콘·태그 | @avoid 상태 표시 */
+    --color-accent-teal: #00c5b1;
+    /* @role 카테고리 구분 하늘 | @use 제품 아이콘·태그 | @avoid 본문 텍스트 (대비 미달) */
+    --color-accent-cyan: #00b0e2;
+
+    /* Tint — accent 와 짝을 이루는 옅은 표면. 위에 올리는 텍스트는 gray-800 이상. */
+    /* @role 파랑 틴트 1단계 | @use 카드·섹션 배경 | @avoid 텍스트·보더 */
+    --color-tint-blue-1: #e5f0fb;
+    /* @role 파랑 틴트 2단계 | @use 카드·섹션 배경 | @avoid 텍스트·보더 */
+    --color-tint-blue-2: #d9ebfc;
+    /* @role 파랑 틴트 3단계 | @use 카드·섹션 배경 | @avoid 텍스트·보더 */
+    --color-tint-blue-3: #d2e9f6;
+    /* @role 하늘 틴트 | @use 카드·섹션 배경 | @avoid 텍스트·보더 */
+    --color-tint-cyan: #d9f4fc;
+    /* @role 청록 틴트 | @use 카드·섹션 배경 | @avoid 텍스트·보더 */
+    --color-tint-teal: #dffbf8;
+    /* @role 초록 틴트 1단계 | @use 카드·섹션 배경 | @avoid 텍스트·보더 */
+    --color-tint-green-1: #dbf8e3;
+    /* @role 초록 틴트 2단계 | @use 카드·섹션 배경 | @avoid 텍스트·보더 */
+    --color-tint-green-2: #d5fade;
+    /* @role 남색 틴트 | @use 카드·섹션 배경 | @avoid 텍스트·보더 */
+    --color-tint-indigo: #e8eaff;
+    /* @role 보라 틴트 | @use 카드·섹션 배경 | @avoid 텍스트·보더 */
+    --color-tint-purple: #f0eaff;
+    /* @role 자홍 틴트 | @use 카드·섹션 배경 | @avoid 텍스트·보더 */
+    --color-tint-magenta: #fbecff;
+    /* @role 주황 틴트 | @use 카드·섹션 배경 | @avoid 텍스트·보더 */
+    --color-tint-amber: #fff2dc;
+
+    /* @role 마케팅 페이지 바탕 | @use whatap.io 셸 배경 | @avoid 제품 UI (--color-bg 사용) */
+    --color-surface-page-web: #f9fafe;
+    /* @role 무채색 보조 면 | @use 구분 블록·인용 배경 | @avoid 제품 UI */
+    --color-surface-neutral: #f2f2f2;
+    /* @role 차가운 보조 면 | @use 섹션 교차 배경 | @avoid 제품 UI */
+    --color-surface-cool: #f4f6f9;
+
+    /* ── Marketing 타이포·모양·레이아웃 (whatap.io) ──────────────────────
+       제품 스케일과 «값이 다르다». --text-* 는 제품(12px 기준),
+       --text-web-* 는 마케팅(14px 기준)이다. 섞어 쓰지 말 것. */
+
+    /* @role 마케팅 본문 서체 | @use whatap.io 전 텍스트 | @avoid 제품 UI (--font-family-korean 사용) */
+    --font-web-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    /* @role 마케팅 표제 서체 | @use 히어로·섹션 대제목 | @avoid 본문·제품 UI */
+    --font-web-display: Lexend, var(--font-web-sans);
+
+    /* @role 마케팅 글자 12px | @use 캡션·각주 | @avoid 제품 UI */
+    --text-web-xs: 12px;
+    /* @role 마케팅 글자 13px | @use 보조 라벨 | @avoid 제품 UI */
+    --text-web-sm: 13px;
+    /* @role 마케팅 글자 14px · 본문 기준 | @use 본문 | @avoid 제품 UI (--text-lg 가 14px) */
+    --text-web-base: 14px;
+    /* @role 마케팅 글자 15px | @use 긴 본문 | @avoid 제품 UI */
+    --text-web-md: 15px;
+    /* @role 마케팅 글자 16px | @use 리드 문장·버튼 | @avoid 제품 UI */
+    --text-web-lg: 16px;
+    /* @role 마케팅 글자 18px | @use 카드 제목 | @avoid 제품 UI */
+    --text-web-xl: 18px;
+    /* @role 마케팅 글자 20px | @use 소제목 | @avoid 제품 UI */
+    --text-web-2xl: 20px;
+    /* @role 마케팅 글자 22px | @use 소제목 강조 | @avoid 제품 UI */
+    --text-web-3xl: 22px;
+    /* @role 마케팅 글자 24px | @use 섹션 제목 | @avoid 제품 UI */
+    --text-web-4xl: 24px;
+    /* @role 마케팅 글자 28px | @use 섹션 제목 강조 | @avoid 제품 UI */
+    --text-web-5xl: 28px;
+    /* @role 마케팅 글자 32px | @use 페이지 제목 | @avoid 제품 UI */
+    --text-web-6xl: 32px;
+    /* @role 마케팅 글자 36px | @use 히어로 부제 | @avoid 제품 UI */
+    --text-web-7xl: 36px;
+    /* @role 마케팅 글자 40px | @use 히어로 제목 | @avoid 제품 UI */
+    --text-web-8xl: 40px;
+    /* @role 마케팅 글자 48px | @use 히어로 대제목 | @avoid 제품 UI */
+    --text-web-9xl: 48px;
+
+    /* Line-heights (마케팅) — 값은 제품 스케일과 같으나 «이름이 한 칸 밀려» 있다.
+       소비앱이 --leading-* 를 재정의하면 서로를 물고 도는 사슬이 되므로 별도 이름을 준다. */
+    /* @role 마케팅 좁은 줄간격 | @use 제목 | @avoid 제품 UI */
+    --leading-web-tight: 1.3;
+    /* @role 마케팅 보통 줄간격 | @use 소제목·리드 | @avoid 제품 UI */
+    --leading-web-snug: 1.4;
+    /* @role 마케팅 본문 줄간격 | @use 본문 | @avoid 제품 UI */
+    --leading-web-normal: 1.5;
+    /* @role 마케팅 넉넉한 줄간격 | @use 긴 본문·약관 | @avoid 제품 UI */
+    --leading-web-relaxed: 1.6;
+
+    /* @role 마케팅 모서리 4px | @use 배지·태그 | @avoid 제품 UI (--radius-control 사용) */
+    --radius-web-xs: 4px;
+    /* @role 마케팅 모서리 8px | @use 입력·작은 카드 | @avoid 제품 UI */
+    --radius-web-sm: 8px;
+    /* @role 마케팅 모서리 12px | @use 카드 | @avoid 제품 UI (--radius-md 는 6px) */
+    --radius-web-md: 12px;
+    /* @role 마케팅 모서리 16px | @use 큰 카드·섹션 블록 | @avoid 제품 UI (--radius-lg 는 8px) */
+    --radius-web-lg: 16px;
+    /* @role 완전한 원 | @use 아바타·아이콘 버튼 | @avoid 사각 요소 (--radius-full 사용) */
+    --radius-web-circle: 50%;
+
+    /* @role 마케팅 카드 그림자 | @use 카드·썸네일 | @avoid 제품 UI (--shadow-xs~xl 사용) */
+    --shadow-web-card: 0 1px 4px rgba(0, 0, 0, 0.06);
+    /* @role 마케팅 들린 표면 그림자 | @use hover 카드·버튼 | @avoid 제품 UI */
+    --shadow-web-raised: 0 2px 5px #00000026;
+    /* @role 마케팅 떠 있는 표면 그림자 | @use 드롭다운·모달 | @avoid 제품 UI */
+    --shadow-web-overlay: 0 8px 16px #0003;
+    /* @role 키보드 포커스 링 | @use 모든 포커스 가능한 요소 | @avoid 마우스 클릭 상태 */
+    --shadow-focus-ring: 0 0 0 3px #296cfe40;
+
+    /* @role 마케팅 본문 최대 폭 | @use 페이지 컨테이너 | @avoid 제품 UI */
+    --container-web-max: 1400px;
+    /* @role 마케팅 넓은 컨테이너 | @use 전폭 섹션 | @avoid 제품 UI */
+    --container-web-wide: 1440px;
+    /* @role 마케팅 좁은 컨테이너 | @use 글 본문·약관 | @avoid 제품 UI */
+    --container-web-narrow: 840px;
+    /* @role 마케팅 컨테이너 좌우 여백 | @use 페이지 가장자리 | @avoid 제품 UI */
+    --container-web-pad: 40px;
+
+    /* Breakpoints — «참조용 상수». CSS 변수는 @media 조건에 쓸 수 없다(사양).
+       미디어쿼리에는 리터럴을 적고, 이 토큰은 JS·문서·대조 기준으로 쓴다. */
+    /* @role 태블릿 분기점(참조값) | @use JS 분기·문서 | @avoid @media 조건 (변수 불가) */
+    --bp-tablet: 991px;
+    /* @role 모바일 가로 분기점(참조값) | @use JS 분기·문서 | @avoid @media 조건 (변수 불가) */
+    --bp-mobile-l: 767px;
+    /* @role 모바일 세로 분기점(참조값) | @use JS 분기·문서 | @avoid @media 조건 (변수 불가) */
+    --bp-mobile-p: 479px;
+
     
     /* @role 한글 본문·라벨 기본 서체 | @use 한글이 섞인 모든 UI 텍스트 */
     --font-family-korean: "Noto Sans", "Noto Sans KR", sans-serif;
@@ -1477,48 +1650,6 @@ html, body, #root {
   background-color: #d6e1ff;
   border-color: #d6e1ff;
 }
-/* AI 입력창 Glow Effect — 입력 중일 때 상단에 무지개 스펙트럼 빛줄기가 흐른다.
-   .ai-input-glow-wrap > .ai-input-wrapper 구조로 감싼다. 롤백은 래퍼 클래스 제거. */
-.ai-input-glow-wrap {
-  position: relative;
-  overflow: visible;
-}
-/* 래퍼가 보더 역할이므로 내부 wrapper 의 보더는 항상 제거한다. */
-.ai-input-glow-wrap > .ai-input-wrapper,
-.rounded-10px > .ai-input-wrapper {
-  border: none !important;
-}
-/* 상단 스펙트럼 라인 */
-.ai-input-glow-line {
-  position: absolute;
-  top: 0;
-  left: 8px;
-  right: 8px;
-  height: 2px;
-  border-radius: 1px;
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #ef4444, #f59e0b, #22c55e, #3b82f6);
-  background-size: 300% 100%;
-  animation: aiGlowFlow 4s linear infinite;
-}
-/* 상단 블러 글로우 — 라인 위로 번지는 빛 */
-.ai-input-glow-blur {
-  position: absolute;
-  top: -6px;
-  left: 8px;
-  right: 8px;
-  height: 14px;
-  border-radius: 7px;
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #ef4444, #f59e0b, #22c55e, #3b82f6);
-  background-size: 300% 100%;
-  animation: aiGlowFlow 4s linear infinite;
-  filter: blur(10px);
-  opacity: 0.5;
-  pointer-events: none;
-}
-@keyframes aiGlowFlow {
-  0%   { background-position: 0% 0; }
-  100% { background-position: 300% 0; }
-}
 
 .ai-input-textarea {
   field-sizing: content;
@@ -2014,6 +2145,100 @@ html, body, #root {
   .wds-landing-header-product { display: inline-flex; }
 }
 
+/* ── AI 입력창 Glow Effect ─────────────────────────────────────────────────
+   입력 중일 때 4면 보더를 따라 스펙트럼 빛줄기가 회전한다.
+   conic-gradient 를 회전시켜 테두리를 따라 흐르는 효과를 만든다.
+   .ai-input-glow-wrap > .ai-input-wrapper 구조. 롤백은 래퍼 클래스 제거. */
+.ai-input-glow-wrap {
+  position: relative;
+  overflow: visible;
+}
+.ai-input-glow-wrap > .ai-input-wrapper,
+.rounded-10px > .ai-input-wrapper {
+  border: none !important;
+}
+/* 4면 회전 보더 — conic-gradient 가 테두리를 따라 돈다. */
+/* 스펙트럼 코어 — 약 10px 구간만 선명하게, 나머지는 넓게 블러로 사라진다. */
+.ai-input-glow-line {
+  position: absolute;
+  inset: -1px;
+  border-radius: 10px;
+  background: conic-gradient(
+    from var(--glow-angle, 0deg),
+    transparent 0%,
+    #296cf210 1%,
+    #3b82f630 2%,
+    #8b5cf6cc 3%,
+    #296cf2 3.5%,
+    #3b82f6cc 4%,
+    #8b5cf630 5%,
+    #296cf210 6%,
+    transparent 8%,
+    transparent 100%
+  );
+  animation: aiGlowSpin 5s linear infinite;
+  z-index: 0;
+}
+/* 넓은 블러 후광 — 코어 주변으로 넓게 퍼진다. */
+.ai-input-glow-spread {
+  position: absolute;
+  inset: -1px;
+  border-radius: 10px;
+  background: conic-gradient(
+    from var(--glow-angle, 0deg),
+    transparent 0%,
+    #296cf240 1%,
+    #3b82f640 3%,
+    #8b5cf640 5%,
+    #296cf240 6%,
+    #3b82f640 8%,
+    #8b5cf620 12%,
+    transparent 18%,
+    transparent 100%
+  );
+  animation: aiGlowSpin 5s linear infinite;
+  filter: blur(8px);
+  z-index: 0;
+}
+/* 안쪽을 파내서 보더만 남긴다 — wrapper 가 위에 올라 가린다. */
+.ai-input-glow-wrap > .ai-input-wrapper {
+  position: relative;
+  z-index: 1;
+}
+/* 외곽 블러 글로우 */
+.ai-input-glow-blur {
+  position: absolute;
+  inset: -5px;
+  border-radius: 14px;
+  background: conic-gradient(
+    from var(--glow-angle, 0deg),
+    transparent 0%,
+    #296cf2 4%,
+    #3b82f6 8%,
+    #8b5cf6 13%,
+    #296cf2 18%,
+    #3b82f6 22%,
+    transparent 27%,
+    transparent 100%
+  );
+  animation: aiGlowSpin 5s linear infinite;
+  filter: blur(16px);
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: -1;
+}
+/* `@property` 는 Tailwind 산출물이 아니라 **네이티브 CSS 기능**이다 — 커스텀 속성에 타입을
+   주어야 브라우저가 각도를 «보간» 한다. 없으면 --glow-angle 이 문자열로 취급돼 0deg→360deg 가
+   중간값 없이 튀고, 회전이 아니라 깜빡임이 된다. conic-gradient 각도 애니메이션의 유일한 방법이다. */
+/* no-tailwind-ok: 각도 보간을 위한 네이티브 @property — 프레임워크 산출물이 아니다(위 주석 참조). */
+@property --glow-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes aiGlowSpin {
+  0% { --glow-angle: 0deg; }
+  100% { --glow-angle: 360deg; }
 /* ── WebCtaButton — 마케팅 CTA ─────────────────────────── */
 
 .wds-web-cta {

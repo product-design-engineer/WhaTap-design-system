@@ -136,6 +136,58 @@ colors:
   gray-soft:                 "#a0a3a6"    # Color
   gray-pale:                 "#bdbdbd"    # Color
 
+  # ── Marketing (whatap.io) ────────────────────────────────────────────
+  #  마케팅 사이트(apps/www)가 쓰는 계열. 원본 Webflow CSS 에서 추출해 흡수했다.
+  #  제품 UI 에서는 쓰지 않는다 — 밀도·대비 기준이 다르다.
+  #  회색은 Tailwind 팔레트(--color-gray-*)와 이름이 부딪혀 web- 을 붙였다.
+
+  # Marketing — Gray
+  web-gray-10:               "#fafafa"    # Color — 섹션 바탕
+  web-gray-100:              "#eeeeee"    # Color — 카드 경계·구분선
+  web-gray-200:              "#e0e0e0"    # Color — 입력 테두리·비활성 면
+  web-gray-400:              "#9e9e9e"    # Color — 보조 아이콘·플레이스홀더
+  web-gray-600:              "#616161"    # Color — 캡션·메타 텍스트
+  web-gray-700:              "#424242"    # Color — 본문 보조 텍스트
+  web-gray-800:              "#313131"    # Color — 소제목
+  web-gray-900:              "#212121"    # Color — 제목·강조 본문
+
+  # Marketing — Brand · Action
+  brand-blue-web:            "#296cfe"    # Color — 마케팅 CTA·링크 (⚠ 제품 brand-blue 는 #296CF2)
+  brand-blue-web-deep:       "#0e53e8"    # Color — hover
+  brand-blue-bright:         "#4485ff"    # Color — 그라데이션 짝·보조 강조
+  web-slate-500:             "#383d47"    # Color — 푸터·다크 섹션 바탕
+  web-slate-400:             "#4d525c"    # Color — 다크 섹션 위 보조 텍스트
+  web-slate-tint:            "#f7fafc"    # Color — 사례 썸네일 빈 자리 바탕
+
+  # Marketing — Accent (제품·카테고리 구분. status 와 혼동 금지)
+  accent-green:              "#45b96e"    # Color
+  accent-lime:               "#8bcd00"    # Color
+  accent-purple:             "#936ce7"    # Color
+  accent-purple-pale:        "#e8e1ff"    # Color — 배지 배경
+  accent-magenta:            "#d75ef5"    # Color
+  accent-orange:             "#ff9900"    # Color
+  accent-indigo:             "#0085cf"    # Color
+  accent-teal:               "#00c5b1"    # Color
+  accent-cyan:               "#00b0e2"    # Color
+
+  # Marketing — Tint (accent 와 짝을 이루는 옅은 표면. 위 텍스트는 web-gray-800 이상)
+  tint-blue-1:               "#e5f0fb"    # Color
+  tint-blue-2:               "#d9ebfc"    # Color
+  tint-blue-3:               "#d2e9f6"    # Color
+  tint-cyan:                 "#d9f4fc"    # Color
+  tint-teal:                 "#dffbf8"    # Color
+  tint-green-1:              "#dbf8e3"    # Color
+  tint-green-2:              "#d5fade"    # Color
+  tint-indigo:               "#e8eaff"    # Color
+  tint-purple:               "#f0eaff"    # Color
+  tint-magenta:              "#fbecff"    # Color
+  tint-amber:                "#fff2dc"    # Color
+
+  # Marketing — Surface
+  surface-page-web:          "#f9fafe"    # Color — 마케팅 셸 배경
+  surface-neutral:           "#f2f2f2"    # Color — 구분 블록·인용 배경
+  surface-cool:              "#f4f6f9"    # Color — 섹션 교차 배경
+
   # Chart — Series (categorical) · 계열 정체성. 고정 순서, 1번부터 배정, 순환 금지.
   #  ⚠️ all-pairs 상한 3슬롯 — scatter/bubble/map/small-multiples 는 3계열까지.
   #  검증(dataviz validate_palette.js): 라이트 최악 인접 CVD ΔE 9.5 · 정상시야 17.0 · 대비 ≥3:1
@@ -315,6 +367,34 @@ typography:
     lineHeight:     "{typography.leading-snug}"       # Reference → 1.3
     letterSpacing:  "{typography.tracking-default}"
 
+  # ── Marketing (whatap.io) ────────────────────────────────────────────
+  #  제품 스케일과 «값이 다르다». size-base 가 제품은 12px, 마케팅은 14px 다.
+  #  하나로 합치면 한쪽이 깨지므로 계열을 갈랐다.
+
+  family-web:            "\"Pretendard Variable\", Pretendard, -apple-system, system-ui, sans-serif"
+  family-web-display:    "Lexend, {typography.family-web}"    # Reference
+
+  size-web-xs:    "12px"   # Dimension — 캡션·각주
+  size-web-sm:    "13px"   # Dimension — 보조 라벨
+  size-web-base:  "14px"   # Dimension — 본문 기준
+  size-web-md:    "15px"   # Dimension — 긴 본문
+  size-web-lg:    "16px"   # Dimension — 리드 문장·버튼
+  size-web-xl:    "18px"   # Dimension — 카드 제목
+  size-web-2xl:   "20px"   # Dimension — 소제목
+  size-web-3xl:   "22px"   # Dimension — 소제목 강조
+  size-web-4xl:   "24px"   # Dimension — 섹션 제목
+  size-web-5xl:   "28px"   # Dimension — 섹션 제목 강조
+  size-web-6xl:   "32px"   # Dimension — 페이지 제목
+  size-web-7xl:   "36px"   # Dimension — 히어로 부제
+  size-web-8xl:   "40px"   # Dimension — 히어로 제목
+  size-web-9xl:   "48px"   # Dimension — 히어로 대제목
+
+  leading-web-tight:    "1.3"   # Dimension — 제목
+  leading-web-snug:     "1.4"   # Dimension — 소제목·리드
+  leading-web-normal:   "1.5"   # Dimension — 본문
+  leading-web-relaxed:  "1.6"   # Dimension — 긴 본문·약관
+
+
 # ── 4. Layout ───────────────────────────────────────────
 
 layout:
@@ -324,6 +404,15 @@ layout:
   sidebar-collapsed-width:  "40px"     # Dimension
   widget-width:             "480px"    # Dimension
   stagger-delay-step:       "120ms"    # Dimension
+
+  # Marketing (whatap.io)
+  container-web-max:        "1400px"   # Dimension — 본문 최대 폭
+  container-web-wide:       "1440px"   # Dimension — 전폭 섹션
+  container-web-narrow:     "840px"    # Dimension — 글 본문·약관
+  container-web-pad:        "40px"     # Dimension — 좌우 여백 (≤767px 에서 20px)
+  bp-tablet:                "991px"    # Dimension — 참조값. CSS 변수는 @media 조건에 못 쓴다
+  bp-mobile-l:              "767px"    # Dimension — 〃
+  bp-mobile-p:              "479px"    # Dimension — 〃
 
 # ── 5. Elevation & Depth ────────────────────────────────
 #
@@ -341,11 +430,24 @@ elevation:
   scrim:                  "{colors.overlay-scrim}"           # Reference → rgba(0, 0, 0, 0.5)
   gradient-ai-tint:       "linear-gradient(95deg, rgba(0, 75, 224, 0.08) 0%, rgba(139, 82, 255, 0.08) 100%)"
 
+  # Marketing (whatap.io)
+  shadow-web-card:        "0 4px 4px rgba(0, 0, 0, 0.10)"     # 용도: 마케팅 카드·썸네일
+  shadow-web-raised:      "0 2px 5px rgba(0, 0, 0, 0.15)"     # 용도: hover 카드·버튼
+  shadow-web-overlay:     "0 8px 16px rgba(0, 0, 0, 0.20)"    # 용도: 드롭다운·모달
+  shadow-focus-ring:      "0 0 0 3px rgba(41, 108, 254, 0.25)" # 용도: 키보드 포커스 링
+
 # ── 6. Shapes ───────────────────────────────────────────
 
 shapes:
   ai-card-rounded:          "8px"      # Dimension
   ai-card-border-color:     "{colors.border-default}"  # Reference → #EAEAEA
+
+  # Marketing (whatap.io)
+  radius-web-xs:            "4px"      # Dimension — 배지·태그
+  radius-web-sm:            "8px"      # Dimension — 입력·작은 카드
+  radius-web-md:            "12px"     # Dimension — 카드
+  radius-web-lg:            "16px"     # Dimension — 큰 카드·섹션 블록
+  radius-web-circle:        "100%"     # Dimension — 아바타·아이콘 버튼
 
 # ── 7. Components ───────────────────────────────────────
 

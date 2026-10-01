@@ -10,9 +10,20 @@ import { execSync } from "node:child_process";
 
 const files = execSync(`find stories -name '*.stories.tsx'`).toString().split("\n").filter(Boolean);
 const TITLE_RE = /title:\s*"((?:Tokens|Primitives|Composite|Shell)\/[^"]*)"/;
+
+/**
+ * 계층에 속하지 않는 **메타 문서** — 트리 최상위에 한 장으로 서는 것들.
+ *
+ * 계층 prefix 를 요구하는 이유는 「폴더와 분류가 같이 움직이게」 하기 위해서인데, 이들은
+ * 애초에 분류 대상이 아니다(Introduction 이 `.mdx` 라 이 게이트를 비켜 갔던 것과 같은 성격).
+ * 목록을 여기 두어 **새 파일이 슬쩍 최상위로 오는 것은 여전히 막는다** — 예외는 이름으로만 난다.
+ */
+const META_STORIES = new Set(["stories/Overview.stories.tsx"]);
+
 const errors = [];
 
 for (const f of files) {
+  if (META_STORIES.has(f)) continue;
   const src = fs.readFileSync(f, "utf8");
   const m = src.match(TITLE_RE);
   if (!m) {
@@ -32,4 +43,7 @@ if (errors.length) {
   console.error("폴더 경로는 story title prefix 와 1:1 이어야 합니다. 파일을 옮기거나 title 을 맞추세요.");
   process.exit(1);
 }
-console.log(`✓ 카탈로그 폴더 정합성 OK — ${files.length} stories (폴더 === title prefix)`);
+console.log(
+  `✓ 카탈로그 폴더 정합성 OK — ${files.length} stories ` +
+    `(폴더 === title prefix · 메타 문서 ${META_STORIES.size}건 면제)`,
+);

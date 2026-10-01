@@ -6,19 +6,19 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 WhaTap 제품 UI 의 단일 출처입니다.
 
-| | 수 | 비고 |
-|---|---|---|
-| 토큰 | **197** | Semantic 111 · Global 68 · Component 18 · 다크 재매핑 60 |
-| 컴포넌트 | **115** | Primitives 75 · Composite 34 · Shell 6 |
-| 카탈로그 항목 | **127** | 위 115 + Tokens 메타 12 |
-| 스토리 엔트리 | **615** | Storybook `index.json` |
-| 무결성 게이트 | **22** | 자동 16 · 정책 4 · 계획 2 |
+- **토큰 295** — Semantic 185 · Global 92 · Component 18
+- **컴포넌트 141** — Primitives 92 · Composite 43 · Shell 6
+- **카탈로그 항목 153** — 위 141 + Tokens 메타 12
+- **스토리 엔트리 735**
+- **무결성 게이트 22** — 자동 16 · 정책 4 · 계획 2
 
-> 수치는 생성 산출물과 맞춰 둡니다(2026-08-21). 좌측 트리와 어긋나면 문서 버그입니다.
+> 수치는 생성 산출물과 맞춰 둡니다(2026-09-17). 좌측 트리와 어긋나면 문서 버그입니다.
 
 ---
 
 ## 시작 — 프론트엔드 개발자
+
+### 설치
 
 ```bash
 npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-latest.tgz
@@ -29,19 +29,52 @@ import { DashboardLayout, PageHeader, DataTable } from "@whatap/design-system";
 import "@whatap/design-system/style.css";   // 런타임 스타일은 이것 하나
 ```
 
-- clone 불필요. Vite · Next · webpack 모두 동작. 버전 목록은 [releases/index.json](/releases/index.json).
-- ⚠️ **`tokens.css` 를 import 하지 마세요.** 토큰 `:root` 만 들어 있어 색은 맞고 레이아웃이 무너집니다. 유틸·전역·`.dark` 는 `style.css` 에만 있습니다.
-- **AI 연결**: `https://whatap-ds-mcp.vercel.app/mcp` (dev 서버 불필요). 라이브 도구는 로컬 `:5181/mcp`. 절차 [AI-INTEGRATION.md](/design-system/AI-INTEGRATION.md) · [mcp.txt](/mcp.txt) · [llms.txt](/llms.txt).
-- **지킬 것 둘**: 인라인 hex 금지(토큰 참조) · 컴포넌트 인라인 재구현 금지(prop 조합).
+- clone 이 필요 없습니다. Vite · Next · webpack 모두 동작합니다.
+  - 버전 목록은 [releases/index.json](/releases/index.json).
+
+### 주의
+
+- ⚠️ **`tokens.css` 를 import 하지 마세요.**
+  - 토큰 `:root` 만 들어 있어 **색은 맞고 레이아웃이 무너집니다.**
+  - 유틸 · 전역 · `.dark` 는 `style.css` 에만 있습니다.
+
+### 지킬 것 둘
+
+- **인라인 hex 금지** — 토큰을 참조합니다.
+- **컴포넌트 인라인 재구현 금지** — prop 조합으로 씁니다.
+
+### AI 연결
+
+- 엔드포인트 `https://whatap-ds-mcp.vercel.app/mcp` (dev 서버가 필요 없습니다).
+  - 라이브 도구는 로컬 `:5181/mcp`.
+- 절차는 [AI-INTEGRATION.md](/design-system/AI-INTEGRATION.md) · [mcp.txt](/mcp.txt) · [llms.txt](/llms.txt).
+
+---
 
 ## 시작 — 디자이너
 
-- **토큰 197개**에 전부 `@role`(무엇을 위한 값인가)이 붙어 있습니다. 다수는 `@use`(권장) · `@avoid`(금지)까지. 값이 아니라 역할로 고릅니다. → [Color](/?path=/docs/tokens-color--docs) · [Typography](/?path=/docs/tokens-typography--docs) · [Tones](/?path=/docs/tokens-tones-semantic-intent--docs) · [tokens.json](/design-system/tokens.json)
-- **컴포넌트**는 항목마다 "언제 쓰고 언제 쓰지 말지"가 적혀 있습니다. → 좌측 트리
+### 토큰은 값이 아니라 역할로 고릅니다
+
+- **295개 전부에 `@role`**(무엇을 위한 값인가)이 붙어 있습니다.
+  - 다수는 `@use`(권장) · `@avoid`(금지)까지 있습니다.
+- 훑어보기 → [Color](/?path=/docs/tokens-color--docs) · [Typography](/?path=/docs/tokens-typography--docs) · [Tones](/?path=/docs/tokens-tones-semantic-intent--docs) · [tokens.json](/design-system/tokens.json)
+
+### 컴포넌트
+
+- 항목마다 **「언제 쓰고 언제 쓰지 말지」**가 적혀 있습니다.
+  - 좌측 트리에서 바로 열립니다.
+
+### 패턴 문서
+
 - **[patterns.md](/design-system/patterns.md)** 는 두 부분입니다.
-  - Part 1 인터랙션 패턴: 파괴적 액션 확인 · 완료 통보 · 즉시반영 vs 폼제출
-  - Part 2 구현 정책: 헤더 invariant · 사이드바 collapse · DataTable density · 타이포 위계 · AI 영역 분리
-- **Figma 연동은 없습니다.** Code Connect 매핑 0건, Variables 동기화 없음. 정본은 이 Storybook 이고, 토큰을 Figma 로 옮기려면 `node scripts/design-export.js dtcg`(W3C DTCG JSON).
+  - **Part 1 인터랙션 패턴** — 파괴적 액션 확인 · 완료 통보 · 즉시반영 vs 폼제출
+  - **Part 2 구현 정책** — 헤더 invariant · 사이드바 collapse · DataTable density · 타이포 위계 · AI 영역 분리
+
+### Figma
+
+- **연동이 없습니다.** Code Connect 매핑 0건, Variables 동기화 없음.
+- 정본은 이 Storybook 입니다.
+  - 토큰을 Figma 로 옮기려면 `node scripts/design-export.js dtcg` (W3C DTCG JSON).
 
 ---
 
@@ -49,12 +82,18 @@ import "@whatap/design-system/style.css";   // 런타임 스타일은 이것 하
 
 정본은 좌측 트리입니다. AI 에셋은 따로 떼지 않고 각 계층 안 `Ai/` 로 묶습니다.
 
-| 그룹 | 수 | 의미 | 예 |
-|---|---|---|---|
-| **Tokens** (메타) | 12 / 197토큰 | `:root` 색·타입·간격·그림자·컴포넌트 토큰 | Color · Typography · Tones · Guardrails |
-| **Primitives** | **75** | 자체 렌더 리프. 다른 DS 컴포넌트 import 0 | Button · TextField · Select · Modal · Toast · Chip · Icons · ToolbarIconButton · `Topology/` · `Ai/`(AiCard · AiToneBadge …) |
-| **Composite** | **34** | 프리미티브 한 단계 조합 | PageHeader · Sidebar · DataTable · FilterBar · OptionbarPage · TimeChip · `Ai/`(AiReasoning · AiUnavailableNotice …) |
-| **Shell** | **6** | 최종 조립 진입점 | DashboardLayout · `Ai/Widget` · `Page/`(A · B · D · TopologyOverview) |
+- **Tokens** (메타) — 12항목 / 295토큰
+  - `:root` 색 · 타입 · 간격 · 그림자 · 컴포넌트 토큰
+  - Color · Typography · Tones · Guardrails
+- **Primitives** — 92
+  - 자체 렌더 리프. 다른 DS 컴포넌트를 import 하지 않습니다.
+  - Button · TextField · Select · Modal · Toast · Chip · Icons · ToolbarIconButton · `Topology/` · `Ai/`(AiCard · AiToneBadge …)
+- **Composite** — 43
+  - 프리미티브를 한 단계 조합합니다.
+  - PageHeader · Sidebar · DataTable · FilterBar · OptionbarPage · TimeChip · ActionMenu · `Ai/`(AiReasoning · AiUnavailableNotice …)
+- **Shell** — 6
+  - 최종 조립 진입점.
+  - DashboardLayout · `Ai/Widget` · `Page/`(A · B · D · TopologyOverview)
 
 `PageHeaderAiInline` 은 AI 입력을 품지만 구조는 프리미티브 조합이라 `Composite/` 입니다.
 
@@ -64,26 +103,51 @@ import "@whatap/design-system/style.css";   // 런타임 스타일은 이것 하
 Tokens   ←   Primitives   ←   Composite   ←   Shell
 ```
 
-| 계층 | import 가능 | 금지 |
-|---|---|---|
-| Primitives | Tokens | 상위 계층 |
-| Composite | Primitives · Tokens | **Composite 끼리** (필요하면 Shell 로 승격) |
-| Shell | 전 계층 | — |
+- **Primitives** — Tokens 만 import. 상위 계층 금지.
+- **Composite** — Primitives · Tokens. **Composite 끼리는 금지**입니다.
+  - 필요하면 Shell 로 승격합니다.
+- **Shell** — 전 계층 가능.
 
-- 문서가 아니라 게이트가 지킵니다(`lint:layers`, 역방향 값 import 동결선 **0**).
-- 계층 판정 근거는 **story title prefix**. 그래서 **스토리 없는 컴포넌트는 계층도 없고 게이트 밖**입니다. 「공개 export 는 카탈로그에 있어야 한다」가 별도 게이트인 이유입니다.
+문서가 아니라 게이트가 지킵니다.
+
+- `lint:layers` — 역방향 값 import 동결선 **0**.
+- 계층 판정 근거는 **story title prefix** 입니다.
+  - 그래서 **스토리 없는 컴포넌트는 계층도 없고 게이트 밖**입니다.
+  - 「공개 export 는 카탈로그에 있어야 한다」가 별도 게이트인 이유입니다.
 
 ---
 
 ## 다섯 가지 핵심 규칙
 
-| # | 규칙 | 핵심 |
-|---|---|---|
-| 1 | **색 리터럴 0** (불변) | hex · `rgba()` · `bg-white` · 값이 이름에 박힌 유틸 금지. 토큰이 없으면 **토큰을 먼저 추가**. TS 토큰 주입은 `.value` 아니라 **`.cssVar`**(`.dark` 는 변수만 바꿈). 소스 · 렌더된 DOM · 시각 스냅샷 3중 검사 |
-| 2 | **위젯 카드는 `<AiCard>`** | 배경 · 보더 · 8px 라운드 · 12px 패딩 · 진입 애니메이션이 그 컴포넌트 책임. div 로 짜면 1px 어긋남이 보임 |
-| 3 | **헤더(48px)는 invariant** | 위젯이 열리면 사이드바만 240 → **80px**(제품 레일 40 + 아이콘 메뉴 40). `DashboardLayout` 에 `widgetOpen` 만 넘기면 내부 처리 |
-| 4 | **SVG 텍스트에 단위** | `fontSize="9px"`. 단위 없으면 viewBox 좌표로 해석돼 카드 크기마다 글자가 달라짐 |
-| 5 | **DataTable density `default`** | header 12px / row 13px. `compact`(10/11)는 100행 넘는 raw log 만. 셀 안은 `text-md`(주) · `text-base`(부) 두 개만 |
+### 1. 색 리터럴 0 (불변)
+
+- hex · `rgba()` · `bg-white` · 값이 이름에 박힌 유틸을 쓰지 않습니다.
+- 토큰이 없으면 **토큰을 먼저 추가**합니다.
+  - 토큰 부재는 리터럴의 근거가 아니라 토큰 추가의 근거입니다.
+- TS 토큰 주입은 `.value` 가 아니라 **`.cssVar`** — `.dark` 는 변수만 바꾸므로 hex 를 박으면 다크가 안 따라옵니다.
+- 소스 · 렌더된 DOM · 시각 스냅샷 **3중**으로 검사합니다.
+
+### 2. 위젯 카드는 `<AiCard>`
+
+- 배경 · 보더 · 8px 라운드 · 12px 패딩 · 진입 애니메이션이 그 컴포넌트 책임입니다.
+- div 로 짜면 1px 어긋남이 보입니다.
+
+### 3. 헤더(48px)는 invariant
+
+- 위젯이 열리면 **사이드바만** 240 → **80px** 로 줄어듭니다.
+  - 제품 레일 40 + 아이콘 메뉴 40.
+- `DashboardLayout` 에 `widgetOpen` 만 넘기면 내부에서 처리합니다.
+
+### 4. SVG 텍스트에 단위
+
+- `fontSize="9px"` 처럼 단위를 붙입니다.
+- 단위가 없으면 viewBox 좌표로 해석돼 **카드 크기마다 글자가 달라집니다.**
+
+### 5. DataTable density `default`
+
+- header 12px / row 13px.
+- `compact`(10 / 11)는 **100행 넘는 raw log 전용**입니다.
+- 셀 안은 `text-md`(주) · `text-base`(부) 두 개만 씁니다.
 
 전체 게이트 22종은 **[Guardrails](/?path=/docs/tokens-guardrails--docs)** 에 있습니다. 손으로 적은 목록이 아니라 명부(`gate-roster.mjs`)에서 생성한 projection 입니다.
 
@@ -91,26 +155,35 @@ Tokens   ←   Primitives   ←   Composite   ←   Shell
 
 ## 기계가 읽는 카탈로그
 
-규칙은 소스 docstring 과 CSS 주석 두 곳에만 씁니다. 나머지는 거기서 뽑아냅니다.
+규칙은 **소스 docstring 과 CSS 주석 두 곳에만** 씁니다. 나머지는 거기서 뽑아냅니다.
 
-| 산출물 | 내용 | 출처 |
-|---|---|---|
-| [components.json](/design-system/components.json) | 127항목 · Purpose · ✅Do · ❌Don't · Composition rules · props · `@example` · 스토리 id | `src/**` docstring 4섹션 + 스토리 |
-| [tokens.json](/design-system/tokens.json) | 197토큰 · tier · 값 · **다크 값** · `@role`/`@use`/`@avoid` · 유틸 클래스 · 쓰는 컴포넌트 | `whatap-ds.css` 선언 + 위 주석 |
-| [guardrails.json](/design-system/guardrails.json) | 게이트 22종 · 불변식 · 막는 것 · 집행 수단 | `scripts/gate-roster.mjs` |
+- [components.json](/design-system/components.json)
+  - 153항목 · Purpose · ✅Do · ❌Don't · Composition rules · props · `@example` · 스토리 id
+  - 출처 — `src/**` docstring 4섹션 + 스토리
+- [tokens.json](/design-system/tokens.json)
+  - 295토큰 · tier · 값 · **다크 값** · `@role`/`@use`/`@avoid` · 유틸 클래스 · 쓰는 컴포넌트
+  - 출처 — `whatap-ds.css` 선언 + 그 위 주석
+- [guardrails.json](/design-system/guardrails.json)
+  - 게이트 22종 · 불변식 · 막는 것 · 집행 수단
+  - 출처 — `scripts/gate-roster.mjs`
 
-MCP 도구 8개 (`https://whatap-ds-mcp.vercel.app/mcp`)
+### MCP 도구 8개
 
-| 도구 | 언제 | 예 |
-|---|---|---|
-| `search_components(q)` | 컴포넌트 이름을 모를 때 | `"삭제 확인"` → Modal + 「P1 파괴적 액션 확인」 + 관련 토큰 |
-| `get_component(id)` | **코드 쓰기 전** | Do/Don't · props · 예시 |
-| `get_do_dont(layer?)` | 작업 시작 시 일괄 주입 | 계층 필터 |
-| `search_tokens(q)` | 원자를 의도로 | `"경고 배경"` → `--color-status-warning-soft` + 다크값 + 유틸 + 금지 용도 |
-| `get_tokens({tier,group})` | 토큰 훑기 | tier · group 필터 |
-| `list_components` · `get_design_catalog` · `get_preview_url(id)` | 목록 · 합본 · 프리뷰 URL | |
+엔드포인트 `https://whatap-ds-mcp.vercel.app/mcp`
 
-> ⚠️ MCP 는 **배포된 이 사이트**를 런타임에 가져옵니다. 머지해도 재배포 전에는 규칙이 바뀌지 않습니다. 2026-08-21 에 9일치가 미배달이었고 두 JSON 이 404 라서 MCP 가 「규칙 카탈로그를 불러오지 못했습니다」만 돌려주고 있었습니다. 지금은 CI 가 배포와 배달 확인을 맡습니다.
+- `search_components(q)` — 컴포넌트 이름을 모를 때
+  - `"삭제 확인"` → Modal + 「P1 파괴적 액션 확인」 + 관련 토큰
+- `get_component(id)` — **코드 쓰기 전에** 부릅니다
+  - Do/Don't · props · 예시
+- `get_do_dont(layer?)` — 작업 시작 시 일괄 주입
+- `search_tokens(q)` — 원자를 의도로 찾습니다
+  - `"경고 배경"` → `--color-status-warning-soft` + 다크값 + 유틸 + 금지 용도
+- `get_tokens({tier, group})` — 토큰 훑기
+- `list_components` · `get_design_catalog` · `get_preview_url(id)` — 목록 · 합본 · 프리뷰 URL
+
+> ⚠️ MCP 는 **배포된 이 사이트**를 런타임에 가져옵니다. 머지해도 **재배포 전에는 규칙이 바뀌지 않습니다.**
+>
+> 2026-08-21 에 9일치가 미배달이었고 두 JSON 이 404 라서 MCP 가 「규칙 카탈로그를 불러오지 못했습니다」만 돌려주고 있었습니다. 2026-09-17 에는 응답 200 에 `last-modified` 가 당일인데도 **내용이 몇 주 전 것**이었습니다 — 그건 캐시 갱신 시각이지 재빌드 시각이 아닙니다. **배달 확인은 응답 코드가 아니라 항목 수를 세는 것**입니다.
 
 ---
 
@@ -182,9 +255,11 @@ function CriticalFinding({ intent, title, bullets }: {
 </Modal>
 ```
 
-- 확인 버튼 라벨은 "확인"이 아니라 동작 이름(`삭제`). 버튼만 읽고 누르는 사람이 있습니다.
+- 확인 버튼 라벨은 "확인"이 아니라 **동작 이름**(`삭제`)입니다.
+  - 버튼만 읽고 누르는 사람이 있고, 그 사람이 틀리지 않아야 합니다.
 - 본문에는 **무엇이** 사라지는지 대상을 적습니다.
-- `disableBackdropClose` 를 켜지 않습니다. 되돌릴 수 없는 건 확인이고, 취소는 쉬워야 합니다.
+- `disableBackdropClose` 를 켜지 않습니다.
+  - 되돌릴 수 없는 것은 *확인*이고, *취소*는 언제나 쉬워야 합니다.
 - 전문은 patterns Part 1 의 `P1`.
 
 ---
@@ -193,23 +268,41 @@ function CriticalFinding({ intent, title, bullets }: {
 
 ```bash
 curl .../design-system/DESIGN.md          # 사람이 읽는 산문 합본
-curl .../design-system/components.json    # 기계 판독 — 컴포넌트 규칙 127
-curl .../design-system/tokens.json        # 기계 판독 — 토큰 197
+curl .../design-system/components.json    # 기계 판독 — 컴포넌트 규칙 153
+curl .../design-system/tokens.json        # 기계 판독 — 토큰 295
 ```
 
-- **docstring 표준은 게이트가 강제합니다.** Purpose / When to use / When NOT to use / Composition rules + `@example`. Do/Don't 는 여기서 유도되므로 따로 쓰지 않습니다.
+- **docstring 표준은 게이트가 강제합니다.**
+  - Purpose / When to use / When NOT to use / Composition rules + `@example`.
+  - Do/Don't 는 여기서 **유도**되므로 따로 쓰지 않습니다.
 - 스토리 안에서 정의되는 합성 템플릿(`Shell/Page/*`)은 **스토리 설명**에 같은 4섹션을 씁니다.
-- 토큰은 선언 위 `@role` 주석이 같은 역할입니다. 현재 **197/197**.
+- 토큰은 선언 위 `@role` 주석이 같은 역할입니다. 현재 **295/295**.
 
 ---
 
 ## 프로젝트
 
-| | |
-|---|---|
-| 소스 (private) | [`src/`](https://github.com/product-design-engineer/WhaTap-design-system/tree/main/src) · [`docs/`](https://github.com/product-design-engineer/WhaTap-design-system/tree/main/docs) · [`stories/`](https://github.com/product-design-engineer/WhaTap-design-system/tree/main/stories) |
-| 배포 | 카탈로그 `whatap-design-system-storybook.vercel.app` · MCP `whatap-ds-mcp.vercel.app`. `main` push 시 CI 가 배포 + 배달 확인 |
-| 소비 (dogfooding) | `WhaTap-AI-Assistant/prototypes/Product-SaaS` — `link:` 심링크라 DS 수정이 바로 반영 |
-| 스택 | React 19 · Vite 6 · Storybook 10.4 · TypeScript 5.6 strict · Vitest 4(chromium 실제 렌더) · tsup 8. 스타일은 자체 일반 CSS, Tailwind 는 의존성·산출물 모두 없음 |
-| 검증 기준선 | 게이트 22종 · vitest 515 테스트 / 128 파일 · 런타임 DOM 리터럴 감사 라이트·다크 각 0건 |
-| 기여 | prop·signature 변경 → 같은 PR 에서 docstring 갱신 · 토큰 추가 → `@role` 주석 동반 · 새 컴포넌트 → 스토리 필수(없으면 게이트 5곳에서 빠짐) |
+### 소스 · 배포
+
+- 소스 (private) — [`src/`](https://github.com/product-design-engineer/WhaTap-design-system/tree/main/src) · [`docs/`](https://github.com/product-design-engineer/WhaTap-design-system/tree/main/docs) · [`stories/`](https://github.com/product-design-engineer/WhaTap-design-system/tree/main/stories)
+- 배포 — 카탈로그 `whatap-design-system-storybook.vercel.app` · MCP `whatap-ds-mcp.vercel.app`
+  - `main` push 시 CI 가 배포 + 배달 확인.
+
+### 소비 (dogfooding)
+
+- `Product-prototype` — `apps/saas` · `apps/url-landing`
+- `URL-product_TF`
+- 셋 다 pnpm `link:` 로 **이 저장소를 직접** 봅니다. DS 수정이 화면에 바로 반영됩니다.
+
+### 스택
+
+- React 19 · Vite 6 · Storybook 10.4 · TypeScript 5.6 strict
+- Vitest 4 (chromium 실제 렌더) · tsup 8
+- 스타일은 자체 일반 CSS. **Tailwind 는 의존성 · 산출물 어디에도 없습니다.**
+
+### 기여
+
+- prop · signature 를 바꾸면 **같은 PR 에서 docstring 을 갱신**합니다.
+- 토큰을 추가하면 `@role` 주석을 **함께** 답니다.
+- 새 컴포넌트에는 **스토리가 필수**입니다.
+  - 없으면 게이트 5곳에서 동시에 빠집니다.
