@@ -2651,7 +2651,7 @@ html, body, #root {
 .wds-web-section--tone-green   { background-color: #dcf9e0; }
 
 /* custom 톤 — 소비앱이 직접 지정 */
-.wds-web-section--tone-custom { background-color: var(--wds-web-section-bg); }
+.wds-web-section--tone-custom { background-color: var(--wds-web-section-bg, transparent); }
 
 /* ── 모디파이어 ── */
 .wds-web-section.\--top-line     { border-top: 1px solid var(--color-border-default); }
