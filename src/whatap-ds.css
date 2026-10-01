@@ -230,6 +230,8 @@
        위에 올리는 텍스트는 --color-tone-text-*. 다크는 .dark 블록에서 반전. 정의: tokens.css */
     /* @role 정상의 넓은 면 배경 | @use 성공 칩·배너 배경 */
     --color-status-success-soft: #E8F8EE;
+    /* @role 정보 상태의 점·인디케이터·아이콘 색 | @use StatCard tone=info 등 상태 인디케이터 | @avoid 넓은 면 배경 (그쪽은 --color-status-info-soft) · 차트 계열 (그쪽은 --color-chart-series-*) */
+    --color-status-info: #296CF2;
     /* @role 정보의 넓은 면 배경 | @use 정보 배너 · 진행 바 트랙 */
     --color-status-info-soft: #E8F0FE;
     /* @role 경고의 넓은 면 배경 | @use 경고 카드·칩 배경 */
@@ -1811,6 +1813,7 @@ html, body, #root {
   --color-tone-text-neutral: #AEB5BF;
 
   --color-status-success-soft: #14301F;
+  --color-status-info: #5B92F7;
   --color-status-info-soft: #16233D;
   --color-status-warning-soft: #33290F;
   --color-status-error-soft: #3A2226;

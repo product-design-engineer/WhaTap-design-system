@@ -60,6 +60,7 @@ colors:
   # Status Soft — status 원색의 옅은 표면 (토스트 배경 · soft 칩/버튼 · 경고 배너)
   #  위에 올리는 텍스트는 tone-text-* 를 쓴다. status 원색을 배경으로 쓰지 말 것.
   status-success-soft:       "#E8F8EE"    # Color
+  status-info:               "#296CF2"    # Color — 정보 상태 인디케이터 (다크 #5B92F7)
   status-info-soft:          "#E8F0FE"    # Color
   status-warning-soft:       "#FFF4E5"    # Color
   status-error-soft:         "#FDECEC"    # Color

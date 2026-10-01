@@ -17,7 +17,7 @@
  *
  * ## Composition rules
  * - Primitives 레이어 (자체 렌더링, DS 컴포넌트 import 0)
- * - 색은 semantic 토큰만 사용 (status/chart/text)
+ * - 색은 semantic 토큰만 사용 (status/text) — 차트 계열(`--color-chart-series-*`)은 차트가 아니므로 쓰지 않는다
  * - `tone`으로 좌측 인디케이터 색상 결정
  * - `trend`는 선택적 — 미지정 시 인디케이터 없음
  *
@@ -46,7 +46,7 @@ const TONE_COLORS: Record<StatCardTone, string> = {
   success: "var(--color-status-success)",
   warning: "var(--color-status-warning)",
   critical: "var(--color-status-error)",
-  info: "var(--color-chart-series-1)",
+  info: "var(--color-status-info)",
 };
 
 const TREND_ARROWS: Record<StatCardTrend, string> = {

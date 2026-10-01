@@ -39,6 +39,7 @@
      ⚠️ status 원색을 배경으로 쓰지 말 것 — 그 위 텍스트 대비가 무너진다.
      다크 값은 파일 하단 `.dark` 블록에서 tone surface 와 함께 반전된다. */
   --color-status-success-soft: #E8F8EE;
+  --color-status-info: #296CF2;   /* 정보 상태의 점·아이콘·짧은 강조 (넓은 면은 -soft) */
   --color-status-info-soft: #E8F0FE;
   --color-status-warning-soft: #FFF4E5;
   --color-status-error-soft: #FDECEC;
@@ -786,6 +787,7 @@ html, body, #root {
 
   /* Status Soft — 토스트 배경·soft 칩/버튼·경고 배너. tone surface 와 같은 값 체계. */
   --color-status-success-soft: #14301F;
+  --color-status-info: #5B92F7;
   --color-status-info-soft: #16233D;
   --color-status-warning-soft: #33290F;
   --color-status-error-soft: #3A2226;
