@@ -375,6 +375,24 @@ hover 시 표면이 뒤집히는 아이콘 버튼(첨부 `+` 버튼 등)은 `bla
 
 seq 램프는 단조 L · 인접 ΔL ≥ 0.06 · 옅은 끝 대비 ≥ 2:1 · 단일 색조 전부 통과. **팔레트를 바꿀 때는 눈으로 판단하지 말고 검증기를 다시 돌리세요.**
 
+## Marketing Web Landing — 해외 URL 모니터링 랜딩 표면
+
+마케팅 랜딩(www `/newer/products/url`) 한 화면이 쓰는 값입니다. 원래 `URL-product_Prototype` 앱의 `theme.css`·`index.css` 에만 있던 것을 2026-09-30 에 정본으로 올렸습니다. 랜딩은 테마를 `[data-theme]` 로 바꾸므로 앞의 네 개는 `.dark` 블록에 다크 값이 있습니다.
+
+| 토큰 | 자리 |
+|---|---|
+| `--color-web-landing-fg-rgb` | 전경 RGB 트리플. `rgba(var(--color-web-landing-fg-rgb), 0.6)` 처럼 알파를 합성해 본문·보더·아이콘을 칠함 |
+| `--color-web-landing-surface-alt` | 섹션 교대 배경 (마케팅 리듬. 제품의 `--color-bg` 와 다른 축) |
+| `--color-web-landing-input-bg` | 히어로 URL 입력칸 바탕 |
+| `--color-web-landing-danger` | 입력 검증 실패 문구. 배지·도트 원색은 `--color-status-error` |
+| `--shadow-web-landing-focus` | 그라데이션 입력칸 포커스 링 |
+| `--color-web-landing-live-ring` · `-fade` | LIVE 점 펄스 키프레임의 시작·끝 |
+| `--shadow-web-landing-cta-glow` · `-peak` · `-end` · `-still` | CTA 글로우 키프레임 세 단계와, 동작 줄이기 설정일 때의 정지 글로우 |
+
+반투명 헤더 면은 새로 만들지 않고 `--color-header-translucent` 를 씁니다(값이 같았습니다). 입력칸 그라데이션 보더는 `--color-brand-blue` · `--color-whatap-purple` · `--color-brand-blue-soft` 를 씁니다.
+
+❌ 제품 화면에 쓰지 마세요. 제품 전경은 `--color-text-*`, 바닥면은 `--color-bg` 입니다.
+
 ## 색상 — 토큰 외 hard-coded
 
 토큰화되지 않은 색상은 거의 모두 chrome / 카드 외형에 한정됩니다. 자주 등장하는 것:

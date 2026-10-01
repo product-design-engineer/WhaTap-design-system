@@ -191,7 +191,7 @@ export default function FilterBar({
             <button
               type="button"
               onClick={handleResetAll}
-              className="text-sm font-medium text-tertiary hover:text-secondary"
+              className="text-sm font-medium text-tertiary hover-text-color-var-color-text-secondary"
               style={{
                 background: "transparent",
                 border: 0,
@@ -212,7 +212,7 @@ export default function FilterBar({
           <button
             type="button"
             onClick={handleResetAll}
-            className="text-sm font-medium text-tertiary hover:text-secondary"
+            className="text-sm font-medium text-tertiary hover-text-color-var-color-text-secondary"
             style={{
               background: "transparent",
               border: 0,

@@ -246,7 +246,7 @@ export default function FilterDropdown({
               <button
                 type="button"
                 onClick={() => onChange?.([])}
-                className="text-sm font-medium text-tertiary hover:text-secondary"
+                className="text-sm font-medium text-tertiary hover-text-color-var-color-text-secondary"
                 style={{ background: "transparent", border: 0, padding: 0, cursor: "pointer" }}
               >
                 모두 해제

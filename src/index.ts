@@ -10,8 +10,16 @@
  */
 
 // Primitives — 재사용 building block (페이지·위젯·다른 컴포넌트가 조립용으로 호출)
+export { default as ActiveTransactionSpeedWidget } from "./ActiveTransactionSpeedWidget";
+export type {
+  ActiveTransactionSpeedWidgetProps,
+  SpeedTone,
+  SpeedTotals,
+} from "./ActiveTransactionSpeedWidget";
 export { default as Checkbox } from "./Checkbox";
 export type { CheckboxProps, CheckboxSize } from "./Checkbox";
+export { default as CountryFlag } from "./CountryFlag";
+export type { CountryFlagProps } from "./CountryFlag";
 export { default as Chip } from "./Chip";
 export type { ChipProps, ChipVariant, ChipTone, ChipSize } from "./Chip";
 export { default as TimeChip } from "./TimeChip";
@@ -63,6 +71,8 @@ export { default as OptionbarNewVersionButton } from "./OptionbarNewVersionButto
 export { IcSearch } from "./icons/SearchIcon";
 export { default as KpiField } from "./KpiField";
 export type { KpiFieldProps } from "./KpiField";
+export { default as StatCard } from "./StatCard";
+export type { StatCardProps, StatCardTone, StatCardTrend } from "./StatCard";
 export { default as UsageGauge } from "./UsageGauge";
 export type { UsageGaugeProps, UsageGaugeTone } from "./UsageGauge";
 export { default as MemberUsageBar } from "./MemberUsageBar";
@@ -98,6 +108,14 @@ export { default as AiTriggerButton } from "./widget/AiTriggerButton";
 export type { AiTriggerButtonProps } from "./widget/AiTriggerButton";
 export { default as Button } from "./Button";
 export type { ButtonProps, ButtonVariant, ButtonSize, ButtonTone } from "./Button";
+export { default as WebCtaButton } from "./WebCtaButton";
+export type { WebCtaButtonProps, WebCtaVariant, WebCtaSize, WebCtaRounded, WebCtaWidth } from "./WebCtaButton";
+export { default as WebDateLabel } from "./WebDateLabel";
+export type { WebDateLabelProps, WebDateLabelSize } from "./WebDateLabel";
+export { default as WebBreadcrumb } from "./WebBreadcrumb";
+export type { WebBreadcrumbProps, WebBreadcrumbItem } from "./WebBreadcrumb";
+export { default as WebSearchField } from "./WebSearchField";
+export type { WebSearchFieldProps, WebSearchFieldSize } from "./WebSearchField";
 export { default as FilterBar } from "./FilterBar";
 export type { FilterBarProps, FilterBarDropdownConfig, FilterBarSize } from "./FilterBar";
 export { default as DashboardBuildingProgress } from "./DashboardBuildingProgress";
@@ -111,7 +129,24 @@ export { default as EventWeekTimeMatrix } from "./EventWeekTimeMatrix";
 export type { EventWeekTimeMatrixProps } from "./EventWeekTimeMatrix";
 export { default as LiveTimerCompact } from "./LiveTimerCompact";
 export type { LiveTimerCompactSize } from "./LiveTimerCompact";
+export { default as GpuStatusBar } from "./GpuStatusBar";
+export type { GpuStatusBarProps, GpuStatusCategory, GpuStatusSegment } from "./GpuStatusBar";
+export { default as HexGrid } from "./HexGrid";
+export type { HexGridProps, HexItem, HexTone } from "./HexGrid";
+export { default as KpiCard } from "./KpiCard";
+export type { KpiCardProps } from "./KpiCard";
+export { default as ActiveTransactionArc } from "./ActiveTransactionArc";
+export type { ActiveTransactionArcProps } from "./ActiveTransactionArc";
+export { default as ScatterHeatmap, SCATTER_HEATMAP_DEMO_DOTS } from "./ScatterHeatmap";
+export type { ScatterHeatmapProps, ScatterDot } from "./ScatterHeatmap";
+export { default as MiniDonutChart } from "./MiniDonutChart";
+export type { MiniDonutChartProps, DonutSegment } from "./MiniDonutChart";
 export { default as MiniLineChart } from "./MiniLineChart";
+export { default as MiniMultiLineChart } from "./MiniMultiLineChart";
+export type {
+  MiniMultiLineChartProps,
+  MiniMultiLineChartSeries,
+} from "./MiniMultiLineChart";
 export { default as OptionbarInstanceSelector } from "./OptionbarInstanceSelector";
 export type { InstanceStatus, OptionbarInstanceSelectorSize } from "./OptionbarInstanceSelector";
 export { default as OptionbarItem } from "./OptionbarItem";

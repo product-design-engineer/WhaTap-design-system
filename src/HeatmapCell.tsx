@@ -134,8 +134,7 @@ export default function HeatmapCell({
           style={{
             left: 3,
             bottom: 2,
-            // raw-color-ok: 스케일 진한 칸 위 라벨 — 칸 색이 어두우면 테마와 무관하게 흰 글자여야 읽힌다.
-            color: labelOnDark ? "#fff" : "var(--color-text-tertiary)",
+            color: labelOnDark ? "var(--color-text-inverse)" : "var(--color-text-tertiary)",
           }}
         >
           {label}

@@ -70,8 +70,7 @@ export default function CriteriaOptionButton({
           fontFamily: "var(--font-family-korean)",
           fontWeight: "var(--font-weight-medium)",
           background: selected ? "var(--color-brand-blue)" : "var(--color-card)",
-          // raw-color-ok: 선택 시 brand-blue 배경 위 전경 — 컬러 위 고정 흰색.
-          color: selected ? "#fff" : "var(--color-brand-blue)",
+          color: selected ? "var(--color-text-inverse)" : "var(--color-brand-blue)",
           borderColor: selected ? "var(--color-brand-blue)" : "var(--color-brand-blue)",
           opacity: dimmed ? 0.4 : 1,
           pointerEvents: locked ? "none" : "auto",
