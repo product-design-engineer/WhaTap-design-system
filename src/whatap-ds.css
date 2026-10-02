@@ -2239,6 +2239,8 @@ html, body, #root {
 @keyframes aiGlowSpin {
   0% { --glow-angle: 0deg; }
   100% { --glow-angle: 360deg; }
+}
+
 /* ── WebCtaButton — 마케팅 CTA ─────────────────────────── */
 
 .wds-web-cta {
