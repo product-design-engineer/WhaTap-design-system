@@ -20,6 +20,15 @@
       "inCI": true
     },
     {
+      "id": "css-structure",
+      "name": "CSS 구조 무결성",
+      "status": "auto",
+      "invariant": "런타임 CSS(`whatap-ds.css` · `tokens.css`)의 규칙이 **규칙으로 브라우저에 도달**해야 한다. R1 중괄호 균형(주석·문자열 제외) · R2 `@keyframes` 안에는 from/to/N% 만 · R3 주석 밖에 남은 `*/` 없음(주석이 일찍 닫힘) · R4 선택자 안 `+ 숫자` 없음(클래스명 안 `+`). 다른 CSS 게이트는 «무엇을 썼는가»를 보고 이것은 «쓴 것이 적용되는가»를 본다 — CSS 는 구조가 깨져도 에러 없이 규칙을 버린다.",
+      "prevents": "닫는 괄호 누락으로 규칙 수백 개가 조용히 죽는 것(2026-10-01 aiGlowSpin · 155규칙) · 주석 조기 종료 · 결합자로 읽히는 클래스명",
+      "command": "test (scripts/check-css-structure.mjs)",
+      "inCI": true
+    },
+    {
       "id": "catalog-build",
       "name": "카탈로그 합본 생성",
       "status": "auto",
