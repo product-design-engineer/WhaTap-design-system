@@ -105,12 +105,12 @@ export default function GpuStatusBar({ categories, max: maxProp }: GpuStatusBarP
     : "";
 
   return (
-    <div className="flex flex-col bg-card border border-[var(--color-border-default)] rounded-[4px] px-[12px] py-[8px] h-full">
-      <span className="text-md font-medium text-secondary mb-[8px] shrink-0">GPU 상태별 활용 현황</span>
+    <div className="flex flex-col bg-card border border-color-var-color-border-default rounded-4px px-12px py-8px h-full">
+      <span className="text-md font-medium text-secondary mb-8px shrink-0">GPU 상태별 활용 현황</span>
 
       <div className="flex flex-1 min-h-0">
         {/* Y축 스케일 */}
-        <div className="shrink-0 flex flex-col justify-between pr-[8px]" style={{ marginBottom: 20 }}>
+        <div className="shrink-0 flex flex-col justify-between pr-8px" style={{ marginBottom: 20 }}>
           {[...yTicks].reverse().map((v) => (
             <span
               key={v}
@@ -125,7 +125,7 @@ export default function GpuStatusBar({ categories, max: maxProp }: GpuStatusBarP
         {/* 차트 영역 */}
         <div className="flex-1 min-w-0 flex flex-col">
           {/* 바 + 곡선 영역 — flex-1로 남은 세로 공간을 전부 채운다 */}
-          <div className="relative flex items-end gap-[4px] flex-1 min-h-0">
+          <div className="relative flex items-end gap-4px flex-1 min-h-0">
             {/* 배경 area chart (SVG overlay) */}
             {areaPath && (
               <svg
@@ -154,7 +154,7 @@ export default function GpuStatusBar({ categories, max: maxProp }: GpuStatusBarP
             )}
             {/* 수평 기준선 */}
             <div
-              className="absolute left-0 right-0 border-b border-[var(--color-border-default)]"
+              className="absolute left-0 right-0 border-b border-color-var-color-border-default"
               style={{ bottom: 0 }}
             />
 
@@ -169,9 +169,9 @@ export default function GpuStatusBar({ categories, max: maxProp }: GpuStatusBarP
                   <div className="relative w-full flex flex-col items-center justify-end h-full">
                     {/* Negative 세그먼트 (위) */}
                     {cat.negative && cat.negative.value > 0 && (
-                      <div className="relative w-[55%] flex items-center justify-end" style={{ height: negPct }}>
+                      <div className="relative w-55pct flex items-center justify-end" style={{ height: negPct }}>
                         <div
-                          className="w-full h-full rounded-[2px]"
+                          className="w-full h-full rounded-2px"
                           style={{ background: NEG_COLOR }}
                         />
                         <span
@@ -187,13 +187,15 @@ export default function GpuStatusBar({ categories, max: maxProp }: GpuStatusBarP
                       </div>
                     )}
                     {/* Positive 세그먼트 (아래) */}
-                    <div className="relative w-[55%] flex items-center justify-end" style={{ height: posPct }}>
+                    <div className="relative w-55pct flex items-center justify-end" style={{ height: posPct }}>
                       <div
-                        className="w-full h-full rounded-[2px]"
+                        className="w-full h-full rounded-2px"
                         style={{ background: posColor }}
                       />
                       <span
-                        className="absolute text-sm text-inverse whitespace-nowrap"
+                        data-ds-policy-ok="차트 계열 색 막대 안 라벨 — 컬러 위 고정 흰색"
+                        // raw-color-ok: 차트 계열 색으로 채운 막대 안 라벨 — 컬러 위 고정 흰색 전경.
+                        className="absolute text-sm text-white whitespace-nowrap"
                         style={{
                           left: "50%",
                           top: "50%",
@@ -211,7 +213,7 @@ export default function GpuStatusBar({ categories, max: maxProp }: GpuStatusBarP
           </div>
 
           {/* X축 라벨 */}
-          <div className="flex gap-[4px] mt-[4px] shrink-0">
+          <div className="flex gap-4px mt-4px shrink-0">
             {categories.map((cat) => (
               <span key={cat.label} className="flex-1 min-w-0 text-center text-sm text-tertiary truncate">
                 {cat.label}

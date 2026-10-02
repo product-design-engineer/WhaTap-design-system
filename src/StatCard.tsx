@@ -17,7 +17,7 @@
  *
  * ## Composition rules
  * - Primitives 레이어 (자체 렌더링, DS 컴포넌트 import 0)
- * - 색은 semantic 토큰만 사용 (status/chart/text)
+ * - 색은 semantic 토큰만 사용 (status/text) — 차트 계열(`--color-chart-series-*`)은 차트가 아니므로 쓰지 않는다
  * - `tone`으로 좌측 인디케이터 색상 결정
  * - `trend`는 선택적 — 미지정 시 인디케이터 없음
  *
@@ -46,7 +46,7 @@ const TONE_COLORS: Record<StatCardTone, string> = {
   success: "var(--color-status-success)",
   warning: "var(--color-status-warning)",
   critical: "var(--color-status-error)",
-  info: "var(--color-chart-series-1)",
+  info: "var(--color-status-info)",
 };
 
 const TREND_ARROWS: Record<StatCardTrend, string> = {
@@ -75,7 +75,7 @@ export default function StatCard({
 
   return (
     <div
-      className="flex items-center gap-[8px] bg-card border border-[var(--color-border-default)] rounded-[4px] px-[12px] py-[8px] flex-1 min-w-0"
+      className="flex items-center gap-8px bg-card border border-color-var-color-border-default rounded-4px px-12px py-8px flex-1 min-w-0"
       style={style}
     >
       {/* 좌측 톤 인디케이터 */}
@@ -87,7 +87,7 @@ export default function StatCard({
       {/* 라벨 + 값 */}
       <div className="flex flex-col min-w-0">
         <span className="text-sm text-tertiary truncate leading-tight">{label}</span>
-        <div className="flex items-baseline gap-[4px]">
+        <div className="flex items-baseline gap-4px">
           <span
             className="text-xl font-bold text-primary leading-none"
             style={{ fontFamily: "var(--font-family-numeric)" }}
@@ -99,7 +99,7 @@ export default function StatCard({
           )}
           {trend && (
             <span
-              className="text-xs leading-none ml-[2px]"
+              className="text-xs leading-none ml-2px"
               style={{ color: TREND_COLORS[trend] }}
             >
               {TREND_ARROWS[trend]}

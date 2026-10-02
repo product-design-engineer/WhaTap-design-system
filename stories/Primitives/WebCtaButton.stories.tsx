@@ -46,7 +46,8 @@ export const Variants: Story = {
     <div style={{ display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center" }}>
       <WebCtaButton href="#" variant="filled" size="lg">무료로 시작하기</WebCtaButton>
       <WebCtaButton href="#" variant="outline" size="lg">문서 보기</WebCtaButton>
-      <div style={{ background: "#1a1a2e", padding: "16px 24px", borderRadius: 8 }}>
+      {/* 어두운 면은 리터럴 대신 DS 의 다크 섹션 톤(--color-web-surface-dark)을 빌린다. */}
+      <div className="wds-web-section--tone-dark" style={{ padding: "16px 24px", borderRadius: 8 }}>
         <WebCtaButton href="#" variant="white" size="lg">WhaTap AI 체험</WebCtaButton>
       </div>
     </div>
@@ -79,14 +80,12 @@ export const NoArrow: Story = {
   args: { href: "#", children: "화살표 없음", arrow: false },
 };
 
-/** 다크 배경 — 히어로 dark/ai 테마에서 사용하는 조합. */
+/** 다크 배경 — 어두운 면 위의 CTA 는 `white` variant 를 쓴다.
+ *  outline 의 글자색을 children 에서 덮어쓰지 말 것 — 소비 측 override 는 금지다. */
 export const OnDarkBackground: Story = {
   render: () => (
-    <div style={{ background: "linear-gradient(135deg, #0a0a1a, #0d0f1e)", padding: 40, borderRadius: 12, display: "flex", gap: 16 }}>
+    <div className="wds-web-section--tone-dark" style={{ padding: 40, borderRadius: 12, display: "flex", gap: 16 }}>
       <WebCtaButton href="#" variant="white" size="lg">도입 문의</WebCtaButton>
-      <WebCtaButton href="#" variant="outline" size="lg">
-        <span style={{ color: "#fff" }}>자세히</span>
-      </WebCtaButton>
     </div>
   ),
 };

@@ -43,14 +43,16 @@ jobs:
       - name: Check story catalog
         run: pnpm check:catalog
 
+      # tokens.css → 생성 산출물. Storybook/Vitest 가 이 결과를 읽는다.
+      # **Type check 보다 먼저** 돈다 — 스토리가 생성물(docs/policies.json 등, gitignore)을
+      # import 하므로 생성 전에 tsc 를 돌리면 TS2307 로 실패한다(PR #13 이 9/18 부터 이걸로 멈춰 있었다).
+      - name: Build design artifacts
+        run: pnpm build:design
+
       # 타입 오류를 빌드가 잡아주지 않는다 — tsup 의 DTS 빌드는 통과시킨다.
       # 실측: tsc 오류 21건이 있는 상태에서 build:js 가 성공했다.
       - name: Type check
         run: pnpm typecheck
-
-      # tokens.css → 생성 산출물. Storybook/Vitest 가 이 결과를 읽는다.
-      - name: Build design artifacts
-        run: pnpm build:design
 
       # ── 렌더 기반 게이트 ────────────────────────────────────────────────
       # vitest 가 storybookTest 로 스토리를 실제 chromium 에서 렌더한다.

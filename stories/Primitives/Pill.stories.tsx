@@ -16,7 +16,16 @@ const meta: Meta = {
         component:
           "**수평 탭 pill.** `.wds-pill` CSS 클래스. " +
           "`aria-selected=\"true\"` 로 활성 상태, 톤 색상은 별도 CSS 클래스로 적용. " +
-          "추천 서비스 섹션 탭 네비게이션에서 사용.",
+          "추천 서비스 섹션 탭 네비게이션에서 사용." +
+          "\n\n" +
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          "## When to use\n" +
+          "- 마케팅 페이지에서 **같은 자리의 콘텐츠를 갈아 끼우는 수평 탭** — 추천 서비스 섹션의 서비스별 탭(`ServiceTabs`).\n" +
+          "- 선택 상태가 하나뿐인 짧은 라벨 묶음(2~8개) — 선택은 `aria-selected` 로 표현한다.\n" +
+          "\n## When NOT to use\n" +
+          "- 제품(SaaS) 화면의 탭 → Tabs · TabButton.\n" +
+          "- 여러 개를 동시에 켜는 필터 → FilterChip.\n" +
+          "- 상태·분류를 보여 주기만 하는 라벨 → Chip(제품) 또는 `.wds-web-service-chip`(마케팅).",
       },
     },
   },
@@ -45,7 +54,7 @@ export const Default: Story = {
  *  선택됨 hover: inset 0 0 0 1px white 20% 내부 하이라이트. */
 export const HoverStates: Story = {
   render: () => (
-    <div style={{ display: "flex", gap: 10, padding: 20, background: "#fff", borderRadius: 8 }}>
+    <div style={{ display: "flex", gap: 10, padding: 20, background: "var(--color-card)", borderRadius: 8 }}>
       <button type="button" className="wds-pill" aria-selected="false">
         기본 — hover 해보세요
       </button>
@@ -64,7 +73,7 @@ export const RecommendedServiceTabs: Story = {
       gap: 10,
       flexWrap: "wrap",
       padding: 20,
-      background: "#fff",
+      background: "var(--color-card)",
       borderRadius: 8,
     }}>
       <button type="button" className="wds-pill" aria-selected="true">

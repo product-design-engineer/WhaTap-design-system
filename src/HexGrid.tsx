@@ -135,16 +135,16 @@ export default function HexGrid({
   const lastRowShift = lastRowLen < cols ? ((cols - lastRowLen) * (hexW + gap)) / 2 : 0;
 
   return (
-    <div className="flex flex-col bg-card border border-[var(--color-border-default)] rounded-[4px] px-[8px] py-[6px] h-full">
-      <div className="flex items-center justify-between mb-[4px] shrink-0">
+    <div className="flex flex-col bg-card border border-color-var-color-border-default rounded-4px px-8px py-6px h-full">
+      <div className="flex items-center justify-between mb-4px shrink-0">
         <span className="text-md font-medium text-secondary">GPU Map</span>
-        <div className="flex items-center gap-[8px]">
-          <div className="flex items-center gap-[4px]">
-            <div className="rounded-[2px]" style={{ width: 8, height: 8, background: TONE_FILL.active }} />
+        <div className="flex items-center gap-8px">
+          <div className="flex items-center gap-4px">
+            <div className="rounded-2px" style={{ width: 8, height: 8, background: TONE_FILL.active }} />
             <span className="text-sm text-tertiary">Active</span>
           </div>
-          <div className="flex items-center gap-[4px]">
-            <div className="rounded-[2px]" style={{ width: 8, height: 8, background: TONE_FILL.idle }} />
+          <div className="flex items-center gap-4px">
+            <div className="rounded-2px" style={{ width: 8, height: 8, background: TONE_FILL.idle }} />
             <span className="text-sm text-tertiary">Idle</span>
           </div>
         </div>
@@ -175,7 +175,7 @@ export default function HexGrid({
             </filter>
             {/* Drop shadow */}
             <filter id="hex-shadow" x="-20%" y="-10%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="1.5" stdDeviation="2" floodColor="#000" floodOpacity="0.12" />
+              <feDropShadow dx="0" dy="1.5" stdDeviation="2" floodColor="var(--color-shadow-flood)" floodOpacity="0.12" />
             </filter>
           </defs>
 
@@ -193,6 +193,8 @@ export default function HexGrid({
                   <polygon
                     points={hexPoints(x, y, radius - 1)}
                     fill={gradId ? `url(#${gradId})` : TONE_FILL[item.tone]}
+                    data-ds-policy-ok={isActive ? "컬러 위 고정 흰색 전경" : undefined}
+                    // raw-color-ok: active 유닛은 브랜드 그라데이션 채움 — 그 위 외곽선은 테마와 무관한 흰색 전경.
                     stroke={isActive ? "rgba(255,255,255,0.25)" : "var(--color-border-default)"}
                     strokeWidth="1"
                   />
@@ -201,6 +203,8 @@ export default function HexGrid({
                     <polygon
                       points={hexPoints(x, y, radius - 4)}
                       fill="none"
+                      data-ds-policy-ok="컬러 위 고정 흰색 전경"
+                      // raw-color-ok: active 유닛 안쪽 글로우 — 브랜드 그라데이션 채움 위 흰색 전경.
                       stroke="rgba(255,255,255,0.15)"
                       strokeWidth="2"
                       filter="url(#hex-glow-active)"

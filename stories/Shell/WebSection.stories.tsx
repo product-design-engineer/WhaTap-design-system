@@ -18,7 +18,17 @@ const meta: Meta = {
           "**마케팅 페이지 섹션 레이아웃 CSS 컴포넌트.** " +
           "`.wds-web-section` + 톤(`--tone-lavender` / `--tone-dark` 등) + " +
           "`.wds-web-section-container` + `.wds-web-section-wrap` 으로 68페이지 공통 뼈대를 조립한다. " +
-          "타이포그래피는 `.wds-web-heading-2` · `.wds-web-p1` · `.wds-web-p2`.",
+          "타이포그래피는 `.wds-web-heading-2` · `.wds-web-p1` · `.wds-web-p2`." +
+          "\n\n" +
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          "## When to use\n" +
+          "- 마케팅 페이지 본문을 **섹션 단위로 쌓을 때의 공통 뼈대** — 래퍼 · 컨테이너 · 패딩 · 헤더 · 톤 배경.\n" +
+          "- 섹션마다 배경 톤(lavender · dark 등)을 번갈아 리듬을 만들 때.\n" +
+          "- 섹션 제목·본문 타이포를 `.wds-web-heading-*` · `.wds-web-p*` 로 맞출 때.\n" +
+          "\n## When NOT to use\n" +
+          "- 제품(SaaS) 페이지 본문 → `.wds-page-content` + `bg-card` 블록(Base surface 2단 규칙).\n" +
+          "- 섹션 안에서 패딩·최대폭을 인라인 숫자로 다시 지정 — 컨테이너가 소유한다.\n" +
+          "- 전환 유도 배너 → `.wds-web-cta-banner`(Shell/Web · CtaBanner).",
       },
     },
   },
@@ -62,12 +72,12 @@ const DemoContentDark = () => (
       <div key={i} style={{
         height: 180,
         borderRadius: 12,
-        background: "rgba(255,255,255,0.06)",
-        border: "1px solid rgba(255,255,255,0.1)",
+        background: "var(--color-web-fill-on-dark)",
+        border: "1px solid var(--color-web-border-on-dark)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        color: "rgba(255,255,255,0.3)",
+        color: "var(--color-web-text-on-dark-faint)",
         fontSize: 14,
       }}>
         카드 {i + 1}
@@ -121,9 +131,9 @@ export const ToneVariants: Story = {
     <div>
       {([
         ["(없음 — 투명)", ""],
-        ["lavender (#f9fafe)", "wds-web-section--tone-lavender"],
+        ["lavender", "wds-web-section--tone-lavender"],
         ["gray (surface-50)", "wds-web-section--tone-gray"],
-        ["mist (#f5f6f9)", "wds-web-section--tone-mist"],
+        ["mist", "wds-web-section--tone-mist"],
         ["sky (surface-blue)", "wds-web-section--tone-sky"],
       ] as const).map(([label, cls]) => (
         <section key={label} className={`wds-web-section ${cls}`}>

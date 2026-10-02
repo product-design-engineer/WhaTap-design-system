@@ -88,16 +88,16 @@ export default function MiniDonutChart({
 
   return (
     <div
-      className="group flex flex-col h-full bg-card border border-[var(--color-border-default)] rounded-[4px] px-[8px] py-[6px]"
+      className="group flex flex-col h-full bg-card border border-color-var-color-border-default rounded-4px px-8px py-6px"
       style={style}
     >
       {/* 헤더 */}
-      <div className="flex items-center justify-between mb-[4px]">
+      <div className="flex items-center justify-between mb-4px">
         <span className="text-md font-medium text-secondary truncate">{title}</span>
       </div>
 
       {/* 도넛 + 범례 */}
-      <div className="flex items-center gap-[12px] flex-1 min-h-0">
+      <div className="flex items-center gap-12px flex-1 min-h-0">
         {/* SVG 도넛 */}
         <div className="relative shrink-0" style={{ width: SIZE, height: SIZE }}>
           <svg
@@ -145,7 +145,7 @@ export default function MiniDonutChart({
                 </span>
               )}
               {centerSub && (
-                <span className="text-xs text-tertiary leading-tight mt-[2px]">
+                <span className="text-xs text-tertiary leading-tight mt-2px">
                   {centerSub}
                 </span>
               )}
@@ -154,9 +154,9 @@ export default function MiniDonutChart({
         </div>
 
         {/* 범례 */}
-        <div className="flex flex-col gap-[4px] min-w-0 flex-1">
+        <div className="flex flex-col gap-4px min-w-0 flex-1">
           {arcs.map((arc) => (
-            <div key={arc.label} className="flex items-center gap-[6px] min-w-0">
+            <div key={arc.label} className="flex items-center gap-6px min-w-0">
               <div
                 className="shrink-0 rounded-full"
                 style={{ width: 8, height: 8, background: arc.color }}

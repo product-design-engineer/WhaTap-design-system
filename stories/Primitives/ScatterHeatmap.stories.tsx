@@ -19,7 +19,7 @@ const meta: Meta<typeof ScatterHeatmap> = {
         component:
           "**APM 트랜잭션 히트맵 (산점도).** " +
           "시간(X축) × 응답시간(Y축) 평면에 609개 dot. " +
-          "3-tone: normal(#3DA9FF) / warning(#FFA012) / critical(#F34747). " +
+          "3-tone: normal / slow / very slow — `--color-chart-speed-*` 토큰(speed-bullet 아이콘과 같은 값). " +
           "Y축 라벨(0~100) · X축 시각 라벨 · 수평/수직 격자선 내장.",
       },
     },

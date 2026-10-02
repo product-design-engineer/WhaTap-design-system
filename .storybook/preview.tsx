@@ -26,7 +26,7 @@ if (typeof window !== 'undefined') {
  *
  * - layout: 'centered' — 대시보드 chrome 같이 큰 컴포넌트는 개별 story 에서 'fullscreen' 으로 override.
  * - backgrounds: light / surface-muted / dark 3종 — prototype 에 자주 등장하는 배경.
- * - storySort: 카탈로그 좌측 트리 ordering — 3-Layer 단일 체계. Introduction → Tokens(메타) → Primitives(자체 렌더 리프, Ai/ 하위그룹) → Composite(프리미티브 조합, Ai/ 하위그룹) → Shell(진입점: DashboardLayout · Ai/Widget · Page 합성 템플릿). 각 계층 안에서 AI 전용 에셋은 `Ai/` 접두 그룹으로 묶는다.
+ * - storySort: 카탈로그 좌측 트리 ordering — 3-Layer 단일 체계. Introduction → Overview(전역 Do/Don't) → Tokens(메타) → Primitives(자체 렌더 리프, Ai/ 하위그룹) → Composite(프리미티브 조합, Ai/ 하위그룹) → Shell(진입점: DashboardLayout · Ai/Widget · Page 합성 템플릿). 각 계층 안에서 AI 전용 에셋은 `Ai/` 접두 그룹으로 묶는다.
  */
 const preview: Preview = {
   parameters: {
@@ -57,6 +57,9 @@ const preview: Preview = {
       storySort: {
         order: [
           'Introduction',
+          // Overview — 전역 Do/Don't. Introduction 다음에 둔다: 「무엇인가」를 읽고 나면
+          // 다음에 필요한 것이 「무엇을 지켜야 하나」이고, 그건 개별 컴포넌트보다 앞이다.
+          'Overview',
           'Tokens',
           ['Color', 'Type Scale', 'Font Weights', 'Line Heights', 'Tracking', 'Text Colors', 'Patterns', 'Korean vs Numeric', 'Typography', 'Tones (Semantic Intent)'],
           'Primitives',

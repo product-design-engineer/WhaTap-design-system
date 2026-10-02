@@ -70,11 +70,6 @@ export const WithCursor: Story = {
   args: { value: "현재 상태 요약해줘", showSendCursor: true },
 };
 
-/** Custom Token Counts — 토큰 pill 가변. */
-export const CustomTokens: Story = {
-  args: { value: "분석 요청", usagePill: <>남은 질문 약 <strong>12회</strong></> },
-};
-
 /** No Caption — 하단 안내 텍스트 제거 (특수 컨텍스트). */
 export const NoCaption: Story = {
   args: { value: "", caption: "" },

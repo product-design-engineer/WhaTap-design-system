@@ -72,7 +72,7 @@ export const GATE_ROSTER = [
     script: "scripts/check-token-sync.mjs",
     pipeline: null,
     invariant:
-      "**R1 — `var(--x)` 로 참조되는 토큰은 `whatap-ds.css`(런타임에 실제 로드되는 CSS)에 정의돼 있어야 한다.** `tokens.css` 는 참조용이라 런타임에 로드되지 않으므로 거기에만 있으면 존재하지 않는 것과 같다. **R2 — 두 파일이 공유하는 토큰은 값이 같아야 한다.** 집합 차이는 통과시킨다(두 파일은 범위가 다르다). 주석은 줄 번호를 보존한 채 제거하고 검사한다. 폴백이 있는 참조(`var(--x, 12px)`)는 대상이 아니다.",
+      "**R1 — `var(--x)` 로 참조되는 토큰은 `whatap-ds.css`(런타임에 실제 로드되는 CSS)에 정의돼 있어야 한다.** `tokens.css` 는 참조용이라 런타임에 로드되지 않으므로 거기에만 있으면 존재하지 않는 것과 같다. **R2 — 두 파일이 공유하는 토큰은 값이 같아야 한다.** 집합 차이는 통과시킨다(두 파일은 범위가 다르다). 주석은 줄 번호를 보존한 채 제거하고 검사한다. 폴백이 있는 참조(`var(--x, 12px)`)는 대상이 아니다. **검사 범위는 TSX 와 `whatap-ds.css` 안의 참조 모두** — CSS 규칙의 참조가 빠져 있던 빈틈으로 토큰 11종이 tokens.css 에만 있었다(2026-10-01). 컴포넌트가 인라인 style 로 주입하는 지역 변수(`\"--x\":`)는 통과, 소비처가 채우는 슬롯은 CSS 에 폴백을 명시한다.",
     prevents:
       "없는 CSS 변수를 참조해 선언이 통째로 무효가 되는 것 — 실측: `--wds-toolbar-control-h` 미정의로 `ToolbarIconButton` 의 width 가 auto(1248px)로 퍼졌는데 타입체크·린트·테스트·DOM 감사가 전부 통과했다(story 가 없어 감사 대상도 아니었다)",
   },
@@ -199,6 +199,17 @@ export const GATE_ROSTER = [
       "`whatap-ds.css` 의 **모든 토큰(197개)** 이 선언 위 줄에 `@role` 을 갖는다(`@use`/`@avoid` 는 선택, 그룹 공통은 `@group-role` 상속). 판정 대상은 생성 산출물 `docs/tokens.json` — 파싱을 두 번 구현하면 게이트와 배달물이 다른 것을 본다. 값과 의미를 다른 파일에 두지 않는다(`DESIGN.md` 가 그렇게 갈라졌다). 동결선 **0**.",
     prevents:
       "설명 없는 토큰이 늘어나 「무엇에 쓰는 것인가」를 도구가 답하지 못하는 상태 — 실측: 197개 중 문서에 이름이라도 있던 것이 55개(28%)뿐이었고, 답할 수 없으면 소비자는 hex 를 적는다(리터럴 0 정책이 토큰 부재로 새어 나간다)",
+  },
+  {
+    id: "policy-docs",
+    name: "전역 정책의 「언제 / 판정」",
+    status: "auto",
+    script: "scripts/check-policy-docs.mjs",
+    pipeline: null,
+    invariant:
+      "`docs/patterns.md` 의 **모든 전역 정책(16개)** 이 `<!-- @policy id · severity · applies -->` 메타와 **When to use · When NOT to use · ✅ 1개 · ❌ 1개** 를 갖는다. 판정 대상은 생성 산출물 `docs/policies.json` — 파싱을 두 번 구현하면 게이트와 배달물이 다른 것을 본다. 동결선 **0**.",
+    prevents:
+      "규칙과 근거만 쌓이고 「언제 걸리는가」가 비는 상태 — 실측: When to use 0/16 · Do 3/16 인 채로 몇 달을 지났고, 그 결과 PageHeader 의 hideDocs·hideSupport 를 열 때 판단 근거가 문서에 없어 컴포넌트 docstring 에만 적혔다(「헤더는 불변」과 「끌 수 있다」의 경계가 어디에도 없었다)",
   },
   {
     id: "catalog-coverage",
