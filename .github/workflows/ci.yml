@@ -87,15 +87,28 @@ jobs:
       # 소스 스캔으로는 원리적으로 볼 수 없는 위반을 렌더된 DOM 에서 잡는다.
       # 지금까지 로컬 실행에만 의존해 왔다 — CLAUDE.md 는 이것을 3중 게이트의 하나로
       # 명시하는데 어느 워크플로도 부르지 않고 있었다.
+      # 병렬 4워커 + PR 은 변경 스토리만(--changed). main push 는 전체 검사.
       - name: Runtime policy audit (light)
         env:
           BASE_URL: http://localhost:6006
-        run: pnpm audit:runtime
+          WORKERS: "4"
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm audit:runtime -- --changed
+          else
+            pnpm audit:runtime
+          fi
 
       - name: Runtime policy audit (dark)
         env:
           BASE_URL: http://localhost:6006
-        run: pnpm audit:runtime:dark
+          WORKERS: "4"
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm audit:runtime:dark -- --changed
+          else
+            pnpm audit:runtime:dark
+          fi
 
       # ⚠️ 비차단(continue-on-error). 기준선 PNG 가 **macOS 에서 생성**된 것이라
       # ubuntu 의 폰트 렌더링과 허용치(0.5%)를 넘겨 상시 red 가 된다. 흔들리는 신호를
