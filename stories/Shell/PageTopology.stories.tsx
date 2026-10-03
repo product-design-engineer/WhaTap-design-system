@@ -24,7 +24,7 @@ import {
  * 새로 그려야 한다면 그건 빠진 컴포넌트가 있다는 신호다.
  */
 const meta: Meta = {
-  title: "Shell/TopologyOverview",
+  title: "Shell/PageTopology",
   parameters: {
     layout: "fullscreen",
     docs: {

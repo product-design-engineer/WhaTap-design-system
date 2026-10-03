@@ -133,7 +133,7 @@ const PAGE_TOOLS = [
 /* ─── Meta ───────────────────────────────────────────── */
 
 const meta: Meta = {
-  title: "Shell/D — 상세 페이지",
+  title: "Shell/PageDetail",
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",

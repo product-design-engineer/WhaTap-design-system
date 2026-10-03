@@ -51,7 +51,7 @@ const SampleMain = (
 /* ─── Meta ───────────────────────────────────────────── */
 
 const meta: Meta = {
-  title: "Shell/B — AI 전용 페이지",
+  title: "Shell/PageWidget",
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",
