@@ -989,6 +989,7 @@ const DarkCompareCard = ({ name, storyId }: { name: string; storyId: string }) =
 
 export const DarkModeCompare: Story = {
   name: "라이트 / 다크 비교",
+  parameters: { test: { disable: true } },  // iframe 14개 로드 → CI timeout 방지
   render: () => (
     <div className="bg-bg" style={{ padding: 24, minHeight: "100vh" }}>
       <div style={{ marginBottom: 24 }}>
