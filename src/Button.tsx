@@ -19,9 +19,9 @@
  * `--wds-btn-bg-hover`). `tokens.css` 의 `.wds-btn` 규칙이 이 변수들을 적용 — hover 까지 정상.
  *
  * ## When to use
- * - 사용자 액션 trigger (제출 / 적용 / 닫기 / 등록 등).
+ * - 사용자 실행 trigger (제출 / 적용 / 닫기 / 등록 등).
  * - Primary CTA, Secondary action, 위험 동작 (delete 등).
- * - 색 의미가 없는 중립 액션 (취소 · 닫기 · 나중에 · 더보기) → `tone="tertiary"`.
+ * - 색 의미가 없는 중립 실행 (취소 · 닫기 · 나중에 · 더보기) → `tone="tertiary"`.
  *
  * ## When NOT to use
  * - 링크 이동 → `<a>` 사용.
@@ -34,7 +34,7 @@
  * - 사이즈는 spec 4 단계만 — custom px 금지.
  * - 한 화면의 CTA 는 contained primary 하나. 그 옆 취소/닫기는 **outline·basic tertiary** 로 —
  *   취소에 tone="primary" 를 쓰면 파란 두 버튼이 CTA 자리를 다툰다.
- * - 파괴적 액션 확인 대화의 취소도 tertiary. critical 은 실행 버튼 쪽만.
+ * - 위험한 실행 확인 대화의 취소도 tertiary. critical 은 실행 버튼 쪽만.
  * - loading=true → 자동 disabled + spinner overlay.
  *
  * @example

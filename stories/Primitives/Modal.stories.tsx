@@ -90,7 +90,7 @@ export const Sizes: Story = {
   },
 };
 
-/** title + description + footer 액션. */
+/** title + description + footer 실행. */
 export const Confirmation: Story = {
   render: () => {
     const Demo = () => {
@@ -191,7 +191,7 @@ export const FormDialog: Story = {
   },
 };
 
-/** hideCloseButton — × 버튼 숨김 (footer 액션으로만 닫는 강제 confirmation). */
+/** hideCloseButton — × 버튼 숨김 (footer 실행으로만 닫는 강제 confirmation). */
 export const NoCloseButton: Story = {
   render: () => {
     const Demo = () => {
@@ -214,7 +214,7 @@ export const NoCloseButton: Story = {
               </Button>
             }
           >
-            <p>×/ESC/backdrop 모두 비활성. footer 액션으로만 닫힘.</p>
+            <p>×/ESC/backdrop 모두 비활성. footer 실행으로만 닫힘.</p>
           </Modal>
         </div>
       );

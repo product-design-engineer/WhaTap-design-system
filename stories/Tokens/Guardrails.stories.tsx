@@ -87,19 +87,19 @@ function Guardrails() {
           <thead>
             <tr className="border-b border-color-var-color-border-strong">
               {["게이트", "상태", "CI", "불변식 (invariant)", "막는 것", "체크"].map((h) => (
-                <th key={h} className="p-2 text-base font-bold text-secondary tracking-default align-bottom">{h}</th>
+                <th key={h} className="p-2 text-sm font-bold text-secondary tracking-default align-bottom">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {GUARDRAILS.map((g) => (
               <tr key={g.id} className="border-b border-color-var-color-border-default align-top">
-                <td className="p-2 text-md font-medium text-primary whitespace-nowrap">{g.name}</td>
+                <td className="p-2 text-base font-medium text-primary whitespace-nowrap">{g.name}</td>
                 <td className="p-2"><Badge status={g.status} /></td>
                 <td className="p-2 text-sm text-tertiary whitespace-nowrap">{g.inCI ? "돌고 있음" : "—"}</td>
-                <td className="p-2 text-base text-secondary leading-normal" style={{ maxWidth: 420 }}>{g.invariant}</td>
-                <td className="p-2 text-base text-tertiary leading-normal" style={{ maxWidth: 220 }}>{g.prevents}</td>
-                <td className="p-2 text-sm font-numeric text-tertiary leading-normal" style={{ maxWidth: 200 }}>{g.command}</td>
+                <td className="p-2 text-sm text-secondary leading-normal">{g.invariant}</td>
+                <td className="p-2 text-sm text-tertiary leading-normal">{g.prevents}</td>
+                <td className="p-2 text-sm font-numeric text-tertiary leading-normal">{g.command}</td>
               </tr>
             ))}
           </tbody>

@@ -41,12 +41,12 @@
  * ```
  */
 import { useEffect, useRef, useState } from "react";
-import AiClickCursor from "./widget/AiClickCursor";
-import AiActionChip from "./widget/AiActionChip";
-import AiAttachmentChip from "./widget/AiAttachmentChip";
+import AiClickCursor from "./widget/ClickCursor";
+import AiActionChip from "./widget/ActionChip";
+import AiAttachmentChip from "./widget/AttachmentChip";
 import AiUnavailableNotice, {
   type AiUnavailableNoticeProps,
-} from "./widget/AiUnavailableNotice";
+} from "./widget/UnavailableNotice";
 
 const WIDGET_WIDTH = 480;
 

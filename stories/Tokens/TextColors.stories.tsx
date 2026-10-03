@@ -22,7 +22,7 @@ const HIERARCHY = ["primary", "secondary", "tertiary", "disabled"] as const;
 
 export const Hierarchy: StoryObj = {
   render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 720, fontFamily: tokens.font.family.korean.value }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%", fontFamily: tokens.font.family.korean.value }}>
       {HIERARCHY.map((h) => {
         const t = tokens.color.text[h];
         return (

@@ -57,17 +57,17 @@ const preview: Preview = {
       storySort: {
         order: [
           'Introduction',
-          // Overview — 전역 Do/Don't. Introduction 다음에 둔다: 「무엇인가」를 읽고 나면
-          // 다음에 필요한 것이 「무엇을 지켜야 하나」이고, 그건 개별 컴포넌트보다 앞이다.
+          // Gallery — 비주얼 컴포넌트 인덱스. Introduction 다음에 둔다: 「무엇인가」를 읽고 나면
+          // 다음에 필요한 것이 「어떤 컴포넌트가 있나」이고, 그건 정책보다 앞이다.
+          'Gallery',
+          // Overview — 전역 Do/Don't.
           'Overview',
           'Tokens',
           ['Color', 'Type Scale', 'Font Weights', 'Line Heights', 'Tracking', 'Text Colors', 'Patterns', 'Korean vs Numeric', 'Typography', 'Tones (Semantic Intent)'],
           'Primitives',
-          ['Ai'],
           'Composite',
-          ['Ai'],
           'Shell',
-          ['DashboardLayout', 'Ai', 'Page'],
+          ['DashboardLayout', 'Page'],
         ],
       },
     },

@@ -38,7 +38,7 @@ const INTENTS: SemanticIntent[] = ["critical", "warning", "info", "muted", "neut
 /** 5개 SemanticIntent 의 의미·legacy alias·예시 컬러 매트릭스. */
 export const SemanticIntentMatrix: StoryObj = {
   render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 900 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%" }}>
       {INTENTS.map((intent) => {
         const surface = tokens.color.surface[intent];
         const indicator = tokens.color.indicator[intent];
@@ -81,7 +81,7 @@ export const SemanticIntentMatrix: StoryObj = {
 /** Legacy Tone alias 표 — 옛 이름과 새 이름의 매핑. */
 export const LegacyToneMapping: StoryObj = {
   render: () => (
-    <div style={{ maxWidth: 720 }}>
+    <div style={{ width: "100%" }}>
       <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "'Noto Sans', sans-serif", fontSize: 13 }}>
         <thead>
           <tr style={{ background: "var(--color-surface-50)", textAlign: "left" }}>

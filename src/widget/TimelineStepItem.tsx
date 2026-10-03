@@ -1,4 +1,4 @@
-import type { TimelineStep } from "./AiStepsTimeline";
+import type { TimelineStep } from "./StepsTimeline";
 
 /**
  * TimelineStepItem — [[AiStepsTimeline]] 의 단일 타임라인 단계 행.

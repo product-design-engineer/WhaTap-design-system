@@ -21,7 +21,7 @@ const meta: Meta<typeof SubHeaderBar> = {
     docs: {
       description: {
         component:
-          "**페이지 헤더(48px) 아래 보조 행 — 고정 40px.** 뒤로가기·브레드크럼·보조 액션 컨테이너. " +
+          "**페이지 헤더(48px) 아래 보조 행 — 고정 40px.** 뒤로가기·브레드크럼·보조 실행 컨테이너. " +
           "사이드바 조직 스위처(40px)와 같은 높이라 좌/우 컬럼 2행이 정렬됨(헤더 48 → 보조 40 chrome 스케일). " +
           "`box-border` 로 padding/border 가 높이를 부풀리지 않음. 페이지에서 inline div 로 재구현 금지.",
       },
@@ -31,7 +31,7 @@ const meta: Meta<typeof SubHeaderBar> = {
     left: { control: false, description: "좌측 슬롯(선택) — 백 버튼·브레드크럼·모드 Tabs 등." },
     children: { control: false, description: "`left` 별칭(기존 사용처 호환). `left` 가 우선." },
     center: { control: false, description: "가운데 슬롯(선택) — 남는 폭 차지 + 중앙 정렬." },
-    right: { control: false, description: "우측 정렬 보조 액션(선택)." },
+    right: { control: false, description: "우측 정렬 보조 실행(선택)." },
   },
   decorators: [(Story) => (<div style={{ width: 720 }}><Story /></div>)],
 };
@@ -59,7 +59,7 @@ export const WithBreadcrumb: Story = {
   },
 };
 
-/** 우측 보조 액션 동반. */
+/** 우측 보조 실행 동반. */
 export const WithRightAction: Story = {
   args: {
     children: <Button variant="basic" size="md">← 관리 홈</Button>,

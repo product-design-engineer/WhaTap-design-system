@@ -40,7 +40,7 @@ function TypeRow({ family, label, hex, description, sample }: { family: string; 
 /** **`tokens.font.family.korean`** — 한국어 본문용 stack. */
 export const KoreanBody: StoryObj = {
   render: () => (
-    <div style={{ maxWidth: 720 }}>
+    <div style={{ width: "100%" }}>
       <TypeRow
         family={tokens.font.family.korean.value}
         label="font.family.korean"
@@ -55,7 +55,7 @@ export const KoreanBody: StoryObj = {
 /** **`tokens.font.family.numeric`** — 숫자·메트릭용 stack. */
 export const Numeric: StoryObj = {
   render: () => (
-    <div style={{ maxWidth: 720 }}>
+    <div style={{ width: "100%" }}>
       <TypeRow
         family={tokens.font.family.numeric.value}
         label="font.family.numeric"
@@ -70,7 +70,7 @@ export const Numeric: StoryObj = {
 /** 둘 한 줄 비교 — 같은 텍스트에서 stack 차이 시각화. */
 export const SideBySide: StoryObj = {
   render: () => (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, maxWidth: 1080 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, width: "100%" }}>
       <TypeRow
         family={tokens.font.family.korean.value}
         label="korean (한국어 본문)"

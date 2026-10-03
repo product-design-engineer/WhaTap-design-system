@@ -1,9 +1,11 @@
 /**
  * WhaTap Design System — widget barrel.
  *
- * AI 위젯 안에서 사용하는 토큰 / 프리미티브 / 메시지 카드 컴포넌트.
- * 외부 사용:
- *   import { AiCard, AiToneBadge, AiClassificationTable, TONE_DOT } from "@whatap/design-system/widget";
+ * 위젯 안에서 사용하는 토큰 / 프리미티브 / 메시지 카드 컴포넌트.
+ * 사용:
+ *   import { Card, ToneBadge, ClassificationTable, TONE_DOT } from "@whatap/design-system/widget";
+ *
+ * 구명(deprecated) Ai-접두어 alias 도 유지 — 소비자 코드가 깨지지 않습니다.
  */
 
 // Tokens — 신규 (의미 기반 단일 출처, AI-friendly description 포함)
@@ -23,64 +25,96 @@ export {
   type LegacyTone,
 } from "./_tokens";
 
-// Primitives
+// Primitives — 새 이름
 export {
-  AiCard,
-  AiCaption,
-  AiSectionHeading,
-  AiToneBadge,
-  AiBulletList,
+  AiCard as Card,
+  AiCaption as Caption,
+  AiSectionHeading as SectionHeading,
+  AiToneBadge as ToneBadge,
+  AiBulletList as BulletList,
 } from "./_primitives";
 
-// AI buttons (위젯 토글 · 송신 등 AI 전용 trigger)
-export { default as AiAssistantButton } from "./AiAssistantButton";
-export type { AiAssistantButtonProps, AiAssistantButtonSize } from "./AiAssistantButton";
-export { default as AiSendButton } from "./AiSendButton";
-export type { AiSendButtonProps } from "./AiSendButton";
+// Buttons (위젯 토글 · 송신 등 trigger)
+export { default as AssistantButton } from "./AssistantButton";
+export type { AiAssistantButtonProps, AiAssistantButtonSize } from "./AssistantButton";
+export { default as SendButton } from "./SendButton";
+export type { AiSendButtonProps } from "./SendButton";
 
-// AI input (사용자 자연어 입력창 — Figma 27087:3416)
-export { default as AiPromptInput } from "./AiPromptInput";
-export type { AiPromptInputProps, AiPromptAttachment } from "./AiPromptInput";
-// AI input — inline (압축형: 토큰 pill · caption 없음)
-export { default as AiInlinePrompt } from "./AiInlinePrompt";
+// Input (사용자 자연어 입력창)
+export { default as PromptInput } from "./PromptInput";
+export type { AiPromptInputProps, AiPromptAttachment } from "./PromptInput";
+export { default as InlinePrompt } from "./InlinePrompt";
 export type {
   AiInlinePromptProps,
   AiInlineAttachment,
   AiPromptSuggestion,
-} from "./AiInlinePrompt";
+} from "./InlinePrompt";
 
 // Message cards
-export { default as AiAlertRulePreview } from "./AiAlertRulePreview";
-export { default as AiChatExchange } from "./AiChatExchange";
-export { default as AiChoiceButtons } from "./AiChoiceButtons";
-export { default as AiClassificationTable } from "./AiClassificationTable";
-export { default as AiClickCursor } from "./AiClickCursor";
-export { default as AiCostBreakdown } from "./AiCostBreakdown";
-export { default as AiCostTable } from "./AiCostTable";
-export { default as AiCriteriaSelection } from "./AiCriteriaSelection";
-export { default as AiDashboardProposal } from "./AiDashboardProposal";
-export { default as AiEventList } from "./AiEventList";
-export type { EventRow, EventSeverity } from "./AiEventList";
-export { default as AiExecutionResult } from "./AiExecutionResult";
-export { default as AiInsightSection } from "./AiInsightSection";
-export { default as AiLoadingMessage } from "./AiLoadingMessage";
-export { default as AiAnswerSkeleton } from "./AiAnswerSkeleton";
-export { default as AiUnavailableNotice, AI_UNAVAILABLE_PRESETS } from "./AiUnavailableNotice";
-export type { AiUnavailableNoticeProps, AiUnavailableReason } from "./AiUnavailableNotice";
-export { default as AiMessageActions } from "./AiMessageActions";
-export { default as AiMigPlan } from "./AiMigPlan";
-export { default as AiReasoning } from "./AiReasoning";
-export { default as AiReceiverChannels } from "./AiReceiverChannels";
-export type { ChannelKey, ChannelState } from "./AiReceiverChannels";
-export { default as AiStepsTimeline } from "./AiStepsTimeline";
+export { default as AlertRulePreview } from "./AlertRulePreview";
+export { default as ChatExchange } from "./ChatExchange";
+export { default as ChoiceButtons } from "./ChoiceButtons";
+export { default as ClassificationTable } from "./ClassificationTable";
+export { default as ClickCursor } from "./ClickCursor";
+export { default as CostBreakdown } from "./CostBreakdown";
+export { default as CostTable } from "./CostTable";
+export { default as CriteriaSelection } from "./CriteriaSelection";
+export { default as DashboardProposal } from "./DashboardProposal";
+export { default as EventList } from "./EventList";
+export type { EventRow, EventSeverity } from "./EventList";
+export { default as ExecutionResult } from "./ExecutionResult";
+export { default as InsightSection } from "./InsightSection";
+export { default as LoadingMessage } from "./LoadingMessage";
+export { default as AnswerSkeleton } from "./AnswerSkeleton";
+export { default as UnavailableNotice, AI_UNAVAILABLE_PRESETS } from "./UnavailableNotice";
+export type { AiUnavailableNoticeProps, AiUnavailableReason } from "./UnavailableNotice";
+export { default as MessageActions } from "./MessageActions";
+export { default as MigPlan } from "./MigPlan";
+export { default as Reasoning } from "./Reasoning";
+export { default as ReceiverChannels } from "./ReceiverChannels";
+export type { ChannelKey, ChannelState } from "./ReceiverChannels";
+export { default as StepsTimeline } from "./StepsTimeline";
 export {
-  default as AiTargetMesh,
+  default as TargetMesh,
   targetMeshDots,
   meshScaleOf,
   MESH_DOT_R,
   MESH_CLUSTER_K,
-} from "./AiTargetMesh";
-export type { TargetMeshItem, MeshDot, MeshTone } from "./AiTargetMesh";
-export { default as AiToolCallStep } from "./AiToolCallStep";
-export { default as AiUsageChart } from "./AiUsageChart";
-export { default as AiUserBubble } from "./AiUserBubble";
+} from "./TargetMesh";
+export type { TargetMeshItem, MeshDot, MeshTone } from "./TargetMesh";
+export { default as ToolCallStep } from "./ToolCallStep";
+export { default as UsageChart } from "./UsageChart";
+export { default as UserBubble } from "./UserBubble";
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Deprecated Ai-prefixed aliases — 소비자 코드 호환. 새 코드는 위 이름을 쓰세요.
+// ═══════════════════════════════════════════════════════════════════════════
+export { AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList } from "./_primitives";
+/** @deprecated Use AssistantButton */ export { default as AiAssistantButton } from "./AssistantButton";
+/** @deprecated Use SendButton */ export { default as AiSendButton } from "./SendButton";
+/** @deprecated Use PromptInput */ export { default as AiPromptInput } from "./PromptInput";
+/** @deprecated Use InlinePrompt */ export { default as AiInlinePrompt } from "./InlinePrompt";
+/** @deprecated Use AlertRulePreview */ export { default as AiAlertRulePreview } from "./AlertRulePreview";
+/** @deprecated Use ChatExchange */ export { default as AiChatExchange } from "./ChatExchange";
+/** @deprecated Use ChoiceButtons */ export { default as AiChoiceButtons } from "./ChoiceButtons";
+/** @deprecated Use ClassificationTable */ export { default as AiClassificationTable } from "./ClassificationTable";
+/** @deprecated Use ClickCursor */ export { default as AiClickCursor } from "./ClickCursor";
+/** @deprecated Use CostBreakdown */ export { default as AiCostBreakdown } from "./CostBreakdown";
+/** @deprecated Use CostTable */ export { default as AiCostTable } from "./CostTable";
+/** @deprecated Use CriteriaSelection */ export { default as AiCriteriaSelection } from "./CriteriaSelection";
+/** @deprecated Use DashboardProposal */ export { default as AiDashboardProposal } from "./DashboardProposal";
+/** @deprecated Use EventList */ export { default as AiEventList } from "./EventList";
+/** @deprecated Use ExecutionResult */ export { default as AiExecutionResult } from "./ExecutionResult";
+/** @deprecated Use InsightSection */ export { default as AiInsightSection } from "./InsightSection";
+/** @deprecated Use LoadingMessage */ export { default as AiLoadingMessage } from "./LoadingMessage";
+/** @deprecated Use AnswerSkeleton */ export { default as AiAnswerSkeleton } from "./AnswerSkeleton";
+/** @deprecated Use UnavailableNotice */ export { default as AiUnavailableNotice } from "./UnavailableNotice";
+/** @deprecated Use MessageActions */ export { default as AiMessageActions } from "./MessageActions";
+/** @deprecated Use MigPlan */ export { default as AiMigPlan } from "./MigPlan";
+/** @deprecated Use Reasoning */ export { default as AiReasoning } from "./Reasoning";
+/** @deprecated Use ReceiverChannels */ export { default as AiReceiverChannels } from "./ReceiverChannels";
+/** @deprecated Use StepsTimeline */ export { default as AiStepsTimeline } from "./StepsTimeline";
+/** @deprecated Use TargetMesh */ export { default as AiTargetMesh } from "./TargetMesh";
+/** @deprecated Use ToolCallStep */ export { default as AiToolCallStep } from "./ToolCallStep";
+/** @deprecated Use UsageChart */ export { default as AiUsageChart } from "./UsageChart";
+/** @deprecated Use UserBubble */ export { default as AiUserBubble } from "./UserBubble";

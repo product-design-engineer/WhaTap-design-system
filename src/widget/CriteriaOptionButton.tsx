@@ -1,4 +1,4 @@
-import AiClickCursor from "./AiClickCursor";
+import AiClickCursor from "./ClickCursor";
 
 /**
  * CriteriaOptionButton — Part / Widget. [[AiCriteriaSelection]] 의 단일 선택 옵션 버튼.

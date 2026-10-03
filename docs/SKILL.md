@@ -212,7 +212,7 @@ export default function AiMyNewMessage({
 | [`chrome-components.md`](./chrome-components.md) | 19 종 — DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · Optionbar* · LiveTimerCompact · TimeRangeSelector · PresetSelect · Stage · Toast · AiSymbol · DataTable · FilterBar · MiniLineChart · EventWeekTimeMatrix · Button · DashboardBuildingProgress · WhaTapAiContext |
 | [`ai-entry.md`](./ai-entry.md) | AI 진입점 4 종 — AiAssistantButton · AiSendButton · AiInlinePrompt · AiPromptInput |
 | [`widget-components.md`](./widget-components.md) | WhaTapAiWidget + 20 종 Ai* 메시지 카드 |
-| [`patterns.md`](./patterns.md) | **Part 1 인터랙션 패턴** — 컴포넌트 횡단 시퀀스(파괴적 액션 확인 · 완료 통보 · 즉시반영 vs 폼제출). **Part 2 구현 정책** — 사이드바 collapse · 헤더 invariant · 차트 정렬 · SVG 단위 · DataTable density · 타이포 위계 · AI 카테고리 분리 등 |
+| [`patterns.md`](./patterns.md) | **Part 1 인터랙션 패턴** — 컴포넌트 횡단 시퀀스(위험한 실행 확인 · 완료 통보 · 즉시반영 vs 폼제출). **Part 2 구현 정책** — 사이드바 collapse · 헤더 invariant · 차트 정렬 · SVG 단위 · DataTable density · 타이포 위계 · AI 카테고리 분리 등 |
 
 ## 동기화 정책
 

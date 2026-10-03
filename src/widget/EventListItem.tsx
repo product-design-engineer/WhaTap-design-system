@@ -1,5 +1,5 @@
 import { TONE_DOT, TONE_BG, TONE_TEXT, type Tone } from "./_tokens";
-import type { EventSeverity, EventRow } from "./AiEventList";
+import type { EventSeverity, EventRow } from "./EventList";
 
 /**
  * EventListItem — [[AiEventList]] 의 단일 이벤트 행(`<li>`).

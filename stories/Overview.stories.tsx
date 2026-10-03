@@ -92,7 +92,7 @@ type Story = StoryObj;
 const Verdict = ({ mark, items, tone }: { mark: string; items: string[]; tone: string }) => {
   if (!items.length) return null;
   return (
-    <ul style={{ listStyle: "none", margin: "0 0 12px", padding: 0, maxWidth: "78ch" }}>
+    <ul style={{ listStyle: "none", margin: "0 0 12px", padding: 0, width: "100%" }}>
       {items.map((t, i) => (
         <li
           key={i}
@@ -112,8 +112,8 @@ const When = ({ label, body }: { label: string; body: string | null }) => {
   /* 「언제」는 여러 줄 불릿일 수 있다 — 마크다운 `- ` 를 그대로 살려 단계를 보인다. */
   const lines = body.split("\n").filter((l) => l.trim());
   return (
-    <div style={{ marginBottom: 10, maxWidth: "78ch" }}>
-      <p className="text-sm font-semibold text-secondary" style={{ margin: "0 0 2px" }}>
+    <div style={{ marginBottom: 10, width: "100%" }}>
+      <p className="text-sm font-bold text-secondary" style={{ margin: "0 0 2px" }}>
         {label}
       </p>
       {lines.map((l, i) => (
@@ -164,7 +164,7 @@ const PolicyCard = ({ p }: { p: Policy }) => {
       </div>
 
       {p.rule && (
-        <p className="text-base text-primary" style={{ margin: "0 0 12px", maxWidth: "78ch", lineHeight: 1.7 }}>
+        <p className="text-base text-primary" style={{ margin: "0 0 12px", width: "100%", lineHeight: 1.7 }}>
           {p.rule.split("\n")[0]}
         </p>
       )}
@@ -193,7 +193,7 @@ export const ByWhatYouAreBuilding: Story = {
     const orphan = policies.filter((p) => !AXES.some((a) => a.key === p.applies));
     return (
       <div className="bg-bg" style={{ padding: 24 }}>
-        <p className="text-base text-secondary" style={{ maxWidth: "78ch", lineHeight: 1.7, marginBottom: 24 }}>
+        <p className="text-base text-secondary" style={{ width: "100%", lineHeight: 1.7, marginBottom: 24 }}>
           정책 <strong>{policies.length}</strong>개. 정본은{" "}
           <a href="/design-system/patterns.md">patterns.md</a> 이고 이 페이지는 생성물(
           <code>docs/policies.json</code>)을 렌더합니다.
@@ -204,13 +204,13 @@ export const ByWhatYouAreBuilding: Story = {
           return (
             <div key={axis.key} style={{ marginBottom: 48 }}>
               {/* 제목 위 여백 ≫ 아래 여백 — 제목이 아래 내용에 붙어야 「이 제목의 것」으로 읽힌다. */}
-              <h2 className="text-2xl font-bold text-primary" style={{ margin: "0 0 2px" }}>
+              <h2 className="text-xl font-bold text-primary" style={{ margin: "0 0 2px" }}>
                 {axis.label}
                 <span className="text-sm text-tertiary font-numeric" style={{ marginLeft: 10 }}>
                   {list.length}
                 </span>
               </h2>
-              <p className="text-sm text-tertiary" style={{ margin: "0 0 14px", maxWidth: "78ch" }}>
+              <p className="text-sm text-tertiary" style={{ margin: "0 0 14px", width: "100%" }}>
                 {axis.hint}
               </p>
               {list.map((p) => (
@@ -223,7 +223,7 @@ export const ByWhatYouAreBuilding: Story = {
         {/* 축이 없는 정책이 생기면 조용히 사라지지 않게 드러낸다 — AXES 에 값을 더하라는 신호다. */}
         {orphan.length > 0 && (
           <div style={{ marginBottom: 48 }}>
-            <h2 className="text-2xl font-bold text-primary" style={{ margin: "0 0 14px" }}>
+            <h2 className="text-xl font-bold text-primary" style={{ margin: "0 0 14px" }}>
               분류되지 않음
               <span className="text-sm text-tertiary" style={{ marginLeft: 10 }}>
                 AXES 에 축을 추가하세요
@@ -244,7 +244,7 @@ export const AllAtOnce: Story = {
   name: "한 장으로 훑기",
   render: () => (
     <div className="bg-bg" style={{ padding: 24 }}>
-      <p className="text-base text-secondary" style={{ maxWidth: "78ch", lineHeight: 1.7, marginBottom: 20 }}>
+      <p className="text-base text-secondary" style={{ width: "100%", lineHeight: 1.7, marginBottom: 20 }}>
         판정만 모았습니다. 근거와 경계는 각 정책을 펼쳐 보거나{" "}
         <a href="/design-system/patterns.md">patterns.md</a> 를 봅니다.
       </p>

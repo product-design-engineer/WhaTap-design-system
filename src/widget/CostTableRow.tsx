@@ -1,4 +1,4 @@
-import type { CostRow } from "./AiCostTable";
+import type { CostRow } from "./CostTable";
 
 /**
  * CostTableRow — [[AiCostTable]] 본문의 단일 비용 행(라벨 + 상세 + 비용).

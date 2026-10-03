@@ -36,7 +36,7 @@
  * ```
  */
 import { useState } from "react";
-import AiAssistantButton from "./widget/AiAssistantButton";
+import AiAssistantButton from "./widget/AssistantButton";
 import HeaderPillButton from "./HeaderPillButton";
 
 /**
@@ -47,7 +47,7 @@ import HeaderPillButton from "./HeaderPillButton";
  */
 const HEADER_CONTROL_SIZE = "sm" as const;
 import { IcDocs, IcSupport } from "./icons/HeaderIcons";
-import AiInlinePrompt, { type AiPromptSuggestion } from "./widget/AiInlinePrompt";
+import AiInlinePrompt, { type AiPromptSuggestion } from "./widget/InlinePrompt";
 import PageHeaderNotificationItem from "./PageHeaderNotificationItem";
 import PageHeaderProfileMenuItem from "./PageHeaderProfileMenuItem";
 

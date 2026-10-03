@@ -1,5 +1,5 @@
 import Switch from "../Switch";
-import type { ChannelKey, ChannelState } from "./AiReceiverChannels";
+import type { ChannelKey, ChannelState } from "./ReceiverChannels";
 
 /**
  * ReceiverChannelItem — [[AiReceiverChannels]] 의 단일 채널 행(`<li>`).

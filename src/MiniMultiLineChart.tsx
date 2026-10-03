@@ -38,7 +38,7 @@
  * ```
  */
 import type { CSSProperties, ReactNode } from "react";
-import AiTriggerButton from "./widget/AiTriggerButton";
+import AiTriggerButton from "./widget/TriggerButton";
 
 const PAD_LEFT = 28;
 const PAD_RIGHT = 8;
