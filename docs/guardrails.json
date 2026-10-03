@@ -182,6 +182,15 @@
       "inCI": true
     },
     {
+      "id": "delivery",
+      "name": "배달 — main 이 실제로 서빙된다",
+      "status": "auto",
+      "invariant": "머지된 것은 배달된다. Storybook 은 `build:design` 으로 `components.json`·`tokens.json` 을 생성해 `/design-system/*` 로 서빙하고, MCP 서버는 그것을 런타임에 fetch 한다 — 즉 **재배포 없이는 규칙이 바뀌지 않는다.**",
+      "prevents": "머지는 됐는데 소비자에게 도달하지 않는 상태 — 실측(2026-08-21): PR #6·#7 머지 후에도 프로덕션이 8/12 배포에 멈춰 있었고 두 카탈로그 JSON 이 404 라서 호스팅 MCP 가 «규칙 카탈로그를 불러오지 못했습니다» 를 돌려주고 있었다. 게이트 12종이 모두 초록이었는데도 배달은 0 이었다",
+      "command": "구조/정책",
+      "inCI": false
+    },
+    {
       "id": "catalog-sync",
       "name": "카탈로그 드리프트 방지",
       "status": "planned",

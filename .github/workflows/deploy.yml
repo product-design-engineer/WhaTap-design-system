@@ -1,0 +1,95 @@
+name: Deploy
+
+# main 에 들어간 것을 **실제로 배달**한다.
+#
+# 왜 필요한가 (2026-08-21 실측): PR #6·#7 이 머지됐는데 프로덕션은 8/12 배포에 멈춰 있었다.
+# Vercel Git 자동배포 트리거가 없어서 `/design-system/components.json` 과 `tokens.json` 이
+# 둘 다 404 였고, 그래서 호스팅 MCP 는 "규칙 카탈로그를 불러오지 못했습니다" 를 돌려주고 있었다.
+# 게이트를 아무리 세워도 **배달 경로가 끊기면 소비자 관점에서는 아무 일도 일어나지 않는다.**
+# 그러니 배달도 CI 가 소유한다 — 사람이 기억해서 누르는 일로 두지 않는다.
+#
+# 배포 대상 두 개 (둘 다 필요하다):
+#   ① Storybook  — 카탈로그 원본. `build:design` 이 components.json·tokens.json 을 생성해 서빙.
+#   ② MCP 서버   — 그 JSON 을 런타임에 fetch 해 도구로 노출. 도구 자체가 바뀌면 이쪽도 배포해야 한다.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # 배포만 다시 하고 싶을 때
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false # 배포는 중간에 끊지 않는다
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy Storybook + MCP
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID_STORYBOOK: ${{ secrets.VERCEL_PROJECT_ID_STORYBOOK }}
+      VERCEL_PROJECT_ID_MCP: ${{ secrets.VERCEL_PROJECT_ID_MCP }}
+      CATALOG_URL: https://whatap-design-system-storybook.vercel.app
+      MCP_URL: https://whatap-ds-mcp.vercel.app/mcp
+    steps:
+      # 시크릿이 없으면 **조용히 건너뛰지 않고 실패**한다. skip 으로 두면 지금 고치고 있는
+      # 실패 모드(머지는 됐는데 배달은 안 됨)가 초록불 아래 그대로 재현된다.
+      - name: Check secrets
+        run: |
+          missing=""
+          for v in VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID_STORYBOOK VERCEL_PROJECT_ID_MCP; do
+            [ -z "${!v}" ] && missing="$missing $v"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::배포 시크릿 누락:$missing — 설정하지 않으면 main 의 변경이 소비자에게 도달하지 않습니다."
+            echo "설정: gh secret set <NAME>  (토큰은 Vercel 대시보드 → Account Settings → Tokens)"
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+
+      - name: Deploy Storybook (catalog)
+        run: |
+          npx --yes vercel@latest deploy --prod --yes --token="$VERCEL_TOKEN"
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STORYBOOK }}
+
+      - name: Deploy MCP server
+        working-directory: mcp-server
+        run: |
+          npx --yes vercel@latest deploy --prod --yes --token="$VERCEL_TOKEN"
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_MCP }}
+
+      # 배포했다 ≠ 배달됐다. 실제로 소비자가 받는 것을 확인한다 — 이 검증이 없으면
+      # 빌드가 성공한 채로 404 를 서빙하는 상태를 아무도 모른다(그게 9일간 벌어진 일이다).
+      - name: Verify delivery
+        run: |
+          fail=0
+          for path in /index.json /design-system/components.json /design-system/tokens.json; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --retry 5 --retry-delay 6 --retry-all-errors "$CATALOG_URL$path")
+            echo "$path → HTTP $code"
+            [ "$code" = "200" ] || { echo "::error::$path 가 $code 입니다 — 카탈로그가 배달되지 않았습니다."; fail=1; }
+          done
+
+          tools=$(curl -s -X POST "$MCP_URL" \
+            -H 'Content-Type: application/json' \
+            -H 'Accept: application/json, text/event-stream' \
+            -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}')
+          for t in get_component search_components get_tokens search_tokens; do
+            echo "$tools" | grep -q "\"$t\"" && echo "MCP $t ✓" || { echo "::error::MCP 도구 $t 가 없습니다 — 서버 배포가 반영되지 않았습니다."; fail=1; }
+          done
+
+          # 규칙이 실제로 실려 오는지(빈 카탈로그를 200 으로 서빙하는 경우를 잡는다)
+          rules=$(curl -s "$CATALOG_URL/design-system/components.json" | head -c 200000 | grep -c '"whenNotToUse"' || true)
+          echo "components.json 의 whenNotToUse 블록: $rules"
+          [ "$rules" -gt 0 ] || { echo "::error::components.json 에 규칙이 없습니다(빈 산출물)."; fail=1; }
+
+          exit $fail
