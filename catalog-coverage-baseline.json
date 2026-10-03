@@ -1,6 +1,37 @@
 {
   "frozen": [
-    "AiWidget"
-  ],
-  "note": "AiWidget(440px) 은 WhaTapAiWidget(480px) 과 진입점이 겹친다 — 폐기(export 제거) 여부가 결정 대기이므로 동결. 결정 후 이 목록은 0 이 되어야 한다."
+    "ActionChip",
+    "AlertRulePreview",
+    "AnswerSkeleton",
+    "AssistantButton",
+    "AttachmentChip",
+    "ChatExchange",
+    "ChoiceButtons",
+    "ClassificationTable",
+    "ClickCursor",
+    "CostBreakdown",
+    "CostTable",
+    "CriteriaSelection",
+    "DashboardProposal",
+    "EventList",
+    "ExecutionResult",
+    "InlinePrompt",
+    "InsightSection",
+    "LoadingMessage",
+    "MessageActions",
+    "MigPlan",
+    "PromptInput",
+    "QuickActionChip",
+    "Reasoning",
+    "ReceiverChannels",
+    "SendButton",
+    "StepsTimeline",
+    "SummaryBanner",
+    "ToolCallStep",
+    "TriggerButton",
+    "UnavailableNotice",
+    "UsageChart",
+    "UserBubble",
+    "WidgetShell"
+  ]
 }

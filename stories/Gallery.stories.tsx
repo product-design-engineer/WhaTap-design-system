@@ -61,10 +61,10 @@ const LAYERS = [
 ] as const;
 
 const SUBGROUP_COLORS: Record<string, { bg: string; fg: string }> = {
-  Widget: { bg: "var(--color-surface-info)", fg: "var(--color-status-info)" },
-  Web: { bg: "var(--color-surface-success)", fg: "var(--color-status-success)" },
-  Topology: { bg: "var(--color-surface-warning)", fg: "var(--color-status-warning)" },
-  Page: { bg: "var(--color-surface-critical)", fg: "var(--color-status-error)" },
+  Widget: { bg: "var(--color-status-info-soft)", fg: "var(--color-status-info)" },
+  Web: { bg: "var(--color-status-success-soft)", fg: "var(--color-status-success)" },
+  Topology: { bg: "var(--color-status-warning-soft)", fg: "var(--color-status-warning)" },
+  Page: { bg: "var(--color-status-error-soft)", fg: "var(--color-status-error)" },
 };
 
 const Badge = ({ subgroup }: { subgroup: string }) => {
@@ -220,7 +220,7 @@ export const ByLayer: Story = {
                     border: isActive
                       ? "1px solid var(--color-brand-blue)"
                       : "1px solid var(--color-border-default)",
-                    background: isActive ? "var(--color-surface-info)" : "var(--color-card)",
+                    background: isActive ? "var(--color-status-info-soft)" : "var(--color-card)",
                     color: isActive ? "var(--color-brand-blue)" : "var(--color-text-secondary)",
                     cursor: "pointer",
                   }}
@@ -550,7 +550,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                 display: "inline-block",
                 padding: "2px 8px",
                 borderRadius: 4,
-                background: "var(--color-surface-info)",
+                background: "var(--color-status-info-soft)",
                 color: "var(--color-brand-blue)",
                 textDecoration: "none",
                 lineHeight: "18px",
@@ -779,7 +779,7 @@ export const Relations: Story = {
                       padding: "6px 10px",
                       borderRadius: 4,
                       border: "none",
-                      background: isActive ? "var(--color-surface-info)" : "transparent",
+                      background: isActive ? "var(--color-status-info-soft)" : "transparent",
                       color: isActive ? "var(--color-brand-blue)" : "var(--color-text-primary)",
                       cursor: "pointer",
                       textAlign: "left",

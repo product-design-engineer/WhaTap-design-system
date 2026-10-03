@@ -6,7 +6,13 @@
     "src/ProductRailItem.tsx -> src/Tooltip.tsx",
     "src/SidebarMenuItem.tsx -> src/Tooltip.tsx",
     "src/topology/TopologyNode.tsx -> src/topology/TopologyCollapseToggle.tsx",
-    "src/widget/ReceiverChannelItem.tsx -> src/Switch.tsx"
+    "src/widget/ReceiverChannelItem.tsx -> src/Switch.tsx",
+    "src/DataTableRow.tsx -> src/Tooltip.tsx",
+    "src/HeatmapCell.tsx -> src/Tooltip.tsx",
+    "src/MemberUsageBar.tsx -> src/UsageGauge.tsx",
+    "src/ToolbarIconButton.tsx -> src/Tooltip.tsx",
+    "src/widget/TriggerButton.tsx -> src/Tooltip.tsx",
+    "src/topology/TopologyMinimap.tsx -> src/topology/TopologyCanvas.tsx"
   ],
   "reverse-type": [
     "src/DataTableRow.tsx -> src/DataTable.tsx",
@@ -16,12 +22,12 @@
     "src/SidebarOrgSwitcher.tsx -> src/Sidebar.tsx",
     "src/SidebarProjectSwitcher.tsx -> src/Sidebar.tsx",
     "src/TabButton.tsx -> src/Tabs.tsx",
-    "src/widget/ClassificationTableRow.tsx -> src/widget/AiClassificationTable.tsx",
-    "src/widget/CostBreakdownRow.tsx -> src/widget/AiCostBreakdown.tsx",
-    "src/widget/CostTableRow.tsx -> src/widget/AiCostTable.tsx",
-    "src/widget/EventListItem.tsx -> src/widget/AiEventList.tsx",
-    "src/widget/ReceiverChannelItem.tsx -> src/widget/AiReceiverChannels.tsx",
-    "src/widget/TimelineStepItem.tsx -> src/widget/AiStepsTimeline.tsx"
+    "src/widget/ClassificationTableRow.tsx -> src/widget/ClassificationTable.tsx",
+    "src/widget/CostBreakdownRow.tsx -> src/widget/CostBreakdown.tsx",
+    "src/widget/CostTableRow.tsx -> src/widget/CostTable.tsx",
+    "src/widget/EventListItem.tsx -> src/widget/EventList.tsx",
+    "src/widget/ReceiverChannelItem.tsx -> src/widget/ReceiverChannels.tsx",
+    "src/widget/TimelineStepItem.tsx -> src/widget/StepsTimeline.tsx"
   ],
   "composite-composite": [
     "src/CardHead.tsx -> src/Tabs.tsx",
@@ -29,7 +35,14 @@
     "src/FilterBar.tsx -> src/FilterDropdown.tsx",
     "src/FilterDropdown.tsx -> src/FilterDropdownOptionItem.tsx",
     "src/InstanceSelectPanel.tsx -> src/Tabs.tsx",
-    "src/widget/AiCriteriaSelection.tsx -> src/widget/CriteriaOptionButton.tsx",
-    "src/widget/AiDashboardProposal.tsx -> src/widget/ProposalSection.tsx"
+    "src/widget/CriteriaSelection.tsx -> src/widget/CriteriaOptionButton.tsx",
+    "src/widget/DashboardProposal.tsx -> src/widget/ProposalSection.tsx",
+    "src/widget/InlinePrompt.tsx -> src/widget/SendButton.tsx",
+    "src/widget/PromptInput.tsx -> src/widget/SendButton.tsx",
+    "src/PageHeader.tsx -> src/widget/InlinePrompt.tsx",
+    "src/PageHeaderAiInline.tsx -> src/widget/InlinePrompt.tsx",
+    "src/MiniLineChart.tsx -> src/widget/TriggerButton.tsx",
+    "src/MiniMultiLineChart.tsx -> src/widget/TriggerButton.tsx",
+    "src/topology/TopologyMinimap.tsx -> src/topology/TopologyCanvas.tsx"
   ]
 }

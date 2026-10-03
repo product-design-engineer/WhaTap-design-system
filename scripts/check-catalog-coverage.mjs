@@ -41,15 +41,21 @@ for (const b of ["src/index.ts", "src/widget/index.ts"]) {
   const p = join(root, b);
   if (!existsSync(p)) continue;
   const src = readFileSync(p, "utf8");
-  for (const m of src.matchAll(/export\s*\{([^}]*)\}\s*from\s*"([^"]+)"/g)) {
-    const isTypeBlock = /export\s*type\s*\{/.test(m[0]);
-    for (const raw of m[1].split(",")) {
-      if (isTypeBlock || /\btype\b/.test(raw)) continue; // 타입은 카탈로그 대상 아님
-      const nm = raw.trim().split(/\s+as\s+/).pop();
-      if (!nm) continue;
-      if (!/^[A-Z]/.test(nm)) continue;        // 소문자 = 함수/유틸
-      if (/^[A-Z0-9_]+$/.test(nm)) continue;   // 상수(TONE_BG · K8S_GPU_MENU …)
-      if (!exported.has(nm)) exported.set(nm, b);
+  const lines = src.split("\n");
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    // @deprecated alias 는 커버리지 대상에서 제외
+    if (/@deprecated/.test(line)) continue;
+    for (const m of line.matchAll(/export\s*\{([^}]*)\}\s*from\s*"([^"]+)"/g)) {
+      const isTypeBlock = /export\s*type\s*\{/.test(m[0]);
+      for (const raw of m[1].split(",")) {
+        if (isTypeBlock || /\btype\b/.test(raw)) continue;
+        const nm = raw.trim().split(/\s+as\s+/).pop();
+        if (!nm) continue;
+        if (!/^[A-Z]/.test(nm)) continue;
+        if (/^[A-Z0-9_]+$/.test(nm)) continue;
+        if (!exported.has(nm)) exported.set(nm, b);
+      }
     }
   }
 }
