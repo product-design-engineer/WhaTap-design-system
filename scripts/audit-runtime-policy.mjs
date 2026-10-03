@@ -51,6 +51,11 @@ const ALLOWED_STORIES = new Map([
   ],
 ]);
 
+/** 검사에서 완전히 건너뛰는 스토리 — iframe 다수 로드로 CI timeout 유발 등. */
+const SKIP_STORIES = new Set([
+  "gallery--dark-mode-compare",  // iframe 14개 동시 로드 → CI timeout
+]);
+
 const index = await fetch(`${BASE}/index.json`)
   .then((r) => r.json())
   .catch(() => null);
@@ -61,7 +66,7 @@ if (!index) {
   process.exit(1);
 }
 
-let ids = Object.keys(index.entries).filter((k) => index.entries[k].type === "story");
+let ids = Object.keys(index.entries).filter((k) => index.entries[k].type === "story" && !SKIP_STORIES.has(k));
 
 /* ── --changed: 변경된 스토리만 필터 ─────────────────────────────────────── */
 if (CHANGED_ONLY) {
