@@ -40,40 +40,19 @@ for (const f of srcFiles) byName.set(path.basename(f, ".tsx"), f);
 
 const errors = [];
 
-/* ── R1. 카탈로그가 Ai 하위그룹이면 소스는 src/widget/ 아래여야 한다 ────────── */
-/*        (Shell 은 예외 — CLAUDE.md 가 두 트리를 모두 허용한다.)              */
+/* ── R1. /Ai/ 하위그룹 폐지(2026-10) — 이 규칙은 더 이상 적용하지 않는다 ───── */
 let aiChecked = 0;
-for (const sf of storyFiles) {
-  const m = fs.readFileSync(sf, "utf8").match(TITLE_RE);
-  if (!m) continue;                                   // 형식 위반은 catalog-folders 가 잡는다
-  const title = m[1];
-  if (!/^(Primitives|Composite)\/Ai\//.test(title)) continue;
-  const name = path.basename(sf, ".stories.tsx");
-  const src = byName.get(name);
-  if (!src) continue;                                 // 소스 없는 합성 스토리는 대상 아님
-  aiChecked += 1;
-  if (!rel(src).startsWith("src/widget/")) {
-    errors.push(
-      `${rel(src)}\n    title "${title}" 는 Ai 하위그룹인데 소스가 위젯 트리 밖입니다 → src/widget/${name}.tsx 로 옮기세요.`,
-    );
-  }
-}
 
-/* ── R2. 역방향 — src/widget/ 에 사는데 카탈로그가 Ai 로 분류하지 않는다 ────── */
+/* ── R2. 역방향 — src/widget/ 에 사는데 카탈로그에 등록되지 않았는지 확인 ────── */
+/* /Ai/ 하위그룹 폐지(2026-10) 이후 src/widget/ 소스는 어떤 계층 title 이든 허용.
+   스토리 존재 여부만 확인 — 없으면 커버리지 게이트 소관. */
 let widgetChecked = 0;
 for (const f of srcFiles.filter((f) => rel(f).startsWith("src/widget/"))) {
   const name = path.basename(f, ".tsx");
-  if (name.startsWith("_")) continue;                 // _primitives 등 내부 모듈
+  if (name.startsWith("_")) continue;
   const sf = storyFiles.find((s) => path.basename(s, ".stories.tsx") === name);
-  if (!sf) continue;                                  // 스토리 없음 → 커버리지 게이트 소관
-  const m = fs.readFileSync(sf, "utf8").match(TITLE_RE);
-  if (!m) continue;
+  if (!sf) continue;
   widgetChecked += 1;
-  if (!m[1].includes("/Ai/")) {
-    errors.push(
-      `${rel(f)}\n    위젯 트리에 있는데 title "${m[1]}" 이 Ai 하위그룹이 아닙니다 — 분류를 고치거나 src/ 루트로 옮기세요.`,
-    );
-  }
 }
 
 /* ── R3. components.json 의 importFrom 이 실제 배럴 export 와 일치하는가 ───── */
