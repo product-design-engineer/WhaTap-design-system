@@ -18,7 +18,10 @@ const TITLE_RE = /title:\s*"((?:Tokens|Primitives|Composite|Shell)\/[^"]*)"/;
  * 애초에 분류 대상이 아니다(Introduction 이 `.mdx` 라 이 게이트를 비켜 갔던 것과 같은 성격).
  * 목록을 여기 두어 **새 파일이 슬쩍 최상위로 오는 것은 여전히 막는다** — 예외는 이름으로만 난다.
  */
-const META_STORIES = new Set(["stories/Overview.stories.tsx"]);
+const META_STORIES = new Set([
+  "stories/Overview.stories.tsx",
+  "stories/Gallery.stories.tsx",
+]);
 
 const errors = [];
 

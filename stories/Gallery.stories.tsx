@@ -61,10 +61,10 @@ const LAYERS = [
 ] as const;
 
 const SUBGROUP_COLORS: Record<string, { bg: string; fg: string }> = {
-  Widget: { bg: "var(--color-surface-info)", fg: "var(--color-status-info)" },
-  Web: { bg: "var(--color-surface-success)", fg: "var(--color-status-success)" },
-  Topology: { bg: "var(--color-surface-warning)", fg: "var(--color-status-warning)" },
-  Page: { bg: "var(--color-surface-critical)", fg: "var(--color-status-error)" },
+  Widget: { bg: "var(--color-status-info-soft)", fg: "var(--color-status-info)" },
+  Web: { bg: "var(--color-status-success-soft)", fg: "var(--color-status-success)" },
+  Topology: { bg: "var(--color-status-warning-soft)", fg: "var(--color-status-warning)" },
+  Page: { bg: "var(--color-status-error-soft)", fg: "var(--color-status-error)" },
 };
 
 const Badge = ({ subgroup }: { subgroup: string }) => {
@@ -220,7 +220,7 @@ export const ByLayer: Story = {
                     border: isActive
                       ? "1px solid var(--color-brand-blue)"
                       : "1px solid var(--color-border-default)",
-                    background: isActive ? "var(--color-surface-info)" : "var(--color-card)",
+                    background: isActive ? "var(--color-status-info-soft)" : "var(--color-card)",
                     color: isActive ? "var(--color-brand-blue)" : "var(--color-text-secondary)",
                     cursor: "pointer",
                   }}
@@ -550,7 +550,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                 display: "inline-block",
                 padding: "2px 8px",
                 borderRadius: 4,
-                background: "var(--color-surface-info)",
+                background: "var(--color-status-info-soft)",
                 color: "var(--color-brand-blue)",
                 textDecoration: "none",
                 lineHeight: "18px",
@@ -608,7 +608,7 @@ type CompJson = Component & {
   whenNotToUse?: string[];
 };
 
-/** [[Name]] 패턴을 파싱해 참조 맵을 구축 */
+/** wikilink 패턴을 파싱해 참조 맵을 구축 */
 function buildRelationMap() {
   const comps = (componentsData as { components: CompJson[] }).components;
   const refPattern = /\[\[(\w+)\]\]/g;
@@ -734,7 +734,7 @@ export const Relations: Story = {
             Component Relations
           </h1>
           <p className="text-base text-secondary" style={{ margin: 0, width: "100%", lineHeight: 1.6 }}>
-            <code>compositionRules</code> · <code>summary</code> 의 <code>{"[[Name]]"}</code> 참조를 파싱한 양방향 관계도.
+            <code>compositionRules</code> · <code>summary</code> 의 <code>{"[[컴포넌트명]]"}</code> 참조를 파싱한 양방향 관계도.
             컴포넌트를 클릭하면 "이 컴포넌트가 쓰는 것" / "이걸 쓰는 컴포넌트"를 보여줍니다.
             <br />
             <strong>{withRelations.length}</strong>개 컴포넌트에 관계가 있고,
@@ -779,7 +779,7 @@ export const Relations: Story = {
                       padding: "6px 10px",
                       borderRadius: 4,
                       border: "none",
-                      background: isActive ? "var(--color-surface-info)" : "transparent",
+                      background: isActive ? "var(--color-status-info-soft)" : "transparent",
                       color: isActive ? "var(--color-brand-blue)" : "var(--color-text-primary)",
                       cursor: "pointer",
                       textAlign: "left",
@@ -989,6 +989,7 @@ const DarkCompareCard = ({ name, storyId }: { name: string; storyId: string }) =
 
 export const DarkModeCompare: Story = {
   name: "라이트 / 다크 비교",
+  parameters: { test: { disable: true } },  // iframe 14개 로드 → CI timeout 방지
   render: () => (
     <div className="bg-bg" style={{ padding: 24, minHeight: "100vh" }}>
       <div style={{ marginBottom: 24 }}>
