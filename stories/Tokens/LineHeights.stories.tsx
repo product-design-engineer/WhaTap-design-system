@@ -22,7 +22,7 @@ const SAMPLE_TEXT = "WhaTap AI 어시스턴트가 분석 중입니다. 잠시만
 
 export const LineHeights: StoryObj = {
   render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 720, fontFamily: tokens.font.family.korean.value }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 16, width: "100%", fontFamily: tokens.font.family.korean.value }}>
       {LHS.map((lh) => {
         const t = tokens.font.lineHeight[lh];
         return (

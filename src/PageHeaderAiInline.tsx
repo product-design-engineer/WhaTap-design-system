@@ -38,8 +38,8 @@
  */
 import AiInlinePrompt, {
   type AiPromptSuggestion,
-} from "./widget/AiInlinePrompt";
-import AiAssistantButton from "./widget/AiAssistantButton";
+} from "./widget/InlinePrompt";
+import AiAssistantButton from "./widget/AssistantButton";
 import HeaderPillButton from "./HeaderPillButton";
 import { IcDocs, IcSupport } from "./icons/HeaderIcons";
 

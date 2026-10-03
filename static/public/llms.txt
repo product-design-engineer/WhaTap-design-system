@@ -23,6 +23,54 @@
 - 로컬 dev MCP (라이브 preview·story 작성·테스트): `http://localhost:5181/mcp` (`storybook dev`, addon-mcp).
 - mcp 전용 빠른 안내: [mcp.txt](/mcp.txt)
 
+## 컴포넌트 선택 트리
+
+> 「지금 뭘 만드나」로 찾는다. 이름을 모르면 아래 트리에서 가장 가까운 용도를 고른다.
+
+```
+만들려는 것
+├── 페이지 전체 (chrome + 본문)
+│   ├── 기본 대시보드 → DashboardLayout + PageHeader + OptionbarPage + DataTable
+│   ├── AI 통합 페이지 → DashboardLayout + PageHeaderAiInline + WhaTapAiWidget
+│   ├── 상세 페이지 → DashboardLayout + PageHeader + SubHeaderBar + Tabs
+│   └── 마케팅 페이지 → LandingHeader + HeroBanner + WebSection + WebCtaBanner
+│
+├── 데이터 표시
+│   ├── 표 → DataTable + Pagination + FilterBar
+│   ├── 필터 → FilterBar + FilterDropdown + FilterChip
+│   ├── 차트 (미니) → MiniLineChart · ScatterHeatmap · Heatmap
+│   ├── 통계 카드 → StatCard · KpiCard
+│   └── 토폴로지 → TopologyCanvas + TopologyNode + TopologyEdge + TopologyToolbar
+│
+├── 사용자 입력
+│   ├── 텍스트 → TextField
+│   ├── 선택 (단일) → Select
+│   ├── 선택 (다중) → FilterDropdown
+│   ├── 날짜/시간 → DatePicker · TimeRangeSelector
+│   ├── ON/OFF → Switch (즉시 적용) · Checkbox (폼 제출)
+│   └── 행동 메뉴 → ActionMenu + ActionMenuItem
+│
+├── 알림 / 피드백
+│   ├── 시스템 알림 → Toast
+│   ├── 확인 대화 → Modal (파괴적 액션은 patterns P1)
+│   ├── 본문 안내 → Notice · EmptyState
+│   └── 보조 정보 → Tooltip
+│
+├── AI 위젯
+│   ├── 진입점 → AiInlinePrompt (헤더 내장) · AiAssistantButton (FAB)
+│   ├── 입력 → AiPromptInput + AiSendButton
+│   ├── 응답 카드 → AiCard + AiSectionHeading + AiBulletList + AiToneBadge
+│   ├── 추론 과정 → AiReasoning + AiStepsTimeline + AiToolCallStep
+│   ├── 비용/분류 → AiCostTable · AiClassificationTable · AiCostBreakdown
+│   └── 대시보드 제안 → AiDashboardProposal + ProposalSection + AiChoiceButtons
+│
+└── 네비게이션
+    ├── 사이드바 → Sidebar + SidebarMenuItem + ProductRailItem
+    ├── 탭 → Tabs + TabButton
+    ├── 칩 → Chip (상태 표시) · FilterChip (인터랙티브)
+    └── 시간 → TimeChip · LiveTimerCompact
+```
+
 ## 규약
 
 - 단일 출처: 인라인 색 리터럴 금지(토큰 사용), 컴포넌트 재구현 금지(prop 조합). 모든 컴포넌트 docstring = Purpose/When to use/When NOT to use/Composition rules + @example (`lint:docstrings` 게이트가 강제).

@@ -1,4 +1,4 @@
-import type { CostBreakdownRow as CostBreakdownRowData } from "./AiCostBreakdown";
+import type { CostBreakdownRow as CostBreakdownRowData } from "./CostBreakdown";
 
 /**
  * CostBreakdownRow — [[AiCostBreakdown]] 표의 단일 비용 행(row).

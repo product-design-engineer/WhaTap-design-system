@@ -17,7 +17,7 @@
  * ## When NOT to use
  * - **디자인 시스템 repo 내부** 작업 — 이 모달은 소비자(엔지니어) 방향 전용. DS 작업자는 대상이 아님.
  * - **일반 확인/경고 모달** → [[Modal]].
- * - **토스트 알림** (비파괴적 안내) → [[Toast]].
+ * - **토스트 알림** (비위험적 안내) → [[Toast]].
  *
  * ## Composition rules
  * - [[Modal]] 기반 — 동일한 portal · backdrop · ESC 닫기 동작.

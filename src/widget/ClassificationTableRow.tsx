@@ -1,4 +1,4 @@
-import type { ClassificationRow } from "./AiClassificationTable";
+import type { ClassificationRow } from "./ClassificationTable";
 
 /**
  * ClassificationTableRow — [[AiClassificationTable]] 표의 단일 데이터 행.

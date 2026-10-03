@@ -56,7 +56,7 @@ const PATTERNS: { key: PatternKey; sample: string; usage: string }[] = [
 
 export const Patterns: StoryObj = {
   render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 860 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%" }}>
       {PATTERNS.map((p) => {
         const r = resolvePattern(p.key);
         const t = tokens.font.pattern[p.key];
@@ -79,7 +79,7 @@ export const Patterns: StoryObj = {
           </div>
         );
       })}
-      <div style={{ marginTop: 12, padding: 12, background: "var(--color-tone-surface-warning)", border: "1px solid var(--color-indicator-warning)", borderRadius: 6, fontSize: 12, color: "var(--color-text-secondary)", lineHeight: 1.5, fontFamily: tokens.font.family.korean.value, maxWidth: 860 }}>
+      <div style={{ marginTop: 12, padding: 12, background: "var(--color-tone-surface-warning)", border: "1px solid var(--color-indicator-warning)", borderRadius: 6, fontSize: 12, color: "var(--color-text-secondary)", lineHeight: 1.5, fontFamily: tokens.font.family.korean.value, width: "100%" }}>
         💡 <strong>Description 메타</strong>: 각 pattern 의 <code>tokens.font.pattern[name].description</code> 으로 사용 의도 즉시 조회 가능. AI agent 가 코드 생성 시 이 description 을 lookup 하여 적합한 pattern 선택.
       </div>
     </div>

@@ -20,7 +20,7 @@ const meta: Meta = {
           "`density` (compact/default), `align` per 컬럼, `numeric` 컬럼은 Roboto + 우측 정렬, `render` 로 셀 커스텀. " +
           "정렬 정책 (feedback-data-table-alignment): 텍스트 → left, 숫자 → right, **header 가 \"No\" 인 컬럼 → center** " +
           "(행 순번; 헤더/셀 모두 가운데). 명시적 `align` prop 이 항상 override. " +
-          "너비 정책: **정형 컬럼(No·시각·상태·액션) → `width`(px 고정)**, **가변 컬럼(이름·메시지) → `flex`(fr)** — " +
+          "너비 정책: **정형 컬럼(No·시각·상태·실행) → `width`(px 고정)**, **가변 컬럼(이름·메시지) → `flex`(fr)** — " +
           "정보량 많은 컬럼에 더 큰 `flex`.",
       },
     },

@@ -68,7 +68,7 @@ export const Open: Story = {
   ),
 };
 
-/** 헤더 액션 — 닫기 버튼 «왼쪽»에 선다. 닫기가 항상 맨 끝이어야 자리가 흔들리지 않는다. */
+/** 헤더 실행 — 닫기 버튼 «왼쪽»에 선다. 닫기가 항상 맨 끝이어야 자리가 흔들리지 않는다. */
 export const WithHeaderActions: Story = {
   render: (args) => (
     <Shell>

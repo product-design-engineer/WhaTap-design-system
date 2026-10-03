@@ -104,11 +104,13 @@ export { default as ThemeToggle } from "./ThemeToggle";
 export type { ThemeToggleProps, ThemeMode } from "./ThemeToggle";
 
 // Chrome — 대시보드 쉘
-export { default as AiSummaryBanner } from "./AiSummaryBanner";
-export type { AiSummaryBannerProps, AiSummaryBannerTone } from "./AiSummaryBanner";
+export { default as SummaryBanner } from "./SummaryBanner";
+/** @deprecated Use SummaryBanner */ export { default as AiSummaryBanner } from "./SummaryBanner";
+export type { AiSummaryBannerProps, AiSummaryBannerTone } from "./SummaryBanner";
 export { default as AiSymbol } from "./widget/AiSymbol";
-export { default as AiTriggerButton } from "./widget/AiTriggerButton";
-export type { AiTriggerButtonProps } from "./widget/AiTriggerButton";
+export { default as TriggerButton } from "./widget/TriggerButton";
+/** @deprecated Use TriggerButton */ export { default as AiTriggerButton } from "./widget/TriggerButton";
+export type { AiTriggerButtonProps } from "./widget/TriggerButton";
 export { default as Button } from "./Button";
 export type { ButtonProps, ButtonVariant, ButtonSize, ButtonTone } from "./Button";
 export { default as WebCtaButton } from "./WebCtaButton";
@@ -188,9 +190,10 @@ export { default as TimeRangeSelector } from "./TimeRangeSelector";
 export { default as Toast } from "./Toast";
 export type { ToastVariant } from "./Toast";
 
-// AI Widget shell + context
+// Widget shell + context
 export { default as WhaTapAiWidget } from "./WhaTapAiWidget";
-export { default as AiWidget } from "./AiWidget";
+export { default as WidgetShell } from "./WidgetShell";
+/** @deprecated Use WidgetShell */ export { default as AiWidget } from "./WidgetShell";
 export { WhaTapAiProvider, useWhaTapAi } from "./widget/WhaTapAiContext";
 export type { LastPrompt } from "./widget/WhaTapAiContext";
 export type { WidgetAction } from "./WhaTapAiWidget";
@@ -209,8 +212,9 @@ export { default as TabButton } from "./TabButton";
 export { default as ProductRailItem } from "./ProductRailItem";
 export { default as BottomRailItem } from "./BottomRailItem";
 export { default as FilterChipItem } from "./FilterChipItem";
-export { default as AiQuickActionChip } from "./widget/AiQuickActionChip";
-//   WhaTap AI parts (src/widget)
+export { default as QuickActionChip } from "./widget/QuickActionChip";
+/** @deprecated Use QuickActionChip */ export { default as AiQuickActionChip } from "./widget/QuickActionChip";
+//   Widget parts (src/widget)
 export { default as CostBreakdownRow } from "./widget/CostBreakdownRow";
 export { default as ClassificationTableRow } from "./widget/ClassificationTableRow";
 export { default as CostTableRow } from "./widget/CostTableRow";
@@ -222,8 +226,10 @@ export { default as ReceiverChannelItem } from "./widget/ReceiverChannelItem";
 export { default as CriteriaGroup } from "./widget/CriteriaGroup";
 export { default as CriteriaOptionButton } from "./widget/CriteriaOptionButton";
 export { default as ProposalSection } from "./widget/ProposalSection";
-export { default as AiActionChip } from "./widget/AiActionChip";
-export { default as AiAttachmentChip } from "./widget/AiAttachmentChip";
+export { default as ActionChip } from "./widget/ActionChip";
+/** @deprecated Use ActionChip */ export { default as AiActionChip } from "./widget/ActionChip";
+export { default as AttachmentChip } from "./widget/AttachmentChip";
+/** @deprecated Use AttachmentChip */ export { default as AiAttachmentChip } from "./widget/AttachmentChip";
 
 // Topology — 노드-엣지 그래프(레이아웃 엔진 + 프리미티브)
 export * from "./topology";

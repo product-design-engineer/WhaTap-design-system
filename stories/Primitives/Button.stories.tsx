@@ -163,7 +163,7 @@ export const FullWidth: Story = {
  * 실제 사용 패턴 — 적용/취소 한 쌍.
  *
  * 취소는 `tone="tertiary"` (중립). CTA 만 브랜드 파란색을 갖는다 —
- * 취소까지 primary 로 두면 파란 버튼 둘이 시선을 나눠 가져 1차 액션이 흐려진다.
+ * 취소까지 primary 로 두면 파란 버튼 둘이 시선을 나눠 가져 1차 실행이 흐려진다.
  */
 export const PrimaryAndCancel: Story = {
   args: {},
@@ -179,7 +179,7 @@ export const PrimaryAndCancel: Story = {
  * ❌ 안티패턴 — 취소를 tone="primary" 로 두기.
  *
  * 아래 두 줄을 나란히 보면 차이가 명확하다. 위: 파란 버튼 둘이 경쟁(❌).
- * 아래: 중립 취소 + 파란 CTA 하나(✅). 파괴적 액션 확인에서도 같다 —
+ * 아래: 중립 취소 + 파란 CTA 하나(✅). 삭제 등 위험한 실행 확인에서도 같다 —
  * critical 은 실행 버튼 쪽만, 취소는 tertiary.
  */
 export const CancelToneComparison: Story = {
@@ -197,7 +197,7 @@ export const CancelToneComparison: Story = {
         <Button variant="contained" tone="primary"  size="lg">적용</Button>
       </div>
       <div className="flex gap-2 items-center">
-        <span className="text-sm text-tertiary" style={{ width: 88 }}>✅ 파괴적</span>
+        <span className="text-sm text-tertiary" style={{ width: 88 }}>✅ 위험</span>
         <Button variant="basic"     tone="tertiary" size="lg">취소</Button>
         <Button variant="contained" tone="critical" size="lg">삭제</Button>
       </div>

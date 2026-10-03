@@ -24,7 +24,7 @@ const SAMPLE_EN = "WhaTap AI Assistant";
 
 export const Tracking: StoryObj = {
   render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 720 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 16, width: "100%" }}>
       {TRACKS.map((tr) => {
         const t = tokens.font.tracking[tr];
         const upper = tr === "caps";

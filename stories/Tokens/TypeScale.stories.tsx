@@ -35,8 +35,8 @@ const SIZES = [
 
 export const ScaleOverview: StoryObj = {
   render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 4, maxWidth: 980 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "80px 80px 110px 1fr", gap: 16, padding: "8px 16px", borderBottom: "1px solid var(--color-border-default)", fontSize: 11, color: "var(--color-text-tertiary)", fontFamily: "'Noto Sans', sans-serif", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.3px" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 4, width: "100%" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "8% 10% 10% 1fr", gap: 16, padding: "8px 16px", borderBottom: "1px solid var(--color-border-default)", fontSize: 11, color: "var(--color-text-tertiary)", fontFamily: "'Noto Sans', sans-serif", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.3px" }}>
         <span>토큰</span>
         <span>크기</span>
         <span>영역</span>
@@ -45,7 +45,7 @@ export const ScaleOverview: StoryObj = {
       {SIZES.map((s) => {
         const t = tokens.font.size[s.key];
         return (
-          <div key={s.key} style={{ display: "grid", gridTemplateColumns: "80px 80px 110px 1fr", gap: 16, alignItems: "center", padding: "12px 16px", borderBottom: "1px solid var(--color-surface-50)" }}>
+          <div key={s.key} style={{ display: "grid", gridTemplateColumns: "8% 10% 10% 1fr", gap: 16, alignItems: "center", padding: "12px 16px", borderBottom: "1px solid var(--color-surface-50)" }}>
             <code style={{ fontFamily: "Roboto, monospace", fontSize: 12, color: "var(--color-text-primary)" }}>{s.key}</code>
             <span style={{ fontFamily: tokens.font.family.korean.value, fontSize: t.value, color: "var(--color-text-primary)", lineHeight: 1 }}>가나abc 123</span>
             <span style={{ fontSize: 11, color: s.range === "Dense" ? "var(--color-brand-blue)" : "var(--color-whatap-purple)", fontWeight: 700, fontFamily: "'Noto Sans', sans-serif" }}>{s.range}</span>

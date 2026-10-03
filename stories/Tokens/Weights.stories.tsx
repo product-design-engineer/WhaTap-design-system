@@ -22,7 +22,7 @@ const WEIGHTS = ["regular", "medium", "bold"] as const;
 
 export const Weights: StoryObj = {
   render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 720 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 16, width: "100%" }}>
       {WEIGHTS.map((w) => {
         const t = tokens.font.weight[w];
         return (
