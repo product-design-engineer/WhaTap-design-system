@@ -608,7 +608,7 @@ type CompJson = Component & {
   whenNotToUse?: string[];
 };
 
-/** [[Name]] 패턴을 파싱해 참조 맵을 구축 */
+/** wikilink 패턴을 파싱해 참조 맵을 구축 */
 function buildRelationMap() {
   const comps = (componentsData as { components: CompJson[] }).components;
   const refPattern = /\[\[(\w+)\]\]/g;
@@ -734,7 +734,7 @@ export const Relations: Story = {
             Component Relations
           </h1>
           <p className="text-base text-secondary" style={{ margin: 0, width: "100%", lineHeight: 1.6 }}>
-            <code>compositionRules</code> · <code>summary</code> 의 <code>{"[[Name]]"}</code> 참조를 파싱한 양방향 관계도.
+            <code>compositionRules</code> · <code>summary</code> 의 <code>{"[[컴포넌트명]]"}</code> 참조를 파싱한 양방향 관계도.
             컴포넌트를 클릭하면 "이 컴포넌트가 쓰는 것" / "이걸 쓰는 컴포넌트"를 보여줍니다.
             <br />
             <strong>{withRelations.length}</strong>개 컴포넌트에 관계가 있고,
