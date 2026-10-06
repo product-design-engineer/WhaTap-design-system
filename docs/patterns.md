@@ -620,6 +620,62 @@ Product-SaaS 안에서 어떤 구현을 선택할지 갈릴 때, 다음 순서�
 
 ---
 
+## 14. 그룹 구분 — 페이지에서는 카드를 나누고, 카드 안에서만 선을 긋는다
+<!-- @policy id=group-separation | @severity must | @applies token -->
+
+**When to use.** 성격이 다른 내용 묶음을 한 화면에 나란히 둘 때 — 결제 화면의 «플랜 정보 · 결제 · 요금», 설정 화면의 구획 등.
+
+**When NOT to use.**
+- 목록 **행 사이** 구분 → `--color-border-divider`(정의된 용도: 목록 행 사이 · 차트 축선). 이 정책은 행이 아니라 **구획**이다.
+- 여러 구획 중 하나만 보여야 할 때 → [[Tabs]]. 접어 두어도 될 보조 구획 → [[Disclosure]].
+
+**규칙.** 묶음이 **어디에 놓이느냐**로 구분 방법을 고른다.
+
+| 놓이는 곳 | 구분 방법 | 이유 |
+|---|---|---|
+| **페이지 본문** | 묶음마다 `bg-card` 카드로 나누고 사이를 띄운다 — **선을 긋지 않는다** | Base surface 2단 레이어 — 회색 바닥(`--color-bg`) 위 카드 사이 간격이 이미 경계다. 선을 더하면 구분이 이중이 된다 |
+| **카드 · 패널 · 모달 하나 안** | 묶음 **사이**에 1px `--color-border-default` + 위아래 여백 | 같은 표면 위라 층으로 나눌 수 없다. `--color-border-default` 의 정의된 용도가 «카드·테이블·헤더 구분선» |
+
+```
+┌ 구독 관리 ─────────────────┐   ← 카드 하나
+│ 플랜 정보                  │   ← text-lg font-bold (heading.section)
+│ …                          │
+├────────────────────────────┤   ← border-t border-default  (사이에만)
+│ 결제                       │
+├────────────────────────────┤
+│ 요금                       │
+└────────────────────────────┘
+```
+
+**Why.** 경계는 하나만 말해야 한다. 페이지에서는 **층**(바닥 위의 카드)이 이미 «여기서 다른 것이 시작된다»를 말하므로 선은 소음이 된다. 카드 안에서는 층을 더 쌓을 수 없으니 선이 그 역할을 맡는데, 선의 진하기는 **구분의 크기**를 뜻한다 — 행 사이용 `--color-border-divider`(#ADADAD)로 구획을 나누면 구획이 행보다 약하게, 혹은 같은 급으로 읽혀 위계가 뒤집힌다.
+
+**How.** DS 유틸만으로 된다 — 새 CSS 불필요.
+
+```tsx
+<div className="bg-card border border-default rounded-8px px-16px">
+  {groups.map((g, i) => (
+    <section key={g.id} className={`py-24px${i > 0 ? " border-t border-default" : ""}`}>
+      <h3 className="text-lg font-bold text-primary">{g.title}</h3>
+      <div className="mt-16px">{g.body}</div>
+    </section>
+  ))}
+</div>
+```
+
+- 선을 카드 폭 전체에 그으려면 `px-16px` 를 카드가 아니라 각 `section` 에 준다 — 둘 중 하나로 통일한다.
+- 색은 토큰 유틸(`border-default`)로만 — 다크에서 자동으로 따라온다(#7 색은 토큰에서만).
+
+✅ 페이지 본문의 묶음은 **카드로 나눈다** — 선을 긋지 않는다
+✅ 카드 안 묶음 사이에는 `--color-border-default` 1px 와 **위아래 여백**을 함께 둔다
+✅ 묶음마다 제목을 `heading.section`(`text-lg font-bold`)으로 세운다
+
+❌ 페이지 바닥 위 카드 사이에 선을 더 긋기 — 구분이 이중이 된다
+❌ 구획 사이에 `--color-border-divider` — 행 사이용이라 구획이 행처럼 읽힌다
+❌ 첫 묶음 위나 마지막 묶음 아래에 선 — 카드 테두리와 겹친다
+❌ 선만 있고 여백이 없는 구획 — 묶음이 아니라 행처럼 읽힌다
+
+---
+
 ## 부록 — 빠른 결정 표
 
 | 상황 | 무엇을 할까 |
@@ -630,4 +686,5 @@ Product-SaaS 안에서 어떤 구현을 선택할지 갈릴 때, 다음 순서�
 | 새 카드 외형이 필요 | 거의 항상 `AiCard`로 충분. 정말 다르다면 디자인 리뷰 후 primitive 추가 |
 | 차트가 필요 | `MiniLineChart` / `AiUsageChart` 확장 — SVG 단위 규칙(#3) 준수 |
 | 테이블이 필요 | `DataTable` (chrome) / `AiClassificationTable` `AiCostTable` (widget) |
+| 한 화면의 여러 구획 구분 | 페이지 본문이면 카드로 나눔 · 카드 안이면 `border-t border-default` + 여백 (#14) |
 | 위젯 토글 | `useWhaTapAi()` 한 곳에서 `aiActive` 공유. `DashboardLayout`에 `widgetOpen` 전달 |
