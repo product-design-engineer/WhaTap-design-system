@@ -14,8 +14,8 @@ import type { ReactNode, ButtonHTMLAttributes } from "react";
  *
  * ## When NOT to use
  * - **일반 액션 버튼** (contained/outline/basic) → [[Button]].
- * - **AI 위젯 토글** → [[AiAssistantButton]].
- * - **AI 송신** → [[AiSendButton]].
+ * - **AI 위젯 토글** → [[AssistantButton]].
+ * - **AI 송신** → [[SendButton]].
  * - **48px 헤더 밖** 에서의 pill 버튼 — 높이/패딩이 헤더 전용 spec.
  *
  * ## Composition rules
@@ -33,7 +33,7 @@ import type { ReactNode, ButtonHTMLAttributes } from "react";
 export type HeaderPillButtonSize = "md" | "sm";
 
 /**
- * 사이즈별 규격 — [[AiAssistantButton]] 의 SIZE 맵과 같은 단계를 쓴다.
+ * 사이즈별 규격 — [[AssistantButton]] 의 SIZE 맵과 같은 단계를 쓴다.
  * 헤더 한 줄에 두 컴포넌트가 나란히 놓이므로 스케일이 갈라지면 안 된다.
  * (DS 사이즈 스케일: 36 / 32 / 24 / 20 — 그 사이의 임의값 금지)
  */

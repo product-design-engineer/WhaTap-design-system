@@ -11,7 +11,7 @@ const meta: Meta<typeof CriteriaGroup> = {
     docs: {
       description: {
         component:
-          "**분류 기준 그룹 행 (part)** — [[AiCriteriaSelection]] 의 단일 기준 행. tone 배경 + 좌측 도트 + 제목 + 상세.",
+          "**분류 기준 그룹 행 (part)** — [[CriteriaSelection]] 의 단일 기준 행. tone 배경 + 좌측 도트 + 제목 + 상세.",
       },
     },
   },

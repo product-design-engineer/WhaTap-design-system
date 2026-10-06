@@ -1,5 +1,5 @@
 /**
- * AiExecutionResult — 작업 실행 후 결과 통지 메시지.
+ * ExecutionResult — 작업 실행 후 결과 통지 메시지.
  *
  * ## Purpose
  * AI 가 어떤 작업을 **실행한 뒤** 그 결과를 사용자에게 알리는 읽기 전용 통지. variant 로 상태를
@@ -11,9 +11,9 @@
  * - 실패·미상 오류의 원인을 details(KV) + footer 후속 안내로 보여줄 때.
  *
  * ## When NOT to use
- * - 실행 **전** 미리보기 / 승인 요청 → [[AiAlertRulePreview]] + [[AiChoiceButtons]].
+ * - 실행 **전** 미리보기 / 승인 요청 → [[AlertRulePreview]] + [[ChoiceButtons]].
  * - 진행 중(스피너) 상태 표시 → 도구 호출 진행 표시 컴포넌트.
- * - 구성 제안 안내 → [[AiDashboardProposal]] / [[AiMigPlan]].
+ * - 구성 제안 안내 → [[DashboardProposal]] / [[MigPlan]].
  *
  * ## Composition rules
  * - 이 컴포넌트는 `AiCard` chrome 없이 자체 `flex-col` 레이아웃 (헤더+타임스탬프 전용 구조).
@@ -22,7 +22,7 @@
  *
  * @example
  * ```tsx
- * <AiExecutionResult
+ * <ExecutionResult
  *   variant="success"
  *   timestamp="2026-05-31 14:02:11"
  *   body="CPU 알림 임계값이 변경되었습니다."
@@ -53,7 +53,7 @@ export type AiExecutionResultProps = {
   footer?: string;
 };
 
-export default function AiExecutionResult({
+export default function ExecutionResult({
   variant,
   timestamp,
   body,

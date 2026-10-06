@@ -1,5 +1,5 @@
 /**
- * AiActionChip — [[WhaTapAiWidget]] 랜딩의 단일 액션 칩 버튼.
+ * ActionChip — [[WhaTapAiWidget]] 랜딩의 단일 액션 칩 버튼.
  *
  * ## Purpose
  * 랜딩 인사말 아래 제안 액션 한 건을 칩 버튼으로 렌더 — 라벨 텍스트 + 진입 페이드인 애니메이션.
@@ -22,11 +22,11 @@
  * @example
  * ```tsx
  * {actions.map((label, i) => (
- *   <AiActionChip key={label} label={label} index={i} />
+ *   <ActionChip key={label} label={label} index={i} />
  * ))}
  * ```
  */
-export default function AiActionChip({
+export default function ActionChip({
   label,
   index,
 }: {

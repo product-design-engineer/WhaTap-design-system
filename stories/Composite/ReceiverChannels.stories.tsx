@@ -1,11 +1,11 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiReceiverChannels } from "@whatap/design-system/widget";
+import { ReceiverChannels } from "@whatap/design-system/widget";
 import type { ChannelState } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiReceiverChannels> = {
+const meta: Meta<typeof ReceiverChannels> = {
   title: "Composite/ReceiverChannels",
-  component: AiReceiverChannels,
+  component: ReceiverChannels,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -19,7 +19,7 @@ const meta: Meta<typeof AiReceiverChannels> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiReceiverChannels>;
+type Story = StoryObj<typeof ReceiverChannels>;
 
 const SAMPLE: ChannelState[] = [
   { key: "email", label: "이메일", detail: "kyungho.oh@whatap.io", enabled: true },
@@ -36,7 +36,7 @@ export const Interactive: Story = {
     const Demo = () => {
       const [channels, setChannels] = useState(SAMPLE);
       return (
-        <AiReceiverChannels
+        <ReceiverChannels
           channels={channels}
           onToggle={(key, next) => setChannels((arr) => arr.map((c) => c.key === key ? { ...c, enabled: next } : c))}
         />

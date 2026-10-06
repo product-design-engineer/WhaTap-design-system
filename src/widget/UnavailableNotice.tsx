@@ -1,5 +1,5 @@
 /**
- * AiUnavailableNotice — WhaTap AI 를 사용할 수 없을 때 위젯 본문에 노출하는 안내 메시지.
+ * UnavailableNotice — WhaTap AI 를 사용할 수 없을 때 위젯 본문에 노출하는 안내 메시지.
  *
  * ## Purpose
  * 특정 사유(요금제 미포함 · 사용량 한도 초과 · 서비스 점검 · 데이터 수집 준비 · 권한 없음 ·
@@ -11,8 +11,8 @@
  * - AI 응답 자체가 불가능해 "무엇을 어떻게" 안내해야 할 때 (에러 토스트로는 부족한 상황).
  *
  * ## When NOT to use
- * - 일반 AI 분석 결과/경고 메시지 → [[AiInsightSection]] · [[AiCard]] + 톤 헤딩.
- * - 로딩/도구 실행 진행 → [[AiLoadingMessage]] · [[AiToolCallStep]].
+ * - 일반 AI 분석 결과/경고 메시지 → [[InsightSection]] · [[AiCard]] + 톤 헤딩.
+ * - 로딩/도구 실행 진행 → [[LoadingMessage]] · [[ToolCallStep]].
  * - 입력은 가능한데 한 줄 힌트만 → placeholder / caption 텍스트.
  *
  * ## Composition rules
@@ -24,10 +24,10 @@
  * @example
  * ```tsx
  * // preset 사용
- * <AiUnavailableNotice reason="quota" onAction={openBilling} />
+ * <UnavailableNotice reason="quota" onAction={openBilling} />
  *
  * // 커스텀 사용
- * <AiUnavailableNotice
+ * <UnavailableNotice
  *   intent="warning"
  *   title="AI 사용이 일시 중단되었습니다"
  *   description={"조직 관리자가 WhaTap AI 를 비활성화했습니다."}
@@ -140,12 +140,12 @@ export interface AiUnavailableNoticeProps {
    * 액션 버튼 크기. 기본 `md`(h-24px).
    *
    * 소비 제품이 버튼 높이를 한 값으로 통일해 두는 경우가 많아 `Button` 의 기본 크기를 그대로
-   * 따른다. 같은 표면의 랜딩 칩([[AiActionChip]])이 32px 이므로 그쪽에 맞추려면 `lg` 를 넘긴다.
+   * 따른다. 같은 표면의 랜딩 칩([[ActionChip]])이 32px 이므로 그쪽에 맞추려면 `lg` 를 넘긴다.
    */
   actionSize?: "sm" | "md" | "lg" | "xl";
 }
 
-export default function AiUnavailableNotice({
+export default function UnavailableNotice({
   reason,
   intent,
   icon,

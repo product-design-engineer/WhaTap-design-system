@@ -2,17 +2,17 @@ import { TONE_DOT, TONE_BG, TONE_TEXT, type Tone } from "./_tokens";
 import type { EventSeverity, EventRow } from "./EventList";
 
 /**
- * EventListItem — [[AiEventList]] 의 단일 이벤트 행(`<li>`).
+ * EventListItem — [[EventList]] 의 단일 이벤트 행(`<li>`).
  *
  * ## Purpose
  * 이벤트 한 건을 한 줄로 렌더 — 시간(고정폭) · 심각도 칩(도트 + 라벨) · 소스 + 메시지(truncate).
  * `AiEventList` 의 `rows.map(...)` 안에 인라인되어 있던 행 마크업을 그대로 추출한 것.
  *
  * ## When to use
- * - [[AiEventList]] 가 `rows.map` 으로 항목마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
+ * - [[EventList]] 가 `rows.map` 으로 항목마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
  *
  * ## When NOT to use
- * - 카드 chrome / 헤딩 / 요약 줄 → 부모 [[AiEventList]] 가 책임.
+ * - 카드 chrome / 헤딩 / 요약 줄 → 부모 [[EventList]] 가 책임.
  * - 이벤트가 아닌 다른 목록 항목 → 해당 위젯의 행 컴포넌트 사용.
  *
  * ## Composition rules

@@ -25,8 +25,8 @@
  *
  * ## When NOT to use
  * - 링크 이동 → `<a>` 사용.
- * - AI 토글 그라데이션 → [[AiAssistantButton]].
- * - AI 위젯 송신 → [[AiSendButton]].
+ * - AI 토글 그라데이션 → [[AssistantButton]].
+ * - AI 위젯 송신 → [[SendButton]].
  * - icon-only 압축 버튼 (size 16-20px) → 인라인 OK.
  *
  * ## Composition rules

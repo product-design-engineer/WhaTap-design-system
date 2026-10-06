@@ -1,5 +1,5 @@
 /**
- * AiReceiverChannels — 사용자별 알림 수신 채널 카드.
+ * ReceiverChannels — 사용자별 알림 수신 채널 카드.
  *
  * ## Purpose
  * 현재 켜진/꺼진 알림 수신 채널(✉️ 이메일 · 💬 SMS · 📞 WhatsApp · 📱 모바일)을 한 카드에
@@ -12,7 +12,7 @@
  *
  * ## When NOT to use
  * - 요일×시간, 이벤트 수신 태그, 3rd-party 연동 등 **정밀 설정** → 레거시 알림 설정 페이지에 위임.
- * - 채널 단위가 아닌 일반 선택지 제시 → [[AiChoiceButtons]].
+ * - 채널 단위가 아닌 일반 선택지 제시 → [[ChoiceButtons]].
  *
  * ## Composition rules
  * - [[AiCard]] + [[AiSectionHeading]](📬) 프리미티브 조립 — 인라인 chrome 금지.
@@ -21,7 +21,7 @@
  *
  * @example
  * ```tsx
- * <AiReceiverChannels
+ * <ReceiverChannels
  *   channels={[
  *     { key: "email", label: "이메일", detail: "kyungho.oh@whatap.io", enabled: true },
  *     { key: "mobile", label: "모바일", enabled: false },
@@ -53,7 +53,7 @@ const CHANNEL_ICON: Record<ChannelKey, string> = {
   mobile: "📱",
 };
 
-export default function AiReceiverChannels({
+export default function ReceiverChannels({
   caption = "알림 수신 채널",
   channels,
   onToggle,

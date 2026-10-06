@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiChatExchange } from "@whatap/design-system/widget";
+import { ChatExchange } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiChatExchange> = {
+const meta: Meta<typeof ChatExchange> = {
   title: "Composite/ChatExchange",
-  component: AiChatExchange,
+  component: ChatExchange,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -19,7 +19,7 @@ const meta: Meta<typeof AiChatExchange> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiChatExchange>;
+type Story = StoryObj<typeof ChatExchange>;
 
 export const QuestionAndAnswer: Story = {
   args: {

@@ -10,7 +10,7 @@ const meta: Meta<typeof CostBreakdownRow> = {
     docs: {
       description: {
         component:
-          "**비용 표 행** — [[AiCostBreakdown]] 5컬럼 표(GPU / Pod / 평균 사용률 / 유휴 비율 / 일일 낭비)의 데이터 행 한 건. 부모 표 헤더와 동일한 grid 트랙을 공유한다.",
+          "**비용 표 행** — [[CostBreakdown]] 5컬럼 표(GPU / Pod / 평균 사용률 / 유휴 비율 / 일일 낭비)의 데이터 행 한 건. 부모 표 헤더와 동일한 grid 트랙을 공유한다.",
       },
     },
   },

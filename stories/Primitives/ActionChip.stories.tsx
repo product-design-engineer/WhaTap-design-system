@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import AiActionChip from "../../src/widget/ActionChip";
+import ActionChip from "../../src/widget/ActionChip";
 
-const meta: Meta<typeof AiActionChip> = {
+const meta: Meta<typeof ActionChip> = {
   title: "Primitives/ActionChip",
-  component: AiActionChip,
+  component: ActionChip,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -24,7 +24,7 @@ const meta: Meta<typeof AiActionChip> = {
   ],
 };
 export default meta;
-type Story = StoryObj<typeof AiActionChip>;
+type Story = StoryObj<typeof ActionChip>;
 
 export const First: Story = {
   args: {

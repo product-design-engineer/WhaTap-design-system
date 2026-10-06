@@ -1,5 +1,5 @@
 /**
- * AiPromptInput — 사용자 자연어 입력 영역 (위젯 인풋 chrome 통째).
+ * PromptInput — 사용자 자연어 입력 영역 (위젯 인풋 chrome 통째).
  *
  * Figma: 27087:3416 (Common 파일).
  *
@@ -15,7 +15,7 @@
  * │                                                                  │
  * │ <textarea>  placeholder 또는 입력 텍스트                         │
  * │                                                                  │
- * │ [+ attach] [토큰 입력 N · 출력 M]              [⬆ AiSendButton] │
+ * │ [+ attach] [토큰 입력 N · 출력 M]              [⬆ SendButton] │
  * └────────────────────────────────────────────────────────────────┘
  * AI 응답은 정확하지 않을 수 있습니다. 중요한 결정은 반드시 확인해 주세요.  ← 하단 caption
  * ```
@@ -35,14 +35,14 @@
  *
  * ## Composition rules
  * - 토큰 pill (`tokenInput` / `tokenOutput`) 는 [[TokenUsageBadge]] (Figma 29424:19317) — pill 형 inline.
- * - 송신 버튼은 [[AiSendButton]] (24×24 squared) — input 텍스트 있으면 활성 자동 전환.
+ * - 송신 버튼은 [[SendButton]] (24×24 squared) — input 텍스트 있으면 활성 자동 전환.
  * - 첨부 chip 행은 `attachments` prop 있을 때만 노출. mime 미지정 시 "CSV" 로 fallback.
  * - 캡션 "AI 응답은 정확하지 않을 수 있습니다…" 는 prototype 전역 정책 — 임의로 제거하지 말 것.
  *
  * @example
  * ```tsx
  * const [text, setText] = useState("");
- * <AiPromptInput
+ * <PromptInput
  *   value={text}
  *   onChange={setText}
  *   onSubmit={(v) => sendToAi(v)}
@@ -53,7 +53,7 @@
  * ```
  */
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
-import AiSendButton from "./SendButton";
+import SendButton from "./SendButton";
 
 export type AiPromptAttachment = {
   /** 파일 이름 (truncate 처리됨). */
@@ -104,7 +104,7 @@ export type AiPromptInputProps = {
 
 const DEFAULT_CAPTION = "AI 응답은 정확하지 않을 수 있습니다. 중요한 결정은 반드시 확인해 주세요.";
 
-export default function AiPromptInput({
+export default function PromptInput({
   value,
   onChange,
   onSubmit,
@@ -304,7 +304,7 @@ export default function AiPromptInput({
             )}
           </div>
           <div className="flex gap-8px items-center shrink-0">
-            <AiSendButton
+            <SendButton
               active={hasInput && !disabled}
               onClick={submit}
               showCursor={showSendCursor}
@@ -355,7 +355,7 @@ function UsagePill({ children }: { children: ReactNode }) {
  * TokenUsageBadge — AI 입출력 토큰 사용량 pill (Figma 29424:19317).
  *
  * "토큰 입력 N · 출력 M" 형태. bg var(--color-surface-50) / radius 24px / px 8 / py 4 / 10px text, 숫자 bold.
- * AiPromptInput 의 내부 sub-component.
+ * PromptInput 의 내부 sub-component.
  */
 function TokenUsageBadge({ inputTokens, outputTokens }: { inputTokens: number; outputTokens: number }) {
   const fmt = (n: number) => n.toLocaleString("en-US");

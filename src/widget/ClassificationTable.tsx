@@ -1,7 +1,7 @@
 import ClassificationTableRow from "./ClassificationTableRow";
 
 /**
- * AiClassificationTable — 리소스 활용도 분류 결과 데이터 테이블 카드.
+ * ClassificationTable — 리소스 활용도 분류 결과 데이터 테이블 카드.
  *
  * ## Purpose
  * 헤더 + N개 행으로 GPU 등 리소스를 활용도(고/활용/저/유휴)별로 분류해 보여주는 표.
@@ -13,9 +13,9 @@ import ClassificationTableRow from "./ClassificationTableRow";
  * - 분류 결과를 컬러 배지로 시각 신호화하면서 통계(평균/최대/최소)도 함께 제시할 때.
  *
  * ## When NOT to use
- * - 비용 비교/분해 → [[AiCostTable]] · [[AiCostBreakdown]].
- * - 시간대별 사용률 추이 → [[AiUsageChart]].
- * - 알림/이벤트 기록 → [[AiEventList]].
+ * - 비용 비교/분해 → [[CostTable]] · [[CostBreakdown]].
+ * - 시간대별 사용률 추이 → [[UsageChart]].
+ * - 알림/이벤트 기록 → [[EventList]].
  *
  * ## Composition rules
  * - 자체 표 레이아웃을 가지며 [[AiCard]] 로 감싸지 않음.
@@ -29,7 +29,7 @@ import ClassificationTableRow from "./ClassificationTableRow";
  *
  * @example
  * ```tsx
- * <AiClassificationTable
+ * <ClassificationTable
  *   caption="GPU 활용도 분류"
  *   description="최근 24시간 평균 사용률 기준으로 분류했습니다."
  *   rows={[
@@ -62,7 +62,7 @@ export type ClassificationRow = {
   badge?: string;
 };
 
-export default function AiClassificationTable({
+export default function ClassificationTable({
   caption,
   description,
   warning,

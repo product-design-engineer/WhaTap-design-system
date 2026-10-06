@@ -1,18 +1,18 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiSummaryBanner, Chip } from "@whatap/design-system";
-import { AiAssistantButton } from "@whatap/design-system/widget";
+import { SummaryBanner, Chip } from "@whatap/design-system";
+import { AssistantButton } from "@whatap/design-system/widget";
 
 /**
- * Stories for [[AiSummaryBanner]] — 화면 상단 40px AI 요약 배너(슬롯 구조).
+ * Stories for [[SummaryBanner]] — 화면 상단 40px AI 요약 배너(슬롯 구조).
  *
  * 화면 진입 직후 AI 가 스스로 돌린 점검 결과를 알리고 심층 분석(위젯 전환)으로 유도한다.
  * 내용은 전부 슬롯(symbol · children · summary · tags · actions)으로 주입한다.
  */
 
-const meta: Meta<typeof AiSummaryBanner> = {
+const meta: Meta<typeof SummaryBanner> = {
   title: "Composite/SummaryBanner",
-  component: AiSummaryBanner,
+  component: SummaryBanner,
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",
@@ -26,12 +26,12 @@ const meta: Meta<typeof AiSummaryBanner> = {
           "- `children` — 주 문장(한 줄)\n" +
           "- `summary` — 보조 카운트 (예: `주의 2 · 관찰 1 · 정상 3`)\n" +
           "- `tags` — [[Chip]] 판정 칩 나열\n" +
-          "- `actions` — 주 실행. [[AiAssistantButton]] `size=\"sm\"`(24px) 권장 — 40px 안에 여유를 남긴다\n" +
+          "- `actions` — 주 실행. [[AssistantButton]] `size=\"sm\"`(24px) 권장 — 40px 안에 여유를 남긴다\n" +
           "- `onClose` — 지정 시 우측 × 노출\n\n" +
           "**규격:** 높이 40px 고정(패딩이 아니라 height). 슬롯 내용이 커져도 늘어나지 않는다. " +
           "높이를 0 → 40 으로 트랜지션하므로 아래 콘텐츠를 밀어내며 등장하고 덮지 않는다.\n\n" +
           "**tone:** `info`(기본, 정보성 표면 토큰) / `neutral`(무채색 표면 토큰).\n\n" +
-          "**언제 쓰지 않는가:** 실행 완료 확인은 [[Toast]], AI 사용 불가 안내는 [[AiUnavailableNotice]].",
+          "**언제 쓰지 않는가:** 실행 완료 확인은 [[Toast]], AI 사용 불가 안내는 [[UnavailableNotice]].",
       },
     },
   },
@@ -53,7 +53,7 @@ export const Default: Story = {
     children: "최근 1시간 헬스체크를 WhaTap AI가 분석했습니다",
     summary: "주의 2 · 관찰 1 · 정상 3",
     tags: WARN_TAGS,
-    actions: <AiAssistantButton size="sm">심층 분석하기</AiAssistantButton>,
+    actions: <AssistantButton size="sm">심층 분석하기</AssistantButton>,
   },
 };
 
@@ -68,7 +68,7 @@ export const AllNormal: Story = {
     revealDelayMs: 0,
     children: "최근 1시간 헬스체크를 WhaTap AI가 분석했습니다",
     summary: "정상 6",
-    actions: <AiAssistantButton size="sm">자세히 보기</AiAssistantButton>,
+    actions: <AssistantButton size="sm">자세히 보기</AssistantButton>,
   },
 };
 
@@ -88,7 +88,7 @@ export const ManyTags: Story = {
         <Chip variant="soft" tone="neutral" size="sm">TPS 206.5</Chip>
       </>
     ),
-    actions: <AiAssistantButton size="sm">심층 분석하기</AiAssistantButton>,
+    actions: <AssistantButton size="sm">심층 분석하기</AssistantButton>,
   },
 };
 
@@ -109,15 +109,15 @@ export const Closable: Story = {
     return (
       <div className="flex flex-col">
         {open && (
-          <AiSummaryBanner
+          <SummaryBanner
             revealDelayMs={0}
             summary="주의 2 · 관찰 1 · 정상 3"
             tags={WARN_TAGS}
-            actions={<AiAssistantButton size="sm">심층 분석하기</AiAssistantButton>}
+            actions={<AssistantButton size="sm">심층 분석하기</AssistantButton>}
             onClose={() => setOpen(false)}
           >
             최근 1시간 헬스체크를 WhaTap AI가 분석했습니다
-          </AiSummaryBanner>
+          </SummaryBanner>
         )}
         <div className="p-12px">
           <button

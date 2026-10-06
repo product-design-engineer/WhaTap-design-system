@@ -1,7 +1,7 @@
 import CostBreakdownRow from "./CostBreakdownRow";
 
 /**
- * AiCostBreakdown — GPU 단위 낭비 비용 상세 분석 카드.
+ * CostBreakdown — GPU 단위 낭비 비용 상세 분석 카드.
  *
  * ## Purpose
  * 헤더(컬러 도트 + 라벨) + 1줄 컨텍스트 + 5컬럼 표(GPU / Pod / 평균 사용률 / 유휴 비율 /
@@ -13,9 +13,9 @@ import CostBreakdownRow from "./CostBreakdownRow";
  * - 행별 소계 + 월 환산까지 한 카드에서 누적 요약이 필요할 때.
  *
  * ## When NOT to use
- * - 현행/제안 2-안 비교 위주 → [[AiCostTable]].
- * - 활용 분류(고/저활용) 표 → [[AiClassificationTable]].
- * - 시간대별 사용률 추이 → [[AiUsageChart]].
+ * - 현행/제안 2-안 비교 위주 → [[CostTable]].
+ * - 활용 분류(고/저활용) 표 → [[ClassificationTable]].
+ * - 시간대별 사용률 추이 → [[UsageChart]].
  *
  * ## Composition rules
  * - 자체 레이아웃을 가지며 [[AiCard]] 로 감싸지 않음 (표 자체는 보더, 외곽은 무 chrome).
@@ -28,7 +28,7 @@ import CostBreakdownRow from "./CostBreakdownRow";
  *
  * @example
  * ```tsx
- * <AiCostBreakdown
+ * <CostBreakdown
  *   toneLabel="저활용 GPU - 낭비 비용 분석"
  *   toneColor="var(--color-brand-blue)"
  *   context="A100 40GB 참고 비용 ₩2,800/hr 기준 일일 환산"
@@ -49,7 +49,7 @@ export type CostBreakdownRow = {
   daily: string;
 };
 
-export default function AiCostBreakdown({
+export default function CostBreakdown({
   toneLabel,
   toneColor,
   context,

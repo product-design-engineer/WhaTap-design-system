@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiToolCallStep } from "@whatap/design-system/widget";
+import { ToolCallStep } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiToolCallStep> = {
+const meta: Meta<typeof ToolCallStep> = {
   title: "Primitives/ToolCallStep",
-  component: AiToolCallStep,
+  component: ToolCallStep,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -17,7 +17,7 @@ const meta: Meta<typeof AiToolCallStep> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiToolCallStep>;
+type Story = StoryObj<typeof ToolCallStep>;
 
 export const Running: Story = {
   args: {

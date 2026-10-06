@@ -1,5 +1,5 @@
 /**
- * AiAssistantButton — WhaTap AI 위젯 토글 (그라데이션 보더 버튼).
+ * AssistantButton — WhaTap AI 위젯 토글 (그라데이션 보더 버튼).
  *
  * ## Purpose
  * PageHeader 우측의 'WhaTap AI' 버튼을 컴포넌트로 추출. AI 위젯 열림/닫힘 토글 trigger.
@@ -11,7 +11,7 @@
  *
  * ## When NOT to use
  * - 일반 CTA 버튼 → [[Button]] (variant=contained · tone=primary).
- * - AI 위젯 내부의 다른 액션 → [[AiSendButton]] 등.
+ * - AI 위젯 내부의 다른 액션 → [[SendButton]] 등.
  *
  * ## Composition rules
  * - `aiActive` prop 으로 위젯 열림 상태 표시 — `.is-active` class 가 추가되어 강조 그라데이션 활성.
@@ -21,7 +21,7 @@
  * @example
  * ```tsx
  * const [active, setActive] = useState(false);
- * <AiAssistantButton aiActive={active} onClick={() => setActive(v => !v)} />
+ * <AssistantButton aiActive={active} onClick={() => setActive(v => !v)} />
  * ```
  */
 import type { ButtonHTMLAttributes, ReactNode } from "react";
@@ -44,7 +44,7 @@ const SIZE: Record<AiAssistantButtonSize, { box: string; icon: string; text: str
   sm: { box: "h-24px px-12px", icon: "size-14px", text: "text-base" },
 };
 
-export default function AiAssistantButton({
+export default function AssistantButton({
   aiActive = false,
   size = "md",
   children = "WhaTap AI",

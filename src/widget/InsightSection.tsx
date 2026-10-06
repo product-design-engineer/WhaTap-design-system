@@ -1,5 +1,5 @@
 /**
- * AiInsightSection — 선택 제목 + 본문 문단으로 된 AI 분석 텍스트 섹션.
+ * InsightSection — 선택 제목 + 본문 문단으로 된 AI 분석 텍스트 섹션.
  *
  * ## Purpose
  * AI 응답 메시지 스택 안에서 "분석 결과:" 같은 미디엄 레벨 헤딩(`title`, 굵게)과
@@ -13,7 +13,7 @@
  * ## When NOT to use
  * - 톤(critical/warning 등) 강조 헤딩이 필요 → [[AiCard]] + AiSectionHeading 의 `tone` 사용.
  * - 표·차트·목록 등 구조화 데이터 → 해당 전용 위젯 카드.
- * - 추론 단계/진행 타임라인 → [[AiReasoning]] · [[AiStepsTimeline]].
+ * - 추론 단계/진행 타임라인 → [[Reasoning]] · [[StepsTimeline]].
  *
  * ## Composition rules
  * - 배경·테두리 없는 투명 텍스트 블록 — 카드 외형이 필요하면 [[AiCard]] 로 감싸 composition.
@@ -21,13 +21,13 @@
  *
  * @example
  * ```tsx
- * <AiInsightSection
+ * <InsightSection
  *   title="분석 결과"
  *   body={"최근 1시간 응답시간이 평소 대비 18% 증가했습니다.\n주요 원인은 DB 커넥션 대기입니다."}
  * />
  * ```
  */
-export default function AiInsightSection({
+export default function InsightSection({
   title,
   body,
   delay = 0,

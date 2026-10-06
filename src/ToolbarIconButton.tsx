@@ -15,7 +15,7 @@ import Tooltip, { type TooltipPlacement } from "./Tooltip";
  * ## When NOT to use
  * - 라벨이 함께 붙는 버튼 → [[Button]] / [[HeaderPillButton]].
  * - 48px 페이지 헤더 안의 아이콘 → 헤더 전용 spec([[PageHeader]] 내부).
- * - AI 진입점 → [[AiTriggerButton]] / [[AiAssistantButton]].
+ * - AI 진입점 → [[TriggerButton]] / [[AssistantButton]].
  *
  * ## Composition rules
  * - 박스는 `--wds-toolbar-control-h` 정사각. 폭을 따로 주지 않는다(정사각이 아니면 줄 안에서

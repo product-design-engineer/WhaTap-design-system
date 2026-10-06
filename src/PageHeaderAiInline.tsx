@@ -2,7 +2,7 @@
  * PageHeaderAiInline — 48px 페이지 헤더의 AI inline variant.
  *
  * ## Purpose
- * 기존 [[PageHeader]] 의 WhaTap AI 토글 버튼 자리를 [[AiInlinePrompt]] 로 대체.
+ * 기존 [[PageHeader]] 의 WhaTap AI 토글 버튼 자리를 [[InlinePrompt]] 로 대체.
  * AI 위젯 호출 trigger 가 인라인 prompt 의 송신으로 이동 — 별도 토글 entry 없음.
  * 48px 높이 invariant 유지. 좌측 타이틀 + 중앙 inline prompt(max 480px) + 우측 chrome(고객지원/벨/아바타).
  *

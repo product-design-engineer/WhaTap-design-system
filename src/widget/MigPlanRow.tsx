@@ -2,19 +2,19 @@
  * MigPlanRow — MIG 계획 표의 단일 데이터 행 (구성 / 분할·Pod / 월 환산).
  *
  * ## Purpose
- * [[AiMigPlan]] 의 요약 테이블에서 `rows.map` 으로 흩어져 있던 한 행 마크업을
+ * [[MigPlan]] 의 요약 테이블에서 `rows.map` 으로 흩어져 있던 한 행 마크업을
  * 한 곳으로 모은 것. 3열 그리드(구성 라벨 · 분할/Pod 구성 · 월 환산 금액)로 그리며,
  * `highlight` 면 행 배경을 라이트블루로 강조합니다. 헤더 행은 포함하지 않습니다
  * (부모가 인라인 유지).
  *
  * ## When to use
- * - [[AiMigPlan]] 이 `rows.map` 으로 행마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
+ * - [[MigPlan]] 이 `rows.map` 으로 행마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
  * - 동일한 MIG 요약 표 행 외형이 필요한 다른 표면.
  *
  * ## When NOT to use
  * - 표 헤더 행 → 부모가 인라인으로 직접 렌더.
  * - 일반 bullet 항목 → [[AiBulletList]] 영역.
- * - 비용 요약/액션 블록 → [[AiMigPlan]] 내부 전용 구조.
+ * - 비용 요약/액션 블록 → [[MigPlan]] 내부 전용 구조.
  *
  * ## Composition rules
  * - 데이터(label · config · monthly · highlight)만 주입 — 그리드 컬럼/정렬/강조는 이 컴포넌트가 책임.

@@ -4,7 +4,7 @@ interface AiQuickActionChipProps {
 }
 
 /**
- * AiQuickActionChip — AI surface. [[AiWidget]] 본문의 빠른 액션 칩(pill 버튼) 한 개.
+ * QuickActionChip — AI surface. [[AiWidget]] 본문의 빠른 액션 칩(pill 버튼) 한 개.
  *
  * ## Purpose
  * AI 위젯 환영 메시지 아래 늘어서는 "현재 상태 요약" 등 빠른 액션 칩 하나를 렌더.
@@ -18,7 +18,7 @@ interface AiQuickActionChipProps {
  *
  * ## When NOT to use
  * - 일반 폼/툴바의 버튼 → 표준 버튼 컴포넌트.
- * - 헤더 안 AI 토글 버튼 → [[AiAssistantButton]].
+ * - 헤더 안 AI 토글 버튼 → [[AssistantButton]].
  *
  * ## Composition rules
  * - `label` 텍스트만 주입 — pill 외형/hover 전환은 이 컴포넌트가 책임.
@@ -27,10 +27,10 @@ interface AiQuickActionChipProps {
  *
  * @example
  * ```tsx
- * {QUICK_ACTIONS.map((label) => <AiQuickActionChip key={label} label={label} />)}
+ * {QUICK_ACTIONS.map((label) => <QuickActionChip key={label} label={label} />)}
  * ```
  */
-export default function AiQuickActionChip({ label, onClick }: AiQuickActionChipProps) {
+export default function QuickActionChip({ label, onClick }: AiQuickActionChipProps) {
   return (
     <button
       onClick={onClick}

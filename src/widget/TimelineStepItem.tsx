@@ -1,17 +1,17 @@
 import type { TimelineStep } from "./StepsTimeline";
 
 /**
- * TimelineStepItem — [[AiStepsTimeline]] 의 단일 타임라인 단계 행.
+ * TimelineStepItem — [[StepsTimeline]] 의 단일 타임라인 단계 행.
  *
  * ## Purpose
  * 단계 한 건을 한 줄 카드로 렌더 — 상태 마커(완료 ✓ / 진행 spinner) · 라벨(truncate) · 우측 화살표.
  * `AiStepsTimeline` 의 `steps.map(...)` 안에 인라인되어 있던 행 마크업을 그대로 추출한 것.
  *
  * ## When to use
- * - [[AiStepsTimeline]] 가 `steps.map` 으로 단계마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
+ * - [[StepsTimeline]] 가 `steps.map` 으로 단계마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
  *
  * ## When NOT to use
- * - 헤더(`N steps`)·접기/펼치기·등장 애니메이션 → 부모 [[AiStepsTimeline]] 가 책임.
+ * - 헤더(`N steps`)·접기/펼치기·등장 애니메이션 → 부모 [[StepsTimeline]] 가 책임.
  * - 단계가 아닌 다른 목록 항목 → 해당 위젯의 행 컴포넌트 사용.
  *
  * ## Composition rules

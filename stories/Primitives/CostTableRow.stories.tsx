@@ -11,7 +11,7 @@ const meta: Meta<typeof CostTableRow> = {
     docs: {
       description: {
         component:
-          "**비용 비교 행** — AiCostTable 본문의 단일 행(라벨 + 상세 + 비용). highlight 면 파란 배경·브랜드 컬러 강조.",
+          "**비용 비교 행** — CostTable 본문의 단일 행(라벨 + 상세 + 비용). highlight 면 파란 배경·브랜드 컬러 강조.",
       },
     },
   },

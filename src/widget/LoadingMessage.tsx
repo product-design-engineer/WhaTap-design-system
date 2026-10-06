@@ -1,5 +1,5 @@
 /**
- * AiLoadingMessage — AI 가 데이터를 수집/분석 중임을 알리는 로딩 안내 줄 (Figma 27110:60783).
+ * LoadingMessage — AI 가 데이터를 수집/분석 중임을 알리는 로딩 안내 줄 (Figma 27110:60783).
  *
  * ## Purpose
  * 좌측 그라데이션 차트 아이콘 + 한 줄 안내 텍스트의 가벼운 진행 표시 카드. AI 응답이
@@ -11,7 +11,7 @@
  * - 결과 카드들이 도착하기 전 단일 줄로 진행 상태를 알릴 때.
  *
  * ## When NOT to use
- * - 단계별 도구 호출 진행 (✓ / spinner 타임라인) → [[AiStepsTimeline]].
+ * - 단계별 도구 호출 진행 (✓ / spinner 타임라인) → [[StepsTimeline]].
  * - 결과를 담은 본문 메시지 → [[AiCard]] 기반 카드.
  *
  * ## Composition rules
@@ -21,11 +21,11 @@
  *
  * @example
  * ```tsx
- * <AiLoadingMessage />
- * <AiLoadingMessage text="GPU 사용률 데이터를 불러오는 중입니다." />
+ * <LoadingMessage />
+ * <LoadingMessage text="GPU 사용률 데이터를 불러오는 중입니다." />
  * ```
  */
-export default function AiLoadingMessage({
+export default function LoadingMessage({
   text = "분석에 필요한 데이터를 수집중입니다.",
 }: {
   text?: string;

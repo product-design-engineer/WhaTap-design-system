@@ -1,5 +1,5 @@
 /**
- * AiMessageActions — AI 응답 하단의 like/dislike/copy 피드백 toolbar (Figma 27598:4604).
+ * MessageActions — AI 응답 하단의 like/dislike/copy 피드백 toolbar (Figma 27598:4604).
  *
  * ## Purpose
  * AI 응답에 대한 사용자 반응을 받는 우측 정렬 3-아이콘 바: 👍 like / 👎 dislike / 📋 copy.
@@ -11,8 +11,8 @@
  * - 응답 카드 본문과 시각적으로 분리하고 싶을 때 `divider` 로 상단 구분선 추가.
  *
  * ## When NOT to use
- * - 복사/재시도만 필요한 단순 교환 → [[AiChatExchange]] 의 내장 toolbar (like/dislike 없음).
- * - prompt 전송 액션 → [[AiSendButton]].
+ * - 복사/재시도만 필요한 단순 교환 → [[ChatExchange]] 의 내장 toolbar (like/dislike 없음).
+ * - prompt 전송 액션 → [[SendButton]].
  *
  * ## Composition rules
  * - 응답 본문 아래에 붙여 배치, 우측 정렬(`justify-end`)·gap 8px(spacing_xs) 유지.
@@ -21,7 +21,7 @@
  *
  * @example
  * ```tsx
- * <AiMessageActions
+ * <MessageActions
  *   divider
  *   onLike={() => logFeedback("like")}
  *   onDislike={() => logFeedback("dislike")}
@@ -33,7 +33,7 @@ import { useState } from "react";
 
 type Reaction = "like" | "dislike" | null;
 
-export default function AiMessageActions({
+export default function MessageActions({
   divider = false,
   onLike,
   onDislike,

@@ -10,7 +10,7 @@ const meta: Meta<typeof MigPlanRow> = {
     docs: {
       description: {
         component:
-          "**MIG 계획 표 행** — [[AiMigPlan]] 요약 표(구성 / 분할·Pod / 월 환산)의 데이터 행 한 건. 부모 표 헤더와 동일한 grid 트랙(`1.4fr 1.4fr 1fr`)을 공유한다.",
+          "**MIG 계획 표 행** — [[MigPlan]] 요약 표(구성 / 분할·Pod / 월 환산)의 데이터 행 한 건. 부모 표 헤더와 동일한 grid 트랙(`1.4fr 1.4fr 1fr`)을 공유한다.",
       },
     },
   },

@@ -442,7 +442,7 @@ const RECIPES: Recipe[] = [
   {
     title: "AI 통합 페이지",
     description: "헤더에 AI 프롬프트 내장 + 우측 AI 위젯 패널. 2-step → 1-step 진입.",
-    components: ["DashboardLayout", "PageHeaderAiInline", "WhaTapAiWidget", "AiCard", "AiReasoning"],
+    components: ["DashboardLayout", "PageHeaderAiInline", "WhaTapAiWidget", "AiCard", "Reasoning"],
     code: `<DashboardLayout
   activeProduct="db"
   widgetOpen={aiActive}

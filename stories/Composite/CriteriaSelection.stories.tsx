@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiCriteriaSelection } from "@whatap/design-system/widget";
+import { CriteriaSelection } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiCriteriaSelection> = {
+const meta: Meta<typeof CriteriaSelection> = {
   title: "Composite/CriteriaSelection",
-  component: AiCriteriaSelection,
+  component: CriteriaSelection,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -17,7 +17,7 @@ const meta: Meta<typeof AiCriteriaSelection> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiCriteriaSelection>;
+type Story = StoryObj<typeof CriteriaSelection>;
 
 export const Default: Story = {
   args: {

@@ -1,5 +1,5 @@
 /**
- * AiSummaryBanner — 화면 상단 40px AI 요약 배너 (슬롯 구조).
+ * SummaryBanner — 화면 상단 40px AI 요약 배너 (슬롯 구조).
  *
  * ## Purpose
  * 화면 진입 직후 AI 가 스스로 돌린 점검·요약 결과를 알리고, 심층 분석(위젯 전환)으로
@@ -12,8 +12,8 @@
  *
  * ## When NOT to use
  * - 사용자 액션의 완료 확인 → [[Toast]] (자동 소멸, 일회성)
- * - AI 를 쓸 수 없는 상태 안내 → [[AiUnavailableNotice]] (위젯 본문)
- * - 대화형 진입점 → [[PageHeaderAiInline]] / [[AiAssistantButton]]
+ * - AI 를 쓸 수 없는 상태 안내 → [[UnavailableNotice]] (위젯 본문)
+ * - 대화형 진입점 → [[PageHeaderAiInline]] / [[AssistantButton]]
  *
  * ## Composition rules
  * - **슬롯 구조**: 배너는 40px 규격·정렬·모션만 책임지고, 내용은 전부 슬롯으로 주입한다.
@@ -21,19 +21,19 @@
  *   `tags`(Chip 등 판정 칩) · `actions`(주 액션 버튼).
  * - 높이 40px 고정 — 패딩이 아니라 height 로 고정해 슬롯 내용이 커져도 배너가 늘어나지 않는다.
  * - `tone="info"`(기본)은 정보성 표면 토큰, `tone="neutral"` 은 무채색 표면 토큰.
- * - 액션 슬롯에는 [[AiAssistantButton]] 처럼 32px 이하 높이 컨트롤만 넣는다.
+ * - 액션 슬롯에는 [[AssistantButton]] 처럼 32px 이하 높이 컨트롤만 넣는다.
  * - 색은 토큰만 사용. 인라인 색 리터럴 금지.
  *
  * @example
  * ```tsx
- * <AiSummaryBanner
+ * <SummaryBanner
  *   summary="주의 2 · 관찰 1 · 정상 3"
  *   tags={<><Chip variant="soft" tone="warning" size="sm">응답시간 21.7s</Chip></>}
- *   actions={<AiAssistantButton onClick={openWidget}>심층 분석하기</AiAssistantButton>}
+ *   actions={<AssistantButton onClick={openWidget}>심층 분석하기</AssistantButton>}
  *   onClose={() => setOpen(false)}
  * >
  *   최근 1시간 헬스체크를 WhaTap AI가 분석했습니다
- * </AiSummaryBanner>
+ * </SummaryBanner>
  * ```
  */
 import { useEffect, useState, type ReactNode } from "react";
@@ -68,7 +68,7 @@ const TONE_STYLE: Record<AiSummaryBannerTone, { bg: string; border: string }> = 
   neutral: { bg: "var(--color-surface-50)", border: "var(--color-border-default)" },
 };
 
-export default function AiSummaryBanner({
+export default function SummaryBanner({
   children,
   symbol,
   summary,

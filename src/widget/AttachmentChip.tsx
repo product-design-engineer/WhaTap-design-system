@@ -1,5 +1,5 @@
 /**
- * AiAttachmentChip — [[WhaTapAiWidget]] 입력 영역의 단일 첨부 파일 칩.
+ * AttachmentChip — [[WhaTapAiWidget]] 입력 영역의 단일 첨부 파일 칩.
  *
  * ## Purpose
  * 입력창 위 첨부 파일 한 건을 고정폭 칩으로 렌더 — 파일명(truncate) + MIME 배지.
@@ -21,11 +21,11 @@
  * @example
  * ```tsx
  * {attachments.map((a, i) => (
- *   <AiAttachmentChip key={i} name={a.name} mime={a.mime} />
+ *   <AttachmentChip key={i} name={a.name} mime={a.mime} />
  * ))}
  * ```
  */
-export default function AiAttachmentChip({
+export default function AttachmentChip({
   name,
   mime,
 }: {

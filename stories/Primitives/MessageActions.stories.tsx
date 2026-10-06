@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiMessageActions } from "@whatap/design-system/widget";
+import { MessageActions } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiMessageActions> = {
+const meta: Meta<typeof MessageActions> = {
   title: "Primitives/MessageActions",
-  component: AiMessageActions,
+  component: MessageActions,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -18,7 +18,7 @@ const meta: Meta<typeof AiMessageActions> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiMessageActions>;
+type Story = StoryObj<typeof MessageActions>;
 
 export const Default: Story = {
   args: { onLike: () => console.log("👍"), onDislike: () => console.log("👎"), onCopy: () => console.log("📋") },

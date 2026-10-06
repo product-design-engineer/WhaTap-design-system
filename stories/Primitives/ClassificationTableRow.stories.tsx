@@ -10,7 +10,7 @@ const meta: Meta<typeof ClassificationTableRow> = {
     docs: {
       description: {
         component:
-          "**분류 표 행** — [[AiClassificationTable]] 7컬럼 표(GPU / 모델명 / 평균 / 최대 / 최소 / Pod / 분류)의 데이터 행 한 건. 부모 표 헤더와 동일한 grid 트랙을 공유하며, 분류 배지의 배경/도트/라벨 색은 부모 `TONE_BADGE` 매핑에서 풀어 props 로 전달된다.",
+          "**분류 표 행** — [[ClassificationTable]] 7컬럼 표(GPU / 모델명 / 평균 / 최대 / 최소 / Pod / 분류)의 데이터 행 한 건. 부모 표 헤더와 동일한 grid 트랙을 공유하며, 분류 배지의 배경/도트/라벨 색은 부모 `TONE_BADGE` 매핑에서 풀어 props 로 전달된다.",
       },
     },
   },

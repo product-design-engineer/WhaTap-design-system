@@ -55,7 +55,7 @@ export const PracticalCombinations: StoryObj = {
       <div style={{ display: "flex", flexDirection: "column", gap: 20, fontFamily: familyKr }}>
         <div>
           <code style={{ fontSize: 11, color: "var(--color-text-tertiary)" }}>regular (400)</code>
-          <p style={{ fontSize: 13, color: "var(--color-text-secondary)", margin: "4px 0", fontWeight: 400 }}>본문 default 텍스트 — AiBulletList, AiUserBubble 등 흔한 본문.</p>
+          <p style={{ fontSize: 13, color: "var(--color-text-secondary)", margin: "4px 0", fontWeight: 400 }}>본문 default 텍스트 — AiBulletList, UserBubble 등 흔한 본문.</p>
         </div>
         <div>
           <code style={{ fontSize: 11, color: "var(--color-text-tertiary)" }}>medium (500)</code>

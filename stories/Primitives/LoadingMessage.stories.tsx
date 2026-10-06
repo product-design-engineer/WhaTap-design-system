@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiLoadingMessage } from "@whatap/design-system/widget";
+import { LoadingMessage } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiLoadingMessage> = {
+const meta: Meta<typeof LoadingMessage> = {
   title: "Primitives/LoadingMessage",
-  component: AiLoadingMessage,
+  component: LoadingMessage,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -17,7 +17,7 @@ const meta: Meta<typeof AiLoadingMessage> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiLoadingMessage>;
+type Story = StoryObj<typeof LoadingMessage>;
 
 export const Default: Story = { args: {} };
 export const Custom: Story = { args: { text: "Kubernetes 이벤트 로그를 분석하는 중입니다." } };

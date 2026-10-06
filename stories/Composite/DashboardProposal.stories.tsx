@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiDashboardProposal } from "@whatap/design-system/widget";
+import { DashboardProposal } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiDashboardProposal> = {
+const meta: Meta<typeof DashboardProposal> = {
   title: "Composite/DashboardProposal",
-  component: AiDashboardProposal,
+  component: DashboardProposal,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -17,7 +17,7 @@ const meta: Meta<typeof AiDashboardProposal> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiDashboardProposal>;
+type Story = StoryObj<typeof DashboardProposal>;
 
 export const Default: Story = {
   args: {

@@ -1,5 +1,5 @@
 /**
- * AiEventList — 실시간 알림 / 이벤트 기록 카드.
+ * EventList — 실시간 알림 / 이벤트 기록 카드.
  *
  * ## Purpose
  * 위젯 안에서 "최근 N시간 알림 N건" 을 한 줄 요약하고, 각 이벤트 행을 시간 + 심각도 배지 +
@@ -11,9 +11,9 @@
  * - 심각도별 컬러 신호와 함께 소스·메시지를 한 줄로 압축 표시할 때.
  *
  * ## When NOT to use
- * - 리소스 활용도 분류 표 → [[AiClassificationTable]].
- * - 비용 비교/분해 → [[AiCostTable]] · [[AiCostBreakdown]].
- * - 단계별 도구 호출 진행 → [[AiStepsTimeline]].
+ * - 리소스 활용도 분류 표 → [[ClassificationTable]].
+ * - 비용 비교/분해 → [[CostTable]] · [[CostBreakdown]].
+ * - 단계별 도구 호출 진행 → [[StepsTimeline]].
  *
  * ## Composition rules
  * - 정책: feedback-widget-primitives — [[AiCard]] + [[AiSectionHeading]] + [[Tone]] 토큰.
@@ -24,7 +24,7 @@
  *
  * @example
  * ```tsx
- * <AiEventList
+ * <EventList
  *   caption="최근 24시간 알림"
  *   summary="16건 (Critical 3 / Warning 13)"
  *   rows={[
@@ -61,7 +61,7 @@ export type EventRow = {
   message: string;
 };
 
-export default function AiEventList({
+export default function EventList({
   caption = "최근 24시간 알림",
   summary,
   rows,

@@ -1,27 +1,27 @@
 import type { CostRow } from "./CostTable";
 
 /**
- * CostTableRow — [[AiCostTable]] 본문의 단일 비용 행(라벨 + 상세 + 비용).
+ * CostTableRow — [[CostTable]] 본문의 단일 비용 행(라벨 + 상세 + 비용).
  *
  * ## Purpose
  * "현행 vs 제안" 비용 비교 테이블의 한 줄을 렌더. `CostRow` 한 건을 받아 좌측에 라벨+상세,
  * 우측에 비용을 표시하고, `highlight` 면 파란 배경(`#eef4ff`)·브랜드 컬러로 강조한다.
- * [[AiCostTable]] 내부 `rows.map` 에 인라인으로 있던 행 마크업을 한 곳으로 모은 것 —
+ * [[CostTable]] 내부 `rows.map` 에 인라인으로 있던 행 마크업을 한 곳으로 모은 것 —
  * JSX·className 그대로(순수 추출), 외형/동작 무변경.
  *
  * ## When to use
- * - [[AiCostTable]] 가 `rows.map` 으로 행마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
+ * - [[CostTable]] 가 `rows.map` 으로 행마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
  * - 동일한 비용 비교 행 외형이 필요한 다른 표면.
  *
  * ## When NOT to use
- * - 카드 chrome·caption·절감 풋라인 전체 → [[AiCostTable]].
- * - GPU/Pod 단위 다컬럼 상세 비용 표 → [[AiCostBreakdown]].
+ * - 카드 chrome·caption·절감 풋라인 전체 → [[CostTable]].
+ * - GPU/Pod 단위 다컬럼 상세 비용 표 → [[CostBreakdown]].
  *
  * ## Composition rules
  * - 데이터(`row`)와 위치(`isFirst`)만 주입 — 행 외형/구분선/강조는 이 컴포넌트가 책임.
  * - 첫 행이 아니면(`isFirst` false) 상단 보더(`border-t`)로 행 구분.
  * - 색·배경은 토큰(`--color-brand-blue`) 및 기존 인라인 hex(`#eef4ff`·`#222`·`#fff`)를
- *   그대로 유지 — 토큰화는 [[AiCostTable]] 와 함께 차후 정리 대상.
+ *   그대로 유지 — 토큰화는 [[CostTable]] 와 함께 차후 정리 대상.
  *
  * @example
  * ```tsx

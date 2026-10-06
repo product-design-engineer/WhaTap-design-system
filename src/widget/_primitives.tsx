@@ -28,8 +28,8 @@ import { TONE_BG, TONE_DOT, TONE_TEXT, TONE_LABEL, type Tone } from "./_tokens";
  * - 카드 진입 stagger 애니메이션이 필요한 모든 경우 (`delay` prop 으로 순차 지연).
  *
  * ## When NOT to use
- * - 사용자 발화 버블 → [[AiUserBubble]] (우측 정렬, 회색 배경).
- * - 도구 호출 진행 표시 → [[AiToolCallStep]] (자체 chrome 보유).
+ * - 사용자 발화 버블 → [[UserBubble]] (우측 정렬, 회색 배경).
+ * - 도구 호출 진행 표시 → [[ToolCallStep]] (자체 chrome 보유).
  * - 카드 chrome 없는 콘텐츠 (예: 로딩 진행 표시 자체) → 일반 div.
  *
  * ## Composition rules
@@ -187,7 +187,7 @@ export function AiSectionHeading({
  * (`tokens.color.surface`) 이 한 톤으로 통일.
  *
  * ## When to use
- * - 분류 표의 셀 안에서 row 의 분류 결과를 시각화 ([[AiClassificationTable]]).
+ * - 분류 표의 셀 안에서 row 의 분류 결과를 시각화 ([[ClassificationTable]]).
  * - 카드 헤딩 옆에 분류 상태 부착 (보조 정보).
  *
  * ## When NOT to use
@@ -250,9 +250,9 @@ export function AiToneBadge({
  * - 평등한 weight 의 항목들 (강조 없는 등가 정보).
  *
  * ## When NOT to use
- * - 항목별 강조가 필요 → 각 항목을 별도 카드 또는 [[AiClassificationTable]] 로.
- * - step-by-step 진행 → [[AiStepsTimeline]] 의 ✓/spinner 패턴 사용.
- * - 숫자가 포함된 표 → [[AiCostTable]] 등 전용 table 컴포넌트.
+ * - 항목별 강조가 필요 → 각 항목을 별도 카드 또는 [[ClassificationTable]] 로.
+ * - step-by-step 진행 → [[StepsTimeline]] 의 ✓/spinner 패턴 사용.
+ * - 숫자가 포함된 표 → [[CostTable]] 등 전용 table 컴포넌트.
  *
  * ## Composition rules
  * - 텍스트 안에 인라인 컬러 적용 금지 — 톤 강조가 필요하면 항목 자체를 다른 카드로 분리.

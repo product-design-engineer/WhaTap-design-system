@@ -1,5 +1,5 @@
 /**
- * AiCostTable — 현행/제안 비용 비교 테이블 카드.
+ * CostTable — 현행/제안 비용 비교 테이블 카드.
  *
  * ## Purpose
  * "현행 vs 제안" 비용을 2-row 로 나란히 비교하고, 절감액·절감률을 하단 강조 라인으로
@@ -11,9 +11,9 @@
  * - 절감 효과(절감액/절감률)를 한 카드 안에서 강조해 보여줄 때.
  *
  * ## When NOT to use
- * - GPU/Pod 단위의 다컬럼 상세 비용 표 → [[AiCostBreakdown]].
- * - 비용이 아닌 분류 결과 표 → [[AiClassificationTable]].
- * - 사용률 시계열 → [[AiUsageChart]].
+ * - GPU/Pod 단위의 다컬럼 상세 비용 표 → [[CostBreakdown]].
+ * - 비용이 아닌 분류 결과 표 → [[ClassificationTable]].
+ * - 사용률 시계열 → [[UsageChart]].
  *
  * ## Composition rules
  * - 자체 카드 chrome(흰 배경/보더/라운드/패딩)을 보유 — [[AiCard]] 로 감싸지 않음.
@@ -26,7 +26,7 @@
  *
  * @example
  * ```tsx
- * <AiCostTable
+ * <CostTable
  *   caption="Cost Analysis"
  *   rows={[
  *     { label: "현행", detail: "A100 GPU 4개 (평균 32%)", cost: "₩8,322,000/월" },
@@ -46,7 +46,7 @@ export type CostRow = {
   highlight?: boolean;
 };
 
-export default function AiCostTable({
+export default function CostTable({
   caption = "Cost Analysis",
   rows,
   savingsLabel,

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiEventList } from "@whatap/design-system/widget";
+import { EventList } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiEventList> = {
+const meta: Meta<typeof EventList> = {
   title: "Composite/EventList",
-  component: AiEventList,
+  component: EventList,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -17,7 +17,7 @@ const meta: Meta<typeof AiEventList> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiEventList>;
+type Story = StoryObj<typeof EventList>;
 
 export const RecentAlerts: Story = {
   args: {

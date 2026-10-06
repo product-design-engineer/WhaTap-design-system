@@ -1,5 +1,5 @@
 /**
- * AiInlinePrompt — 한 줄 inline 자연어 입력창.
+ * InlinePrompt — 한 줄 inline 자연어 입력창.
  *
  * Figma: 27087:3416 의 single-row variant.
  *
@@ -8,27 +8,27 @@
  * 배열 순서: `[chip…] [input grow] [+ attach] [⬆ send]` — 정보 → 입력 → 액션 흐름.
  * PageHeader 우측, 카드 헤더, 모달 푸터 등 세로 공간이 한정된 자리에 사용.
  *
- * ## 차이 (vs AiPromptInput)
+ * ## 차이 (vs PromptInput)
  * - ❌ TokenUsageBadge (토큰 입력/출력 pill)
  * - ❌ 하단 caption
  * - ❌ 첨부 chip **행** (별도 row 없음, 같은 행에 인라인 compact chip 으로 들어감)
  * - ❌ multi-line textarea — 단일 라인 `<input>` 으로 축소
  * - ✅ 첨부 버튼 (+ icon)
  * - ✅ 첨부 chip — 같은 행 안에 compact (max-w-[120px] · truncate · xs font)
- * - ✅ 송신 버튼 ([[AiSendButton]])
+ * - ✅ 송신 버튼 ([[SendButton]])
  *
  * ## When to use
  * - PageHeader 우측 inline prompt — chrome 48px 안에 들어가야 함.
  * - 카드 / 모달 / sub-section 의 빠른 질문 입력.
  *
  * ## When NOT to use
- * - 위젯 본체 입력 → [[AiPromptInput]] (token pill · caption · multi-line · 첨부 chip 행 full chrome).
- * - 여러 줄 prompt / 다수 첨부가 자주 들어가는 자리 → [[AiPromptInput]].
+ * - 위젯 본체 입력 → [[PromptInput]] (token pill · caption · multi-line · 첨부 chip 행 full chrome).
+ * - 여러 줄 prompt / 다수 첨부가 자주 들어가는 자리 → [[PromptInput]].
  *
  * ## Composition rules
  * - 단일 row, height 고정 (~32px) — `flex-row items-center`.
  * - 첨부 chip 는 같은 행에 inline 으로 들어감. 다수 첨부 시 가로 스크롤이 아니라 chip 자체가 truncate.
- * - 송신 버튼은 [[AiSendButton]] 채택, 입력값 유무로 active 자동 전환.
+ * - 송신 버튼은 [[SendButton]] 채택, 입력값 유무로 active 자동 전환.
  * - border 색은 토큰 binding (`--color-brand-blue` / `--color-brand-blue-bg-2`) — 인라인 hex 금지.
  *
  * ## Suggestions channel (선택)
@@ -51,7 +51,7 @@
  *
  * @example
  * ```tsx
- * <AiInlinePrompt
+ * <InlinePrompt
  *   onSubmit={(v) => askAi(v)}
  *   placeholder="WhaTap AI 에게 질문..."
  *   suggestions={[
@@ -69,7 +69,7 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from "react";
-import AiSendButton from "./SendButton";
+import SendButton from "./SendButton";
 
 export type AiInlineAttachment = {
   /** 파일 이름 (truncate). */
@@ -125,7 +125,7 @@ export type AiInlinePromptProps = {
   disabled?: boolean;
 };
 
-export default function AiInlinePrompt({
+export default function InlinePrompt({
   value,
   onChange,
   onSubmit,
@@ -324,7 +324,7 @@ export default function AiInlinePrompt({
         </button>
 
         {/* 송신 */}
-        <AiSendButton
+        <SendButton
           active={hasInput && !disabled}
           onClick={submit}
           showCursor={showSendCursor}

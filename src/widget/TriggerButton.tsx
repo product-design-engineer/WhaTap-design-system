@@ -1,5 +1,5 @@
 /**
- * AiTriggerButton — 인라인 WhaTap AI 진입점 (아이콘 전용, 애니메이션 심볼).
+ * TriggerButton — 인라인 WhaTap AI 진입점 (아이콘 전용, 애니메이션 심볼).
  *
  * ## Purpose
  * 차트 카드·테이블 행·셀 제목 옆에 놓여, 클릭하면 그 요소의 컨텍스트로 WhaTap AI
@@ -12,7 +12,7 @@
  * - 상시 노출이 과한 밀집 UI 에서 hover 시에만 드러내야 하는 AI 트리거
  *
  * ## When NOT to use
- * - 라벨 있는 전역 AI 버튼 → [[AiAssistantButton]] (PageHeader 우측 pill)
+ * - 라벨 있는 전역 AI 버튼 → [[AssistantButton]] (PageHeader 우측 pill)
  * - 클릭 없는 브랜드 표식/장식 심볼 → [[AiSymbol]]
  * - AI 대화 UI 전체 → [[WhaTapAiWidget]]
  *
@@ -28,7 +28,7 @@
  * ```tsx
  * // hover 노출은 부모 .group 필요
  * <div className="group ...">
- *   <AiTriggerButton
+ *   <TriggerButton
  *     reveal="hover"
  *     tooltip="이 차트를 WhaTap AI로 분석"
  *     onClick={() => openAi({ metric, values })}
@@ -70,7 +70,7 @@ export type AiTriggerButtonProps = {
   tooltipPlacement?: TooltipPlacement;
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onClick">;
 
-export default function AiTriggerButton({
+export default function TriggerButton({
   onClick,
   reveal = "always",
   size = 13,

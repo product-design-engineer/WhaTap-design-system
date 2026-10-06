@@ -11,7 +11,7 @@ const meta: Meta<typeof EventListItem> = {
     docs: {
       description: {
         component:
-          "**이벤트 행 (part)** — [[AiEventList]] 의 단일 `<li>`. 시간(고정폭) + severity 칩 + 소스 + 한 줄 메시지.",
+          "**이벤트 행 (part)** — [[EventList]] 의 단일 `<li>`. 시간(고정폭) + severity 칩 + 소스 + 한 줄 메시지.",
       },
     },
   },

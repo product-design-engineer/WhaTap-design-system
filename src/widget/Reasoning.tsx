@@ -1,5 +1,5 @@
 /**
- * AiReasoning — AI 추론 과정을 "Reasoning" 라벨 + 단계 목록 카드로 표시.
+ * Reasoning — AI 추론 과정을 "Reasoning" 라벨 + 단계 목록 카드로 표시.
  *
  * ## Purpose
  * AI 가 답을 도출하기까지의 추론 단계를 흰 카드 안에 세로 목록으로 노출. 완료 단계는
@@ -11,9 +11,9 @@
  * - "지금 생각 중" 상태를 마지막 단계 spinner 로 표현할 때.
  *
  * ## When NOT to use
- * - 접기/펼치기되는 step 진행 타임라인 → [[AiStepsTimeline]].
- * - 실제 tool/function 호출 단위 표시 → [[AiToolCallStep]].
- * - 단순 로딩 표시 → [[AiLoadingMessage]].
+ * - 접기/펼치기되는 step 진행 타임라인 → [[StepsTimeline]].
+ * - 실제 tool/function 호출 단위 표시 → [[ToolCallStep]].
+ * - 단순 로딩 표시 → [[LoadingMessage]].
  *
  * ## Composition rules
  * - 자체 흰 카드(border-default 1px·8px 라운드)로 렌더되는 독립 블록 — 추가 래퍼 카드로 감싸지 말 것.
@@ -22,7 +22,7 @@
  *
  * @example
  * ```tsx
- * <AiReasoning
+ * <Reasoning
  *   steps={[
  *     { label: "관련 지표 수집" },
  *     { label: "이상 구간 식별" },
@@ -39,7 +39,7 @@ export type ReasoningStep = {
   running?: boolean;
 };
 
-export default function AiReasoning({
+export default function Reasoning({
   steps,
   delay = 0,
 }: {

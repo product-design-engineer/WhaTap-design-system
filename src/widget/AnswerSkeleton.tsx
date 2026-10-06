@@ -1,7 +1,7 @@
 import { AiCard } from "./_primitives";
 
 /**
- * AiAnswerSkeleton — AI 답변 카드가 도착하기 전의 자리표시자(스켈레톤).
+ * AnswerSkeleton — AI 답변 카드가 도착하기 전의 자리표시자(스켈레톤).
  *
  * ## Purpose
  * 헬스체크 원인 진단처럼 **데이터 수집 + 집계(산수)** 를 거쳐야 답이 나오는 응답은
@@ -13,9 +13,9 @@ import { AiCard } from "./_primitives";
  * - 응답 시간이 1초를 넘길 수 있는 모든 분석·진단 응답.
  *
  * ## When NOT to use
- * - **무엇을 하는 중인지 문장으로 알려야 할 때** → [[AiLoadingMessage]] (한 줄 안내).
+ * - **무엇을 하는 중인지 문장으로 알려야 할 때** → [[LoadingMessage]] (한 줄 안내).
  *   둘은 같이 쓸 수 있다 — 안내 줄 아래에 스켈레톤 카드.
- * - 단계별 도구 호출 진행 표시 → [[AiStepsTimeline]].
+ * - 단계별 도구 호출 진행 표시 → [[StepsTimeline]].
  * - 즉시(<300ms) 렌더되는 정적 카드 — 깜빡임만 만든다.
  *
  * ## Composition rules
@@ -26,10 +26,10 @@ import { AiCard } from "./_primitives";
  *
  * @example
  * ```tsx
- * {loading ? <AiAnswerSkeleton bullets={4} /> : <AiEntryMessages ... />}
+ * {loading ? <AnswerSkeleton bullets={4} /> : <AiEntryMessages ... />}
  * ```
  */
-export default function AiAnswerSkeleton({
+export default function AnswerSkeleton({
   bullets = 3,
   /** 카드 등장 지연 — 여러 카드를 stagger 로 깔 때 사용. */
   delay = 0,

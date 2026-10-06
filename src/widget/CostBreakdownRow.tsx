@@ -1,7 +1,7 @@
 import type { CostBreakdownRow as CostBreakdownRowData } from "./CostBreakdown";
 
 /**
- * CostBreakdownRow — [[AiCostBreakdown]] 표의 단일 비용 행(row).
+ * CostBreakdownRow — [[CostBreakdown]] 표의 단일 비용 행(row).
  *
  * ## Purpose
  * 5컬럼(GPU / Pod / 평균 사용률 / 유휴 비율 / 일일 낭비) 그리드의 데이터 행 한 건을
@@ -9,13 +9,13 @@ import type { CostBreakdownRow as CostBreakdownRowData } from "./CostBreakdown";
  * 옮겨온 것 — 부모 표의 헤더 행과 동일한 `gridTemplateColumns` 트랙을 공유한다.
  *
  * ## When to use
- * - [[AiCostBreakdown]] 가 `rows.map` 으로 행마다 렌더 (기본 용법). 보통 단독 사용 안 함.
+ * - [[CostBreakdown]] 가 `rows.map` 으로 행마다 렌더 (기본 용법). 보통 단독 사용 안 함.
  * - 동일한 5컬럼 비용 표 외형이 필요한 다른 표면.
  *
  * ## When NOT to use
  * - 표 헤더 행(컬럼명 th류) → 부모 인라인 유지 (이 컴포넌트는 데이터 행 전용).
  * - 소계 행 → 부모가 별도 처리 (`subtotal`).
- * - 현행/제안 2-안 비교 행 → [[AiCostTable]].
+ * - 현행/제안 2-안 비교 행 → [[CostTable]].
  *
  * ## Composition rules
  * - 데이터(`CostBreakdownRowData`)만 주입 — 행 외형/그리드 트랙은 이 컴포넌트가 책임.

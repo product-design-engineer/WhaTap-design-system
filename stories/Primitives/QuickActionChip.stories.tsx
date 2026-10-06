@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import AiQuickActionChip from "../../src/widget/QuickActionChip";
+import QuickActionChip from "../../src/widget/QuickActionChip";
 
-const meta: Meta<typeof AiQuickActionChip> = {
+const meta: Meta<typeof QuickActionChip> = {
   title: "Primitives/QuickActionChip",
-  component: AiQuickActionChip,
+  component: QuickActionChip,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -19,7 +19,7 @@ const meta: Meta<typeof AiQuickActionChip> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiQuickActionChip>;
+type Story = StoryObj<typeof QuickActionChip>;
 
 export const Default: Story = {
   args: {

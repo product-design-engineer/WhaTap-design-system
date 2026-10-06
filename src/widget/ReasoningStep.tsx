@@ -1,5 +1,5 @@
 /**
- * ReasoningStep — [[AiReasoning]] 카드 본문의 단일 추론 단계 행.
+ * ReasoningStep — [[Reasoning]] 카드 본문의 단일 추론 단계 행.
  *
  * ## Purpose
  * reasoning 목록의 한 항목(상태 마커 + 라벨)을 렌더. `running: true` 면 회전 spinner +
@@ -7,12 +7,12 @@
  * AiReasoning 의 `steps.map(...)` 본문에 흩어져 있던 행 마크업을 한 곳으로 모은 것.
  *
  * ## When to use
- * - [[AiReasoning]] 가 `steps.map` 으로 단계마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
+ * - [[Reasoning]] 가 `steps.map` 으로 단계마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
  *
  * ## When NOT to use
- * - 카드 전체(라벨 + 목록) → [[AiReasoning]] 를 사용.
- * - 접기/펼치기 step 타임라인 → [[AiStepsTimeline]].
- * - tool/function 호출 단위 표시 → [[AiToolCallStep]].
+ * - 카드 전체(라벨 + 목록) → [[Reasoning]] 를 사용.
+ * - 접기/펼치기 step 타임라인 → [[StepsTimeline]].
+ * - tool/function 호출 단위 표시 → [[ToolCallStep]].
  *
  * ## Composition rules
  * - 데이터(상태 `running` · `label`)만 주입 — 마커/간격은 이 컴포넌트가 책임.

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiUserBubble } from "@whatap/design-system/widget";
+import { UserBubble } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiUserBubble> = {
+const meta: Meta<typeof UserBubble> = {
   title: "Primitives/UserBubble",
-  component: AiUserBubble,
+  component: UserBubble,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -18,7 +18,7 @@ const meta: Meta<typeof AiUserBubble> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiUserBubble>;
+type Story = StoryObj<typeof UserBubble>;
 
 export const Default: Story = { args: { children: "현재 상태 요약해줘" } };
 export const LongText: Story = { args: { children: "지금 프로젝트 전체 서버 디스크 사용량 90% 이상일때 Critical 알림 발생하도록 설정해주세요." } };

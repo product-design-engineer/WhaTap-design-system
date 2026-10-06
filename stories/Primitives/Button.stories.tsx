@@ -22,7 +22,7 @@ const meta: Meta<typeof Button> = {
           "**위계는 variant, 색 의미는 tone.** contained=1차 CTA · outline=2차 · basic=3차 텍스트. " +
           "`tone=\"tertiary\"` 는 색 의미가 없는 **중립 무채색** — 취소 · 닫기 · 나중에 · 더보기. " +
           "한 화면에 파란 버튼 두 개가 CTA 자리를 다투지 않게 하는 자리다.\n\n" +
-          "AI 전용 그라데이션 버튼은 [[AiAssistantButton]], 송신 버튼은 [[AiSendButton]] 별도.",
+          "AI 전용 그라데이션 버튼은 [[AssistantButton]], 송신 버튼은 [[SendButton]] 별도.",
       },
     },
   },

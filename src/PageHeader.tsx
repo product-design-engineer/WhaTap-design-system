@@ -2,7 +2,7 @@
  * PageHeader — Chrome layer. 48px 페이지 최상단 헤더.
  *
  * ## Purpose
- * 페이지 상단 48px 고정 바. 좌측은 페이지 타이틀 + WhaTap AI 토글([[AiAssistantButton]])
+ * 페이지 상단 48px 고정 바. 좌측은 페이지 타이틀 + WhaTap AI 토글([[AssistantButton]])
  * + Docs 버튼, 우측은 고객지원 버튼 + 알림 벨(드롭다운) + 프로필 아바타(드롭다운).
  * [[Sidebar]] 의 48px 로고 헤더와 동일 높이로 chrome 의 최상단 행을 정렬.
  *
@@ -18,7 +18,7 @@
  * - 공통 정책(feedback-page-header-invariant): WhaTap AI 위젯 토글과 무관하게 항상
  *   동일한 레이아웃·가시 요소·크기로 렌더. 내부 항목을 숨기거나 줄이는 prop 은
  *   의도적으로 제공하지 않음.
- * - WhaTap AI 토글은 인라인 마크업이 아니라 [[AiAssistantButton]] 채택 (토큰 binding dogfooding).
+ * - WhaTap AI 토글은 인라인 마크업이 아니라 [[AssistantButton]] 채택 (토큰 binding dogfooding).
  * - 높이 48px 고정(`box-border`) — 페이지에서 inline `<div>` 로 재구현 금지.
  * - 배경/경계/텍스트 색은 토큰 (`--color-border-strong` · `--color-text-*` · `--color-brand-blue-bg`).
  * - `notifications` 1건 이상이면 벨에 빨간 점 + 클릭 시 목록, `profileMenu` 있으면 아바타가 드롭다운.
@@ -94,7 +94,7 @@ export default function PageHeader({
   /** 고객지원 버튼을 숨긴다. 기준은 `hideDocs` 와 같다 — 제품 화면에서는 끄지 않는다. */
   hideSupport?: boolean;
   /**
-   * 헤더에 [[AiInlinePrompt]] 를 **직접** 얹는다(1-step 입력). 기본 false.
+   * 헤더에 [[InlinePrompt]] 를 **직접** 얹는다(1-step 입력). 기본 false.
    *
    * `hideAi`(토글 pill 숨김)와 짝이다 — 본문이 대화인 화면이 아니라 **헤더가 유일한 AI
    * 진입점**인 제품에서, 버튼을 눌러 위젯을 여는 2-step 대신 바로 묻게 한다.
