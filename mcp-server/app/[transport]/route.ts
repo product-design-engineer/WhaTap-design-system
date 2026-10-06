@@ -267,28 +267,53 @@ const handler = createMcpHandler(
       "get_component",
       "특정 컴포넌트의 **사용 규칙**(Purpose · ✅Do · ❌Don't · Composition rules) + props + import 경로 + 스토리 변형 반환. " +
         "컴포넌트를 쓰기 전에 이 도구를 먼저 부를 것. id 는 list_components 의 docs id(예: composite-pageheader) 또는 컴포넌트 제목.",
-      { id: z.string().describe("docs id (예: chrome-subheaderbar) 또는 컴포넌트 제목") },
+      { id: z.string().describe("docs id (예: composite-pageheader) · 컴포넌트 제목 · 또는 컴포넌트 이름(예: CountryFlag · WhaTapAiWidget)") },
       async ({ id }) => {
-        const entries = await fetchIndex();
+        const [entries, docMap] = await Promise.all([fetchIndex(), fetchComponentDocs()]);
         const key = id.toLowerCase();
+        const bare = key.replace(/\s+/g, "");
+        // 제목의 마지막 이름 조각 — "Primitives/Web · CountryFlag" → "countryflag".
+        // 마케팅(`Web · X`) 제목은 끝이 "/countryflag" 가 아니어서 이름만으로는 못 찾았다(2026-10-02 확인).
+        const leaf = (title: string) =>
+          (title.split("/").pop() ?? title).split("·").pop()!.trim().toLowerCase().replace(/\s+/g, "");
+        const all = Object.values(entries);
         // 1) id/제목으로 한 항목(hit) 찾기 → 2) 같은 title 의 전체 그룹(docs + stories) 수집.
-        const hit = Object.values(entries).find(
+        let hit = all.find(
           (e) =>
             e.id === id ||
             e.id.replace(/--(docs|[a-z0-9-]+)$/, "") === key ||
             e.title.toLowerCase() === key ||
             e.title.toLowerCase().endsWith("/" + key),
         );
+        if (!hit) {
+          // 3) 이름으로 — 제목의 마지막 조각, 그다음 components.json 의 컴포넌트 이름
+          //    (제목과 이름이 다른 경우: Shell/Ai/Widget ↔ WhaTapAiWidget).
+          const byLeaf = new Set(all.filter((e) => leaf(e.title) === bare).map((e) => e.title));
+          const byName = new Set(
+            [...(docMap?.values() ?? [])].filter((c) => c.name.toLowerCase() === bare).map((c) => c.title),
+          );
+          const titles = [...(byLeaf.size ? byLeaf : byName)];
+          if (titles.length > 1) {
+            return text(
+              [`'${id}' 이(가) 여러 컴포넌트에 해당합니다 — 제목으로 다시 부르세요:`, ...titles.map((t) => `- ${t}`)].join("\n"),
+            );
+          }
+          if (titles.length === 1) hit = all.find((e) => e.title === titles[0]);
+        }
         if (!hit) return text(`'${id}' 에 해당하는 컴포넌트를 찾지 못했습니다. list_components 로 확인하세요.`);
         const title = hit.title;
-        const group = Object.values(entries).filter((e) => e.title === title);
+        const group = all.filter((e) => e.title === title);
         const stories = group.filter((e) => e.type === "story");
         const docs = group.find((e) => e.type === "docs");
-        const doc = (await fetchComponentDocs())?.get(title) ?? null;
+        const doc = docMap?.get(title) ?? null;
         const lines = [
           `# ${title}`,
           ``,
-          `import { ${doc?.name ?? title.split("/").pop()} } from "${doc?.importFrom ?? hit.importPath}";`,
+          // 소스 파일이 없는 항목(CSS 클래스 컴포넌트 · 스토리 안 합성 템플릿 — 27종)은 import 할 것이 없다.
+          // 예전에는 스토리 파일 경로를 import 처럼 내보내 AI 가 존재하지 않는 import 를 썼다.
+          doc && !doc.importFrom
+            ? `import 없음 — 소스 컴포넌트가 아니다(CSS 클래스 또는 스토리 안 합성 템플릿). 마크업은 아래 스토리를 본다.`
+            : `import { ${doc?.name ?? title.split("/").pop()} } from "${doc?.importFrom ?? hit.importPath}";`,
           `프리뷰/문서: ${BASE}/?path=/docs/${docs?.id ?? hit.id}`,
           ...(doc?.sourceFile ? [`소스: ${doc.sourceFile}`] : []),
           ...(doc ? rulesBlock(doc) : [``, `⚠️ 규칙 카탈로그(components.json)를 불러오지 못했습니다 — 배포가 낡았을 수 있습니다.`]),
