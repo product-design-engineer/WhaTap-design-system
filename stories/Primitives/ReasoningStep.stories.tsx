@@ -11,8 +11,8 @@ const meta: Meta<typeof ReasoningStep> = {
     docs: {
       description: {
         component:
-          "**[[AiReasoning]] 카드의 단일 추론 단계 행.** `running: true` 면 회전 spinner + 점 애니메이션(진행 중), " +
-          "false 면 brand-blue 체크 원(완료). 보통 AiReasoning 의 `steps.map` 안에서 렌더.",
+          "**[[Reasoning]] 카드의 단일 추론 단계 행.** `running: true` 면 회전 spinner + 점 애니메이션(진행 중), " +
+          "false 면 brand-blue 체크 원(완료). 보통 Reasoning 의 `steps.map` 안에서 렌더.",
       },
     },
   },

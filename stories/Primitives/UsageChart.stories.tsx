@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiUsageChart } from "@whatap/design-system/widget";
+import { UsageChart } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiUsageChart> = {
+const meta: Meta<typeof UsageChart> = {
   title: "Primitives/UsageChart",
-  component: AiUsageChart,
+  component: UsageChart,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -17,7 +17,7 @@ const meta: Meta<typeof AiUsageChart> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiUsageChart>;
+type Story = StoryObj<typeof UsageChart>;
 
 export const HourlyGpu: Story = {
   args: {

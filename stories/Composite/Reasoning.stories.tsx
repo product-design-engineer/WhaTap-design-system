@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiReasoning } from "@whatap/design-system/widget";
+import { Reasoning } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiReasoning> = {
+const meta: Meta<typeof Reasoning> = {
   title: "Composite/Reasoning",
-  component: AiReasoning,
+  component: Reasoning,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -19,7 +19,7 @@ const meta: Meta<typeof AiReasoning> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiReasoning>;
+type Story = StoryObj<typeof Reasoning>;
 
 export const AllRunning: Story = {
   args: {

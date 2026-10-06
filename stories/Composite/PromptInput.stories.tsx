@@ -1,10 +1,10 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiPromptInput } from "@whatap/design-system/widget";
+import { PromptInput } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiPromptInput> = {
+const meta: Meta<typeof PromptInput> = {
   title: "Composite/PromptInput",
-  component: AiPromptInput,
+  component: PromptInput,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -30,7 +30,7 @@ const meta: Meta<typeof AiPromptInput> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiPromptInput>;
+type Story = StoryObj<typeof PromptInput>;
 
 /** Empty — placeholder 노출, border 연한 파란. */
 export const Empty: Story = {
@@ -83,7 +83,7 @@ export const Interactive: Story = {
       const [submitted, setSubmitted] = useState<string[]>([]);
       return (
         <div className="flex flex-col gap-3">
-          <AiPromptInput
+          <PromptInput
             onSubmit={(v) => setSubmitted((arr) => [v, ...arr].slice(0, 5))}
             placeholder="어떤 작업을 함께 할까요?"
           />

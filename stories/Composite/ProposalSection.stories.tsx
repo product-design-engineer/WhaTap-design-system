@@ -11,7 +11,7 @@ const meta: Meta<typeof ProposalSection> = {
     docs: {
       description: {
         component:
-          "**제안 섹션 (part)** — [[AiDashboardProposal]] 의 단일 섹션. 이모지 헤딩 + 굵은 제목 + bullet 목록.",
+          "**제안 섹션 (part)** — [[DashboardProposal]] 의 단일 섹션. 이모지 헤딩 + 굵은 제목 + bullet 목록.",
       },
     },
   },

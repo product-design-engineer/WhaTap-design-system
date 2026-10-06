@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiTriggerButton } from "@whatap/design-system";
+import { TriggerButton } from "@whatap/design-system";
 
 /**
- * Stories for [[AiTriggerButton]] — 인라인 WhaTap AI 진입점 (아이콘 전용, 애니메이션 심볼).
+ * Stories for [[TriggerButton]] — 인라인 WhaTap AI 진입점 (아이콘 전용, 애니메이션 심볼).
  */
-const meta: Meta<typeof AiTriggerButton> = {
+const meta: Meta<typeof TriggerButton> = {
   title: "Primitives/TriggerButton",
-  component: AiTriggerButton,
+  component: TriggerButton,
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
@@ -37,7 +37,7 @@ const meta: Meta<typeof AiTriggerButton> = {
   },
 };
 export default meta;
-type Story = StoryObj<typeof AiTriggerButton>;
+type Story = StoryObj<typeof TriggerButton>;
 
 /** 기본 — always 노출, 13px (제목 옆 인라인). */
 export const Default: Story = {
@@ -63,7 +63,7 @@ export const HoverReveal: Story = {
       <span style={{ fontFamily: "var(--font-family-korean)", fontSize: 13, fontWeight: 700 }}>
         CPU 사용률
       </span>
-      <AiTriggerButton {...args} />
+      <TriggerButton {...args} />
       <span style={{ marginLeft: "auto", fontSize: 11, color: "var(--color-text-tertiary)" }}>
         ← 카드 위에 마우스를 올려보세요
       </span>
@@ -82,7 +82,7 @@ export const SizeMatrix: Story = {
     <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
       {[13, 16, 24].map((s) => (
         <div key={s} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-          <AiTriggerButton size={s} />
+          <TriggerButton size={s} />
           <span style={{ fontFamily: "Roboto, monospace", fontSize: 10, color: "var(--color-text-tertiary)" }}>{s}px</span>
         </div>
       ))}

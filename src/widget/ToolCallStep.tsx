@@ -1,5 +1,5 @@
 /**
- * AiToolCallStep — Agent SDK 스타일의 단일 tool 호출 블록 (접기 헤더 + tool 이름 + 서술 본문).
+ * ToolCallStep — Agent SDK 스타일의 단일 tool 호출 블록 (접기 헤더 + tool 이름 + 서술 본문).
  *
  * ## Purpose
  * AI 가 실행한 하나의 tool/function 호출을 사용자에게 보여주는 블록. 구성:
@@ -13,9 +13,9 @@
  * - 에이전트 실행 로그를 메시지 스택 안에 한 블록으로 보여줄 때.
  *
  * ## When NOT to use
- * - tool 호출 없는 일반 추론 단계 → [[AiReasoning]].
- * - 여러 step 의 진행 상태를 한 목록으로 → [[AiStepsTimeline]].
- * - 단순 서술 문단 → [[AiInsightSection]].
+ * - tool 호출 없는 일반 추론 단계 → [[Reasoning]].
+ * - 여러 step 의 진행 상태를 한 목록으로 → [[StepsTimeline]].
+ * - 단순 서술 문단 → [[InsightSection]].
  *
  * ## Composition rules
  * - 카드 없는 단독 블록 — 외형 카드가 필요하면 [[AiCard]] 로 감싸 composition (자체 배경/테두리 추가 금지).
@@ -24,7 +24,7 @@
  *
  * @example
  * ```tsx
- * <AiToolCallStep
+ * <ToolCallStep
  *   stepsCompleted={1}
  *   toolName="whatap_bulk_create_event_rule"
  *   body="먼저 올바른 디스크 사용량 필드를 확인하겠습니다."
@@ -33,7 +33,7 @@
  */
 import { useState } from "react";
 
-export default function AiToolCallStep({
+export default function ToolCallStep({
   stepsCompleted,
   running = false,
   toolName,

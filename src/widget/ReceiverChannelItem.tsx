@@ -2,17 +2,17 @@ import Switch from "../Switch";
 import type { ChannelKey, ChannelState } from "./ReceiverChannels";
 
 /**
- * ReceiverChannelItem — [[AiReceiverChannels]] 의 단일 채널 행(`<li>`).
+ * ReceiverChannelItem — [[ReceiverChannels]] 의 단일 채널 행(`<li>`).
  *
  * ## Purpose
  * 알림 수신 채널 한 건을 한 줄로 렌더 — 이모지 아이콘 · 라벨(+유료 배지) · 보조 정보 · [[Switch]] 토글.
  * `AiReceiverChannels` 의 `channels.map(...)` 안에 인라인되어 있던 행 마크업을 그대로 추출한 것.
  *
  * ## When to use
- * - [[AiReceiverChannels]] 가 `channels.map` 으로 항목마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
+ * - [[ReceiverChannels]] 가 `channels.map` 으로 항목마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
  *
  * ## When NOT to use
- * - 카드 chrome / 헤딩 → 부모 [[AiReceiverChannels]] 가 책임.
+ * - 카드 chrome / 헤딩 → 부모 [[ReceiverChannels]] 가 책임.
  * - 채널이 아닌 다른 목록 항목 → 해당 위젯의 행 컴포넌트 사용.
  *
  * ## Composition rules

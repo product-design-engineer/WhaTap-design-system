@@ -1,10 +1,10 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiSendButton } from "@whatap/design-system/widget";
+import { SendButton } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiSendButton> = {
+const meta: Meta<typeof SendButton> = {
   title: "Composite/SendButton",
-  component: AiSendButton,
+  component: SendButton,
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
@@ -22,7 +22,7 @@ const meta: Meta<typeof AiSendButton> = {
   },
 };
 export default meta;
-type Story = StoryObj<typeof AiSendButton>;
+type Story = StoryObj<typeof SendButton>;
 
 /** 비활성 — 입력 비어있을 때 (회색 보더, 클릭 불가). */
 export const Inactive: Story = { args: { active: false } };
@@ -48,7 +48,7 @@ export const InInputContext: Story = {
             className="flex-1 text-md text-primary outline-none"
             style={{ fontFamily: "var(--font-family-korean)" }}
           />
-          <AiSendButton
+          <SendButton
             active={active}
             onClick={() => {
               if (active) {

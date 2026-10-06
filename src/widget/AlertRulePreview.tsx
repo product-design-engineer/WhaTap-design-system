@@ -1,5 +1,5 @@
 /**
- * AiAlertRulePreview — 알림 규칙 등록 전 미리보기 카드.
+ * AlertRulePreview — 알림 규칙 등록 전 미리보기 카드.
  *
  * ## Purpose
  * AI 가 만들 알림 규칙을 등록 **직전에** 사용자에게 읽기 전용으로 보여주는 카드.
@@ -13,8 +13,8 @@
  *
  * ## When NOT to use
  * - 실제 규칙 **적용/등록** 액션 → 이 카드는 read-only 미리보기일 뿐, 적용은 레거시 알림 설정 페이지에서.
- * - 사용자 선택 CTA 가 필요 → [[AiChoiceButtons]] (예: "등록 / 수정") 를 카드 아래 별도로 배치.
- * - 실행 후 결과 통지 → [[AiExecutionResult]].
+ * - 사용자 선택 CTA 가 필요 → [[ChoiceButtons]] (예: "등록 / 수정") 를 카드 아래 별도로 배치.
+ * - 실행 후 결과 통지 → [[ExecutionResult]].
  *
  * ## Composition rules
  * - [[AiCard]] + [[AiSectionHeading]](📋) + [[AiBulletList]] 프리미티브 조립 — 인라인 chrome 금지.
@@ -23,7 +23,7 @@
  *
  * @example
  * ```tsx
- * <AiAlertRulePreview
+ * <AlertRulePreview
  *   title="알림 규칙 상세"
  *   fields={[
  *     { label: "규칙 이름", value: "Disk" },
@@ -43,7 +43,7 @@ export type AlertRuleField = {
   value: ReactNode;
 };
 
-export default function AiAlertRulePreview({
+export default function AlertRulePreview({
   title = "알림 규칙 상세",
   fields,
   notes,

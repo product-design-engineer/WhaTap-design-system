@@ -1,5 +1,5 @@
 /**
- * AiChoiceButtons — 사용자 선택 CTA 한 쌍.
+ * ChoiceButtons — 사용자 선택 CTA 한 쌍.
  *
  * ## Purpose
  * AI 흐름에서 다음 행동을 사용자가 고르게 하는 2지선다 버튼. Primary(filled blue)와
@@ -11,9 +11,9 @@
  * - primary 강조 + secondary 보조의 위계가 분명한 한 쌍의 액션.
  *
  * ## When NOT to use
- * - 3개 이상의 기준 중 택1 + 근거 설명 → [[AiCriteriaSelection]].
- * - 결정 없이 정보만 제시 → [[AiDashboardProposal]] / [[AiAlertRulePreview]] (카드 자체에 버튼 금지).
- * - 자유 입력 / 자연어 응답 → [[AiInlinePrompt]] / [[AiPromptInput]].
+ * - 3개 이상의 기준 중 택1 + 근거 설명 → [[CriteriaSelection]].
+ * - 결정 없이 정보만 제시 → [[DashboardProposal]] / [[AlertRulePreview]] (카드 자체에 버튼 금지).
+ * - 자유 입력 / 자연어 응답 → [[InlinePrompt]] / [[PromptInput]].
  *
  * ## Composition rules
  * - 이 컴포넌트는 카드가 아님 — 버튼 한 쌍만 렌더하며, 위 메시지 [[AiCard]] 와 형제로 배치.
@@ -22,7 +22,7 @@
  *
  * @example
  * ```tsx
- * <AiChoiceButtons
+ * <ChoiceButtons
  *   primary={{ label: "이 구성으로 진행", onClick: confirm }}
  *   secondary={{ label: "다시 제안받기", onClick: retry }}
  * />
@@ -35,7 +35,7 @@ export type Choice = {
   onClick?: () => void;
 };
 
-export default function AiChoiceButtons({
+export default function ChoiceButtons({
   primary,
   secondary,
   delay = 0,

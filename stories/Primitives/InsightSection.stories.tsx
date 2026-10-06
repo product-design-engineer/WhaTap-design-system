@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiInsightSection } from "@whatap/design-system/widget";
+import { InsightSection } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiInsightSection> = {
+const meta: Meta<typeof InsightSection> = {
   title: "Primitives/InsightSection",
-  component: AiInsightSection,
+  component: InsightSection,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -19,7 +19,7 @@ const meta: Meta<typeof AiInsightSection> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiInsightSection>;
+type Story = StoryObj<typeof InsightSection>;
 
 export const TitleAndBody: Story = {
   args: {

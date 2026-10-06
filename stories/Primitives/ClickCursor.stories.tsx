@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiClickCursor } from "@whatap/design-system/widget";
+import { ClickCursor } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiClickCursor> = {
+const meta: Meta<typeof ClickCursor> = {
   title: "Primitives/ClickCursor",
-  component: AiClickCursor,
+  component: ClickCursor,
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
@@ -15,7 +15,7 @@ const meta: Meta<typeof AiClickCursor> = {
   },
 };
 export default meta;
-type Story = StoryObj<typeof AiClickCursor>;
+type Story = StoryObj<typeof ClickCursor>;
 
 export const Default: Story = { args: {} };
 export const Small: Story = { args: { size: 32 } };

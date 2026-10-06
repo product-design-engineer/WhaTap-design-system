@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import AiAttachmentChip from "../../src/widget/AttachmentChip";
+import AttachmentChip from "../../src/widget/AttachmentChip";
 
-const meta: Meta<typeof AiAttachmentChip> = {
+const meta: Meta<typeof AttachmentChip> = {
   title: "Primitives/AttachmentChip",
-  component: AiAttachmentChip,
+  component: AttachmentChip,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -24,7 +24,7 @@ const meta: Meta<typeof AiAttachmentChip> = {
   ],
 };
 export default meta;
-type Story = StoryObj<typeof AiAttachmentChip>;
+type Story = StoryObj<typeof AttachmentChip>;
 
 export const Csv: Story = {
   args: {

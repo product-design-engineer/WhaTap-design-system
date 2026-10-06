@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiChoiceButtons } from "@whatap/design-system/widget";
+import { ChoiceButtons } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiChoiceButtons> = {
+const meta: Meta<typeof ChoiceButtons> = {
   title: "Primitives/ChoiceButtons",
-  component: AiChoiceButtons,
+  component: ChoiceButtons,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -17,7 +17,7 @@ const meta: Meta<typeof AiChoiceButtons> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiChoiceButtons>;
+type Story = StoryObj<typeof ChoiceButtons>;
 
 export const Default: Story = {
   args: {

@@ -6,7 +6,7 @@ import type { AiPromptSuggestion } from "@whatap/design-system/widget";
 /**
  * Stories for [[PageHeaderAiInline]] — PageHeader 의 AI inline variant.
  *
- * 기존 PageHeader 의 WhaTap AI 토글 버튼 자리를 AiInlinePrompt 로 대체.
+ * 기존 PageHeader 의 WhaTap AI 토글 버튼 자리를 InlinePrompt 로 대체.
  * AI 위젯 호출 entry 가 inline prompt 의 송신으로 이동.
  */
 
@@ -33,10 +33,10 @@ const meta: Meta<typeof PageHeaderAiInline> = {
     docs: {
       description: {
         component:
-          "**48px 페이지 헤더의 AI inline variant.** 기존 [[PageHeader]] 의 WhaTap AI 토글 버튼 자리를 [[AiInlinePrompt]] 로 대체.\n\n" +
+          "**48px 페이지 헤더의 AI inline variant.** 기존 [[PageHeader]] 의 WhaTap AI 토글 버튼 자리를 [[InlinePrompt]] 로 대체.\n\n" +
           "**차이 (vs PageHeader):**\n" +
-          "- ❌ AiAssistantButton (WhaTap AI 토글) — 제거\n" +
-          "- ✅ AiInlinePrompt — 중앙, `flex-1 + max-w-480px`\n" +
+          "- ❌ AssistantButton (WhaTap AI 토글) — 제거\n" +
+          "- ✅ InlinePrompt — 중앙, `flex-1 + max-w-480px`\n" +
           "- 좌측 그룹: Title + Docs (Docs 는 Title 바로 우측에 인접)\n" +
           "- 우측 chrome: 고객지원 / 🔔 / Avatar — Docs 제외, 유지\n\n" +
           "**언제 사용:** inline prompt 가 AI 위젯 호출 entry 인 페이지 (위젯 토글 별도 entry 불필요).\n\n" +

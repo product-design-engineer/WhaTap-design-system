@@ -1,10 +1,10 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiAssistantButton } from "@whatap/design-system/widget";
+import { AssistantButton } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiAssistantButton> = {
+const meta: Meta<typeof AssistantButton> = {
   title: "Primitives/AssistantButton",
-  component: AiAssistantButton,
+  component: AssistantButton,
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
@@ -23,7 +23,7 @@ const meta: Meta<typeof AiAssistantButton> = {
   },
 };
 export default meta;
-type Story = StoryObj<typeof AiAssistantButton>;
+type Story = StoryObj<typeof AssistantButton>;
 
 /** 기본 — 위젯 닫힘 상태. */
 export const Default: Story = { args: { aiActive: false } };
@@ -38,7 +38,7 @@ export const Interactive: Story = {
       const [active, setActive] = useState(false);
       return (
         <div className="flex flex-col gap-3 items-center">
-          <AiAssistantButton aiActive={active} onClick={() => setActive((v) => !v)} />
+          <AssistantButton aiActive={active} onClick={() => setActive((v) => !v)} />
           <span className="text-sm text-tertiary" style={{ fontFamily: "var(--font-family-korean)" }}>
             상태: <strong className="text-primary">{active ? "위젯 열림 (active)" : "위젯 닫힘"}</strong>
           </span>
@@ -51,14 +51,14 @@ export const Interactive: Story = {
 
 /**
  * 사이즈 — `md`(32px, 기본) / `sm`(24px).
- * `sm` 은 40px 배너([[AiSummaryBanner]])·툴바처럼 높이가 제한된 표면에 놓일 때 사용한다.
+ * `sm` 은 40px 배너([[SummaryBanner]])·툴바처럼 높이가 제한된 표면에 놓일 때 사용한다.
  * 아이콘 14px · 라벨 12px 로 함께 줄어든다.
  */
 export const Sizes: Story = {
   render: () => (
     <div className="flex items-center gap-3">
-      <AiAssistantButton size="md">심층 분석하기</AiAssistantButton>
-      <AiAssistantButton size="sm">심층 분석하기</AiAssistantButton>
+      <AssistantButton size="md">심층 분석하기</AssistantButton>
+      <AssistantButton size="sm">심층 분석하기</AssistantButton>
     </div>
   ),
 };

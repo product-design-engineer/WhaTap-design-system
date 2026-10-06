@@ -18,7 +18,7 @@ const meta: Meta<typeof TextField> = {
       description: {
         component:
           "**폼 텍스트 입력 primitive.** 3 size (sm=24px / md=28px / lg=32px) + leading/trailing 슬롯 + invalid 상태 + helper text. " +
-          "AI 위젯 대화 입력은 별개(`AiPromptInput`) — 본 컴포넌트는 페이지·폼 일반용.",
+          "AI 위젯 대화 입력은 별개(`PromptInput`) — 본 컴포넌트는 페이지·폼 일반용.",
       },
     },
   },

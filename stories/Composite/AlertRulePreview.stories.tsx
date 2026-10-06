@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiAlertRulePreview } from "@whatap/design-system/widget";
+import { AlertRulePreview } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiAlertRulePreview> = {
+const meta: Meta<typeof AlertRulePreview> = {
   title: "Composite/AlertRulePreview",
-  component: AiAlertRulePreview,
+  component: AlertRulePreview,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -17,7 +17,7 @@ const meta: Meta<typeof AiAlertRulePreview> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiAlertRulePreview>;
+type Story = StoryObj<typeof AlertRulePreview>;
 
 export const Default: Story = {
   args: {

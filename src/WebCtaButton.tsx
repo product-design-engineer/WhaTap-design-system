@@ -29,7 +29,7 @@
  *
  * ## When NOT to use
  * - 로그인 후 제품 UI 의 버튼 → [[Button]].
- * - AI 위젯 그라데이션 토글 → [[AiTriggerButton]].
+ * - AI 위젯 그라데이션 토글 → [[TriggerButton]].
  * - 텍스트 링크 (밑줄만) → `<a>` 직접 사용.
  * - icon-only 버튼 → 인라인 OK.
  *

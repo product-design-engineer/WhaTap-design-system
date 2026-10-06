@@ -27,8 +27,8 @@ const QUICK_ACTIONS = ["현재 상태 요약", "슬로우 트랜잭션 분석", 
  * ## When NOT to use
  * - 프로덕션 대시보드의 위젯 본체(480px · prop 외부화 · 토큰 사용량 · 첨부 칩 · 자동 스크롤)
  *   → [[WhaTapAiWidget]].
- * - 헤더/카드/모달의 한 줄 inline 입력 → [[AiInlinePrompt]].
- * - 헤더 안 AI 토글 버튼만 → [[AiAssistantButton]].
+ * - 헤더/카드/모달의 한 줄 inline 입력 → [[InlinePrompt]].
+ * - 헤더 안 AI 토글 버튼만 → [[AssistantButton]].
  *
  * ## Composition rules
  * - 색·그라데이션·경계는 토큰 binding (`--color-brand-blue` / `--color-brand-blue-deep` /

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiStepsTimeline } from "@whatap/design-system/widget";
+import { StepsTimeline } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiStepsTimeline> = {
+const meta: Meta<typeof StepsTimeline> = {
   title: "Composite/StepsTimeline",
-  component: AiStepsTimeline,
+  component: StepsTimeline,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -17,7 +17,7 @@ const meta: Meta<typeof AiStepsTimeline> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiStepsTimeline>;
+type Story = StoryObj<typeof StepsTimeline>;
 
 export const InProgress: Story = {
   args: {

@@ -1,8 +1,8 @@
 /**
- * AiChatExchange — 사용자 질문 1개 + AI 응답 1개를 한 쌍으로 묶는 대화 교환 블록 (Figma 27110:53407).
+ * ChatExchange — 사용자 질문 1개 + AI 응답 1개를 한 쌍으로 묶는 대화 교환 블록 (Figma 27110:53407).
  *
  * ## Purpose
- * 채팅 스레드의 가장 단순한 "한 턴" 단위. 우측 정렬 사용자 버블([[AiUserBubble]])과
+ * 채팅 스레드의 가장 단순한 "한 턴" 단위. 우측 정렬 사용자 버블([[UserBubble]])과
  * full-width 응답 버블, 그리고 각 메시지 아래 복사/재시도 아이콘을 한 번에 렌더.
  * `attachments` 로 응답 아래 파일 카드/이미지 썸네일을 우측 정렬 스택으로 덧붙임.
  * `answer` 가 비면 사용자 메시지만 렌더(응답 대기 중 상태에 적합).
@@ -12,26 +12,26 @@
  * - 첨부(파일/이미지)를 응답에 곁들여 보여줄 때.
  *
  * ## When NOT to use
- * - 추론 단계·tool 호출·표/차트 등 풍부한 AI 응답 → [[AiToolCallStep]] · [[AiStepsTimeline]] · [[AiInsightSection]] 등 메시지 스택으로 직접 구성.
- * - 사용자 버블만 단독으로 → [[AiUserBubble]].
- * - 응답 하단 like/dislike 피드백이 필요 → [[AiMessageActions]] (이 컴포넌트의 내장 toolbar 는 복사/재시도뿐).
- * - prompt 입력창 → [[AiPromptInput]] · [[AiInlinePrompt]].
+ * - 추론 단계·tool 호출·표/차트 등 풍부한 AI 응답 → [[ToolCallStep]] · [[StepsTimeline]] · [[InsightSection]] 등 메시지 스택으로 직접 구성.
+ * - 사용자 버블만 단독으로 → [[UserBubble]].
+ * - 응답 하단 like/dislike 피드백이 필요 → [[MessageActions]] (이 컴포넌트의 내장 toolbar 는 복사/재시도뿐).
+ * - prompt 입력창 → [[PromptInput]] · [[InlinePrompt]].
  *
  * ## Composition rules
- * - 사용자 버블은 [[AiUserBubble]] 을 그대로 채택(우측 정렬·max-width 85%).
+ * - 사용자 버블은 [[UserBubble]] 을 그대로 채택(우측 정렬·max-width 85%).
  * - 응답 버블은 단일 문단 텍스트 전용(`whitespace-pre-wrap`) — 구조화된 응답은 카드 컴포넌트로 분리.
  * - 배경/구분은 surface·border 토큰만 사용, 인라인 hex 금지.
  *
  * @example
  * ```tsx
- * <AiChatExchange
+ * <ChatExchange
  *   question="지난 1시간 에러율 추이 알려줘"
  *   answer={"에러율은 평균 0.4% 로 안정적입니다.\n특이 spike 는 없었습니다."}
  *   attachments={[{ kind: "image", src: chartPng, alt: "에러율 차트" }]}
  * />
  * ```
  */
-import AiUserBubble from "./UserBubble";
+import UserBubble from "./UserBubble";
 
 export type AiChatAttachment =
   | { kind: "file"; name: string; mime?: string }
@@ -46,7 +46,7 @@ export type AiChatExchangeProps = {
   attachments?: AiChatAttachment[];
 };
 
-export default function AiChatExchange({
+export default function ChatExchange({
   question,
   answer,
   attachments,
@@ -56,7 +56,7 @@ export default function AiChatExchange({
     <div className="flex flex-col gap-12px w-full">
       {/* 사용자 질문 — 우측 정렬 그레이 버블 (Figma 27110:53409) */}
       <div className="flex flex-col items-end gap-4px w-full">
-        <AiUserBubble>{question}</AiUserBubble>
+        <UserBubble>{question}</UserBubble>
         <MessageTools />
       </div>
 

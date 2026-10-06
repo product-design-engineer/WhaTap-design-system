@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiMigPlan } from "@whatap/design-system/widget";
+import { MigPlan } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiMigPlan> = {
+const meta: Meta<typeof MigPlan> = {
   title: "Composite/MigPlan",
-  component: AiMigPlan,
+  component: MigPlan,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -17,7 +17,7 @@ const meta: Meta<typeof AiMigPlan> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiMigPlan>;
+type Story = StoryObj<typeof MigPlan>;
 
 export const Default: Story = {
   args: {

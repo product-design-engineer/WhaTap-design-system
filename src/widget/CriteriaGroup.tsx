@@ -1,14 +1,14 @@
 import type { CSSProperties } from "react";
 
 /**
- * CriteriaGroup — Part / Widget. [[AiCriteriaSelection]] 의 단일 분류 기준 그룹 행.
+ * CriteriaGroup — Part / Widget. [[CriteriaSelection]] 의 단일 분류 기준 그룹 행.
  *
  * ## Purpose
  * tone 별 배경 위에 좌측 컬러 도트 + 제목(bold) + 상세 설명을 세로로 쌓는 한 행.
  * `AiCriteriaSelection` 의 `groups.map(...)` 본문을 그대로 추출한 것 — 시각/동작 동일.
  *
  * ## When to use
- * - [[AiCriteriaSelection]] 가 `groups.map` 으로 기준마다 렌더 (기본 용법).
+ * - [[CriteriaSelection]] 가 `groups.map` 으로 기준마다 렌더 (기본 용법).
  * - 동일한 tone 배경 + 도트 + 제목/상세 행 외형이 필요한 다른 표면.
  *
  * ## When NOT to use

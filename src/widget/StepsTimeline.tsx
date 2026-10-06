@@ -1,5 +1,5 @@
 /**
- * AiStepsTimeline — "N steps" 접기/펼치기 진행 타임라인.
+ * StepsTimeline — "N steps" 접기/펼치기 진행 타임라인.
  *
  * ## Purpose
  * 여러 실행 단계를 행 카드 목록으로 보여주는 접이식 타임라인. 헤더(`N steps`,
@@ -12,9 +12,9 @@
  * - 완료/진행 단계를 한눈에 요약하고 상세는 접어둘 때.
  *
  * ## When NOT to use
- * - 단일 tool 호출 + 결과 서술 → [[AiToolCallStep]].
- * - 카드 형태의 reasoning 단계 묶음 → [[AiReasoning]].
- * - 단순 로딩 표시 → [[AiLoadingMessage]].
+ * - 단일 tool 호출 + 결과 서술 → [[ToolCallStep]].
+ * - 카드 형태의 reasoning 단계 묶음 → [[Reasoning]].
+ * - 단순 로딩 표시 → [[LoadingMessage]].
  *
  * ## Composition rules
  * - 카드 없는 단독 블록 — 외형 카드가 필요하면 [[AiCard]] 로 감싸 composition.
@@ -23,7 +23,7 @@
  *
  * @example
  * ```tsx
- * <AiStepsTimeline
+ * <StepsTimeline
  *   steps={[
  *     { label: "지표 수집" },
  *     { label: "이상 구간 분석" },
@@ -41,7 +41,7 @@ export type TimelineStep = {
   running?: boolean;
 };
 
-export default function AiStepsTimeline({
+export default function StepsTimeline({
   steps,
   defaultOpen = true,
   delay = 0,

@@ -1,5 +1,5 @@
 /**
- * AiUsageChart — 시간대별 GPU 사용률 막대 차트 카드.
+ * UsageChart — 시간대별 GPU 사용률 막대 차트 카드.
  *
  * ## Purpose
  * 24개 시간 슬롯(0–23시)의 사용률(%)을 막대로 표시하는 미니 차트. `highlightThreshold`
@@ -11,8 +11,8 @@
  * - 임계값을 넘는 구간을 색으로 강조해 부하 집중 시간대를 알릴 때.
  *
  * ## When NOT to use
- * - 행 단위 통계/분류 표 → [[AiClassificationTable]].
- * - 비용 비교/분해 → [[AiCostTable]] · [[AiCostBreakdown]].
+ * - 행 단위 통계/분류 표 → [[ClassificationTable]].
+ * - 비용 비교/분해 → [[CostTable]] · [[CostBreakdown]].
  * - 24슬롯이 아닌 임의 시계열/다계열 차트 → 전용 차트 컴포넌트 검토.
  *
  * ## Composition rules
@@ -25,14 +25,14 @@
  *
  * @example
  * ```tsx
- * <AiUsageChart
+ * <UsageChart
  *   caption="Hourly GPU Utilization"
  *   values={[12, 18, 9, null, 44, 61, 73, 88, 95, 82, ...]}
  *   highlightThreshold={50}
  * />
  * ```
  */
-export default function AiUsageChart({
+export default function UsageChart({
   caption = "Hourly GPU Utilization",
   values,
   highlightThreshold = 50,

@@ -25,8 +25,8 @@ import type { ReactNode } from "react";
  *   도는 물체가 아니다.
  *
  * ## When NOT to use
- * - 시계열 추이 → [[AiUsageChart]] 또는 지표 차트 화면.
- * - 값을 정확히 읽어야 하는 경우 → 표([[AiClassificationTable]]). 이 메시는 «모양»을
+ * - 시계열 추이 → [[UsageChart]] 또는 지표 차트 화면.
+ * - 값을 정확히 읽어야 하는 경우 → 표([[ClassificationTable]]). 이 메시는 «모양»을
  *   보는 그림이지 눈금을 읽는 그림이 아니다.
  *
  * ## Composition rules

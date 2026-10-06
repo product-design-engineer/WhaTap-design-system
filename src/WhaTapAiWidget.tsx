@@ -13,8 +13,8 @@
  * - 랜딩 인사말 + 빠른 액션 칩 + 토큰 사용량 + 첨부까지 풀 chrome 이 필요한 자리.
  *
  * ## When NOT to use
- * - 세로 공간이 한정된 헤더/카드/모달의 한 줄 입력 → [[AiInlinePrompt]] (single-row).
- * - 헤더 안 AI 토글 버튼만 필요 → [[AiAssistantButton]].
+ * - 세로 공간이 한정된 헤더/카드/모달의 한 줄 입력 → [[InlinePrompt]] (single-row).
+ * - 헤더 안 AI 토글 버튼만 필요 → [[AssistantButton]].
  * - 라이브 vercel 위젯의 440px 변형(Beta 배지 · 모델 선택기) 재현 → [[AiWidget]].
  *
  * ## Composition rules
@@ -132,7 +132,7 @@ export default function WhaTapAiWidget({
   usagePill?: import("react").ReactNode;
   /**
    * 값이 있으면 특정 사유로 AI 사용이 불가한 상태 — 랜딩/시나리오 대신
-   * [[AiUnavailableNotice]] 안내를 본문에 노출하고 입력창을 비활성화합니다.
+   * [[UnavailableNotice]] 안내를 본문에 노출하고 입력창을 비활성화합니다.
    * preset 사유만 쓰려면 `{ reason: "quota" }` 처럼 전달.
    */
   unavailable?: AiUnavailableNoticeProps;

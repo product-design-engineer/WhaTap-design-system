@@ -1,5 +1,5 @@
 /**
- * AiClickCursor — 자동 클릭 손 커서 (시연용 인터랙션 데모, 공용).
+ * ClickCursor — 자동 클릭 손 커서 (시연용 인터랙션 데모, 공용).
  *
  * ## Purpose
  * 시나리오/Storybook 데모에서 "AI 가 어디를 누를지" 를 시각적으로 알려주는 데코레이션
@@ -24,14 +24,14 @@
  * @example
  * ```tsx
  * <div className="relative">
- *   <AiSendButton active />
- *   <AiClickCursor style={{ right: -6, top: -6 }} />
+ *   <SendButton active />
+ *   <ClickCursor style={{ right: -6, top: -6 }} />
  * </div>
  * ```
  */
 import type { CSSProperties } from "react";
 
-export default function AiClickCursor({
+export default function ClickCursor({
   size = 48,
   style,
 }: {

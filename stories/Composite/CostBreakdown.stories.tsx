@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiCostBreakdown } from "@whatap/design-system/widget";
+import { CostBreakdown } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiCostBreakdown> = {
+const meta: Meta<typeof CostBreakdown> = {
   title: "Composite/CostBreakdown",
-  component: AiCostBreakdown,
+  component: CostBreakdown,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -17,7 +17,7 @@ const meta: Meta<typeof AiCostBreakdown> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiCostBreakdown>;
+type Story = StoryObj<typeof CostBreakdown>;
 
 export const HighUtilization: Story = {
   args: {

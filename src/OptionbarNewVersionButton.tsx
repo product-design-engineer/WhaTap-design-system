@@ -11,7 +11,7 @@
  *
  * ## When NOT to use
  * - **일반 액션 버튼** → [[Button]] (variant/tone 체계).
- * - **AI 진입 버튼** → [[AiAssistantButton]] / [[AiInlinePrompt]].
+ * - **AI 진입 버튼** → [[AssistantButton]] / [[InlinePrompt]].
  * - **텍스트 링크** — 이 컴포넌트는 버튼형 CTA 전용.
  *
  * ## Composition rules

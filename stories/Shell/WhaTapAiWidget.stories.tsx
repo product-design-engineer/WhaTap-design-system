@@ -6,7 +6,7 @@ import {
   AiSectionHeading,
   AiBulletList,
 } from "@whatap/design-system";
-import { AiUserBubble, AiChatExchange } from "@whatap/design-system/widget";
+import { UserBubble, ChatExchange } from "@whatap/design-system/widget";
 
 /**
  * Stories for [[WhaTapAiWidget]] — AI 위젯 (480px 우측 패널).
@@ -67,7 +67,7 @@ export const WithMessages: Story = {
     pageHighlight: "APM",
     messages: (
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        <AiUserBubble>실행 중 스레드 상태 분석해주세요.</AiUserBubble>
+        <UserBubble>실행 중 스레드 상태 분석해주세요.</UserBubble>
         <AiCard delay={0}>
           <AiSectionHeading tone="critical">🔴 핵심 이상 징후</AiSectionHeading>
           <AiBulletList items={[

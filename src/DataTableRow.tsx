@@ -77,7 +77,7 @@ export default function DataTableRow<T>({
 }: DataTableRowProps<T>) {
   return (
     <div
-      /* `group`: 행 hover 시에만 드러나는 자식(예: reveal="hover" 인 [[AiTriggerButton]])을
+      /* `group`: 행 hover 시에만 드러나는 자식(예: reveal="hover" 인 [[TriggerButton]])을
          셀 안에 놓을 수 있게 한다. 자식이 opt-in 하지 않으면 시각적 변화 없음. */
       className={`group grid items-center border-t border-color-var-color-border-default ${rowPadding} ${onRowClick ? "cursor-pointer" : ""} hover-bg-surface-100${className ? ` ${className}` : ""}`}
       style={{ gridTemplateColumns: gridTemplate }}

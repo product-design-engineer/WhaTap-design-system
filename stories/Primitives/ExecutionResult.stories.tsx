@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiExecutionResult } from "@whatap/design-system/widget";
+import { ExecutionResult } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiExecutionResult> = {
+const meta: Meta<typeof ExecutionResult> = {
   title: "Primitives/ExecutionResult",
-  component: AiExecutionResult,
+  component: ExecutionResult,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -20,7 +20,7 @@ const meta: Meta<typeof AiExecutionResult> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiExecutionResult>;
+type Story = StoryObj<typeof ExecutionResult>;
 
 export const Success: Story = {
   args: {

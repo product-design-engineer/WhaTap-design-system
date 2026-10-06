@@ -1,7 +1,7 @@
 import type { ClassificationRow } from "./ClassificationTable";
 
 /**
- * ClassificationTableRow — [[AiClassificationTable]] 표의 단일 데이터 행.
+ * ClassificationTableRow — [[ClassificationTable]] 표의 단일 데이터 행.
  *
  * ## Purpose
  * GPU# / 모델명 / 평균 / 최대 / 최소 / Pod / 분류(톤 컬러 배지) 7컬럼 그리드 행 1건을 렌더.
@@ -9,11 +9,11 @@ import type { ClassificationRow } from "./ClassificationTable";
  * 그리드 컬럼 정의는 그대로 유지(순수 추출).
  *
  * ## When to use
- * - [[AiClassificationTable]] 가 `rows.map` 으로 행마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
+ * - [[ClassificationTable]] 가 `rows.map` 으로 행마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
  * - 동일한 분류 표 행 외형이 필요한 다른 표 표면.
  *
  * ## When NOT to use
- * - 헤더 행 → 부모 [[AiClassificationTable]] 가 인라인으로 직접 처리.
+ * - 헤더 행 → 부모 [[ClassificationTable]] 가 인라인으로 직접 처리.
  * - 비용/사용률 등 다른 표 행 → 해당 위젯 사용.
  *
  * ## Composition rules

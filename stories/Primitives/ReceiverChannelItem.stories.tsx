@@ -11,7 +11,7 @@ const meta: Meta<typeof ReceiverChannelItem> = {
     docs: {
       description: {
         component:
-          "**채널 행 (part)** — [[AiReceiverChannels]] 의 단일 `<li>`. 이모지 아이콘 + 라벨(+유료 배지) + 보조 정보 + 토글 핀(mock).",
+          "**채널 행 (part)** — [[ReceiverChannels]] 의 단일 `<li>`. 이모지 아이콘 + 라벨(+유료 배지) + 보조 정보 + 토글 핀(mock).",
       },
     },
   },

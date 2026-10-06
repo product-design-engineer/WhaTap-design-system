@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiClassificationTable } from "@whatap/design-system/widget";
+import { ClassificationTable } from "@whatap/design-system/widget";
 
-const meta: Meta<typeof AiClassificationTable> = {
+const meta: Meta<typeof ClassificationTable> = {
   title: "Composite/ClassificationTable",
-  component: AiClassificationTable,
+  component: ClassificationTable,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -17,7 +17,7 @@ const meta: Meta<typeof AiClassificationTable> = {
   decorators: [(Story) => <div style={{ width: 440 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiClassificationTable>;
+type Story = StoryObj<typeof ClassificationTable>;
 
 export const GpuClassification: Story = {
   args: {

@@ -1,5 +1,5 @@
 /**
- * AiCriteriaSelection — 분류/임계값 기준 선택 카드.
+ * CriteriaSelection — 분류/임계값 기준 선택 카드.
  *
  * ## Purpose
  * AI 가 제안한 분류 기준을 설명하고, 사용자가 그중 하나를 골라 다음 stage 로 진행하게 하는
@@ -13,8 +13,8 @@
  * - 데모/시연에서 자동 선택 연출이 필요할 때 (`autoPick`).
  *
  * ## When NOT to use
- * - 단순 2지선다(예: 진행/취소) → [[AiChoiceButtons]] (primary/secondary 한 쌍).
- * - 선택 없이 정보만 제시하는 읽기 전용 제안 → [[AiDashboardProposal]] / [[AiAlertRulePreview]].
+ * - 단순 2지선다(예: 진행/취소) → [[ChoiceButtons]] (primary/secondary 한 쌍).
+ * - 선택 없이 정보만 제시하는 읽기 전용 제안 → [[DashboardProposal]] / [[AlertRulePreview]].
  *
  * ## Composition rules
  * - 이 카드는 `AiCard` chrome 없이 자체 흰 배경/보더/라운드 레이아웃 (선택 상태·tone 그룹 전용 구조).
@@ -23,7 +23,7 @@
  *
  * @example
  * ```tsx
- * <AiCriteriaSelection
+ * <CriteriaSelection
  *   body="제안을 3단계 심각도로 분류했습니다."
  *   groups={[
  *     { tone: "high", title: "즉시 조치", detail: "임계값 초과" },
@@ -62,7 +62,7 @@ const TONE_DOT: Record<CriterionGroup["tone"], string> = {
   neutral: "var(--color-text-tertiary)",
 };
 
-export default function AiCriteriaSelection({
+export default function CriteriaSelection({
   heading = "Reasoning",
   body,
   groups,

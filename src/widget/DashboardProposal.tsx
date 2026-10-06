@@ -1,5 +1,5 @@
 /**
- * AiDashboardProposal — AI 가 제안하는 대시보드 구성 안내 카드.
+ * DashboardProposal — AI 가 제안하는 대시보드 구성 안내 카드.
  *
  * ## Purpose
  * AI 가 만들 대시보드 구성을 사용자에게 **제안**하는 읽기 전용 카드. 인트로 본문 + 위치 안내
@@ -11,18 +11,18 @@
  * - 위치 안내(어느 메뉴/패널에 생기는지) + 섹션별 패널 목록을 함께 보여줄 때.
  *
  * ## When NOT to use
- * - 실제 대시보드 **생성/적용** 액션 → 이 카드는 제안 안내일 뿐, 확정 CTA 는 [[AiChoiceButtons]] 로 분리.
- * - 단순 KV 요약 표 → [[AiAlertRulePreview]].
- * - 실행 후 결과 통지 → [[AiExecutionResult]].
+ * - 실제 대시보드 **생성/적용** 액션 → 이 카드는 제안 안내일 뿐, 확정 CTA 는 [[ChoiceButtons]] 로 분리.
+ * - 단순 KV 요약 표 → [[AlertRulePreview]].
+ * - 실행 후 결과 통지 → [[ExecutionResult]].
  *
  * ## Composition rules
  * - [[AiCard]] + [[AiBulletList]] 프리미티브 조립 — 인라인 chrome 금지.
- * - 카드 자체는 확인 질문까지만 — 승인/거부 버튼은 카드 밖 [[AiChoiceButtons]] 로.
+ * - 카드 자체는 확인 질문까지만 — 승인/거부 버튼은 카드 밖 [[ChoiceButtons]] 로.
  * - `delay` 는 부모 메시지 시퀀스에서 계산 (stagger).
  *
  * @example
  * ```tsx
- * <AiDashboardProposal
+ * <DashboardProposal
  *   intro="oracle_dnx 프로젝트에 RAC 지표 기반 대시보드를 제안합니다."
  *   locationHeading="📊"
  *   locationLabel="대시보드: 우측 → '인스턴스 모니터링'"
@@ -40,7 +40,7 @@ export type ProposalSection = {
   bullets: string[];
 };
 
-export default function AiDashboardProposal({
+export default function DashboardProposal({
   intro,
   locationHeading,
   locationLabel,

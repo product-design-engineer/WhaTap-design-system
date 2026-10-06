@@ -1,7 +1,7 @@
 import MigPlanRowComponent from "./MigPlanRow";
 
 /**
- * AiMigPlan — GPU MIG 통합 기획 제안 카드.
+ * MigPlan — GPU MIG 통합 기획 제안 카드.
  *
  * ## Purpose
  * AI 가 제안하는 GPU MIG(Multi-Instance GPU) 통합 전략을 읽기 전용으로 보여주는 카드.
@@ -14,18 +14,18 @@ import MigPlanRowComponent from "./MigPlanRow";
  *
  * ## When NOT to use
  * - 실제 MIG 구성 **적용** 액션 → 이 카드는 기획 제안일 뿐, 적용은 별도 흐름/페이지에서.
- * - 일반 KV 요약 표 → [[AiAlertRulePreview]].
- * - 사용자 선택 CTA → [[AiChoiceButtons]].
+ * - 일반 KV 요약 표 → [[AlertRulePreview]].
+ * - 사용자 선택 CTA → [[ChoiceButtons]].
  *
  * ## Composition rules
  * - 이 카드는 `AiCard` chrome 없이 자체 `flex-col` 레이아웃 (테이블·비용 요약 등 전용 구조).
  * - 색은 토큰 (`--color-brand-blue` · `--color-indicator-critical` · `--color-whatap-blue`) 사용,
  *   비용 요약 그라데이션/highlight 행만 인라인 색 한정.
- * - 액션 버튼을 내부에 넣지 말 것 — 승인/적용 CTA 는 [[AiChoiceButtons]] 로 분리.
+ * - 액션 버튼을 내부에 넣지 말 것 — 승인/적용 CTA 는 [[ChoiceButtons]] 로 분리.
  *
  * @example
  * ```tsx
- * <AiMigPlan
+ * <MigPlan
  *   bullets={["A100 한 장을 4개 인스턴스로 분할"]}
  *   rows={[{ label: "현재", config: "Full GPU × 1", monthly: "₩560,000" }]}
  *   total="₩134,400"
@@ -49,7 +49,7 @@ export type MigAction = {
   body: string;
 };
 
-export default function AiMigPlan({
+export default function MigPlan({
   heading = "MIG 통합 기획 (A100 핵심 활용 전략)",
   bullets,
   rows,

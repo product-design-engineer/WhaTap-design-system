@@ -11,7 +11,7 @@ const meta: Meta<typeof TimelineStepItem> = {
     docs: {
       description: {
         component:
-          "**타임라인 단계 행 (part)** — [[AiStepsTimeline]] 의 단일 단계 행. 상태 마커(완료 ✓ / 진행 spinner) + 라벨 + 우측 화살표.",
+          "**타임라인 단계 행 (part)** — [[StepsTimeline]] 의 단일 단계 행. 상태 마커(완료 ✓ / 진행 spinner) + 라벨 + 우측 화살표.",
       },
     },
   },

@@ -419,7 +419,7 @@ export const ChartSeries: StoryObj = {
  * **`--color-chart-seq-1..4`** — **크기/강도**(sequential). 한 색조의 단조 lightness 램프.
  *
  * 라이트는 옅음→진함, **다크는 anchor 가 뒤집혀** 어두움→밝음이다(자동 반전이 아니라 선택된 값).
- * `AiUsageChart` 의 시간별 사용률 막대가 이 램프를 쓴다.
+ * `UsageChart` 의 시간별 사용률 막대가 이 램프를 쓴다.
  *
  * ❌ 계열 구분에 seq 를 쓰지 말 것 — 순서가 없는 항목에 순서를 부여해 잘못 읽힌다.
  * 검증: 단조 L · 인접 ΔL ≥ 0.06 · 옅은 끝 대비 ≥ 2:1 · 단일 색조 전부 PASS.

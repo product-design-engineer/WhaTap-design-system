@@ -11,7 +11,7 @@ const meta: Meta<typeof CriteriaOptionButton> = {
     docs: {
       description: {
         component:
-          "**선택 옵션 버튼 (part)** — [[AiCriteriaSelection]] 의 단일 CTA. selected(filled blue) / dimmed / pending(자동 클릭 손) / locked 상태.",
+          "**선택 옵션 버튼 (part)** — [[CriteriaSelection]] 의 단일 CTA. selected(filled blue) / dimmed / pending(자동 클릭 손) / locked 상태.",
       },
     },
   },

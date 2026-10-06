@@ -1,8 +1,8 @@
 /**
- * AiSendButton — AI 위젯 입력창 송신 버튼.
+ * SendButton — AI 위젯 입력창 송신 버튼.
  *
  * ## Purpose
- * `WhaTapAiWidget` / `<AiPromptInput>` 의 텍스트 입력 영역 우하단 송신 trigger.
+ * `WhaTapAiWidget` / `<PromptInput>` 의 텍스트 입력 영역 우하단 송신 trigger.
  * input 텍스트 유무에 따라 활성(파랑 채움) / 비활성(회색 채움) 자동 전환.
  *
  * ## Spec (실 위젯 마크업 1:1)
@@ -12,28 +12,28 @@
  * - icon: 8→4/12 의 상향 화살표 (위로 올리는 송신)
  *
  * ## When to use
- * - `<AiPromptInput>` 내부 — 자체 채택.
+ * - `<PromptInput>` 내부 — 자체 채택.
  * - `WhaTapAiWidget` 의 직접 송신 trigger (인라인 마크업 교체 시).
  *
  * ## When NOT to use
  * - 일반 form submit → [[Button]] (variant=contained · tone=primary · type=submit).
- * - AI 위젯 토글 → [[AiAssistantButton]].
- * - 페이지 헤더의 AI 진입 → [[AiInlinePrompt]] (내부에서 AiSendButton 을 자동 사용).
+ * - AI 위젯 토글 → [[AssistantButton]].
+ * - 페이지 헤더의 AI 진입 → [[InlinePrompt]] (내부에서 SendButton 을 자동 사용).
  *
  * ## Composition rules
  * - 24×24px, `rounded-4px` — 위젯 인라인 spec 1:1.
  * - active 색은 토큰 (`--color-brand-blue` 배경, 흰 화살표) — 인라인 hex 금지.
  * - inactive 색은 토큰 (`--color-surface-50` 배경, `#d3d3d3` 보더) — 보더만 예외적 hex(토큰화 대상).
  * - `showCursor` 는 시연 전용 — 프로덕션에서 사용 금지.
- * - [[AiPromptInput]] · [[AiInlinePrompt]] 가 내부에서 자동 렌더 — 단독 import 는 시연 시나리오 한정.
+ * - [[PromptInput]] · [[InlinePrompt]] 가 내부에서 자동 렌더 — 단독 import 는 시연 시나리오 한정.
  *
  * @example
  * ```tsx
- * <AiSendButton active={input.trim().length > 0} onClick={() => onSubmit?.(input)} />
+ * <SendButton active={input.trim().length > 0} onClick={() => onSubmit?.(input)} />
  * ```
  */
 import type { ButtonHTMLAttributes } from "react";
-import AiClickCursor from "./ClickCursor";
+import ClickCursor from "./ClickCursor";
 
 export type AiSendButtonProps = {
   /** true 면 활성 (파랑 채움). false 면 비활성 (회색 채움, disabled). */
@@ -42,7 +42,7 @@ export type AiSendButtonProps = {
   showCursor?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
-export default function AiSendButton({
+export default function SendButton({
   active = false,
   showCursor = false,
   className = "",
@@ -76,7 +76,7 @@ export default function AiSendButton({
           />
         </svg>
       </button>
-      {showCursor && <AiClickCursor style={{ right: -18, top: 6 }} />}
+      {showCursor && <ClickCursor style={{ right: -18, top: 6 }} />}
     </div>
   );
 }

@@ -1,22 +1,22 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiUnavailableNotice, AI_UNAVAILABLE_PRESETS } from "@whatap/design-system/widget";
+import { UnavailableNotice, AI_UNAVAILABLE_PRESETS } from "@whatap/design-system/widget";
 
 /**
- * Stories for [[AiUnavailableNotice]] — AI 를 **쓸 수 없는 이유**를 위젯 본문에 세우는 안내.
+ * Stories for [[UnavailableNotice]] — AI 를 **쓸 수 없는 이유**를 위젯 본문에 세우는 안내.
  *
  * 빈 화면이나 비활성 버튼으로 두지 않는 이유: 사용자는 «고장»과 «권한 없음»과 «준비 중»을
  * 구분하지 못하면 같은 시도를 반복한다. 사유별 문구는 `AI_UNAVAILABLE_PRESETS` 가 단일
  * 출처이고, 개별 prop 으로 덮어쓸 수 있다.
  */
-const meta: Meta<typeof AiUnavailableNotice> = {
+const meta: Meta<typeof UnavailableNotice> = {
   title: "Composite/UnavailableNotice",
-  component: AiUnavailableNotice,
+  component: UnavailableNotice,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   decorators: [(Story) => <div style={{ width: 420 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiUnavailableNotice>;
+type Story = StoryObj<typeof UnavailableNotice>;
 
 /** 플랜 미포함 — 업그레이드 경로가 있으므로 실행을 함께 준다. */
 export const Plan: Story = { args: { reason: "plan", onAction: () => {} } };
@@ -35,7 +35,7 @@ export const AllReasons: Story = {
   render: () => (
     <div className="flex flex-col gap-8px">
       {(Object.keys(AI_UNAVAILABLE_PRESETS) as (keyof typeof AI_UNAVAILABLE_PRESETS)[]).map((r) => (
-        <AiUnavailableNotice key={r} reason={r} onAction={() => {}} />
+        <UnavailableNotice key={r} reason={r} onAction={() => {}} />
       ))}
     </div>
   ),

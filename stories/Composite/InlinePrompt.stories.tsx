@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AiInlinePrompt, type AiPromptSuggestion } from "@whatap/design-system/widget";
+import { InlinePrompt, type AiPromptSuggestion } from "@whatap/design-system/widget";
 
 /**
  * 페이지 컨텍스트별 chip 카탈로그 예시 — DB RAC 페이지 시나리오에서 자주 묻는 질의.
@@ -14,9 +14,9 @@ const DB_SUGGESTIONS: AiPromptSuggestion[] = [
   { id: "cleanup",   label: "Cleanup 제안",    query: "디스크 사용량이 높은 schema/table 정리 제안" },
 ];
 
-const meta: Meta<typeof AiInlinePrompt> = {
+const meta: Meta<typeof InlinePrompt> = {
   title: "Composite/InlinePrompt",
-  component: AiInlinePrompt,
+  component: InlinePrompt,
   tags: ["autodocs"],
   parameters: {
     layout: "padded",
@@ -24,7 +24,7 @@ const meta: Meta<typeof AiInlinePrompt> = {
     docs: {
       description: {
         component:
-          "**한 줄 inline 자연어 입력창 — `<AiPromptInput>` 의 single-row 변형 (Figma 27087:3416).**\n\n" +
+          "**한 줄 inline 자연어 입력창 — `<PromptInput>` 의 single-row 변형 (Figma 27087:3416).**\n\n" +
           "모든 구성요소(첨부 chip · input · 첨부 버튼 · 송신)가 단일 행에 배열, height 고정 (~32px).\n\n" +
           "**제외:** TokenUsageBadge · 하단 caption · 첨부 chip 별도 행 · multi-line textarea.\n\n" +
           "**롤링 placeholder (옵션):** `rollingPlaceholders` (제품별 핵심 prompt 배열) 주입 시 입력이 비어 있을 때 placeholder 가 세로 순환. 미주입이면 정적 1개(`placeholder`).\n\n" +
@@ -43,7 +43,7 @@ const meta: Meta<typeof AiInlinePrompt> = {
   decorators: [(Story) => <div style={{ width: 480 }}><Story /></div>],
 };
 export default meta;
-type Story = StoryObj<typeof AiInlinePrompt>;
+type Story = StoryObj<typeof InlinePrompt>;
 
 /** Empty — placeholder 노출, border 연한 파랑. height ~32px. */
 export const Empty: Story = {
@@ -129,7 +129,7 @@ export const InteractiveSuggestions: Story = {
       const [picks, setPicks] = useState<string[]>([]);
       return (
         <div className="flex flex-col gap-3">
-          <AiInlinePrompt
+          <InlinePrompt
             suggestions={DB_SUGGESTIONS}
             onSelectSuggestion={(s) => setPicks((arr) => [s.label, ...arr].slice(0, 5))}
             onSubmit={(v) => setSubmitted((arr) => [v, ...arr].slice(0, 5))}
@@ -169,7 +169,7 @@ export const Interactive: Story = {
       const [submitted, setSubmitted] = useState<string[]>([]);
       return (
         <div className="flex flex-col gap-3">
-          <AiInlinePrompt
+          <InlinePrompt
             onSubmit={(v) => setSubmitted((arr) => [v, ...arr].slice(0, 5))}
             placeholder="WhaTap AI 에게 질문..."
           />

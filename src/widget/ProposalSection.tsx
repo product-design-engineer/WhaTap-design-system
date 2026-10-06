@@ -1,17 +1,17 @@
 import { AiBulletList } from "./_primitives";
 
 /**
- * ProposalSection — Part. [[AiDashboardProposal]] 의 단일 섹션(행).
+ * ProposalSection — Part. [[DashboardProposal]] 의 단일 섹션(행).
  *
  * ## Purpose
  * 제안 카드 한 섹션을 렌더 — 이모지 헤딩 + 굵은 제목 + bullet 목록. 인라인으로
  * `sections.map(...)` 안에 흩어져 있던 섹션 마크업을 한 곳으로 모은 것.
  *
  * ## When to use
- * - [[AiDashboardProposal]] 가 `sections.map` 으로 섹션마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
+ * - [[DashboardProposal]] 가 `sections.map` 으로 섹션마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
  *
  * ## When NOT to use
- * - 제안 카드 전체(인트로 + 위치 + 섹션들 + 확인 질문) → [[AiDashboardProposal]].
+ * - 제안 카드 전체(인트로 + 위치 + 섹션들 + 확인 질문) → [[DashboardProposal]].
  * - 헤딩 없는 단순 bullet 목록 → [[AiBulletList]] 직접 사용.
  *
  * ## Composition rules

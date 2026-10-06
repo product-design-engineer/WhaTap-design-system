@@ -1,7 +1,7 @@
 import AiClickCursor from "./ClickCursor";
 
 /**
- * CriteriaOptionButton — Part / Widget. [[AiCriteriaSelection]] 의 단일 선택 옵션 버튼.
+ * CriteriaOptionButton — Part / Widget. [[CriteriaSelection]] 의 단일 선택 옵션 버튼.
  *
  * ## Purpose
  * 기준 선택 CTA 한 개. 상태(selected / dimmed / pending)에 따라 filled blue 강조,
@@ -9,16 +9,16 @@ import AiClickCursor from "./ClickCursor";
  * 본문을 그대로 추출한 것 — 시각/동작 동일.
  *
  * ## When to use
- * - [[AiCriteriaSelection]] 가 `options.map` 으로 옵션마다 렌더 (기본 용법).
+ * - [[CriteriaSelection]] 가 `options.map` 으로 옵션마다 렌더 (기본 용법).
  *
  * ## When NOT to use
  * - 정보성 기준 그룹 행(비-인터랙티브) → [[CriteriaGroup]].
- * - 일반 2지선다 CTA → [[AiChoiceButtons]].
+ * - 일반 2지선다 CTA → [[ChoiceButtons]].
  *
  * ## Composition rules
  * - 선택 잠금/상태 계산(`selected`/`dimmed`/`pending`/`locked`)은 부모가 결정해 props 로 주입 — 버튼은 표현용.
  * - 색은 토큰(`--color-brand-blue`) 사용 — 인라인 hex 신규 추가 금지.
- * - `pending` 일 때 우측 상단에 [[AiClickCursor]] 손 인디케이터 표시.
+ * - `pending` 일 때 우측 상단에 [[ClickCursor]] 손 인디케이터 표시.
  *
  * @example
  * ```tsx

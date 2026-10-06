@@ -60,9 +60,9 @@ const meta: Meta = {
         component:
           "**프리셋 B — AI 전용 페이지.** Sidebar + PageHeaderAiInline + WhaTapAiWidget.\n\n" +
           "페이지 자체가 AI 중심. 헤더에서 바로 자연어 입력 → 위젯 즉시 열림 (1-step UX).\n\n" +
-          "**포함 컴포넌트:** DashboardLayout · PageHeaderAiInline(AiInlinePrompt 내장) · WhaTapAiWidget\n\n" +
+          "**포함 컴포넌트:** DashboardLayout · PageHeaderAiInline(InlinePrompt 내장) · WhaTapAiWidget\n\n" +
           "**핵심 기능:** 롤링 placeholder + suggestion chip + 인라인 송신 → 위젯 활성화.\n\n" +
-          "✅ **Do** — AI 진입은 버튼이 아니라 `AiInlinePrompt` 직접 주입(2-step → 1-step) · " +
+          "✅ **Do** — AI 진입은 버튼이 아니라 `InlinePrompt` 직접 주입(2-step → 1-step) · " +
           "화면 본문 자체가 대화인 경우 `hideAi` 로 헤더 토글을 숨겨 진입점을 하나로 · " +
           "질문 예시는 suggestion chip 으로 제시\n\n" +
           "❌ **Don't** — AI 영역에 일반 TextField·Button 사용(`Ai...` 컴포넌트만) · " +
