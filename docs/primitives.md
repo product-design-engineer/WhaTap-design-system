@@ -1,12 +1,12 @@
-# 일반 폼/표시 Primitives — 9 컴포넌트
+# 일반 폼/표시 Primitives — 10 컴포넌트
 
 > 원본: `src/` (interfacedesigner/WhaTap-design-system) · Storybook 트리 `Primitives/`
 
 가장 작은 단위의 재사용 컴포넌트들. **새 화면을 만들 때 인라인 form/feedback UI 를 새로 짜지 마세요. 이들을 조립하세요.**
 
-> **참고:** `Primitives` 는 "자체 렌더 리프" 계층 전체(65종 — 행·칩·항목·심볼 포함)를 뜻한다. 이 문서는 그중 **일반 폼/표시 9종**만 다룬다. AI 리프 카드는 `Primitives/Ai`(아래) 참조.
+> **참고:** `Primitives` 는 "자체 렌더 리프" 계층 전체(65종 — 행·칩·항목·심볼 포함)를 뜻한다. 이 문서는 그중 **일반 폼/표시 10종**만 다룬다. AI 리프 카드는 `Primitives/Ai`(아래) 참조.
 
-- **일반 폼/표시 (9)** — 페이지·다이얼로그 어디서나 — Checkbox · Tooltip · Chip · FilterChip · TextField · Select · Tabs · Modal · FilterDropdown
+- **일반 폼/표시 (10)** — 페이지·다이얼로그 어디서나 — Checkbox · Tooltip · Chip · FilterChip · TextField · Select · Tabs · Modal · FilterDropdown · Disclosure
 
 > **AI 카드 빌딩 블록(AiCard · AiCaption · AiSectionHeading · AiToneBadge · AiBulletList)** 은 Storybook `Primitives/Ai` 하위그룹(AI 리프 프리미티브). 카탈로그: [widget-components.md](./widget-components.md). 아래 "AI 카드 빌딩 블록" 상세는 참고용으로 유지.
 
@@ -14,7 +14,7 @@
 
 ---
 
-# A. 일반 폼/표시 Primitives (9)
+# A. 일반 폼/표시 Primitives (10)
 
 ## Checkbox
 
@@ -271,6 +271,30 @@ dialog — backdrop · panel · footer · 3 채널 닫기 (× / ESC / backdrop).
   onChange={setPicked}
   footer={<Button size="sm" fullWidth onClick={apply}>적용</Button>}
 />
+```
+
+## Disclosure
+
+머리말을 눌러 아래 내용을 펼치고 접는다. 머리말은 늘 보이고 내용은 펼쳤을 때만 선다. 기본은 접힘.
+머리말 전체가 버튼이고 `aria-expanded` · `aria-controls` 가 자동으로 붙는다.
+
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `summary` | `ReactNode` | — | 늘 보이는 머리말. 접힌 것이 무엇인지와 그 양을 적는다 |
+| `children` | `ReactNode` | — | 펼쳤을 때만 서는 내용 |
+| `open` | `boolean` | _비제어_ | 제어 모드 열림. 주면 `defaultOpen` 무시 |
+| `defaultOpen` | `boolean` | `false` | 비제어 모드 처음 열림 |
+| `onOpenChange` | `(open: boolean) => void` | — | 머리말을 누를 때 다음 열림 값 |
+| `size` | `"sm" \| "md"` | `"md"` | 머리말 글자 크기 |
+| `disabled` | `boolean` | `false` | — |
+
+- 머리말에 「펼치기 · 접기」 낱말을 넣지 않는다. 열림은 화살표와 `aria-expanded` 가 말한다
+- 화면의 주요 내용을 접어 두지 않는다. 여러 구획 중 하나만 보여야 하면 `Tabs`, 덮어야 하면 `Modal`
+
+```tsx
+<Disclosure summary="다른 플랜에 속한 프로젝트 15">
+  <ul>…</ul>
+</Disclosure>
 ```
 
 ---

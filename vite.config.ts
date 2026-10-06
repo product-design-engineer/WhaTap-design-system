@@ -48,6 +48,14 @@ export default defineConfig({
         ],
         test: {
           name: "storybook",
+          // 파일마다 환경을 새로 만들지 않는다(isolate: false). CI 의 `Test` 단계가 간헐적으로
+          // `Failed to fetch dynamically imported module` → `Cannot connect to the iframe` 로 멈췄다
+          // (2026-10-01~02 실제 CI 14회 중 3회). 업스트림 미해결 이슈(vitest#9509 · storybook#33347)이고
+          // 2코어 러너에서 테스트 서버가 순간적으로 요청을 받지 못하는 리소스 압박으로 본다.
+          // 같은 러너 조건 측정(exp/vitest-flake): 기본 2/30 실패 · isolate:false 0/45 실패,
+          // job 시간 6.7분 → 3.3분. 45회 모두 175 파일 통과 — 파일 간 상태 누수로 인한 실패 없음.
+          // 되돌림 조건: 파일 간 상태 누수가 의심되는 실패가 나오면 이 줄을 지우고 재측정한다.
+          isolate: false,
           browser: {
             enabled: true,
             headless: true,
