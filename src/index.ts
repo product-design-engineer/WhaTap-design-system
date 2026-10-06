@@ -84,6 +84,8 @@ export { default as FilterSelect } from "./FilterSelect";
 export type { FilterSelectProps } from "./FilterSelect";
 export { default as Notice } from "./Notice";
 export type { NoticeProps, NoticeTone, NoticeVariant } from "./Notice";
+export { default as Disclosure } from "./Disclosure";
+export type { DisclosureProps, DisclosureSize } from "./Disclosure";
 export { default as EmptyState } from "./EmptyState";
 export type { EmptyStateProps, EmptyStateSize } from "./EmptyState";
 export { default as ExtensionPanel } from "./ExtensionPanel";
