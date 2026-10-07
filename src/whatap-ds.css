@@ -1862,6 +1862,21 @@ html, body, #root {
 @media (prefers-reduced-motion: reduce) {
   .wds-disclosure-chevron { transition: none; }
 }
+/* ── DataTable — 다 못 보이면 세로 스크롤 ─────────────────────────────────────
+   표가 받은 높이(부모 flex 열의 남은 칸 · maxHeight)보다 행이 많으면 **잘리지 않고** 본문이
+   세로로 스크롤된다. 예전엔 overflow:hidden 이라 넘친 행이 조용히 사라졌다.
+   헤더는 스크롤 영역 안의 sticky — 밖에 두면 스크롤바 폭만큼 열이 어긋난다.
+   행은 줄어들지 않는다(shrink 0): 높이가 모자라면 행을 눌러 담는 대신 스크롤한다. */
+.wds-data-table {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.wds-data-table > * { flex-shrink: 0; }
+.wds-data-table-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
 /* 옵션바 항목 자동 배치 — 「폭이 넉넉하면 라벨을 값 왼쪽에」.
    기준은 뷰포트가 아니라 **행이 실제로 쓸 수 있는 폭**이다(container query). 사이드바(240)와
    AI 위젯(480)이 열리면 같은 화면에서도 행이 좁아지는데, 뷰포트 기준이면 그때도 라벨을 옆에

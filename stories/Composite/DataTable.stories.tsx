@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { DataTable } from "@whatap/design-system";
-import type { DataTableColumn } from "@whatap/design-system";
+import { Button, Chip, DataTable } from "@whatap/design-system";
+import type { DataTableColumn, DataTableSort } from "@whatap/design-system";
 
 /**
  * Stories for [[DataTable]] — 모니터링 페이지의 재활용 generic 데이터 테이블.
@@ -181,4 +181,78 @@ export const RowHighlight: StoryObj = {
       />
     );
   },
+};
+
+/* ─── 세로 스크롤 — 받은 높이에 다 안 들어갈 때 ─────────────── */
+
+type MemberRow = {
+  name: string;
+  badge?: { label: string; tone: "primary" | "critical" | "neutral" };
+  deleted?: boolean;
+  email: string;
+  org: string;
+  addedAt: string;
+  usage: number;
+};
+const MEMBERS: MemberRow[] = [
+  { name: "정우성", badge: { label: "플랜 1개 이상", tone: "primary" }, email: "jung@whatap.io", org: "(주) 와탭랩스/서비스개발", addedAt: "2026-05-02 14:22", usage: 12410 },
+  { name: "오경호", badge: { label: "플랜 1개 이상", tone: "primary" }, email: "kyungho.oh@whatap.io", org: "(주) 와탭랩스/플랫폼", addedAt: "2026-04-14 09:12", usage: 6240 },
+  { name: "이준호", badge: { label: "플랜 1개 이상", tone: "primary" }, email: "lee@whatap.io", org: "(주) 와탭랩스/서비스개발", addedAt: "2026-04-14 11:31", usage: 5220 },
+  { name: "김서연", email: "kim@whatap.io", org: "(주) 와탭랩스/플랫폼", addedAt: "2026-04-14 10:04", usage: 4960 },
+  { name: "박다인", badge: { label: "플랜 1개 이상", tone: "primary" }, email: "park@whatap.io", org: "(주) 와탭랩스/서비스개발", addedAt: "2026-05-02 13:47", usage: 3880 },
+  { name: "한지민", email: "han@whatap.io", org: "(주) 와탭랩스/플랫폼/SRE", addedAt: "2026-06-11 15:08", usage: 2410 },
+  { name: "신동하", badge: { label: "삭제된 계정", tone: "critical" }, deleted: true, email: "shin@whatap.io", org: "(주) 와탭랩스/서비스개발", addedAt: "2026-05-02 17:05", usage: 1120 },
+  { name: "조민석", badge: { label: "초대 대기", tone: "neutral" }, email: "cho@whatap.io", org: "(주) 와탭랩스/데이터", addedAt: "2026-08-11 16:44", usage: 0 },
+];
+const MEMBER_COLS: DataTableColumn<MemberRow>[] = [
+  {
+    key: "name", header: "계정", sortable: true, tooltip: (r) => r.name,
+    render: (r) => (
+      <span className="flex items-center gap-8px min-w-0">
+        <span className={r.deleted ? "text-tertiary" : undefined} style={r.deleted ? { textDecoration: "line-through" } : undefined}>{r.name}</span>
+        {r.badge && <Chip variant="soft" tone={r.badge.tone} size="md">{r.badge.label}</Chip>}
+      </span>
+    ),
+  },
+  { key: "email", header: "메일", render: (r) => <span className="text-tertiary">{r.email}</span>, tooltip: (r) => r.email },
+  { key: "org", header: "소속", render: (r) => <span className="text-tertiary">{r.org}</span>, tooltip: (r) => r.org },
+  { key: "addedAt", header: "추가 일시", sortable: true, render: (r) => <span className="text-tertiary">{r.addedAt}</span> },
+  { key: "usage", header: "이번 주기 사용량", sortable: true, align: "left", render: (r) => `${r.usage.toLocaleString()} 크레딧` },
+  {
+    key: "action", header: "", align: "right",
+    render: () => <Button variant="outline" tone="primary" size="sm">플랜에서 제외</Button>,
+  },
+];
+
+/**
+ * 세로 스크롤 — `maxHeight` 로 높이를 정한 경우. 8행이 200px 에 다 안 들어가므로 본문이
+ * 세로로 스크롤되고 **헤더는 위에 붙어 남는다**. 예전에는 넘친 행이 잘려 보이지 않았다.
+ */
+export const VerticalScroll: StoryObj = {
+  render: () => {
+    const [sort, setSort] = useState<DataTableSort>({ key: "usage", dir: "desc" });
+    return (
+      <DataTable<MemberRow>
+        columns={MEMBER_COLS}
+        rows={MEMBERS}
+        sort={sort}
+        onSortChange={setSort}
+        maxHeight={200}
+      />
+    );
+  },
+};
+
+/**
+ * 세로 스크롤 — 부모가 높이를 준 경우(`maxHeight` 없음). 카드 안 flex 열에서 필터 줄 아래
+ * 남은 칸을 표가 차지한다. 그 칸보다 행이 많으면 표 안에서 스크롤된다 — 표를
+ * `overflow-auto` 래퍼로 감쌀 필요가 없다(감싸면 헤더까지 같이 밀려 올라간다).
+ */
+export const VerticalScrollInFlexParent: StoryObj = {
+  render: () => (
+    <div className="flex flex-col gap-12px bg-card rounded-4px p-16px" style={{ height: 280 }}>
+      <span className="text-lg font-bold text-primary">플랜 멤버</span>
+      <DataTable<MemberRow> columns={MEMBER_COLS} rows={MEMBERS} />
+    </div>
+  ),
 };
