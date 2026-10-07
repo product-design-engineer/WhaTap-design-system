@@ -83,6 +83,8 @@ export type { MemberUsageBarProps } from "./MemberUsageBar";
 export { default as FilterSelect } from "./FilterSelect";
 export type { FilterSelectProps } from "./FilterSelect";
 export { default as Notice } from "./Notice";
+export { default as MailTemplate } from "./MailTemplate";
+export type { MailTemplateProps, MailTemplateAction } from "./MailTemplate";
 export type { NoticeProps, NoticeTone, NoticeVariant } from "./Notice";
 export { default as Disclosure } from "./Disclosure";
 export type { DisclosureProps, DisclosureSize } from "./Disclosure";
