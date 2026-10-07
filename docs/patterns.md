@@ -485,14 +485,17 @@ row height ≈ 33-36px (default density) 기준:
 2. **기존 widget 컴포넌트의 prop 확장**으로 해결되는가? → 같은 외형/다른 데이터인 경우 매우 흔함
 3. 위 둘이 다 안 되는 진짜 새 패턴인가? → 그러면 `widget/Ai<Name>.tsx`를 만들되, **반드시 `AiCard` + 토큰 + primitive 조합**으로
 
-추가한 컴포넌트는 같은 PR에서 [`widget-components.md`](./widget-components.md)에 등록.
+추가한 컴포넌트는 **세 정본에 함께** 들어간다 — 코드(docstring · export) · Storybook(스토리) · Figma 정본(세트 · 변수 연결 · 문서 프레임 · 게시)과 카탈로그 문서(`*-components.md` · 필요하면 `patterns.md` · `SKILL.md` · `llms.txt`). AI 는 카탈로그를 읽고 그대로 실행하므로 한쪽에만 있는 컴포넌트는 다른 쪽에서 다시 만들어진다. Figma 에 없는 하위 의존(컴포넌트 · 텍스트 스타일 · 아이콘)은 근사하지 말고 먼저 세 정본에 넣는다.
 
 ✅ 기존 컴포넌트의 **prop 확장**으로 되는지 먼저 본다 — 같은 외형·다른 데이터인 경우가 매우 흔하다
 ✅ 반복되거나 의미 단위가 분명한 구조(목록 행·카드·셀·항목)는 **컴포넌트로 추출**한다 — 추출이 기본이다
 ✅ 새 컴포넌트는 계층 명시 + docstring 4섹션 + 스토리 + `index.ts` export 를 **같은 PR 에서** 갖춘다
+✅ 같은 흐름에서 **Figma 정본**(세트 · WDS 변수 연결 · 문서 프레임)과 **카탈로그 문서**까지 맞춘다 — 셋 중 하나라도 빠지면 추가가 끝난 것이 아니다
 
 ❌ 프리미티브로 조립되는 것을 새 컴포넌트로 — 페이지에서 직접 조립하면 된다
 ❌ 스토리 없이 추가 — 계층 판정이 story title prefix 라서 **게이트 5곳에서 동시에 빠진다**
+❌ 코드만 병합하고 Figma 는 나중에 — AI 와 디자이너가 서로 다른 정본을 보고 같은 것을 두 번 만든다
+❌ Figma 에 없는 하위 의존을 근사값으로 그리기 — 근사는 다음 조정 때 정본 밖에 남는다
 ❌ `map` 안에 구조를 인라인으로 펼치기 — 인라인 허용은 재사용 없는 1회성 레이아웃 래퍼뿐이다
 
 ---
@@ -678,6 +681,58 @@ Product-SaaS 안에서 어떤 구현을 선택할지 갈릴 때, 다음 순서�
 
 ---
 
+## 15. 대시보드 위젯 — 껍데기는 WidgetFrame 하나
+<!-- @policy id=dashboard-widget-frame | @severity must | @applies chart -->
+
+**When to use.** 대시보드 · Flex 보드처럼 지표 위젯이 격자로 놓이는 제품 화면. 차트 · 표 · 수치를 한 칸에 담는 모든 자리.
+
+**When NOT to use.**
+- AI 위젯 **안**의 카드 → [[AiCard]] (§6). 두 껍데기는 «화면의 조각» 과 «AI 의 답» 을 가르는 표지라 서로 빌려 쓰지 않는다.
+- 폼 · 설정의 구획 → 카드 + 구획 사이 선 (§14).
+- 이관 전 차트(MiniMultiLineChart · MiniDonutChart · KpiCard · MiniLineChart)는 아직 껍데기를 스스로 그린다. 이들은 WidgetFrame 에 넣지 말고 그대로 격자에 세운다. 이관은 각 차트에 껍데기 끄는 prop 을 여는 별도 작업이다.
+
+**규칙.** 위젯 한 칸은 [[WidgetFrame]] 이 **헤더 · 본문 · 푸터** 로 세운다. 그 위에 다섯 가지를 지킨다.
+
+| 축 | 규칙 |
+|---|---|
+| 껍데기 | 표면 · 테두리 · 반경 · 안쪽 여백 · 제목 줄은 WidgetFrame 만 정한다. 높이는 격자 행이 정한다 |
+| 제목 · 메뉴 | 제목은 지표 이름만. 범위 · 대상 수 · 단위는 헤더 `meta`. 헤더 오른쪽 아이콘 메뉴는 **⛶ 전체 화면 + ⋮ 더보기 둘로 고정**(순서 고정), 나머지 행동은 더보기 안으로 |
+| 범례 | **본문 오른쪽 위 한 줄**(`legend`). 헤더 오른쪽은 메뉴 자리라 올리지 않는다. 계열이 셋을 넘거나 글이 길면 본문 안 차트 옆 열로. 푸터로 내리지 않는다 |
+| 색 | 선 · 막대는 `--color-chart-series-N`. 상태색(`--color-status-*` · `--color-indicator-critical`)은 **상태를 말하는 위젯에만** 쓰고, 한 위젯 안에서 둘을 섞지 않는다 |
+| 빈 상태 | 데이터 없음(`no-data`)과 수집 끊김(`collect-gap`)을 가른다. 둘 다 선을 0 으로 그리지 않는다 |
+| AI 진입점 | 위젯이 아니라 **페이지 성격**이 정한다. 레거시 차트 모드 · 전체 격자 화면에서는 두지 않는다. AI 위젯을 여는 제품 화면에서는 아이콘을 더하지 않고 **더보기 첫 줄**(「AI 에게 묻기」)로 넣는다 |
+
+**Why.** 격자는 «같은 것이 나란히 있다» 로 읽히는 형식이다. 칸마다 여백이 1~4px 다르고 제목 굵기가 다르면 사람은 그 차이를 종류의 차이로 읽는다. 껍데기를 차트마다 따로 두면 그 차이는 반드시 생긴다(2026-10 통합 대시보드 실측: 여백 12 · 12/8 · 8/6px, 제목 bold · medium 이 한 화면에 섞였다).
+색이 섞이면 같은 빨강이 «위험» 인지 «시리즈 8» 인지 알 수 없다. 끊긴 수집을 0 으로 그리면 «조용하다» 로 읽혀 장애가 정상으로 감춰진다. 위젯마다 AI 아이콘을 다는 것은 판단을 문장 대신 부스러기로 흩는 일이라, 붙일지 말지를 칸 단위가 아니라 화면 단위로 정한다.
+
+**How.**
+
+```tsx
+<div className="grid grid-cols-4 gap-12px" style={{ height: 232 }}>
+  <WidgetFrame title="액티브 트랜잭션" meta="APM 24" bleed>
+    <ActiveTransactionArc maxTx={maxTx} agent={agent} />
+  </WidgetFrame>
+  <WidgetFrame title="히트맵" meta="수행 시간(초)">
+    <ScatterHeatmap dots={dots} />
+  </WidgetFrame>
+  <WidgetFrame title="DB 액티브 세션" meta="최근 30분" state="collect-gap" stateDescription="2대 · 18분째 끊김" />
+</div>
+```
+
+✅ 위젯 한 칸은 `WidgetFrame` 으로 세우고, 높이는 격자 행에 준다
+✅ 표 · 히트맵 · 아크처럼 본문이 가장자리를 가지면 `bleed`
+✅ 끊긴 수집은 `state="collect-gap"` + 끊긴 범위 한 줄
+✅ 헤더 메뉴는 `onFullscreen` · `menu` 로만 — 아이콘 자리를 직접 짜지 않는다
+
+❌ 페이지에서 `bg-card border …` 로 위젯 껍데기를 직접 짜기 — 칸마다 여백이 달라진다
+❌ 껍데기를 가진 차트를 WidgetFrame 에 넣기 — 카드가 두 겹이 된다
+❌ 수집이 끊긴 구간을 0 선 · 빈 막대로 그리기 — 정상으로 읽힌다
+❌ 레거시 격자 화면의 차트마다 `onAiTrigger` — AI 진입점은 화면 단위로 정한다
+❌ 위젯마다 헤더 아이콘을 다르게 늘어놓기(설정 · 복사 · 이동 …) — 칸이 좁을 때 제목이 칸마다 다른 자리에서 잘린다. ⛶ + ⋮ 둘로
+❌ 범례를 헤더 오른쪽이나 푸터에 — 헤더는 메뉴 자리, 범례는 차트에 붙어 읽혀야 한다
+
+---
+
 ## 부록 — 빠른 결정 표
 
 | 상황 | 무엇을 할까 |
@@ -687,6 +742,7 @@ Product-SaaS 안에서 어떤 구현을 선택할지 갈릴 때, 다음 순서�
 | 새 색상이 필요 | [`tokens.md`](./tokens.md)에 토큰 추가 → 컴포넌트에서 import |
 | 새 카드 외형이 필요 | 거의 항상 `AiCard`로 충분. 정말 다르다면 디자인 리뷰 후 primitive 추가 |
 | 차트가 필요 | `MiniLineChart` / `AiUsageChart` 확장 — SVG 단위 규칙(#3) 준수 |
+| 대시보드 위젯 한 칸 | `WidgetFrame`(헤더 · 본문 · 푸터) + 본문 컴포넌트 · 빈 상태는 `state` (#15) |
 | 테이블이 필요 | `DataTable` (chrome) / `AiClassificationTable` `AiCostTable` (widget) |
 | 한 화면의 여러 구획 구분 | 페이지 본문이면 카드로 나눔 · 카드 안이면 `border-t border-default` + 여백 (#14) |
 | 위젯 토글 | `useWhaTapAi()` 한 곳에서 `aiActive` 공유. `DashboardLayout`에 `widgetOpen` 전달 |

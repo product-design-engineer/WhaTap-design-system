@@ -13,9 +13,11 @@
  * ## When NOT to use
  * - 페이지 전체의 머리 → [[PageHeader]] · [[SubHeaderBar]].
  * - 조건 입력이 늘어선 줄 → [[OptionbarPage]] 또는 `.wds-field-row` 를 붙인 컨테이너.
- * - 카드 안 본문의 소제목 → `text-base font-bold text-primary` 한 줄이면 충분하다.
+ * - 카드 안 본문의 소제목 → `text-base font-medium text-primary`(body.label) 한 줄이면 충분하다.
  *
  * ## Composition rules
+ * - 이름은 타이포 역할 `heading.subsection`(`text-md font-bold`, 13px)이다. 카드 헤더의 정본 역할이다(patterns §10).
+ *   12px 에 bold 를 얹지 않는다 — 12px 은 medium 자리라 같은 크기에서 굵기만 바뀌면 위계가 흐려진다.
  * - **이름과 탭을 위아래로 나누지 않는다.** 나누면 두 줄 다 가로를 15% 안팎만 쓰면서 세로만
  *   34px 더 먹는다. 위계는 줄 구분이 아니라 굵기(이름 bold / 탭 regular)가 진다.
  * - `meta` 는 **우측 끝**. 카드마다 달아야 하는 값(보고 있는 구간 등)을 넣는다. 여러 카드가
@@ -64,7 +66,7 @@ export default function CardHead({ title, tabs, meta }: CardHeadProps) {
   return (
     <div className="flex items-center justify-between" style={{ gap: 16 }}>
       <span className="flex items-center" style={{ gap: 16 }}>
-        <span className="text-base font-bold text-primary whitespace-nowrap">{title}</span>
+        <span className="text-md font-bold text-primary whitespace-nowrap">{title}</span>
         {tabs && (
           <Tabs
             variant={tabs.variant ?? "segmented"}

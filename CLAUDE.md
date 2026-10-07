@@ -313,6 +313,24 @@ AI 위젯 영역의 모든 컴포넌트는 다음 primitive 를 **반드시 comp
 - 새 페이지는 prop 으로 조합. inline 복사·재정의 금지.
 - 페이지 dogfooding 중 발견된 gap 은 본 패키지에 새 컴포넌트로 추가 (페이지 안에서 해결 X)
 
+### 🔒 불변 정책 — 신규 컴포넌트는 세 정본에 함께 (코드 · Storybook · Figma)
+
+> **이 정책은 불변(immutable)입니다. 예외 없음.** (2026-10-07 사용자 지시)
+
+신규 컴포넌트(그리고 그 컴포넌트가 새로 요구하는 토큰 · 텍스트 스타일 · 아이콘)는 **세 정본에 같은 모양으로, 카탈로그 정보와 함께** 들어간다. 하나라도 빠지면 «추가» 가 끝난 것이 아니다.
+
+| 정본 | 들어가야 하는 것 |
+|---|---|
+| **코드** | `src/` 컴포넌트 · docstring 4섹션(Purpose · When to use · When NOT to use · Composition rules) · `index.ts` export · 필요한 CSS · 토큰 |
+| **Storybook** | 계층 title 의 스토리(변형 · 상태마다) · autodocs 설명 |
+| **Figma 정본** (`2LktjSjKZDnCuWo5CQ6828`) | 컴포넌트 페이지 · 세트(코드 prop 과 같은 축의 variant · property · slot) · 색 · 여백 · 반경 · 글자는 WDS 변수 · 스타일 연결(미연결 0) · 설명(출처 · 코드 경로 · Figma 구현 노트) · 📄 문서 프레임 · 라이브러리 게시 |
+| **카탈로그** (AI 가 읽고 실행하는 자리) | `docs/*-components.md` 또는 `primitives.md` 등재 · 정책이 걸리면 `patterns.md` · 필요하면 `SKILL.md` · `GUIDE.md` · `static/public/llms.txt` · 생성물(`components.json` · `policies.json` · `DESIGN.md`)은 `pnpm build:design` 으로 확인 |
+
+- 세 정본은 **같은 PR 흐름**에서 맞춘다. 코드만 먼저 병합하고 Figma 를 나중에 두지 않는다 — AI 는 카탈로그를 읽고 그대로 실행하므로, 한쪽에만 있는 컴포넌트는 다른 쪽에서 «없는 것» 으로 다시 만들어진다.
+- 한쪽 정본에 **없는 의존**(Figma 에 없는 하위 컴포넌트 · 텍스트 스타일 · 아이콘)을 만나면 근사하지 말고 그 의존부터 세 정본에 넣는다.
+- 의존을 넣다가 **다른 정책과 부딪히면**(예: 타이포 위계 §10) 의존을 그대로 옮기지 말고 어느 쪽을 고칠지 먼저 정한다.
+- Figma 게시는 플러그인 API 로 할 수 없다. 사람이 게시해야 하므로 PR 본문에 「게시 필요」 를 적는다.
+
 ### 🔒 불변 정책 — 소비자(엔지니어)의 역방향 수정 금지
 
 > **이 정책은 불변(immutable)입니다. 예외 없음.**

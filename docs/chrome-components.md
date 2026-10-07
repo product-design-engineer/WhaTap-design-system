@@ -1,4 +1,4 @@
-# Chrome (페이지 골격) Components — 21 컴포넌트
+# Chrome (페이지 골격) Components — 23 컴포넌트
 
 > 원본: `src/` (interfacedesigner/WhaTap-design-system)
 
@@ -10,13 +10,13 @@
 
 **조립 순서:** `DashboardLayout` → `Sidebar` + `header` 슬롯 (`PageHeader` 또는 `PageHeaderAiInline` + 옵션으로 `OptionbarPage` 또는 `FilterBar`) + `main` 슬롯 + 자식으로 `WhaTapAiWidget`
 
-## 카탈로그 (21)
+## 카탈로그 (23)
 
 | 영역 | 컴포넌트 |
 |---|---|
 | 레이아웃 | DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · SubHeaderBar |
 | 옵션바 (시간/인스턴스/프리셋) | OptionbarPage · OptionbarInstanceSelector · LiveTimerCompact · TimeRangeSelector · PresetSelect |
-| 데이터 표시 | DataTable · FilterBar · MiniLineChart · EventWeekTimeMatrix |
+| 데이터 표시 | WidgetFrame · CardHead · DataTable · FilterBar · MiniLineChart · EventWeekTimeMatrix |
 | 액션·진입 | Button · AiSymbol |
 | 알림·상태 | Toast · ConfirmDialog · Stage · DashboardBuildingProgress |
 | 위젯 컨텍스트 | WhaTapAiContext (Provider) |
@@ -410,6 +410,57 @@ export type DataTableProps<T> = {
 - AI 위젯 토글 (그라데이션) → [`AiAssistantButton`](./ai-entry.md#aiassistantbutton)
 - AI 위젯 송신 → [`AiSendButton`](./ai-entry.md#aisendbutton)
 - icon-only 압축 (size 16-20px) → 인라인 OK
+
+---
+
+## WidgetFrame
+
+대시보드 격자의 위젯 한 칸. **헤더(`CardHead`) · 본문 · 푸터** 세 칸으로 나누고, 표면 · 테두리 · 반경 · 안쪽 여백을 이 컴포넌트 한 곳에서 정한다. 차트 · 표는 본문만 그린다. 정책은 [patterns.md §15](./patterns.md#15-대시보드-위젯--껍데기는-widgetframe-하나).
+
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `title` | `string` | — | 지표 이름만(「TPS」). 범위 · 대상 · 단위는 `meta` |
+| `meta` | `ReactNode` | — | 헤더 우측. 글자면 tertiary |
+| `onFullscreen` | `() => void` | — | 헤더 메뉴 첫 칸 ⛶ 전체 화면. 주면 선다 |
+| `menu` | `ActionMenuAction[]` | — | 헤더 메뉴 둘째 칸 ⋮ 더보기 안의 줄(설정 · 복사 · 상세로 이동). 주면 선다 |
+| `legend` | `{ label, color }[]` | — | 본문 오른쪽 위 한 줄 범례. 계열 셋 이하 |
+| `bleed` | `boolean` | `false` | 본문 안쪽 여백 없앰. 표 · 히트맵 · 아크처럼 본문이 가장자리를 가질 때만 |
+| `state` | `"ready" \| "no-data" \| "collect-gap"` | `"ready"` | `ready` 가 아니면 본문 대신 [[EmptyState]] |
+| `stateTitle` / `stateDescription` | `ReactNode` | 상태별 기본 문장 / — | 빈 상태 두 줄 |
+| `footer` | `ReactNode` | — | 출처 · 마지막 수집 시각 한 줄(범례는 `legend`) |
+
+- 높이는 부모(격자 행)가 정한다. WidgetFrame 은 `h-full`
+- 헤더 줄은 24px 고정. 메뉴가 있는 칸과 없는 칸의 본문 시작선이 같다
+- **헤더 오른쪽 아이콘 메뉴는 ⛶ 전체 화면 + ⋮ 더보기 둘로 고정**(순서 고정). 나머지 행동은 전부 더보기 안으로. AI 진입점은 아이콘이 아니라 더보기 첫 줄(AI 위젯을 여는 화면에서만)
+- **범례는 본문 오른쪽 위 한 줄.** 헤더 오른쪽은 메뉴 자리다. 계열이 셋을 넘거나 글이 길면 본문 안 차트 옆 열로
+- 세 칸 사이에 구분선을 긋지 않는다. 같은 표면 안이라 여백이 경계다
+- 껍데기를 스스로 그리는 차트(MiniMultiLineChart · MiniDonutChart · KpiCard · MiniLineChart)는 넣지 않는다. 카드가 두 겹이 된다
+- AI 진입점은 껍데기에 두지 않는다(§15)
+
+```tsx
+<div className="grid grid-cols-4 gap-12px" style={{ height: 232 }}>
+  <WidgetFrame title="액티브 트랜잭션" meta="APM 24" bleed onFullscreen={open} menu={WIDGET_MENU}>
+    <ActiveTransactionArc maxTx={maxTx} agent={agent} />
+  </WidgetFrame>
+  <WidgetFrame title="서버 CPU" meta="최근 30분" state="collect-gap" stateDescription="서버 12대 · 32분째 끊김" />
+</div>
+```
+
+---
+
+## CardHead
+
+카드 머리 한 줄 — **이름 · 탭 · 우측 메타**. 이름은 영역이 무엇인지, 탭은 무엇으로 나뉘는지, 메타는 지금 무엇을 보는지를 말한다. [[WidgetFrame]] 의 헤더가 이것이다.
+
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `title` | `string` | — | 영역 이름. 타이포 역할 `heading.subsection`(`text-md font-bold`, 13px) |
+| `tabs` | `{ items, value, onChange, variant? }` | — | 탭. 기본 `segmented`. 없으면 이름만 |
+| `meta` | `ReactNode` | — | 우측 끝. 지금 보는 범위 · 기준 |
+
+- 이름과 탭을 위아래로 나누지 않는다. 위계는 줄이 아니라 굵기가 진다
+- 이름 · 메타는 한 줄(`whitespace-nowrap`)
+- 탭 `large` 가 필요하면 탭을 머리 아래 자기 줄로 내린다
 
 ---
 
