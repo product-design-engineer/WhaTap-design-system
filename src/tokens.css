@@ -500,6 +500,15 @@
   --color-chart-speed-slow: #FFA012;      /* 느림 */
   --color-chart-speed-very-slow: #F34747; /* 매우 느림 */
 
+  /* Chart — APM 대시보드 고정색. 계열(series) 순서 체계 밖에서 APM 대시보드가 원래 쓰던 두 계열색과
+     Apdex 카드의 세 구간 배경이다. speed 와 같이 «제품이 정한 고정 의미» 라 다크에서도 재매핑하지 않는다.
+     새 차트에는 series/seq 를 쓴다 — 이 다섯은 APM 대시보드 재현용이다. */
+  --color-chart-apm-blue: #4FC3F7;               /* TPS·응답시간 막대 · Method 비율 · 오늘 추이 */
+  --color-chart-apm-green: #81C784;              /* 힙 메모리 · SQL 비율 */
+  --color-chart-apdex-excellent-bg: #DCEFFF;     /* Apdex Excellent 구간 배경 */
+  --color-chart-apdex-poor-bg: #FFEDCF;          /* Apdex Poor 구간 배경 */
+  --color-chart-apdex-unacceptable-bg: #FFE2E2;  /* Apdex Unacceptable 구간 배경 */
+
   /* Shadow flood — SVG 필터(feDropShadow)의 그림자 색. CSS box-shadow 는 --shadow-* 를 쓴다. 테마 무관. */
   --color-shadow-flood: #000000;
 
