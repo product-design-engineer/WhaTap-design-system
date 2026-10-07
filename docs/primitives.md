@@ -1,12 +1,12 @@
-# 일반 폼/표시 Primitives — 11 컴포넌트
+# 일반 폼/표시 Primitives — 12 컴포넌트
 
 > 원본: `src/` (interfacedesigner/WhaTap-design-system) · Storybook 트리 `Primitives/`
 
 가장 작은 단위의 재사용 컴포넌트들. **새 화면을 만들 때 인라인 form/feedback UI 를 새로 짜지 마세요. 이들을 조립하세요.**
 
-> **참고:** `Primitives` 는 "자체 렌더 리프" 계층 전체(65종 — 행·칩·항목·심볼 포함)를 뜻한다. 이 문서는 그중 **일반 폼/표시 11종**만 다룬다. AI 리프 카드는 `Primitives/Ai`(아래) 참조.
+> **참고:** `Primitives` 는 "자체 렌더 리프" 계층 전체(65종 — 행·칩·항목·심볼 포함)를 뜻한다. 이 문서는 그중 **일반 폼/표시 12종**만 다룬다. AI 리프 카드는 `Primitives/Ai`(아래) 참조.
 
-- **일반 폼/표시 (11)** — 페이지·다이얼로그 어디서나 — Checkbox · Tooltip · Chip · FilterChip · TextField · Select · Slider · Tabs · Modal · FilterDropdown · Disclosure
+- **일반 폼/표시 (12)** — 페이지·다이얼로그 어디서나 — Checkbox · RadioGroup · Tooltip · Chip · FilterChip · TextField · Select · Slider · Tabs · Modal · FilterDropdown · Disclosure
 
 > **AI 카드 빌딩 블록(AiCard · AiCaption · AiSectionHeading · AiToneBadge · AiBulletList)** 은 Storybook `Primitives/Ai` 하위그룹(AI 리프 프리미티브). 카탈로그: [widget-components.md](./widget-components.md). 아래 "AI 카드 빌딩 블록" 상세는 참고용으로 유지.
 
@@ -14,7 +14,7 @@
 
 ---
 
-# A. 일반 폼/표시 Primitives (11)
+# A. 일반 폼/표시 Primitives (12)
 
 ## Checkbox
 
@@ -33,6 +33,36 @@
 ```tsx
 <Checkbox checked={enabled} onChange={setEnabled}>알림 활성</Checkbox>
 <Checkbox checked={false} indeterminate onChange={...}>일부 선택</Checkbox>
+```
+
+## RadioGroup
+
+서로 배타인 선택지 2–5개 중 하나를 고르는 폼 값. 선택지를 접지 않고 펼쳐 둔다. 네이티브 radio 라 화살표 이동 · Space 선택 · 낭독을 브라우저가 맡는다(`role="radiogroup"`).
+
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `items` | `RadioGroupItem[]` | — | `{ value, label, description?, disabled? }` |
+| `value` / `onChange` | `string` / `(next) => void` | — | controlled |
+| `defaultValue` | `string` | 고를 수 있는 첫 선택지 | uncontrolled |
+| `direction` | `"vertical" \| "horizontal"` | `"vertical"` | 가로는 2–3개 · 풀이 없을 때만 |
+| `disabled` | `boolean` | `false` | 묶음 전체 비활성 |
+| `label` / `aria-labelledby` | `string` | — | 묶음 이름. 둘 중 하나 필수 |
+
+- 처음부터 하나를 골라 둔다. 추천이 있으면 그것(patterns P4)
+- 고를 수 없는 선택지는 지우지 않고 `disabled`. 이유는 그 아래 문장이 말한다
+- 6개 이상 → `Select`. 뷰 전환 → `Tabs`(라디오는 «값», 탭은 «보기»). 크기순 값 → `Slider`
+
+```tsx
+<RadioGroup
+  label="과금 범위"
+  direction="horizontal"
+  value={mode}
+  onChange={setMode}
+  items={[
+    { value: "all", label: "전체 프로젝트 (7개)" },
+    { value: "pick", label: "직접 선택" },
+  ]}
+/>
 ```
 
 ## Tooltip

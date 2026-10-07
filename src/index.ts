@@ -108,6 +108,8 @@ export { default as Switch } from "./Switch";
 export type { SwitchProps, SwitchSize } from "./Switch";
 export { default as Slider } from "./Slider";
 export type { SliderProps } from "./Slider";
+export { default as RadioGroup } from "./RadioGroup";
+export type { RadioGroupProps, RadioGroupItem, RadioGroupDirection } from "./RadioGroup";
 export { default as ThemeToggle } from "./ThemeToggle";
 export type { ThemeToggleProps, ThemeMode } from "./ThemeToggle";
 

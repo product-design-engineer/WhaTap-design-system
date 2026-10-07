@@ -1933,6 +1933,42 @@ html, body, #root {
   white-space: nowrap;
 }
 .wds-slider-mark[data-active] { color: var(--color-text-primary); font-weight: 600; }
+/* ── RadioGroup — 서로 배타인 선택지 중 하나 ──────────────────────────────────
+   네이티브 radio 는 보이지 않게 두되 포커스 · 키보드 · 낭독은 그대로 받는다. 보이는 원은 바로 뒤 형제
+   `.wds-radio-circle` 이 그린다 — 고르면 테두리가 브랜드색이 되고 가운데 점이 선다. 원 지름 16px 은
+   Checkbox md 와 같다. 첫 줄 글자(12px · 행간 18px)와 원의 중심을 맞추려고 원을 1px 내린다. */
+.wds-radio-group { display: flex; flex-direction: column; gap: 8px; }
+.wds-radio-group[data-direction="horizontal"] { flex-direction: row; flex-wrap: wrap; gap: 8px 24px; }
+.wds-radio { position: relative; display: inline-flex; align-items: flex-start; gap: 8px; cursor: pointer; }
+.wds-radio[data-disabled] { cursor: not-allowed; opacity: 0.5; }
+.wds-radio-input { position: absolute; width: 16px; height: 16px; margin: 0; opacity: 0; cursor: inherit; }
+.wds-radio-circle {
+  position: relative;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-card);
+  transition: border-color 0.15s ease;
+}
+.wds-radio:not([data-disabled]):hover .wds-radio-circle { border-color: var(--color-brand-blue); }
+.wds-radio-input:checked + .wds-radio-circle { border-color: var(--color-brand-blue); }
+.wds-radio-input:checked + .wds-radio-circle::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: var(--radius-full);
+  background: var(--color-brand-blue);
+}
+.wds-radio-input:focus-visible + .wds-radio-circle { outline: 2px solid var(--color-brand-blue); outline-offset: 2px; }
+.wds-radio-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.wds-radio-label { font-size: var(--text-base); line-height: 1.5; color: var(--color-text-primary); }
+.wds-radio-description { font-size: var(--text-base); line-height: 1.5; color: var(--color-text-tertiary); }
+@media (prefers-reduced-motion: reduce) {
+  .wds-radio-circle { transition: none; }
+}
 /* ── DataTable — 다 못 보이면 세로 스크롤 ─────────────────────────────────────
    표가 받은 높이(부모 flex 열의 남은 칸 · maxHeight)보다 행이 많으면 **잘리지 않고** 본문이
    세로로 스크롤된다. 예전엔 overflow:hidden 이라 넘친 행이 조용히 사라졌다.
