@@ -689,7 +689,7 @@ Product-SaaS 안에서 어떤 구현을 선택할지 갈릴 때, 다음 순서�
 **When NOT to use.**
 - AI 위젯 **안**의 카드 → [[AiCard]] (§6). 두 껍데기는 «화면의 조각» 과 «AI 의 답» 을 가르는 표지라 서로 빌려 쓰지 않는다.
 - 폼 · 설정의 구획 → 카드 + 구획 사이 선 (§14).
-- 이관 전 차트(MiniMultiLineChart · MiniDonutChart · KpiCard · MiniLineChart)는 아직 껍데기를 스스로 그린다. 이들은 WidgetFrame 에 넣지 말고 그대로 격자에 세운다. 이관은 각 차트에 껍데기 끄는 prop 을 여는 별도 작업이다.
+- 껍데기를 가진 차트(MiniLineChart · MiniMultiLineChart · MiniDonutChart · KpiCard · HexGrid)는 `frame={false}` 로 껍데기를 끄고 WidgetFrame 에 넣는다. 켠 채 넣으면 카드가 두 겹이 된다. 단독 카드(`frame` 기본값)로 격자에 세우는 것은 대시보드가 아닌 자리(AI 답 · 히어로 에셋)에서만.
 
 **규칙.** 위젯 한 칸은 [[WidgetFrame]] 이 **헤더 · 본문 · 푸터** 로 세운다. 그 위에 다섯 가지를 지킨다.
 
@@ -725,7 +725,7 @@ Product-SaaS 안에서 어떤 구현을 선택할지 갈릴 때, 다음 순서�
 ✅ 헤더 메뉴는 `onFullscreen` · `menu` 로만 — 아이콘 자리를 직접 짜지 않는다
 
 ❌ 페이지에서 `bg-card border …` 로 위젯 껍데기를 직접 짜기 — 칸마다 여백이 달라진다
-❌ 껍데기를 가진 차트를 WidgetFrame 에 넣기 — 카드가 두 겹이 된다
+❌ 껍데기를 가진 차트를 `frame` 을 켠 채 WidgetFrame 에 넣기 — 카드가 두 겹이 된다. 늘 `frame={false}`
 ❌ 수집이 끊긴 구간을 0 선 · 빈 막대로 그리기 — 정상으로 읽힌다
 ❌ 레거시 격자 화면의 차트마다 `onAiTrigger` — AI 진입점은 화면 단위로 정한다
 ❌ 위젯마다 헤더 아이콘을 다르게 늘어놓기(설정 · 복사 · 이동 …) — 칸이 좁을 때 제목이 칸마다 다른 자리에서 잘린다. ⛶ + ⋮ 둘로

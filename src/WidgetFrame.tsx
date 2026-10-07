@@ -18,15 +18,15 @@ import ToolbarIconButton from "./ToolbarIconButton";
  *
  * ## When to use
  * - 대시보드 · Flex 보드 격자의 위젯 한 칸 (액티브 트랜잭션 · 히트맵 · 이벤트 목록 · 프로젝트 표).
- * - 본문만 그리는 DS 컴포넌트를 담을 때: [[ActiveTransactionArc]] · [[ScatterHeatmap]] · [[DataTable]] · [[HexGrid]] 본문.
+ * - 본문만 그리는 DS 컴포넌트를 담을 때: [[ActiveTransactionArc]] · [[ScatterHeatmap]] · [[DataTable]].
+ * - 껍데기를 가진 차트는 `frame={false}` 로 끄고 담는다: [[MiniLineChart]] · [[MiniMultiLineChart]] · [[MiniDonutChart]] · [[KpiCard]] · [[HexGrid]].
  *
  * ## When NOT to use
  * - AI 위젯 **안**의 카드 → [[AiCard]]. 제품 화면에 AiCard 를 쓰면 그 칸이 AI 응답처럼 읽히고,
  *   반대로 AI 답변에 WidgetFrame 을 쓰면 답이 대시보드 조각처럼 읽힌다.
  * - 폼 · 설정의 구획 묶음 → `bg-card` 카드 + 구획 사이 선 (patterns §14).
  * - 상태를 알리는 상자 → [[Notice]].
- * - 아직 껍데기를 스스로 그리는 차트([[MiniMultiLineChart]] · [[MiniDonutChart]] · [[KpiCard]] · [[MiniLineChart]])
- *   를 그대로 넣기 → 카드가 두 겹이 된다. 그 차트들은 그대로 격자에 세우고, 껍데기 이관은 별도로 한다.
+ * - 껍데기를 가진 차트를 `frame` 을 켠 채 넣기 → 카드가 두 겹이 된다. 넣을 때는 늘 `frame={false}`.
  *
  * ## Composition rules
  * - **높이는 부모가 정한다.** WidgetFrame 은 `h-full` 로 칸을 채우고, 격자 행 높이가 칸 높이다.

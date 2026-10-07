@@ -14,6 +14,9 @@
  * - 격자형 빈도 → [[EventWeekTimeMatrix]]
  *
  * ## Composition rules
+ * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 안쪽 여백 · 제목 줄 · ⋮ · 헤더 범례 · AI 트리거를 뺀다).
+ *   [[WidgetFrame]] 안에 넣을 때 쓴다. 제목은 WidgetFrame `title`, 범위는 `meta`, 범례는 `legend`(시리즈 색 그대로),
+ *   메뉴는 `onFullscreen` · `menu` 가 맡는다(patterns §15). 통계값(`stat`) · `footer` 는 본문이라 남는다.
  * MiniLineChart 와 동일한 SVG 좌표계·텍스트 정책:
  * - viewBox 는 plot 영역과 비례 (1000 × 1000), preserveAspectRatio="none"
  * - 글자는 SVG 밖 HTML overlay (px 고정)
@@ -78,6 +81,11 @@ export type MiniMultiLineChartProps = {
   }) => void;
   aiTriggerReveal?: "always" | "hover";
   aiTriggerTooltip?: string;
+  /**
+   * 껍데기(카드 표면 · 테두리 · 여백 · 제목 줄 · ⋮ · 헤더 범례)를 그릴지. 기본 `true`.
+   * `false` 면 본문만 그린다. [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
+   */
+  frame?: boolean;
 };
 
 export default function MiniMultiLineChart({
@@ -93,6 +101,7 @@ export default function MiniMultiLineChart({
   onAiTrigger,
   aiTriggerReveal = "always",
   aiTriggerTooltip = "이 차트를 WhaTap AI로 분석",
+  frame = true,
 }: MiniMultiLineChartProps) {
   const VBW = 1000;
   const VBH = 1000;
@@ -127,10 +136,11 @@ export default function MiniMultiLineChart({
 
   return (
     <div
-      className={`group flex flex-col h-full bg-card border border-color-var-color-border-default rounded-4px overflow-hidden p-12px gap-4px${delay !== undefined ? " ai-anim-in" : ""}`}
+      className={`group flex flex-col h-full gap-4px ${frame ? "bg-card border border-color-var-color-border-default rounded-4px overflow-hidden p-12px" : "min-w-0"}${delay !== undefined ? " ai-anim-in" : ""}`}
       style={delay !== undefined ? { animationDelay: `${delay}ms` } : undefined}
     >
-      {/* ── Header + Legend (한 줄) ─────────────────────────────────── */}
+      {/* ── Header + Legend (한 줄) — frame 일 때만. WidgetFrame 안에서는 그쪽 머리 · 범례가 맡는다. ── */}
+      {frame && (
       <div className="flex items-center justify-between gap-6px shrink-0">
         <div className="flex items-center gap-3px min-w-0">
           <span
@@ -179,6 +189,7 @@ export default function MiniMultiLineChart({
           <MenuDots />
         </div>
       </div>
+      )}
 
       {/* ── Stat ──────────────────────────────────────────────────────── */}
       {stat && (

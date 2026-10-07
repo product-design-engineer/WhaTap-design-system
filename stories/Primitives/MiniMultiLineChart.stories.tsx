@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { MiniMultiLineChart } from "@whatap/design-system";
+import { MiniMultiLineChart, WidgetFrame } from "@whatap/design-system";
 
 /**
  * Stories for [[MiniMultiLineChart]] — 여러 계열을 겹쳐 그리는 작은 line chart 카드.
@@ -74,4 +74,37 @@ export const WithAiTrigger: Story = {
     aiTriggerReveal: "always",
     onAiTrigger: () => {},
   },
+};
+
+/** 대시보드 칸 — `frame={false}` 로 껍데기를 끄고 [[WidgetFrame]] 에 담는다. 범례는 WidgetFrame `legend`(본문 오른쪽 위), 통계값은 본문이라 남는다. */
+export const InWidgetFrame: Story = {
+  render: () => (
+    <div style={{ width: 420, height: 240 }}>
+      <WidgetFrame
+        title="백분위 TTFT"
+        meta="최근 10분"
+        onFullscreen={() => {}}
+        menu={[{ key: "detail", label: "상세로 이동" }]}
+        legend={[
+          { label: "p50", color: "var(--color-chart-series-1)" },
+          { label: "p95", color: "var(--color-chart-series-2)" },
+          { label: "p99", color: "var(--color-chart-series-3)" },
+        ]}
+      >
+        <MiniMultiLineChart
+          title="백분위 TTFT"
+          frame={false}
+          unit="ms"
+          stat="45.87"
+          statUnit="ms"
+          xLabels={X}
+          series={[
+            { label: "p50", values: P50, color: "var(--color-chart-series-1)" },
+            { label: "p95", values: P95, color: "var(--color-chart-series-2)" },
+            { label: "p99", values: P99, color: "var(--color-chart-series-3)" },
+          ]}
+        />
+      </WidgetFrame>
+    </div>
+  ),
 };

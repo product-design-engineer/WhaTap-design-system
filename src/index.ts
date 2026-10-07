@@ -144,7 +144,7 @@ export { default as LiveTimerCompact } from "./LiveTimerCompact";
 export type { LiveTimerCompactSize } from "./LiveTimerCompact";
 export { default as GpuStatusBar } from "./GpuStatusBar";
 export type { GpuStatusBarProps, GpuStatusCategory, GpuStatusSegment } from "./GpuStatusBar";
-export { default as HexGrid } from "./HexGrid";
+export { default as HexGrid, HEX_GRID_LEGEND } from "./HexGrid";
 export type { HexGridProps, HexItem, HexTone } from "./HexGrid";
 export { default as KpiCard } from "./KpiCard";
 export type { KpiCardProps } from "./KpiCard";

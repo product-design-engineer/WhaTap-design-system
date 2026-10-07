@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { MiniLineChart } from "@whatap/design-system";
+import { MiniLineChart, WidgetFrame } from "@whatap/design-system";
 
 /**
  * Stories for [[MiniLineChart]] — DB/APM/GPU 모니터링 카드용 line chart.
@@ -90,4 +90,15 @@ export const WithStaggerDelay: Story = {
     values: [10, 12, 14, 13, 15, 17, 16],
     delay: 400,
   },
+};
+
+/** 대시보드 칸 — `frame={false}` 로 껍데기를 끄고 [[WidgetFrame]] 에 담는다. 제목 · 메뉴는 WidgetFrame 이 맡는다. */
+export const InWidgetFrame: Story = {
+  render: () => (
+    <div style={{ width: 320, height: 180 }}>
+      <WidgetFrame title="CPU Usage" meta="최근 10분" onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
+        <MiniLineChart title="CPU Usage" values={[12, 18, 25, 38, 52, 47, 35]} unit="%" frame={false} />
+      </WidgetFrame>
+    </div>
+  ),
 };

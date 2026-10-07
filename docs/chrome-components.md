@@ -1,4 +1,4 @@
-# Chrome (페이지 골격) Components — 23 컴포넌트
+# Chrome (페이지 골격) Components — 27 컴포넌트
 
 > 원본: `src/` (interfacedesigner/WhaTap-design-system)
 
@@ -10,13 +10,14 @@
 
 **조립 순서:** `DashboardLayout` → `Sidebar` + `header` 슬롯 (`PageHeader` 또는 `PageHeaderAiInline` + 옵션으로 `OptionbarPage` 또는 `FilterBar`) + `main` 슬롯 + 자식으로 `WhaTapAiWidget`
 
-## 카탈로그 (23)
+## 카탈로그 (27)
 
 | 영역 | 컴포넌트 |
 |---|---|
 | 레이아웃 | DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · SubHeaderBar |
 | 옵션바 (시간/인스턴스/프리셋) | OptionbarPage · OptionbarInstanceSelector · LiveTimerCompact · TimeRangeSelector · PresetSelect |
-| 데이터 표시 | WidgetFrame · CardHead · DataTable · FilterBar · MiniLineChart · EventWeekTimeMatrix |
+| 데이터 표시 | WidgetFrame · CardHead · DataTable · FilterBar · EventWeekTimeMatrix |
+| 대시보드 차트 (`frame={false}` 로 WidgetFrame 안에) | MiniLineChart · MiniMultiLineChart · MiniDonutChart · KpiCard · HexGrid |
 | 액션·진입 | Button · AiSymbol |
 | 알림·상태 | Toast · ConfirmDialog · Stage · DashboardBuildingProgress |
 | 위젯 컨텍스트 | WhaTapAiContext (Provider) |
@@ -434,7 +435,7 @@ export type DataTableProps<T> = {
 - **헤더 오른쪽 아이콘 메뉴는 ⛶ 전체 화면 + ⋮ 더보기 둘로 고정**(순서 고정). 나머지 행동은 전부 더보기 안으로. AI 진입점은 아이콘이 아니라 더보기 첫 줄(AI 위젯을 여는 화면에서만)
 - **범례는 본문 오른쪽 위 한 줄.** 헤더 오른쪽은 메뉴 자리다. 계열이 셋을 넘거나 글이 길면 본문 안 차트 옆 열로
 - 세 칸 사이에 구분선을 긋지 않는다. 같은 표면 안이라 여백이 경계다
-- 껍데기를 스스로 그리는 차트(MiniMultiLineChart · MiniDonutChart · KpiCard · MiniLineChart)는 넣지 않는다. 카드가 두 겹이 된다
+- 껍데기를 가진 차트(MiniLineChart · MiniMultiLineChart · MiniDonutChart · KpiCard · HexGrid)는 `frame={false}` 로 끄고 넣는다. 켠 채 넣으면 카드가 두 겹이 된다
 - AI 진입점은 껍데기에 두지 않는다(§15)
 
 ```tsx
@@ -478,8 +479,68 @@ export type DataTableProps<T> = {
 | `color` | `string` | `"#3DA9FF"` |
 | `unit` | `string` | `""` |
 | `delay` | `number` | — |
+| `frame` | `boolean` | `true` |
+
+- `frame={false}` 면 본문만 그린다(카드 · 제목 줄 · Top Stat · ⋮ · AI 트리거를 뺀다). [[WidgetFrame]] 안에 넣을 때 쓴다.
 
 ⚠️ SVG 내부 `<text fontSize>`는 **반드시 `"9px"` 형식**으로 단위 명시 ([patterns.md](./patterns.md#3-svg-text-must-include-units)).
+
+---
+
+## 대시보드 차트 공통 — `frame`
+
+아래 넷과 [[MiniLineChart]] 는 단독으로 세우면 **스스로 카드 껍데기**(표면 · 테두리 · 여백 · 제목 줄)를 그린다. 대시보드 격자에서는 늘 `frame={false}` 로 껍데기를 끄고 [[WidgetFrame]] 에 담는다. 그러면 제목 · 범위 · 메뉴(⛶ + ⋮) · 범례가 모든 칸에서 같은 자리 · 같은 모양이 된다(patterns §15).
+
+| 차트 | `frame={false}` 에서 빠지는 것 | WidgetFrame 쪽에서 채우는 것 |
+|---|---|---|
+| MiniLineChart | 카드 · 제목 줄 · Top Stat · ⋮ · AI 트리거 | `title` · `meta` · 메뉴 |
+| MiniMultiLineChart | 카드 · 제목 줄 · 헤더 범례 · ⋮ · AI 트리거 (`stat` · `footer` 는 남음) | `title` · `meta` · `legend`(시리즈 색 그대로) · 메뉴 |
+| MiniDonutChart | 카드 · 제목 줄 (도넛 옆 범례는 남음) | `title` · `meta` · 메뉴 |
+| KpiCard | 카드 · 제목 | `title` · `meta`(최대 · 최소 등) · 메뉴 |
+| HexGrid | 카드 · 「GPU Map」 제목 줄 · 범례 | `title` · `legend={HEX_GRID_LEGEND}` · 메뉴 |
+
+## MiniMultiLineChart
+
+2~3 계열(백분위 · 입출력 · 상태 코드)을 한 칸에 겹쳐 그리는 시계열. 단일 계열 + 통계값도 된다.
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `string` | — |
+| `series` | `{ label, values, color, showArea? }[]` | — |
+| `xLabels` · `unit` | `string[]` · `string` | 샘플 · `""` |
+| `stat` · `statUnit` · `statSub` | `string` · `string` · `ReactNode` | — |
+| `footer` | `ReactNode` | — |
+| `frame` | `boolean` | `true` |
+
+## MiniDonutChart
+
+구성비 도넛 + 옆 범례(값 포함). 범례 글이 길어 한 줄 범례로 올리지 않는다.
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `string` | — |
+| `segments` | `{ label, value, color }[]` | — |
+| `centerLabel` · `centerSub` | `string` | — |
+| `frame` | `boolean` | `true` |
+
+## KpiCard
+
+핵심 지표 하나를 큰 숫자로.
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` · `value` · `unit` | `string` | — |
+| `frame` | `boolean` | `true` |
+
+## HexGrid
+
+개별 장치(GPU 등)를 헥사곤으로 깔아 상태를 색으로. 범례 상수 `HEX_GRID_LEGEND`.
+
+| Prop | Type | Default |
+|---|---|---|
+| `items` | `{ id, label, tone }[]` | — |
+| `columns` · `radius` | `number` | `6` · `24` |
+| `frame` | `boolean` | `true` |
 
 ---
 
