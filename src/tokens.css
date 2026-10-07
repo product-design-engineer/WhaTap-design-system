@@ -592,6 +592,15 @@
      내부 pill 등 중첩 요소는 --wds-toolbar-pill-h 를 쓴다(32 − 상하 여백). */
   --wds-toolbar-control-h: 32px;
   --wds-toolbar-pill-h: 24px;
+
+  /* ── Component tokens: 대시보드 위젯 본문 간격 (patterns §15) ──
+     한 줄에 놓인 칸들의 본문 시작선 · Y축 선 · 줄 간격이 같아야 격자가 «같은 것이 나란히»
+     로 읽힌다. 여백은 WidgetFrame 하나가 갖고, 칸 안 차트(frame={false})는 바깥 여백 0 으로
+     이 값만 따른다. 축 글자는 --text-chart. */
+  --wds-widget-body-px: 12px;
+  --wds-widget-body-pb: 12px;
+  --wds-widget-row-gap: 4px;
+  --wds-widget-axis-gutter: 28px;
 }
 
 html, body, #root {

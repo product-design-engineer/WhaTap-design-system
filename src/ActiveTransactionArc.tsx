@@ -18,6 +18,7 @@
  * - 위젯 chrome(CardChrome, FlexBoardWidget 등)은 소비자가 감싼다.
  * - 이 컴포넌트는 본문만 렌더한다 — `h-full` 부모 안에서 채워진다.
  * - 회전 오버레이는 12s linear infinite.
+ * - `frame={false}` 면 바깥 여백(좌우 · 아래 8px)을 뺀다. [[WidgetFrame]] 안에 넣을 때 쓴다 — 여백은 WidgetFrame 이 갖는다(patterns §15).
  *
  * @example
  * ```tsx
@@ -31,14 +32,20 @@ export type ActiveTransactionArcProps = {
   maxTx?: { name: string; value: number };
   /** Agent 통계. */
   agent?: { active: number; inactive: number };
+  /**
+   * 자기 바깥 여백(좌우 · 아래 8px)을 둘지. 기본 `true`.
+   * `false` 면 여백 0 — [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
+   */
+  frame?: boolean;
 };
 
 export default function ActiveTransactionArc({
   maxTx = { name: "TC-1-57-8094", value: 30 },
   agent = { active: 7, inactive: 1 },
+  frame = true,
 }: ActiveTransactionArcProps) {
   return (
-    <div className="flex h-full items-stretch min-h-0 w-full px-8px pb-8px gap-6px">
+    <div className={`flex h-full items-stretch min-h-0 w-full gap-6px${frame ? " px-8px pb-8px" : ""}`}>
       {/* left: Max TX + Elapsed legend */}
       <div className="flex flex-col shrink-0 min-w-0 justify-between" style={{ width: 72 }}>
         <div className="flex flex-col min-w-0">

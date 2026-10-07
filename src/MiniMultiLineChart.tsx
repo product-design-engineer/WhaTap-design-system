@@ -43,7 +43,8 @@
 import type { CSSProperties, ReactNode } from "react";
 import AiTriggerButton from "./widget/TriggerButton";
 
-const PAD_LEFT = 28;
+/** Y축 눈금 칸 폭 — 토큰 하나(`--wds-widget-axis-gutter`)로 모든 그래프의 Y축 선을 같은 x 에 세운다. */
+const GUTTER = "var(--wds-widget-axis-gutter)";
 const PAD_RIGHT = 8;
 const PAD_BOTTOM = 14;
 const PAD_TOP = 4;
@@ -137,7 +138,11 @@ export default function MiniMultiLineChart({
   return (
     <div
       className={`group flex flex-col h-full gap-4px ${frame ? "bg-card border border-color-var-color-border-default rounded-4px overflow-hidden p-12px" : "min-w-0"}${delay !== undefined ? " ai-anim-in" : ""}`}
-      style={delay !== undefined ? { animationDelay: `${delay}ms` } : undefined}
+      style={{
+        ...(delay !== undefined ? { animationDelay: `${delay}ms` } : {}),
+        /* 칸 안(frame=false)에서는 줄 간격을 위젯 토큰 하나로 — 범례 줄 · 통계값 · 그래프 사이가 칸마다 같다. */
+        ...(frame ? {} : { gap: "var(--wds-widget-row-gap)" }),
+      }}
     >
       {/* ── Header + Legend (한 줄) — frame 일 때만. WidgetFrame 안에서는 그쪽 머리 · 범례가 맡는다. ── */}
       {frame && (
@@ -215,7 +220,7 @@ export default function MiniMultiLineChart({
         <div
           className="absolute bg-color-var-color-border-divider"
           style={{
-            left: PAD_LEFT,
+            left: GUTTER,
             right: PAD_RIGHT,
             bottom: PAD_BOTTOM,
             height: 1,
@@ -225,7 +230,7 @@ export default function MiniMultiLineChart({
         <div
           className="absolute bg-color-var-color-border-divider"
           style={{
-            left: PAD_LEFT,
+            left: GUTTER,
             top: PAD_TOP,
             bottom: PAD_BOTTOM,
             width: 1,
@@ -237,7 +242,7 @@ export default function MiniMultiLineChart({
             key={`grid-${ratio}`}
             className="absolute"
             style={{
-              left: PAD_LEFT,
+              left: GUTTER,
               right: PAD_RIGHT,
               top: `calc(${PAD_TOP}px + (100% - ${PAD_TOP + PAD_BOTTOM}px) * ${1 - ratio})`,
               height: 0,
@@ -253,9 +258,9 @@ export default function MiniMultiLineChart({
           preserveAspectRatio="none"
           className="absolute"
           style={{
-            left: PAD_LEFT,
+            left: GUTTER,
             top: PAD_TOP,
-            width: `calc(100% - ${PAD_LEFT + PAD_RIGHT}px)`,
+            width: `calc(100% - ${GUTTER} - ${PAD_RIGHT}px)`,
             height: `calc(100% - ${PAD_TOP + PAD_BOTTOM}px)`,
           }}
         >
@@ -297,7 +302,7 @@ export default function MiniMultiLineChart({
                   left: 0,
                   textAlign: "right",
                   paddingRight: 4,
-                  width: PAD_LEFT,
+                  width: GUTTER,
                 } as CSSProperties
               }
             >
@@ -314,7 +319,7 @@ export default function MiniMultiLineChart({
                 className="absolute text-chart text-tertiary leading-none whitespace-nowrap"
                 style={{
                   fontFamily: "var(--font-family-numeric)",
-                  left: `calc(${PAD_LEFT}px + (100% - ${PAD_LEFT + PAD_RIGHT}px) * ${ratio})`,
+                  left: `calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${ratio})`,
                   bottom: 2,
                   transform:
                     i === 0

@@ -489,7 +489,9 @@ export type DataTableProps<T> = {
 
 ## 대시보드 차트 공통 — `frame`
 
-아래 넷과 [[MiniLineChart]] 는 단독으로 세우면 **스스로 카드 껍데기**(표면 · 테두리 · 여백 · 제목 줄)를 그린다. 대시보드 격자에서는 늘 `frame={false}` 로 껍데기를 끄고 [[WidgetFrame]] 에 담는다. 그러면 제목 · 범위 · 메뉴(⛶ + ⋮) · 범례가 모든 칸에서 같은 자리 · 같은 모양이 된다(patterns §15).
+아래 차트들은 단독으로 세우면 **스스로 껍데기나 바깥 여백**을 그린다. 대시보드 격자에서는 늘 `frame={false}` 로 끄고 [[WidgetFrame]] 에 담는다. 그러면 제목 · 범위 · 메뉴(⛶ + ⋮) · 범례 · 본문 여백이 모든 칸에서 같은 자리 · 같은 모양이 된다(patterns §15).
+
+**본문 간격 토큰** — `--wds-widget-body-px`(12) · `--wds-widget-body-pb`(12) · `--wds-widget-row-gap`(4) · `--wds-widget-axis-gutter`(28). WidgetFrame 이 앞의 셋을, 그래프가 축 칸을 쓴다. **축 글자**는 모든 그래프가 `text-chart`(9px) · 숫자 서체 · tertiary.
 
 | 차트 | `frame={false}` 에서 빠지는 것 | WidgetFrame 쪽에서 채우는 것 |
 |---|---|---|
@@ -498,6 +500,8 @@ export type DataTableProps<T> = {
 | MiniDonutChart | 카드 · 제목 줄 (도넛 옆 범례는 남음) | `title` · `meta` · 메뉴 |
 | KpiCard | 카드 · 제목 | `title` · `meta`(최대 · 최소 등) · 메뉴 |
 | HexGrid | 카드 · 「GPU Map」 제목 줄 · 범례 | `title` · `legend={HEX_GRID_LEGEND}` · 메뉴 |
+| ActiveTransactionArc | 바깥 여백(좌우 · 아래 8px) | `title` · `meta` · 메뉴 (범례 Elapsed 는 본문 안) |
+| ScatterHeatmap | 바깥 좌우 여백(8px) | `title` · `meta` · `legend`(속도 토큰) · 메뉴 |
 
 ## MiniMultiLineChart
 
