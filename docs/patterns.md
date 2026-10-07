@@ -678,6 +678,54 @@ Product-SaaS 안에서 어떤 구현을 선택할지 갈릴 때, 다음 순서�
 
 ---
 
+## 15. 대시보드 위젯 — 껍데기는 WidgetFrame 하나
+<!-- @policy id=dashboard-widget-frame | @severity must | @applies chart -->
+
+**When to use.** 대시보드 · Flex 보드처럼 지표 위젯이 격자로 놓이는 제품 화면. 차트 · 표 · 수치를 한 칸에 담는 모든 자리.
+
+**When NOT to use.**
+- AI 위젯 **안**의 카드 → [[AiCard]] (§6). 두 껍데기는 «화면의 조각» 과 «AI 의 답» 을 가르는 표지라 서로 빌려 쓰지 않는다.
+- 폼 · 설정의 구획 → 카드 + 구획 사이 선 (§14).
+- 이관 전 차트(MiniMultiLineChart · MiniDonutChart · KpiCard · MiniLineChart)는 아직 껍데기를 스스로 그린다. 이들은 WidgetFrame 에 넣지 말고 그대로 격자에 세운다. 이관은 각 차트에 껍데기 끄는 prop 을 여는 별도 작업이다.
+
+**규칙.** 위젯 한 칸은 [[WidgetFrame]] 이 **헤더 · 본문 · 푸터** 로 세운다. 그 위에 다섯 가지를 지킨다.
+
+| 축 | 규칙 |
+|---|---|
+| 껍데기 | 표면 · 테두리 · 반경 · 안쪽 여백 · 제목 줄은 WidgetFrame 만 정한다. 높이는 격자 행이 정한다 |
+| 제목 | 지표 이름만. 범위 · 대상 수 · 단위는 헤더 `meta` |
+| 색 | 선 · 막대는 `--color-chart-series-N`. 상태색(`--color-status-*` · `--color-indicator-critical`)은 **상태를 말하는 위젯에만** 쓰고, 한 위젯 안에서 둘을 섞지 않는다 |
+| 빈 상태 | 데이터 없음(`no-data`)과 수집 끊김(`collect-gap`)을 가른다. 둘 다 선을 0 으로 그리지 않는다 |
+| AI 진입점 | 위젯이 아니라 **페이지 성격**이 정한다. 레거시 차트 모드 · 전체 격자 화면에서는 차트의 `onAiTrigger` 를 주지 않는다. AI 위젯을 여는 제품 화면에서만 준다 |
+
+**Why.** 격자는 «같은 것이 나란히 있다» 로 읽히는 형식이다. 칸마다 여백이 1~4px 다르고 제목 굵기가 다르면 사람은 그 차이를 종류의 차이로 읽는다. 껍데기를 차트마다 따로 두면 그 차이는 반드시 생긴다(2026-10 통합 대시보드 실측: 여백 12 · 12/8 · 8/6px, 제목 bold · medium 이 한 화면에 섞였다).
+색이 섞이면 같은 빨강이 «위험» 인지 «시리즈 8» 인지 알 수 없다. 끊긴 수집을 0 으로 그리면 «조용하다» 로 읽혀 장애가 정상으로 감춰진다. 위젯마다 AI 아이콘을 다는 것은 판단을 문장 대신 부스러기로 흩는 일이라, 붙일지 말지를 칸 단위가 아니라 화면 단위로 정한다.
+
+**How.**
+
+```tsx
+<div className="grid grid-cols-4 gap-12px" style={{ height: 232 }}>
+  <WidgetFrame title="액티브 트랜잭션" meta="APM 24" bleed>
+    <ActiveTransactionArc maxTx={maxTx} agent={agent} />
+  </WidgetFrame>
+  <WidgetFrame title="히트맵" meta="수행 시간(초)">
+    <ScatterHeatmap dots={dots} />
+  </WidgetFrame>
+  <WidgetFrame title="DB 액티브 세션" meta="최근 30분" state="collect-gap" stateDescription="2대 · 18분째 끊김" />
+</div>
+```
+
+✅ 위젯 한 칸은 `WidgetFrame` 으로 세우고, 높이는 격자 행에 준다
+✅ 표 · 히트맵 · 아크처럼 본문이 가장자리를 가지면 `bleed`
+✅ 끊긴 수집은 `state="collect-gap"` + 끊긴 범위 한 줄
+
+❌ 페이지에서 `bg-card border …` 로 위젯 껍데기를 직접 짜기 — 칸마다 여백이 달라진다
+❌ 껍데기를 가진 차트를 WidgetFrame 에 넣기 — 카드가 두 겹이 된다
+❌ 수집이 끊긴 구간을 0 선 · 빈 막대로 그리기 — 정상으로 읽힌다
+❌ 레거시 격자 화면의 차트마다 `onAiTrigger` — AI 진입점은 화면 단위로 정한다
+
+---
+
 ## 부록 — 빠른 결정 표
 
 | 상황 | 무엇을 할까 |
@@ -687,6 +735,7 @@ Product-SaaS 안에서 어떤 구현을 선택할지 갈릴 때, 다음 순서�
 | 새 색상이 필요 | [`tokens.md`](./tokens.md)에 토큰 추가 → 컴포넌트에서 import |
 | 새 카드 외형이 필요 | 거의 항상 `AiCard`로 충분. 정말 다르다면 디자인 리뷰 후 primitive 추가 |
 | 차트가 필요 | `MiniLineChart` / `AiUsageChart` 확장 — SVG 단위 규칙(#3) 준수 |
+| 대시보드 위젯 한 칸 | `WidgetFrame`(헤더 · 본문 · 푸터) + 본문 컴포넌트 · 빈 상태는 `state` (#15) |
 | 테이블이 필요 | `DataTable` (chrome) / `AiClassificationTable` `AiCostTable` (widget) |
 | 한 화면의 여러 구획 구분 | 페이지 본문이면 카드로 나눔 · 카드 안이면 `border-t border-default` + 여백 (#14) |
 | 위젯 토글 | `useWhaTapAi()` 한 곳에서 `aiActive` 공유. `DashboardLayout`에 `widgetOpen` 전달 |
