@@ -163,6 +163,17 @@ tokens.color.text.disabled.value   // #adadad — 비활성 상태 텍스트 (6 
 
 본문이 압도적으로 흔하므로 `primary` 가 다른 색을 합친 것보다 많이 쓰임 — 위계 4 단계로 충분.
 
+### 필수 표시 — `--color-text-required`
+
+폼 라벨 옆 필수 표시 `*` 의 전경입니다. 값은 `var(--color-brand-blue)` 별칭이라 다크에서도 브랜드색을 따릅니다. 유틸은 `.text-required`.
+
+```tsx
+<span className="text-required"> *</span>
+```
+
+❌ `*` 를 `--color-status-error` 나 `--color-status-warning` 으로 칠하지 마세요. 아직 아무것도 치지 않은 빈 칸이 이미 틀린 것처럼 읽힙니다. 오류 색은 실제로 검증이 실패했을 때를 위해 아껴 둡니다.
+❌ 없는 유틸(`text-status-warning` 등)을 쓰지 마세요. 실제로 그 이름으로 칠한 `*` 가 몇 달간 본문 색으로 나왔습니다 — 없는 클래스는 아무도 에러를 내지 않습니다.
+
 ### 반전 전경 — `--color-text-inverse`
 
 위계 4단계와 별개로, **`--color-text-strong` 을 배경으로 깐 표면**(툴팁 등) 위의 텍스트·아이콘에 쓰는 전용 토큰입니다. 라이트 `#FFFFFF` / 다크 `#0E1116` — `text-strong` 이 다크에서 밝아지므로 전경은 반대로 어두워집니다.

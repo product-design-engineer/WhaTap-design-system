@@ -270,6 +270,8 @@
     --color-text-secondary: #4c4c4c;
     /* @role 메타·캡션 텍스트 전경 | @use 시각 · 단위 · 부가 설명 | @avoid 본문 running text */
     --color-text-tertiary: #757575;
+    /* @role 필수 입력 표시(*)의 전경 — 경고 · 오류가 아닌 «여기는 채워야 한다» 는 강조 | @use 폼 라벨 옆 * · .text-required | @avoid 검증 실패 · 오류 문장 (그쪽은 --color-status-error) · 상태 색(warning)으로 칠하기 — 빈 칸이 이미 틀린 것처럼 읽힌다 */
+    --color-text-required: var(--color-brand-blue);
     /* @role 비활성 컨트롤의 텍스트 전경 | @use disabled 버튼·입력 라벨 | @avoid 읽어야 하는 값 (대비 미달) */
     --color-text-disabled: #adadad;
     /* @role 컬러/어두운 면 위 텍스트 전경 | @use contained 버튼 · 톤 배지 안 텍스트 */
@@ -1459,6 +1461,7 @@
    secondary 123곳 · tertiary 170곳 · disabled 21곳이 의도한 색으로 렌더되지 않았다. */
 .text-secondary { color: var(--color-text-secondary); }
 .text-tertiary { color: var(--color-text-tertiary); }
+.text-required { color: var(--color-text-required); }
 .text-disabled { color: var(--color-text-disabled); }
 
 /* font-family utility — tokens.css 의 Role Catalog(`numeric.metric`)가 지시하는 이름.
