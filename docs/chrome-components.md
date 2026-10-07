@@ -1,4 +1,4 @@
-# Chrome (페이지 골격) Components — 22 컴포넌트
+# Chrome (페이지 골격) Components — 23 컴포넌트
 
 > 원본: `src/` (interfacedesigner/WhaTap-design-system)
 
@@ -10,13 +10,13 @@
 
 **조립 순서:** `DashboardLayout` → `Sidebar` + `header` 슬롯 (`PageHeader` 또는 `PageHeaderAiInline` + 옵션으로 `OptionbarPage` 또는 `FilterBar`) + `main` 슬롯 + 자식으로 `WhaTapAiWidget`
 
-## 카탈로그 (22)
+## 카탈로그 (23)
 
 | 영역 | 컴포넌트 |
 |---|---|
 | 레이아웃 | DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · SubHeaderBar |
 | 옵션바 (시간/인스턴스/프리셋) | OptionbarPage · OptionbarInstanceSelector · LiveTimerCompact · TimeRangeSelector · PresetSelect |
-| 데이터 표시 | WidgetFrame · DataTable · FilterBar · MiniLineChart · EventWeekTimeMatrix |
+| 데이터 표시 | WidgetFrame · CardHead · DataTable · FilterBar · MiniLineChart · EventWeekTimeMatrix |
 | 액션·진입 | Button · AiSymbol |
 | 알림·상태 | Toast · ConfirmDialog · Stage · DashboardBuildingProgress |
 | 위젯 컨텍스트 | WhaTapAiContext (Provider) |
@@ -442,6 +442,22 @@ export type DataTableProps<T> = {
   <WidgetFrame title="서버 CPU" meta="최근 30분" state="collect-gap" stateDescription="서버 12대 · 32분째 끊김" />
 </div>
 ```
+
+---
+
+## CardHead
+
+카드 머리 한 줄 — **이름 · 탭 · 우측 메타**. 이름은 영역이 무엇인지, 탭은 무엇으로 나뉘는지, 메타는 지금 무엇을 보는지를 말한다. [[WidgetFrame]] 의 헤더가 이것이다.
+
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `title` | `string` | — | 영역 이름. 타이포 역할 `heading.subsection`(`text-md font-bold`, 13px) |
+| `tabs` | `{ items, value, onChange, variant? }` | — | 탭. 기본 `segmented`. 없으면 이름만 |
+| `meta` | `ReactNode` | — | 우측 끝. 지금 보는 범위 · 기준 |
+
+- 이름과 탭을 위아래로 나누지 않는다. 위계는 줄이 아니라 굵기가 진다
+- 이름 · 메타는 한 줄(`whitespace-nowrap`)
+- 탭 `large` 가 필요하면 탭을 머리 아래 자기 줄로 내린다
 
 ---
 
