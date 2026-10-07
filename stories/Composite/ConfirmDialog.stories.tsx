@@ -13,6 +13,9 @@ const meta: Meta<typeof ConfirmDialog> = {
   parameters: {
     layout: "fullscreen",
     docs: {
+      // 스토리가 열린 채 시작하므로 문서 페이지에선 각자 iframe 에 가둔다 — 인라인이면 Modal 의
+      // body 스크롤 잠금 · 전면 백드롭이 문서 페이지 전체에 걸려 아래로 내려갈 수 없다.
+      story: { inline: false, iframeHeight: 480 },
       description: {
         component:
           "**P1 「위험한 실행 확인」 을 굳힌 확인 모달.** `target` 에 대상, `outcomes` 에 결과를 한 줄씩 적고, 확인 버튼은 동작 낱말(`삭제` · `제외`)이다. " +
