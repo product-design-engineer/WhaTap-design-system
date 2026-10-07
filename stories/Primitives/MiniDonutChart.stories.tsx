@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { MiniDonutChart } from "@whatap/design-system";
+import { MiniDonutChart, WidgetFrame } from "@whatap/design-system";
 
 /**
  * Stories for [[MiniDonutChart]] — 범주 비율을 보여 주는 작은 도넛 카드.
@@ -47,4 +47,25 @@ export const ThreeSegments: Story = {
     centerLabel: "100",
     centerSub: "%",
   },
+};
+
+/** 대시보드 칸 — `frame={false}` 로 껍데기를 끄고 [[WidgetFrame]] 에 담는다. 범례는 도넛 옆 열 그대로(항목 글이 길어 한 줄 범례로 올리지 않는다). */
+export const InWidgetFrame: Story = {
+  render: () => (
+    <div style={{ width: 360, height: 232 }}>
+      <WidgetFrame title="서버 상태" meta="46대" onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
+        <MiniDonutChart
+          title="서버 상태"
+          frame={false}
+          centerLabel="46"
+          centerSub="대"
+          segments={[
+            { label: "정상", value: 40, color: "var(--color-status-success)" },
+            { label: "경고", value: 5, color: "var(--color-status-warning)" },
+            { label: "위험", value: 1, color: "var(--color-indicator-critical)" },
+          ]}
+        />
+      </WidgetFrame>
+    </div>
+  ),
 };

@@ -14,6 +14,9 @@
  * - 격자형 빈도 → [[EventWeekTimeMatrix]]
  *
  * ## Composition rules
+ * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 안쪽 여백 · 제목 줄 · ⋮ · 헤더 범례 · AI 트리거를 뺀다).
+ *   [[WidgetFrame]] 안에 넣을 때 쓴다. 제목은 WidgetFrame `title`, 범위는 `meta`, 범례는 `legend`(시리즈 색 그대로),
+ *   메뉴는 `onFullscreen` · `menu` 가 맡는다(patterns §15). 통계값(`stat`) · `footer` 는 본문이라 남는다.
  * MiniLineChart 와 동일한 SVG 좌표계·텍스트 정책:
  * - viewBox 는 plot 영역과 비례 (1000 × 1000), preserveAspectRatio="none"
  * - 글자는 SVG 밖 HTML overlay (px 고정)
@@ -40,7 +43,8 @@
 import type { CSSProperties, ReactNode } from "react";
 import AiTriggerButton from "./widget/TriggerButton";
 
-const PAD_LEFT = 28;
+/** Y축 눈금 칸 폭 — 토큰 하나(`--wds-widget-axis-gutter`)로 모든 그래프의 Y축 선을 같은 x 에 세운다. */
+const GUTTER = "var(--wds-widget-axis-gutter)";
 const PAD_RIGHT = 8;
 const PAD_BOTTOM = 14;
 const PAD_TOP = 4;
@@ -78,6 +82,11 @@ export type MiniMultiLineChartProps = {
   }) => void;
   aiTriggerReveal?: "always" | "hover";
   aiTriggerTooltip?: string;
+  /**
+   * 껍데기(카드 표면 · 테두리 · 여백 · 제목 줄 · ⋮ · 헤더 범례)를 그릴지. 기본 `true`.
+   * `false` 면 본문만 그린다. [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
+   */
+  frame?: boolean;
 };
 
 export default function MiniMultiLineChart({
@@ -93,6 +102,7 @@ export default function MiniMultiLineChart({
   onAiTrigger,
   aiTriggerReveal = "always",
   aiTriggerTooltip = "이 차트를 WhaTap AI로 분석",
+  frame = true,
 }: MiniMultiLineChartProps) {
   const VBW = 1000;
   const VBH = 1000;
@@ -127,10 +137,15 @@ export default function MiniMultiLineChart({
 
   return (
     <div
-      className={`group flex flex-col h-full bg-card border border-color-var-color-border-default rounded-4px overflow-hidden p-12px gap-4px${delay !== undefined ? " ai-anim-in" : ""}`}
-      style={delay !== undefined ? { animationDelay: `${delay}ms` } : undefined}
+      className={`group flex flex-col h-full gap-4px ${frame ? "bg-card border border-color-var-color-border-default rounded-4px overflow-hidden p-12px" : "min-w-0"}${delay !== undefined ? " ai-anim-in" : ""}`}
+      style={{
+        ...(delay !== undefined ? { animationDelay: `${delay}ms` } : {}),
+        /* 칸 안(frame=false)에서는 줄 간격을 위젯 토큰 하나로 — 범례 줄 · 통계값 · 그래프 사이가 칸마다 같다. */
+        ...(frame ? {} : { gap: "var(--wds-widget-row-gap)" }),
+      }}
     >
-      {/* ── Header + Legend (한 줄) ─────────────────────────────────── */}
+      {/* ── Header + Legend (한 줄) — frame 일 때만. WidgetFrame 안에서는 그쪽 머리 · 범례가 맡는다. ── */}
+      {frame && (
       <div className="flex items-center justify-between gap-6px shrink-0">
         <div className="flex items-center gap-3px min-w-0">
           <span
@@ -179,6 +194,7 @@ export default function MiniMultiLineChart({
           <MenuDots />
         </div>
       </div>
+      )}
 
       {/* ── Stat ──────────────────────────────────────────────────────── */}
       {stat && (
@@ -204,7 +220,7 @@ export default function MiniMultiLineChart({
         <div
           className="absolute bg-color-var-color-border-divider"
           style={{
-            left: PAD_LEFT,
+            left: GUTTER,
             right: PAD_RIGHT,
             bottom: PAD_BOTTOM,
             height: 1,
@@ -214,7 +230,7 @@ export default function MiniMultiLineChart({
         <div
           className="absolute bg-color-var-color-border-divider"
           style={{
-            left: PAD_LEFT,
+            left: GUTTER,
             top: PAD_TOP,
             bottom: PAD_BOTTOM,
             width: 1,
@@ -226,7 +242,7 @@ export default function MiniMultiLineChart({
             key={`grid-${ratio}`}
             className="absolute"
             style={{
-              left: PAD_LEFT,
+              left: GUTTER,
               right: PAD_RIGHT,
               top: `calc(${PAD_TOP}px + (100% - ${PAD_TOP + PAD_BOTTOM}px) * ${1 - ratio})`,
               height: 0,
@@ -242,9 +258,9 @@ export default function MiniMultiLineChart({
           preserveAspectRatio="none"
           className="absolute"
           style={{
-            left: PAD_LEFT,
+            left: GUTTER,
             top: PAD_TOP,
-            width: `calc(100% - ${PAD_LEFT + PAD_RIGHT}px)`,
+            width: `calc(100% - ${GUTTER} - ${PAD_RIGHT}px)`,
             height: `calc(100% - ${PAD_TOP + PAD_BOTTOM}px)`,
           }}
         >
@@ -286,7 +302,7 @@ export default function MiniMultiLineChart({
                   left: 0,
                   textAlign: "right",
                   paddingRight: 4,
-                  width: PAD_LEFT,
+                  width: GUTTER,
                 } as CSSProperties
               }
             >
@@ -303,7 +319,7 @@ export default function MiniMultiLineChart({
                 className="absolute text-chart text-tertiary leading-none whitespace-nowrap"
                 style={{
                   fontFamily: "var(--font-family-numeric)",
-                  left: `calc(${PAD_LEFT}px + (100% - ${PAD_LEFT + PAD_RIGHT}px) * ${ratio})`,
+                  left: `calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${ratio})`,
                   bottom: 2,
                   transform:
                     i === 0

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ScatterHeatmap, SCATTER_HEATMAP_DEMO_DOTS } from "@whatap/design-system";
+import { ScatterHeatmap, SCATTER_HEATMAP_DEMO_DOTS, WidgetFrame } from "@whatap/design-system";
 
 /**
  * Stories for [[ScatterHeatmap]] — APM 트랜잭션 히트맵 (산점도).
@@ -77,6 +77,27 @@ export const InGrid: Story = {
       <div style={{ border: "1px solid var(--color-border-default)", borderRadius: 4 }}>
         <ScatterHeatmap dots={[]} />
       </div>
+    </div>
+  ),
+};
+
+/** 대시보드 칸 — `frame={false}` 로 자기 좌우 여백을 빼고 [[WidgetFrame]] 에 담는다. 축 글자 `text-chart` · Y축 눈금 칸 `--wds-widget-axis-gutter` 라 선 그래프와 Y축 선이 같은 x 에 선다. */
+export const InWidgetFrame: Story = {
+  render: () => (
+    <div style={{ width: 400, height: 240 }}>
+      <WidgetFrame
+        title="히트맵"
+        meta="수행 시간(초)"
+        legend={[
+          { label: "Normal", color: "var(--color-chart-speed-normal)" },
+          { label: "Slow", color: "var(--color-chart-speed-slow)" },
+          { label: "Very Slow", color: "var(--color-chart-speed-very-slow)" },
+        ]}
+        onFullscreen={() => {}}
+        menu={[{ key: "detail", label: "상세로 이동" }]}
+      >
+        <ScatterHeatmap dots={SCATTER_HEATMAP_DEMO_DOTS} yLabels={[10, 8, 6, 4, 2, 0]} frame={false} />
+      </WidgetFrame>
     </div>
   ),
 };

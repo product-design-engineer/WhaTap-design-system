@@ -16,11 +16,13 @@
  * - 정밀한 인터랙션(zoom·tooltip·다중 시리즈)이 필요한 본격 차트 → 전용 차트 라이브러리
  *
  * ## Composition rules
+ * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 안쪽 여백 · 제목 줄 · Top Stat · ⋮ · AI 트리거를 뺀다).
+ *   [[WidgetFrame]] 안에 넣을 때 쓴다. 제목 · 범위 · 메뉴는 WidgetFrame 이 맡는다(patterns §15).
  * - **SVG font-size 단위 정책 (feedback-svg-text-units)**: SVG 내부에는 텍스트를
  *   두지 않음. Y축/X축/peak 값은 모두 SVG 밖 HTML overlay 로 px 고정 — `preserveAspectRatio="none"`
  *   로 가로 stretch 되는 SVG 안에 글자를 넣으면 폭에 따라 늘어나기 때문.
  * - **좌표 정합 (feedback-chart-peak-alignment)**: viewBox 는 plot 사각형과 동일 비율
- *   (`1000 × PLOT_H_PX`), SVG 는 plot 영역(`PAD_LEFT`/`PAD_RIGHT`/패딩)에만 absolute 배치.
+ *   (`1000 × PLOT_H_PX`), SVG 는 plot 영역(`GUTTER`(--wds-widget-axis-gutter)/`PAD_RIGHT`/패딩)에만 absolute 배치.
  *   peak ▼/라벨은 동일 좌표계(`peakXRatio`/`peakYRatio`)로 찍어 폭과 무관하게 1:1 일치.
  * - stroke 는 `vectorEffect="non-scaling-stroke"` 로 1px 유지, area fill 은 color + alpha.
  * - 색은 토큰 (`color` 기본 `--color-brand-blue-soft`), 축선은 `--color-border-divider`.
@@ -41,7 +43,8 @@ import type { CSSProperties } from "react";
 import AiTriggerButton from "./widget/TriggerButton";
 
 const CHART_HEIGHT = 96;
-const PAD_LEFT = 28;
+/** Y축 눈금 칸 폭 — 토큰 하나(`--wds-widget-axis-gutter`)로 모든 그래프의 Y축 선을 같은 x 에 세운다. */
+const GUTTER = "var(--wds-widget-axis-gutter)";
 const PAD_RIGHT = 8;
 const PAD_TOP_PX = 14;
 const PAD_BOTTOM_PX = 16;
@@ -66,6 +69,7 @@ export default function MiniLineChart({
   aiTriggerReveal = "always",
   /** AI 트리거 버튼 호버 설명(Tooltip). 페이지별 override 가능. 기본 "이 차트를 WhaTap AI로 분석". */
   aiTriggerTooltip = "이 차트를 WhaTap AI로 분석",
+  frame = true,
 }: {
   title: string;
   values: number[];
@@ -86,11 +90,16 @@ export default function MiniLineChart({
   onAiTrigger?: (ctx: { metric: string; values: number[]; unit?: string; timeRange?: string }) => void;
   aiTriggerReveal?: "always" | "hover";
   aiTriggerTooltip?: string;
+  /**
+   * 껍데기(카드 표면 · 테두리 · 여백 · 제목 줄 · Top Stat · ⋮)를 그릴지. 기본 `true`.
+   * `false` 면 본문만 그린다. [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
+   */
+  frame?: boolean;
 }) {
   // ★ 정책 (feedback-chart-peak-alignment):
   //   SVG viewBox는 plot 영역 자체와 정확히 동일한 비율을 가짐 → 라인의 peak
   //   좌표가 카드 폭과 무관하게 HTML overlay의 peak ▼/라벨 위치와 1:1 일치.
-  //   SVG는 absolute로 plot 영역 (left=PAD_LEFT, right=PAD_RIGHT, top/bottom 패딩)
+  //   SVG는 absolute로 plot 영역 (left=GUTTER, right=PAD_RIGHT, top/bottom 패딩)
   //   에만 그리고, 좌표계는 viewBox 1000 x PLOT_H_PX 로 plot 내부 비율.
   const VBW = 1000; // viewBox width — 임의 큰 값 (정밀도)
   const VBH = PLOT_H_PX;
@@ -121,10 +130,11 @@ export default function MiniLineChart({
 
   return (
     <div
-      className={`group flex flex-col bg-card border border-color-var-color-border-default rounded-4px px-8px py-6px gap-2px min-w-0${delay !== undefined ? " ai-anim-in" : ""}`}
+      className={`group flex flex-col gap-2px min-w-0${frame ? " bg-card border border-color-var-color-border-default rounded-4px px-8px py-6px" : ""}${delay !== undefined ? " ai-anim-in" : ""}`}
       style={delay !== undefined ? { animationDelay: `${delay}ms` } : undefined}
     >
-      {/* 헤더 */}
+      {/* 헤더 — frame 일 때만. WidgetFrame 안에서는 그쪽 머리가 맡는다. */}
+      {frame && (
       <div className="flex items-center justify-between gap-6px">
         <div className="flex items-center gap-3px min-w-0">
           <span
@@ -169,18 +179,19 @@ export default function MiniLineChart({
           <MenuDots />
         </div>
       </div>
+      )}
 
       {/* 차트 영역 (SVG는 정확히 plot 사각형에만 absolute 배치) */}
       <div className="relative w-full" style={{ height: CHART_HEIGHT }}>
         {/* X-axis (plot 하단) */}
         <div
           className="absolute h-1px bg-color-var-color-border-divider"
-          style={{ left: PAD_LEFT, right: PAD_RIGHT, top: PAD_TOP_PX + PLOT_H_PX }}
+          style={{ left: GUTTER, right: PAD_RIGHT, top: PAD_TOP_PX + PLOT_H_PX }}
         />
         {/* Y-axis (plot 좌측) */}
         <div
           className="absolute w-1px bg-color-var-color-border-divider"
-          style={{ left: PAD_LEFT, top: PAD_TOP_PX, height: PLOT_H_PX }}
+          style={{ left: GUTTER, top: PAD_TOP_PX, height: PLOT_H_PX }}
         />
         {/* Y축 수평 그리드 라인 — 모든 tick 위치에 점선 */}
         {yTicks.map((ratio) => (
@@ -188,7 +199,7 @@ export default function MiniLineChart({
             key={`grid-${ratio}`}
             className="absolute"
             style={{
-              left: PAD_LEFT,
+              left: GUTTER,
               right: PAD_RIGHT,
               top: PAD_TOP_PX + PLOT_H_PX * (1 - ratio),
               height: 0,
@@ -201,7 +212,7 @@ export default function MiniLineChart({
         <div
           className="absolute"
           style={{
-            left: `calc(${PAD_LEFT}px + (100% - ${PAD_LEFT + PAD_RIGHT}px) * ${markerAt})`,
+            left: `calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${markerAt})`,
             top: PAD_TOP_PX,
             height: PLOT_H_PX,
             width: 0,
@@ -217,7 +228,7 @@ export default function MiniLineChart({
           width="100%"
           height={PLOT_H_PX}
           className="absolute"
-          style={{ left: PAD_LEFT, right: PAD_RIGHT, top: PAD_TOP_PX, width: `calc(100% - ${PAD_LEFT + PAD_RIGHT}px)` }}
+          style={{ left: GUTTER, right: PAD_RIGHT, top: PAD_TOP_PX, width: `calc(100% - ${GUTTER} - ${PAD_RIGHT}px)` }}
         >
           {/* area fill: color 는 var(--token) 일 수 있어 hex 알파(+"1f") 를 붙이면 무효가 된다
               (var(...)1f → 잘못된 색 → 회색 fallback). fillOpacity 로 ~12% 투명도를 준다. */}
@@ -256,7 +267,7 @@ export default function MiniLineChart({
                   left: 0,
                   textAlign: "right",
                   paddingRight: 4,
-                  width: PAD_LEFT,
+                  width: GUTTER,
                 } as CSSProperties
               }
             >
@@ -265,13 +276,13 @@ export default function MiniLineChart({
           ))}
 
           {/* peak ▼ + 값 라벨 — SVG polyline의 peak 점과 동일 좌표계 사용
-              (PAD_LEFT + plotWidth × peakXRatio, PAD_TOP_PX + PLOT_H_PX × peakYRatio).
+              (GUTTER + plotWidth × peakXRatio, PAD_TOP_PX + PLOT_H_PX × peakYRatio).
               ▼ tip(svg path 끝점)이 peak 점에 정확히 닿도록 transform 보정. */}
           {peakIdx >= 0 && (
             <div
               className="absolute flex flex-col items-center"
               style={{
-                left: `calc(${PAD_LEFT}px + (100% - ${PAD_LEFT + PAD_RIGHT}px) * ${peakXRatio})`,
+                left: `calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${peakXRatio})`,
                 top: `${PAD_TOP_PX + PLOT_H_PX * peakYRatio}px`,
                 transform: "translate(-50%, -100%)",
               }}
@@ -303,7 +314,7 @@ export default function MiniLineChart({
                 className="absolute text-chart text-tertiary leading-none whitespace-nowrap"
                 style={{
                   fontFamily: "var(--font-family-numeric)",
-                  left: `calc(${PAD_LEFT}px + (100% - ${PAD_LEFT + PAD_RIGHT}px) * ${ratio})`,
+                  left: `calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${ratio})`,
                   bottom: 2,
                   transform:
                     i === 0

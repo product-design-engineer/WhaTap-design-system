@@ -42,26 +42,26 @@ const EVENTS = [
   { at: "04:05", project: "알림", name: "발송 지연", level: "warning" as const },
 ];
 
-/** 본문만 그리는 컴포넌트를 담는다 — 액티브 트랜잭션 아크. 아크가 가장자리를 가지므로 `bleed`. */
+/** 칸 안 차트는 `frame={false}` — 여백은 WidgetFrame 이 갖는다. */
 export const Default: Story = {
   render: () => (
     <Cell>
-      <WidgetFrame title="액티브 트랜잭션" meta="APM 24" bleed>
-        <ActiveTransactionArc maxTx={{ name: "/api/order/checkout", value: 14 }} agent={{ active: 24, inactive: 0 }} />
+      <WidgetFrame title="액티브 트랜잭션" meta="APM 24">
+        <ActiveTransactionArc maxTx={{ name: "/api/order/checkout", value: 14 }} agent={{ active: 24, inactive: 0 }} frame={false} />
       </WidgetFrame>
     </Cell>
   ),
 };
 
-/** 같은 줄 — 높이는 격자 행이 정하고, 칸마다 여백 · 제목 굵기가 같다. */
+/** 같은 줄 — 높이는 격자 행이 정하고, 칸마다 여백 · 제목 굵기 · Y축 선이 같다. */
 export const Row: Story = {
   render: () => (
     <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 360px)", gap: 12, height: 232 }}>
-      <WidgetFrame title="액티브 트랜잭션" meta="APM 24" bleed>
-        <ActiveTransactionArc />
+      <WidgetFrame title="액티브 트랜잭션" meta="APM 24">
+        <ActiveTransactionArc frame={false} />
       </WidgetFrame>
       <WidgetFrame title="히트맵" meta="수행 시간(초)">
-        <ScatterHeatmap dots={SCATTER_HEATMAP_DEMO_DOTS} yLabels={[10, 8, 6, 4, 2, 0]} />
+        <ScatterHeatmap dots={SCATTER_HEATMAP_DEMO_DOTS} yLabels={[10, 8, 6, 4, 2, 0]} frame={false} />
       </WidgetFrame>
     </div>
   ),
@@ -95,7 +95,7 @@ export const WithMenu: Story = {
         </div>
       </WidgetFrame>
       <WidgetFrame title="히트맵" meta="수행 시간(초)">
-        <ScatterHeatmap dots={SCATTER_HEATMAP_DEMO_DOTS} yLabels={[10, 8, 6, 4, 2, 0]} />
+        <ScatterHeatmap dots={SCATTER_HEATMAP_DEMO_DOTS} yLabels={[10, 8, 6, 4, 2, 0]} frame={false} />
       </WidgetFrame>
     </div>
   ),

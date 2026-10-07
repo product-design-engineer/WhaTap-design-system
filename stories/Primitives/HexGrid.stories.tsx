@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { HexGrid } from "@whatap/design-system";
+import { HEX_GRID_LEGEND, HexGrid, WidgetFrame } from "@whatap/design-system";
 import type { HexItem, HexTone } from "@whatap/design-system";
 
 /**
@@ -45,4 +45,15 @@ export const ActiveIdle: Story = {
 /** 큰 유닛 — `radius` 로 크기 조정. */
 export const LargeRadius: Story = {
   args: { items: make(8), columns: 4, radius: 32 },
+};
+
+/** 대시보드 칸 — `frame={false}` 로 껍데기를 끄고 [[WidgetFrame]] 에 담는다. 범례는 `HEX_GRID_LEGEND` 를 WidgetFrame `legend` 로. */
+export const InWidgetFrame: Story = {
+  render: () => (
+    <div style={{ width: 420, height: 260 }}>
+      <WidgetFrame title="GPU Map" meta="16대" legend={HEX_GRID_LEGEND} onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
+        <HexGrid items={make(16)} columns={6} frame={false} />
+      </WidgetFrame>
+    </div>
+  ),
 };

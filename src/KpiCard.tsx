@@ -15,6 +15,8 @@
  * - 시계열 추이 → [[MiniLineChart]]
  *
  * ## Composition rules
+ * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 안쪽 여백 · 제목 줄을 뺀다). [[WidgetFrame]] 안에 넣을 때 쓴다.
+ *   제목은 WidgetFrame `title`, 범위는 `meta`, 범례는 `legend`, 메뉴는 `onFullscreen` · `menu` 가 맡는다(patterns §15).
  * - Primitives 레이어 (자체 렌더링, DS 컴포넌트 import 0)
  * - 숫자는 numeric 폰트, 단위는 tertiary 색상
  * - 타이틀은 카드 상단, 숫자는 중앙 정렬
@@ -32,19 +34,24 @@ export type KpiCardProps = {
   unit?: string;
   /** stagger 진입 애니메이션 delay(ms) */
   delay?: number;
+  /**
+   * 껍데기(카드 표면 · 테두리 · 여백 · 제목 줄)를 그릴지. 기본 `true`.
+   * `false` 면 본문만 그린다. [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
+   */
+  frame?: boolean;
 };
 
-export default function KpiCard({ title, value, unit, delay }: KpiCardProps) {
+export default function KpiCard({ title, value, unit, delay, frame = true }: KpiCardProps) {
   const style = delay !== undefined
     ? { animationDelay: `${delay}ms` } as React.CSSProperties
     : undefined;
 
   return (
     <div
-      className="flex flex-col bg-card border border-color-var-color-border-default rounded-4px px-12px py-8px h-full"
+      className={frame ? "flex flex-col bg-card border border-color-var-color-border-default rounded-4px px-12px py-8px h-full" : "flex flex-col h-full min-w-0"}
       style={style}
     >
-      <span className="text-md font-medium text-secondary truncate shrink-0">{title}</span>
+      {frame && <span className="text-md font-medium text-secondary truncate shrink-0">{title}</span>}
       <div className="flex-1 min-h-0 flex items-center justify-center">
         <span
           className="text-primary leading-none"

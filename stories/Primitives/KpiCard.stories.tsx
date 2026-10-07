@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { KpiCard } from "@whatap/design-system";
+import { KpiCard, WidgetFrame } from "@whatap/design-system";
 
 /**
  * Stories for [[KpiCard]] — 핵심 지표를 큰 숫자로 강조하는 카드.
@@ -39,6 +39,17 @@ export const KpiRow: Story = {
       <KpiCard title="Avg GPU Utilization" value="32.72" unit="%" />
       <KpiCard title="Avg Temperature" value="61" unit="°C" />
       <KpiCard title="Power Draw" value="4.8" unit="kW" />
+    </div>
+  ),
+};
+
+/** 대시보드 칸 — `frame={false}` 로 껍데기를 끄고 [[WidgetFrame]] 에 담는다. 제목 · 메뉴는 WidgetFrame 이 맡는다. */
+export const InWidgetFrame: Story = {
+  render: () => (
+    <div style={{ width: 280, height: 120 }}>
+      <WidgetFrame title="Avg CPU" meta="최대 92.1 · 최소 3.4" onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
+        <KpiCard title="Avg CPU" value="47.3" unit="%" frame={false} />
+      </WidgetFrame>
     </div>
   ),
 };

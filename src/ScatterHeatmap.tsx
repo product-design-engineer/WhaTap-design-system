@@ -19,6 +19,10 @@
  * - `dots` prop 으로 데이터를 외부에서 주입한다.
  * - Y축 라벨(0~100) · X축 시각 라벨 · 격자선을 내장한다.
  * - `h-full` 부모 안에서 채워진다.
+ * - 축 글자는 모든 그래프와 같은 `text-chart`(9px) · 숫자 서체 · tertiary. Y축 눈금 칸 폭은 `--wds-widget-axis-gutter`
+ *   라서 한 줄에 놓인 선 그래프와 Y축 선이 같은 x 에 선다. X축 글자 줄 높이 14 는 선 그래프의 아래 여백(PAD_BOTTOM 14)과 같아
+ *   X축 선도 같은 높이에 선다.
+ * - `frame={false}` 면 바깥 좌우 여백(8px)을 뺀다. [[WidgetFrame]] 안에 넣을 때 쓴다 — 여백은 WidgetFrame 이 갖는다(patterns §15).
  *
  * @example
  * ```tsx
@@ -37,6 +41,11 @@ export type ScatterHeatmapProps = {
   xLabels?: string[];
   /** Y축 라벨 (기본 [100,80,60,40,20,0]). */
   yLabels?: number[];
+  /**
+   * 자기 바깥 여백(좌우 8px)을 둘지. 기본 `true`.
+   * `false` 면 여백 0 — [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
+   */
+  frame?: boolean;
 };
 
 const DEFAULT_Y = [100, 80, 60, 40, 20, 0];
@@ -51,12 +60,14 @@ export default function ScatterHeatmap({
   dots,
   xLabels = DEFAULT_X,
   yLabels = DEFAULT_Y,
+  frame = true,
 }: ScatterHeatmapProps) {
   return (
-    <div className="flex h-full min-h-0 w-full" style={{ padding: "0 8px", gap: 4 }}>
-      <div className="flex flex-col justify-between shrink-0" style={{ width: 21, paddingBottom: 15 }}>
+    <div className="flex h-full min-h-0 w-full" style={{ padding: frame ? "0 8px" : 0, gap: 4 }}>
+      {/* 눈금 칸 + 간격 4 = 축 칸 토큰. 그래야 Y축 선이 선 그래프와 같은 x 에 선다. */}
+      <div className="flex flex-col justify-between shrink-0" style={{ width: "calc(var(--wds-widget-axis-gutter) - 4px)", paddingBottom: 14 }}>
         {yLabels.map((v) => (
-          <span key={v} className="text-base text-primary leading-none text-right block" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}>{v}</span>
+          <span key={v} className="text-chart text-tertiary leading-none text-right block" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}>{v}</span>
         ))}
       </div>
       <div className="flex flex-1 flex-col min-w-0 min-h-0">
@@ -89,11 +100,11 @@ export default function ScatterHeatmap({
             />
           ))}
         </div>
-        <div className="flex items-start justify-between shrink-0 w-full" style={{ height: 15, padding: "0 16px" }}>
+        <div className="flex items-start justify-between shrink-0 w-full" style={{ height: 14, padding: "0 16px" }}>
           {xLabels.map((label, i) => (
             <div key={i} className="flex flex-col items-center">
               <div className="w-px" style={{ height: 3, background: "var(--color-text-tertiary)" }} />
-              <span className="text-base text-primary text-center leading-none whitespace-nowrap" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}>{label}</span>
+              <span className="text-chart text-tertiary text-center leading-none whitespace-nowrap" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}>{label}</span>
             </div>
           ))}
         </div>

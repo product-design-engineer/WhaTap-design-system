@@ -16,6 +16,8 @@ import React from "react";
  * - 시계열 데이터 → [[MiniLineChart]]
  *
  * ## Composition rules
+ * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 여백 · 「GPU Map」 제목 줄 · 범례를 뺀다). [[WidgetFrame]] 안에 넣을 때 쓴다.
+ *   범례는 `HEX_GRID_LEGEND` 를 WidgetFrame `legend` 로 넘긴다(같은 색 토큰). 제목 · 메뉴도 WidgetFrame 이 맡는다(patterns §15).
  * - Primitives 레이어 (자체 렌더링, DS 컴포넌트 import 0)
  * - 색은 chart/status 토큰만 사용
  * - SVG 기반 — 헥사곤은 polygon, 라벨은 HTML overlay
@@ -46,6 +48,11 @@ export type HexGridProps = {
   columns?: number;
   /** 헥사곤 반지름 (기본 24) */
   radius?: number;
+  /**
+   * 껍데기(카드 표면 · 테두리 · 여백 · 제목 줄 · 범례)를 그릴지. 기본 `true`.
+   * `false` 면 본문만 그린다. [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
+   */
+  frame?: boolean;
 };
 
 const TONE_FILL: Record<HexTone, string> = {
@@ -54,6 +61,14 @@ const TONE_FILL: Record<HexTone, string> = {
   warning: "var(--color-status-warning)",
   critical: "var(--color-status-error)",
 };
+
+/** 껍데기를 끈 HexGrid 의 범례 — [[WidgetFrame]] `legend` 로 넘긴다. 색은 헥사곤과 같은 토큰. */
+export const HEX_GRID_LEGEND = [
+  { label: "Active", color: TONE_FILL.active },
+  { label: "Idle", color: TONE_FILL.idle },
+  { label: "Warning", color: TONE_FILL.warning },
+  { label: "Critical", color: TONE_FILL.critical },
+];
 
 const TONE_TEXT: Record<HexTone, string> = {
   active: "var(--color-text-inverse)",
@@ -74,6 +89,7 @@ export default function HexGrid({
   items,
   columns = 6,
   radius: _radius = 24,
+  frame = true,
 }: HexGridProps) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [size, setSize] = React.useState<{ w: number; h: number } | null>(null);
@@ -135,20 +151,21 @@ export default function HexGrid({
   const lastRowShift = lastRowLen < cols ? ((cols - lastRowLen) * (hexW + gap)) / 2 : 0;
 
   return (
-    <div className="flex flex-col bg-card border border-color-var-color-border-default rounded-4px px-8px py-6px h-full">
+    <div className={frame ? "flex flex-col bg-card border border-color-var-color-border-default rounded-4px px-8px py-6px h-full" : "flex flex-col h-full min-w-0"}>
+      {frame && (
       <div className="flex items-center justify-between mb-4px shrink-0">
         <span className="text-md font-medium text-secondary">GPU Map</span>
+        {/* 범례는 헥사곤이 쓰는 네 톤을 다 말한다. 종전엔 Active · Idle 둘뿐이라 주황 · 빨강이 범례에 없었다. */}
         <div className="flex items-center gap-8px">
-          <div className="flex items-center gap-4px">
-            <div className="rounded-2px" style={{ width: 8, height: 8, background: TONE_FILL.active }} />
-            <span className="text-sm text-tertiary">Active</span>
-          </div>
-          <div className="flex items-center gap-4px">
-            <div className="rounded-2px" style={{ width: 8, height: 8, background: TONE_FILL.idle }} />
-            <span className="text-sm text-tertiary">Idle</span>
-          </div>
+          {HEX_GRID_LEGEND.map((l) => (
+            <div key={l.label} className="flex items-center gap-4px">
+              <div className="rounded-2px" style={{ width: 8, height: 8, background: l.color }} />
+              <span className="text-sm text-tertiary">{l.label}</span>
+            </div>
+          ))}
         </div>
       </div>
+      )}
 
       <div ref={containerRef} className="flex-1 min-h-0 flex items-center justify-center overflow-hidden">
         <svg

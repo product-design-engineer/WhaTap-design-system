@@ -742,6 +742,16 @@
     /* @role 툴바 알약 높이 | @use 툴바 안 알약형 표시 */
     --wds-toolbar-pill-h: 24px;
 
+    /* ── Component tokens: 대시보드 위젯 본문 간격 (patterns §15) ── */
+    /* @role 위젯 본문 좌·우 안쪽 여백의 단일 소유자 | @use WidgetFrame 본문 · 범례 줄 | @avoid 칸 안 차트가 자기 바깥 여백을 또 두기 */
+    --wds-widget-body-px: 12px;
+    /* @role 위젯 본문 아래 안쪽 여백 | @use WidgetFrame 본문 */
+    --wds-widget-body-pb: 12px;
+    /* @role 위젯 본문 안 줄 간격 — 범례 · 통계값 · 그래프 사이 | @use WidgetFrame 본문 · frame={false} 차트 */
+    --wds-widget-row-gap: 4px;
+    /* @role 그래프 Y축 눈금 칸 폭 — 한 줄의 Y축 선을 같은 x 에 세운다 | @use MiniLineChart · MiniMultiLineChart · ScatterHeatmap | @avoid 차트마다 다른 눈금 칸 폭 */
+    --wds-widget-axis-gutter: 28px;
+
     /* ── Component tokens: DateTimeBlock ── */
     /* @role 연도 칸 폭 | @use DateTimeBlock */
     --wds-datetime-year-w: 28px;

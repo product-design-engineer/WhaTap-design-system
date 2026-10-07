@@ -149,7 +149,7 @@ AiCard (흰 배경 + 테두리 + 둥근 모서리 + 진입 애니메이션)
 
 - [ ] **색상 리터럴 없음** — `#FF0000` 같은 직접 색 코드가 없는가?
 - [ ] **AI 카드는 `AiCard`로 감쌌는가?** — 직접 만든 `<div>` 카드가 없는가?
-- [ ] **대시보드 위젯 한 칸은 `WidgetFrame`인가?** — 제목은 지표 이름만, 범위는 `meta`, 헤더 메뉴는 ⛶ `onFullscreen` + ⋮ `menu` 둘로 고정, 범례는 본문 오른쪽 위 `legend`, 데이터 없음 · 수집 끊김은 `state`. 끊긴 수집을 0 선으로 그리지 않았는가?
+- [ ] **대시보드 위젯 한 칸은 `WidgetFrame`인가?** — 제목은 지표 이름만, 범위는 `meta`, 헤더 메뉴는 ⛶ `onFullscreen` + ⋮ `menu` 둘로 고정, 범례는 본문 오른쪽 위 `legend`, 데이터 없음 · 수집 끊김은 `state`. 끊긴 수집을 0 선으로 그리지 않았는가? 칸 안 차트는 아크 · 히트맵까지 모두 `frame={false}` 인가? 축 글자는 `text-chart` 하나인가?
 - [ ] **페이지 헤더가 AI 위젯 열었을 때도 그대로인가?** — 어떤 요소도 숨겨지지 않는가?
 - [ ] **테이블 숫자는 오른쪽 정렬인가?**
 - [ ] **SVG 차트 텍스트에 단위(px)가 있는가?** — `fontSize="9px"` (O) / `fontSize={9}` (X)
@@ -507,7 +507,7 @@ export default function EventListPage() {
 ```tsx
 import {
   DashboardLayout, PageHeader, OptionbarPage,
-  Tabs, MiniLineChart,
+  Tabs, MiniLineChart, WidgetFrame,
   DataTable, type DataTableColumn,
   WhaTapAiWidget, useWhaTapAi,
 } from "@whatap/design-system";
@@ -546,12 +546,13 @@ export default function InstanceDetailPage() {
 
           {activeTab === "overview" && (
             <>
-              {/* 차트 그리드 2x2 */}
-              <div className="grid grid-cols-2 gap-4 p-4">
-                <MiniLineChart title="CPU"      values={cpuData}     unit="%" />
-                <MiniLineChart title="Memory"   values={memData}     unit="%" />
-                <MiniLineChart title="Disk I/O" values={diskData}    unit="MB/s" />
-                <MiniLineChart title="Network"  values={networkData} unit="Mbps" />
+              {/* 차트 그리드 2x2 — 칸은 WidgetFrame, 차트는 frame={false} 로 본문만 (patterns §15) */}
+              <div className="grid grid-cols-2 gap-12px wds-page-content" style={{ gridAutoRows: 180 }}>
+                {CHARTS.map((c) => (
+                  <WidgetFrame key={c.title} title={c.title} meta="최근 10분" onFullscreen={() => open(c)} menu={WIDGET_MENU}>
+                    <MiniLineChart title={c.title} values={c.values} unit={c.unit} frame={false} />
+                  </WidgetFrame>
+                ))}
               </div>
 
               {/* 하단 상세 지표 테이블 */}
@@ -586,15 +587,15 @@ export default function InstanceDetailPage() {
 > - 뼈대: `DashboardLayout` + `PageHeader` (제목: '{대상} 상세') + `OptionbarPage`
 > - 탭: `Tabs` — [{탭 목록 나열, 예: 개요 / 성능 / 이벤트}]
 > - 개요 탭 구성:
->   - 상단: `MiniLineChart` {개수}개를 {N}x{M} 그리드 배치
->     - 각 차트: {차트 항목 — 제목, 단위}
+>   - 상단: 차트 {개수}칸을 {N}x{M} 그리드 배치. 칸은 `WidgetFrame`(제목 · 범위 `meta` · ⛶ `onFullscreen` + ⋮ `menu`), 안의 `MiniLineChart` 는 `frame={false}`
+>     - 각 칸: {차트 항목 — 제목, 단위}
 >     - SVG 텍스트는 반드시 `fontSize="9px"` (단위 필수)
 >     - peak 라벨은 라인 최고점과 1:1 좌표 매칭
 >   - 하단: `DataTable` density="default"
 >     - 컬럼: {컬럼 목록 — 시각(width: 150) + 지표들(width: 96, numeric)}
 > - AI 위젯: `WhaTapAiWidget` + `useWhaTapAi` 연결
 > - `activeProduct="{제품코드}"`
-> - 숫자=오른쪽 정렬, 차트 헤더는 `text-md font-bold`, hex 직접 쓰지 마.
+> - 숫자=오른쪽 정렬, 칸 머리는 WidgetFrame 이 그린다(직접 짜지 마), hex 직접 쓰지 마.
 
 ---
 
@@ -707,12 +708,12 @@ export default function InstanceDetailPage() {
 
 ### 예시 8: 차트 카드 만들기
 
-> 본문 영역에 MiniLineChart 카드 4개를 2x2 그리드로 배치해 줘.
-> - 각 카드: CPU / Memory / Disk I/O / Network
+> 본문 영역에 차트 칸 4개를 2x2 그리드로 배치해 줘.
+> - 칸은 `WidgetFrame`(헤더 메뉴 ⛶ + ⋮ 고정, 범례는 본문 오른쪽 위 `legend`), 안의 `MiniLineChart` 는 `frame={false}`
+> - 각 칸: CPU / Memory / Disk I/O / Network
 > - 차트 안 SVG 텍스트는 반드시 `fontSize="9px"` (단위 필수)
 > - peak 라벨은 라인 최고점과 1:1 좌표 매칭
-> - 카드 헤더: `text-md font-bold`
-> - 카드 부제: `text-base text-tertiary`
+> - 칸 머리 · 부제(범위)는 WidgetFrame `title` · `meta` 로 — 글자 크기를 직접 정하지 마
 
 ---
 

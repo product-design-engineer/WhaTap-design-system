@@ -18,15 +18,15 @@ import ToolbarIconButton from "./ToolbarIconButton";
  *
  * ## When to use
  * - 대시보드 · Flex 보드 격자의 위젯 한 칸 (액티브 트랜잭션 · 히트맵 · 이벤트 목록 · 프로젝트 표).
- * - 본문만 그리는 DS 컴포넌트를 담을 때: [[ActiveTransactionArc]] · [[ScatterHeatmap]] · [[DataTable]] · [[HexGrid]] 본문.
+ * - 칸 안 차트는 모두 `frame={false}` 로 담는다: [[MiniLineChart]] · [[MiniMultiLineChart]] · [[MiniDonutChart]] · [[KpiCard]] · [[HexGrid]]
+ *   · [[ActiveTransactionArc]] · [[ScatterHeatmap]]. 표([[DataTable]])는 `bleed`.
  *
  * ## When NOT to use
  * - AI 위젯 **안**의 카드 → [[AiCard]]. 제품 화면에 AiCard 를 쓰면 그 칸이 AI 응답처럼 읽히고,
  *   반대로 AI 답변에 WidgetFrame 을 쓰면 답이 대시보드 조각처럼 읽힌다.
  * - 폼 · 설정의 구획 묶음 → `bg-card` 카드 + 구획 사이 선 (patterns §14).
  * - 상태를 알리는 상자 → [[Notice]].
- * - 아직 껍데기를 스스로 그리는 차트([[MiniMultiLineChart]] · [[MiniDonutChart]] · [[KpiCard]] · [[MiniLineChart]])
- *   를 그대로 넣기 → 카드가 두 겹이 된다. 그 차트들은 그대로 격자에 세우고, 껍데기 이관은 별도로 한다.
+ * - 껍데기를 가진 차트를 `frame` 을 켠 채 넣기 → 카드가 두 겹이 된다. 넣을 때는 늘 `frame={false}`.
  *
  * ## Composition rules
  * - **높이는 부모가 정한다.** WidgetFrame 은 `h-full` 로 칸을 채우고, 격자 행 높이가 칸 높이다.
@@ -40,7 +40,11 @@ import ToolbarIconButton from "./ToolbarIconButton";
  * - **범례는 본문 오른쪽 위 한 줄**(`legend`). 헤더 오른쪽은 메뉴 자리라 범례를 올리지 않는다. 계열이 셋을 넘거나
  *   항목 글이 길면(도넛 · 분포) 한 줄에 넣지 말고 본문 안에서 차트 옆 열로 그린다.
  * - 푸터는 출처 · 마지막 수집 시각 한 줄만. 범례를 푸터로 내리지 않는다.
- * - `bleed` 는 본문이 자기 가장자리를 가진 것(표 · 히트맵 · 도는 아크)에만 준다. 칸 안의 [[DataTable]] 은 자기 테두리를 지우고 칸 테두리를 쓴다.
+ * - **본문 간격은 토큰 넷이 정한다**: 좌우 `--wds-widget-body-px` · 아래 `--wds-widget-body-pb` · 줄 간격 `--wds-widget-row-gap`
+ *   · Y축 눈금 칸 `--wds-widget-axis-gutter`. 칸 안 차트는 모두 `frame={false}` 로 자기 바깥 여백을 0 으로 둔다. 그래야 한 줄의
+ *   본문 시작선 · Y축 선 · X축 선이 같다. 그래프 축 글자는 모두 `text-chart`.
+ * - `bleed` 는 표처럼 행이 칸 가장자리까지 닿아야 하는 것에만 준다. 아크 · 히트맵은 `bleed` 가 아니라 `frame={false}`.
+ *   칸 안의 [[DataTable]] 은 자기 테두리를 지우고 칸 테두리를 쓴다.
  * - 빈 상태는 `state` 로만 바꾼다. 본문 안에 빈 그림 · 0 선 · 「-」 를 직접 그리지 않는다.
  * - 색은 토큰만: 표면 `--color-card` · 테두리 `--color-border-default` · 범례 색은 `--color-chart-series-N`.
  *
@@ -86,7 +90,7 @@ export type WidgetFrameProps = {
   menu?: ActionMenuAction[];
   /** 본문 오른쪽 위 한 줄 범례. 계열 셋 이하에만. */
   legend?: WidgetFrameLegendItem[];
-  /** 본문 안쪽 여백을 없앤다. 표 · 히트맵처럼 본문이 자기 가장자리를 가질 때만. */
+  /** 본문 안쪽 여백을 없앤다. 표처럼 행이 칸 가장자리까지 닿아야 할 때만(아크 · 히트맵은 frame={false} 로). */
   bleed?: boolean;
   /**
    * 본문 상태. `ready` 가 아니면 `children` 대신 빈 상태 한 덩어리를 그린다.
@@ -161,8 +165,12 @@ export default function WidgetFrame({
 
       <div
         className="wds-widget-frame-body flex flex-col flex-1 min-h-0"
-        /* 여백은 이 한 곳에서만 정한다. 본문이 다시 여백을 두면 칸마다 안쪽 선이 달라진다. */
-        style={bleed || empty ? undefined : { padding: "0 12px 12px" }}
+        /* 여백 · 줄 간격은 이 한 곳에서 토큰으로만 정한다(--wds-widget-*). 칸 안 차트는 frame={false} 로
+           자기 바깥 여백을 0 으로 두므로, 본문 시작선 · Y축 선 · 줄 간격이 모든 칸에서 같다. */
+        style={{
+          gap: "var(--wds-widget-row-gap)",
+          ...(bleed || empty ? {} : { padding: "0 var(--wds-widget-body-px) var(--wds-widget-body-pb)" }),
+        }}
       >
         {empty ? (
           <div className="flex flex-1 min-h-0 items-center">
@@ -174,7 +182,7 @@ export default function WidgetFrame({
               <ul
                 aria-label="범례"
                 className="flex items-center justify-end gap-12px shrink-0"
-                style={{ listStyle: "none", margin: 0, padding: bleed ? "0 12px 4px" : "0 0 4px" }}
+                style={{ listStyle: "none", margin: 0, padding: bleed ? "0 var(--wds-widget-body-px)" : 0 }}
               >
                 {legend.map((l) => (
                   <li key={l.label} className="flex items-center gap-4px text-sm text-secondary whitespace-nowrap">
