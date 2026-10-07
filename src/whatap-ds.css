@@ -684,6 +684,18 @@
     --color-chart-speed-slow: #FFA012;
     /* @role 응답 속도 등급 — 매우 느림 | @use 액티브 트랜잭션 Arc·히트맵·speed 범례 | @avoid 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
     --color-chart-speed-very-slow: #F34747;
+
+    /* Chart — APM 대시보드 고정색. 다크 재매핑 없음. 정의: tokens.css */
+    /* @role APM 대시보드 기본 계열 — TPS·응답시간 막대, Method 비율, 오늘 추이 | @use APM 대시보드 재현(ApmBoardMain · Apdex 카드) | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 크기 표현(그쪽은 --color-chart-seq-*) */
+    --color-chart-apm-blue: #4FC3F7;
+    /* @role APM 대시보드 보조 계열 — 힙 메모리, SQL 비율 | @use APM 대시보드 재현(ApmBoardMain · Apdex 카드) | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 크기 표현(그쪽은 --color-chart-seq-*) */
+    --color-chart-apm-green: #81C784;
+    /* @role Apdex 카드 Excellent 구간 배경 | @use APM 대시보드 재현(ApmBoardMain · Apdex 카드) | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 크기 표현(그쪽은 --color-chart-seq-*) */
+    --color-chart-apdex-excellent-bg: #DCEFFF;
+    /* @role Apdex 카드 Poor 구간 배경 | @use APM 대시보드 재현(ApmBoardMain · Apdex 카드) | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 크기 표현(그쪽은 --color-chart-seq-*) */
+    --color-chart-apdex-poor-bg: #FFEDCF;
+    /* @role Apdex 카드 Unacceptable 구간 배경 | @use APM 대시보드 재현(ApmBoardMain · Apdex 카드) | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 크기 표현(그쪽은 --color-chart-seq-*) */
+    --color-chart-apdex-unacceptable-bg: #FFE2E2;
     /* @role SVG 필터 그림자 색 | @use feDropShadow 의 floodColor (불투명도는 floodOpacity 로) | @avoid CSS 그림자 (그쪽은 --shadow-*) */
     --color-shadow-flood: #000000;
 
