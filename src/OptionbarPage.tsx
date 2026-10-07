@@ -28,7 +28,7 @@
  *   맞는다(자동 주입하지 않는다: content 가 임의 노드라 prop 이름을 알 수 없다).
  * - `items` 의 content 도 등록된 컴포넌트만 쓴다 — 값 표시는 [[OptionbarValueDisplay]],
  *   선택은 [[PresetSelect]]·[[OptionbarInstanceSelector]]. 인라인 `<div>` 로 컨트롤 자작 금지.
- * - 모든 content chrome 은 `size` 한 값으로 높이를 맞춘다 — `md`(32px, 기본) / `sm`(24px).
+ * - 모든 content chrome 은 `size` 한 값으로 높이를 맞춘다 — `sm`(24px, 기본) / `md`(28px) / `lg`(32px).
  *   LIVE 타이머 · 인스턴스 셀렉터 · DB 값 · 프리셋 셀렉터에 그대로 전달되어 행 baseline 이 어긋나지 않는다.
  *   기본값은 `layout="inline"` + `size="sm"` — 40px 행 안에 24px 컨트롤(가장 컴팩트한 표준 조합).
  * - `layout="inline"` 행 높이는 **40px 고정**(`box-border` + `minHeight:40`) — `size` 를 sm 으로 내려도
@@ -121,7 +121,7 @@ export default function OptionbarPage({
   // auto 는 항목 높이가 폭에 따라 1줄/2줄로 달라지므로 center 로 둔다(stack 처럼 밑줄 정렬하면
   // 인라인으로 펴진 순간 라벨과 컨트롤의 baseline 이 어긋난다).
   const rowAlign = layout === "stack" ? "items-end" : "items-center";
-  // inline 행 높이는 **40px 고정**(`box-border`) — size(md 32px / sm 24px) 가 바뀌어도 행 높이는 불변.
+  // inline 행 높이는 **40px 고정**(`box-border`) — size(sm 24 / md 28 / lg 32px) 가 바뀌어도 행 높이는 불변.
   // 사이드바 스위처·SubHeaderBar 40px 라인과 정렬을 보장하려면 padding 기반이 아니라 고정 높이여야 한다.
   // stack 은 항목이 2줄(타이틀+값)이라 높이 고정 없이 py-8px 유지.
   // auto 는 폭에 따라 1줄(인라인)↔2줄(스택)로 바뀌므로 높이를 고정하지 않는다.

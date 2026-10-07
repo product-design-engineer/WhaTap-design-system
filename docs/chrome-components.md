@@ -184,9 +184,9 @@ inline prompt 는 `max-w-[480px]` cap — 우측 chrome (고객지원·bell·ava
 | `databaseLabel` | `string` | `"ORA11K"` |
 | `presetLabel` | `string` | `"Default"` |
 | `layout` | `"inline" \| "stack"` | `"inline"` | 항목 배치 — `inline`(**기본**): 타이틀을 값 좌측에 나란히 + **행 높이 40px 고정** / `stack`: 타이틀 위·값 아래(`box-border` + `minHeight:40`, `size` 와 무관). 각 `OptionbarItem` 에 그대로 전달됨 |
-| `size` | `OptionbarSize` (`"sm" \| "md"`) | `"sm"` | 행 chrome 높이 — `sm` 24px(기본) / `md` 32px. `LiveTimerCompact` · `OptionbarInstanceSelector` · `OptionbarValueDisplay` · `PresetSelect` 에 일괄 전달되어 baseline 이 어긋나지 않음 |
+| `size` | `OptionbarSize` (`"sm" \| "md" \| "lg"`) | `"sm"` | 행 chrome 높이 — `sm` 24px(기본) / `md` 28px / `lg` 32px. `LiveTimerCompact` · `OptionbarInstanceSelector` · `OptionbarValueDisplay` · `PresetSelect` 에 일괄 전달되어 baseline 이 어긋나지 않음 |
 
-**24px(`sm`) 이 기본선:** 옵션바 컨트롤 4종(`OptionbarInstanceSelector` · `OptionbarValueDisplay` · `PresetSelect`) + `LiveTimerCompact` 는 모두 **기본 `size="sm"`(24px)**, `md`(32px) 는 세로 공간이 넉넉한 자리에서 명시적으로 올려 씁니다. 행 컨테이너 높이는 `size` 와 무관하게 40px 고정이며, 한 행에서는 **같은 size 로 통일**합니다.
+**24px(`sm`) 이 기본선:** 옵션바 컨트롤 4종(`OptionbarInstanceSelector` · `OptionbarValueDisplay` · `PresetSelect`) + `LiveTimerCompact` 는 모두 **기본 `size="sm"`(24px)** 이고, 컨트롤 공통 사다리 `md`(28px) · `lg`(32px) 는 세로 공간이 넉넉한 자리에서 명시적으로 올려 씁니다. 행 컨테이너 높이는 `size` 와 무관하게 40px 고정이며, 한 행에서는 **같은 size 로 통일**합니다.
 
 내부적으로 `OptionbarInstanceSelector` + `LiveTimerCompact` + `PresetSelect`를 조합합니다. 보통은 이 컴포넌트 하나만 쓰면 충분하고, 옵션바를 세부 커스터마이즈해야 할 때만 하위 셋을 직접 import 합니다.
 
@@ -252,14 +252,25 @@ type DateParts = { year: string; month: string; day: string; hour: string; minut
 
 ## PresetSelect
 
-프리셋 드롭다운 (230px, 관리 버튼 포함).
+프리셋 드롭다운 (230px, 관리 버튼 포함). 드롭다운과 정사각 관리 버튼이 4px 떨어져 섭니다.
 
-| Prop | Type | Default |
-|---|---|---|
-| `label` | `string` | — |
-| `width` | `number` | `230` |
-| `onOpenList` | `() => void` | — |
-| `onManage` | `() => void` | — |
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `label` | `string` | — | 지금 고른 프리셋 이름. 넘치면 말줄임 |
+| `width` | `number` | `230` | 드롭다운 폭(px). 관리 버튼은 따로 붙는다 |
+| `size` | `"sm" \| "md" \| "lg"` | `"sm"` | 높이 24 · 28 · 32px. 한 줄의 다른 옵션바 컨트롤과 같은 값 |
+| `onOpenList` | `() => void` | — | 드롭다운 누름 |
+| `onManage` | `() => void` | — | 관리 버튼 누름 |
+
+| size | 높이 | 글자 | 좌우 여백 | 관리 아이콘 |
+|---|---|---|---|---|
+| `sm` (기본) | 24px | 11px | 8px | 14px |
+| `md` | 28px | 12px | 10px | 16px |
+| `lg` | 32px | 13px | 10px | 16px |
+
+- 목록과 관리 패널은 이 컴포넌트가 띄우지 않는다. 두 콜백으로 호출측이 연다
+- 페이지에서 드롭다운과 저장 버튼을 손으로 다시 짜지 않는다(테두리를 이어 붙이거나 hex 회색을 쓰는 자작이 있었다)
+- Figma 정본은 `size` variant 셋. Figma 기본은 이미 놓인 인스턴스를 지키려고 `lg` 다
 
 ---
 
