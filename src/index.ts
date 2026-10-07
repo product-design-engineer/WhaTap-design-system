@@ -52,7 +52,7 @@ export type {
 export { default as CardHead } from "./CardHead";
 export type { CardHeadProps, CardHeadTabs } from "./CardHead";
 export { default as WidgetFrame } from "./WidgetFrame";
-export type { WidgetFrameProps, WidgetFrameState } from "./WidgetFrame";
+export type { WidgetFrameProps, WidgetFrameState, WidgetFrameLegendItem } from "./WidgetFrame";
 export { default as HeatmapCell, heatmapScaleColor } from "./HeatmapCell";
 export type { HeatmapCellProps } from "./HeatmapCell";
 export { default as HeatmapLegend } from "./HeatmapLegend";
