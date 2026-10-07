@@ -1,4 +1,4 @@
-# Chrome (페이지 골격) Components — 20 컴포넌트
+# Chrome (페이지 골격) Components — 21 컴포넌트
 
 > 원본: `src/` (interfacedesigner/WhaTap-design-system)
 
@@ -10,7 +10,7 @@
 
 **조립 순서:** `DashboardLayout` → `Sidebar` + `header` 슬롯 (`PageHeader` 또는 `PageHeaderAiInline` + 옵션으로 `OptionbarPage` 또는 `FilterBar`) + `main` 슬롯 + 자식으로 `WhaTapAiWidget`
 
-## 카탈로그 (20)
+## 카탈로그 (21)
 
 | 영역 | 컴포넌트 |
 |---|---|
@@ -18,7 +18,7 @@
 | 옵션바 (시간/인스턴스/프리셋) | OptionbarPage · OptionbarInstanceSelector · LiveTimerCompact · TimeRangeSelector · PresetSelect |
 | 데이터 표시 | DataTable · FilterBar · MiniLineChart · EventWeekTimeMatrix |
 | 액션·진입 | Button · AiSymbol |
-| 알림·상태 | Toast · Stage · DashboardBuildingProgress |
+| 알림·상태 | Toast · ConfirmDialog · Stage · DashboardBuildingProgress |
 | 위젯 컨텍스트 | WhaTapAiContext (Provider) |
 
 ---
@@ -449,6 +449,41 @@ export type ToastVariant = "success" | "info" | "warning" | "error";
 | `onAction` | `() => void` | — |
 | `onClose` | `() => void` | — |
 | `durationMs` | `number` | `4500` |
+
+---
+
+## ConfirmDialog
+
+실행 직전에 **대상과 결과를 되읽는** 확인 모달. [`patterns.md`](./patterns.md) P1 「위험한 실행 확인」 을 컴포넌트로 굳힌 것(Composite = [[Modal]] + [[Button]]). 확인 버튼은 footer 오른쪽 끝, 라벨은 동작 낱말.
+
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `open` | `boolean` | — | |
+| `title` | `ReactNode` | — | 실행 이름(「플랜에서 제외」) |
+| `target` | `ReactNode` | — | 무엇을 — 대상을 이름 그대로 |
+| `outcomes` | `{ text; tone?: "default" \| "critical" }[]` | — | 그래서 무엇이 바뀌나, 한 줄씩. 되돌릴 수 없는 결과는 `critical` |
+| `children` | `ReactNode` | — | 되읽기 값(KpiField 등). target 과 outcomes 사이 |
+| `confirmLabel` | `string` | — | 동작 낱말. 「확인」 금지 |
+| `cancelLabel` | `string` | `"취소"` | 고치러 돌아가면 「돌아가서 고치기」 |
+| `tone` | `"critical" \| "primary"` | `"critical"` | `primary` = 약정 · 생성처럼 무겁지만 파괴는 아닌 실행 |
+| `loading` | `boolean` | — | 실행 버튼 로딩 |
+| `onConfirm` · `onClose` | `() => void` | — | |
+| `size` | `"sm" \| "md" \| "lg"` | `"sm"` | |
+
+- 되돌릴 수 있는 가벼운 실행 · 자주 반복하는 일에는 쓰지 않는다 — 그 자리는 Toast 의 되돌리기
+- 완료는 Toast 로, 되돌릴 수 있으면 토스트에 「되돌리기」
+
+```tsx
+<ConfirmDialog
+  open={!!target}
+  title="플랜에서 제외"
+  target={<><strong>김서연</strong> kim@whatap.io 을 운영팀 플랜에서 제외합니다.</>}
+  outcomes={[{ text: "이 계정은 더 이상 AI 를 쓸 수 없습니다.", tone: "critical" }]}
+  confirmLabel="제외"
+  onConfirm={remove}
+  onClose={() => setTarget(null)}
+/>
+```
 
 ---
 

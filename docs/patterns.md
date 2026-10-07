@@ -22,7 +22,7 @@ WhaTap AI Assistant 화면을 만들면서 누적된 **반복되는 규칙**들�
 ## P1. 위험한 실행 확인 — 확인을 거치지 않는 삭제는 없다
 <!-- @policy id=destructive-confirm | @severity must | @applies process -->
 
-**규칙.** 되돌릴 수 없는 실행은 **[[Button]] `tone="critical"` → [[Modal]] 확인 → [[Toast]] 완료** 세 단계를 거친다. 한 단계도 생략하지 않는다.
+**규칙.** 되돌릴 수 없는 실행은 **[[Button]] `tone="critical"` → [[ConfirmDialog]] 확인 → [[Toast]] 완료** 세 단계를 거친다. 한 단계도 생략하지 않는다. 확인은 [[Modal]] 을 손으로 짜지 않고 [[ConfirmDialog]] 를 쓴다 — 아래 규칙(동작 라벨 · 대상 · footer 배치)을 구조가 지킨다.
 
 **When to use.** 되돌릴 수 없는 것을 사람이 실행하는 자리 전부 — 삭제 · 해지 · 초기화 · 되돌릴 수 없는 전송. 「목록에서 행을 지운다」가 가장 흔하다.
 
@@ -37,13 +37,15 @@ WhaTap AI Assistant 화면을 만들면서 누적된 **반복되는 규칙**들�
 ```tsx
 <Button tone="critical" size="sm" onClick={() => setConfirm(true)}>삭제</Button>
 
-<Modal open={confirm} onClose={() => setConfirm(false)} size="sm" title="알림 규칙 삭제"
-  footer={<>
-    <Button variant="basic" onClick={() => setConfirm(false)}>취소</Button>
-    <Button variant="contained" tone="critical" onClick={remove}>삭제</Button>
-  </>}>
-  「CPU 90% 초과」 규칙을 삭제합니다. 되돌릴 수 없습니다.
-</Modal>
+<ConfirmDialog
+  open={confirm}
+  title="알림 규칙 삭제"
+  target="「CPU 90% 초과」 규칙을 삭제합니다."
+  outcomes={[{ text: "삭제하면 되돌릴 수 없습니다.", tone: "critical" }]}
+  confirmLabel="삭제"
+  onConfirm={remove}
+  onClose={() => setConfirm(false)}
+/>
 ```
 
 - **확인 버튼 라벨은 동작(`삭제`)** — "확인" 이 아니다. 버튼만 읽고 누르는 사용자가 있고, 그 사람이 틀리지 않아야 한다.
