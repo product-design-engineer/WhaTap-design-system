@@ -17,7 +17,10 @@
  *
  * ## Composition rules
  * - 드롭다운 버튼 폭 `width`(기본 230px) + 정사각 관리 버튼, 4px gap.
- * - 두 버튼 높이는 `size` — `sm`(24px, **기본**) / `md`(32px). `--color-border-control` + `--radius-control` 로
+ * - 두 버튼 높이는 `size` — `sm`(24px, **기본**) / `md`(28px) / `lg`(32px). 컨트롤 공통 사다리라
+ *   [[LiveTimerCompact]] · [[OptionbarInstanceSelector]] · [[OptionbarValueDisplay]] 와 한 줄에서는 같은 `size` 를 쓴다.
+ *   글자는 sm 11 · md 12 · lg 13, 좌우 여백 sm 8 · md/lg 10, 관리 아이콘 sm 14 · md/lg 16.
+ * - 테두리는 `--color-border-control` + `--radius-control` 로
  *   옵션바 baseline 통일 ([[LiveTimerCompact]] · [[OptionbarInstanceSelector]] 와 같은 라인).
  * - 라벨은 korean 폰트 + truncate. 색은 토큰(var(--color-border-control) 등).
  *
@@ -33,7 +36,6 @@
 
 export type PresetSelectSize = "sm" | "md" | "lg";
 
-/** 사이즈 스펙 — md(32px) 는 기존 값 verbatim, sm(24px) 은 한 단계 아래. */
 /* 컨트롤 공통 스케일 (feedback-control-size-scale) — sm 24 / md 28 / lg 32.
    글자는 [[TextField]] 사다리와 같다: sm text-sm / md text-base / lg text-md. */
 const SIZE = {
@@ -54,7 +56,7 @@ export default function PresetSelect({
   width?: number;
   onOpenList?: () => void;
   onManage?: () => void;
-  /** 높이 — sm(24px, **기본**) / md(32px). */
+  /** 높이 — sm(24px, **기본**) / md(28px) / lg(32px). 한 줄의 다른 옵션바 컨트롤과 같은 값을 쓴다. */
   size?: PresetSelectSize;
 }) {
   const spec = SIZE[size];
