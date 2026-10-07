@@ -31,7 +31,7 @@ import type { CSSProperties } from "react";
  *
  * @example
  * ```tsx
- * <WidgetFrame title="TPS" meta="최근 5분" legend={[{ label: "TPS", color: "var(--color-chart-series-1)" }]}>
+ * <WidgetFrame title="TPS" legend={[{ label: "TPS", color: "var(--color-chart-series-1)" }]}>
  *   <MiniBarChart frame={false} xLabels={X} series={[{ label: "TPS", values: tps, color: "var(--color-chart-series-1)" }]} />
  * </WidgetFrame>
  *

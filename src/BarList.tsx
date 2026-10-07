@@ -24,7 +24,7 @@
  *
  * @example
  * ```tsx
- * <WidgetFrame title="액티브 스테이터스" meta="지금">
+ * <WidgetFrame title="액티브 스테이터스">
  *   <BarList frame={false} rows={[
  *     { label: "Method", value: 210, ratio: 0.88, color: "var(--color-chart-series-1)" },
  *     { label: "SQL", value: 86, ratio: 0.67, color: "var(--color-chart-series-2)" },

@@ -29,7 +29,7 @@ export const Default: Story = { args: { rows: ROWS } };
 export const InWidgetFrame: Story = {
   decorators: [(Story) => (<div style={{ width: 320, height: 232 }}><Story /></div>)],
   render: () => (
-    <WidgetFrame title="액티브 스테이터스" meta="지금" onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
+    <WidgetFrame title="액티브 스테이터스" onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
       <BarList frame={false} rows={ROWS} />
     </WidgetFrame>
   ),

@@ -45,7 +45,6 @@ export const InWidgetFrame: Story = {
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, height: "100%" }}>
       <WidgetFrame
         title="시스템 CPU"
-        meta="최근 5분"
         legend={[
           { label: "usr", color: "var(--color-chart-series-1)" },
           { label: "sys", color: "var(--color-chart-series-2)" },
@@ -64,7 +63,7 @@ export const InWidgetFrame: Story = {
           ]}
         />
       </WidgetFrame>
-      <WidgetFrame title="금일 TPS" meta="오늘" legend={[{ label: "TPS", color: "var(--color-chart-series-1)" }]} onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
+      <WidgetFrame title="금일 TPS" legend={[{ label: "TPS", color: "var(--color-chart-series-1)" }]} onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
         <MiniMultiLineChart title="금일 TPS" frame={false} xLabels={X} series={[{ label: "TPS", values: TPS.slice(0, 12), color: "var(--color-chart-series-1)", showArea: true }]} />
       </WidgetFrame>
     </div>

@@ -27,7 +27,7 @@ export const Excellent: Story = { args: { value: 96.4, values: [95, 96, 97, 96, 
 export const InWidgetFrame: Story = {
   decorators: [(Story) => (<div style={{ width: 360, height: 232 }}><Story /></div>)],
   render: () => (
-    <WidgetFrame title="Apdex" meta="× 100 · 최근 5분" onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
+    <WidgetFrame title="Apdex" meta="× 100" onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
       <ApdexChart frame={false} value={71.2} values={TREND} xLabels={X} />
     </WidgetFrame>
   ),

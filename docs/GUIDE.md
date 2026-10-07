@@ -149,7 +149,7 @@ AiCard (흰 배경 + 테두리 + 둥근 모서리 + 진입 애니메이션)
 
 - [ ] **색상 리터럴 없음** — `#FF0000` 같은 직접 색 코드가 없는가?
 - [ ] **AI 카드는 `AiCard`로 감쌌는가?** — 직접 만든 `<div>` 카드가 없는가?
-- [ ] **대시보드 위젯 한 칸은 `WidgetFrame`인가?** — 제목은 지표 이름만, 범위는 `meta`, 헤더 메뉴는 ⛶ `onFullscreen` + ⋮ `menu` 둘로 고정, 범례는 본문 오른쪽 위 `legend`, 데이터 없음 · 수집 끊김은 `state`. 끊긴 수집을 0 선으로 그리지 않았는가? 칸 안 차트는 아크 · 히트맵까지 모두 `frame={false}` 인가? 축 글자는 `text-chart` 하나인가?
+- [ ] **대시보드 위젯 한 칸은 `WidgetFrame`인가?** — 제목은 지표 이름만, 범위는 `meta`, 헤더 메뉴는 ⛶ `onFullscreen` + ⋮ `menu` 둘로 고정(AI 화면은 `onAsk` 로 호버 지름길 + ⋮ 첫 줄), 범례는 본문 오른쪽 위 `legend`, `meta` 에 시간 범위 없음, 데이터 없음 · 수집 끊김은 `state`. 끊긴 수집을 0 선으로 그리지 않았는가? 칸 안 차트는 아크 · 히트맵까지 모두 `frame={false}` 인가? 축 글자는 `text-chart` 하나인가?
 - [ ] **페이지 헤더가 AI 위젯 열었을 때도 그대로인가?** — 어떤 요소도 숨겨지지 않는가?
 - [ ] **테이블 숫자는 오른쪽 정렬인가?**
 - [ ] **SVG 차트 텍스트에 단위(px)가 있는가?** — `fontSize="9px"` (O) / `fontSize={9}` (X)
@@ -549,7 +549,7 @@ export default function InstanceDetailPage() {
               {/* 차트 그리드 2x2 — 칸은 WidgetFrame, 차트는 frame={false} 로 본문만 (patterns §15) */}
               <div className="grid grid-cols-2 gap-12px wds-page-content" style={{ gridAutoRows: 180 }}>
                 {CHARTS.map((c) => (
-                  <WidgetFrame key={c.title} title={c.title} meta="최근 10분" onFullscreen={() => open(c)} menu={WIDGET_MENU}>
+                  <WidgetFrame key={c.title} title={c.title} onFullscreen={() => open(c)} menu={WIDGET_MENU}>
                     <MiniLineChart title={c.title} values={c.values} unit={c.unit} frame={false} />
                   </WidgetFrame>
                 ))}

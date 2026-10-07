@@ -432,10 +432,12 @@ export type DataTableProps<T> = {
 | Prop | Type | Default | 설명 |
 |---|---|---|---|
 | `title` | `string` | — | 지표 이름만(「TPS」). 범위 · 대상 · 단위는 `meta` |
-| `meta` | `ReactNode` | — | 헤더 우측. 글자면 tertiary |
+| `meta` | `ReactNode` | — | 헤더 우측. 칸에만 있는 정보(대상 수 · 단위 · 건수). 시간 범위는 넣지 않는다 |
 | `onFullscreen` | `() => void` | — | 헤더 메뉴 첫 칸 ⛶ 전체 화면. 주면 선다 |
 | `menu` | `ActionMenuAction[]` | — | 헤더 메뉴 둘째 칸 ⋮ 더보기 안의 줄(설정 · 복사 · 상세로 이동). 주면 선다 |
-| `legend` | `{ label, color }[]` | — | 본문 오른쪽 위 한 줄 범례. 계열 셋 이하 |
+| `onAsk` | `() => void` | — | AI 진입점. ⋮ 첫 줄 「AI 에게 묻기」 + 헤더 맨 앞 호버 지름길(같은 동작). AI 위젯을 여는 화면에서만 |
+| `draggable` | `boolean` | `false` | 헤더를 끌기 손잡이로(`.wds-widget-frame-handle`, 메뉴 `.wds-widget-frame-actions` 제외). 배치하는 보드에서만 |
+| `legend` | `{ label, color }[]` | — | 본문 오른쪽 위 한 줄 범례. 계열 둘~셋. 하나면 두지 않는다 |
 | `bleed` | `boolean` | `false` | 본문 안쪽 여백 없앰. 표 · 히트맵 · 아크처럼 본문이 가장자리를 가질 때만 |
 | `state` | `"ready" \| "no-data" \| "collect-gap"` | `"ready"` | `ready` 가 아니면 본문 대신 [[EmptyState]] |
 | `stateTitle` / `stateDescription` | `ReactNode` | 상태별 기본 문장 / — | 빈 상태 두 줄 |
@@ -443,7 +445,8 @@ export type DataTableProps<T> = {
 
 - 높이는 부모(격자 행)가 정한다. WidgetFrame 은 `h-full`
 - 헤더 줄은 24px 고정. 메뉴가 있는 칸과 없는 칸의 본문 시작선이 같다
-- **헤더 오른쪽 아이콘 메뉴는 ⛶ 전체 화면 + ⋮ 더보기 둘로 고정**(순서 고정). 나머지 행동은 전부 더보기 안으로. AI 진입점은 아이콘이 아니라 더보기 첫 줄(AI 위젯을 여는 화면에서만)
+- **헤더 오른쪽 아이콘 메뉴는 ⛶ 전체 화면 + ⋮ 더보기 둘로 고정**(순서 고정). 나머지 행동은 전부 더보기 안으로. AI 위젯을 여는 화면이면 `onAsk` 로 맨 앞에 호버 지름길(AI)이 더해져 [AI][⛶][⋮] — ⋮ 첫 줄 「AI 에게 묻기」도 함께 선다
+- 칸 `meta` 에 시간 범위를 쓰지 않는다. 옵션바가 한 번 말한다
 - **범례는 본문 오른쪽 위 한 줄.** 헤더 오른쪽은 메뉴 자리다. 계열이 셋을 넘거나 글이 길면 본문 안 차트 옆 열로
 - 세 칸 사이에 구분선을 긋지 않는다. 같은 표면 안이라 여백이 경계다
 - 껍데기를 가진 차트(MiniLineChart · MiniMultiLineChart · MiniDonutChart · KpiCard · HexGrid)는 `frame={false}` 로 끄고 넣는다. 켠 채 넣으면 카드가 두 겹이 된다
@@ -454,7 +457,7 @@ export type DataTableProps<T> = {
   <WidgetFrame title="액티브 트랜잭션" meta="APM 24" bleed onFullscreen={open} menu={WIDGET_MENU}>
     <ActiveTransactionArc maxTx={maxTx} agent={agent} />
   </WidgetFrame>
-  <WidgetFrame title="서버 CPU" meta="최근 30분" state="collect-gap" stateDescription="서버 12대 · 32분째 끊김" />
+  <WidgetFrame title="서버 CPU" state="collect-gap" stateDescription="서버 12대 · 32분째 끊김" />
 </div>
 ```
 

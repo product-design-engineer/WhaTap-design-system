@@ -79,7 +79,6 @@ export const WithMenu: Story = {
     <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 360px)", gap: 12, height: 232 }}>
       <WidgetFrame
         title="TPS"
-        meta="최근 30분"
         onFullscreen={() => {}}
         menu={MENU}
         legend={[
@@ -95,6 +94,30 @@ export const WithMenu: Story = {
         </div>
       </WidgetFrame>
       <WidgetFrame title="히트맵" meta="수행 시간(초)">
+        <ScatterHeatmap dots={SCATTER_HEATMAP_DEMO_DOTS} yLabels={[10, 8, 6, 4, 2, 0]} frame={false} />
+      </WidgetFrame>
+    </div>
+  ),
+};
+
+/** AI 진입점 — `onAsk` 하나로 ⋮ 첫 줄 「AI 에게 묻기」와 헤더 맨 앞 호버 지름길이 함께 선다. 칸에 마우스를 올리거나 Tab 으로 들어오면 지름길이 보인다. */
+export const WithAsk: Story = {
+  render: () => (
+    <div style={{ width: 360, height: 232 }}>
+      <WidgetFrame title="TPS" onAsk={() => {}} onFullscreen={() => {}} menu={MENU}>
+        <div className="flex flex-1 items-center justify-center text-base text-tertiary" style={{ border: "1px dashed var(--color-border-default)" }}>
+          칸에 마우스를 올려 보세요
+        </div>
+      </WidgetFrame>
+    </div>
+  ),
+};
+
+/** 끌기 — `draggable` 이면 헤더가 손잡이(커서 grab)가 되고 왼쪽 여백에 ⠿ 가 호버 때 나타난다. 이동은 보드 격자가 맡는다. */
+export const Draggable: Story = {
+  render: () => (
+    <div style={{ width: 360, height: 232 }}>
+      <WidgetFrame title="히트맵" meta="1,345건 · 에러 21" draggable onFullscreen={() => {}} menu={MENU}>
         <ScatterHeatmap dots={SCATTER_HEATMAP_DEMO_DOTS} yLabels={[10, 8, 6, 4, 2, 0]} frame={false} />
       </WidgetFrame>
     </div>
@@ -134,7 +157,7 @@ export const Table: Story = {
 export const NoData: Story = {
   render: () => (
     <Cell>
-      <WidgetFrame title="DB 액티브 세션" meta="최근 30분" state="no-data" />
+      <WidgetFrame title="DB 액티브 세션" state="no-data" />
     </Cell>
   ),
 };
@@ -143,7 +166,7 @@ export const NoData: Story = {
 export const CollectGap: Story = {
   render: () => (
     <Cell>
-      <WidgetFrame title="서버 CPU" meta="최근 30분" state="collect-gap" stateDescription="서버 12대 · 32분째 끊김" />
+      <WidgetFrame title="서버 CPU" state="collect-gap" stateDescription="서버 12대 · 32분째 끊김" />
     </Cell>
   ),
 };
