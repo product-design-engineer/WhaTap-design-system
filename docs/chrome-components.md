@@ -420,13 +420,16 @@ export type DataTableProps<T> = {
 | Prop | Type | Default | 설명 |
 |---|---|---|---|
 | `title` | `string` | — | 지표 이름만(「TPS」). 범위 · 대상 · 단위는 `meta` |
-| `meta` | `ReactNode` | — | 헤더 우측 끝. 글자면 tertiary |
+| `meta` | `ReactNode` | — | 헤더 우측. 글자면 tertiary |
+| `actions` | `ReactNode` | — | 헤더 오른쪽 끝(`meta` 뒤). 위젯에 대한 행동만. `ToolbarIconButton` 은 24px 로 맞춰진다 |
 | `bleed` | `boolean` | `false` | 본문 안쪽 여백 없앰. 표 · 히트맵 · 아크처럼 본문이 가장자리를 가질 때만 |
 | `state` | `"ready" \| "no-data" \| "collect-gap"` | `"ready"` | `ready` 가 아니면 본문 대신 [[EmptyState]] |
 | `stateTitle` / `stateDescription` | `ReactNode` | 상태별 기본 문장 / — | 빈 상태 두 줄 |
 | `footer` | `ReactNode` | — | 범례 · 출처 · 마지막 수집 시각 한 줄 |
 
 - 높이는 부모(격자 행)가 정한다. WidgetFrame 은 `h-full`
+- 헤더 줄은 24px 고정. `actions` 가 있는 칸과 없는 칸의 본문 시작선이 같다
+- `actions` 에는 아이콘 행동(전체 화면 · 설정 · 복사 · 이동 · 더 보기)만. 셋을 넘으면 더 보기 하나로 접는다. AI 진입점은 AI 위젯을 여는 화면에서만
 - 세 칸 사이에 구분선을 긋지 않는다. 같은 표면 안이라 여백이 경계다
 - 껍데기를 스스로 그리는 차트(MiniMultiLineChart · MiniDonutChart · KpiCard · MiniLineChart)는 넣지 않는다. 카드가 두 겹이 된다
 - AI 진입점은 껍데기에 두지 않는다(§15)

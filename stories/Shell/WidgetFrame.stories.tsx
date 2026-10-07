@@ -5,6 +5,7 @@ import {
   DataTable,
   SCATTER_HEATMAP_DEMO_DOTS,
   ScatterHeatmap,
+  ToolbarIconButton,
   WidgetFrame,
 } from "@whatap/design-system";
 
@@ -58,6 +59,30 @@ export const Row: Story = {
   render: () => (
     <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 360px)", gap: 12, height: 232 }}>
       <WidgetFrame title="액티브 트랜잭션" meta="APM 24" bleed>
+        <ActiveTransactionArc />
+      </WidgetFrame>
+      <WidgetFrame title="히트맵" meta="수행 시간(초)">
+        <ScatterHeatmap dots={SCATTER_HEATMAP_DEMO_DOTS} yLabels={[10, 8, 6, 4, 2, 0]} />
+      </WidgetFrame>
+    </div>
+  ),
+};
+
+/** 행동 — 헤더 오른쪽 끝. ToolbarIconButton 이 24px 로 맞춰지고, 행동이 없는 칸과 본문 시작선이 같다. */
+export const WithActions: Story = {
+  render: () => (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 360px)", gap: 12, height: 232 }}>
+      <WidgetFrame
+        title="액티브 트랜잭션"
+        meta="APM 24"
+        bleed
+        actions={
+          <>
+            <ToolbarIconButton icon="bottom-fullscreen.svg" label="전체 화면" />
+            <ToolbarIconButton icon="menu-settings.svg" label="위젯 설정" />
+          </>
+        }
+      >
         <ActiveTransactionArc />
       </WidgetFrame>
       <WidgetFrame title="히트맵" meta="수행 시간(초)">

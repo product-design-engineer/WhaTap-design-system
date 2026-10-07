@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import CardHead from "./CardHead";
 import EmptyState from "./EmptyState";
 
@@ -30,15 +30,24 @@ import EmptyState from "./EmptyState";
  * - **높이는 부모가 정한다.** WidgetFrame 은 `h-full` 로 칸을 채우고, 격자 행 높이가 칸 높이다.
  *   위젯마다 높이를 따로 주면 같은 줄의 아래 선이 맞지 않는다.
  * - 제목은 지표 이름만 쓴다(「TPS」 「응답시간」). 범위 · 대상 수 · 단위처럼 «지금 무엇을 보는가» 는 `meta` 로.
+ * - **헤더 줄은 24px 고정**이다. `actions` 가 있는 칸과 없는 칸이 한 줄에 서도 본문 시작선이 같다.
+ * - `actions` 는 헤더 오른쪽 끝, `meta` 뒤. 위젯에 대한 행동(전체 화면 · 설정 · 복사 · 상세로 이동 · 더 보기)만 둔다.
+ *   [[ToolbarIconButton]] 을 그대로 넣으면 이 자리가 크기 토큰(`--wds-toolbar-control-h`)을 24px 로 덮어써
+ *   헤더 줄에 맞춘다. 라벨 버튼 · 32px 컨트롤 · 입력창을 넣지 않는다. 행동이 셋을 넘으면 더 보기 하나로 접는다.
  * - `bleed` 는 본문이 자기 가장자리를 가진 것(표 · 히트맵 · 도는 아크)에만 준다. 표에 안쪽 여백을 두면
- *   행 구분선이 카드 테두리에 닿지 않고 떠 보인다.
+ *   행 구분선이 카드 테두리에 닿지 않고 떠 보인다. 칸 안의 [[DataTable]] 은 자기 테두리를 지우고 칸 테두리를 쓴다.
  * - 빈 상태는 `state` 로만 바꾼다. 본문 안에 빈 그림 · 0 선 · 「-」 를 직접 그리지 않는다.
  * - AI 진입점(`onAiTrigger` 류)은 이 껍데기에 두지 않는다. 붙일지는 위젯이 아니라 **페이지 성격**이 정한다(patterns §15).
  * - 색은 토큰만 — 표면 `--color-card` · 테두리 `--color-border-default`.
  *
  * @example
  * ```tsx
- * <WidgetFrame title="액티브 트랜잭션" meta="APM 24" bleed>
+ * <WidgetFrame
+ *   title="액티브 트랜잭션"
+ *   meta="APM 24"
+ *   bleed
+ *   actions={<ToolbarIconButton icon="bottom-fullscreen.svg" label="전체 화면" />}
+ * >
  *   <ActiveTransactionArc maxTx={maxTx} agent={agent} />
  * </WidgetFrame>
  *
@@ -53,8 +62,13 @@ export type WidgetFrameState = "ready" | "no-data" | "collect-gap";
 export type WidgetFrameProps = {
   /** 지표 이름. 범위 · 대상 · 단위는 `meta` 로. */
   title: string;
-  /** 머리 우측 끝 — 지금 보는 범위 · 대상 수 · 단위. 글자면 tertiary 로 그린다. */
+  /** 머리 우측 — 지금 보는 범위 · 대상 수 · 단위. 글자면 tertiary 로 그린다. */
   meta?: ReactNode;
+  /**
+   * 머리 오른쪽 끝(`meta` 뒤) — 위젯에 대한 행동. [[ToolbarIconButton]] 을 넣으면 24px 로 맞춰진다.
+   * AI 진입점([[TriggerButton]])은 AI 위젯을 여는 화면에서만 이 자리에 둔다(patterns §15).
+   */
+  actions?: ReactNode;
   /** 본문 안쪽 여백을 없앤다. 표 · 히트맵처럼 본문이 자기 가장자리를 가질 때만. */
   bleed?: boolean;
   /**
@@ -73,6 +87,9 @@ export type WidgetFrameProps = {
   className?: string;
 };
 
+/* 헤더 줄(24px)에 맞춘다. ToolbarIconButton 은 이 토큰으로 정사각을 그리므로 버튼을 고치지 않고 자리에서 덮는다. */
+const ACTIONS_SIZE = { "--wds-toolbar-control-h": "24px" } as CSSProperties;
+
 const STATE_TITLE: Record<Exclude<WidgetFrameState, "ready">, string> = {
   "no-data": "이 구간에 수집된 데이터가 없습니다",
   "collect-gap": "수집이 끊겨 그리지 않았습니다",
@@ -81,6 +98,7 @@ const STATE_TITLE: Record<Exclude<WidgetFrameState, "ready">, string> = {
 export default function WidgetFrame({
   title,
   meta,
+  actions,
   bleed = false,
   state = "ready",
   stateTitle,
@@ -96,15 +114,22 @@ export default function WidgetFrame({
       aria-label={title}
       className={`flex flex-col h-full min-h-0 min-w-0 bg-card border border-color-var-color-border-default rounded-4px overflow-hidden ${className ?? ""}`}
     >
-      <div className="px-12px pt-8px pb-4px shrink-0">
-        <CardHead
-          title={title}
-          meta={typeof meta === "string" ? <span className="text-sm text-tertiary">{meta}</span> : meta}
-        />
+      <div className="flex items-center gap-8px h-24px px-12px shrink-0" style={{ boxSizing: "content-box", paddingTop: 8, paddingBottom: 4 }}>
+        <div className="flex-1 min-w-0">
+          <CardHead
+            title={title}
+            meta={typeof meta === "string" ? <span className="text-sm text-tertiary">{meta}</span> : meta}
+          />
+        </div>
+        {actions && (
+          <div className="flex items-center gap-4px shrink-0" style={ACTIONS_SIZE}>
+            {actions}
+          </div>
+        )}
       </div>
 
       <div
-        className="flex flex-col flex-1 min-h-0"
+        className="wds-widget-frame-body flex flex-col flex-1 min-h-0"
         /* 여백은 이 한 곳에서만 정한다. 본문이 다시 여백을 두면 칸마다 안쪽 선이 달라진다. */
         style={bleed || empty ? undefined : { padding: "0 12px 12px" }}
       >

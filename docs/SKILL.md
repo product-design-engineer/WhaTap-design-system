@@ -142,7 +142,7 @@ Tokens → Primitives → Composite → Shell
 이 5가지만 지키면 디자인 시스템의 80%를 따른 것입니다. 자세한 근거는 [`patterns.md`](./patterns.md).
 
 1. **인라인 색상 리터럴 금지.** `#E53935` 같은 hex를 컴포넌트에 직접 쓰지 마세요. [`tokens.md`](./tokens.md)의 `TONE_*` 또는 기존 톤을 재사용. 새 톤은 토큰에 먼저 추가.
-2. **위젯 카드는 `<AiCard>`로 감싼다.** 흰 배경 + `#eaeaea` 보더 + 8px 라운드 + 12px 패딩 + 진입 애니메이션은 [`primitives.md`](./primitives.md#aicard)가 책임집니다. div를 새로 짜면 톤이 어긋납니다.
+2. **카드 껍데기는 직접 짜지 않는다. 어디에 놓이느냐로 둘 중 하나.** AI 위젯 **안**의 응답 카드는 `<AiCard>`([`primitives.md`](./primitives.md#aicard)), 대시보드 격자의 **위젯 한 칸**은 `<WidgetFrame>`(헤더 · 본문 · 푸터, [`chrome-components.md`](./chrome-components.md#widgetframe) · [`patterns.md`](./patterns.md) §15). 둘을 바꿔 쓰면 화면의 조각이 AI 답처럼, AI 답이 화면의 조각처럼 읽힙니다. div 로 새로 짜면 칸마다 여백이 어긋납니다.
 3. **AI 위젯이 열려도 페이지 헤더(48px)는 그대로.** 사이드바는 240→80px(제품 레일 40 + 아이콘 메뉴 40)로 축소되지만, 헤더의 title/AI/Docs/고객지원/bell/avatar는 절대 사라지지 않습니다. ([`patterns.md`](./patterns.md#1-page-header-invariant))
 4. **차트 텍스트는 단위까지.** SVG 안의 `<text fontSize>`는 반드시 `"9px"`처럼 단위를 붙입니다. 단위 없는 숫자는 viewBox 좌표로 계산되어 화면마다 크기가 달라집니다.
 5. **데이터 테이블 정렬.** 텍스트 컬럼은 좌측, 숫자 컬럼은 우측. `DataTable`의 `align` / `numeric` prop으로 명시.
@@ -212,7 +212,7 @@ export default function AiMyNewMessage({
 | [`chrome-components.md`](./chrome-components.md) | 19 종 — DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · Optionbar* · LiveTimerCompact · TimeRangeSelector · PresetSelect · Stage · Toast · AiSymbol · DataTable · FilterBar · MiniLineChart · EventWeekTimeMatrix · Button · DashboardBuildingProgress · WhaTapAiContext |
 | [`ai-entry.md`](./ai-entry.md) | AI 진입점 4 종 — AiAssistantButton · AiSendButton · AiInlinePrompt · AiPromptInput |
 | [`widget-components.md`](./widget-components.md) | WhaTapAiWidget + 20 종 Ai* 메시지 카드 |
-| [`patterns.md`](./patterns.md) | **Part 1 인터랙션 패턴** — 컴포넌트 횡단 시퀀스(위험한 실행 확인 · 완료 통보 · 즉시반영 vs 폼제출). **Part 2 구현 정책** — 사이드바 collapse · 헤더 invariant · 차트 정렬 · SVG 단위 · DataTable density · 타이포 위계 · AI 카테고리 분리 등 |
+| [`patterns.md`](./patterns.md) | **Part 1 인터랙션 패턴** — 컴포넌트 횡단 시퀀스(위험한 실행 확인 · 완료 통보 · 즉시반영 vs 폼제출). **Part 2 구현 정책** — 사이드바 collapse · 헤더 invariant · 차트 정렬 · SVG 단위 · 대시보드 위젯 껍데기(WidgetFrame) · DataTable density · 타이포 위계 · AI 카테고리 분리 등 |
 
 ## 동기화 정책
 
