@@ -689,7 +689,7 @@ Product-SaaS 안에서 어떤 구현을 선택할지 갈릴 때, 다음 순서�
 **When NOT to use.**
 - AI 위젯 **안**의 카드 → [[AiCard]] (§6). 두 껍데기는 «화면의 조각» 과 «AI 의 답» 을 가르는 표지라 서로 빌려 쓰지 않는다.
 - 폼 · 설정의 구획 → 카드 + 구획 사이 선 (§14).
-- 껍데기를 가진 차트(MiniLineChart · MiniMultiLineChart · MiniDonutChart · KpiCard · HexGrid)는 `frame={false}` 로 껍데기를 끄고 WidgetFrame 에 넣는다. 켠 채 넣으면 카드가 두 겹이 된다. 단독 카드(`frame` 기본값)로 격자에 세우는 것은 대시보드가 아닌 자리(AI 답 · 히어로 에셋)에서만.
+- 껍데기나 바깥 여백을 가진 차트(MiniLineChart · MiniMultiLineChart · MiniBarChart · ApdexChart · BarList · MiniDonutChart · KpiCard · HexGrid · ActiveTransactionArc · ScatterHeatmap)는 `frame={false}` 로 끄고 WidgetFrame 에 넣는다. 켠 채 넣으면 카드가 두 겹이 된다. 단독 카드(`frame` 기본값)로 격자에 세우는 것은 대시보드가 아닌 자리(AI 답 · 히어로 에셋)에서만.
 
 **규칙.** 위젯 한 칸은 [[WidgetFrame]] 이 **헤더 · 본문 · 푸터** 로 세운다. 그 위에 다섯 가지를 지킨다.
 

@@ -39,7 +39,7 @@
 │   ├── 표 → DataTable + Pagination + FilterBar
 │   ├── 필터 → FilterBar + FilterDropdown + FilterChip
 │   ├── 위젯 한 칸 (대시보드 격자) → WidgetFrame(헤더 · 본문 · 푸터) + 본문 컴포넌트 (patterns §15)
-│   ├── 차트 (미니) → MiniLineChart · MiniMultiLineChart · MiniDonutChart · ScatterHeatmap · Heatmap (대시보드 칸에서는 frame={false} + WidgetFrame)
+│   ├── 차트 (미니) → MiniLineChart · MiniMultiLineChart · MiniBarChart(막대 · 누적) · ApdexChart · BarList(가로 막대 줄) · MiniDonutChart · ScatterHeatmap · Heatmap (대시보드 칸에서는 frame={false} + WidgetFrame)
 │   ├── 통계 카드 → StatCard · KpiCard (대시보드 칸에서는 frame={false} + WidgetFrame)
 │   └── 토폴로지 → TopologyCanvas + TopologyNode + TopologyEdge + TopologyToolbar
 │

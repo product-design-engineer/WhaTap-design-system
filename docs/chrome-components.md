@@ -1,4 +1,4 @@
-# Chrome (페이지 골격) Components — 27 컴포넌트
+# Chrome (페이지 골격) Components — 30 컴포넌트
 
 > 원본: `src/` (interfacedesigner/WhaTap-design-system)
 
@@ -10,14 +10,14 @@
 
 **조립 순서:** `DashboardLayout` → `Sidebar` + `header` 슬롯 (`PageHeader` 또는 `PageHeaderAiInline` + 옵션으로 `OptionbarPage` 또는 `FilterBar`) + `main` 슬롯 + 자식으로 `WhaTapAiWidget`
 
-## 카탈로그 (27)
+## 카탈로그 (30)
 
 | 영역 | 컴포넌트 |
 |---|---|
 | 레이아웃 | DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · SubHeaderBar |
 | 옵션바 (시간/인스턴스/프리셋) | OptionbarPage · OptionbarInstanceSelector · LiveTimerCompact · TimeRangeSelector · PresetSelect |
 | 데이터 표시 | WidgetFrame · CardHead · DataTable · FilterBar · EventWeekTimeMatrix |
-| 대시보드 차트 (`frame={false}` 로 WidgetFrame 안에) | MiniLineChart · MiniMultiLineChart · MiniDonutChart · KpiCard · HexGrid |
+| 대시보드 차트 (`frame={false}` 로 WidgetFrame 안에) | MiniLineChart · MiniMultiLineChart · MiniBarChart · ApdexChart · BarList · MiniDonutChart · KpiCard · HexGrid |
 | 액션·진입 | Button · AiSymbol |
 | 알림·상태 | Toast · ConfirmDialog · Stage · DashboardBuildingProgress |
 | 위젯 컨텍스트 | WhaTapAiContext (Provider) |
@@ -513,6 +513,39 @@ export type DataTableProps<T> = {
 | HexGrid | 카드 · 「GPU Map」 제목 줄 · 범례 | `title` · `legend={HEX_GRID_LEGEND}` · 메뉴 |
 | ActiveTransactionArc | 바깥 여백(좌우 · 아래 8px) | `title` · `meta` · 메뉴 (범례 Elapsed 는 본문 안) |
 | ScatterHeatmap | 바깥 좌우 여백(8px) | `title` · `meta` · `legend`(속도 토큰) · 메뉴 |
+| MiniBarChart | 바깥 좌우 여백(8px) | `title` · `meta` · `legend`(막대 색 그대로) · 메뉴 |
+| ApdexChart | 바깥 좌우 여백(8px) | `title`(「Apdex」) · `meta` · 메뉴 (구간 이름이 띠 안에 있어 범례 없음) |
+| BarList | 바깥 여백(좌우 · 아래 8px) | `title` · `meta` · 메뉴 (줄마다 색이 이름표라 범례 없음) |
+
+## MiniBarChart
+
+구간마다 막대 하나, 계열이 둘 이상이면 누적(시스템 CPU usr + sys). 축 규칙은 다른 그래프와 같다(축 칸 토큰 · 바닥 14 · `text-chart`).
+
+| Prop | Type | Default |
+|---|---|---|
+| `series` | `{ label, values, color }[]` | — |
+| `xLabels` · `unit` · `yMax` | `string[]` · `string` · `number` | — · `""` · 자동 |
+| `peak` | `boolean` | `false` |
+| `frame` | `boolean` | `true` |
+
+## ApdexChart
+
+Apdex × 100 을 네 구간 띠(Excellent 94 · Good 85 · Poor 70 · Unacceptable) 위에 선과 값으로. 띠 높이는 경계값에서 계산(50~100 축), 경계 숫자는 Y축 칸에. 색은 Apdex 토큰(`--color-chart-apdex-*` · `-bg`).
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `number` | — |
+| `values` · `xLabels` | `number[]` · `string[]` | — |
+| `frame` | `boolean` | `true` |
+
+## BarList
+
+값 · 이름 · 가로 막대 한 줄을 여러 줄(액티브 스테이터스). 막대 길이는 줄마다 받은 `ratio`(0~1), 색은 시리즈 토큰.
+
+| Prop | Type | Default |
+|---|---|---|
+| `rows` | `{ label, value, ratio, color }[]` | — |
+| `frame` | `boolean` | `true` |
 
 ## MiniMultiLineChart
 

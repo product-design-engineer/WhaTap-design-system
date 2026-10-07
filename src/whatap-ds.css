@@ -692,10 +692,20 @@
     --color-chart-apm-green: #81C784;
     /* @role Apdex 카드 Excellent 구간 배경 | @use APM 대시보드 재현(ApmBoardMain · Apdex 카드) | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 크기 표현(그쪽은 --color-chart-seq-*) */
     --color-chart-apdex-excellent-bg: #DCEFFF;
+    /* @role Apdex 카드 Good 구간 배경 | @use ApdexChart · APM 대시보드 | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
+    --color-chart-apdex-good-bg: #DBF8E3;
     /* @role Apdex 카드 Poor 구간 배경 | @use APM 대시보드 재현(ApmBoardMain · Apdex 카드) | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 크기 표현(그쪽은 --color-chart-seq-*) */
     --color-chart-apdex-poor-bg: #FFEDCF;
     /* @role Apdex 카드 Unacceptable 구간 배경 | @use APM 대시보드 재현(ApmBoardMain · Apdex 카드) | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 크기 표현(그쪽은 --color-chart-seq-*) */
     --color-chart-apdex-unacceptable-bg: #FFE2E2;
+    /* @role Apdex Excellent 구간 이름 글자 | @use ApdexChart · APM 대시보드 | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
+    --color-chart-apdex-excellent: #85C2FA;
+    /* @role Apdex Good 구간 이름 글자 | @use ApdexChart · APM 대시보드 | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
+    --color-chart-apdex-good: #71DF8B;
+    /* @role Apdex Poor 구간 이름 글자 | @use ApdexChart · APM 대시보드 | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
+    --color-chart-apdex-poor: #FFC771;
+    /* @role Apdex Unacceptable 구간 이름 글자 | @use ApdexChart · APM 대시보드 | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
+    --color-chart-apdex-unacceptable: #FFA1A1;
     /* @role SVG 필터 그림자 색 | @use feDropShadow 의 floodColor (불투명도는 floodOpacity 로) | @avoid CSS 그림자 (그쪽은 --shadow-*) */
     --color-shadow-flood: #000000;
 
