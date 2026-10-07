@@ -24,6 +24,10 @@
  * - 색·border 는 토큰(var(--color-border-default)/var(--color-surface-50)) 사용.
  * - 행 강조: **테이블을 인라인 재구현하지 말고** `rowClassName`(문자열 또는 `(row,idx)=>class`)
  *   으로 행 단위 클래스를 주입 — 기존 행 클래스에 append(하위호환). 강조 색은 토큰 클래스로.
+ * - 세로 스크롤: 받은 높이에 행이 다 안 들어가면 **잘리지 않고 본문이 세로로 스크롤**되며 헤더는
+ *   위에 붙어 남는다. 높이는 부모가 준다(flex 열에서 남은 칸) — 따로 정하려면 `maxHeight`
+ *   (`200` · `"100%"`). 표를 `overflow-auto` 래퍼로 감싸 스크롤을 만들지 말 것 — 헤더까지 같이
+ *   밀려 올라가 무슨 열인지 잃는다.
  *
  * @example
  * ```tsx
@@ -97,6 +101,12 @@ export type DataTableProps<T> = {
    * (DS 제공 배경 클래스: `bg-color-var-color-surface-50/100`, `bg-color-var-color-brand-blue`. 소비 앱 자체 클래스도 가능.)
    */
   rowClassName?: string | ((row: T, idx: number) => string | undefined);
+  /**
+   * 표 전체(헤더 포함)의 최대 높이. 넘치면 본문이 세로로 스크롤되고 헤더는 붙어 남는다.
+   * number=px, string=CSS 길이(`"100%"` 는 부모 높이를 채움 — 부모 높이가 정해져 있어야 한다).
+   * 미지정이면 부모가 준 높이를 따른다 — 그 높이에 다 안 들어가도 잘리지 않고 스크롤된다.
+   */
+  maxHeight?: number | string;
 };
 
 export default function DataTable<T>({
@@ -107,6 +117,7 @@ export default function DataTable<T>({
   onSortChange,
   onRowClick,
   rowClassName,
+  maxHeight,
 }: DataTableProps<T>) {
   /** 트랙 크기 — `width` 고정(px/CSS) 우선, 없으면 `flex`fr (기본 1fr). */
   const gridTemplate = columns
@@ -142,10 +153,14 @@ export default function DataTable<T>({
         };
 
   return (
-    <div className="flex flex-col rounded-4px border border-color-var-color-border-default bg-card overflow-hidden">
-      {/* 헤더 행 */}
+    <div
+      className="wds-data-table flex flex-col rounded-4px border border-color-var-color-border-default bg-card"
+      style={maxHeight != null ? { maxHeight: typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight } : undefined}
+    >
+      {/* 헤더 행 — 본문이 스크롤돼도 위에 붙어 남는다(.wds-data-table-head). 스크롤 영역 **안**에
+          두는 이유: 밖에 두면 세로 스크롤바 폭만큼 본문 열이 헤더 열과 어긋난다. */}
       <div
-        className={`grid items-center bg-color-var-color-surface-50 ${tokens.rowPadding}`}
+        className={`wds-data-table-head grid items-center bg-color-var-color-surface-50 ${tokens.rowPadding}`}
         style={{ gridTemplateColumns: gridTemplate }}
       >
         {columns.map((c, ci) => {
