@@ -316,6 +316,7 @@
   --color-text-primary: #222;
   --color-text-secondary: #4c4c4c;
   --color-text-tertiary: #757575;
+  --color-text-required: var(--color-brand-blue);
   --color-text-disabled: #adadad;
 
   /* 반전 전경 — text-strong 을 배경으로 깐 표면(툴팁 등) 위의 텍스트·아이콘.
