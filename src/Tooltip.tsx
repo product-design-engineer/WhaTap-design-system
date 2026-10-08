@@ -179,7 +179,8 @@ export default function Tooltip({
   const panelStyle: React.CSSProperties = {
     position: "fixed",
     ...(pos ?? { top: -9999, left: -9999 }),
-    zIndex: 50,
+    /* Modal(1000) 위에 서야 한다. 50 이던 때는 모달 안 툴팁이 백드롭 뒤에 깔려 보이지 않았다(2026-10-07). */
+    zIndex: 1100,
     pointerEvents: "none",
     whiteSpace: "nowrap",
     backgroundColor: "var(--color-text-strong)",
