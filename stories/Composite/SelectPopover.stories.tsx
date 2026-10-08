@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { SelectPopover, Select } from "@whatap/design-system";
+import { SelectPopover, Select, WhaTapAiWidget } from "@whatap/design-system";
 
 /**
  * Stories for [[SelectPopover]] — 묶음과 색 표식을 가진 단일 선택.
@@ -104,6 +104,43 @@ export const AlongsideSelect: Story = {
           <SelectPopover label="정렬 기준" size="sm" value={v} onChange={setV} groups={SORT_GROUPS} />
         </div>
       </Frame>
+    );
+  },
+};
+
+/** 위젯 헤더의 재원 뱃지 — `appearance="inline"`. 컬러 표면 위라 글자 + 꺾쇠만 그리고, 표면은 감싼 알약
+ *  (WhaTapAiWidget `titleBadge`)이 진다. 알약 좌우 여백(--space-2)만큼 `panelOffsetX` 로 되밀어 패널을
+ *  알약 겉 테두리에 맞춘다. 지금 재원이 플랜 목록 밖이면 첫 줄에 고를 수 없는 줄로 세운다 — 셀렉트의
+ *  값은 «지금 그것» 이어야 한다. 쓸 수 없는 플랜도 지우지 않고 비활성으로 둔다. */
+export const InWidgetTitle: Story = {
+  render: () => {
+    const [v, setV] = useState("__current__");
+    return (
+      <div style={{ height: 420, display: "flex" }}>
+        <WhaTapAiWidget
+          open
+          showLanding={false}
+          titleBadge={
+            <SelectPopover
+              appearance="inline"
+              label="재원 · 플랜 고르기"
+              value={v}
+              onChange={setV}
+              panelOffsetX="calc(-1 * var(--space-2))"
+              groups={[
+                {
+                  options: [
+                    { value: "__current__", label: "개인 무료분", disabled: true },
+                    { value: "ops", label: "운영팀" },
+                    { value: "svc", label: "서비스개발 · 한계 도달", disabled: true },
+                    { value: "new", label: "신규 서비스 실험" },
+                  ],
+                },
+              ]}
+            />
+          }
+        />
+      </div>
     );
   },
 };
