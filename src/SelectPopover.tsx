@@ -27,6 +27,10 @@
  * - 트리거를 갈아 끼울 수 있다(`trigger`) — [[FilterDropdown]] 과 같은 계약이다. 기본 트리거가
  *   앉을 수 없는 표면(컬러 배경 위 칩 따위)에서만 쓰고, 그 밖에는 기본형을 쓴다. 두 드롭다운이
  *   트리거를 받는 방식이 다르면 호출측이 어느 쪽인지 매번 확인해야 한다.
+ * - **컬러 표면 위 글자형 트리거는 `appearance="inline"`** 이다 — 고른 값의 글자 + 8px 꺾쇠만
+ *   그리고 표면 · 테두리를 갖지 않으며 글자색은 부모를 따른다. AI 위젯 헤더의 재원 뱃지
+ *   (WhaTapAiWidget `titleBadge` 알약 안)가 그 자리다. 같은 모양을 `trigger` 로 손수 짜지 않는다 —
+ *   화면마다 꺾쇠 크기 · 간격이 갈린다. `label` 은 화면에 서지 않고 스크린리더 이름이 된다.
  * - 선택 항목은 배경 강조 + brand-blue. 체크 표시는 쓰지 않는다(단일 선택).
  *
  * @example
@@ -53,6 +57,9 @@ import {
 } from "react";
 
 export type SelectPopoverSize = "sm" | "md" | "lg";
+
+/** `field` = Select 형 컨트롤(기본) · `inline` = 컬러 표면 위 글자 + 꺾쇠. */
+export type SelectPopoverAppearance = "field" | "inline";
 
 export type SelectPopoverOption = {
   value: string;
@@ -107,6 +114,15 @@ export type SelectPopoverProps = {
    * 감싼 여백과 «같은 토큰» 을 음수로 넘겨 표면 기준으로 되민다.
    */
   panelOffsetX?: number | string;
+  /**
+   * 트리거 모양. 기본 `field` — [[Select]] 와 같은 흰 표면 컨트롤.
+   *
+   * `inline` 은 **컬러 표면 위에 앉는 글자형 트리거**다. 고른 옵션의 글자 + 8px 꺾쇠만 그리고
+   * 표면 · 테두리 · 높이를 갖지 않는다. 글자색 · 크기는 부모를 따른다(감싼 알약이 정한다).
+   * `label` 은 화면에 서지 않고 `aria-label` 로 들어간다. `size` · `width` 는 쓰이지 않는다.
+   * `trigger` 를 주면 그쪽이 이긴다.
+   */
+  appearance?: SelectPopoverAppearance;
 };
 
 export default function SelectPopover({
@@ -120,6 +136,7 @@ export default function SelectPopover({
   disabled = false,
   trigger,
   panelOffsetX = 0,
+  appearance = "field",
 }: SelectPopoverProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -137,21 +154,47 @@ export default function SelectPopover({
 
   const selected = groups.flatMap((g) => g.options).find((o) => o.value === value);
 
+  /* inline — 컬러 표면 위 글자형 트리거. 갈아 끼운 트리거와 같은 경로(aria · onClick 주입)로 흐른다. */
+  const inline = appearance === "inline" && !trigger;
+  const effectiveTrigger: ReactElement | undefined =
+    trigger ??
+    (inline ? (
+      <button
+        type="button"
+        disabled={disabled}
+        aria-label={typeof label === "string" ? `${label} · ${selected?.label ?? ""}` : selected?.label}
+        className="inline-flex items-center gap-2px cursor-pointer whitespace-nowrap"
+        style={{
+          background: "transparent",
+          border: 0,
+          padding: 0,
+          font: "inherit",
+          color: "inherit",
+          opacity: disabled ? 0.6 : 1,
+        }}
+      >
+        {selected?.label ?? ""}
+        <svg width="8" height="8" viewBox="0 0 8 8" aria-hidden style={{ opacity: 0.85 }}>
+          <path d="M1 2.5 L4 5.5 L7 2.5" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+        </svg>
+      </button>
+    ) : undefined);
+
   return (
     <div className="wds-field inline-flex flex-col gap-1_5">
-      {label !== undefined && label !== null && (
+      {!inline && label !== undefined && label !== null && (
         <span className="text-sm font-medium text-primary">{label}</span>
       )}
 
       <div ref={rootRef} className="relative inline-flex" style={{ width }}>
         {/* 갈아 끼운 트리거 — onClick · aria 를 주입한다(호출측이 적어 둔 onClick 은 먼저 부른다). */}
-        {trigger && isValidElement(trigger) ? (
-          cloneElement(trigger, {
+        {effectiveTrigger && isValidElement(effectiveTrigger) ? (
+          cloneElement(effectiveTrigger, {
             "aria-haspopup": "listbox",
             "aria-expanded": open,
             onClick: (e: React.MouseEvent) => {
               (
-                (trigger.props as Record<string, unknown>)?.onClick as
+                (effectiveTrigger.props as Record<string, unknown>)?.onClick as
                   | ((e: React.MouseEvent) => void)
                   | undefined
               )?.(e);
@@ -202,7 +245,7 @@ export default function SelectPopover({
             role="listbox"
             className="absolute bg-card rounded-2px"
             style={{
-              top: trigger ? "calc(100% + 4px)" : spec.h + 4,
+              top: effectiveTrigger ? "calc(100% + 4px)" : spec.h + 4,
               left: panelOffsetX,
               minWidth: "100%",
               width: "max-content",
@@ -228,6 +271,9 @@ export default function SelectPopover({
                 )}
                 {g.options.map((o) => {
                   const active = o.value === value;
+                  /* 고를 수 없는 줄은 흐리게 — 같은 색이면 눌러 보기 전엔 못 고르는 줄인지 모른다.
+                     단 «지금 값» 줄(선택 + 비활성)은 선택 표시가 이긴다. 셀렉트의 값이 무엇인지가 먼저다. */
+                  const muted = o.disabled && !active;
                   return (
                     <button
                       key={o.value}
@@ -239,9 +285,9 @@ export default function SelectPopover({
                         onChange(o.value);
                         setOpen(false);
                       }}
-                      className={`flex items-center w-full text-left cursor-pointer transition-colors hover-bg-surface-100 ${
-                        active ? "text-brand-blue font-medium" : "text-primary"
-                      }`}
+                      className={`flex items-center w-full text-left transition-colors ${
+                        muted ? "text-disabled" : "cursor-pointer hover-bg-surface-100"
+                      } ${active ? "text-brand-blue font-medium" : muted ? "" : "text-primary"}`}
                       style={{
                         height: 28,
                         paddingInline: 8,
