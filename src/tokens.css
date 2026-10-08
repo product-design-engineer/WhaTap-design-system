@@ -506,8 +506,13 @@
   --color-chart-apm-blue: #4FC3F7;               /* TPS·응답시간 막대 · Method 비율 · 오늘 추이 */
   --color-chart-apm-green: #81C784;              /* 힙 메모리 · SQL 비율 */
   --color-chart-apdex-excellent-bg: #DCEFFF;     /* Apdex Excellent 구간 배경 */
+  --color-chart-apdex-good-bg: #DBF8E3;          /* Apdex Good 구간 배경 */
   --color-chart-apdex-poor-bg: #FFEDCF;          /* Apdex Poor 구간 배경 */
   --color-chart-apdex-unacceptable-bg: #FFE2E2;  /* Apdex Unacceptable 구간 배경 */
+  --color-chart-apdex-excellent: #85C2FA;        /* Apdex Excellent 구간 이름 */
+  --color-chart-apdex-good: #71DF8B;             /* Apdex Good 구간 이름 */
+  --color-chart-apdex-poor: #FFC771;             /* Apdex Poor 구간 이름 */
+  --color-chart-apdex-unacceptable: #FFA1A1;     /* Apdex Unacceptable 구간 이름 */
 
   /* Shadow flood — SVG 필터(feDropShadow)의 그림자 색. CSS box-shadow 는 --shadow-* 를 쓴다. 테마 무관. */
   --color-shadow-flood: #000000;

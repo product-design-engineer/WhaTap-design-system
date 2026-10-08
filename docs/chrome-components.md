@@ -1,4 +1,4 @@
-# Chrome (페이지 골격) Components — 27 컴포넌트
+# Chrome (페이지 골격) Components — 30 컴포넌트
 
 > 원본: `src/` (interfacedesigner/WhaTap-design-system)
 
@@ -10,14 +10,14 @@
 
 **조립 순서:** `DashboardLayout` → `Sidebar` + `header` 슬롯 (`PageHeader` 또는 `PageHeaderAiInline` + 옵션으로 `OptionbarPage` 또는 `FilterBar`) + `main` 슬롯 + 자식으로 `WhaTapAiWidget`
 
-## 카탈로그 (27)
+## 카탈로그 (30)
 
 | 영역 | 컴포넌트 |
 |---|---|
 | 레이아웃 | DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · SubHeaderBar |
 | 옵션바 (시간/인스턴스/프리셋) | OptionbarPage · OptionbarInstanceSelector · LiveTimerCompact · TimeRangeSelector · PresetSelect |
 | 데이터 표시 | WidgetFrame · CardHead · DataTable · FilterBar · EventWeekTimeMatrix |
-| 대시보드 차트 (`frame={false}` 로 WidgetFrame 안에) | MiniLineChart · MiniMultiLineChart · MiniDonutChart · KpiCard · HexGrid |
+| 대시보드 차트 (`frame={false}` 로 WidgetFrame 안에) | MiniLineChart · MiniMultiLineChart · MiniBarChart · ApdexChart · BarList · MiniDonutChart · KpiCard · HexGrid |
 | 액션·진입 | Button · AiSymbol |
 | 알림·상태 | Toast · ConfirmDialog · Stage · DashboardBuildingProgress |
 | 위젯 컨텍스트 | WhaTapAiContext (Provider) |
@@ -432,10 +432,12 @@ export type DataTableProps<T> = {
 | Prop | Type | Default | 설명 |
 |---|---|---|---|
 | `title` | `string` | — | 지표 이름만(「TPS」). 범위 · 대상 · 단위는 `meta` |
-| `meta` | `ReactNode` | — | 헤더 우측. 글자면 tertiary |
+| `meta` | `ReactNode` | — | 헤더 우측. 칸에만 있는 정보(대상 수 · 단위 · 건수). 시간 범위는 넣지 않는다 |
 | `onFullscreen` | `() => void` | — | 헤더 메뉴 첫 칸 ⛶ 전체 화면. 주면 선다 |
 | `menu` | `ActionMenuAction[]` | — | 헤더 메뉴 둘째 칸 ⋮ 더보기 안의 줄(설정 · 복사 · 상세로 이동). 주면 선다 |
-| `legend` | `{ label, color }[]` | — | 본문 오른쪽 위 한 줄 범례. 계열 셋 이하 |
+| `onAsk` | `() => void` | — | AI 진입점. ⋮ 첫 줄 「AI 에게 묻기」 + 헤더 맨 앞 호버 지름길(같은 동작). AI 위젯을 여는 화면에서만 |
+| `draggable` | `boolean` | `false` | 헤더를 끌기 손잡이로(`.wds-widget-frame-handle`, 메뉴 `.wds-widget-frame-actions` 제외). 배치하는 보드에서만 |
+| `legend` | `{ label, color }[]` | — | 본문 오른쪽 위 한 줄 범례. 계열 둘~셋. 하나면 두지 않는다 |
 | `bleed` | `boolean` | `false` | 본문 안쪽 여백 없앰. 표 · 히트맵 · 아크처럼 본문이 가장자리를 가질 때만 |
 | `state` | `"ready" \| "no-data" \| "collect-gap"` | `"ready"` | `ready` 가 아니면 본문 대신 [[EmptyState]] |
 | `stateTitle` / `stateDescription` | `ReactNode` | 상태별 기본 문장 / — | 빈 상태 두 줄 |
@@ -443,7 +445,8 @@ export type DataTableProps<T> = {
 
 - 높이는 부모(격자 행)가 정한다. WidgetFrame 은 `h-full`
 - 헤더 줄은 24px 고정. 메뉴가 있는 칸과 없는 칸의 본문 시작선이 같다
-- **헤더 오른쪽 아이콘 메뉴는 ⛶ 전체 화면 + ⋮ 더보기 둘로 고정**(순서 고정). 나머지 행동은 전부 더보기 안으로. AI 진입점은 아이콘이 아니라 더보기 첫 줄(AI 위젯을 여는 화면에서만)
+- **헤더 오른쪽 아이콘 메뉴는 ⛶ 전체 화면 + ⋮ 더보기 둘로 고정**(순서 고정). 나머지 행동은 전부 더보기 안으로. AI 위젯을 여는 화면이면 `onAsk` 로 맨 앞에 호버 지름길(AI)이 더해져 [AI][⛶][⋮] — ⋮ 첫 줄 「AI 에게 묻기」도 함께 선다
+- 칸 `meta` 에 시간 범위를 쓰지 않는다. 옵션바가 한 번 말한다
 - **범례는 본문 오른쪽 위 한 줄.** 헤더 오른쪽은 메뉴 자리다. 계열이 셋을 넘거나 글이 길면 본문 안 차트 옆 열로
 - 세 칸 사이에 구분선을 긋지 않는다. 같은 표면 안이라 여백이 경계다
 - 껍데기를 가진 차트(MiniLineChart · MiniMultiLineChart · MiniDonutChart · KpiCard · HexGrid)는 `frame={false}` 로 끄고 넣는다. 켠 채 넣으면 카드가 두 겹이 된다
@@ -454,7 +457,7 @@ export type DataTableProps<T> = {
   <WidgetFrame title="액티브 트랜잭션" meta="APM 24" bleed onFullscreen={open} menu={WIDGET_MENU}>
     <ActiveTransactionArc maxTx={maxTx} agent={agent} />
   </WidgetFrame>
-  <WidgetFrame title="서버 CPU" meta="최근 30분" state="collect-gap" stateDescription="서버 12대 · 32분째 끊김" />
+  <WidgetFrame title="서버 CPU" state="collect-gap" stateDescription="서버 12대 · 32분째 끊김" />
 </div>
 ```
 
@@ -513,6 +516,39 @@ export type DataTableProps<T> = {
 | HexGrid | 카드 · 「GPU Map」 제목 줄 · 범례 | `title` · `legend={HEX_GRID_LEGEND}` · 메뉴 |
 | ActiveTransactionArc | 바깥 여백(좌우 · 아래 8px) | `title` · `meta` · 메뉴 (범례 Elapsed 는 본문 안) |
 | ScatterHeatmap | 바깥 좌우 여백(8px) | `title` · `meta` · `legend`(속도 토큰) · 메뉴 |
+| MiniBarChart | 바깥 좌우 여백(8px) | `title` · `meta` · `legend`(막대 색 그대로) · 메뉴 |
+| ApdexChart | 바깥 좌우 여백(8px) | `title`(「Apdex」) · `meta` · 메뉴 (구간 이름이 띠 안에 있어 범례 없음) |
+| BarList | 바깥 여백(좌우 · 아래 8px) | `title` · `meta` · 메뉴 (줄마다 색이 이름표라 범례 없음) |
+
+## MiniBarChart
+
+구간마다 막대 하나, 계열이 둘 이상이면 누적(시스템 CPU usr + sys). 축 규칙은 다른 그래프와 같다(축 칸 토큰 · 바닥 14 · `text-chart`).
+
+| Prop | Type | Default |
+|---|---|---|
+| `series` | `{ label, values, color }[]` | — |
+| `xLabels` · `unit` · `yMax` | `string[]` · `string` · `number` | — · `""` · 자동 |
+| `peak` | `boolean` | `false` |
+| `frame` | `boolean` | `true` |
+
+## ApdexChart
+
+Apdex × 100 을 네 구간 띠(Excellent 94 · Good 85 · Poor 70 · Unacceptable) 위에 선과 값으로. 띠 높이는 경계값에서 계산(50~100 축), 경계 숫자는 Y축 칸에. 색은 Apdex 토큰(`--color-chart-apdex-*` · `-bg`).
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `number` | — |
+| `values` · `xLabels` | `number[]` · `string[]` | — |
+| `frame` | `boolean` | `true` |
+
+## BarList
+
+값 · 이름 · 가로 막대 한 줄을 여러 줄(액티브 스테이터스). 막대 길이는 줄마다 받은 `ratio`(0~1), 색은 시리즈 토큰.
+
+| Prop | Type | Default |
+|---|---|---|
+| `rows` | `{ label, value, ratio, color }[]` | — |
+| `frame` | `boolean` | `true` |
 
 ## MiniMultiLineChart
 

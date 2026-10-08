@@ -692,10 +692,20 @@
     --color-chart-apm-green: #81C784;
     /* @role Apdex 카드 Excellent 구간 배경 | @use APM 대시보드 재현(ApmBoardMain · Apdex 카드) | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 크기 표현(그쪽은 --color-chart-seq-*) */
     --color-chart-apdex-excellent-bg: #DCEFFF;
+    /* @role Apdex 카드 Good 구간 배경 | @use ApdexChart · APM 대시보드 | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
+    --color-chart-apdex-good-bg: #DBF8E3;
     /* @role Apdex 카드 Poor 구간 배경 | @use APM 대시보드 재현(ApmBoardMain · Apdex 카드) | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 크기 표현(그쪽은 --color-chart-seq-*) */
     --color-chart-apdex-poor-bg: #FFEDCF;
     /* @role Apdex 카드 Unacceptable 구간 배경 | @use APM 대시보드 재현(ApmBoardMain · Apdex 카드) | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 크기 표현(그쪽은 --color-chart-seq-*) */
     --color-chart-apdex-unacceptable-bg: #FFE2E2;
+    /* @role Apdex Excellent 구간 이름 글자 | @use ApdexChart · APM 대시보드 | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
+    --color-chart-apdex-excellent: #85C2FA;
+    /* @role Apdex Good 구간 이름 글자 | @use ApdexChart · APM 대시보드 | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
+    --color-chart-apdex-good: #71DF8B;
+    /* @role Apdex Poor 구간 이름 글자 | @use ApdexChart · APM 대시보드 | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
+    --color-chart-apdex-poor: #FFC771;
+    /* @role Apdex Unacceptable 구간 이름 글자 | @use ApdexChart · APM 대시보드 | @avoid 새 차트의 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
+    --color-chart-apdex-unacceptable: #FFA1A1;
     /* @role SVG 필터 그림자 색 | @use feDropShadow 의 floodColor (불투명도는 floodOpacity 로) | @avoid CSS 그림자 (그쪽은 --shadow-*) */
     --color-shadow-flood: #000000;
 
@@ -1907,6 +1917,26 @@ html, body, #root {
 .wds-widget-frame-body > .wds-data-table {
   border-width: 0;
   border-radius: 0;
+}
+/* ── WidgetFrame — 칸에 손이 닿으면 나타나는 것(AI 지름길 · 드래그 손잡이) ─────────────
+   자리는 늘 잡혀 있고 불투명도만 바뀐다 — 나타날 때 제목이 밀리지 않는다. 마우스뿐 아니라
+   키보드 포커스가 칸 안에 들어와도 나타난다(호버만으로는 키보드 · 스크린리더가 닿지 못한다). */
+.wds-widget-frame-reveal {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.wds-widget-frame:hover .wds-widget-frame-reveal,
+.wds-widget-frame:focus-within .wds-widget-frame-reveal {
+  opacity: 1;
+}
+.wds-widget-frame-handle {
+  cursor: grab;
+}
+.wds-widget-frame-handle:active {
+  cursor: grabbing;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wds-widget-frame-reveal { transition: none; }
 }
 /* 옵션바 항목 자동 배치 — 「폭이 넉넉하면 라벨을 값 왼쪽에」.
    기준은 뷰포트가 아니라 **행이 실제로 쓸 수 있는 폭**이다(container query). 사이드바(240)와

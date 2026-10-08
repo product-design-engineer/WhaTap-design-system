@@ -82,7 +82,6 @@ export const InWidgetFrame: Story = {
     <div style={{ width: 420, height: 240 }}>
       <WidgetFrame
         title="백분위 TTFT"
-        meta="최근 10분"
         onFullscreen={() => {}}
         menu={[{ key: "detail", label: "상세로 이동" }]}
         legend={[

@@ -3,6 +3,7 @@ import ActionMenu, { type ActionMenuAction } from "./ActionMenu";
 import CardHead from "./CardHead";
 import EmptyState from "./EmptyState";
 import ToolbarIconButton from "./ToolbarIconButton";
+import TriggerButton from "./widget/TriggerButton";
 
 /**
  * WidgetFrame — 대시보드 위젯 한 칸의 껍데기 (헤더 · 본문 · 푸터 + 빈 상태). Shell layer: 본문에 무엇이든 담고 [[CardHead]] · [[ActionMenu]] 를 조립한다.
@@ -18,8 +19,9 @@ import ToolbarIconButton from "./ToolbarIconButton";
  *
  * ## When to use
  * - 대시보드 · Flex 보드 격자의 위젯 한 칸 (액티브 트랜잭션 · 히트맵 · 이벤트 목록 · 프로젝트 표).
- * - 칸 안 차트는 모두 `frame={false}` 로 담는다: [[MiniLineChart]] · [[MiniMultiLineChart]] · [[MiniDonutChart]] · [[KpiCard]] · [[HexGrid]]
- *   · [[ActiveTransactionArc]] · [[ScatterHeatmap]]. 표([[DataTable]])는 `bleed`.
+ * - 칸 안 차트는 모두 `frame={false}` 로 담는다: [[MiniLineChart]] · [[MiniMultiLineChart]] · [[MiniBarChart]] · [[ApdexChart]]
+ *   · [[BarList]] · [[MiniDonutChart]] · [[KpiCard]] · [[HexGrid]] · [[ActiveTransactionArc]] · [[ScatterHeatmap]]. 표([[DataTable]])는 `bleed`.
+ * - 요약 숫자 여럿(애플리케이션 요약 같은)은 새 차트가 아니라 [[KpiField]] 를 세로로 쌓고 값만 크게(children) 둔다.
  *
  * ## When NOT to use
  * - AI 위젯 **안**의 카드 → [[AiCard]]. 제품 화면에 AiCard 를 쓰면 그 칸이 AI 응답처럼 읽히고,
@@ -30,13 +32,22 @@ import ToolbarIconButton from "./ToolbarIconButton";
  *
  * ## Composition rules
  * - **높이는 부모가 정한다.** WidgetFrame 은 `h-full` 로 칸을 채우고, 격자 행 높이가 칸 높이다.
- * - 제목은 지표 이름만 쓴다(「TPS」 「응답시간」). 범위 · 대상 수 · 단위처럼 «지금 무엇을 보는가» 는 `meta` 로.
+ * - 제목은 지표 이름만 쓴다(「TPS」 「응답시간」). 칸에만 있는 정보(대상 수 · 단위 · 건수)는 `meta` 로.
+ *   **시간 범위(「최근 5분」 「오늘」 「지금」)는 `meta` 에 쓰지 않는다** — 페이지 옵션바 · 보조 행이 한 번 말한다. 칸마다 되풀이하면
+ *   같은 말이 열두 번 서고, 한 칸만 다른 범위일 때 그 차이가 묻힌다(그때만 적는다).
  * - **헤더 오른쪽 아이콘 메뉴는 둘로 고정한다: 전체 화면(⛶) + 더보기(⋮).** 순서도 고정이다.
  *   설정 · 복사 · 상세로 이동 같은 나머지 행동은 전부 더보기(`menu`) 안으로 접는다. 아이콘을 늘어놓지 않는다.
  *   위젯마다 아이콘 수가 다르면 칸이 좁을 때 제목이 칸마다 다른 자리에서 잘린다.
  * - 버튼은 [[ToolbarIconButton]] 을 24px 로 줄여 쓴다(자리에서 `--wds-toolbar-control-h` 를 덮는다). 헤더 줄은 24px 고정이라
  *   메뉴가 있는 칸과 없는 칸의 본문 시작선이 같다.
- * - AI 진입점은 아이콘으로 더하지 않는다. 그 화면이 AI 위젯을 여는 화면이면(patterns §15) 더보기의 **첫 줄**로 넣는다.
+ * - **AI 진입점은 `onAsk` 하나로 준다.** 주면 두 자리에 같은 동작이 선다: ⋮ 더보기의 **첫 줄** 「AI 에게 묻기」(늘 닿는 길 —
+ *   터치 · 키보드)와 헤더 맨 앞 **호버 지름길** 아이콘. 지름길은 칸에 마우스가 올라가거나 칸 안에 포커스가 있을 때만 보이고
+ *   자리는 늘 잡혀 있다(나타나도 제목이 밀리지 않는다). 순서는 [AI][⛶][⋮]. AI 위젯을 여는 화면에서만 준다 —
+ *   레거시 차트 모드 · 전체 격자 화면에는 주지 않는다(patterns §15).
+ * - **`draggable`** 은 칸을 사람이 배치하는 보드(Flex 보드)에만 켠다. 켜면 헤더가 끌기 손잡이가 되고(`.wds-widget-frame-handle`,
+ *   커서 grab) 왼쪽 여백에 ⠿ 표시가 호버 때 나타난다. 메뉴 버튼 묶음(`.wds-widget-frame-actions`)은 끌기에서 뺀다.
+ *   실제 이동 · 재배치는 격자(보드)가 맡는다 — 격자 라이브러리의 손잡이 선택자로 이 두 클래스를 넘긴다.
+ *   배치가 정해진 대시보드에서는 켜지 않는다(제목 · 메뉴를 누르려다 칸이 밀린다).
  * - **범례는 본문 오른쪽 위 한 줄**(`legend`). 헤더 오른쪽은 메뉴 자리라 범례를 올리지 않는다. 계열이 셋을 넘거나
  *   항목 글이 길면(도넛 · 분포) 한 줄에 넣지 말고 본문 안에서 차트 옆 열로 그린다.
  * - 푸터는 출처 · 마지막 수집 시각 한 줄만. 범례를 푸터로 내리지 않는다.
@@ -52,7 +63,6 @@ import ToolbarIconButton from "./ToolbarIconButton";
  * ```tsx
  * <WidgetFrame
  *   title="TPS"
- *   meta="최근 30분"
  *   onFullscreen={openFullscreen}
  *   menu={[
  *     { key: "settings", label: "위젯 설정", onSelect: openSettings },
@@ -64,7 +74,7 @@ import ToolbarIconButton from "./ToolbarIconButton";
  *   <TpsChart />
  * </WidgetFrame>
  *
- * <WidgetFrame title="DB 액티브 세션" meta="최근 30분" state="collect-gap" stateDescription="2대 · 18분째 끊김" />
+ * <WidgetFrame title="DB 액티브 세션" state="collect-gap" stateDescription="2대 · 18분째 끊김" />
  * ```
  */
 
@@ -79,7 +89,7 @@ export type WidgetFrameLegendItem = {
 export type WidgetFrameProps = {
   /** 지표 이름. 범위 · 대상 · 단위는 `meta` 로. */
   title: string;
-  /** 머리 우측: 지금 보는 범위 · 대상 수 · 단위. 글자면 tertiary 로 그린다. */
+  /** 머리 우측: 칸에만 있는 정보(대상 수 · 단위 · 건수). 시간 범위는 넣지 않는다(옵션바가 말한다). 글자면 tertiary. */
   meta?: ReactNode;
   /** 전체 화면(⛶). 주면 아이콘이 선다. 헤더 메뉴의 첫 칸. */
   onFullscreen?: () => void;
@@ -88,7 +98,14 @@ export type WidgetFrameProps = {
    * 설정 · 복사 · 상세로 이동 등. AI 위젯을 여는 화면이면 「AI 에게 묻기」 를 첫 줄로.
    */
   menu?: ActionMenuAction[];
-  /** 본문 오른쪽 위 한 줄 범례. 계열 셋 이하에만. */
+  /**
+   * AI 진입점. 주면 ⋮ 첫 줄 「AI 에게 묻기」와 헤더 맨 앞 호버 지름길 아이콘이 함께 선다(같은 동작).
+   * AI 위젯을 여는 화면에서만 준다(patterns §15).
+   */
+  onAsk?: () => void;
+  /** 헤더를 끌기 손잡이로. 칸을 사람이 배치하는 보드에만. 이동은 격자가 맡는다. */
+  draggable?: boolean;
+  /** 본문 오른쪽 위 한 줄 범례. 계열 셋 이하에만. 계열이 하나면 제목과 같은 말이라 두지 않는다. */
   legend?: WidgetFrameLegendItem[];
   /** 본문 안쪽 여백을 없앤다. 표처럼 행이 칸 가장자리까지 닿아야 할 때만(아크 · 히트맵은 frame={false} 로). */
   bleed?: boolean;
@@ -124,11 +141,24 @@ const MoreIcon = (
   </svg>
 );
 
+const GripIcon = (
+  <svg width="8" height="12" viewBox="0 0 8 12" fill="none" aria-hidden="true">
+    {[2, 6, 10].map((y) => (
+      <g key={y}>
+        <circle cx="2" cy={y} r="1" fill="var(--color-text-tertiary)" />
+        <circle cx="6" cy={y} r="1" fill="var(--color-text-tertiary)" />
+      </g>
+    ))}
+  </svg>
+);
+
 export default function WidgetFrame({
   title,
   meta,
   onFullscreen,
   menu,
+  onAsk,
+  draggable = false,
   legend,
   bleed = false,
   state = "ready",
@@ -139,14 +169,25 @@ export default function WidgetFrame({
   className,
 }: WidgetFrameProps) {
   const empty = state !== "ready";
-  const hasMenu = !!onFullscreen || !!menu?.length;
+  /* AI 는 ⋮ 첫 줄이 늘 닿는 길이다. 지름길 아이콘만 두면 터치 · 키보드에서 진입점이 사라진다. */
+  const items: ActionMenuAction[] = [...(onAsk ? [{ key: "wds-ask", label: "AI 에게 묻기", onSelect: onAsk }] : []), ...(menu ?? [])];
+  const hasMenu = !!onFullscreen || items.length > 0 || !!onAsk;
 
   return (
     <section
       aria-label={title}
-      className={`flex flex-col h-full min-h-0 min-w-0 bg-card border border-color-var-color-border-default rounded-4px overflow-hidden ${className ?? ""}`}
+      className={`wds-widget-frame flex flex-col h-full min-h-0 min-w-0 bg-card border border-color-var-color-border-default rounded-4px overflow-hidden ${className ?? ""}`}
     >
-      <div className="flex items-center gap-8px h-24px px-12px shrink-0" style={{ boxSizing: "content-box", paddingTop: 8, paddingBottom: 4 }}>
+      <div
+        className={`relative flex items-center gap-8px h-24px px-12px shrink-0${draggable ? " wds-widget-frame-handle" : ""}`}
+        style={{ boxSizing: "content-box", paddingTop: 8, paddingBottom: 4 }}
+      >
+        {draggable && (
+          /* 손잡이 표시 — 왼쪽 여백(12px) 안에 서서 제목을 밀지 않는다. */
+          <span aria-hidden className="wds-widget-frame-reveal absolute flex items-center" style={{ left: 2, top: 8, height: 24 }}>
+            {GripIcon}
+          </span>
+        )}
         <div className="flex-1 min-w-0">
           <CardHead
             title={title}
@@ -154,10 +195,16 @@ export default function WidgetFrame({
           />
         </div>
         {hasMenu && (
-          <div className="flex items-center gap-4px shrink-0" style={MENU_SIZE}>
+          <div className="wds-widget-frame-actions flex items-center gap-4px shrink-0" style={MENU_SIZE}>
+            {onAsk && (
+              /* 호버 지름길 — 자리는 늘 잡혀 있고 칸에 손이 닿을 때만 보인다(.wds-widget-frame-reveal). */
+              <span className="wds-widget-frame-reveal flex items-center justify-center" style={{ width: 24, height: 24 }}>
+                <TriggerButton size={14} animate={false} label={`${title} 위젯을 WhaTap-AI로 분석`} tooltip={`${title} 위젯을 WhaTap-AI로 분석`} tooltipPlacement="bottom" onClick={onAsk} />
+              </span>
+            )}
             {onFullscreen && <ToolbarIconButton icon="bottom-fullscreen.svg" label="전체 화면" onClick={onFullscreen} />}
-            {!!menu?.length && (
-              <ActionMenu placement="bottom-end" items={menu} trigger={<ToolbarIconButton icon={MoreIcon} label="더보기" />} />
+            {items.length > 0 && (
+              <ActionMenu placement="bottom-end" items={items} trigger={<ToolbarIconButton icon={MoreIcon} label="더보기" />} />
             )}
           </div>
         )}
