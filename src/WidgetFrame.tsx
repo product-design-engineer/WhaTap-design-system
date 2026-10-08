@@ -32,9 +32,9 @@ import TriggerButton from "./widget/TriggerButton";
  *
  * ## Composition rules
  * - **높이는 부모가 정한다.** WidgetFrame 은 `h-full` 로 칸을 채우고, 격자 행 높이가 칸 높이다.
- * - 제목은 지표 이름만 쓴다(「TPS」 「응답시간」). 칸에만 있는 정보(대상 수 · 단위 · 건수)는 `meta` 로.
- *   **시간 범위(「최근 5분」 「오늘」 「지금」)는 `meta` 에 쓰지 않는다** — 페이지 옵션바 · 보조 행이 한 번 말한다. 칸마다 되풀이하면
- *   같은 말이 열두 번 서고, 한 칸만 다른 범위일 때 그 차이가 묻힌다(그때만 적는다).
+ * - **헤더는 제목과 메뉴만.** 제목은 지표 이름만 쓴다(「TPS」 「응답시간」). 값 · 건수 · 대상 수 · 단위 · 시간 범위를 헤더에 두지 않는다
+ *   (2026-10-08 사용자 결정) — 헤더가 모든 칸에서 같은 모양이어야 격자가 읽힌다. 시간 범위는 페이지 옵션바가 한 번 말한다.
+ * - 칸에 꼭 필요한 값(히트맵 건수 · 최대 · 최소 · 척도)은 **`summary`** — 본문 첫 줄 왼쪽. 같은 줄 오른쪽이 범례다.
  * - **헤더 오른쪽 아이콘 메뉴는 둘로 고정한다: 전체 화면(⛶) + 더보기(⋮).** 순서도 고정이다.
  *   설정 · 복사 · 상세로 이동 같은 나머지 행동은 전부 더보기(`menu`) 안으로 접는다. 아이콘을 늘어놓지 않는다.
  *   위젯마다 아이콘 수가 다르면 칸이 좁을 때 제목이 칸마다 다른 자리에서 잘린다.
@@ -48,8 +48,10 @@ import TriggerButton from "./widget/TriggerButton";
  *   커서 grab) 왼쪽 여백에 ⠿ 표시가 호버 때 나타난다. 메뉴 버튼 묶음(`.wds-widget-frame-actions`)은 끌기에서 뺀다.
  *   실제 이동 · 재배치는 격자(보드)가 맡는다 — 격자 라이브러리의 손잡이 선택자로 이 두 클래스를 넘긴다.
  *   배치가 정해진 대시보드에서는 켜지 않는다(제목 · 메뉴를 누르려다 칸이 밀린다).
- * - **범례는 본문 오른쪽 위 한 줄**(`legend`). 헤더 오른쪽은 메뉴 자리라 범례를 올리지 않는다. 계열이 셋을 넘거나
- *   항목 글이 길면(도넛 · 분포) 한 줄에 넣지 말고 본문 안에서 차트 옆 열로 그린다.
+ * - **범례는 본문 오른쪽 위 한 줄**(`legend`). 헤더 오른쪽은 메뉴 자리라 범례를 올리지 않는다.
+ *   **모든 차트 칸에 둔다 — 계열이 하나여도**(2026-10-08 사용자 결정). 이름은 제목이 아니라 계열 이름(「전체 APM」 「평균」 「usr」).
+ *   예외는 이름표가 본문 안에 이미 있는 것뿐이다: [[BarList]](줄 이름) · [[MiniDonutChart]](옆 열) · [[ApdexChart]](띠 이름) · 숫자 칸([[KpiCard]] · [[KpiField]]).
+ *   속도 구분(아크 · 히트맵)은 `SPEED_LEGEND`, GPU 맵은 `HEX_GRID_LEGEND` 를 그대로 넘긴다. 계열이 넷을 넘으면 줄바꿈 없이 넘치는 만큼 잘린다 — 그런 칸은 계열을 줄인다.
  * - 푸터는 출처 · 마지막 수집 시각 한 줄만. 범례를 푸터로 내리지 않는다.
  * - **본문 간격은 토큰 넷이 정한다**: 좌우 `--wds-widget-body-px` · 아래 `--wds-widget-body-pb` · 줄 간격 `--wds-widget-row-gap`
  *   · Y축 눈금 칸 `--wds-widget-axis-gutter`. 칸 안 차트는 모두 `frame={false}` 로 자기 바깥 여백을 0 으로 둔다. 그래야 한 줄의
@@ -87,10 +89,13 @@ export type WidgetFrameLegendItem = {
 };
 
 export type WidgetFrameProps = {
-  /** 지표 이름. 범위 · 대상 · 단위는 `meta` 로. */
+  /** 지표 이름만. 값 · 단위 · 시간 범위는 헤더에 두지 않는다(값은 `summary`). */
   title: string;
-  /** 머리 우측: 칸에만 있는 정보(대상 수 · 단위 · 건수). 시간 범위는 넣지 않는다(옵션바가 말한다). 글자면 tertiary. */
-  meta?: ReactNode;
+  /**
+   * 본문 첫 줄 왼쪽 — 칸에 꼭 필요한 값(건수 · 최대 · 최소 · 척도). 같은 줄 오른쪽이 범례.
+   * 헤더에는 값을 두지 않는다(제목 · 메뉴만). 시간 범위는 쓰지 않는다. 글자면 tertiary.
+   */
+  summary?: ReactNode;
   /** 전체 화면(⛶). 주면 아이콘이 선다. 헤더 메뉴의 첫 칸. */
   onFullscreen?: () => void;
   /**
@@ -105,7 +110,7 @@ export type WidgetFrameProps = {
   onAsk?: () => void;
   /** 헤더를 끌기 손잡이로. 칸을 사람이 배치하는 보드에만. 이동은 격자가 맡는다. */
   draggable?: boolean;
-  /** 본문 오른쪽 위 한 줄 범례. 계열 셋 이하에만. 계열이 하나면 제목과 같은 말이라 두지 않는다. */
+  /** 본문 오른쪽 위 한 줄 범례. 모든 차트 칸에 둔다(계열 하나여도). 이름표가 본문 안에 있는 BarList · 도넛 · Apdex · 숫자 칸은 제외. */
   legend?: WidgetFrameLegendItem[];
   /** 본문 안쪽 여백을 없앤다. 표처럼 행이 칸 가장자리까지 닿아야 할 때만(아크 · 히트맵은 frame={false} 로). */
   bleed?: boolean;
@@ -154,7 +159,7 @@ const GripIcon = (
 
 export default function WidgetFrame({
   title,
-  meta,
+  summary,
   onFullscreen,
   menu,
   onAsk,
@@ -189,10 +194,7 @@ export default function WidgetFrame({
           </span>
         )}
         <div className="flex-1 min-w-0">
-          <CardHead
-            title={title}
-            meta={typeof meta === "string" ? <span className="text-sm text-tertiary">{meta}</span> : meta}
-          />
+          <CardHead title={title} />
         </div>
         {hasMenu && (
           <div className="wds-widget-frame-actions flex items-center gap-4px shrink-0" style={MENU_SIZE}>
@@ -225,19 +227,23 @@ export default function WidgetFrame({
           </div>
         ) : (
           <>
-            {!!legend?.length && (
-              <ul
-                aria-label="범례"
-                className="flex items-center justify-end gap-12px shrink-0"
-                style={{ listStyle: "none", margin: 0, padding: bleed ? "0 var(--wds-widget-body-px)" : 0 }}
-              >
-                {legend.map((l) => (
-                  <li key={l.label} className="flex items-center gap-4px text-sm text-secondary whitespace-nowrap">
-                    <span aria-hidden className="shrink-0 rounded-2px" style={{ width: 8, height: 8, background: l.color }} />
-                    {l.label}
-                  </li>
-                ))}
-              </ul>
+            {(!!legend?.length || summary) && (
+              /* 본문 첫 줄 — 왼쪽 summary(값), 오른쪽 범례. 범례는 모든 차트 칸에 둔다(계열 하나여도). */
+              <div className="flex items-center justify-between shrink-0" style={{ gap: 12, padding: bleed ? "0 var(--wds-widget-body-px)" : 0 }}>
+                <span className="text-sm text-tertiary whitespace-nowrap truncate min-w-0" style={{ fontFamily: "var(--font-family-numeric)" }}>
+                  {summary}
+                </span>
+                {!!legend?.length && (
+                  <ul aria-label="범례" className="flex items-center justify-end gap-12px shrink-0" style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                    {legend.map((l) => (
+                      <li key={l.label} className="flex items-center gap-4px text-sm text-secondary whitespace-nowrap">
+                        <span aria-hidden className="shrink-0 rounded-2px" style={{ width: 8, height: 8, background: l.color }} />
+                        {l.label}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             )}
             {children}
           </>

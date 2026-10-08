@@ -47,7 +47,7 @@ export const KpiRow: Story = {
 export const InWidgetFrame: Story = {
   render: () => (
     <div style={{ width: 280, height: 120 }}>
-      <WidgetFrame title="Avg CPU" meta="최대 92.1 · 최소 3.4" onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
+      <WidgetFrame title="Avg CPU" summary="최대 92.1 · 최소 3.4" onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
         <KpiCard title="Avg CPU" value="47.3" unit="%" frame={false} />
       </WidgetFrame>
     </div>

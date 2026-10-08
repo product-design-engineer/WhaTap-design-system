@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ActiveTransactionArc, WidgetFrame } from "@whatap/design-system";
+import { ActiveTransactionArc, SPEED_LEGEND, WidgetFrame } from "@whatap/design-system";
 
 /**
  * Stories for [[ActiveTransactionArc]] — APM 액티브 트랜잭션 Arc Equalizer.
@@ -70,11 +70,11 @@ export const InGrid: Story = {
   ),
 };
 
-/** 대시보드 칸 — `frame={false}` 로 자기 여백(8px)을 빼고 [[WidgetFrame]] 에 담는다. 여백은 WidgetFrame 토큰이 갖는다. */
+/** 대시보드 칸 — `frame={false}` 로 자기 여백(8px)과 Elapsed 범례를 빼고 [[WidgetFrame]] 에 담는다. 범례는 `SPEED_LEGEND` 로 본문 오른쪽 위에. */
 export const InWidgetFrame: Story = {
   render: () => (
     <div style={{ width: 400, height: 240 }}>
-      <WidgetFrame title="액티브 트랜잭션" meta="APM 24" onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
+      <WidgetFrame title="액티브 트랜잭션" legend={SPEED_LEGEND} onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
         <ActiveTransactionArc maxTx={{ name: "/api/order/checkout", value: 14 }} agent={{ active: 24, inactive: 0 }} frame={false} />
       </WidgetFrame>
     </div>

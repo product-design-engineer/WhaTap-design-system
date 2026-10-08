@@ -18,7 +18,11 @@
  * - 위젯 chrome(CardChrome, FlexBoardWidget 등)은 소비자가 감싼다.
  * - 이 컴포넌트는 본문만 렌더한다 — `h-full` 부모 안에서 채워진다.
  * - 회전 오버레이는 12s linear infinite.
- * - `frame={false}` 면 바깥 여백(좌우 · 아래 8px)을 뺀다. [[WidgetFrame]] 안에 넣을 때 쓴다 — 여백은 WidgetFrame 이 갖는다(patterns §15).
+ * - 가운데 Total TX 는 `total` 값을 그린다. 에셋(ark-equalizer-ring.svg)에는 고리만 있다 — 종전엔 「334」 가 그림에 박혀 어느 화면이든 같은 숫자였다.
+ * - `frame={false}` 면 바깥 여백(좌우 · 아래 8px)과 왼쪽 아래 Elapsed 범례를 빼고, **아크 왼쪽 · 값 오른쪽 한 열**(Max TX 「N초」 + 이름 ·
+ *   Agent 활성 · 비활성)로 다시 놓는다. 네 귀퉁이에 흩어 두지 않는다. [[WidgetFrame]] 안에 넣을 때 쓴다 — 여백은
+ *   WidgetFrame 이 갖고, 범례는 `SPEED_LEGEND` 를 WidgetFrame `legend` 로 넘겨 본문 오른쪽 위에 세운다(patterns §15).
+ *   같은 속도 구분을 쓰는 [[ScatterHeatmap]] 칸도 같은 상수를 쓴다 — 낱말이 칸마다 달라지지 않게.
  *
  * @example
  * ```tsx
@@ -32,6 +36,8 @@ export type ActiveTransactionArcProps = {
   maxTx?: { name: string; value: number };
   /** Agent 통계. */
   agent?: { active: number; inactive: number };
+  /** 가운데 Total TX. 그림에 박힌 글자가 아니라 이 값을 그린다. 기본 334. */
+  total?: number;
   /**
    * 자기 바깥 여백(좌우 · 아래 8px)을 둘지. 기본 `true`.
    * `false` 면 여백 0 — [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
@@ -39,11 +45,54 @@ export type ActiveTransactionArcProps = {
   frame?: boolean;
 };
 
+/**
+ * 응답 속도 구분 범례 — Normal(0~3초) · Slow(3~8초) · Very Slow(8초 이상).
+ * [[WidgetFrame]] `legend` 로 넘긴다. [[ActiveTransactionArc]] · [[ScatterHeatmap]] 칸이 함께 쓴다.
+ */
+export const SPEED_LEGEND = [
+  { label: "Normal", color: "var(--color-chart-speed-normal)" },
+  { label: "Slow", color: "var(--color-chart-speed-slow)" },
+  { label: "Very Slow", color: "var(--color-chart-speed-very-slow)" },
+];
+
 export default function ActiveTransactionArc({
   maxTx = { name: "TC-1-57-8094", value: 30 },
   agent = { active: 7, inactive: 1 },
+  total = 334,
   frame = true,
 }: ActiveTransactionArcProps) {
+  /* 칸 안(frame=false) — 아크 왼쪽, 값 오른쪽 한 열(위에서 아래로 Max TX · Agent). 네 귀퉁이에 흩어 두지 않는다.
+     Total 은 아크 가운데 하나만 — 같은 값을 두 번 쓰지 않는다. 범례는 WidgetFrame legend(SPEED_LEGEND). */
+  if (!frame) {
+    const LABEL = "text-sm text-tertiary leading-none";
+    const NUM = { fontFamily: "var(--font-family-numeric)" } as const;
+    return (
+      <div className="flex h-full items-center min-h-0 w-full" style={{ gap: 16 }}>
+        <div className="relative h-full shrink-0" style={{ aspectRatio: "1 / 1", maxWidth: "60%" }}>
+          <ArcEqualizer total={total} />
+        </div>
+        <dl className="flex flex-col justify-center min-w-0 flex-1" style={{ gap: 12, margin: 0 }}>
+          <div className="flex flex-col min-w-0" style={{ gap: 4 }}>
+            <dt className={LABEL} style={NUM}>Max TX</dt>
+            <dd className="flex items-baseline text-primary leading-none" style={{ ...NUM, margin: 0, gap: 2 }}>
+              <span className="text-2xl" style={{ fontWeight: "var(--font-weight-medium)" }}>{maxTx.value}</span>
+              <span className="text-sm text-tertiary">초</span>
+            </dd>
+            <dd className="text-sm text-secondary leading-tight truncate" title={maxTx.name} style={{ ...NUM, margin: 0 }}>{maxTx.name}</dd>
+          </div>
+          <div className="flex flex-col min-w-0" style={{ gap: 4 }}>
+            <dt className={LABEL} style={NUM}>Agent</dt>
+            <dd className="flex items-baseline text-primary leading-none whitespace-nowrap" style={{ ...NUM, margin: 0, gap: 6 }}>
+              <span className="text-sm text-tertiary">활성</span>
+              <span className="text-2xl" style={{ fontWeight: "var(--font-weight-medium)" }}>{agent.active}</span>
+              <span className="text-sm text-tertiary">· 비활성</span>
+              <span className="text-2xl" style={{ fontWeight: "var(--font-weight-medium)" }}>{agent.inactive}</span>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    );
+  }
   return (
     <div className={`flex h-full items-stretch min-h-0 w-full gap-6px${frame ? " px-8px pb-8px" : ""}`}>
       {/* left: Max TX + Elapsed legend */}
@@ -53,12 +102,15 @@ export default function ActiveTransactionArc({
           <p className="text-sm text-primary mt-4px leading-tight truncate" title={maxTx.name} style={{ fontFamily: "var(--font-family-numeric)" }}>{maxTx.name}</p>
           <p className="text-2xl text-primary mt-4px leading-none" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}>{maxTx.value}</p>
         </div>
-        <div className="flex flex-col gap-3px">
-          <p className="text-sm text-tertiary leading-snug" style={{ fontFamily: "var(--font-family-numeric)" }}>Elapsed</p>
-          <LegendDot color="var(--color-chart-speed-very-slow)" label="very slow" />
-          <LegendDot color="var(--color-chart-speed-slow)" label="slow" />
-          <LegendDot color="var(--color-chart-speed-normal)" label="normal" />
-        </div>
+        {/* 범례 — frame 일 때만. 칸 안(frame=false)에서는 WidgetFrame legend 로 본문 오른쪽 위에 선다(SPEED_LEGEND). */}
+        {frame && (
+          <div className="flex flex-col gap-3px">
+            <p className="text-sm text-tertiary leading-snug" style={{ fontFamily: "var(--font-family-numeric)" }}>Elapsed</p>
+            <LegendDot color="var(--color-chart-speed-very-slow)" label="very slow" />
+            <LegendDot color="var(--color-chart-speed-slow)" label="slow" />
+            <LegendDot color="var(--color-chart-speed-normal)" label="normal" />
+          </div>
+        )}
       </div>
       {/* center: arc chart */}
       <div
@@ -73,7 +125,7 @@ export default function ActiveTransactionArc({
             aspectRatio: "1 / 1",
           }}
         >
-          <ArcEqualizer />
+          <ArcEqualizer total={total} />
         </div>
       </div>
       {/* right: Agent stats */}
@@ -101,13 +153,14 @@ function LegendDot({ color, label }: { color: string; label: string }) {
   );
 }
 
-function ArcEqualizer() {
+function ArcEqualizer({ total }: { total: number }) {
   return (
-    <div className="relative w-full h-full">
+    /* 가운데 글자는 그림에 박지 않는다 — 에셋(ark-equalizer-ring.svg)은 고리만, Total 은 이 값을 그린다. 크기는 아크 폭을 따른다(cqw). */
+    <div className="relative w-full h-full" style={{ containerType: "inline-size" }}>
       <img
         alt="Active Transaction Chart"
         className="absolute inset-0 w-full h-full"
-        src="/icons/ark-equalizer.svg"
+        src="/icons/ark-equalizer-ring.svg"
       />
       <div
         className="absolute inset-0"
@@ -119,6 +172,10 @@ function ArcEqualizer() {
           src="/icons/ark-oval-left.svg"
           style={{ width: "50.67%", height: "100%" }}
         />
+      </div>
+      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none" style={{ fontFamily: "var(--font-family-numeric)" }}>
+        <span className="text-tertiary leading-none" style={{ fontSize: "5.5cqw" }}>Total TX</span>
+        <span className="text-primary leading-none" style={{ fontSize: "15cqw", fontWeight: "var(--font-weight-medium)", marginTop: "1.5cqw" }}>{total}</span>
       </div>
       <style>{`@keyframes wds-ark-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>

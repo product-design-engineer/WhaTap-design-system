@@ -27,7 +27,7 @@ import type { CSSProperties } from "react";
  *
  * @example
  * ```tsx
- * <WidgetFrame title="Apdex" meta="× 100">
+ * <WidgetFrame title="Apdex" summary="× 100">
  *   <ApdexChart frame={false} value={71.2} values={trend} xLabels={X} />
  * </WidgetFrame>
  * ```

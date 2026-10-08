@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ScatterHeatmap, SCATTER_HEATMAP_DEMO_DOTS, WidgetFrame } from "@whatap/design-system";
+import { ScatterHeatmap, SCATTER_HEATMAP_DEMO_DOTS, SPEED_LEGEND, WidgetFrame } from "@whatap/design-system";
 
 /**
  * Stories for [[ScatterHeatmap]] — APM 트랜잭션 히트맵 (산점도).
@@ -87,12 +87,8 @@ export const InWidgetFrame: Story = {
     <div style={{ width: 400, height: 240 }}>
       <WidgetFrame
         title="히트맵"
-        meta="수행 시간(초)"
-        legend={[
-          { label: "Normal", color: "var(--color-chart-speed-normal)" },
-          { label: "Slow", color: "var(--color-chart-speed-slow)" },
-          { label: "Very Slow", color: "var(--color-chart-speed-very-slow)" },
-        ]}
+        summary="수행 시간(초)"
+        legend={SPEED_LEGEND}
         onFullscreen={() => {}}
         menu={[{ key: "detail", label: "상세로 이동" }]}
       >
