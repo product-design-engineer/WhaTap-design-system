@@ -1,12 +1,12 @@
-# 일반 폼/표시 Primitives — 10 컴포넌트
+# 일반 폼/표시 Primitives — 11 컴포넌트
 
 > 원본: `src/` (interfacedesigner/WhaTap-design-system) · Storybook 트리 `Primitives/`
 
 가장 작은 단위의 재사용 컴포넌트들. **새 화면을 만들 때 인라인 form/feedback UI 를 새로 짜지 마세요. 이들을 조립하세요.**
 
-> **참고:** `Primitives` 는 "자체 렌더 리프" 계층 전체(65종 — 행·칩·항목·심볼 포함)를 뜻한다. 이 문서는 그중 **일반 폼/표시 10종**만 다룬다. AI 리프 카드는 `Primitives/Ai`(아래) 참조.
+> **참고:** `Primitives` 는 "자체 렌더 리프" 계층 전체(65종 — 행·칩·항목·심볼 포함)를 뜻한다. 이 문서는 그중 **일반 폼/표시 11종**만 다룬다. AI 리프 카드는 `Primitives/Ai`(아래) 참조.
 
-- **일반 폼/표시 (10)** — 페이지·다이얼로그 어디서나 — Checkbox · Tooltip · Chip · FilterChip · TextField · Select · Tabs · Modal · FilterDropdown · Disclosure
+- **일반 폼/표시 (11)** — 페이지·다이얼로그 어디서나 — Checkbox · Tooltip · Chip · FilterChip · TextField · Select · Slider · Tabs · Modal · FilterDropdown · Disclosure
 
 > **AI 카드 빌딩 블록(AiCard · AiCaption · AiSectionHeading · AiToneBadge · AiBulletList)** 은 Storybook `Primitives/Ai` 하위그룹(AI 리프 프리미티브). 카탈로그: [widget-components.md](./widget-components.md). 아래 "AI 카드 빌딩 블록" 상세는 참고용으로 유지.
 
@@ -14,7 +14,7 @@
 
 ---
 
-# A. 일반 폼/표시 Primitives (10)
+# A. 일반 폼/표시 Primitives (11)
 
 ## Checkbox
 
@@ -177,6 +177,39 @@ native `<select>` 기반 드롭다운 + 통일된 보더·사이즈. TextField �
   value={sev}
   onChange={setSev}
   placeholder="선택하세요"
+/>
+```
+
+## Slider
+
+한 축 위에서 크기를 고르는 막대. 네이티브 `<input type="range">` 라 키보드 · 스크린리더 · 터치를 브라우저가 맡는다.
+상한 · 한도 · 임계치처럼 **크기순으로 놓인 값** 중 하나를 고를 때 [[Select]] 대신 쓴다. 전체 범위와 지금 위치가 한눈에 보인다.
+
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `value` / `onChange` | `number` / `(next: number) => void` | — | controlled. 끄는 동안에도 불린다 |
+| `defaultValue` | `number` | `stops[0]` 또는 `min` | uncontrolled |
+| `min` / `max` / `step` | `number` | `0` / `100` / `1` | 연속. `stops` 가 있으면 무시 |
+| `stops` | `readonly number[]` | — | 정해진 값(크기순). 값의 간격과 상관없이 **같은 간격의 눈금**에 놓인다 |
+| `markLabel` | `(v: number) => ReactNode` | — | 눈금 아래 짧은 글자. `stops` 면 눈금마다, 연속이면 양 끝에만. 고른 눈금은 진하게 |
+| `valueText` | `(v: number) => string` | — | `aria-valuetext` |
+| `label` | `string` | — | 시각 라벨이 없을 때 `aria-label` |
+| `disabled` | `boolean` | `false` | — |
+
+- 지금 고른 값은 막대 밖에 글로 적는다(라벨 줄 또는 막대 위 한 줄). 막대 위치만으로 금액을 읽게 하지 않는다
+- 눈금 글자는 짧게(「50만」). 단위와 풀이는 위 문장이 맡는다
+- 폭은 부모가 정한다(`width: 100%`). 폼 열에 세울 때는 `className` 으로 폭을 준다
+- 크기순이 아닌 선택지 → `Select`. 정확한 숫자 입력 → `TextField`. 둘 중 하나 → `Switch` · `Tabs segmented`
+
+```tsx
+<p>누적 사용액 {won(limit)}까지</p>
+<Slider
+  stops={[0, 100_000, 200_000, 500_000, 1_000_000, 2_000_000]}
+  value={limit}
+  onChange={setLimit}
+  markLabel={(v) => (v === 0 ? "0" : `${v / 10_000}만`)}
+  valueText={won}
+  label="사용량 한계"
 />
 ```
 
@@ -405,7 +438,7 @@ dialog — backdrop · panel · footer · 3 채널 닫기 (× / ESC / backdrop).
 
 ✅ **Do**
 
-- 새 form/feedback UI 를 만들기 전에 **위 14개로 조립 가능한지 확인**
+- 새 form/feedback UI 를 만들기 전에 **위 컴포넌트로 조립 가능한지 확인**
 - size 토큰만 사용 (sm/md/lg) — 임의 px 지정 금지
 - TextField/Select/Tabs 등의 `helperText` + `invalid` 로 에러 표시 — 별도 에러 컴포넌트 만들지 말 것
 - 위젯 카드는 무조건 `<AiCard>` 로 감싸기

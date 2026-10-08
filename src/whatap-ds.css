@@ -1896,6 +1896,64 @@ html, body, #root {
 @media (prefers-reduced-motion: reduce) {
   .wds-disclosure-chevron { transition: none; }
 }
+/* ── Slider — 한 축 위에서 크기를 고르는 막대 ─────────────────────────────────
+   네이티브 range 의 껍데기를 지우고 트랙 · 손잡이를 토큰으로 그린다. 채운 구간의 끝은 컴포넌트가
+   `--wds-slider-fill` 로 준다(손잡이 중심과 맞춘 길이). 손잡이 지름 16px 은 Slider.tsx 의 THUMB 와 같다. */
+.wds-slider { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+.wds-slider[data-disabled] { opacity: 0.5; }
+.wds-slider-input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 16px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.wds-slider-input:disabled { cursor: not-allowed; }
+.wds-slider-input::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(to right, var(--color-brand-blue) 0 var(--wds-slider-fill, 0), var(--color-surface-200) var(--wds-slider-fill, 0) 100%);
+}
+.wds-slider-input::-moz-range-track {
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(to right, var(--color-brand-blue) 0 var(--wds-slider-fill, 0), var(--color-surface-200) var(--wds-slider-fill, 0) 100%);
+}
+.wds-slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -6px;
+  border-radius: var(--radius-full);
+  background: var(--color-card);
+  border: 2px solid var(--color-brand-blue);
+  box-shadow: var(--shadow-sm);
+}
+.wds-slider-input::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: var(--color-card);
+  border: 2px solid var(--color-brand-blue);
+  box-shadow: var(--shadow-sm);
+}
+.wds-slider-input:focus-visible { outline: none; }
+.wds-slider-input:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--color-brand-blue); outline-offset: 2px; }
+.wds-slider-input:focus-visible::-moz-range-thumb { outline: 2px solid var(--color-brand-blue); outline-offset: 2px; }
+.wds-slider-marks { position: relative; height: calc(var(--text-sm) * 1.5); }
+.wds-slider-mark {
+  position: absolute;
+  top: 0;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+.wds-slider-mark[data-active] { color: var(--color-text-primary); font-weight: 600; }
 /* ── DataTable — 다 못 보이면 세로 스크롤 ─────────────────────────────────────
    표가 받은 높이(부모 flex 열의 남은 칸 · maxHeight)보다 행이 많으면 **잘리지 않고** 본문이
    세로로 스크롤된다. 예전엔 overflow:hidden 이라 넘친 행이 조용히 사라졌다.
