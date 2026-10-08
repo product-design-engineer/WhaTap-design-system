@@ -49,6 +49,15 @@ const DB_MENU: MenuItem[] = [
   { icon: "menu-report.svg", label: "보고서" },
 ];
 
+/** 계정 메뉴 — 라이브 계정 화면의 항목 순서. 「계정 정보」 · 「서비스 공지」 는 menu-user · menu-notice 를 쓴다. */
+const ACCOUNT_MENU: MenuItem[] = [
+  { icon: "menu-user.svg", label: "계정 정보" },
+  { icon: "menu-settings.svg", label: "SSO 연동" },
+  { icon: "menu-report.svg", label: "이용 내역", expanded: true, children: [{ label: "프로젝트 목록" }, { label: "결제 정보", active: true }] },
+  { icon: "menu-alert.svg", label: "접근 제어" },
+  { icon: "menu-notice.svg", label: "서비스 공지" },
+];
+
 /** 기본 — K8s-GPU default 컨텍스트. */
 export const Default: Story = { args: { activeProduct: "gpu" } };
 
@@ -58,6 +67,9 @@ export const DbContext: Story = {
 };
 
 /** Collapsed — 위젯 열림 상태 (80px Min: 제품 레일 + 아이콘 전용 메뉴 열, 라벨은 title 툴팁). controlled 라 정적. */
+/** 계정 화면 — 제품 맥락이 아닌 계정 메뉴. */
+export const AccountMenu: Story = { args: { activeProduct: "db", project: DB_PROJECT, menu: ACCOUNT_MENU } };
+
 export const Collapsed: Story = { args: { activeProduct: "db", project: DB_PROJECT, menu: DB_MENU, collapsed: true } };
 
 /**
