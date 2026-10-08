@@ -51,7 +51,7 @@ export const LargeRadius: Story = {
 export const InWidgetFrame: Story = {
   render: () => (
     <div style={{ width: 420, height: 260 }}>
-      <WidgetFrame title="GPU Map" meta="16대" legend={HEX_GRID_LEGEND} onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
+      <WidgetFrame title="GPU Map" legend={HEX_GRID_LEGEND} onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
         <HexGrid items={make(16)} columns={6} frame={false} />
       </WidgetFrame>
     </div>

@@ -156,7 +156,7 @@ export { default as ApdexChart } from "./ApdexChart";
 export type { ApdexChartProps } from "./ApdexChart";
 export { default as BarList } from "./BarList";
 export type { BarListProps, BarListRow } from "./BarList";
-export { default as ActiveTransactionArc } from "./ActiveTransactionArc";
+export { default as ActiveTransactionArc, SPEED_LEGEND } from "./ActiveTransactionArc";
 export type { ActiveTransactionArcProps } from "./ActiveTransactionArc";
 export { default as ScatterHeatmap, SCATTER_HEATMAP_DEMO_DOTS } from "./ScatterHeatmap";
 export type { ScatterHeatmapProps, ScatterDot } from "./ScatterHeatmap";

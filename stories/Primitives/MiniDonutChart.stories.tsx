@@ -53,7 +53,7 @@ export const ThreeSegments: Story = {
 export const InWidgetFrame: Story = {
   render: () => (
     <div style={{ width: 360, height: 232 }}>
-      <WidgetFrame title="서버 상태" meta="46대" onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
+      <WidgetFrame title="서버 상태" onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
         <MiniDonutChart
           title="서버 상태"
           frame={false}

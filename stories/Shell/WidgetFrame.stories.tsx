@@ -5,6 +5,7 @@ import {
   DataTable,
   SCATTER_HEATMAP_DEMO_DOTS,
   ScatterHeatmap,
+  SPEED_LEGEND,
   WidgetFrame,
 } from "@whatap/design-system";
 
@@ -46,7 +47,7 @@ const EVENTS = [
 export const Default: Story = {
   render: () => (
     <Cell>
-      <WidgetFrame title="액티브 트랜잭션" meta="APM 24">
+      <WidgetFrame title="액티브 트랜잭션" legend={SPEED_LEGEND}>
         <ActiveTransactionArc maxTx={{ name: "/api/order/checkout", value: 14 }} agent={{ active: 24, inactive: 0 }} frame={false} />
       </WidgetFrame>
     </Cell>
@@ -57,10 +58,10 @@ export const Default: Story = {
 export const Row: Story = {
   render: () => (
     <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 360px)", gap: 12, height: 232 }}>
-      <WidgetFrame title="액티브 트랜잭션" meta="APM 24">
+      <WidgetFrame title="액티브 트랜잭션" legend={SPEED_LEGEND}>
         <ActiveTransactionArc frame={false} />
       </WidgetFrame>
-      <WidgetFrame title="히트맵" meta="수행 시간(초)">
+      <WidgetFrame title="히트맵" summary="수행 시간(초)" legend={SPEED_LEGEND}>
         <ScatterHeatmap dots={SCATTER_HEATMAP_DEMO_DOTS} yLabels={[10, 8, 6, 4, 2, 0]} frame={false} />
       </WidgetFrame>
     </div>
@@ -93,7 +94,7 @@ export const WithMenu: Story = {
           차트 본문
         </div>
       </WidgetFrame>
-      <WidgetFrame title="히트맵" meta="수행 시간(초)">
+      <WidgetFrame title="히트맵" summary="수행 시간(초)" legend={SPEED_LEGEND}>
         <ScatterHeatmap dots={SCATTER_HEATMAP_DEMO_DOTS} yLabels={[10, 8, 6, 4, 2, 0]} frame={false} />
       </WidgetFrame>
     </div>
@@ -117,7 +118,7 @@ export const WithAsk: Story = {
 export const Draggable: Story = {
   render: () => (
     <div style={{ width: 360, height: 232 }}>
-      <WidgetFrame title="히트맵" meta="1,345건 · 에러 21" draggable onFullscreen={() => {}} menu={MENU}>
+      <WidgetFrame title="히트맵" summary="1,345건 · 에러 21" legend={SPEED_LEGEND} draggable onFullscreen={() => {}} menu={MENU}>
         <ScatterHeatmap dots={SCATTER_HEATMAP_DEMO_DOTS} yLabels={[10, 8, 6, 4, 2, 0]} frame={false} />
       </WidgetFrame>
     </div>
@@ -128,7 +129,7 @@ export const Draggable: Story = {
 export const Table: Story = {
   render: () => (
     <Cell width={560}>
-      <WidgetFrame title="미해소 이벤트" meta={`${EVENTS.length}건`} bleed>
+      <WidgetFrame title="미해소 이벤트" bleed>
         <DataTable
           density="default"
           rows={EVENTS}
