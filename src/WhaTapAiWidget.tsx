@@ -52,6 +52,9 @@ const WIDGET_WIDTH = 480;
 
 export type WidgetAction = string;
 
+/** 쓸 수 없는 입력창에서 입력칸 · 첨부 · 전송만 흐리고 막는다. 재원 알약은 빼고(위 설명). */
+const UNAVAILABLE_DIM = { opacity: 0.5, pointerEvents: "none" } as const;
+
 export default function WhaTapAiWidget({
   open,
   onClose,
@@ -347,11 +350,12 @@ export default function WhaTapAiWidget({
             className="ai-input-wrapper relative bg-card flex flex-col gap-4px items-center justify-center p-12px shrink-0 rounded-8px transition-all duration-200 w-full"
             style={{
               border: hasInput ? "2px solid var(--color-brand-blue)" : "2px solid var(--color-brand-blue-bg-2)",
-              opacity: isUnavailable ? 0.5 : 1,
-              pointerEvents: isUnavailable ? "none" : undefined,
             }}
             aria-disabled={isUnavailable || undefined}
           >
+            {/* 쓸 수 없을 때 흐리고 막는 것은 입력칸 · 첨부 · 전송뿐이다. 재원 알약(usagePill)은 그 상태에서
+                빠져나가는 길(「범위에 추가」 · 「결제권한자에게 요청」 · 「납부하기」)이라 또렷하게 두고 누를 수 있게 한다.
+                전에는 감싸는 상자 전체에 opacity · pointer-events 를 걸어 알약까지 마우스로 누를 수 없었다. */}
             {/* 첨부 파일 칩 행 (Figma 27087:3416) */}
             {attachments && attachments.length > 0 && (
               <div className="flex gap-6px items-center w-full overflow-x-auto pb-4px">
@@ -360,7 +364,7 @@ export default function WhaTapAiWidget({
                 ))}
               </div>
             )}
-            <div className="flex gap-0 items-center p-2px w-full">
+            <div className="flex gap-0 items-center p-2px w-full" style={isUnavailable ? UNAVAILABLE_DIM : undefined}>
               <textarea
                 placeholder={isUnavailable ? "지금은 WhaTap AI 를 사용할 수 없습니다" : inputPlaceholder}
                 rows={1}
@@ -389,6 +393,7 @@ export default function WhaTapAiWidget({
                 <button
                   type="button"
                   aria-label="파일 또는 이미지 추가"
+                  style={isUnavailable ? UNAVAILABLE_DIM : undefined}
                   className="group-plus flex items-center justify-center p-2px rounded-4px shrink-0 size-20px cursor-pointer border-0 bg-card hover-bg-invert transition-colors"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-colors">
@@ -402,7 +407,7 @@ export default function WhaTapAiWidget({
               </div>
               <div className="flex gap-8px items-center shrink-0">
                 {/* 전송 버튼 — input에 텍스트가 있으면 활성(blue) */}
-                <div className="relative shrink-0">
+                <div className="relative shrink-0" style={isUnavailable ? UNAVAILABLE_DIM : undefined}>
                 <button
                   type="button"
                   disabled={!hasInput}
