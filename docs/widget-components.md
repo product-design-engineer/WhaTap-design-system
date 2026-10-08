@@ -100,6 +100,19 @@ export type AiChatAttachment =
 | `children` | `ReactNode` |
 | `className` | `string?` |
 
+### ThreadDivider
+
+대화 스레드 경계선. 양옆 1px `--color-border-default` 선 사이에 `text-base` · `text-tertiary` 글자 한 줄(예: 「여기부터 SRE 플랜」). 대화 도중 재원 · 대상 같은 조건이 바뀐 순간 그 자리(앞 답 다음)에 끼운다. `role="separator"`.
+
+| Prop | Type | 설명 |
+|---|---|---|
+| `children` | `ReactNode?` | 가운데 글자. 비우면 선만 선다 |
+| `label` | `string?` | 스크린리더 문장. 글자가 문자열이면 생략 |
+| `className` | `string?` | |
+
+- 답 하나의 끝맺음 선은 `MessageActions divider` 다. 이것을 쓰지 않는다
+- 바뀐 사실의 설명은 카드나 `UnavailableNotice` 로. 구분선 글자는 경계의 사실 한 줄만
+
 ---
 
 ## 메시지 카드 — 진행 상태 (Reasoning / Tool calls)
