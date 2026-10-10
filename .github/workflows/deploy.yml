@@ -53,9 +53,34 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Deploy Storybook (catalog)
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # tarball 자동 생성 — 수동 `pnpm release` + git commit 에 의존하지 않는다.
+      # pack-release.mjs 가 build:js + build:design + npm pack + static/public/releases/ 배치를 한다.
+      # 이후 build-storybook 이 staticDirs 를 통해 releases/ 를 storybook-static 에 포함시킨다.
+      - name: Build library + pack tarball
+        run: node scripts/pack-release.mjs --skip-scan
+        env:
+          RELEASE_ALLOW_BEHIND: "1"
+
+      # Vercel 에 사전 빌드된 산출물을 올린다 — 원격 빌드를 쓰면 git 에 커밋된 것만
+      # 포함되므로 방금 생성한 tarball 이 빠진다.
+      # vercel pull → vercel build(= pnpm build-storybook) → vercel deploy --prebuilt
+      - name: Build & deploy Storybook (catalog)
         run: |
-          npx --yes vercel@latest deploy --prod --yes --token="$VERCEL_TOKEN"
+          npx --yes vercel@latest pull --yes --environment=production --token="$VERCEL_TOKEN"
+          npx vercel build --prod --token="$VERCEL_TOKEN"
+          npx vercel deploy --prebuilt --prod --yes --token="$VERCEL_TOKEN"
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STORYBOOK }}
@@ -73,7 +98,7 @@ jobs:
       - name: Verify delivery
         run: |
           fail=0
-          for path in /index.json /design-system/components.json /design-system/tokens.json; do
+          for path in /index.json /design-system/components.json /design-system/tokens.json /releases/whatap-design-system-latest.tgz /releases/index.json; do
             code=$(curl -s -o /dev/null -w '%{http_code}' --retry 5 --retry-delay 6 --retry-all-errors "$CATALOG_URL$path")
             echo "$path → HTTP $code"
             [ "$code" = "200" ] || { echo "::error::$path 가 $code 입니다 — 카탈로그가 배달되지 않았습니다."; fail=1; }
@@ -91,5 +116,13 @@ jobs:
           rules=$(curl -s "$CATALOG_URL/design-system/components.json" | head -c 200000 | grep -c '"whenNotToUse"' || true)
           echo "components.json 의 whenNotToUse 블록: $rules"
           [ "$rules" -gt 0 ] || { echo "::error::components.json 에 규칙이 없습니다(빈 산출물)."; fail=1; }
+
+          # tarball 이 유효한 npm 패키지인지 확인 — 200 이지만 HTML 오류 페이지인 경우를 잡는다.
+          tgz_version=$(curl -sL "$CATALOG_URL/releases/whatap-design-system-latest.tgz" \
+            | tar xzf - -O package/package.json 2>/dev/null \
+            | node -e "process.stdin.setEncoding('utf8');let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{console.log(JSON.parse(d).version)}catch{console.log('INVALID')}})" || echo "EXTRACT_FAIL")
+          echo "tarball version: $tgz_version"
+          [ "$tgz_version" != "INVALID" ] && [ "$tgz_version" != "EXTRACT_FAIL" ] \
+            || { echo "::error::tarball 이 유효한 npm 패키지가 아닙니다."; fail=1; }
 
           exit $fail

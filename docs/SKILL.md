@@ -10,15 +10,23 @@ metadata:
 
 # WhaTap Design System (@whatap/design-system)
 
-WhaTap 제품의 단일 컴포넌트 출처(별도 git repo, 빌드 산출물 없는 소스온리). 소비 측(프로토타입)은 `link:` 심링크로 import — DS 수정이 자동 반영(HMR).
+WhaTap 제품의 단일 컴포넌트 출처. 빌드된 패키지(JS + 타입 + CSS)를 Vercel 호스팅 tarball로 배포하며, DS 동시 개발 시에는 `link:` 심링크도 지원.
 
 원본 소스는 `src/`. 이 문서는 실제 코드와 1:1 동기화된 카탈로그입니다.
 
 ## 설치 / Import
 
-> 외부 repo·신규 엔지니어(접근 권한·사전조건·설치 순서)는 [`ONBOARDING.md`](./ONBOARDING.md)의 체크리스트를 먼저 참고하세요. (private repo collaborator 초대 + Vite·TS·React19 · 스타일은 일반 CSS style.css)
+> 상세 절차·사전조건·트러블슈팅: [`ONBOARDING.md`](./ONBOARDING.md)
 
-### 소비 (link: 심링크)
+### 소비 (tarball — 권장)
+
+```bash
+npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-latest.tgz
+```
+
+repo 접근 불필요. Vite·Next.js·webpack 모두 추가 설정 없이 동작. main 배포마다 자동 갱신.
+
+### DS 동시 개발 (link: 심링크)
 
 소비자 프로토타입의 `package.json` 에:
 
@@ -62,12 +70,12 @@ DS는 **Tailwind를 쓰지 않습니다.** `style.css`(= `whatap-ds.css`)는 외
 
 > ⚠️ `whatap-ds.css` 는 `scripts/detailwind.mjs` 생성물입니다. 컴포넌트 className 추가/변경 시 `node scripts/detailwind.mjs generate` 로 재생성.
 
-### 새 소비 프로토타입 추가 시
+### 새 소비 프로젝트 추가 시
 
-1. `package.json` 에 `"@whatap/design-system": "link:<상대경로>/WhaTap-design-system"`
-2. vite `resolve.dedupe: ['react','react-dom']`
-3. 진입점에 `import "@whatap/design-system/style.css"` (Tailwind 불필요)
-4. `import { ... } from "@whatap/design-system"`
+1. `npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-latest.tgz`
+2. 진입점에 `import "@whatap/design-system/style.css"` (Tailwind 불필요)
+3. `import { ... } from "@whatap/design-system"`
+4. (DS 동시 개발 시에만) `link:` 심링크 + vite `resolve.dedupe: ['react','react-dom']`
 
 자세한 절차·사전조건(협업자 초대 등): [`ONBOARDING.md`](./ONBOARDING.md) · [`AI-INTEGRATION.md`](./AI-INTEGRATION.md).
 
