@@ -25,7 +25,8 @@ import Tooltip, { type TooltipPlacement } from "./Tooltip";
  * - 색은 `--color-text-tertiary`, hover · focus 에 `--color-text-secondary`. 포커스 링은 brand-blue 2px.
  * - `label` 은 스크린리더 이름이다. 생략하면 「도움말」. 툴팁 본문과 같은 문장을 넣지 않는다 —
  *   본문은 `aria-describedby` 로 따로 읽힌다.
- * - 버튼이 폼 안에 있어도 제출하지 않는다(`type="button"`).
+ * - 버튼이 폼 안에 있어도 제출하지 않는다(`type="button"`). 누름은 바깥으로 올리지 않는다 — 누르면 이동하는
+ *   행(표 행 · 카드) 안에 있어도 ⓘ 를 누른 사람은 설명을 보려던 것이다.
  *
  * @example
  * ```tsx
@@ -50,7 +51,7 @@ export type InfoTipProps = {
 export default function InfoTip({ content, label = "도움말", placement = "top", open, className }: InfoTipProps) {
   return (
     <Tooltip content={content} placement={placement} open={open}>
-      <button type="button" aria-label={label} className={`wds-info-tip ${className ?? ""}`}>
+      <button type="button" aria-label={label} onClick={(e) => e.stopPropagation()} className={`wds-info-tip ${className ?? ""}`}>
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
           <circle cx="6" cy="6" r="5.25" stroke="currentColor" strokeWidth="1.2" />
           <path d="M6 5.3v3.2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
