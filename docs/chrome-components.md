@@ -10,7 +10,7 @@
 
 **조립 순서:** `DashboardLayout` → `Sidebar` + `header` 슬롯 (`PageHeader` 또는 `PageHeaderAiInline` + 옵션으로 `OptionbarPage` 또는 `FilterBar`) + `main` 슬롯 + 자식으로 `WhaTapAiWidget`
 
-## 카탈로그 (30)
+## 카탈로그 (31)
 
 | 영역 | 컴포넌트 |
 |---|---|
@@ -19,7 +19,7 @@
 | 데이터 표시 | WidgetFrame · CardHead · DataTable · FilterBar · EventWeekTimeMatrix |
 | 대시보드 차트 (`frame={false}` 로 WidgetFrame 안에) | MiniLineChart · MiniMultiLineChart · MiniBarChart · ApdexChart · BarList · MiniDonutChart · KpiCard · HexGrid |
 | 액션·진입 | Button · AiSymbol |
-| 알림·상태 | Toast · ConfirmDialog · Stage · DashboardBuildingProgress |
+| 알림·상태 | Toast · ConfirmDialog · InfoTip · Stage · DashboardBuildingProgress |
 | 위젯 컨텍스트 | WhaTapAiContext (Provider) |
 
 ---
@@ -646,6 +646,31 @@ export type ToastVariant = "success" | "info" | "warning" | "error";
   onConfirm={remove}
   onClose={() => setTarget(null)}
 />
+```
+
+---
+
+## InfoTip
+
+글자 옆 **ⓘ 아이콘 버튼 + [[Tooltip]]**(Composite). 원 안에 영문 i 가 든 16px 버튼이고 hover · focus 로 툴팁이 열린다. 툴팁 트리거를 밑줄로 그리지 않는다([`patterns.md`](./patterns.md) §16).
+
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `content` | `ReactNode` | — | 툴팁 본문 1-2 문장. 줄을 가르려면 `<br />` |
+| `label` | `string` | `"도움말"` | 스크린리더 이름. 본문과 같은 문장을 넣지 않는다 |
+| `placement` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` | |
+| `open` | `boolean` | _auto_ | 강제 표시(디자인 확인용) |
+| `className` | `string` | — | |
+
+- 설명이 붙는 글자는 밑줄 없이 두고 바로 뒤에. 사이 4px, 같은 줄 가운데 정렬
+- 꼭 읽어야 하는 경고 · 차단 이유는 숨기지 않는다 → [[Notice]]
+- 색 tertiary → hover · focus secondary, 포커스 링 brand-blue
+
+```tsx
+<span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+  한계 금액 200,000원
+  <InfoTip content="종량제 사용량 한계는 기본 크레딧이 소진된 후 누적 사용액에 적용됩니다." />
+</span>
 ```
 
 ---

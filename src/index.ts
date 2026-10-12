@@ -98,6 +98,8 @@ export { default as Modal } from "./Modal";
 export type { ModalProps, ModalSize } from "./Modal";
 export { default as ConfirmDialog } from "./ConfirmDialog";
 export type { ConfirmDialogProps, ConfirmDialogTone, ConfirmDialogOutcome } from "./ConfirmDialog";
+export { default as InfoTip } from "./InfoTip";
+export type { InfoTipProps } from "./InfoTip";
 export { default as Select } from "./Select";
 export type { SelectProps, SelectSize, SelectOption } from "./Select";
 export { default as Tabs } from "./Tabs";
