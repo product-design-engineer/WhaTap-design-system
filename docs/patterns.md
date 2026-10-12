@@ -742,6 +742,35 @@ Product-SaaS 안에서 어떤 구현을 선택할지 갈릴 때, 다음 순서�
 
 ---
 
+## 16. 툴팁 트리거 — 밑줄 말고 ⓘ InfoTip
+<!-- @policy id=tooltip-trigger-infotip | @severity must | @applies chrome -->
+
+**When to use.** 글자(라벨 · 값 · 문장 · 「외 N」)에 보조 설명을 다는 모든 자리.
+
+**When NOT to use.** 아이콘만 있는 버튼의 이름표 — 그 버튼에 [[Tooltip]] 을 직접 씌운다([[ToolbarIconButton]] 은 내장).
+
+**규칙.** 툴팁 트리거를 **밑줄(점선 · 실선)로 표현하지 않는다.** 설명이 붙는 글자는 밑줄 없이 그대로 두고, 바로 뒤에 [[InfoTip]](원 안에 영문 i 가 든 16px 버튼)을 둔다. 글자와 사이 4px, 같은 줄 가운데 정렬.
+
+### Do
+
+| 상황 | 이렇게 |
+|---|---|
+| 값 문장에 설명 | `한계 금액 200,000원 <InfoTip content="…" />` |
+| 「외 N」 으로 접은 목록 | `외 8 <InfoTip label="나머지 프로젝트" content="주문 API · 정산 배치 · …" />` |
+| 문단에 덧붙이는 한 문장 | 문단 끝에 InfoTip 하나 |
+
+### Don't
+
+| 하지 말 것 | 왜 |
+|---|---|
+| `<Tooltip><span className="underline decoration-dotted">…</span></Tooltip>` | 밑줄은 링크로 읽히고 트리거 경계가 흐리다 |
+| 문단 전체를 Tooltip 트리거로 감싸기 | 설명이 있다는 표지가 없어 아무도 열지 않는다 |
+| 글자 앞에 ⓘ 를 두기 | 읽는 순서가 «설명 → 대상» 으로 뒤집힌다. ⓘ 는 설명을 다는 글자 바로 뒤 |
+
+**왜.** 밑줄은 링크로 읽힌다. 누르면 어디로 갈 것 같은데 아무 일도 없다. 점선 밑줄은 트리거가 어디서 어디까지인지 경계가 흐리고, 글자 길이가 바뀌면 트리거 크기도 따라 바뀐다. ⓘ 는 «여기에 설명이 있다» 는 뜻이 하나로 굳어 있고 크기가 늘 같다(2026-10-12 사용자 결정).
+
+---
+
 ## 부록 — 빠른 결정 표
 
 | 상황 | 무엇을 할까 |
@@ -752,6 +781,7 @@ Product-SaaS 안에서 어떤 구현을 선택할지 갈릴 때, 다음 순서�
 | 새 카드 외형이 필요 | 거의 항상 `AiCard`로 충분. 정말 다르다면 디자인 리뷰 후 primitive 추가 |
 | 차트가 필요 | `MiniLineChart` / `AiUsageChart` 확장 — SVG 단위 규칙(#3) 준수 |
 | 대시보드 위젯 한 칸 | `WidgetFrame`(헤더 · 본문 · 푸터) + 본문 컴포넌트 · 빈 상태는 `state` (#15) |
+| 글자에 보조 설명 | 밑줄 금지 · 글자 뒤에 `InfoTip` (#16) |
 | 테이블이 필요 | `DataTable` (chrome) / `AiClassificationTable` `AiCostTable` (widget) |
 | 한 화면의 여러 구획 구분 | 페이지 본문이면 카드로 나눔 · 카드 안이면 `border-t border-default` + 여백 (#14) |
 | 위젯 토글 | `useWhaTapAi()` 한 곳에서 `aiActive` 공유. `DashboardLayout`에 `widgetOpen` 전달 |

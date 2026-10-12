@@ -11,6 +11,7 @@
  * - hover 시 추가 메타 (생성 시각, 권한, 단위 설명 등)
  *
  * ## When NOT to use
+ * - 글자(라벨 · 값 · 문장)에 설명을 다는 자리 → [[InfoTip]]. 글자에 밑줄을 그어 트리거로 쓰지 않는다(patterns §16)
  * - 클릭 액션을 담아야 함 → `Popover` (별도 컴포넌트)
  * - 긴 본문 (3 문장+) → `AiInsightSection` 또는 inline 본문
  * - 모달 같은 무거운 컨테이너 → `Modal`

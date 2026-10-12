@@ -55,7 +55,7 @@
 │   ├── 시스템 알림 → Toast
 │   ├── 확인 대화 → Modal (파괴적 액션은 patterns P1)
 │   ├── 본문 안내 → Notice · EmptyState
-│   └── 보조 정보 → Tooltip
+│   └── 보조 정보 → InfoTip (글자 옆 ⓘ · 밑줄 트리거 금지) · Tooltip (아이콘 버튼 이름표)
 │
 ├── AI 위젯
 │   ├── 진입점 → AiInlinePrompt (헤더 내장) · AiAssistantButton (FAB)

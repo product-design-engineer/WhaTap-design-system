@@ -1901,6 +1901,30 @@ html, body, #root {
 @media (prefers-reduced-motion: reduce) {
   .wds-disclosure-chevron { transition: none; }
 }
+/* ── InfoTip — 글자 옆 ⓘ 툴팁 트리거 ───────────────────────────────────────────
+   툴팁 트리거를 밑줄로 그리지 않는다(patterns §16). 16px 원형 버튼 안에 12px 아이콘. */
+.wds-info-tip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  vertical-align: middle;
+  transition: color 0.15s ease;
+}
+.wds-info-tip:hover,
+.wds-info-tip:focus-visible { color: var(--color-text-secondary); }
+.wds-info-tip:focus-visible {
+  outline: 2px solid var(--color-brand-blue);
+  outline-offset: 1px;
+}
 /* ── Slider — 한 축 위에서 크기를 고르는 막대 ─────────────────────────────────
    네이티브 range 의 껍데기를 지우고 트랙 · 손잡이를 토큰으로 그린다. 채운 구간의 끝은 컴포넌트가
    `--wds-slider-fill` 로 준다(손잡이 중심과 맞춘 길이). 손잡이 지름 16px 은 Slider.tsx 의 THUMB 와 같다. */

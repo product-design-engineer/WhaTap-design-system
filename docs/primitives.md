@@ -69,6 +69,8 @@
 
 hover/focus 시 짧은 설명 표시. 트리거 1개를 wrap (cloneElement) 해서 ARIA 자동 주입.
 
+> 글자에 설명을 달 때는 Tooltip 을 직접 쓰지 말고 [[InfoTip]](ⓘ 버튼)을 쓴다. 툴팁 트리거를 밑줄로 그리지 않는다([`patterns.md`](./patterns.md) §16).
+
 | Prop | Type | Default | 설명 |
 |---|---|---|---|
 | `content` | `ReactNode` | — | 1-2 문장 권장 |
