@@ -68,7 +68,7 @@ export type ConfirmDialogProps = {
   children?: ReactNode;
   /** 실행 버튼 라벨. 동작 낱말이어야 한다(「확인」 금지). */
   confirmLabel: string;
-  /** 물러나는 버튼 라벨. 기본 「취소」. 고치러 돌아가는 흐름이면 「돌아가서 고치기」. */
+  /** 물러나는 버튼 라벨. 「취소」 로 둔다 — 고치러 돌아가는 흐름도 「취소」(2026-10-12 사용자 결정). */
   cancelLabel?: string;
   /** `critical` = 되돌릴 수 없는 실행(기본), `primary` = 약정 · 생성처럼 무겁지만 파괴는 아닌 실행. */
   tone?: ConfirmDialogTone;
