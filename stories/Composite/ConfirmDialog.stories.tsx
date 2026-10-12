@@ -64,7 +64,6 @@ export const CreateWithReadback: Story = {
     size: "md",
     tone: "primary",
     confirmLabel: "플랜 만들기",
-    cancelLabel: "돌아가서 고치기",
     outcomes: [
       { text: "기본 크레딧을 넘으면 쓴 만큼 누적 사용 요금이 붙고, 누적 사용액이 500,000원에 닿으면 멈춥니다." },
       { text: "플랜으로 전환하면 남은 개인 무료분은 사라지고 되돌아오지 않습니다." },

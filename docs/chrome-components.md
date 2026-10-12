@@ -627,7 +627,7 @@ export type ToastVariant = "success" | "info" | "warning" | "error";
 | `outcomes` | `{ text; tone?: "default" \| "critical" }[]` | — | 그래서 무엇이 바뀌나, 한 줄씩. 되돌릴 수 없는 결과는 `critical` |
 | `children` | `ReactNode` | — | 되읽기 값(KpiField 등). target 과 outcomes 사이 |
 | `confirmLabel` | `string` | — | 동작 낱말. 「확인」 금지 |
-| `cancelLabel` | `string` | `"취소"` | 고치러 돌아가면 「돌아가서 고치기」 |
+| `cancelLabel` | `string` | `"취소"` | 「취소」 로 둔다. 고치러 돌아가는 흐름도 같다 |
 | `tone` | `"critical" \| "primary"` | `"critical"` | `primary` = 약정 · 생성처럼 무겁지만 파괴는 아닌 실행 |
 | `loading` | `boolean` | — | 실행 버튼 로딩 |
 | `onConfirm` · `onClose` | `() => void` | — | |
