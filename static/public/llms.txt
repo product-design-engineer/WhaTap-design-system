@@ -49,7 +49,8 @@
 │   ├── 선택 (다중) → FilterDropdown
 │   ├── 날짜/시간 → DatePicker · TimeRangeSelector
 │   ├── ON/OFF → Switch (즉시 적용) · Checkbox (폼 제출)
-│   └── 행동 메뉴 → ActionMenu + ActionMenuItem
+│   ├── 행동 메뉴 → ActionMenu + ActionMenuItem
+│   └── 화면 언어 → PageHeader `language` (PageHeaderLanguageMenu · 지구본 24px · 라벨은 그 언어 자기 이름)
 │
 ├── 알림 / 피드백
 │   ├── 시스템 알림 → Toast
