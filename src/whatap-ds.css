@@ -603,7 +603,7 @@
     /* @role 한글 본문·라벨 기본 서체 | @use 한글이 섞인 모든 UI 텍스트 */
     --font-family-korean: "Noto Sans", "Noto Sans KR", sans-serif;
     /* @role 수치 서체(자릿수 정렬) | @use 지표·표 수치 · 시각 | @avoid 한글 라벨 */
-    --font-family-numeric: Roboto, "Noto Sans", sans-serif;
+    --font-family-numeric: Roboto, "Noto Sans", "Noto Sans KR", sans-serif;
     /* @role 코드·로그용 고정폭 서체 | @use SQL·로그 원문 */
     --font-family-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
     /* @role 한글 전용 서체 변형 */

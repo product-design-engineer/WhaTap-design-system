@@ -247,7 +247,8 @@
 
   /* Font Family */
   --font-family-korean: "Noto Sans", "Noto Sans KR", sans-serif;
-  --font-family-numeric: Roboto, "Noto Sans", sans-serif;
+  /* 숫자 줄에 섞인 한글(「8건」 · 「초」)은 Noto Sans KR 로 받는다. 없으면 OS 기본 글꼴로 떨어져 Figma(한글을 Noto Sans KR 로 그림)와 폭이 달라진다. */
+  --font-family-numeric: Roboto, "Noto Sans", "Noto Sans KR", sans-serif;
 
   /* Type Scale — Hybrid (Dense 1px + Display 2배수 인접).
      text-* utility(whatap-ds.css)의 font-size 값. */
