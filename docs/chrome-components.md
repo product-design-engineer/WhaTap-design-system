@@ -513,7 +513,7 @@ export type DataTableProps<T> = {
 | MiniMultiLineChart | 카드 · 제목 줄 · 헤더 범례 · ⋮ · AI 트리거 (`stat` · `footer` 는 남음) | `title` · `meta` · `legend`(시리즈 색 그대로) · 메뉴 |
 | MiniDonutChart | 카드 · 제목 줄 (도넛 옆 범례는 남음) | `title` · `meta` · 메뉴 |
 | KpiCard | 카드 · 제목 | `title` · `meta`(최대 · 최소 등) · 메뉴 |
-| HexGrid | 카드 · 「GPU Map」 제목 줄 · 범례 | `title` · `legend={HEX_GRID_LEGEND}` · 메뉴 |
+| HexGrid | 카드 · 「GPU Map」 제목 줄 · 범례 | `title` · `legend={HEX_GRID_LEGEND}`(칸 수를 붙이면 `hexGridLegend(items)`) · 메뉴 |
 | ActiveTransactionArc | 바깥 여백(좌우 · 아래 8px) · 왼쪽 아래 Elapsed 범례 | `title` · `meta` · `legend={SPEED_LEGEND}` · 메뉴 |
 | ScatterHeatmap | 바깥 좌우 여백(8px) | `title` · `meta` · `legend={SPEED_LEGEND}` · 메뉴 |
 | MiniBarChart | 바깥 좌우 여백(8px) | `title` · `meta` · `legend`(막대 색 그대로) · 메뉴 |
@@ -585,13 +585,28 @@ Apdex × 100 을 네 구간 띠(Excellent 94 · Good 85 · Poor 70 · Unacceptab
 
 ## HexGrid
 
-개별 장치(GPU 등)를 헥사곤으로 깔아 상태를 색으로. 범례 상수 `HEX_GRID_LEGEND`.
+개별 장치(GPU · 서버 등)를 헥사곤으로 깔아 상태를 색으로. 범례 상수 `HEX_GRID_LEGEND` · 칸 수를 붙인 범례 `hexGridLegend(items, labels?)`.
+
+```ts
+export type HexTone = "active" | "idle" | "warning" | "critical";
+export type HexItem = { id: string; label?: string; tone: HexTone; ariaLabel?: string };
+```
 
 | Prop | Type | Default |
 |---|---|---|
-| `items` | `{ id, label, tone }[]` | — |
+| `items` | `HexItem[]` | — |
 | `columns` · `radius` | `number` | `6` · `24` |
 | `frame` | `boolean` | `true` |
+| `onSelect` | `(item: HexItem) => void` | — |
+| `highlightIds` | `ReadonlySet<string> \| readonly string[] \| null` | — |
+| `renderTooltip` | `(item: HexItem) => ReactNode` | — |
+
+- **상호작용은 opt-in.** `onSelect` · `renderTooltip` 이 없으면 hover 흐림 · 포인터 · role 이 붙지 않는다(GPU 맵 기본은 정적).
+- `onSelect` 를 주면 헥사곤이 버튼이 된다(`role="button"` · Tab · Enter/Space). 이름은 `ariaLabel` → `label` → `id`.
+- hover 중엔 나머지 칸이 0.32 로, `highlightIds` 밖의 칸은 0.18 로 흐려진다. **하이라이트가 hover 보다 우선**(배너가 가리키는 대상이 마우스에 흔들리지 않게).
+- `renderTooltip` 은 내용만 준다. 상자(`bg-card` · `--color-border-default` · `--shadow-md`)는 HexGrid 가 SVG 와 같은 좌표계로 hover · 포커스한 칸에 붙여 그린다(patterns §5). `pointer-events: none` 이라 툴팁 안에 버튼을 두지 않는다. 행동은 헥사곤 클릭으로.
+- `label` 이 비면 글자를 그리지 않는다(서버 맵).
+- 칸 수 범례: `legend={hexGridLegend(items, { active: "Normal", idle: "Inactive" })}` → `Normal 0 · Inactive 0 · Warning 11 · Critical 3`. 칠해진 톤을 세고 0 개 톤도 줄은 남긴다.
 
 ---
 
