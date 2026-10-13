@@ -54,3 +54,34 @@ export const Interactive: Story = {
     return <Demo />;
   },
 };
+
+/** 언어 설정 — `language` 를 주면 알림 벨 왼쪽에 지구본이 선다. 헤더 고정 글자는 `labels` 로 함께 바꾼다. */
+export const WithLanguage: Story = {
+  args: {},
+  render: () => {
+    const LANGS = [
+      { code: "ko", label: "한국어" },
+      { code: "en", label: "English" },
+      { code: "ja", label: "日本語" },
+    ];
+    const LABELS: Record<string, { support: string; notifications: string; myAccount: string; title: string }> = {
+      ko: { support: "고객지원", notifications: "알림", myAccount: "내 계정", title: "언어" },
+      en: { support: "Support", notifications: "Notifications", myAccount: "My account", title: "Language" },
+      ja: { support: "サポート", notifications: "通知", myAccount: "マイアカウント", title: "言語" },
+    };
+    const Demo = () => {
+      const [lang, setLang] = useState("ko");
+      const l = LABELS[lang];
+      return (
+        <PageHeader
+          title="WhaTap-AI / Plans"
+          roleBadge="OWNER"
+          profileMenu={[{ label: "Logout" }]}
+          language={{ value: lang, options: LANGS, title: l.title, onChange: setLang }}
+          labels={l}
+        />
+      );
+    };
+    return <Demo />;
+  },
+};

@@ -125,13 +125,19 @@ export type OrgContext = { label: string; icon?: string; badge?: string }; // ba
 | `profileMenu` | `ProfileMenuItem[]` | — | 우상단 **아바타 클릭 드롭다운**(계정 정보·엔터프라이즈 관리·전환·로그아웃 등). 미지정 시 정적 아바타 |
 | `roleBadge` | `string` | — | 프로필 드롭다운 **헤더**에 표시할 역할(예: `"OWNER"`) → "OWNER · 내 계정". **아바타 옆 독립 칩 아님** |
 | `notifications` | `NotificationItem[]` | — | **벨 빨간 점 + 드롭다운**. 1건↑일 때만 인디케이터 |
+| `language` | `PageHeaderLanguage` | — | **언어 설정**. 주면 벨 왼쪽에 지구본 24px 트리거([[PageHeaderLanguageMenu]]). 라벨은 그 언어 자기 이름(한국어 · English · 日本語) |
+| `labels` | `PageHeaderLabels` | 한국어 | 헤더 고정 글자(`support` 고객지원 · `notifications` 알림 · `myAccount` 내 계정). 화면 언어가 한국어가 아닐 때 번역해 넘긴다 |
 
 ```ts
 export type ProfileMenuItem = { label: string; onClick?: () => void };
 export type NotificationItem = { label: string; onClick?: () => void };
+export type PageHeaderLanguage = { value: string; options: { code: string; label: string }[]; onChange?: (code: string) => void; title?: string };
+export type PageHeaderLabels = { support?: string; notifications?: string; myAccount?: string };
 ```
 
-타이틀 + AI 버튼 + Docs + 고객지원 + **bell(notifications 시 빨간 점)** + **avatar(profileMenu 드롭다운 · roleBadge 헤더)** 가 항상 한 줄에 모두 표시됩니다.
+**언어 설정 정책:** 언어 트리거는 벨 · 아바타와 같은 **24px 아이콘 트리거**다(글자 pill 아님). 그래서 켜도 오른쪽 줄의 크기와 16px 간격이 그대로다. 선택지 라벨을 지금 언어로 번역하지 않는다 — 읽지 못하는 언어로 들어온 사람이 자기 언어를 찾을 수 있어야 한다. 헤더는 고른 값만 알리고, 저장과 화면 다시 그리기는 소비 레이어가 한다.
+
+타이틀 + AI 버튼 + Docs + 고객지원 + (언어 · `language` 시) + **bell(notifications 시 빨간 점)** + **avatar(profileMenu 드롭다운 · roleBadge 헤더)** 가 항상 한 줄에 모두 표시됩니다.
 
 **사용자 메뉴 정책:** 우상단 사용자 영역은 **아바타 드롭다운 1개**로 일원화. 역할(`roleBadge`)은 **드롭다운 헤더**로 표시하고, 아바타 옆에 별도 역할 칩(2번째 트리거)을 두지 않는다.
 
