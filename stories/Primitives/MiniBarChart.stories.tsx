@@ -69,3 +69,40 @@ export const InWidgetFrame: Story = {
     </div>
   ),
 };
+
+const SERVERS = ["dev-yard", "dev-dfs-yard-01", "dev-agency-01", "dev-front", "Dev-Modules"];
+const IOPS = [502, 177, 148, 96, 64];
+
+/**
+ * TOP-N 범주 · 서버 다섯 대의 Disk IOPS. `categories` 가 막대마다 이름을 바로 아래 가운데에 놓고(칸 폭에서 말줄임 · 전체 이름은 title),
+ * `valueLabels` 가 모든 막대 위에 값을 적는다. 가장 큰 값만 굵게 · primary.
+ */
+export const TopN: Story = {
+  args: {
+    unit: "B",
+    valueLabels: true,
+    categories: SERVERS,
+    series: [{ label: "Disk IOPS", values: IOPS, color: "var(--color-chart-series-1)" }],
+  },
+};
+
+/** TOP-N 을 대시보드 칸에. `frame={false}` 로 [[WidgetFrame]] 에 담고 범례는 계열 이름 하나. */
+export const TopNInWidgetFrame: Story = {
+  decorators: [(Story) => (<div style={{ width: 360, height: 232 }}><Story /></div>)],
+  render: () => (
+    <WidgetFrame
+      title="Disk IOPS TOP5"
+      legend={[{ label: "Disk IOPS", color: "var(--color-chart-series-1)" }]}
+      onFullscreen={() => {}}
+      menu={[{ key: "detail", label: "상세로 이동" }]}
+    >
+      <MiniBarChart
+        frame={false}
+        unit="B"
+        valueLabels
+        categories={SERVERS}
+        series={[{ label: "Disk IOPS", values: IOPS, color: "var(--color-chart-series-1)" }]}
+      />
+    </WidgetFrame>
+  ),
+};
