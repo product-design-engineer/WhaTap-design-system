@@ -524,11 +524,19 @@ export type DataTableProps<T> = {
 
 구간마다 막대 하나, 계열이 둘 이상이면 누적(시스템 CPU usr + sys). 축 규칙은 다른 그래프와 같다(축 칸 토큰 · 바닥 14 · `text-chart`).
 
+**TOP-N 범주 막대.** `categories` + `valueLabels`. Disk IOPS · Disk Inode · 메모리 상위 5대처럼 대상마다 막대 하나를 세운다. 이름은 막대 바로 아래 가운데(`text-chart` · tertiary · 칸 폭에서 말줄임, 전체 이름은 `title`), 값은 모든 막대 위(가장 큰 값만 굵게 · primary). 범주축이면 바닥 여백이 18 로, 값 글자를 켜면 위 여백이 14 로 늘어난다. Y축 칸은 그대로 `--wds-widget-axis-gutter` 라 옆 칸과 Y축 선이 맞는다.
+
+- X축은 시간축(`xLabels`)과 범주축(`categories`) 중 하나. 둘 다 주면 `categories` 만 그린다.
+- `peak` 는 시계열에서 최댓값 하나만 적을 때. `valueLabels` 를 켜면 `peak` 는 따로 켜지 않는다.
+- 대상이 여섯 이상이거나 이름이 잘리면 안 되면 [[BarList]](가로 막대 줄)를 쓴다.
+
 | Prop | Type | Default |
 |---|---|---|
 | `series` | `{ label, values, color }[]` | — |
 | `xLabels` · `unit` · `yMax` | `string[]` · `string` · `number` | — · `""` · 자동 |
+| `categories` | `string[]` | — (주면 `xLabels` 대신) |
 | `peak` | `boolean` | `false` |
+| `valueLabels` | `boolean` | `false` |
 | `frame` | `boolean` | `true` |
 
 ## ApdexChart
