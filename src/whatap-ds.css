@@ -679,6 +679,9 @@
     /* @role 순차 스케일 4 단계 (크기·강도) | @use 히트맵 · 농도 표현 | @avoid 계열 구분 (series 사용) */
     --color-chart-seq-4: #1A50B0;
 
+    /* @role 판정 밖 계열 · 대조군의 회색 마크 | @use ForecastLineChart 의 대조군 선(평탄 · 지평 밖) · 비교 기준 계열 | @avoid 텍스트 (text 토큰 사용) · 비활성 표시 (그쪽은 --color-text-disabled) · 계열 정체성 (series 사용) */
+    --color-chart-neutral: #8A94A3;
+
     /* Chart — Speed · APM 응답 속도 등급. 다크 재매핑 없음(정적 아이콘과 일치). 정의: tokens.css */
     /* @role 응답 속도 등급 — 정상 | @use 액티브 트랜잭션 Arc·히트맵·speed 범례 | @avoid 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
     --color-chart-speed-normal: #3DA9FF;
@@ -2186,6 +2189,7 @@ html, body, #root {
   --color-chart-seq-2: #4C7CC4;
   --color-chart-seq-3: #6BA3EE;
   --color-chart-seq-4: #9BC8FF;
+  --color-chart-neutral: #6B7380;
 
   /* Topology — 레퍼런스에 다크 시안이 없어 새로 설계한 값(반전 아님).
      층 순서는 라이트와 동일: canvas < group < node. 정의: tokens.css */

@@ -158,6 +158,8 @@ export { default as MiniBarChart } from "./MiniBarChart";
 export type { MiniBarChartProps, MiniBarChartSeries } from "./MiniBarChart";
 export { default as ApdexChart } from "./ApdexChart";
 export type { ApdexChartProps } from "./ApdexChart";
+export { default as ForecastLineChart } from "./ForecastLineChart";
+export type { ForecastLineChartProps, ForecastLineChartSeries, ForecastPoint } from "./ForecastLineChart";
 export { default as BarList } from "./BarList";
 export type { BarListProps, BarListRow } from "./BarList";
 export { default as ActiveTransactionArc, SPEED_LEGEND } from "./ActiveTransactionArc";

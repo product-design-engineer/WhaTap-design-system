@@ -19,7 +19,7 @@ import TriggerButton from "./widget/TriggerButton";
  *
  * ## When to use
  * - 대시보드 · Flex 보드 격자의 위젯 한 칸 (액티브 트랜잭션 · 히트맵 · 이벤트 목록 · 프로젝트 표).
- * - 칸 안 차트는 모두 `frame={false}` 로 담는다: [[MiniLineChart]] · [[MiniMultiLineChart]] · [[MiniBarChart]] · [[ApdexChart]]
+ * - 칸 안 차트는 모두 `frame={false}` 로 담는다: [[MiniLineChart]] · [[MiniMultiLineChart]] · [[MiniBarChart]] · [[ApdexChart]] · [[ForecastLineChart]]
  *   · [[BarList]] · [[MiniDonutChart]] · [[KpiCard]] · [[HexGrid]] · [[ActiveTransactionArc]] · [[ScatterHeatmap]]. 표([[DataTable]])는 `bleed`.
  * - 요약 숫자 여럿(애플리케이션 요약 같은)은 새 차트가 아니라 [[KpiField]] 를 세로로 쌓고 값만 크게(children) 둔다.
  *

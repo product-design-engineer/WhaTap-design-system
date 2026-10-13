@@ -363,6 +363,7 @@ hover 시 표면이 뒤집히는 아이콘 버튼(첨부 `+` 버튼 등)은 `bla
 |---|---|---|
 | **series** (categorical) | `--color-chart-series-1..8` | **정체성** — 어느 계열인가 |
 | **seq** (sequential) | `--color-chart-seq-1..4` | **크기** — 얼마나 큰가 |
+| **neutral** | `--color-chart-neutral` | **판정 밖**: 대조군 · 평탄 계열. 상태색을 쓰는 차트에서 대상이 아닌 계열을 회색으로 낮춘다(ForecastLineChart) |
 
 **series 규칙**
 - **1번부터 순서대로 배정하고 순환하지 않습니다.** 순서 자체가 CVD 안전 장치이므로 바꾸지 않습니다.

@@ -1,4 +1,4 @@
-# Chrome (페이지 골격) Components — 30 컴포넌트
+# Chrome (페이지 골격) Components — 31 컴포넌트
 
 > 원본: `src/` (interfacedesigner/WhaTap-design-system)
 
@@ -10,14 +10,14 @@
 
 **조립 순서:** `DashboardLayout` → `Sidebar` + `header` 슬롯 (`PageHeader` 또는 `PageHeaderAiInline` + 옵션으로 `OptionbarPage` 또는 `FilterBar`) + `main` 슬롯 + 자식으로 `WhaTapAiWidget`
 
-## 카탈로그 (31)
+## 카탈로그 (32)
 
 | 영역 | 컴포넌트 |
 |---|---|
 | 레이아웃 | DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · SubHeaderBar |
 | 옵션바 (시간/인스턴스/프리셋) | OptionbarPage · OptionbarInstanceSelector · LiveTimerCompact · TimeRangeSelector · PresetSelect |
 | 데이터 표시 | WidgetFrame · CardHead · DataTable · FilterBar · EventWeekTimeMatrix |
-| 대시보드 차트 (`frame={false}` 로 WidgetFrame 안에) | MiniLineChart · MiniMultiLineChart · MiniBarChart · ApdexChart · BarList · MiniDonutChart · KpiCard · HexGrid |
+| 대시보드 차트 (`frame={false}` 로 WidgetFrame 안에) | MiniLineChart · MiniMultiLineChart · MiniBarChart · ApdexChart · ForecastLineChart · BarList · MiniDonutChart · KpiCard · HexGrid |
 | 액션·진입 | Button · AiSymbol |
 | 알림·상태 | Toast · ConfirmDialog · InfoTip · Stage · DashboardBuildingProgress |
 | 위젯 컨텍스트 | WhaTapAiContext (Provider) |
@@ -518,6 +518,7 @@ export type DataTableProps<T> = {
 | ScatterHeatmap | 바깥 좌우 여백(8px) | `title` · `meta` · `legend={SPEED_LEGEND}` · 메뉴 |
 | MiniBarChart | 바깥 좌우 여백(8px) | `title` · `meta` · `legend`(막대 색 그대로) · 메뉴 |
 | ApdexChart | 바깥 좌우 여백(8px) | `title`(「Apdex」) · `meta` · 메뉴 (구간 이름이 띠 안에 있어 범례 없음) |
+| ForecastLineChart | 바깥 좌우 여백(8px) | `title` · `summary`(추세 구간 · 지평) · `legend`(선 색 그대로) · 메뉴 |
 | BarList | 바깥 여백(좌우 · 아래 8px) | `title` · `meta` · 메뉴 (줄마다 색이 이름표라 범례 없음) |
 
 ## MiniBarChart
@@ -548,6 +549,24 @@ Apdex × 100 을 네 구간 띠(Excellent 94 · Good 85 · Poor 70 · Unacceptab
 | `value` | `number` | — |
 | `values` · `xLabels` | `number[]` · `string[]` | — |
 | `frame` | `boolean` | `true` |
+
+## ForecastLineChart
+
+관측은 실선, 예측은 점선. x = 0 「지금」 세로선이 둘을 가르고, 임계선(점선) 위에 옅은 띠, 예측이 천장에 닿는 자리에 빈 원 마커와 도달 시각을 적는다. 디스크 · 쿼터 고갈처럼 판정이 기울기의 연장에서 나오는 지표용. x 는 도메인 단위(음수 = 과거, 0 = 지금, 양수 = 미래). 축 규칙은 다른 그래프와 같다(축 칸 토큰 · 바닥 14 · `text-chart`).
+
+색은 호출부가 토큰으로 준다. 기본은 `--color-chart-series-N`. 위젯이 상태를 말할 때만 `--color-status-error` · `--color-status-warning` 을 쓰고, 그때 판정 밖 계열(평탄 · 지평 밖 · 대조군)은 `--color-chart-neutral` 회색으로 낮춘다. 임계 띠는 `threshold.tone` 이 정한다(선 `--color-status-*` · 띠 `--color-status-*-soft`). 글자는 text 토큰.
+
+| Prop | Type | Default |
+|---|---|---|
+| `series` | `{ id, label, color, observed, forecast?, reach? }[]` (점은 `{ x, y }`, `reach` 는 `{ x, y, label? }`) | — |
+| `xDomain` | `[number, number]` | — |
+| `xLabels` | `{ x, label }[]` | `[]` |
+| `nowLabel` | `string` | `"지금"` |
+| `yMax` · `unit` | `number` · `string` | `100` · `""` |
+| `threshold` | `{ value, label?, tone?: "critical" \| "warning" }` | — |
+| `highlightId` | `string \| null` | `null` |
+| `frame` | `boolean` | `true` |
+| `ariaLabel` | `string` | — |
 
 ## BarList
 
