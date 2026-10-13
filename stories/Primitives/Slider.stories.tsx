@@ -50,6 +50,22 @@ export const Stops: Story = {
   },
 };
 
+/** 바닥값(floor) — 이미 쓴 값보다 낮게는 못 고른다. 아래 눈금은 흐리게 서고, 끌면 손잡이가 floor(눈금 사이)에서 멈춘다. */
+export const Floor: Story = {
+  render: () => {
+    const Demo = () => {
+      const [v, setV] = useState(500_000);
+      return (
+        <div style={{ width: 420, display: "flex", flexDirection: "column", gap: 8 }}>
+          <span className="text-base text-primary">누적 사용액 {won(v)}까지 · 지금 누적 사용액 150,000원</span>
+          <Slider stops={LIMITS} floor={150_000} value={v} onChange={setV} markLabel={man} valueText={won} label="사용량 한계" />
+        </div>
+      );
+    };
+    return <Demo />;
+  },
+};
+
 /** 연속 — min · max · step. 눈금 글자는 양 끝에만 선다. */
 export const Continuous: Story = {
   render: () => {
