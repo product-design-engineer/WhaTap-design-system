@@ -51,7 +51,7 @@ import TriggerButton from "./widget/TriggerButton";
  * - **범례는 본문 오른쪽 위 한 줄**(`legend`). 헤더 오른쪽은 메뉴 자리라 범례를 올리지 않는다.
  *   **모든 차트 칸에 둔다 — 계열이 하나여도**(2026-10-08 사용자 결정). 이름은 제목이 아니라 계열 이름(「전체 APM」 「평균」 「usr」).
  *   예외는 이름표가 본문 안에 이미 있는 것뿐이다: [[BarList]](줄 이름) · [[MiniDonutChart]](옆 열) · [[ApdexChart]](띠 이름) · 숫자 칸([[KpiCard]] · [[KpiField]]).
- *   속도 구분(아크 · 히트맵)은 `SPEED_LEGEND`, GPU 맵은 `HEX_GRID_LEGEND` 를 그대로 넘긴다. 계열이 넷을 넘으면 줄바꿈 없이 넘치는 만큼 잘린다 — 그런 칸은 계열을 줄인다.
+ *   속도 구분(아크 · 히트맵)은 `SPEED_LEGEND`, GPU 맵은 `HEX_GRID_LEGEND` 를 그대로 넘긴다(칸 수를 붙이면 `hexGridLegend(items)` → `Critical 3`). 계열이 넷을 넘으면 줄바꿈 없이 넘치는 만큼 잘린다 — 그런 칸은 계열을 줄인다.
  * - 푸터는 출처 · 마지막 수집 시각 한 줄만. 범례를 푸터로 내리지 않는다.
  * - **본문 간격은 토큰 넷이 정한다**: 좌우 `--wds-widget-body-px` · 아래 `--wds-widget-body-pb` · 줄 간격 `--wds-widget-row-gap`
  *   · Y축 눈금 칸 `--wds-widget-axis-gutter`. 칸 안 차트는 모두 `frame={false}` 로 자기 바깥 여백을 0 으로 둔다. 그래야 한 줄의

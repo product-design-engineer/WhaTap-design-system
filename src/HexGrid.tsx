@@ -1,26 +1,39 @@
-import React from "react";
+import React, { type ReactNode } from "react";
 
 /**
- * HexGrid — GPU 리소스 맵 (헥사곤 그리드).
+ * HexGrid — 리소스 맵 (헥사곤 그리드). GPU 디바이스 · 서버처럼 개별 장치를 한 칸씩 깐다.
  *
  * ## Purpose
- * GPU Map처럼 개별 GPU 디바이스를 헥사곤으로 배치하여
- * Active/Idle 상태를 색상으로 시각화. 토폴로지 파악에 사용.
+ * 개별 장치(GPU 디바이스 · 서버 등)를 헥사곤으로 배치하여 상태(active · idle · warning · critical)를
+ * 색상으로 시각화. 토폴로지 파악에 사용. 필요하면 장치 하나를 가리키고(hover 툴팁) · 고르고(`onSelect`) ·
+ * 일부만 남겨 보이게(`highlightIds`) 할 수 있다.
  *
  * ## When to use
  * - GPU 대시보드에서 디바이스별 상태를 한눈에 볼 때
- * - 자원 맵(Resource Map) 시각화
+ * - 자원 맵(Resource Map) 시각화 · 서버 상태 맵(SMS 리소스 보드)
+ * - 배너 · 칩이 가리키는 장치를 맵에서 찾아 보여 줄 때 → `highlightIds`
+ * - 장치 하나를 눌러 그 장치의 상세 · 원인 진단으로 들어갈 때 → `onSelect` + `renderTooltip`
  *
  * ## When NOT to use
  * - 노드-엣지 관계가 필요 → [[TopologyCanvas]]
  * - 시계열 데이터 → [[MiniLineChart]]
+ * - 장치 수백 개를 군집 단위로 요약 → [[AiTargetMesh]]
+ * - 아이콘 · 텍스트에 붙는 설명 말풍선 → [[Tooltip]] (HexGrid 툴팁은 맵 안 헥사곤 전용)
  *
  * ## Composition rules
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 여백 · 「GPU Map」 제목 줄 · 범례를 뺀다). [[WidgetFrame]] 안에 넣을 때 쓴다.
  *   범례는 `HEX_GRID_LEGEND` 를 WidgetFrame `legend` 로 넘긴다(같은 색 토큰). 제목 · 메뉴도 WidgetFrame 이 맡는다(patterns §15).
- * - Primitives 레이어 (자체 렌더링, DS 컴포넌트 import 0)
- * - 색은 chart/status 토큰만 사용
- * - SVG 기반 — 헥사곤은 polygon, 라벨은 HTML overlay
+ * - 개수를 범례에 붙일 때는 `hexGridLegend(items)` 를 WidgetFrame `legend` 로 넘긴다 → `Critical 3` 처럼
+ *   라벨 뒤에 칸 수가 붙는다. 칠해진 색을 센다(톤이 0 개여도 줄은 남는다). 라벨은 `labels` 로 바꾼다.
+ * - Primitives 레이어 (자체 렌더링, DS 컴포넌트 import 0). 툴팁 상자도 [[Tooltip]] 을 쓰지 않고 직접 그린다.
+ * - 색은 chart/status 토큰만 사용. 툴팁 상자는 `bg-card` · `--color-border-default` · `--shadow-md` · 텍스트 토큰.
+ * - SVG 기반. 헥사곤은 polygon. 툴팁은 SVG 와 **같은 좌표계**(viewBox → 픽셀 환산)로 hover 헥사곤에 붙는
+ *   HTML overlay 다(patterns §5). `pointer-events: none` 이라 툴팁 안에 버튼을 넣지 않는다. 행동은 헥사곤 클릭으로.
+ * - 상호작용은 **opt-in**. `onSelect` 나 `renderTooltip` 이 없으면 hover 흐림 · 포인터 · role 이 전혀 붙지 않는다(GPU 맵 기본은 정적).
+ * - `onSelect` 를 주면 헥사곤이 버튼이 된다(`role="button"` · Tab 으로 닿고 Enter/Space 로 고른다). 이름은 `ariaLabel` → `label` → `id` 순.
+ * - hover 중엔 나머지가 약하게(0.32) 흐려지고, `highlightIds` 가 있으면 밖의 칸은 강하게(0.18) 흐려진다.
+ *   **하이라이트가 hover 보다 우선**한다. 가리키는 대상이 마우스 움직임에 흔들리면 안 된다.
+ * - `label` 이 비면 글자를 그리지 않는다(서버 맵처럼 라벨 없는 맵).
  *
  * @example
  * ```tsx
@@ -31,6 +44,16 @@ import React from "react";
  *   ]}
  *   columns={6}
  * />
+ *
+ * <WidgetFrame title="Server Status Map" legend={hexGridLegend(servers)}>
+ *   <HexGrid
+ *     frame={false}
+ *     items={servers}
+ *     highlightIds={bannerHosts}
+ *     onSelect={(s) => openDiagnosis(s.id)}
+ *     renderTooltip={(s) => <ServerTip id={s.id} />}
+ *   />
+ * </WidgetFrame>
  * ```
  */
 
@@ -38,8 +61,11 @@ export type HexTone = "active" | "idle" | "warning" | "critical";
 
 export type HexItem = {
   id: string;
-  label: string;
+  /** 헥사곤 가운데 글자. 비우거나 없으면 글자를 그리지 않는다(서버 맵 등). */
+  label?: string;
   tone: HexTone;
+  /** 접근 이름(`onSelect` 가 있을 때 버튼 이름). 없으면 `label` → `id`. */
+  ariaLabel?: string;
 };
 
 export type HexGridProps = {
@@ -53,6 +79,21 @@ export type HexGridProps = {
    * `false` 면 본문만 그린다. [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
    */
   frame?: boolean;
+  /**
+   * 헥사곤을 고를 때. 주면 헥사곤이 버튼이 된다(포인터 · `role="button"` · Tab · Enter/Space).
+   * 없으면 포인터 · role 변화 없음.
+   */
+  onSelect?: (item: HexItem) => void;
+  /**
+   * 주면 이 id 들만 또렷하게 남기고 나머지를 강하게(0.18) 흐린다. hover 흐림보다 우선.
+   * `null` · 생략이면 하이라이트 없음.
+   */
+  highlightIds?: ReadonlySet<string> | readonly string[] | null;
+  /**
+   * hover · 키보드 포커스한 헥사곤에 붙는 툴팁 내용. 상자(표면 · 테두리 · 그림자)는 HexGrid 가 그린다.
+   * `pointer-events: none` 이라 툴팁 안에 버튼을 넣지 않는다.
+   */
+  renderTooltip?: (item: HexItem) => ReactNode;
 };
 
 const TONE_FILL: Record<HexTone, string> = {
@@ -69,6 +110,29 @@ export const HEX_GRID_LEGEND = [
   { label: "Warning", color: TONE_FILL.warning },
   { label: "Critical", color: TONE_FILL.critical },
 ];
+
+const LEGEND_TONES: HexTone[] = ["active", "idle", "warning", "critical"];
+
+/**
+ * 칸 수를 붙인 범례. [[WidgetFrame]] `legend` 로 넘긴다(`Critical 3`). 순서 · 색은 `HEX_GRID_LEGEND` 와 같다.
+ * 칠해진 톤을 센다. 0 개인 톤도 줄은 남긴다(범례 자리가 데이터마다 흔들리지 않게).
+ * `labels` 로 톤 이름을 바꾼다(예: `{ active: "정상", idle: "비활성" }`).
+ */
+export function hexGridLegend(
+  items: readonly Pick<HexItem, "tone">[],
+  labels?: Partial<Record<HexTone, string>>,
+): { label: string; color: string }[] {
+  const counts: Record<HexTone, number> = { active: 0, idle: 0, warning: 0, critical: 0 };
+  for (const it of items) counts[it.tone]++;
+  return LEGEND_TONES.map((tone, i) => ({
+    label: `${labels?.[tone] ?? HEX_GRID_LEGEND[i].label} ${counts[tone]}`,
+    color: TONE_FILL[tone],
+  }));
+}
+
+/** hover 중 나머지 칸 · 하이라이트 밖 칸의 불투명도. */
+const HOVER_DIM_OPACITY = 0.32;
+const HIGHLIGHT_DIM_OPACITY = 0.18;
 
 const TONE_TEXT: Record<HexTone, string> = {
   active: "var(--color-text-inverse)",
@@ -90,9 +154,20 @@ export default function HexGrid({
   columns = 6,
   radius: _radius = 24,
   frame = true,
+  onSelect,
+  highlightIds,
+  renderTooltip,
 }: HexGridProps) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [size, setSize] = React.useState<{ w: number; h: number } | null>(null);
+  /** hover · 포커스 중인 칸. 상호작용이 켜졌을 때만 쓴다. */
+  const [activeId, setActiveId] = React.useState<string | null>(null);
+  const [focusRingId, setFocusRingId] = React.useState<string | null>(null);
+  const interactive = !!onSelect || !!renderTooltip;
+  const highlightSet = React.useMemo<ReadonlySet<string> | null>(() => {
+    if (!highlightIds) return null;
+    return highlightIds instanceof Set ? highlightIds : new Set(highlightIds as readonly string[]);
+  }, [highlightIds]);
 
   React.useEffect(() => {
     const el = containerRef.current;
@@ -150,6 +225,15 @@ export default function HexGrid({
   const lastRowLen = rowItems[rowItems.length - 1]?.length ?? 0;
   const lastRowShift = lastRowLen < cols ? ((cols - lastRowLen) * (hexW + gap)) / 2 : 0;
 
+  /** 칸 중심 좌표(viewBox 단위). 툴팁을 같은 좌표계에 붙이려고 렌더와 같은 식으로 구한다. */
+  const positions = new Map<string, { x: number; y: number }>();
+  rowItems.forEach((row, ri) => {
+    const oddOffset = ri % 2 === 1 ? (hexW + gap) / 2 : 0;
+    const centerOffset = ri === rowItems.length - 1 ? lastRowShift : 0;
+    const y = ri * (hexH * 0.75 + gap) + hexH / 2;
+    row.forEach((item, ci) => positions.set(item.id, { x: ci * (hexW + gap) + radius + oddOffset + centerOffset, y }));
+  });
+
   return (
     <div className={frame ? "flex flex-col bg-card border border-color-var-color-border-default rounded-4px px-8px py-6px h-full" : "flex flex-col h-full min-w-0"}>
       {frame && (
@@ -167,7 +251,8 @@ export default function HexGrid({
       </div>
       )}
 
-      <div ref={containerRef} className="flex-1 min-h-0 flex items-center justify-center overflow-hidden">
+      {/* 상호작용이 켜지면 툴팁이 칸 밖으로 잘리지 않게 overflow 를 연다(SVG 는 100% 라 넘치지 않는다). */}
+      <div ref={containerRef} className={`relative flex-1 min-h-0 flex items-center justify-center${interactive ? "" : " overflow-hidden"}`}>
         <svg
           viewBox={`${-pad} ${-pad} ${totalW + pad * 2} ${totalH + pad * 2}`}
           width="100%"
@@ -196,17 +281,59 @@ export default function HexGrid({
             </filter>
           </defs>
 
-          {rowItems.map((row, ri) => {
-            const isLastRow = ri === rowItems.length - 1;
-            const oddOffset = ri % 2 === 1 ? (hexW + gap) / 2 : 0;
-            const centerOffset = isLastRow ? lastRowShift : 0;
-            const y = ri * (hexH * 0.75 + gap) + hexH / 2;
-            return row.map((item, ci) => {
-              const x = ci * (hexW + gap) + radius + oddOffset + centerOffset;
+          {rowItems.map((row) => {
+            return row.map((item) => {
+              const { x, y } = positions.get(item.id)!;
               const isActive = item.tone === "active";
               const gradId = isActive ? "hex-grad-active" : item.tone === "idle" ? "hex-grad-idle" : undefined;
+              const outOfHighlight = !!highlightSet && !highlightSet.has(item.id);
+              const hoverDim = interactive && activeId !== null && activeId !== item.id;
+              const opacity = outOfHighlight ? HIGHLIGHT_DIM_OPACITY : hoverDim ? HOVER_DIM_OPACITY : 1;
+              const dimmable = interactive || !!highlightSet;
+              const name = item.ariaLabel ?? (item.label || item.id);
               return (
-                <g key={item.id} filter="url(#hex-shadow)">
+                <g
+                  key={item.id}
+                  filter="url(#hex-shadow)"
+                  opacity={dimmable ? opacity : undefined}
+                  style={
+                    dimmable
+                      ? { transition: "opacity 120ms ease", cursor: onSelect ? "pointer" : undefined, outline: interactive ? "none" : undefined }
+                      : undefined
+                  }
+                  role={onSelect ? "button" : undefined}
+                  tabIndex={onSelect ? 0 : undefined}
+                  aria-label={onSelect ? name : undefined}
+                  onMouseEnter={interactive ? () => setActiveId(item.id) : undefined}
+                  onMouseLeave={interactive ? () => setActiveId((cur) => (cur === item.id ? null : cur)) : undefined}
+                  onFocus={
+                    interactive
+                      ? (e) => {
+                          setActiveId(item.id);
+                          if (e.currentTarget.matches(":focus-visible")) setFocusRingId(item.id);
+                        }
+                      : undefined
+                  }
+                  onBlur={
+                    interactive
+                      ? () => {
+                          setActiveId((cur) => (cur === item.id ? null : cur));
+                          setFocusRingId((cur) => (cur === item.id ? null : cur));
+                        }
+                      : undefined
+                  }
+                  onClick={onSelect ? () => onSelect(item) : undefined}
+                  onKeyDown={
+                    onSelect
+                      ? (e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            onSelect(item);
+                          }
+                        }
+                      : undefined
+                  }
+                >
                   <polygon
                     points={hexPoints(x, y, radius - 1)}
                     fill={gradId ? `url(#${gradId})` : TONE_FILL[item.tone]}
@@ -227,6 +354,11 @@ export default function HexGrid({
                       filter="url(#hex-glow-active)"
                     />
                   )}
+                  {/* 키보드 포커스 링. 컨트롤의 focus 는 ring(브랜드 파랑). SVG g 는 outline 이 고르지 않아 외곽선으로 그린다. */}
+                  {focusRingId === item.id && (
+                    <polygon points={hexPoints(x, y, radius + 1)} fill="none" stroke="var(--color-brand-blue)" strokeWidth="2" />
+                  )}
+                  {item.label ? (
                   <text
                     x={x}
                     y={y}
@@ -239,11 +371,43 @@ export default function HexGrid({
                   >
                     {item.label}
                   </text>
+                  ) : null}
                 </g>
               );
             });
           })}
         </svg>
+        {renderTooltip && activeId !== null && size && (() => {
+          const pos = positions.get(activeId);
+          const item = items.find((it) => it.id === activeId);
+          if (!pos || !item) return null;
+          /* SVG 와 같은 좌표계. viewBox(meet) 를 컨테이너 픽셀로 환산한다(patterns §5). */
+          const vbW = totalW + pad * 2;
+          const vbH = totalH + pad * 2;
+          const scale = Math.min(size.w / vbW, size.h / vbH);
+          const ox = (size.w - vbW * scale) / 2;
+          const oy = (size.h - vbH * scale) / 2;
+          const px = ox + (pos.x + pad) * scale;
+          const py = oy + (pos.y + pad) * scale;
+          const off = radius * scale * 0.5;
+          /* 칸 중심이 오른쪽 · 아래 절반이면 반대쪽으로 편다. 맵 밖으로 덜 나가게. */
+          const flipX = px > size.w / 2;
+          const flipY = py > size.h / 2;
+          return (
+            <div
+              role="tooltip"
+              className="absolute z-10 pointer-events-none bg-card border border-color-var-color-border-default rounded-6px px-12px py-8px shadow-md text-sm text-primary whitespace-nowrap"
+              style={{
+                left: flipX ? px - off : px + off,
+                top: flipY ? py - off : py + off,
+                transform: `translate(${flipX ? "-100%" : "0"}, ${flipY ? "-100%" : "0"})`,
+                fontFamily: "var(--font-family-korean)",
+              }}
+            >
+              {renderTooltip(item)}
+            </div>
+          );
+        })()}
       </div>
     </div>
   );
