@@ -30,12 +30,12 @@ const meta: Meta<typeof PageHeaderLanguageMenu> = {
 export default meta;
 type Story = StoryObj<typeof PageHeaderLanguageMenu>;
 
-/** 기본 — 한국어 선택 상태. 아이콘을 누르면 펴진다. */
+/** 기본: 한국어 선택 상태. 아이콘을 누르면 펴진다. */
 export const Default: Story = {
   args: { value: "ko", options: LANGS },
 };
 
-/** 인터랙티브 — 고르면 체크가 옮겨 가고, 머리글도 그 언어로 바뀐다. */
+/** 인터랙티브: 고르면 체크가 옮겨 가고, 머리글도 그 언어로 바뀐다. */
 export const Interactive: Story = {
   args: {},
   render: () => {

@@ -23,7 +23,7 @@ export type LanguageOption = { code: string; label: string };
  * - 선택지 라벨은 그 언어 자기 이름으로 적는다. 「영어」 처럼 지금 언어로 번역하면, 읽지 못하는 언어로
  *   들어온 사람이 자기 언어를 찾지 못한다.
  * - 열림/닫힘은 이 컴포넌트가 가진다. 고른 값의 저장과 화면 반영은 소비 레이어가 `onChange` 에서 한다.
- * - 색·배경은 토큰/기정의 클래스(`text-primary` · `hover-bg-surface-100` · `--color-text-secondary`) — 새 클래스 금지.
+ * - 색·배경은 토큰/기정의 클래스(`text-primary` · `hover-bg-surface-100` · `--color-text-secondary`)만 쓴다. 새 클래스 금지.
  *
  * @example
  * ```tsx

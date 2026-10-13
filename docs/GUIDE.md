@@ -105,7 +105,7 @@ AiCard (흰 배경 + 테두리 + 둥근 모서리 + 진입 애니메이션)
 | 팝업 대화상자 | `Modal` |
 | 도움말 (글자 옆 ⓘ) | `InfoTip` — 밑줄 트리거 금지 |
 | 아이콘 버튼 이름표 | `Tooltip` |
-| 화면 언어 고르기 | `PageHeader` 의 `language` (= `PageHeaderLanguageMenu`) — 헤더 밖에 따로 두지 않는다 |
+| 화면 언어 고르기 | `PageHeader` 의 `language` (= `PageHeaderLanguageMenu`). 헤더 밖에 따로 두지 않는다 |
 
 ---
 

@@ -135,7 +135,7 @@ export type PageHeaderLanguage = { value: string; options: { code: string; label
 export type PageHeaderLabels = { support?: string; notifications?: string; myAccount?: string };
 ```
 
-**언어 설정 정책:** 언어 트리거는 벨 · 아바타와 같은 **24px 아이콘 트리거**다(글자 pill 아님). 그래서 켜도 오른쪽 줄의 크기와 16px 간격이 그대로다. 선택지 라벨을 지금 언어로 번역하지 않는다 — 읽지 못하는 언어로 들어온 사람이 자기 언어를 찾을 수 있어야 한다. 헤더는 고른 값만 알리고, 저장과 화면 다시 그리기는 소비 레이어가 한다.
+**언어 설정 정책:** 언어 트리거는 벨 · 아바타와 같은 **24px 아이콘 트리거**다(글자 pill 아님). 그래서 켜도 오른쪽 줄의 크기와 16px 간격이 그대로다. 선택지 라벨을 지금 언어로 번역하지 않는다. 읽지 못하는 언어로 들어온 사람이 자기 언어를 찾을 수 있어야 한다. 헤더는 고른 값만 알리고, 저장과 화면 다시 그리기는 소비 레이어가 한다.
 
 타이틀 + AI 버튼 + Docs + 고객지원 + (언어 · `language` 시) + **bell(notifications 시 빨간 점)** + **avatar(profileMenu 드롭다운 · roleBadge 헤더)** 가 항상 한 줄에 모두 표시됩니다.
 

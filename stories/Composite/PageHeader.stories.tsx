@@ -55,7 +55,7 @@ export const Interactive: Story = {
   },
 };
 
-/** 언어 설정 — `language` 를 주면 알림 벨 왼쪽에 지구본이 선다. 헤더 고정 글자는 `labels` 로 함께 바꾼다. */
+/** 언어 설정: `language` 를 주면 알림 벨 왼쪽에 지구본이 선다. 헤더 고정 글자는 `labels` 로 함께 바꾼다. */
 export const WithLanguage: Story = {
   args: {},
   render: () => {
