@@ -39,7 +39,7 @@ export type Tone = "high" | "mid" | "low" | "idle" | "neutral";
 
 ```ts
 tokens.font.family.korean.value   // 'Noto Sans', 'Noto Sans KR', sans-serif
-tokens.font.family.numeric.value  // Roboto, 'Noto Sans', sans-serif
+tokens.font.family.numeric.value  // Roboto, 'Noto Sans', 'Noto Sans KR', sans-serif
 ```
 
 - `korean` — 위젯 본문, 헤딩, 라벨 (한국어 + 영문 혼합)

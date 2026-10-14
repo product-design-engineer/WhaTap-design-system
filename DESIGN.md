@@ -246,7 +246,7 @@ typography:
   # Font Family
   family-sans:           '"Noto Sans KR", "Noto Sans", ui-sans-serif, system-ui, sans-serif'
   family-korean:         '"Noto Sans", "Noto Sans KR", sans-serif'
-  family-numeric:        'Roboto, "Noto Sans", sans-serif'
+  family-numeric:        'Roboto, "Noto Sans", "Noto Sans KR", sans-serif'
   family-mono:           '"JetBrains Mono", "SF Mono", Menlo, Consolas, monospace'
   family-korean-kr:      '"Noto Sans KR", sans-serif'
   family-korean-inter:   'Inter, "Noto Sans KR", sans-serif'
