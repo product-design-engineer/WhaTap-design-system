@@ -41,7 +41,7 @@ export const GATE_ROSTER = [
     script: "scripts/check-no-tailwind.mjs",
     pipeline: null,
     invariant:
-      "런타임 스타일은 외부 CSS 프레임워크 의존 없는 일반 CSS(`whatap-ds.css`). 의존성·CSS 산출물 어디에도 Tailwind 흔적이 없어야 한다 — `@layer` · `--tw-*` · `@property` · escape 클래스명(`.foo-\\[…\\]`) · `tailwind*` 의존성. 유틸 클래스명은 escape 없는 일반 식별자.",
+      "런타임 스타일은 외부 CSS 프레임워크 의존 없는 일반 CSS(`whatap-ds.css`). 의존성·CSS 산출물 어디에도 Tailwind 흔적이 없어야 한다 — `--tw-*` · escape 클래스명(`.foo-\\[…\\]`) · `tailwind*` 의존성 · 설정 파일, 그리고 면제 표시 없는 `@layer` · `@property`. 의도된 네이티브 사용 2곳(`@layer base` preflight · `@property --glow-angle`)은 줄 단위 `no-tailwind-ok` 로만 허용된다. 유틸 클래스명은 escape 없는 일반 식별자.",
     prevents: "Tailwind 재도입 · CSS 내 프레임워크 흔적",
   },
   {

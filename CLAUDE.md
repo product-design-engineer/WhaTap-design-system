@@ -189,7 +189,7 @@ style={{ background: tokens.color.surface.critical.value }}     // ❌ 라이트
 
 ## 스타일 — 일반 CSS (Tailwind 미사용 · 흔적 0)
 
-런타임 스타일은 외부 CSS 프레임워크 흔적이 0인 **자체 소유 일반 CSS** `src/whatap-ds.css` (= export `./style.css`·`./whatap-ds.css`). 내부에 `--tw-*`·`@property`·`.foo-\[…\]`(escape 클래스명) 없음. 유틸 클래스명은 escape 없는 일반 식별자(`gap-4px`·`hover-opacity-70` 등).
+런타임 스타일은 외부 CSS 프레임워크 흔적이 0인 **자체 소유 일반 CSS** `src/whatap-ds.css` (= export `./style.css`·`./whatap-ds.css`). 내부에 `--tw-*`·`.foo-\[…\]`(escape 클래스명) 없음. `@property` 는 각도 보간용 네이티브 1곳(`--glow-angle`)만 있고 `@layer base` 와 같은 방식으로 줄 단위 면제된다 — 프레임워크 산출물이 아니다. 유틸 클래스명은 escape 없는 일반 식별자(`gap-4px`·`hover-opacity-70` 등).
 
 **`@layer base` 는 한 곳에 의도적으로 있다** — preflight 전역 reset 전용이다. 이 파일은 unlayered 로 import 되는데 reset 까지 unlayered 면 **소비자 쪽** utility 를 cascade 에서 이겨 소비 페이지 스타일을 무력화한다. 그래서 preflight 만 base 레이어로 내렸다(아래 utilities 섹션은 unlayered 유지). 프레임워크 산출물이 아니라 네이티브 cascade layer 다. `npm run lint:no-tailwind` 가 이 한 줄만 `/* no-tailwind-ok: … */` 로 면제하고 나머지 `@layer`·Tailwind 의존성·설정 파일·`--tw-*` 는 전부 차단한다(면제는 **줄 단위**라 새 `@layer` 는 그대로 잡힌다).
 

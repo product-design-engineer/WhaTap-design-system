@@ -5,8 +5,8 @@
  * CSS 식별자, 색/타이포/보더/transition 값은 토큰(:root) 또는 인라인 상수로 직접 표기.
  * 구조: 토큰(:root) → preflight → utilities → 전역(keyframes·.ai-*·.dark). 자체완결.
  *
- * 생성: node scripts/detailwind.mjs generate  (컴포넌트 className/토큰 변경 시 재생성)
- * 진실 원본: scripts/frozen-whatap-ds.css (구 빌드 1회 스냅샷, 미배포)
+ * 이 파일을 직접 편집한다(hand-maintained). scripts/detailwind.mjs 는 최초 1회 변환에 쓴 도구이고
+ * 재실행하면 수동 추가분이 사라진다 — 가드가 거부한다. 변환 당시 스냅샷: scripts/frozen-whatap-ds.css(미배포).
  * ============================================================================ */
 
 /* ── tokens (:root) ─────────────────────────────────────────────────────── */

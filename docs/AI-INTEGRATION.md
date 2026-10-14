@@ -188,7 +188,7 @@ import "@whatap/design-system/style.css";   // 일반 CSS — 토큰+유틸+전�
    - 관리자(초대): `gh api -X PUT repos/interfacedesigner/WhaTap-design-system/collaborators/<github-login> -f permission=pull`
    - 엔지니어: 메일/알림의 초대 수락 → `git clone https://github.com/interfacedesigner/WhaTap-design-system.git`
 2. **npm 미등록** — `npm install @whatap/design-system` 으로는 못 받습니다(공개 레지스트리 아님). **로컬 clone 을 `link:`(또는 `file:`)** 로 소비하거나 워크스페이스(`workspace:*`) 멤버로 둡니다.
-3. **소비 환경 호환** — 이 패키지는 빌드 산출물(dist) 없이 **`.ts` 소스를 직접 export**합니다. 소비 측이 **Vite + TypeScript + React 19 + Tailwind 4** 여야 무설정 동작. 다른 번들러(webpack 등)는 TS/JSX 트랜스파일·CSS 처리 추가 설정이 필요하며, 이 경우 별도 빌드 산출물 배포 방식([아래 zero-friction 옵션](#zero-friction-설치-검토중)) 검토.
+3. **소비 환경 호환** — 이 패키지는 빌드 산출물(`dist/` — ESM + `.d.ts` + `style.css`)과 소스(`source` 조건)를 함께 내보냅니다. Vite 등 `source` 조건을 쓰는 소비자는 소스를, 그 외 번들러(webpack 등)는 `dist` 를 씁니다. 요구 사항은 **React 19** 뿐이고 **Tailwind · PostCSS 는 필요 없습니다** — 스타일은 `import "@whatap/design-system/style.css"` 한 줄.
 
 ### 설치 (사전 조건 충족 후)
 
