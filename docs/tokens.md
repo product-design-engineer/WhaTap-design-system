@@ -379,16 +379,15 @@ hover 시 표면이 뒤집히는 아이콘 버튼(첨부 `+` 버튼 등)은 `bla
 
 **seq** 는 한 색조의 단조 lightness 램프다. 라이트는 옅음→진함, **다크는 anchor 가 뒤집혀** 어두움→밝음이다(자동 반전이 아니라 고른 값).
 
-**검증 근거** (dataviz `validate_palette.js`, 6개 체크):
+**측정값은 여기에 적지 않는다** — 손으로 옮긴 수치는 값을 바꾸는 순간 낡는다(2026-10-14 재조정 때 옛 수치가 다섯 군데에 남아 있었다).
 
-| | 최악 인접 CVD ΔE | 정상시야 최악 | 대비 |
-|---|---|---|---|
-| 라이트 | 9.5 (deutan) | 17.0 | 전부 ≥3:1 |
-| 다크 | 9.6 (deutan) | 18.3 | 전부 ≥3:1 |
-| 엔티티 순서 (슬롯 1·3·7·2·5·6, §21) | 라이트 9.5 · 다크 9.6 (deutan) | 라이트 20.7 · 다크 16.5 | 전부 ≥3:1 |
+| 보고 싶은 것 | 정본 |
+|---|---|
+| 대역 · 채도 · 대비 · 인접 · 1~3 전체 · 엔티티 순서 · Severity 최악 쌍 (라이트 · 다크) | `pnpm lint:chart-palette` 출력 — `pnpm test` 가 매번 잰다 |
+| 계열 슬롯별 Severity · info 와의 거리 (모든 쌍 · 정상시야 / protan / deutan) | `docs/tokens.json` 의 `distinctFrom` — MCP `get_tokens` 가 읽는다 |
+| 값 · 다크 값 | `docs/tokens.json` 의 `value` · `dark` (런타임 `whatap-ds.css` 에서 생성) |
 
-엔티티 순서의 첫 후보(socket → 8)는 dbc(2) 와 이웃해 정상시야 ΔE 7.0 / 7.5 로 FAIL 했다.
-Severity 쌍 측정(§23)은 정책 본문의 표가 정본이다 — 슬롯 2 · 8 미달, 3 · 4 · 6 다크 미달, 1 = `status-info`.
+식은 dataviz `validate_palette.js` 와 같다(`scripts/lib/color-distance.mjs`). 이력: 첫 후보는 gold 밝기 대역 초과로, 엔티티 순서의 첫 배치는 dbc↔socket 이웃에서, 2026-10-14 재조정의 계산 후보는 hex 반올림 뒤 대역 · 채도 경계에서 FAIL 했다.
 
 seq 램프는 단조 L · 인접 ΔL ≥ 0.06 · 옅은 끝 대비 ≥ 2:1 · 단일 색조 전부 통과. **팔레트를 바꿀 때는 눈으로 판단하지 말고 검증기를 다시 돌리세요.**
 

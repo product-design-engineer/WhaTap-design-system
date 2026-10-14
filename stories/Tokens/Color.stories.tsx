@@ -351,7 +351,7 @@ export const WhaTapGradient: StoryObj = {
 
 /* ─── Chart ────────────────────────────────────────── */
 
-const HUE_NAME = ["blue", "orange", "teal", "gold", "magenta", "green", "violet", "red"];
+const HUE_NAME = ["navy", "amber", "teal", "gold", "magenta", "green", "violet", "raspberry"];
 
 /**
  * **`--color-chart-series-1..8`** — 계열 **정체성**(categorical). 구 `--color-palette-{hex}` 36색을 대체.
@@ -361,12 +361,15 @@ const HUE_NAME = ["blue", "orange", "teal", "gold", "magenta", "green", "violet"
  * 색은 **엔티티를 따라간다** — 필터로 계열 수가 바뀌어도 남은 계열의 색은 그대로 유지한다.
  *
  * ⚠️ **all-pairs 상한 3슬롯.** scatter · bubble · choropleth · small-multiples 처럼 임의의 두
- * 마크가 맞닿을 수 있는 형태는 3계열까지만 안전하다(측정값: 라이트 20.7 / 다크 16.5). 4번째를
- * 넣으면 orange↔gold 가 정상시야 ΔE 11.0 로 무너진다 — 팔레트로 해결되지 않으므로 facet 으로 쪼갠다.
+ * 마크가 맞닿을 수 있는 형태는 3계열까지만 안전하다. 4번째(gold)는 2번(amber)과 구별되지 않는다 —
+ * 팔레트로 해결되지 않으므로 facet 으로 쪼갠다 (patterns.md §18).
  *
- * 검증(dataviz `validate_palette.js`, 6개 체크 전부 PASS):
- * 라이트 최악 인접 CVD ΔE 9.5(deutan) · 정상시야 17.0 · 대비 전부 ≥3:1.
- * 다크 최악 인접 CVD ΔE 9.6(deutan) · 정상시야 18.3 · 대비 전부 ≥3:1.
+ * **Severity 와 구별된다.** 모든 슬롯이 Severity 색과 info 에서 정상시야 ΔE 15 이상 떨어져 있다
+ * (§23). 그래서 2번은 주황이 아니라 amber, 8번은 빨강이 아니라 raspberry 다 — 밝은 주황 · 빨강 ·
+ * 초록은 Severity 몫이다.
+ *
+ * 측정값은 여기에 적지 않는다 — `pnpm lint:chart-palette` 출력과 `docs/tokens.json` 의
+ * `distinctFrom` 이 정본이다.
  */
 export const ChartSeries: StoryObj = {
   render: () => {

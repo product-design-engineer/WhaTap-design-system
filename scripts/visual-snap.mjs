@@ -6,6 +6,8 @@
 // 사용:
 //   node scripts/visual-snap.mjs            # 비교 (실패 시 exit 1, diff PNG 생성)
 //   node scripts/visual-snap.mjs --update   # baseline 갱신
+//   node scripts/visual-snap.mjs --update --only chart-series   # id 에 그 글자가 든 장만
+//     (의도한 변경만 갱신할 때. 전부 갱신하면 무관한 기존 차이까지 baseline 에 굳는다)
 //   BASE_URL=http://localhost:5181 ...       # dev 서버 URL (기본)
 //
 // ⚠️ baseline 은 캡처 머신의 폰트/렌더에 민감 — 머신 간 미세 차이 가능. 같은 환경에서
@@ -18,6 +20,7 @@ import pixelmatch from "pixelmatch";
 
 const BASE = process.env.BASE_URL || "http://localhost:5181";
 const UPDATE = process.argv.includes("--update");
+const ONLY = (() => { const i = process.argv.indexOf("--only"); return i >= 0 ? process.argv[i + 1] : null; })();
 const THRESHOLD = 0.005; // 허용 mismatch 비율 (0.5%) — antialiasing 흡수
 const BASELINE_DIR = "tests/visual/baseline";
 const DIFF_DIR = "tests/visual/diff";
@@ -82,7 +85,8 @@ const ctx = await browser.newContext({ viewport: { width: 1200, height: 720 }, d
 const page = await ctx.newPage();
 
 let failed = 0, updated = 0, passed = 0;
-for (const { id, theme } of SHOTS) {
+const TARGETS = ONLY ? SHOTS.filter((s) => s.id.includes(ONLY)) : SHOTS;
+for (const { id, theme } of TARGETS) {
   const name = `${id}__${theme}`;
   // dsGuard=off — 정책 가드의 빨간 outline·배지가 스냅샷에 찍히지 않게 끈다.
   const url = `${BASE}/iframe.html?id=${id}&globals=theme:${theme}&dsGuard=off`;
@@ -127,7 +131,7 @@ for (const { id, theme } of SHOTS) {
 }
 await browser.close();
 
-console.log(`\n${UPDATE ? "baseline" : "compare"}: ${passed} ok · ${failed} fail · ${updated} updated (총 ${SHOTS.length})`);
+console.log(`\n${UPDATE ? "baseline" : "compare"}: ${passed} ok · ${failed} fail · ${updated} updated (총 ${TARGETS.length}${ONLY ? ` · --only ${ONLY}` : ""})`);
 if (!UPDATE && failed > 0) {
   console.error(`✗ 시각 회귀 ${failed}건 — tests/visual/diff/ 확인. 의도된 변경이면 --update 로 baseline 갱신.`);
   process.exit(1);
