@@ -54,6 +54,9 @@ import {
 // 위젯 (AI 카테고리) subpath
 import { AiCard, AiSectionHeading, TONE_DOT } from "@whatap/design-system/widget";
 
+// 차트 (데이터 시각화 · Chart Art) subpath — 루트에서도 같은 이름을 재수출한다
+import { MiniLineChart, Heatmap } from "@whatap/design-system/chart";
+
 // 스타일시트 (소비자 진입점에서 1회) — 토큰+유틸+전역+.dark 전부 포함
 import "@whatap/design-system/style.css";
 ```

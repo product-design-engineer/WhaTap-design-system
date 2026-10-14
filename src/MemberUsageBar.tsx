@@ -28,7 +28,7 @@
  * ))}
  * ```
  */
-import UsageGauge from "./UsageGauge";
+import UsageGauge from "./chart/UsageGauge";
 
 export type MemberUsageBarProps = {
   /** 사람 이름 · 계정. 좁아지면 줄어든다. */

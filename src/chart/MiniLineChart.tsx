@@ -40,7 +40,7 @@
  * ```
  */
 import type { CSSProperties } from "react";
-import AiTriggerButton from "./widget/TriggerButton";
+import AiTriggerButton from "../widget/TriggerButton";
 
 const CHART_HEIGHT = 96;
 /** Y축 눈금 칸 폭 — 토큰 하나(`--wds-widget-axis-gutter`)로 모든 그래프의 Y축 선을 같은 x 에 세운다. */

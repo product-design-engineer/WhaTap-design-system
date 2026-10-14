@@ -85,7 +85,7 @@ if (CHANGED_ONLY) {
         }
         if (f.startsWith("src/")) {
           // src/Button.tsx → 소스 변경 시 관련 스토리도 포함
-          const base = f.replace(/^src\//, "").replace(/^widget\//, "").replace(/\.tsx?$/, "");
+          const base = f.replace(/^src\//, "").replace(/^(widget|chart)\//, "").replace(/\.tsx?$/, "");
           changedStoryBases.add(base);
         }
       }

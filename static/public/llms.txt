@@ -15,6 +15,7 @@ npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-s
 import "@whatap/design-system/style.css";   // 진입점에서 1회 — 토큰+유틸+전역+.dark 포함
 import { DashboardLayout, Button, DataTable } from "@whatap/design-system";
 import { AiCard } from "@whatap/design-system/widget";
+import { MiniLineChart } from "@whatap/design-system/chart";   // 차트 전용 진입점 (루트에서도 재수출)
 ```
 - repo clone·collaborator 초대 불필요. npm·pnpm·yarn 모두 가능.
 - 버전 목록: `/releases/index.json`

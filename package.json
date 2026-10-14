@@ -17,6 +17,12 @@
       "import": "./dist/widget.js",
       "default": "./dist/widget.js"
     },
+    "./chart": {
+      "source": "./src/chart/index.ts",
+      "types": "./dist/chart.d.ts",
+      "import": "./dist/chart.js",
+      "default": "./dist/chart.js"
+    },
     "./tokens.css": "./src/tokens.css",
     "./style.css": "./dist/style.css",
     "./whatap-ds.css": "./dist/style.css"

@@ -39,7 +39,7 @@
  * ```
  */
 
-import Tooltip from "./Tooltip";
+import Tooltip from "../Tooltip";
 
 /** 스케일 stop — whatap-ds.css `--color-heatmap-*` 와 같은 지점. */
 const STOPS = [0, 20, 40, 50, 60, 80, 90, 100] as const;

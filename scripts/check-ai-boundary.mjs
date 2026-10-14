@@ -65,8 +65,9 @@ if (!fs.existsSync(CATALOG)) {
   const raw = JSON.parse(fs.readFileSync(CATALOG, "utf8"));
   const entries = Array.isArray(raw) ? raw : raw.components ?? Object.values(raw);
   const barrelText = {
-    "@whatap/design-system": read("src/index.ts") + read("src/topology/index.ts"),
+    "@whatap/design-system": read("src/index.ts") + read("src/topology/index.ts") + read("src/chart/index.ts"),
     "@whatap/design-system/widget": read("src/widget/index.ts"),
+    "@whatap/design-system/chart": read("src/chart/index.ts"),
   };
   for (const e of entries) {
     if (!e || !e.importFrom || !e.sourceFile) continue;
