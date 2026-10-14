@@ -168,18 +168,33 @@ function propsOf(src, name) {
 
 /* ── 스토리 파싱 ──────────────────────────────────────────────────────────── */
 
-/* Storybook 의 id 규칙과 맞춘다 — 한글은 살리고(`shell-page-b-ai-전용-페이지`) 그 외 기호만 대시로.
-   여기서 어긋나면 MCP 가 돌려준 링크가 404 가 되므로 아래에서 index.json 과 대조한다. */
+/* Storybook 의 id 규칙(`storybook/internal/csf` 의 `sanitize`)을 **그대로** 옮긴다 — 지정된 기호만
+   대시로 바꾸고 나머지(한글 · 가운뎃점 `·`)는 살린다. 「글자 · 숫자가 아니면 대시」 로 근사했던 동안
+   `Primitives/Web · Breadcrumb` 를 `primitives-web-breadcrumb` 로 안내했는데 실제 id 는
+   `primitives-web-·-breadcrumb` 였다 — MCP 가 돌려준 Web 컴포넌트 미리보기 링크가 전부 404 였다(2026-10-14).
+   여기서 어긋나면 링크가 깨지므로 아래에서 index.json 과 대조한다. */
 const slugify = (title) =>
-  title.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "");
-/** export 명 → 스토리 이름 kebab. 숫자 경계도 끊는다(`With10MinLabel` → `with-10-min-label`). */
-const kebab = (s) =>
-  s
-    .replace(/([a-z])([A-Z])/g, "$1-$2")
-    .replace(/([A-Za-z])(\d)/g, "$1-$2")
-    .replace(/(\d)([A-Za-z])/g, "$1-$2")
-    .replace(/\s+/g, "-")
-    .toLowerCase();
+  title
+    .toLowerCase()
+    .replace(/[ ’–—―′¿'`~!@#$%^&*()_|+\-=?;:'",.<>{}[\]\\/]/gi, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+/, "")
+    .replace(/-+$/, "");
+/** export 명 → 스토리 id 조각. Storybook 의 `storyNameFromExport`(= `toStartCaseStr`) 를 그대로 옮기고
+ *  `slugify` 를 씌운다. 근사했던 동안 `TopNInWidgetFrame` 을 `top-nin-…` 로 안내했다(실제 `top-n-in-…`). */
+const startCase = (str) =>
+  str
+    .replace(/_/g, " ")
+    .replace(/-/g, " ")
+    .replace(/\./g, " ")
+    .replace(/([^\n])([A-Z])([a-z])/g, (_, a, b, c) => `${a} ${b}${c}`)
+    .replace(/([a-z])([A-Z])/g, (_, a, b) => `${a} ${b}`)
+    .replace(/([a-z])([0-9])/gi, (_, a, b) => `${a} ${b}`)
+    .replace(/([0-9])([a-z])/gi, (_, a, b) => `${a} ${b}`)
+    .replace(/(\s|^)(\w)/g, (_, a, b) => `${a}${b.toUpperCase()}`)
+    .replace(/ +/g, " ")
+    .trim();
+const kebab = (s) => slugify(startCase(s));
 
 /** 문자열 리터럴 연결(`"a" + "b"`)을 이어붙인다. 템플릿/변수는 건너뛴다. */
 function joinLiterals(chunk) {

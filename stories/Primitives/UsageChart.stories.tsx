@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { UsageChart } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof UsageChart> = {
-  title: "Primitives/UsageChart",
+  title: "Primitives/Chart · UsageChart",
   component: UsageChart,
   tags: ["autodocs"],
   parameters: {

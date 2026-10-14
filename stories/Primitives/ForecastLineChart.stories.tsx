@@ -6,7 +6,7 @@ import type { ForecastLineChartSeries } from "@whatap/design-system";
  * Stories for [[ForecastLineChart]]: 관측은 실선, 예측은 점선. 「지금」 세로선 · 임계 띠 · 도달 마커.
  */
 const meta: Meta<typeof ForecastLineChart> = {
-  title: "Primitives/ForecastLineChart",
+  title: "Primitives/Chart · ForecastLineChart",
   component: ForecastLineChart,
   tags: ["autodocs"],
   parameters: { layout: "padded", backgrounds: { default: "surface-muted" } },

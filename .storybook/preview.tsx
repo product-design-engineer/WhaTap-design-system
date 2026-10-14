@@ -55,6 +55,12 @@ const preview: Preview = {
     },
     options: {
       storySort: {
+        // 순서 목록에 없는 자리는 **메뉴명(title) 순**. 기본값 'configure'(파일 import 순)이면 메뉴명 접두
+        // (`Chart ·` · `Web ·`)가 한데 모이지 않는다 — 파일명이 `CountryFlag` 인 `Web · CountryFlag` 가
+        // C 자리에 홀로 서 있었다(2026-10-14). 같은 컴포넌트 안의 스토리 순서는 그대로다(includeNames 기본 false →
+        // 같은 title 은 정렬하지 않는다). ⚠️ 함수형 storySort 는 Storybook 이 정적으로 다시 해석하다 구문 오류로
+        // 카탈로그 전체를 못 띄웠다 — 객체 설정만 쓴다.
+        method: 'alphabetical',
         order: [
           'Introduction',
           // Gallery — 비주얼 컴포넌트 인덱스. Introduction 다음에 둔다: 「무엇인가」를 읽고 나면
