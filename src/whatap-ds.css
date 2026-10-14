@@ -1986,6 +1986,8 @@ html, body, #root {
   white-space: nowrap;
 }
 .wds-slider-mark[data-active] { color: var(--color-text-primary); font-weight: 600; }
+/* floor 아래 눈금 — 범위를 보여 주려고 세우지만 고를 수 없다. */
+.wds-slider-mark[data-disabled] { color: var(--color-text-disabled); }
 /* ── RadioGroup — 서로 배타인 선택지 중 하나 ──────────────────────────────────
    네이티브 radio 는 보이지 않게 두되 포커스 · 키보드 · 낭독은 그대로 받는다. 보이는 원은 바로 뒤 형제
    `.wds-radio-circle` 이 그린다 — 고르면 테두리가 브랜드색이 되고 가운데 점이 선다. 원 지름 16px 은
