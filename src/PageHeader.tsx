@@ -22,6 +22,8 @@
  * - 높이 48px 고정(`box-border`) — 페이지에서 inline `<div>` 로 재구현 금지.
  * - 배경/경계/텍스트 색은 토큰 (`--color-border-strong` · `--color-text-*` · `--color-brand-blue-bg`).
  * - `notifications` 1건 이상이면 벨에 빨간 점 + 클릭 시 목록, `profileMenu` 있으면 아바타가 드롭다운.
+ * - `language` 를 주면 벨 왼쪽에 [[PageHeaderLanguageMenu]](지구본 24px)가 선다. 같은 24px 아이콘 트리거라
+ *   오른쪽 줄 간격(16px)이 그대로다. 헤더 고정 글자는 `labels` 로 번역해 넘긴다.
  *
  * @example
  * ```tsx
@@ -50,9 +52,27 @@ import { IcDocs, IcSupport } from "./icons/HeaderIcons";
 import AiInlinePrompt, { type AiPromptSuggestion } from "./widget/InlinePrompt";
 import PageHeaderNotificationItem from "./PageHeaderNotificationItem";
 import PageHeaderProfileMenuItem from "./PageHeaderProfileMenuItem";
+import PageHeaderLanguageMenu, { type LanguageOption } from "./PageHeaderLanguageMenu";
 
 export type ProfileMenuItem = { label: string; onClick?: () => void };
 export type NotificationItem = { label: string; onClick?: () => void };
+/** 헤더 언어 설정. 주면 알림 벨 왼쪽에 [[PageHeaderLanguageMenu]] 가 선다. */
+export type PageHeaderLanguage = {
+  value: string;
+  options: LanguageOption[];
+  onChange?: (code: string) => void;
+  /** 드롭다운 머리글. 기본 "Language". */
+  title?: string;
+};
+/** 헤더 크롬의 고정 글자. 화면 언어를 바꿀 때 소비 레이어가 번역해 넘긴다. 미지정이면 한국어 기본값. */
+export type PageHeaderLabels = {
+  /** 고객지원 버튼. 기본 「고객지원」. */
+  support?: string;
+  /** 알림 드롭다운 머리글. 기본 「알림」. */
+  notifications?: string;
+  /** 프로필 드롭다운 헤더의 역할 옆 글자. 기본 「내 계정」. */
+  myAccount?: string;
+};
 
 export default function PageHeader({
   title,
@@ -70,6 +90,8 @@ export default function PageHeader({
   profileMenu,
   roleBadge,
   notifications,
+  language,
+  labels,
 }: {
   title: string;
   aiActive?: boolean;
@@ -118,6 +140,13 @@ export default function PageHeader({
   roleBadge?: string;
   /** 알림(벨) 드롭다운. 1건 이상이면 벨에 빨간 점 표시 + 클릭 시 목록. */
   notifications?: NotificationItem[];
+  /**
+   * 언어 설정. 주면 알림 벨 왼쪽에 지구본 트리거가 선다. 미지정이면 헤더 구성은 종전과 같다.
+   * 언어를 바꾼 뒤 화면을 다시 그리는 것은 소비 레이어 몫이다(이 헤더는 값만 알린다).
+   */
+  language?: PageHeaderLanguage;
+  /** 헤더 크롬의 고정 글자(고객지원 · 알림 · 내 계정). 화면 언어가 한국어가 아닐 때 넘긴다. */
+  labels?: PageHeaderLabels;
 }) {
   const [profileOpen, setProfileOpen] = useState(false);
   const [notifyOpen, setNotifyOpen] = useState(false);
@@ -165,8 +194,16 @@ export default function PageHeader({
 
       {/* 우측: 고객지원 + 알림 + 아바타 */}
       <div className="flex items-center gap-16px h-full shrink-0">
-        {!hideSupport && <HeaderPillButton size={HEADER_CONTROL_SIZE} icon={<IcSupport />}>고객지원</HeaderPillButton>}
+        {!hideSupport && <HeaderPillButton size={HEADER_CONTROL_SIZE} icon={<IcSupport />}>{labels?.support ?? "고객지원"}</HeaderPillButton>}
         <div className="flex items-center gap-16px">
+          {language && (
+            <PageHeaderLanguageMenu
+              value={language.value}
+              options={language.options}
+              onChange={language.onChange}
+              title={language.title}
+            />
+          )}
           <div className="relative shrink-0 size-24px">
             <button
               type="button"
@@ -195,7 +232,7 @@ export default function PageHeader({
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setNotifyOpen(false)} />
                 <div className="absolute right-0 top-32px z-50 min-w-260px rounded-8px border border-color-var-color-border-default bg-card py-4px shadow-md">
-                  <div className="px-14px py-6px text-xs text-tertiary" style={{ fontFamily: "var(--font-family-korean)" }}>알림</div>
+                  <div className="px-14px py-6px text-xs text-tertiary" style={{ fontFamily: "var(--font-family-korean)" }}>{labels?.notifications ?? "알림"}</div>
                   {notifications!.map((n) => (
                     <PageHeaderNotificationItem
                       key={n.label}
@@ -232,7 +269,7 @@ export default function PageHeader({
                   {roleBadge && (
                     <div className="flex items-center gap-6px px-14px pt-8px pb-8px mb-2px border-b border-color-var-color-border-soft">
                       <span className="inline-flex items-center h-18px px-6px rounded-4px text-xs font-bold bg-var-color-brand-blue-bg text-color-var-color-brand-blue" style={{ fontFamily: "var(--font-family-korean)" }}>{roleBadge}</span>
-                      <span className="text-sm text-tertiary" style={{ fontFamily: "var(--font-family-korean)" }}>내 계정</span>
+                      <span className="text-sm text-tertiary" style={{ fontFamily: "var(--font-family-korean)" }}>{labels?.myAccount ?? "내 계정"}</span>
                     </div>
                   )}
                   {profileMenu.map((it) => (

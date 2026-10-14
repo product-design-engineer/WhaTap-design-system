@@ -185,7 +185,7 @@ export type { OptionbarValueDisplaySize, OptionbarValueDisplayVariant } from "./
 export { default as LandingHeader } from "./LandingHeader";
 export type { LandingHeaderProps, LandingHeaderNavItem, LandingHeaderAction } from "./LandingHeader";
 export { default as PageHeader } from "./PageHeader";
-export type { ProfileMenuItem, NotificationItem } from "./PageHeader";
+export type { ProfileMenuItem, NotificationItem, PageHeaderLanguage, PageHeaderLabels } from "./PageHeader";
 export { default as PageHeaderAiInline } from "./PageHeaderAiInline";
 export type { PageHeaderAiInlineProps } from "./PageHeaderAiInline";
 export { default as PresetSelect } from "./PresetSelect";
@@ -228,6 +228,8 @@ export type { DsReadOnlyNoticeProps } from "./DsReadOnlyNotice";
 //   Chrome parts
 export { default as PageHeaderNotificationItem } from "./PageHeaderNotificationItem";
 export { default as PageHeaderProfileMenuItem } from "./PageHeaderProfileMenuItem";
+export { default as PageHeaderLanguageMenu } from "./PageHeaderLanguageMenu";
+export type { LanguageOption } from "./PageHeaderLanguageMenu";
 export { default as DataTableRow } from "./DataTableRow";
 export { default as FilterDropdownOptionItem } from "./FilterDropdownOptionItem";
 export { default as TabButton } from "./TabButton";
