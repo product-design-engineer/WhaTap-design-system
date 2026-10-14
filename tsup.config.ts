@@ -16,7 +16,7 @@ export default defineConfig({
     copyFileSync("src/whatap-ds.css", "dist/style.css");
     console.log("· dist/style.css 복사 완료");
   },
-  entry: { index: "src/index.ts", widget: "src/widget/index.ts" },
+  entry: { index: "src/index.ts", widget: "src/widget/index.ts", chart: "src/chart/index.ts" },
   format: ["esm"],
   dts: true,
   external: ["react", "react-dom", "react/jsx-runtime"],

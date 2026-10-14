@@ -1,10 +1,10 @@
 # @whatap/design-system — 컴포넌트·디자인 시스템 정책
 
-본 패키지는 WhaTap-AI-Assistant 의 단일 컴포넌트 출처. Storybook 카탈로그 + tokens.css 단일 출처 + `exports` 로 `.` (루트 컴포넌트) · `./widget` (AI 위젯) 분리.
+본 패키지는 WhaTap-AI-Assistant 의 단일 컴포넌트 출처. Storybook 카탈로그 + tokens.css 단일 출처 + `exports` 로 `.` (루트 컴포넌트) · `./widget` (AI 위젯) · `./chart` (데이터 시각화 — Chart Art) 분리.
 
 ## 디렉토리 구성
 
-- `src/` — 컴포넌트 소스 + `tokens.css` + `widget/` (AI 카테고리)
+- `src/` — 컴포넌트 소스 + `tokens.css` + `widget/` (AI 카테고리) + `chart/` (데이터 시각화 — 차트·게이지·히트맵, `./chart` 진입점. 루트 배럴도 재수출) + `topology/` (노드-엣지 그래프)
 - `stories/` — Storybook 카탈로그 (Tokens 메타 + Primitives / Composite / Shell 3-Layer, AI 는 각 계층 `Ai/` 하위그룹)
 - `docs/` — markdown 카탈로그 (단일 출처 문서)
   - `SKILL.md` — 본 디자인 시스템 사용 절차

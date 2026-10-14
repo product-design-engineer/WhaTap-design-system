@@ -249,8 +249,8 @@ function harvestMarkers(text) {
  */
 function barrelMap() {
   const map = new Map();
-  const exportedBy = new Map();     // 컴포넌트 이름 → Set<"root"|"widget">
-  const exportedFile = new Map();   // 소스 파일(절대경로) → Set<"root"|"widget">
+  const exportedBy = new Map();     // 컴포넌트 이름 → Set<"root"|"widget"|"chart">
+  const exportedFile = new Map();   // 소스 파일(절대경로) → Set<"root"|"widget"|"chart">
   const mark = (key, owner, sink) => {
     if (!sink.has(key)) sink.set(key, new Set());
     sink.get(key).add(owner);
@@ -302,6 +302,7 @@ function barrelMap() {
 
   scan(join(root, "src/index.ts"), "root");
   scan(join(root, "src/widget/index.ts"), "widget");
+  scan(join(root, "src/chart/index.ts"), "chart");
   return { map, exportedBy, exportedFile };
 }
 
@@ -322,6 +323,8 @@ function importEntry(name, srcFile) {
   // 위젯 배럴이 실제로 내보내면 그쪽을 가르친다 — `.`(루트) / `./widget` 분리가 의미를 갖는 자리.
   // 루트 배럴이 위젯까지 한 번에 노출하므로 둘 다 유효하지만, AI 위젯 자산은 전용 진입점이 정본.
   if (owners.has("widget")) return "@whatap/design-system/widget";
+  // 차트도 같은 이유 — 루트가 재수출하지만 전용 진입점 `./chart`(Chart Art) 가 정본.
+  if (owners.has("chart")) return "@whatap/design-system/chart";
   if (owners.has("root")) return "@whatap/design-system";
   return null;
 }

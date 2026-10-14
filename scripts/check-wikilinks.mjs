@@ -51,7 +51,7 @@ const jsonPath = join(root, "docs/components.json");
 if (existsSync(jsonPath))
   for (const c of JSON.parse(readFileSync(jsonPath, "utf8")).components) known.add(c.name);
 
-for (const b of ["src/index.ts", "src/widget/index.ts"]) {
+for (const b of ["src/index.ts", "src/widget/index.ts", "src/chart/index.ts"]) {
   const p = join(root, b);
   if (!existsSync(p)) continue;
   const t = readFileSync(p, "utf8");
