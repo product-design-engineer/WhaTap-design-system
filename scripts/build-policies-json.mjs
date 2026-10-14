@@ -32,7 +32,7 @@
  * ## 무엇을 유도하나
  * - `anchor` — 번호가 아니라 제목에서 만든 링크 조각. 번호는 문서를 고치면 밀린다.
  * - `components` — 본문의 `[[Wikilink]]` 에서. 어느 컴포넌트가 이 정책에 걸리는지 역인덱스가 된다.
- * - `related` — 같은 `@applies` 축의 다른 정책.
+ * - `related` — 같은 `@applies` 기준의 다른 정책.
  *
  * 사용: `node scripts/build-policies-json.mjs`
  */
@@ -160,7 +160,7 @@ for (let k = 0; k < heads.length - 1; k += 1) {
   });
 }
 
-/* 같은 축(@applies)의 다른 정책 — Overview 가 축으로 묶어 보여줄 때 쓴다. */
+/* 같은 기준(@applies)의 다른 정책 — Overview 가 기준으로 묶어 보여줄 때 쓴다. */
 for (const p of policies) {
   p.related = policies.filter((o) => o.applies === p.applies && o.id !== p.id).map((o) => o.id);
 }

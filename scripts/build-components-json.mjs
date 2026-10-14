@@ -249,8 +249,8 @@ function harvestMarkers(text) {
  */
 function barrelMap() {
   const map = new Map();
-  const exportedBy = new Map();     // 컴포넌트 이름 → Set<"root"|"widget">
-  const exportedFile = new Map();   // 소스 파일(절대경로) → Set<"root"|"widget">
+  const exportedBy = new Map();     // 컴포넌트 이름 → Set<"root"|"widget"|"chart">
+  const exportedFile = new Map();   // 소스 파일(절대경로) → Set<"root"|"widget"|"chart">
   const mark = (key, owner, sink) => {
     if (!sink.has(key)) sink.set(key, new Set());
     sink.get(key).add(owner);
@@ -302,6 +302,7 @@ function barrelMap() {
 
   scan(join(root, "src/index.ts"), "root");
   scan(join(root, "src/widget/index.ts"), "widget");
+  scan(join(root, "src/chart/index.ts"), "chart");
   return { map, exportedBy, exportedFile };
 }
 
@@ -322,6 +323,8 @@ function importEntry(name, srcFile) {
   // 위젯 배럴이 실제로 내보내면 그쪽을 가르친다 — `.`(루트) / `./widget` 분리가 의미를 갖는 자리.
   // 루트 배럴이 위젯까지 한 번에 노출하므로 둘 다 유효하지만, AI 위젯 자산은 전용 진입점이 정본.
   if (owners.has("widget")) return "@whatap/design-system/widget";
+  // 차트도 같은 이유 — 루트가 재수출하지만 전용 진입점 `./chart`(Chart Art) 가 정본.
+  if (owners.has("chart")) return "@whatap/design-system/chart";
   if (owners.has("root")) return "@whatap/design-system";
   return null;
 }
@@ -346,8 +349,8 @@ for (const sf of storyFiles) {
 
   /* 스토리 파일 안에서 정의되는 합성 템플릿(`Shell/Page/*` · 브랜드 자산)은 소스 docstring 이
      있을 수 없다 — 그쪽은 **스토리 설명이 유일한 문서**다. 같은 4섹션을 거기서도 읽는다.
-     그러지 않으면 「이 페이지는 어떤 동선용인가」(= When to use) 축이 기계 경로에서 영구히
-     빈칸으로 남는다 — 이름을 모르는 사람이 의도로 찾아올 때 검색에 걸리는 축이 그것이다.
+     그러지 않으면 「이 페이지는 어떤 동선용인가」(= When to use) 기준이 기계 경로에서 영구히
+     빈칸으로 남는다 — 이름을 모르는 사람이 의도로 찾아올 때 검색에 걸리는 기준이 그것이다.
      소스가 있는 컴포넌트는 대상이 아니다(같은 말을 docstring 과 스토리 두 곳에 두게 된다). */
   const docText = doc ?? s.description ?? "";
   /* 스토리 설명이 섹션을 담게 되면 첫 `##` 앞까지가 사람이 읽는 한 줄 요약이다. */

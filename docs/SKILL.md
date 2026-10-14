@@ -54,6 +54,9 @@ import {
 // 위젯 (AI 카테고리) subpath
 import { AiCard, AiSectionHeading, TONE_DOT } from "@whatap/design-system/widget";
 
+// 차트 (데이터 시각화 · Chart Art) subpath — 루트에서도 같은 이름을 재수출한다
+import { MiniLineChart, Heatmap } from "@whatap/design-system/chart";
+
 // 스타일시트 (소비자 진입점에서 1회) — 토큰+유틸+전역+.dark 전부 포함
 import "@whatap/design-system/style.css";
 ```
@@ -105,7 +108,7 @@ DS는 **Tailwind를 쓰지 않습니다.** `style.css`(= `whatap-ds.css`)는 외
 
 ## 디자인 시스템 구조
 
-트리는 **컴포넌트 3계층(Primitives · Composite · Shell)** 과 동일한 축. AI 전용 에셋은 별도 카테고리가 아니라 각 계층 안 **`Ai/` 하위그룹**.
+트리는 **컴포넌트 3계층(Primitives · Composite · Shell)** 과 동일한 기준. AI 전용 에셋은 별도 카테고리가 아니라 각 계층 안 **`Ai/` 하위그룹**.
 
 ```
 WhaTap Design System (@whatap/design-system)

@@ -35,7 +35,7 @@ pnpm build-storybook                     # 정적 빌드 검증
 
 ### 카탈로그 분류 (Storybook 좌측 트리)
 - **Primitives** — 원자 부품 (Button 포함) · **Chrome** — 페이지 틀 + 합성 위젯 (+ `Parts/`) · **WhaTap AI** — AI 위젯/진입/카드 (+ `Parts/`) · **Page** — 전체 페이지 합성 템플릿(A–D) · **Tokens** · **Foundation**(WhaTap Symbol).
-- 3-Layer(Foundation/Composite/Shell)는 코드 의존 계층, 카탈로그 분류와 별개 축. 정책 전문: repo `CLAUDE.md`.
+- 3-Layer(Foundation/Composite/Shell)는 코드 의존 계층, 카탈로그 분류와 별개 기준. 정책 전문: repo `CLAUDE.md`.
 
 ## 2. 이번 세션에 main 에 반영된 작업 (PR #1~#3 처리 완료)
 

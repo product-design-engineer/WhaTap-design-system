@@ -11,7 +11,7 @@ import policiesData from "../docs/policies.json";
  * 컴포넌트마다 붙는 Do/Don't 는 각 컴포넌트 문서에 있다. 이 페이지는 **한 컴포넌트를 넘는
  * 규칙** — 헤더 불변 · 색 리터럴 0 · DataTable 종합 정책처럼 여러 자리에 걸치는 것 — 을 모은다.
  *
- * 축은 **`@applies`(무엇을 만드는가)** 다. 컴포넌트 이름으로는 찾을 수 없는 규칙들이라
+ * 기준은 **`@applies`(무엇을 만드는가)** 다. 컴포넌트 이름으로는 찾을 수 없는 규칙들이라
  * 「지금 표를 만든다 / 차트를 만든다 / 위젯 카드를 만든다」로 들어오게 했다.
  */
 type Policy = {
@@ -34,7 +34,7 @@ type Policy = {
 
 const policies = (policiesData as { policies: Policy[] }).policies;
 
-/** `@applies` 축 — 「무엇을 만드는가」. 사람이 들어오는 입구라 순서를 의도로 정한다. */
+/** `@applies` 기준 — 「무엇을 만드는가」. 사람이 들어오는 입구라 순서를 의도로 정한다. */
 const AXES: { key: string; label: string; hint: string }[] = [
   { key: "process", label: "일하는 절차", hint: "만들기 전·후에 거치는 것 — 확인 · 통보 · 판단 순서" },
   { key: "chrome", label: "셸 (헤더 · 사이드바)", hint: "화면의 틀. 페이지를 오가도 변하지 않아야 하는 것" },
@@ -66,16 +66,16 @@ const meta: Meta = {
           "**정본은 [patterns.md](/design-system/patterns.md) 이고 이 페이지는 생성물을 렌더합니다** " +
           "(`docs/policies.json`). 손으로 적은 목록이 아니므로 문서를 고치면 여기가 따라옵니다 — " +
           "그래야 네 번째 사본이 생기지 않습니다.\n\n" +
-          "축은 **「무엇을 만드는가」** 입니다. 컴포넌트 이름으로는 찾을 수 없는 규칙들이라, " +
+          "기준은 **「무엇을 만드는가」** 입니다. 컴포넌트 이름으로는 찾을 수 없는 규칙들이라, " +
           "「지금 표를 만든다 / 차트를 만든다」로 들어오게 했습니다.\n\n" +
           "## When to use\n" +
-          "- **만들기 전에** — 지금 만드는 것(표 · 차트 · 위젯 카드 · 셸)의 축을 열어 걸리는 규칙을 먼저 봅니다.\n" +
+          "- **만들기 전에** — 지금 만드는 것(표 · 차트 · 위젯 카드 · 셸)의 기준을 열어 걸리는 규칙을 먼저 봅니다.\n" +
           "- 컴포넌트 문서가 답하지 않는 것을 찾을 때 — 「삭제 버튼을 만드는데 무엇을 거쳐야 하나」처럼 **여러 컴포넌트에 걸친** 물음.\n" +
           "- 리뷰에서 「이래도 되나」가 갈릴 때 — `반드시`/`권장`/`판단` 세 무게가 그 자리에서 답합니다.\n\n" +
           "## When NOT to use\n" +
           "- **한 컴포넌트의 사용법** → 그 컴포넌트 문서. 여기에는 한 컴포넌트를 넘는 것만 있습니다.\n" +
           "- **토큰 값을 고를 때** → [Color](/?path=/docs/tokens-color--docs) · [tokens.json](/design-system/tokens.json). " +
-          "여기 `토큰 · 색` 축은 「어떻게 정하나」이지 「무슨 값인가」가 아닙니다.\n" +
+          "여기 `토큰 · 색` 기준은 「어떻게 정하나」이지 「무슨 값인가」가 아닙니다.\n" +
           "- **규칙을 고칠 때** → 이 페이지는 생성물입니다. [patterns.md](/design-system/patterns.md) 를 고치면 여기가 따라옵니다.",
       },
     },
@@ -185,7 +185,7 @@ const PolicyCard = ({ p }: { p: Policy }) => {
   );
 };
 
-/** 축별 전문 — 「무엇을 만드는가」로 들어온다. */
+/** 기준별 전문 — 「무엇을 만드는가」로 들어온다. */
 export const ByWhatYouAreBuilding: Story = {
   name: "무엇을 만드는가로 찾기",
   render: () => {
@@ -220,13 +220,13 @@ export const ByWhatYouAreBuilding: Story = {
           );
         })}
 
-        {/* 축이 없는 정책이 생기면 조용히 사라지지 않게 드러낸다 — AXES 에 값을 더하라는 신호다. */}
+        {/* 기준이 없는 정책이 생기면 조용히 사라지지 않게 드러낸다 — AXES 에 값을 더하라는 신호다. */}
         {orphan.length > 0 && (
           <div style={{ marginBottom: 48 }}>
             <h2 className="text-xl font-bold text-primary" style={{ margin: "0 0 14px" }}>
               분류되지 않음
               <span className="text-sm text-tertiary" style={{ marginLeft: 10 }}>
-                AXES 에 축을 추가하세요
+                AXES 에 기준을 추가하세요
               </span>
             </h2>
             {orphan.map((p) => (

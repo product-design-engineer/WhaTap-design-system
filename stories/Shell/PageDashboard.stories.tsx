@@ -81,7 +81,7 @@ const meta: Meta = {
           "본문 패딩에 매직넘버(`padding:16`) — `.wds-page-content` 사용 · AI 위젯이 열렸다고 헤더 항목을 숨기기" +
           "(page-header-invariant 위반)\n\n" +
           // ↓ 이 두 섹션은 build-components-json 이 whenToUse/whenNotToUse 로 읽는다 —
-          //   컴포넌트 이름을 모르는 사람이 «하려는 일»로 검색해 이 프리셋에 도달하는 축이다.
+          //   컴포넌트 이름을 모르는 사람이 «하려는 일»로 검색해 이 프리셋에 도달하는 기준이다.
           "## When to use\n" +
           "- 목록·지표를 한 화면에서 훑는 일반 모니터링 페이지 — 인스턴스·세션·프로세스·알림 목록.\n" +
           "- 조회 조건(기간·대상)을 옵션바에서 바꿔 가며 표를 보는 화면.\n" +
