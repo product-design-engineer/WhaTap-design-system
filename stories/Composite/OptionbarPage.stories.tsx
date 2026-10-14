@@ -182,7 +182,7 @@ const CUBE_FIELDS = [
   {
     title: "큐브 지표",
     content: (
-      <TextField size="sm" value="[XOS] CPU" onChange={() => {}} leadingIcon={<SearchIcon />} />
+      <TextField size="sm" value="[XOS] CPU" onChange={() => {}} leadingIcon={<SearchIcon />} aria-label="대시보드 검색" />
     ),
   },
 ];

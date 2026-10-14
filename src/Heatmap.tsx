@@ -20,6 +20,9 @@
  * - `day` 는 열 라벨을 10분 간격(0·10·20·30·40·50분), 행 라벨을 2시간 간격으로만 찍는다 —
  *   전부 찍으면 라벨이 격자를 이긴다.
  * - 선택은 한 칸만(`selectedIndex`). 격자 자체가 필터라서 다중 선택은 뜻이 흐려진다.
+ * - 접근성 이름: 루트는 `ariaLabel`(기본 «월간/일간 히트맵») 을 단 `role="group"`.
+ *   클릭 가능한 칸은 `cellTitle` 이 없어도 축 라벨로 이름을 만든다(«19일 · 강도 24%», «9시 35분 · 데이터 없음»).
+ *   읽기 전용 격자는 칸을 보조기술에서 숨기므로, 무엇을 보여 주는지는 `ariaLabel` 에 쓴다.
  * - 범례는 포함하지 않는다 — 폭을 맞춰 [[HeatmapLegend]] 를 바로 아래 둔다.
  * - `onHoverChange` 를 [[HeatmapLegend]] `marker` 에 이으면, 커서가 놓인 칸의 색이 스케일
  *   어디에 앉는지 범례가 짚어 준다. 색만 있고 수치가 없는 격자에서 값을 읽는 유일한 길이다.
@@ -52,7 +55,9 @@ export type HeatmapProps = {
   /** 선택된 칸 인덱스. */
   selectedIndex?: number;
   onSelect?: (index: number) => void;
-  /** hover tooltip 문구 생성기. */
+  /** 격자 전체의 스크린리더 이름 — 무엇의 강도인지 적는다. 기본 «월간 히트맵»/«일간 히트맵». */
+  ariaLabel?: string;
+  /** hover tooltip 문구 생성기. 스크린리더 이름도 이걸 쓴다. */
   cellTitle?: (index: number, value: number | null) => string;
   /**
    * 커서(또는 focus)가 놓인 칸의 값. 벗어나면 `null`.
@@ -73,6 +78,7 @@ export default function Heatmap({
   selectedIndex,
   onSelect,
   cellTitle,
+  ariaLabel,
   onHoverChange,
   monthCellHeight = 49,
   dayCellHeight = 13,
@@ -80,9 +86,22 @@ export default function Heatmap({
   const cols = mode === "month" ? 7 : DAY_COLS;
   const height = mode === "month" ? monthCellHeight : dayCellHeight;
   const lead = mode === "month" ? offset : 0;
+  // cellTitle 이 없을 때의 칸 이름 — 클릭 가능한 칸이 이름 없는 버튼이 되지 않게 축 라벨로 만든다.
+  const cellName = (i: number, v: number | null) => {
+    const where =
+      mode === "month"
+        ? `${labels?.[i] ?? i + 1}일`
+        : `${Math.floor(i / DAY_COLS)}시 ${(i % DAY_COLS) * 5}분`;
+    return `${where} · ${v === null ? "데이터 없음" : `강도 ${Math.round(v * 100)}%`}`;
+  };
 
   return (
-    <div className="flex flex-col" style={{ gap: 4 }}>
+    <div
+      role="group"
+      aria-label={ariaLabel ?? (mode === "month" ? "월간 히트맵" : "일간 히트맵")}
+      className="flex flex-col"
+      style={{ gap: 4 }}
+    >
       {/* 열 라벨 */}
       <div
         className="grid"
@@ -121,6 +140,7 @@ export default function Heatmap({
               selected={selectedIndex === i}
               onClick={onSelect ? () => onSelect(i) : undefined}
               title={cellTitle?.(i, v)}
+              ariaLabel={cellTitle ? undefined : cellName(i, v)}
               onHoverChange={onHoverChange}
             />
           ))}
@@ -145,6 +165,7 @@ export default function Heatmap({
                   selected={selectedIndex === i}
                   onClick={onSelect ? () => onSelect(i) : undefined}
                   title={cellTitle?.(i, cells[i] ?? null)}
+                  ariaLabel={cellTitle ? undefined : cellName(i, cells[i] ?? null)}
                   onHoverChange={onHoverChange}
                 />
               );

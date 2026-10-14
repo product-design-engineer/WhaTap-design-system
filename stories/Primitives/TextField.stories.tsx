@@ -121,6 +121,7 @@ export const SearchInteractive: Story = {
             value={q}
             onChange={setQ}
             placeholder="검색…"
+            aria-label="검색"
             leadingIcon={
               <svg viewBox="0 0 16 16" width={12} height={12} fill="none" aria-hidden>
                 <circle cx={7} cy={7} r={5} stroke="currentColor" strokeWidth={1.5} />

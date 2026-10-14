@@ -228,12 +228,13 @@ export default function ActiveTransactionSpeedWidget({
         </div>
         <div className="flex items-center gap-4px shrink-0">
           {onOpenDetail && (
-            <span
+            <button
+              type="button"
               className="shrink-0 size-20px flex items-center justify-center cursor-pointer"
               onClick={onOpenDetail}
-              role="button"
+              aria-label="상세 보기"
             >
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
                 <path
                   d="M5 10H15M15 10L11 6M15 10L11 14"
                   stroke="var(--color-text-primary)"
@@ -242,7 +243,7 @@ export default function ActiveTransactionSpeedWidget({
                   strokeLinejoin="round"
                 />
               </svg>
-            </span>
+            </button>
           )}
           <MenuDots />
         </div>

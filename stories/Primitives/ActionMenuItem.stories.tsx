@@ -8,6 +8,15 @@ const meta: Meta<typeof ActionMenuItem> = {
   title: "Primitives/ActionMenuItem",
   component: ActionMenuItem,
   tags: ["autodocs"],
+  // 실제로는 [[ActionMenu]] 의 `role="menu"` 패널 안에 선다. 단독 시연에도 그 부모를 세운다 —
+  // 부모 없는 menuitem 은 보조기술에 «메뉴 밖 메뉴 항목» 으로 읽힌다(aria-required-parent).
+  decorators: [
+    (Story) => (
+      <div role="menu" aria-label="ActionMenuItem 시연">
+        <Story />
+      </div>
+    ),
+  ],
   parameters: {
     layout: "padded",
     docs: {

@@ -52,7 +52,7 @@ export default function MemberUsageBar({ name, value, percent, className }: Memb
           {value}
         </span>
       </div>
-      <UsageGauge percent={percent} tone="neutral" />
+      <UsageGauge label={`${name} 사용 비중`} percent={percent} tone="neutral" />
     </div>
   );
 }

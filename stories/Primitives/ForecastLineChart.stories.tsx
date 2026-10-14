@@ -55,12 +55,12 @@ const DISK = [
 
 /** 계열색 두 줄: 임계 없이 관측 · 예측 · 「지금」 만. */
 export const Default: Story = {
-  args: { series: QUOTA, xDomain: X_DOMAIN, xLabels: X_LABELS, unit: "%" },
+  args: { series: QUOTA, xDomain: X_DOMAIN, xLabels: X_LABELS, unit: "%", ariaLabel: "쿼터 사용률 추세와 예측" },
 };
 
 /** 임계 90%: 점선 + 그 위 옅은 띠. 예측이 천장에 닿는 자리에 마커와 도달 시각. */
 export const WithThreshold: Story = {
-  args: { series: DISK, xDomain: X_DOMAIN, xLabels: X_LABELS, unit: "%", threshold: { value: 90, label: "임계 90%" } },
+  args: { series: DISK, xDomain: X_DOMAIN, xLabels: X_LABELS, unit: "%", threshold: { value: 90, label: "임계 90%" }, ariaLabel: "마운트별 디스크 사용률 추세와 임계 도달 예상 시점" },
 };
 
 /** 배너 칩이 가리키는 계열만 진하게: 나머지는 흐리게. */
@@ -83,6 +83,7 @@ export const ControlGroup: Story = {
     xLabels: X_LABELS,
     unit: "%",
     threshold: { value: 90, label: "임계 90%" },
+    ariaLabel: "마운트별 디스크 사용률 추세 — 기울기 0 대조군 포함",
   },
 };
 

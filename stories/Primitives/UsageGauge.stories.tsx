@@ -27,13 +27,13 @@ const meta: Meta<typeof UsageGauge> = {
 export default meta;
 type Story = StoryObj<typeof UsageGauge>;
 
-export const Neutral: Story = { args: { percent: 42, tone: "neutral" } };
+export const Neutral: Story = { args: { label: "청구 사용량", percent: 42, tone: "neutral" } };
 
 /** 남은 여유가 얼마 없을 때 — 기준은 과금 화면의 `limitTone` 이 정한다. */
-export const Warning: Story = { args: { percent: 86, tone: "warning" } };
+export const Warning: Story = { args: { label: "청구 사용량", percent: 86, tone: "warning" } };
 
 /** 다 썼을 때. */
-export const Critical: Story = { args: { percent: 100, tone: "critical" } };
+export const Critical: Story = { args: { label: "청구 사용량", percent: 100, tone: "critical" } };
 
 /** 숫자와 함께 선다 — 막대만으로는 얼마나 남았는지 못 읽는다. */
 export const WithValue: Story = {
@@ -45,7 +45,7 @@ export const WithValue: Story = {
           215,000 / 250,000
         </span>
       </div>
-      <UsageGauge percent={86} tone="warning" />
+      <UsageGauge label="누적 크레딧" percent={86} tone="warning" />
     </div>
   ),
 };

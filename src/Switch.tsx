@@ -20,7 +20,8 @@ import { forwardRef, useState, type ReactNode, type ButtonHTMLAttributes } from 
  * - 색/치수/radius/shadow = 토큰(`--color-brand-blue`·`--color-surface-200`·`--radius-full`·`--shadow-sm`) — 인라인 hex 금지.
  * - controlled(`checked`) / uncontrolled(`defaultChecked`) 둘 다 지원 ([[Checkbox]] 패턴 동일).
  * - 라이트 기본 — 다크는 토큰이 자동 전환(`.dark`/`[data-theme=dark]`).
- * - 시각 라벨 없으면 `label`(=aria-label) 또는 `aria-label`/`aria-labelledby` 필수.
+ * - 이름은 **타입으로 필수** — `label`(=aria-label) · `aria-label` · `aria-labelledby` 중 하나가 없으면
+ *   컴파일되지 않는다. 이름 없는 스위치는 스크린리더에 «스위치, 꺼짐» 만 남는다.
  *
  * @example
  * ```tsx
@@ -31,7 +32,7 @@ import { forwardRef, useState, type ReactNode, type ButtonHTMLAttributes } from 
  */
 export type SwitchSize = "sm" | "md";
 
-export interface SwitchProps
+interface SwitchBaseProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onChange" | "type"> {
   /** controlled 상태. */
   checked?: boolean;
@@ -42,12 +43,16 @@ export interface SwitchProps
   /** 크기 — sm: track 40×22 / md: track 52×28. default "md". */
   size?: SwitchSize;
   disabled?: boolean;
-  /** 시각 라벨(옵션). 없으면 aria-label 권장. */
+  /** 접근성 이름(aria-label 로 들어간다). 이것·`aria-label`·`aria-labelledby` 중 하나는 필수. */
   label?: string;
   /** 노브 안 콘텐츠(아이콘 등) — [[ThemeToggle]] 가 해/달 주입. */
   knobContent?: ReactNode;
   className?: string;
 }
+
+/** 접근성 이름 셋 중 하나는 필수 — 빠지면 타입 에러. */
+export type SwitchProps = SwitchBaseProps &
+  ({ label: string } | { "aria-label": string } | { "aria-labelledby": string });
 
 const DIMS: Record<SwitchSize, { w: number; h: number; k: number }> = {
   sm: { w: 40, h: 22, k: 16 },
