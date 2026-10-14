@@ -149,7 +149,7 @@ const meta: Meta = {
           "❌ **Don't** — 서로 다른 대상을 탭으로 묶기(탭은 한 대상의 단면이지 목록이 아니다) · " +
           "차트에 팔레트 hex 직접 지정 · 100행 미만에 `compact` density 사용 · " +
           "탭 콘텐츠를 카드 없이 회색 바닥에 배치\n\n" +
-          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 기준).
           "## When to use\n" +
           "- **하나의 대상**(인스턴스·서버·컨테이너·SQL)을 탭 단면으로 깊이 보는 상세 화면.\n" +
           "- 목록에서 행을 클릭해 들어오는 드릴다운 도착지.\n" +

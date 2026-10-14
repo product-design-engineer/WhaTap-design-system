@@ -68,7 +68,7 @@
       "id": "no-cycle",
       "name": "순환 참조 금지",
       "status": "auto",
-      "invariant": "`src/` 의 **런타임** import 그래프에 순환이 없어야 한다(ESLint `import-x/no-cycle`). `layer-deps` 가 볼 수 없는 축이다 — 그쪽은 계층 *방향*만 보므로 같은 계층 안의 A→B→A 는 통과한다. ⚠️ **false green 주의**: `import-x/parsers` 로 `.ts`/`.tsx` 파서를 등록하지 않으면 그래프가 1-hop 에서 끊겨 순환이 있어도 조용히 통과한다 — 실측으로 확인했다. 규칙을 손보면 일부러 2파일 순환을 넣어 발화를 다시 확인할 것. ESLint 표면은 **의도적으로 이 규칙만** 둔다(포맷팅·네이밍·hooks·a11y 는 린트하지 않는다 — 넓게 켜면 상시 red 가 되고 팀이 red 를 무시하기 시작한다).",
+      "invariant": "`src/` 의 **런타임** import 그래프에 순환이 없어야 한다(ESLint `import-x/no-cycle`). `layer-deps` 가 볼 수 없는 기준이다 — 그쪽은 계층 *방향*만 보므로 같은 계층 안의 A→B→A 는 통과한다. ⚠️ **false green 주의**: `import-x/parsers` 로 `.ts`/`.tsx` 파서를 등록하지 않으면 그래프가 1-hop 에서 끊겨 순환이 있어도 조용히 통과한다 — 실측으로 확인했다. 규칙을 손보면 일부러 2파일 순환을 넣어 발화를 다시 확인할 것. ESLint 표면은 **의도적으로 이 규칙만** 둔다(포맷팅·네이밍·hooks·a11y 는 린트하지 않는다 — 넓게 켜면 상시 red 가 되고 팀이 red 를 무시하기 시작한다).",
       "prevents": "초기화 순서에 따라 undefined 가 되는 순환 import · 번들 분할 실패",
       "command": "lint:cycles (pnpm)",
       "inCI": true

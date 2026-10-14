@@ -17,7 +17,7 @@
 
 ## 카탈로그 — 단일 3-Layer 체계 (Primitives · Composite · Shell)
 
-Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분류한다. (구 `Chrome` / `WhaTap AI` / `Foundation` / `Page` 카테고리는 폐지 → 계층으로 흡수.) AI 전용 에셋은 폐지하지 않고 **각 계층 안 `Ai/` 접두 하위그룹**으로 묶어 발견성을 유지한다.
+Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 기준**으로 분류한다. (구 `Chrome` / `WhaTap AI` / `Foundation` / `Page` 카테고리는 폐지 → 계층으로 흡수.) AI 전용 에셋은 폐지하지 않고 **각 계층 안 `Ai/` 접두 하위그룹**으로 묶어 발견성을 유지한다.
 
 | 카탈로그 그룹 | 의미 | 소스 | 예 |
 |---|---|---|---|
@@ -35,7 +35,7 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 - AI 진입점·AI 응답 UI 는 **`Ai...` 카테고리만** 사용 (AiInlinePrompt / AiSendButton / AiAssistantButton)
 - 일반 폼/검색은 TextField·Button
 - 페이지의 AI 진입점은 **버튼 대신 AiInlinePrompt 직접 주입 (2-step → 1-step)**
-- **카탈로그 분류와 소스 트리는 같이 움직인다** — `Primitives/Ai/`·`Composite/Ai/` 로 분류했으면 소스도 `src/widget/` 에 둔다(Shell 은 위 표대로 두 트리 허용). 강제: `pnpm lint:ai-boundary`. `check-catalog-folders` 는 `stories/` 안만 보므로 이 축을 볼 수 없다 — 실제로 4종이 카탈로그는 `Ai/`, 소스는 루트인 상태로 있었다. 같은 게이트가 `components.json` 의 `importFrom` 이 **배럴이 실제로 export 하는 진입점**인지도 검산한다.
+- **카탈로그 분류와 소스 트리는 같이 움직인다** — `Primitives/Ai/`·`Composite/Ai/` 로 분류했으면 소스도 `src/widget/` 에 둔다(Shell 은 위 표대로 두 트리 허용). 강제: `pnpm lint:ai-boundary`. `check-catalog-folders` 는 `stories/` 안만 보므로 이 기준을 볼 수 없다 — 실제로 4종이 카탈로그는 `Ai/`, 소스는 루트인 상태로 있었다. 같은 게이트가 `components.json` 의 `importFrom` 이 **배럴이 실제로 export 하는 진입점**인지도 검산한다.
 
 ## 아키텍처 — 2-Tier Token + 3-Layer Component
 
@@ -323,7 +323,7 @@ AI 위젯 영역의 모든 컴포넌트는 다음 primitive 를 **반드시 comp
 |---|---|
 | **코드** | `src/` 컴포넌트 · docstring 4섹션(Purpose · When to use · When NOT to use · Composition rules) · `index.ts` export · 필요한 CSS · 토큰 |
 | **Storybook** | 계층 title 의 스토리(변형 · 상태마다) · autodocs 설명 |
-| **Figma 정본** (`2LktjSjKZDnCuWo5CQ6828`) | 컴포넌트 페이지 · 세트(코드 prop 과 같은 축의 variant · property · slot) · 색 · 여백 · 반경 · 글자는 WDS 변수 · 스타일 연결(미연결 0) · 설명(출처 · 코드 경로 · Figma 구현 노트) · 📄 문서 프레임 · 라이브러리 게시 |
+| **Figma 정본** (`2LktjSjKZDnCuWo5CQ6828`) | 컴포넌트 페이지 · 세트(코드 prop 과 같은 기준의 variant · property · slot) · 색 · 여백 · 반경 · 글자는 WDS 변수 · 스타일 연결(미연결 0) · 설명(출처 · 코드 경로 · Figma 구현 노트) · 📄 문서 프레임 · 라이브러리 게시 |
 | **카탈로그** (AI 가 읽고 실행하는 자리) | `docs/*-components.md` 또는 `primitives.md` 등재 · 정책이 걸리면 `patterns.md` · 필요하면 `SKILL.md` · `GUIDE.md` · `static/public/llms.txt` · 생성물(`components.json` · `policies.json` · `DESIGN.md`)은 `pnpm build:design` 으로 확인 |
 
 - 세 정본은 **같은 PR 흐름**에서 맞춘다. 코드만 먼저 병합하고 Figma 를 나중에 두지 않는다 — AI 는 카탈로그를 읽고 그대로 실행하므로, 한쪽에만 있는 컴포넌트는 다른 쪽에서 «없는 것» 으로 다시 만들어진다.

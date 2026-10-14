@@ -18,7 +18,7 @@ const meta: Meta = {
           "`aria-selected=\"true\"` 로 활성 상태, 톤 색상은 별도 CSS 클래스로 적용. " +
           "추천 서비스 섹션 탭 네비게이션에서 사용." +
           "\n\n" +
-          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 기준).
           "## When to use\n" +
           "- 마케팅 페이지에서 **같은 자리의 콘텐츠를 갈아 끼우는 수평 탭** — 추천 서비스 섹션의 서비스별 탭(`ServiceTabs`).\n" +
           "- 선택 상태가 하나뿐인 짧은 라벨 묶음(2~8개) — 선택은 `aria-selected` 로 표현한다.\n" +

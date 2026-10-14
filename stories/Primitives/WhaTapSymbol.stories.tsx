@@ -31,7 +31,7 @@ const meta: Meta = {
           "✅ **Do** — 회사·제품 브랜드를 식별할 때만 사용(사이드바 로고 헤더 등) · 4 컬러 바 비율 그대로 스케일\n\n" +
           "❌ **Don't** — AI 기능 표식으로 사용(그건 `AiSymbol`) · 컬러 바 색을 바꾸거나 일부만 쓰기 · " +
           "심볼을 인라인 SVG 로 다시 그리기(브랜드 마크는 재구현 금지)\n\n" +
-          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 기준).
           "## When to use\n" +
           "- 회사·제품 브랜드를 식별하는 자리 — 사이드바 로고 헤더 · 로그인 화면 · 문서 표지.\n" +
           "- 워드마크가 함께 필요하면 Horizon(심볼 + 워드마크) 가로 조합.\n\n" +

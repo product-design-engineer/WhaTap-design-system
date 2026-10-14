@@ -19,7 +19,7 @@ const meta: Meta = {
           "텍스트 + CTA 좌측, 비주얼 에셋 우측 2컬럼 구조. 720px 고정 높이. " +
           "테마 클래스는 글자색만 정한다 — 배경은 소비 페이지가 칠한다(아래 스토리의 배경은 맥락 표시용 토큰)." +
           "\n\n" +
-          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 기준).
           "## When to use\n" +
           "- 마케팅 페이지 최상단에서 **제품·캠페인 하나를 크게 소개**하는 첫 화면 — 헤드라인 · 서브텍스트 · CTA · 비주얼.\n" +
           "- 배경 톤에 맞춰 글자색을 바꿔야 할 때 — `--dark` · `--light` · `--ai` 테마.\n" +

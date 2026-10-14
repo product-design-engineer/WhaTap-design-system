@@ -174,7 +174,7 @@
      랜딩은 라이트/다크를 [data-theme] 로 바꾸므로 다크 값은 아래 .dark 블록에 있다.
      헤더 반투명 면은 이미 있는 --color-header-translucent 를 쓴다(값이 같다). */
   --color-web-landing-fg-rgb: 30, 30, 30;     /* 전경 RGB 트리플 — rgba(var(), a) 로 알파 합성 */
-  --color-web-landing-surface-alt: #f4f6fa;   /* 섹션 교대 배경 (마케팅 리듬, 제품 --color-bg 와 별개 축) */
+  --color-web-landing-surface-alt: #f4f6fa;   /* 섹션 교대 배경 (마케팅 리듬, 제품 --color-bg 와 별개 기준) */
   --color-web-landing-input-bg: #ffffff;      /* URL 입력칸 배경 */
   --color-web-landing-danger: #c81e1e;        /* 에러 문구 — 근백색 카드 위 AA 대비 */
   --shadow-web-landing-focus: 0 0 0 3px rgba(41, 108, 242, 0.18);  /* 그라데이션 입력칸 포커스 링 */

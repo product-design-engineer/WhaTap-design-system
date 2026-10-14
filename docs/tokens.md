@@ -399,7 +399,7 @@ seq 램프는 단조 L · 인접 ΔL ≥ 0.06 · 옅은 끝 대비 ≥ 2:1 · �
 | 토큰 | 자리 |
 |---|---|
 | `--color-web-landing-fg-rgb` | 전경 RGB 트리플. `rgba(var(--color-web-landing-fg-rgb), 0.6)` 처럼 알파를 합성해 본문·보더·아이콘을 칠함 |
-| `--color-web-landing-surface-alt` | 섹션 교대 배경 (마케팅 리듬. 제품의 `--color-bg` 와 다른 축) |
+| `--color-web-landing-surface-alt` | 섹션 교대 배경 (마케팅 리듬. 제품의 `--color-bg` 와 다른 기준) |
 | `--color-web-landing-input-bg` | 히어로 URL 입력칸 바탕 |
 | `--color-web-landing-danger` | 입력 검증 실패 문구. 배지·도트 원색은 `--color-status-error` |
 | `--shadow-web-landing-focus` | 그라데이션 입력칸 포커스 링 |

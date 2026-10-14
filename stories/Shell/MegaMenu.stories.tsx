@@ -18,7 +18,7 @@ const meta: Meta = {
           "`.wds-mega-menu` + `.wds-mega-menu--divided` 로 4컬럼 카테고리 그리드를 조립한다. " +
           "컬럼 사이 세로 구분선(Divided)이 기본이며, Light 배경에서 사용한다." +
           "\n\n" +
-          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 기준).
           "## When to use\n" +
           "- 마케팅 GNB(LandingHeader)에서 **서비스 목록을 카테고리별 4컬럼으로 펼치는 드롭다운**(`Gnb`).\n" +
           "- 항목이 많아 한 줄 드롭다운으로는 훑기 어려운 제품·솔루션 탐색 메뉴.\n" +
