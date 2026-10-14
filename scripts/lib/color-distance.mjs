@@ -67,3 +67,19 @@ export function distances(h1, h2) {
     deutan: round1(deltaE(h1, h2, "deutan")),
   };
 }
+
+/** OKLCH 의 [L, C] — 검증기의 밝기 대역 · 채도 하한 판정에 쓴다. */
+export function oklch(h) {
+  const [L, a, b] = oklabFromLin(lin(h));
+  return [L, Math.hypot(a, b)];
+}
+
+/** WCAG 대비. */
+export function contrast(h1, h2) {
+  const lum = (h) => {
+    const [r, g, b] = lin(h);
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const [hi, lo] = [lum(h1), lum(h2)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+}

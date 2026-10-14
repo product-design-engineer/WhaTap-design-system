@@ -329,7 +329,7 @@
     --color-product-gauge: #B443DD;
 
     /* Heatmap Scale — 강도 8단 순차 스케일.
-       차트 계열색(--color-chart-series-*)과 다른 축이다: 계열은 «누구인지», 이 스케일은 «얼마나»를 말한다.
+       차트 계열색(--color-chart-series-*)과 다른 기준이다: 계열은 «누구인지», 이 스케일은 «얼마나»를 말한다.
        값이 아니라 위치(0·20·40…100)로 이름 붙여 stop 을 바꿔도 참조가 안 깨진다. */
     /* @role 강도 스케일 최저 stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
     --color-heatmap-0: #1B69C6;
@@ -653,22 +653,22 @@
     /* Chart — 데이터 시각화 전용. 역할로 고른다: 정체성(series) vs 크기(seq).
        구 --color-palette-{hex} 36색을 대체. 정의·검증 근거: tokens.css
        series 는 고정 순서로 1번부터 배정하고 순환하지 않는다(all-pairs 상한 3슬롯). */
-    /* @role 차트 계열 1 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
-    --color-chart-series-1: #296CF2;
-    /* @role 차트 계열 2 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
-    --color-chart-series-2: #C75B1A;
-    /* @role 차트 계열 3 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
-    --color-chart-series-3: #00908A;
-    /* @role 차트 계열 4 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
-    --color-chart-series-4: #9A7B00;
-    /* @role 차트 계열 5 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
-    --color-chart-series-5: #B0349B;
-    /* @role 차트 계열 6 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
-    --color-chart-series-6: #0E7A56;
-    /* @role 차트 계열 7 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
-    --color-chart-series-7: #6B3FD4;
-    /* @role 차트 계열 8 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
-    --color-chart-series-8: #C93B34;
+    /* @role 차트 계열 1 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why brand-blue · status-info 와 같은 값이던 파랑을 남색으로 내렸다 — 첫 계열과 «정보» 배지가 같은 말을 하지 않게(info 와 정상시야 ΔE 15). 레거시 method(파랑)의 색조는 유지 */
+    --color-chart-series-1: #1E4E9E;
+    /* @role 차트 계열 2 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why 주황은 warning · error · critical 과 ΔE 15 를 넘길 수 없어 amber 로 비켰다. 레거시 dbc(주황)의 색조 계열 유지 */
+    --color-chart-series-2: #985521;
+    /* @role 차트 계열 3 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why 원래 teal 을 유지하되 다크에서 success 와 ΔE 15 를 넘기도록 밝기를 조정했다. 레거시 sql(청록) */
+    --color-chart-series-3: #06A3A5;
+    /* @role 차트 계열 4 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why gold 유지. 다크에서 warning 과 ΔE 15 경계 — 4번째 계열이 2번(amber)과 붙는 것이 §18 3계열 상한의 이유다 */
+    --color-chart-series-4: #9A7D0B;
+    /* @role 차트 계열 5 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why magenta 유지. 레거시 socket(분홍)을 받는 슬롯 — 8번 빨강에 두면 dbc(2) 와 이웃해 검증기 FAIL */
+    --color-chart-series-5: #B3329D;
+    /* @role 차트 계열 6 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why green 유지. 다크에서 success 와 ΔE 15 를 넘기도록 청록 쪽으로 조정했다. 레거시 resultset(초록) */
+    --color-chart-series-6: #037C58;
+    /* @role 차트 계열 7 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why violet 유지. info 와 ΔE 15 를 넘기도록 보라 쪽으로 조정했다. 레거시 httpc(보라) */
+    --color-chart-series-7: #7130CB;
+    /* @role 차트 계열 8 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why 빨강은 error · critical 과 구별되지 않아 raspberry 로 옮겼다 — 다크에서 대비 3:1 을 지키는 빨강은 Severity 빨강과 ΔE 15 이상 떨어질 수 없다는 것이 탐색으로 확인됐다 */
+    --color-chart-series-8: #9F2D48;
 
     /* @role 순차 스케일 1 단계 (크기·강도) | @use 히트맵 · 농도 표현 | @avoid 계열 구분 (series 사용) */
     --color-chart-seq-1: #7AB8F0;
@@ -715,7 +715,7 @@
     --color-shadow-flood: #000000;
 
     /* Topology — 노드-엣지 그래프 전용 역할 토큰(구조·상태). 차트 series/seq 로
-       대체 불가 — 의미 축이 다르다. 값 출처·금지사항: tokens.css */
+       대체 불가 — 의미 기준이 다르다. 값 출처·금지사항: tokens.css */
     /* @role 토폴로지 캔버스 배경 그라데이션 시작 */
     --color-topology-canvas-from: #F1F6FB;
     /* @role 토폴로지 캔버스 배경 그라데이션 끝 */
@@ -2177,14 +2177,14 @@ html, body, #root {
   --color-status-warning-soft-border: #4A3714;
 
   /* Chart — 다크 표면용으로 다시 스텝한 값(자동 반전 아님). 정의: tokens.css */
-  --color-chart-series-1: #5B92F7;
-  --color-chart-series-2: #D9762E;
-  --color-chart-series-3: #1FA9A2;
-  --color-chart-series-4: #B08D14;
-  --color-chart-series-5: #CE4FB6;
-  --color-chart-series-6: #2FA97D;
-  --color-chart-series-7: #9A7DF0;
-  --color-chart-series-8: #E8635C;
+  --color-chart-series-1: #406CAA;
+  --color-chart-series-2: #9F6620;
+  --color-chart-series-3: #12A7A8;
+  --color-chart-series-4: #A9912B;
+  --color-chart-series-5: #D249B8;
+  --color-chart-series-6: #04896A;
+  --color-chart-series-7: #B264FB;
+  --color-chart-series-8: #AA618D;
 
   /* seq — 다크는 anchor 가 뒤집힌다: 어두움(작음) → 밝음(큼). */
   --color-chart-seq-1: #3A5480;

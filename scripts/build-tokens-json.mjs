@@ -28,6 +28,8 @@
  *   - `utilities` 이 토큰을 `var()` 로 쓰는 유틸 클래스명
  *   - `usedBy`    `src/**` 에서 이 토큰을 참조하는 컴포넌트 파일
  *   - `aliasOf`   값이 `var(--other)` 인 경우의 대상
+ *   - (선택) `@why` — 이 값을 고른 근거. 사람이 쓰는 유일한 «이유» 칸이고 그대로 `why` 로 싣는다.
+ *                 Chart Art 사이트 · MCP 가 «왜 이 색인가» 를 값 옆에서 읽게 하려는 자리다.
  *   - `distinctFrom` `@distinct <집합>` 을 선언한 토큰만. 그 집합의 색과 **실제 값으로 잰**
  *                 ΔE(정상시야 · protan · deutan, 라이트 · 다크)와 판정. 숫자를 주석에 손으로
  *                 쓰면 값을 바꾸는 순간 낡는다 — 주석은 «무엇과 구별돼야 하는가» 만 선언한다.
@@ -62,7 +64,7 @@ const darkStart = lines.findIndex((l) => /^\.dark\b|^\.dark,/.test(l));
 
 /* ── 주석에서 의미 뽑기 ───────────────────────────────────────────────────── */
 
-const FIELDS = ["role", "use", "avoid", "distinct"];
+const FIELDS = ["role", "use", "avoid", "distinct", "why"];
 
 /** `@role x | @use y | @avoid z` → { role, use, avoid }. 없는 건 undefined. */
 function parseAnnotation(text) {
@@ -158,6 +160,7 @@ lines.forEach((ln, i) => {
     use: meta?.use ?? null,
     avoid: meta?.avoid ?? null,
     distinct: meta?.distinct ?? null,
+    why: meta?.why ?? null,
     inheritedFrom: own ? null : inherited ? "group" : null,
     utilities: [],
     usedBy: [],
@@ -186,9 +189,10 @@ const DISTINCT_SETS = {
       "--color-status-error",
       "--color-indicator-critical",
       "--color-indicator-warning",
+      // info 는 Severity 가 아니지만 같은 문턱을 건다 — 첫 계열과 «정보» 배지가 같은 말을 하지
+      // 않게(2026-10-14 팔레트 재조정에서 결정, §23).
+      "--color-status-info",
     ],
-    // info 는 Severity 가 아니다. ΔE 판정 대상이 아니라 «같은 값 금지» 만 본다(§23).
-    sameValueOnly: ["--color-status-info"],
   },
 };
 
@@ -223,7 +227,7 @@ for (const t of tokens.values()) {
   t.distinctFrom = {
     set: key,
     policy: set.policy,
-    criterion: `정상시야 OKLab ΔE×100 ≥ ${set.threshold} (라이트 · 다크 각각) · 같은 값 금지`,
+    criterion: `정상시야 OKLab ΔE×100 ≥ ${set.threshold} (라이트 · 다크 각각, Severity 와 info 모두)`,
     pass: passMode("light") === true && passMode("dark") === true && !pairs.some((p) => p.light?.sameValue || p.dark?.sameValue),
     light: nearest.light ? { nearest: nearest.light, pass: passMode("light") } : null,
     dark: nearest.dark ? { nearest: nearest.dark, pass: passMode("dark") } : null,
@@ -284,7 +288,7 @@ const undocumented = list.filter((t) => !t.role).map((t) => t.name);
 const out = {
   $comment:
     "자동 생성 (scripts/build-tokens-json.mjs). 직접 편집 금지 — src/whatap-ds.css 의 토큰 선언과 " +
-    "그 위 `@role / @use / @avoid / @distinct` 주석을 고치고 재생성. tier·group·dark·utilities·usedBy·distinctFrom 은 유도된다.",
+    "그 위 `@role / @use / @avoid / @distinct / @why` 주석을 고치고 재생성. tier·group·dark·utilities·usedBy·distinctFrom 은 유도된다.",
   generatedFrom: { css: rel(CSS), tokens: list.length, dark: darkValues.size },
   coverage: { documented: list.length - undocumented.length, total: list.length, undocumented },
   tokens: list,

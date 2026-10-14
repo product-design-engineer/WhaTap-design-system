@@ -56,6 +56,15 @@
       "inCI": true
     },
     {
+      "id": "chart-palette",
+      "name": "차트 계열 팔레트",
+      "status": "auto",
+      "invariant": "차트 계열 8색(`--color-chart-series-*`)은 라이트 · 다크 각각 **실제 런타임 값으로** 밝기 대역 · 채도 하한 · 카드 표면 대비 3:1 · 인접 쌍 정상시야 ΔE ≥ 15 · 색각 이상 ≥ 8(6~8 경고) · 슬롯 1~3 모든 쌍(§18) · 레거시 엔티티 순서 1·3·7·2·5·6 이웃(§21) · **모든 Severity 색과 info 와 정상시야 ΔE ≥ 15**(§23)를 지킨다. 사본(`tokens.css` 라이트 · 다크, 루트 `DESIGN.md`)은 런타임 값과 같아야 한다. 식은 dataviz `validate_palette.js` 와 같다(`scripts/lib/color-distance.mjs`).",
+      "prevents": "사람이 검증기를 돌려야만 지켜지던 차트 색 조건의 누락 — 실측(2026-10-14): 계열 8슬롯 중 6개가 Severity 색과 구별되지 않았고(series-8 ↔ error ΔE 4.7, series-1 = status-info 같은 값) 모든 게이트가 통과했다. `token-sync` R2 는 첫 선언만 비교해 다크 사본이 갈라져도 통과했다",
+      "command": "test (scripts/check-chart-palette.mjs)",
+      "inCI": true
+    },
+    {
       "id": "layer-deps",
       "name": "3-Layer 의존 방향",
       "status": "auto",
