@@ -68,7 +68,7 @@ const meta: Meta = {
           "❌ **Don't** — AI 영역에 일반 TextField·Button 사용(`Ai...` 컴포넌트만) · " +
           "진입점을 헤더 토글과 인라인 입력 둘 다 노출(어느 쪽이 지금 대화인지 알 수 없어진다) · " +
           "chip 을 줄바꿈시키기(한 줄 invariant)\n\n" +
-          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 기준).
           "## When to use\n" +
           "- 자연어 질문이 화면의 **주 입력**인 AI 모드 화면 — 전체 개요·자연어 조회 진입 화면.\n" +
           "- 무엇을 볼지 사용자가 미리 정하지 않고 AI 에게 맡기는 시작 화면.\n" +

@@ -86,7 +86,7 @@ export default function WhaTapAiWidget({
    * 헤더 제목 「WhaTap AI」 옆에 서는 뱃지. 이 대화가 «무엇으로 나가는가» 를 상시로 말한다
    * (재원 이름 — 무료 · plan 이름).
    *
-   * 잔량은 여기 적지 않는다. 종류와 잔량은 다른 축이고, 잔량은 «보내는 자리»(입력창 pill)에
+   * 잔량은 여기 적지 않는다. 종류와 잔량은 다른 기준이고, 잔량은 «보내는 자리»(입력창 pill)에
    * 붙어야 뜻이 선다. 헤더에 숫자까지 넣으면 위젯 꼭대기가 과금 계기판이 된다.
    */
   titleBadge?: import("react").ReactNode;

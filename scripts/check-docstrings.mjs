@@ -50,9 +50,9 @@ for (const c of targets) {
      두고 서로 엇갈리게 만든다. 스토리 안에서 정의되는 합성 템플릿에는 이것이 유일한 문서다. */
   if (!c.summary && !c.sourceFile) missing.push("story description");
   /* 스토리 안에서 정의되는 합성 템플릿(`Shell/Page/*` 등)에는 「언제 쓰나」도 요구한다 —
-     그것이 **컴포넌트 이름을 모르는 사람이 «하려는 일»로 검색해 도달하는 축**이고
+     그것이 **컴포넌트 이름을 모르는 사람이 «하려는 일»로 검색해 도달하는 기준**이고
      (`search_components` 가 whenToUse 를 이름 다음 순위로 본다), 소스 docstring 이 없는
-     이들에게는 스토리 설명이 그 축을 담을 유일한 자리다. 표기는 docstring 과 같은
+     이들에게는 스토리 설명이 그 기준을 담을 유일한 자리다. 표기는 docstring 과 같은
      `## When to use` 섹션. */
   if (!c.sourceFile && !c.whenToUse.length) missing.push("story ## When to use");
   if (c.sourceFile) {

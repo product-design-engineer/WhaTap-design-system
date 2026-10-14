@@ -16,7 +16,7 @@ const meta: Meta = {
           "**마케팅 서비스 유형 칩.** `.wds-web-service-chip` — 22px 높이, brand-blue soft 톤. " +
           "사례·리소스 카드의 타이틀 아래에서 서비스 유형을 표시한다." +
           "\n\n" +
-          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 기준).
           "## When to use\n" +
           "- 마케팅 사례·리소스 카드에서 **어떤 서비스에 관한 글인지** 표시하는 읽기 전용 라벨(`case-list`).\n" +
           "- 카드 하나에 서비스 유형이 여러 개면 `.wds-web-service-chips` 로 묶는다.\n" +

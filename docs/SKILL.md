@@ -105,7 +105,7 @@ DS는 **Tailwind를 쓰지 않습니다.** `style.css`(= `whatap-ds.css`)는 외
 
 ## 디자인 시스템 구조
 
-트리는 **컴포넌트 3계층(Primitives · Composite · Shell)** 과 동일한 축. AI 전용 에셋은 별도 카테고리가 아니라 각 계층 안 **`Ai/` 하위그룹**.
+트리는 **컴포넌트 3계층(Primitives · Composite · Shell)** 과 동일한 기준. AI 전용 에셋은 별도 카테고리가 아니라 각 계층 안 **`Ai/` 하위그룹**.
 
 ```
 WhaTap Design System (@whatap/design-system)

@@ -10,7 +10,7 @@
 //   Shell/                        → 소스 `src/` · `src/widget/` 둘 다 허용
 //                                   (WhaTapAiWidget 은 루트에 있는 것이 정상)
 //
-// R3 은 다른 축이지만 같은 병이다 — **카탈로그가 말하는 위치와 실제가 다른 것**.
+// R3 은 다른 기준이지만 같은 병이다 — **카탈로그가 말하는 위치와 실제가 다른 것**.
 // `importFrom` 이 파일 위치(`src/widget/` 로 시작하는가)로 계산되던 동안,
 // widget 배럴이 export 하지 않는 13종이 `@whatap/design-system/widget` 에서
 // 가져오라고 안내되고 있었다 — 소비 AI 가 그대로 쓰면 import 가 실패한다.

@@ -18,7 +18,7 @@ const meta: Meta = {
           "**마케팅 CTA 배너 CSS 컴포넌트.** `.wds-web-cta-banner` 그라데이션 배경 + 글로우. " +
           "heading · sub · actions(WebCtaButton) 3단 구성. 반응형 3단계(데스크톱 · 태블릿 · 모바일)." +
           "\n\n" +
-          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 축).
+          // ↓ build-components-json 이 whenToUse/whenNotToUse 로 읽는 섹션(의도 검색 기준).
           "## When to use\n" +
           "- 마케팅 페이지 **하단에서 전환(무료 체험·도입 문의)을 유도하는 풀폭 배너** — 제품·요금·사례 목록 페이지 끝.\n" +
           "- heading · sub · 버튼 1~2개로 행동을 한 번 더 제시할 때.\n" +

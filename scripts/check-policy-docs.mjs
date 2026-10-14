@@ -14,7 +14,7 @@
  * ## 무엇을 요구하나 (정책 1개 기준)
  *   ① `<!-- @policy id=… -->` — id 는 전역 유일. 번호(`1`·`P2`)는 문서를 고치면 밀린다.
  *   ② `@severity` 가 must · should · context 중 하나
- *   ③ `@applies` 가 알려진 축 중 하나
+ *   ③ `@applies` 가 알려진 기준 중 하나
  *   ④ `**When to use**` · `**When NOT to use**`
  *   ⑤ `✅` 1개 이상 · `❌` 1개 이상
  *
@@ -37,7 +37,7 @@ const JSON_PATH = join(root, "docs/policies.json");
 const BASELINE = join(root, "scripts/policy-docs-baseline.json");
 const update = process.argv.includes("--update");
 
-/** 알려진 축. 새 축이 필요하면 여기에 더하고 Overview 의 `AXES` 에도 라벨을 준다. */
+/** 알려진 기준. 새 기준이 필요하면 여기에 더하고 Overview 의 `AXES` 에도 라벨을 준다. */
 const APPLIES = new Set(["chrome", "widget", "table", "chart", "token", "type", "layer", "process"]);
 const SEVERITY = new Set(["must", "should", "context"]);
 
@@ -60,7 +60,7 @@ for (const p of policies) {
   if (!p.do.length) missing.push("✅ Do (1개 이상)");
   if (!p.dont.length) missing.push("❌ Don't (1개 이상)");
   if (!SEVERITY.has(p.severity)) missing.push(`@severity 가 must|should|context 아님 (${p.severity})`);
-  if (!APPLIES.has(p.applies)) missing.push(`@applies 가 알려진 축 아님 (${p.applies})`);
+  if (!APPLIES.has(p.applies)) missing.push(`@applies 가 알려진 기준 아님 (${p.applies})`);
 
   // id 중복 — 링크와 게이트가 id 를 물으므로 겹치면 조용히 한쪽을 가린다.
   if (seen.has(p.id)) missing.push(`@policy id 중복 — ${seen.get(p.id)} 와 같다`);
