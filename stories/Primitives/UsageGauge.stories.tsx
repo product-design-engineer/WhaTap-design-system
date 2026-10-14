@@ -3,7 +3,7 @@ import { UsageGauge } from "@whatap/design-system";
 
 /** Stories for [[UsageGauge]] — 한계 대비 소비량 막대. */
 const meta: Meta<typeof UsageGauge> = {
-  title: "Primitives/UsageGauge",
+  title: "Primitives/Chart · UsageGauge",
   component: UsageGauge,
   tags: ["autodocs"],
   parameters: {

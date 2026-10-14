@@ -5,7 +5,7 @@ import { GpuStatusBar } from "@whatap/design-system";
  * Stories for [[GpuStatusBar]] — 범주별 할당/미할당을 위아래로 나눠 보여 주는 막대.
  */
 const meta: Meta<typeof GpuStatusBar> = {
-  title: "Primitives/GpuStatusBar",
+  title: "Primitives/Chart · GpuStatusBar",
   component: GpuStatusBar,
   tags: ["autodocs"],
   parameters: {
