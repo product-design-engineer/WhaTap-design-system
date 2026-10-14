@@ -172,8 +172,11 @@ export default function PageHeader({
               type="button"
               className="size-24px flex items-center justify-center cursor-pointer relative"
               onClick={() => hasNotify && setNotifyOpen((o) => !o)}
+              aria-label="알림"
+              aria-haspopup={hasNotify ? "true" : undefined}
+              aria-expanded={hasNotify ? notifyOpen : undefined}
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <path
                   d="M6 10C6 6.69 8.69 4 12 4C15.31 4 18 6.69 18 10V14L20 16V17H4V16L6 14V10Z"
                   stroke="var(--color-text-secondary)"
@@ -212,8 +215,11 @@ export default function PageHeader({
               type="button"
               className="size-24px cursor-pointer block"
               onClick={() => profileMenu && profileMenu.length > 0 && setProfileOpen((o) => !o)}
+              aria-label="프로필"
+              aria-haspopup={profileMenu?.length ? "true" : undefined}
+              aria-expanded={profileMenu?.length ? profileOpen : undefined}
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <defs>
                   <linearGradient id="avatar-grad" x1="0" y1="0" x2="24" y2="24">
                     <stop stopColor="var(--color-avatar-gradient-from)" />

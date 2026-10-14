@@ -27,14 +27,14 @@ export const Default: Story = {
   render: (args) => {
     const Demo = () => {
       const [on, setOn] = useState(false);
-      return <Switch {...args} checked={on} onChange={setOn} />;
+      return <Switch {...args} checked={on} onChange={setOn} label="알림 활성화" />;
     };
     return <Demo />;
   },
 };
 
 /** uncontrolled — defaultChecked. */
-export const Uncontrolled: Story = { args: { defaultChecked: true } };
+export const Uncontrolled: Story = { args: { defaultChecked: true, label: "자동 새로고침" } };
 
 /** 크기 — sm(40×22) / md(52×28). */
 export const Sizes: Story = {

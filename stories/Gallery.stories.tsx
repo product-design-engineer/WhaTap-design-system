@@ -530,9 +530,9 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
       className="bg-card border border-color-var-color-border-default rounded-8px"
       style={{ padding: 20, marginBottom: 12 }}
     >
-      <h3 className="text-lg font-bold text-primary" style={{ margin: "0 0 4px" }}>
+      <h2 className="text-lg font-bold text-primary" style={{ margin: "0 0 4px" }}>
         {recipe.title}
-      </h3>
+      </h2>
       <p className="text-base text-secondary" style={{ margin: "0 0 10px", lineHeight: 1.6 }}>
         {recipe.description}
       </p>
@@ -805,9 +805,9 @@ export const Relations: Story = {
                 className="bg-card border border-color-var-color-border-default rounded-8px"
                 style={{ padding: 20 }}
               >
-                <h3 className="text-lg font-bold text-primary" style={{ margin: "0 0 14px" }}>
+                <h2 className="text-lg font-bold text-primary" style={{ margin: "0 0 14px" }}>
                   {selected}
-                </h3>
+                </h2>
 
                 {detail.uses.length > 0 && (
                   <div style={{ marginBottom: 16 }}>
@@ -845,9 +845,9 @@ export const Relations: Story = {
                 className="bg-card border border-color-var-color-border-default rounded-8px"
                 style={{ padding: 20 }}
               >
-                <h3 className="text-lg font-bold text-primary" style={{ margin: "0 0 4px" }}>
+                <h2 className="text-lg font-bold text-primary" style={{ margin: "0 0 4px" }}>
                   허브 컴포넌트 TOP 10
-                </h3>
+                </h2>
                 <p className="text-sm text-tertiary" style={{ margin: "0 0 14px" }}>
                   가장 많이 참조되는 컴포넌트. 좌측 리스트에서 클릭하면 상세를 봅니다.
                 </p>

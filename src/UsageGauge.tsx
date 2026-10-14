@@ -24,11 +24,12 @@
  *   DS 는 받은 톤을 색으로만 옮긴다.
  * - 트랙은 `--color-surface-100` — tokens.css 가 「트랙(progress/skeleton)」 용으로 정의한 값이다.
  * - 높이 6px · 양끝 라운드. 막대 위아래에 여백을 두는 것은 담는 쪽 몫이다.
+ * - `label` 은 필수 — 스크린리더가 «무엇의» 진행 막대인지 읽는 이름이다(«청구 사용량»).
  * - `percent` 는 0~100 으로 잘라 쓴다. 넘겨받은 값이 범위를 벗어나도 막대가 트랙을 넘지 않는다.
  *
  * @example
  * ```tsx
- * <UsageGauge percent={(total - remaining) / total * 100} tone={limitTone(remaining, total)} />
+ * <UsageGauge label="청구 사용량" percent={(total - remaining) / total * 100} tone={limitTone(remaining, total)} />
  * ```
  */
 export type UsageGaugeTone = "neutral" | "warning" | "critical";
@@ -43,16 +44,19 @@ const BAR: Record<UsageGaugeTone, string> = {
 export type UsageGaugeProps = {
   /** 채움 비율 0~100. 범위를 벗어난 값은 잘라 쓴다. */
   percent: number;
+  /** 스크린리더 이름 — 무엇을 잰 막대인지. 화면에 보이는 라벨과 같은 말을 쓴다. */
+  label: string;
   /** 성격. 기준(몇 %부터 warning 인지)은 호출부가 정한다. */
   tone?: UsageGaugeTone;
   className?: string;
 };
 
-export default function UsageGauge({ percent, tone = "neutral", className }: UsageGaugeProps) {
+export default function UsageGauge({ label, percent, tone = "neutral", className }: UsageGaugeProps) {
   const w = Math.min(100, Math.max(0, percent));
   return (
     <div
       role="progressbar"
+      aria-label={label}
       aria-valuenow={Math.round(w)}
       aria-valuemin={0}
       aria-valuemax={100}

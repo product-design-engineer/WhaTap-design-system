@@ -55,6 +55,7 @@ import type { CSSProperties } from "react";
  *     xLabels={[{ x: -6, label: "-6h" }, { x: 24, label: "+24h" }]}
  *     threshold={{ value: 90, label: "임계 90%" }}
  *     series={series}
+ *     ariaLabel="마운트별 디스크 사용률 추세와 고갈 예상 시점"
  *   />
  * </WidgetFrame>
  * ```
@@ -109,8 +110,8 @@ export type ForecastLineChartProps = {
    * `false` 면 여백 0: [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
    */
   frame?: boolean;
-  /** 스크린리더용 설명. */
-  ariaLabel?: string;
+  /** 스크린리더용 설명 — 필수. `role="img"` 는 이름이 없으면 보조기술에 빈 그림으로 남는다. */
+  ariaLabel: string;
 };
 
 const THRESHOLD_TONE = {
