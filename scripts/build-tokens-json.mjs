@@ -28,12 +28,16 @@
  *   - `utilities` 이 토큰을 `var()` 로 쓰는 유틸 클래스명
  *   - `usedBy`    `src/**` 에서 이 토큰을 참조하는 컴포넌트 파일
  *   - `aliasOf`   값이 `var(--other)` 인 경우의 대상
+ *   - `distinctFrom` `@distinct <집합>` 을 선언한 토큰만. 그 집합의 색과 **실제 값으로 잰**
+ *                 ΔE(정상시야 · protan · deutan, 라이트 · 다크)와 판정. 숫자를 주석에 손으로
+ *                 쓰면 값을 바꾸는 순간 낡는다 — 주석은 «무엇과 구별돼야 하는가» 만 선언한다.
  *
  * 사용: `node scripts/build-tokens-json.mjs`  (build:design 이 함께 호출)
  */
 import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
+import { isHex, distances } from "./lib/color-distance.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const CSS = join(root, "src/whatap-ds.css");
@@ -58,7 +62,7 @@ const darkStart = lines.findIndex((l) => /^\.dark\b|^\.dark,/.test(l));
 
 /* ── 주석에서 의미 뽑기 ───────────────────────────────────────────────────── */
 
-const FIELDS = ["role", "use", "avoid"];
+const FIELDS = ["role", "use", "avoid", "distinct"];
 
 /** `@role x | @use y | @avoid z` → { role, use, avoid }. 없는 건 undefined. */
 function parseAnnotation(text) {
@@ -153,6 +157,7 @@ lines.forEach((ln, i) => {
     role: meta?.role ?? null,
     use: meta?.use ?? null,
     avoid: meta?.avoid ?? null,
+    distinct: meta?.distinct ?? null,
     inheritedFrom: own ? null : inherited ? "group" : null,
     utilities: [],
     usedBy: [],
@@ -160,6 +165,71 @@ lines.forEach((ln, i) => {
 });
 
 for (const [name, v] of darkValues) if (tokens.has(name)) tokens.get(name).dark = v;
+
+/* ── 변별 측정 (`@distinct <집합>`) ──────────────────────────────────────── */
+
+/**
+ * 「이 색은 저 색들과 구별돼야 한다」 는 선언을 숫자로 바꾼다. 정책 본문(patterns.md)과
+ * 같은 식(`lib/color-distance.mjs` = dataviz 검증기)으로 재므로 문서의 표와 숫자가 같다.
+ *
+ * 판정은 정상시야 ΔE ≥ threshold 만 본다. 색각 이상(protan · deutan)은 싣기만 한다 —
+ * Severity 가 빨강 · 초록이라 색으로는 원리적으로 보장할 수 없고, 그 몫은 구조 규칙
+ * (한 위젯에 섞지 않음 · 아이콘 + 라벨)이 맡는다(§23). 값이 같은 쌍은 `sameValue` 로 표시.
+ */
+const DISTINCT_SETS = {
+  severity: {
+    policy: "chart-series-vs-severity",
+    threshold: 15,
+    against: [
+      "--color-status-success",
+      "--color-status-warning",
+      "--color-status-error",
+      "--color-indicator-critical",
+      "--color-indicator-warning",
+    ],
+    // info 는 Severity 가 아니다. ΔE 판정 대상이 아니라 «같은 값 금지» 만 본다(§23).
+    sameValueOnly: ["--color-status-info"],
+  },
+};
+
+const modeValue = (t, mode) => (mode === "dark" ? t.dark ?? t.value : t.value);
+
+for (const t of tokens.values()) {
+  if (!t.distinct) continue;
+  const key = t.distinct.trim().split(/\s+/)[0];
+  const set = DISTINCT_SETS[key];
+  if (!set) {
+    console.error(`✗ ${t.name} — @distinct ${key} 는 알 수 없는 집합입니다 (${Object.keys(DISTINCT_SETS).join(", ")})`);
+    process.exit(1);
+  }
+  const pairs = [];
+  const nearest = {};
+  for (const mode of ["light", "dark"]) {
+    const mine = modeValue(t, mode);
+    if (!isHex(mine)) continue;
+    for (const other of [...set.against, ...(set.sameValueOnly ?? [])]) {
+      const o = tokens.get(other);
+      if (!o || !isHex(modeValue(o, mode))) continue;
+      const d = distances(mine, modeValue(o, mode));
+      let row = pairs.find((p) => p.token === other);
+      if (!row) pairs.push((row = { token: other }));
+      const judged = set.against.includes(other);
+      row.judged = judged ? "deltaE" : "sameValue";
+      row[mode] = { ...d, sameValue: mine.toLowerCase() === modeValue(o, mode).toLowerCase() };
+      if (judged && (!nearest[mode] || d.normal < nearest[mode].normal)) nearest[mode] = { token: other, normal: d.normal };
+    }
+  }
+  const passMode = (m) => (nearest[m] ? nearest[m].normal >= set.threshold : null);
+  t.distinctFrom = {
+    set: key,
+    policy: set.policy,
+    criterion: `정상시야 OKLab ΔE×100 ≥ ${set.threshold} (라이트 · 다크 각각) · 같은 값 금지`,
+    pass: passMode("light") === true && passMode("dark") === true && !pairs.some((p) => p.light?.sameValue || p.dark?.sameValue),
+    light: nearest.light ? { nearest: nearest.light, pass: passMode("light") } : null,
+    dark: nearest.dark ? { nearest: nearest.dark, pass: passMode("dark") } : null,
+    pairs,
+  };
+}
 
 /* ── 유틸 클래스 역인덱스 ─────────────────────────────────────────────────── */
 
@@ -214,7 +284,7 @@ const undocumented = list.filter((t) => !t.role).map((t) => t.name);
 const out = {
   $comment:
     "자동 생성 (scripts/build-tokens-json.mjs). 직접 편집 금지 — src/whatap-ds.css 의 토큰 선언과 " +
-    "그 위 `@role / @use / @avoid` 주석을 고치고 재생성. tier·group·dark·utilities·usedBy 는 유도된다.",
+    "그 위 `@role / @use / @avoid / @distinct` 주석을 고치고 재생성. tier·group·dark·utilities·usedBy·distinctFrom 은 유도된다.",
   generatedFrom: { css: rel(CSS), tokens: list.length, dark: darkValues.size },
   coverage: { documented: list.length - undocumented.length, total: list.length, undocumented },
   tokens: list,
@@ -224,5 +294,6 @@ writeFileSync(join(root, "docs/tokens.json"), JSON.stringify(out, null, 2) + "\n
 console.log(
   `tokens.json generated — ${list.length} tokens ` +
     `(role ${list.length - undocumented.length} · 다크 재매핑 ${darkValues.size} · ` +
-    `유틸 연결 ${list.filter((t) => t.utilities.length).length})`,
+    `유틸 연결 ${list.filter((t) => t.utilities.length).length} · ` +
+    `변별 측정 ${list.filter((t) => t.distinctFrom).length}(미달 ${list.filter((t) => t.distinctFrom && !t.distinctFrom.pass).length}))`,
 );

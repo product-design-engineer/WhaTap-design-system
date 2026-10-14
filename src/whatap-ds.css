@@ -653,21 +653,21 @@
     /* Chart — 데이터 시각화 전용. 역할로 고른다: 정체성(series) vs 크기(seq).
        구 --color-palette-{hex} 36색을 대체. 정의·검증 근거: tokens.css
        series 는 고정 순서로 1번부터 배정하고 순환하지 않는다(all-pairs 상한 3슬롯). */
-    /* @role 차트 계열 1 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
+    /* @role 차트 계열 1 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
     --color-chart-series-1: #296CF2;
-    /* @role 차트 계열 2 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
+    /* @role 차트 계열 2 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
     --color-chart-series-2: #C75B1A;
-    /* @role 차트 계열 3 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
+    /* @role 차트 계열 3 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
     --color-chart-series-3: #00908A;
-    /* @role 차트 계열 4 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
+    /* @role 차트 계열 4 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
     --color-chart-series-4: #9A7B00;
-    /* @role 차트 계열 5 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
+    /* @role 차트 계열 5 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
     --color-chart-series-5: #B0349B;
-    /* @role 차트 계열 6 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
+    /* @role 차트 계열 6 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
     --color-chart-series-6: #0E7A56;
-    /* @role 차트 계열 7 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
+    /* @role 차트 계열 7 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
     --color-chart-series-7: #6B3FD4;
-    /* @role 차트 계열 8 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
+    /* @role 차트 계열 8 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) | @distinct severity */
     --color-chart-series-8: #C93B34;
 
     /* @role 순차 스케일 1 단계 (크기·강도) | @use 히트맵 · 농도 표현 | @avoid 계열 구분 (series 사용) */

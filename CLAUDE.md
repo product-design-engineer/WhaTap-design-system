@@ -12,7 +12,7 @@
   - `tokens.md` — 토큰 정의 (CSS 변수 ↔ 디자인 의미)
   - `patterns.md` — **Part 1 인터랙션 패턴**(`P1`… 컴포넌트 횡단 시퀀스 — 파괴적 액션 확인 · 완료 통보 · 즉시반영 vs 폼제출 · 기본/선택 항목 그룹) + **Part 2 구현 정책**(`1`… 기존 번호 유지). MCP `search_components` 가 이 파일을 함께 검색한다.
   - `components.json` — **기계 판독 규칙 카탈로그(자동 생성 · 직접 편집 금지).** 컴포넌트별 Purpose · ✅Do · ❌Don't · Composition rules · props · 스토리 id. `scripts/build-components-json.mjs` 가 **소스 docstring + 스토리**에서 유도하고 MCP `get_component`·`get_do_dont` 가 이걸 읽는다 — Do/Don't 를 따로 손으로 쓰지 않는다(표기 단일화 규칙은 `docs/SKILL.md`). 강제: `pnpm lint:docstrings`.
-  - `tokens.json` — **기계 판독 토큰 카탈로그(자동 생성 · 직접 편집 금지).** 토큰별 tier·값·다크값·`@role`/`@use`/`@avoid`·유틸 클래스·사용 컴포넌트. `scripts/build-tokens-json.mjs` 가 **`whatap-ds.css` 의 선언 + 그 위 주석**에서 유도하고 MCP `get_tokens`·`search_tokens` 가 이걸 읽는다 — 의미를 다른 파일에 두지 않는다. 강제: `pnpm lint:token-docs`(전 토큰 `@role` 필수, 동결선 0).
+  - `tokens.json` — **기계 판독 토큰 카탈로그(자동 생성 · 직접 편집 금지).** 토큰별 tier·값·다크값·`@role`/`@use`/`@avoid`·유틸 클래스·사용 컴포넌트 · `@distinct <집합>` 을 선언한 토큰은 그 집합과의 **측정된 변별**(`distinctFrom`, 차트 계열 ↔ Severity). `scripts/build-tokens-json.mjs` 가 **`whatap-ds.css` 의 선언 + 그 위 주석**에서 유도하고 MCP `get_tokens`·`search_tokens` 가 이걸 읽는다 — 의미를 다른 파일에 두지 않는다. 강제: `pnpm lint:token-docs`(전 토큰 `@role` 필수, 동결선 0).
   - `STORIES_ROADMAP.md` — Storybook 카탈로그 추가 작업 목록
 
 ## 카탈로그 — 단일 3-Layer 체계 (Primitives · Composite · Shell)
@@ -83,7 +83,7 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 
 - UI 컴포넌트는 **Semantic 토큰만 참조**. Global 직접 참조 금지.
 - Component 토큰(3계층)은 variant×tone 조합이 복잡한 것만 선택 도입 (`--wds-btn-*`).
-- 차트 색은 **역할 토큰**으로 고른다 — `--color-chart-series-1..8`(계열 정체성, 고정 순서·순환 금지) · `--color-chart-seq-1..4`(크기/강도). 구 `--color-palette-{hex}` 36색은 폐지(값이 이름이라 선택 규칙이 없고 다크가 없었다). all-pairs 상한 3슬롯 — scatter/bubble/map/small-multiples 는 3계열까지, 그 이상은 facet. 팔레트 변경 시 dataviz `validate_palette.js` 재실행 필수(눈으로 판단 금지). 전문: `docs/tokens.md` → Chart.
+- 차트 색은 **역할 토큰**으로 고른다 — `--color-chart-series-1..8`(계열 정체성, 고정 순서·순환 금지) · `--color-chart-seq-1..4`(크기/강도). 구 `--color-palette-{hex}` 36색은 폐지(값이 이름이라 선택 규칙이 없고 다크가 없었다). all-pairs 상한 3슬롯 — scatter/bubble/map/small-multiples 는 3계열까지, 그 이상은 facet. 팔레트 변경 시 dataviz `validate_palette.js` 재실행 필수(눈으로 판단 금지). 전문: `docs/tokens.md` → Chart · 규칙 정본: `docs/patterns.md` §17~23(색 역할 · 3계열 상한 · 이중 축 · 검증기 · 레거시 흡수 · 많은 계열 · Severity 변별).
 
 **🔒 페이지 좌·우 거터 — 단일 토큰 규칙 (`--wds-page-px`)**
 - 페이지의 좌·우 거터는 **단 하나의 토큰 `--wds-page-px`(24px)** 이 소유한다. 헤더(`--wds-header-px`)·옵션바·본문(`--wds-content-px`)은 모두 이 값을 **alias 로 참조** → 한 곳만 바꾸면 헤더·옵션바·테이블 가장자리가 함께 정렬된다.
