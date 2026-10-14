@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect } from "storybook/test";
+import { Button } from "@whatap/design-system";
 import { tokens, type SemanticIntent } from "@whatap/design-system/widget";
 import { useTokens, tokenLabel, type TokenEntry } from "../_useTokens";
 
@@ -459,5 +461,32 @@ export const ChartSequential: StoryObj = {
         </div>
       </div>
     );
+  },
+};
+
+/**
+ * CSS 로드 검증 — 스토리가 whatap-ds.css 를 실제로 받았는지 계산된 스타일로 확인한다.
+ * `toBeVisible` 은 스타일 없는 버튼에서도 통과하므로 이것만이 증거다. 기대값은 리터럴이
+ * 아니라 같은 토큰을 칠한 기준 요소에서 읽는다(색 리터럴 0). 사이드바·문서에서는 숨기고 테스트만 돈다.
+ */
+export const CssCheck: StoryObj = {
+  tags: ["!dev", "!autodocs"],
+  render: () => (
+    <div className="flex items-center gap-2">
+      <Button variant="contained" tone="primary" size="lg">확인</Button>
+      <div data-testid="probe" style={{ width: 16, height: 16, background: "var(--color-brand-blue)" }} />
+      <div data-testid="bare" style={{ width: 16, height: 16 }} />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const button = canvas.getByRole("button", { name: "확인" });
+    const brand = getComputedStyle(canvas.getByTestId("probe")).backgroundColor;
+    const none = getComputedStyle(canvas.getByTestId("bare")).backgroundColor;
+    // 토큰(:root)이 없으면 기준 요소가 투명이다.
+    await expect(brand).not.toBe(none);
+    // `.wds-btn` 규칙이 없으면 버튼이 브라우저 기본 회색이다.
+    await expect(getComputedStyle(button).backgroundColor).toBe(brand);
+    // 유틸 클래스(h-32px)가 없으면 높이가 글자 크기를 따라간다.
+    await expect(getComputedStyle(button).height).toBe("32px");
   },
 };
