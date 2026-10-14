@@ -41,22 +41,43 @@ DS는 빌드 산출물(dist) 없이 **`.ts` 소스를 직접 export** 합니다.
 
 ---
 
-## 3. 설치 (Install) — 두 경로
+## 3. 설치 (Install) — 세 경로
 
-**A) `link:` 심링크 (권장 — 현재 모델)**
+**A) tarball (권장 — repo 접근 불필요, 빌드된 패키지)**
 ```bash
-git clone https://github.com/interfacedesigner/WhaTap-design-system.git   # 협업자 권한 필요
+# 최신 버전 (main 배포마다 자동 갱신)
+npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-latest.tgz
+
+# 특정 버전 고정
+npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-0.1.10.tgz
+
+# 버전 목록 확인
+curl https://whatap-design-system-storybook.vercel.app/releases/index.json
+```
+빌드된 `dist/`(JS + 타입 + CSS)가 포함되어 있어 **Vite·Next.js·webpack 모두 추가 설정 없이 동작**. repo clone·collaborator 초대 불필요. `npm`·`pnpm`·`yarn` 모두 가능.
+
+**B) `link:` 심링크 (DS 동시 개발용)**
+```bash
+git clone https://github.com/interfacedesigner/WhaTap-design-system.git   # collaborator 권한 필요
 # 소비 앱에서
 pnpm add "link:../WhaTap-design-system"
 ```
-`pnpm install` → 심링크 생성, **빌드 단계 없음**(DS 수정 자동 반영/HMR). 소비 vite 에 `resolve.dedupe: ['react','react-dom']` 필요(React 중복 방지).
+`pnpm install` → 심링크 생성, **빌드 단계 없음**(DS 수정 자동 반영/HMR). 소비 vite 에 `resolve.dedupe: ['react','react-dom']` 필요(React 중복 방지). DS 소스를 함께 수정해야 할 때 적합.
 
-**B) 같은 pnpm 워크스페이스일 때만**
+**C) 같은 pnpm 워크스페이스일 때만**
 ```json
 // 소비자 package.json (DS 가 동일 워크스페이스 멤버인 경우만)
 "dependencies": { "@whatap/design-system": "workspace:*" }
 ```
-현재 DS 는 별도 repo라 기본은 A). 동일 모노레포로 편입했을 때만 B).
+현재 DS 는 별도 repo라 기본은 A). 동일 모노레포로 편입했을 때만 C).
+
+**어떤 경로를 골라야 하나?**
+
+| 상황 | 경로 |
+|---|---|
+| DS 컴포넌트를 **소비만** 한다 (대부분의 경우) | **A) tarball** |
+| DS 소스를 **함께 수정**하며 개발한다 | B) link: |
+| 같은 모노레포 안에 있다 | C) workspace: |
 
 ---
 
@@ -86,15 +107,19 @@ import { AiCard, AiSectionHeading } from "@whatap/design-system/widget";
 
 | 증상 | 확인 |
 |---|---|
-| `git clone` 실패 | collaborator 초대/수락 여부 (1) |
-| 색·보더가 안 나옴 | `index.css` 의 `@source` 경로 (4) |
-| import가 안 잡힘 | `link:` + `pnpm install` (3) |
-| `npm install` 시도 실패 | 미배포(private). 토큰만 필요하면 `tokens.css` 다운로드 |
-| 다른 번들러에서 깨짐 | Vite·TS·React19 호환 여부 (2) |
+| `git clone` 실패 | collaborator 초대/수락 여부 (1). tarball 경로(A)는 접근 권한 불필요 |
+| 색·보더가 안 나옴 | `import "@whatap/design-system/style.css"` 누락 여부 (4) |
+| import가 안 잡힘 | tarball: `npm i <URL>` 재실행 / link: `pnpm install` 재실행 (3) |
+| tarball 설치 시 타입 오류 | `dist/index.d.ts` 포함 확인. `node_modules/@whatap/design-system/dist/` 존재 여부 |
+| 다른 번들러에서 깨짐 | tarball(A)은 빌드된 JS라 번들러 무관. link:(B)는 Vite·TS·React19 필요 (2) |
+| tarball이 최신이 아닌 것 같다 | `/releases/index.json` 의 latest 버전 확인. main 배포마다 자동 갱신 |
 
 ---
 
-## (선택) 조직 표준 배포가 필요하면
+## tarball 릴리스 구조
 
-다른 팀/외부 배포까지 표준화하려면 **GitHub Packages 사설 npm registry에 publish + 빌드 산출물(dist) 동봉**을 검토하세요.
-그러면 `npm install @whatap/design-system`(+ `.npmrc` 토큰)로 부담 없이 설치되고 번들러 호환성도 올라갑니다. (DS에 lib 빌드 추가가 필요한 별도 작업)
+main 브랜치에 머지되면 deploy 워크플로가 자동으로 라이브러리를 빌드하고 tarball을 생성해 Storybook과 함께 배포합니다. 수동 `pnpm release` + git commit은 더 이상 필요하지 않습니다.
+
+- 최신: `https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-latest.tgz`
+- 버전 고정: `.../releases/whatap-design-system-<version>.tgz`
+- 버전 목록: `.../releases/index.json`

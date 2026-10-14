@@ -82,6 +82,8 @@ export {
   MESH_CLUSTER_K,
 } from "./TargetMesh";
 export type { TargetMeshItem, MeshDot, MeshTone } from "./TargetMesh";
+export { default as ThreadDivider } from "./ThreadDivider";
+export type { ThreadDividerProps } from "./ThreadDivider";
 export { default as ToolCallStep } from "./ToolCallStep";
 export { default as UsageChart } from "./UsageChart";
 export { default as UserBubble } from "./UserBubble";

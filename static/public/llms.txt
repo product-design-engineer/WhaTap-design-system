@@ -2,6 +2,24 @@
 
 > `@whatap/design-system` — WhaTap SaaS 의 단일 컴포넌트·토큰 출처. Primitives · Chrome · AI Widget 카드 + 토큰(@theme static). 프론트엔드 엔지니어가 자기 AI 작업 환경에서 인터페이스 작업에 그대로 사용하기 위한 디자인 시스템.
 
+## 설치 (소비자)
+
+```bash
+# 최신 (main 배포마다 자동 갱신)
+npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-latest.tgz
+
+# 버전 고정
+npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-0.1.10.tgz
+```
+```tsx
+import "@whatap/design-system/style.css";   // 진입점에서 1회 — 토큰+유틸+전역+.dark 포함
+import { DashboardLayout, Button, DataTable } from "@whatap/design-system";
+import { AiCard } from "@whatap/design-system/widget";
+```
+- repo clone·collaborator 초대 불필요. npm·pnpm·yarn 모두 가능.
+- 버전 목록: `/releases/index.json`
+- 상세: [ONBOARDING.md](/design-system/ONBOARDING.md)
+
 ## 지식 주입 (catalog)
 
 - [DESIGN.md](/design-system/DESIGN.md): 전체 합본 카탈로그(SKILL→tokens→primitives→chrome→ai-entry→widget→patterns). AI 컨텍스트에 한 번에 주입용.

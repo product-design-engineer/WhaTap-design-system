@@ -17,14 +17,14 @@ pnpm build-storybook    # 정적 빌드 (DESIGN.md 합본 자동 생성)
 
 **Vercel 호스팅 tarball** 로 설치 — repo clone 불필요, Vite·Next·webpack 모두 추가 설정 없이 동작.
 ```bash
-npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-0.1.0.tgz
-# 최신: .../releases/whatap-design-system-latest.tgz · 버전 목록: /releases/index.json
+npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-latest.tgz
+# 버전 고정: .../releases/whatap-design-system-0.1.10.tgz · 버전 목록: /releases/index.json
 ```
 ```tsx
 import { DashboardLayout, PageHeaderAiInline, DataTable } from "@whatap/design-system";
-import "@whatap/design-system/tokens.css";   // import 만으로 전 토큰 :root 보장
+import "@whatap/design-system/style.css";   // 토큰+유틸+전역+.dark 전부 포함
 ```
-> 릴리스: 버전 올림 → `pnpm release` → `static/public/releases` 커밋·푸시(Vercel 자동 배포).
+> tarball은 main 배포마다 자동 갱신됩니다 (deploy 워크플로가 빌드 → pack → 배포 → 검증).
 
 단일 출처 원칙: 인라인 색 리터럴 금지(토큰 사용), 컴포넌트 inline 재구현 금지(prop 조합). 자세한 정책은 `CLAUDE.md`.
 
