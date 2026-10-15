@@ -18,7 +18,7 @@
  * - 위젯 chrome(CardChrome, FlexBoardWidget 등)은 소비자가 감싼다.
  * - 이 컴포넌트는 본문만 렌더한다 — `h-full` 부모 안에서 채워진다.
  * - 회전 오버레이는 12s linear infinite.
- * - 가운데 Total TX 는 `total` 값을 그린다. 에셋(ark-equalizer-ring.svg)에는 고리만 있다 — 종전엔 「334」 가 그림에 박혀 어느 화면이든 같은 숫자였다.
+ * - 가운데 Total TX 는 `total` 값을 그린다. 원판(인라인 SVG, 색은 속도 토큰)에는 고리만 있다 — 종전엔 「334」 가 그림에 박혀 어느 화면이든 같은 숫자였다.
  * - `frame={false}` 면 바깥 여백(좌우 · 아래 8px)과 왼쪽 아래 Elapsed 범례를 빼고, **아크 왼쪽 · 값 오른쪽 한 열**(Max TX 「N초」 + 이름 ·
  *   Agent 활성 · 비활성)로 다시 놓는다. 네 귀퉁이에 흩어 두지 않는다. [[WidgetFrame]] 안에 넣을 때 쓴다 — 여백은
  *   WidgetFrame 이 갖고, 범례는 `SPEED_LEGEND` 를 WidgetFrame `legend` 로 넘겨 본문 오른쪽 위에 세운다(patterns §15).
@@ -30,6 +30,9 @@
  * <ActiveTransactionArc maxTx={{ name: "api-gw-01", value: 42 }} agent={{ active: 12, inactive: 3 }} />
  * ```
  */
+
+import { useId } from "react";
+import { ARC_DISC, ARC_INNER, ARC_OUTER, ARC_SEGMENTS, ARC_SPOKES, ARC_SWEEP, ARC_VIEWBOX } from "./arcEqualizerShape";
 
 export type ActiveTransactionArcProps = {
   /** Max TX 이름. */
@@ -153,25 +156,42 @@ function LegendDot({ color, label }: { color: string; label: string }) {
   );
 }
 
+/** 원판 색 — 속도 등급 토큰. 원판 · 바큇살은 normal 을 옅게 깔아 테마를 따른다(다크에서 밝은 원판이 남지 않게). */
+const SPEED = ["var(--color-chart-speed-normal)", "var(--color-chart-speed-slow)", "var(--color-chart-speed-very-slow)"] as const;
+/** 종전 그림의 옅은 원판(normal 18%) · 선(normal 40%)과 같은 농도. */
+const DISC_OPACITY = 0.18;
+const LINE_OPACITY = 0.4;
+
 function ArcEqualizer({ total }: { total: number }) {
+  const sweepId = `wds-ark-sweep-${useId().replace(/:/g, "")}`;
   return (
-    /* 가운데 글자는 그림에 박지 않는다 — 에셋(ark-equalizer-ring.svg)은 고리만, Total 은 이 값을 그린다. 크기는 아크 폭을 따른다(cqw). */
+    /* 가운데 글자는 그림에 박지 않는다 — 원판은 모양만, Total 은 이 값을 그린다. 크기는 아크 폭을 따른다(cqw).
+       원판은 인라인 SVG 로 그리고 색은 토큰이다 — <img> 로 띄우면 색이 그림에 박혀 다크를 따라오지 않는다. */
     <div className="relative w-full h-full" style={{ containerType: "inline-size" }}>
-      <img
-        alt="Active Transaction Chart"
-        className="absolute inset-0 w-full h-full"
-        src="/icons/ark-equalizer-ring.svg"
-      />
+      <svg className="absolute inset-0 w-full h-full" viewBox={`0 0 ${ARC_VIEWBOX} ${ARC_VIEWBOX}`} fill="none" role="img" aria-label="Active Transaction Chart">
+        <path d={ARC_DISC} fill={SPEED[0]} fillOpacity={DISC_OPACITY} stroke={SPEED[0]} strokeOpacity={LINE_OPACITY} />
+        {ARC_SEGMENTS.map(([speed, d], i) => (
+          <path key={i} d={d} fillRule="evenodd" clipRule="evenodd" fill={SPEED[speed]} stroke="var(--color-card)" strokeOpacity={0.1} />
+        ))}
+        {ARC_SPOKES.map((d, i) => (
+          <path key={i} d={d} stroke={SPEED[0]} strokeOpacity={LINE_OPACITY} />
+        ))}
+        <circle {...ARC_INNER} fill="var(--color-card)" stroke={SPEED[0]} strokeOpacity={LINE_OPACITY} />
+        <circle {...ARC_OUTER} stroke={SPEED[0]} strokeOpacity={LINE_OPACITY} />
+      </svg>
       <div
         className="absolute inset-0"
         style={{ animation: "wds-ark-spin 12s linear infinite", transformOrigin: "50% 50%" }}
       >
-        <img
-          alt=""
-          className="absolute left-0 top-0"
-          src="/icons/ark-oval-left.svg"
-          style={{ width: "50.67%", height: "100%" }}
-        />
+        <svg className="absolute left-0 top-0" viewBox="0 0 113 223" fill="none" aria-hidden="true" style={{ width: "50.67%", height: "100%" }}>
+          <defs>
+            <linearGradient id={sweepId} x1="56.5" y1="1.5" x2="56.5" y2="221.5" gradientUnits="userSpaceOnUse">
+              <stop stopColor={SPEED[0]} />
+              <stop offset="1" stopColor="var(--color-card)" stopOpacity={0.15} />
+            </linearGradient>
+          </defs>
+          <path d={ARC_SWEEP} stroke={`url(#${sweepId})`} strokeWidth={3} strokeLinecap="round" />
+        </svg>
       </div>
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none" style={{ fontFamily: "var(--font-family-numeric)" }}>
         <span className="text-tertiary leading-none" style={{ fontSize: "5.5cqw" }}>Total TX</span>

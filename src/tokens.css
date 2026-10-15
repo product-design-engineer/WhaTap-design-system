@@ -926,6 +926,13 @@ html, body, #root {
   --color-chart-seq-4: #9BC8FF;
   --color-chart-neutral: #6B7380;
 
+  /* Apdex 구간 배경 — 라이트의 옅은 파스텔이 다크에 그대로 남아 차트가 흰 판처럼 떠 보였고 위의 큰 숫자가
+     읽히지 않았다. 다크 값은 상태 soft 표면과 같은 농도로 맞춘다(구간 이름 색은 다크에서도 그대로 읽혀 유지). */
+  --color-chart-apdex-excellent-bg: #16233D;
+  --color-chart-apdex-good-bg: #14301F;
+  --color-chart-apdex-poor-bg: #33290F;
+  --color-chart-apdex-unacceptable-bg: #3A2226;
+
   /* Topology — **레퍼런스에 다크 시안이 없어 여기서 새로 설계한 값**이다(추출 아님).
      라이트를 반전한 것이 아니라, 캔버스가 페이지 바닥(--color-bg #0E1116)보다 살짝
      밝은 자체 표면이 되도록 다시 스텝했다. 층 순서는 라이트와 동일하게 유지:
