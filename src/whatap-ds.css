@@ -2193,6 +2193,13 @@ html, body, #root {
   --color-chart-seq-4: #9BC8FF;
   --color-chart-neutral: #6B7380;
 
+  /* Apdex 구간 배경 — 라이트의 옅은 파스텔이 다크에 그대로 남아 차트가 흰 판처럼 떠 보였고 위의 큰 숫자가
+     읽히지 않았다. 다크 값은 상태 soft 표면과 같은 농도로 맞춘다(구간 이름 색은 다크에서도 그대로 읽혀 유지). */
+  --color-chart-apdex-excellent-bg: #16233D;
+  --color-chart-apdex-good-bg: #14301F;
+  --color-chart-apdex-poor-bg: #33290F;
+  --color-chart-apdex-unacceptable-bg: #3A2226;
+
   /* Topology — 레퍼런스에 다크 시안이 없어 새로 설계한 값(반전 아님).
      층 순서는 라이트와 동일: canvas < group < node. 정의: tokens.css */
   --color-topology-canvas-from: #1A2130;
