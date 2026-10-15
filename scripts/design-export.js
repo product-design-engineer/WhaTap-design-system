@@ -1,19 +1,22 @@
 #!/usr/bin/env node
 /**
- * design-export — DESIGN.md 토큰을 Tailwind theme config 또는 DTCG tokens.json 으로 변환.
+ * design-export — DESIGN.md 토큰을 W3C DTCG tokens.json(기본) 또는 Tailwind v4 theme 로 변환.
+ *
+ * 기본은 dtcg 다(Figma 등 도구 연동용). tailwind 형식은 **Tailwind 를 쓰는 소비앱**이 토큰을
+ * 가져갈 때만 쓰는 선택지이고, 이 DS 자체는 Tailwind 를 쓰지 않는다(CLAUDE.md «스타일»).
  *
  * Usage:
- *   node scripts/design-export.js tailwind          → stdout JSON (Tailwind v4 theme)
- *   node scripts/design-export.js dtcg              → stdout JSON (W3C DTCG tokens.json)
- *   node scripts/design-export.js tailwind -o out.js → 파일 출력
+ *   node scripts/design-export.js                   → stdout JSON (W3C DTCG tokens.json)
  *   node scripts/design-export.js dtcg -o out.json  → 파일 출력
+ *   node scripts/design-export.js tailwind          → stdout JSON (Tailwind v4 theme · 소비앱용)
+ *   node scripts/design-export.js tailwind -o out.js → 파일 출력
  */
 
 import { writeFileSync } from "node:fs";
 import { loadDesignTokens, flattenTokens } from "./parse-design.js";
 
 const args = process.argv.slice(2);
-const format = args[0] || "tailwind";
+const format = args[0] && !args[0].startsWith("-") ? args[0] : "dtcg";
 const outIdx = args.indexOf("-o");
 const outFile = outIdx !== -1 ? args[outIdx + 1] : null;
 

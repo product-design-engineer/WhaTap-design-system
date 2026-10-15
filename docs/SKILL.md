@@ -71,7 +71,7 @@ import "@whatap/design-system/style.css";
 
 DS는 **Tailwind를 쓰지 않습니다.** `style.css`(= `whatap-ds.css`)는 외부 프레임워크 흔적이 0인 자체 일반 CSS(클래스명도 escape 없는 식별자)라, 컴포넌트가 쓰는 모든 유틸·토큰·전역·`.dark`가 이미 포함됩니다. 소비 앱에 Tailwind·`@source` 설정 **불필요**. (토큰만 필요하면 `@whatap/design-system/tokens.css`.) 자세한 내용은 repo root `CLAUDE.md`.
 
-> ⚠️ `whatap-ds.css` 는 `scripts/detailwind.mjs` 생성물입니다. 컴포넌트 className 추가/변경 시 `node scripts/detailwind.mjs generate` 로 재생성.
+> ⚠️ `whatap-ds.css` 는 **직접 편집한다**(hand-maintained). `scripts/detailwind.mjs generate` 는 최초 1회 변환용이었고 **재실행 금지** — 가드가 거부한다(CLAUDE.md «스타일»). 새 유틸 · 토큰은 이 파일에 바로 추가한다.
 
 ### 새 소비 프로젝트 추가 시
 

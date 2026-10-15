@@ -89,7 +89,7 @@ import "@whatap/design-system/style.css";   // = whatap-ds.css. 토큰+유틸+�
 ```
 - **Tailwind·`@source` 불필요.** 자체 일반 CSS라 컴포넌트가 쓰는 모든 유틸·토큰이 이미 들어 있음.
 - 토큰 변수만 필요하면 `@whatap/design-system/tokens.css`.
-- (DS 작업자만) `whatap-ds.css` 는 `scripts/detailwind.mjs` 생성물 — className/토큰 변경 시 `node scripts/detailwind.mjs generate` 재실행.
+- (DS 작업자만) `whatap-ds.css` 는 **직접 편집한다**(hand-maintained). `scripts/detailwind.mjs generate` 는 최초 1회 변환용이었고 **재실행 금지** — 가드가 거부한다(CLAUDE.md «스타일»).
 
 ---
 

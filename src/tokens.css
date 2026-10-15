@@ -241,7 +241,7 @@
    *    text-primary text-secondary text-tertiary text-disabled
    *
    *  JS 동적 케이스: `style={{ fontSize: "var(--text-base)" }}` 도 가능 (같은 변수 참조).
-   *  Single source of truth — 이 값을 바꾸면 `detailwind generate` 로 whatap-ds.css 재생성.
+   *  Single source of truth — 이 값을 바꾸면 whatap-ds.css 의 같은 선언도 직접 고친다(값 일치는 lint:token-sync 가 검사).
    *  Sync 대상: src/widget/_tokens.ts 의 value 필드 (display 용) + whatap-ds.css.
    * ────────────────────────────────────────────────────────────────────── */
 
