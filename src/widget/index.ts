@@ -55,6 +55,8 @@ export { default as AiProgress } from "./AiProgress";
 export type { AiProgressProps, AiProgressItem, AiProgressPhase } from "./AiProgress";
 export { default as AiProgressStep } from "./AiProgressStep";
 export type { AiProgressStepProps, AiProgressStepStatus, AiProgressCount } from "./AiProgressStep";
+export { default as AiProgressCompact } from "./AiProgressCompact";
+export type { AiProgressCompactProps, AiProgressCompactItem, AiProgressCompactPhase } from "./AiProgressCompact";
 export { default as AiStageMotion } from "./AiStageMotion";
 export type { AiStageMotionProps, AiStage } from "./AiStageMotion";
 

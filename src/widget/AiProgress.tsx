@@ -26,6 +26,7 @@ import AiProgressStep, { type AiProgressCount, type AiProgressStepStatus } from 
  * - 2초 안에 끝나는 응답 → [[LoadingMessage]] 한 줄. 짧은 응답에 진행 카드를 깔면 깜빡임만 남는다.
  * - 단계 이벤트가 없는 응답(시간에 맞춘 연출밖에 할 수 없다) → [[LoadingMessage]] + [[AnswerSkeleton]].
  *   진행 카드는 실제 진행을 말한다는 약속이다. 가짜 막대는 10초를 넘기면 멈춘 화면이 된다.
+ * - 대상 하나짜리 짧은 대기 · 이어 묻는 질문 · 좁은 자리 → [[AiProgressCompact]](실행 내용 한 줄 + 글로우, 누르면 같은 상세를 조회).
  * - 끝난 도구 호출 기록을 접어 두는 자리 → [[StepsTimeline]] · [[ToolCallStep]].
  *
  * ## Composition rules

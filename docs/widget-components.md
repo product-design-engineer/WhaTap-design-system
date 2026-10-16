@@ -159,6 +159,27 @@ export type AiProgressItem = {
 - 진행률을 시간으로 계산하지 않는다. 분모 모르는 단계에 `count` 를 주지 않는다
 - 제목은 상황에 맞게: «{처리하는 대상}을/를 {동작}하고 있어요». `label` 은 고정, `title` · `count.unit` 은 같은 대상(patterns §24)
 
+### AiProgressCompact
+
+[[AiProgress]] 의 간편 버전. Composite(Ai). 카드 없이 실행 내용 문장 한 줄(«트랜잭션을 분석하고 있어요  2/3 · 6초 ⌄»). 진행 중에는 문장 위를 빛이 훑는 글로우(`.wds-ai-shimmer`)가 «아직 일하는 중» 의 유일한 표시다. 문장을 누르면 상세 연산 정보(단계 막대 · 처리 수 · 중간 발견, [[AiProgressStep]])가 펼쳐진다. 완료 «3단계 완료 · 12초» · 중단 «중단했어요 · 6초» 로 바뀌고 글로우가 멈춘다. 펼치기 · 접기는 늘 이 한 줄에서.
+
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `steps` | `AiProgressCompactItem[]` | — | `AiProgress` 의 `steps` 를 그대로 넘겨도 된다(`stage` · `marker` 는 안 쓴다) |
+| `phase` | `"running" \| "done" \| "stopped"` | — | |
+| `elapsed` | `number` | — | 경과 초 |
+| `expanded` · `onExpandedChange` | `boolean?` | 내부 상태(접힘) | 상세 펼침 |
+| `startingTitle` · `doneTitle` · `stoppedTitle` | `ReactNode` | 한국어 기본 문장 | 문구 교체 |
+| `still` | `boolean?` | `prefers-reduced-motion` | 글로우 멈춤 |
+| `expandable` | `boolean` | `true` | 상세 펼침 사용 여부. `false` 면 셰브런 · 클릭 없이 상태 한 줄만 |
+
+- **언제 무엇을**: 대상 하나짜리 짧은 대기 · 이어 묻는 질문 · 좁은 자리는 `AiProgressCompact`. 기다림 자체를 보여야 하는 대표 연산(원인 진단 · 통합 분석)은 `AiProgress` 카드. 한 대기에 둘을 함께 두지 않는다
+- 예상 시간 · 「완료되면 알림」 · 「중단」 · 30초 지연 사유는 카드에만 있다. 간편 버전의 중단은 위젯 `onStop`(송신 자리 ■)으로
+- 문장 규칙은 카드와 같다: «{처리하는 대상}을/를 {동작}하고 있어요»
+- `.wds-ai-shimmer` 는 따로 쓸 수 있는 글로우 클래스다. 진행 중인 AI 문장에만, 동작 줄이기면 글자만 남는다
+- 개발 스펙은 소스 docstring `## Spec`(Storybook Docs 탭 · MCP `get_component("AiProgressCompact")`)
+- **Figma 정본**: 페이지 `AiProgressCompact` 491:2 · 세트 491:155(state 5 + `expandable` BOOLEAN). 글로우는 한 순간을 칠했다(text/disabled + 가운데 text/primary). 상세 단계 아이콘 열은 변수 `ai-progress/col`(컬렉션 `WDS · AiProgress`, card 32 · compact 16 · 코드 `--wds-ai-progress-col`)의 compact 모드. 게시는 사람이 한다
+
 ### AiProgressStep
 
 [[AiProgress]] 의 단계 한 줄. Primitives(Ai). 상태 넷: `pending` 회색 점 · 흐린 이름 / `active` 파란 고리 + 처리 수 «에이전트 8 / 12» / `done` 초록 체크 + 한 줄 / `halted` 빈 원 + «여기서 멈췄어요». 아래에 발견 칩(경고 면 `--color-status-warning-soft` · 글자 `--color-tone-text-warning`). `<li>` 를 그리므로 `<ul>` 안에 둔다.
