@@ -153,7 +153,8 @@ export type AiProgressItem = {
 | `still` | `boolean?` | `prefers-reduced-motion` | 머리 그림 멈춤 |
 
 - **Figma 정본**(`2LktjSjKZDnCuWo5CQ6828`): 페이지 `AiProgress` 485:2 · 세트 485:317(state 7) / `AiProgressStep` 483:2 · 세트 483:47(status 4) / `AiStageMotion` 482:2 · 세트 482:90(stage 3 × progress 3). 색 · 반경 · 간격은 WDS 변수, 글자는 WDS 텍스트 스타일(미연결 0). 라이브러리 게시는 사람이 한다
-- **개발 스펙**(격자 · 치수 · 토큰 · 상태 → 화면 · 서버 이벤트 계약 · 접근성 · 모션)은 소스 docstring `## Spec` 이 정본이다. 같은 내용이 Storybook Docs 탭 「개발 스펙」 과 DS MCP `get_component("AiProgress")` 의 `## Spec` 에 나온다. `AiProgressStep` · `AiStageMotion` 도 같다
+- **서버 구현 조건**(2026-10-16, 백엔드 확인 전): 단계 전환 · 예상 시간 · 중단은 쉬움, 처리 수 · 중간 발견 · 지연 사유는 «분석을 규칙 엔진이 얼마나 나눠 맡느냐»에 달린 조건부, 분석 처리 수와 「완료되면 알림」(백그라운드 실행 필요)은 어려움. 안 되는 항목은 프롭을 넘기지 않으면 화면에서 빠진다. 항목별 표는 개발 스펙에 있다
+- **개발 스펙**(격자 · 치수 · 토큰 · 상태 → 화면 · 서버 이벤트 계약 · 서버 구현 조건 · 접근성 · 모션)은 소스 docstring `## Spec` 이 정본이다. 같은 내용이 Storybook Docs 탭 「개발 스펙」 과 DS MCP `get_component("AiProgress")` 의 `## Spec` 에 나온다. `AiProgressStep` · `AiStageMotion` 도 같다
 - 함께 쓰는 것: 작성 단계에서만 `AnswerSkeleton still` · 위젯 `onStop` · 완료 답변을 `.wds-ai-reveal` 로 감싸기
 - 진행률을 시간으로 계산하지 않는다. 분모 모르는 단계에 `count` 를 주지 않는다
 - 제목은 상황에 맞게: «{처리하는 대상}을/를 {동작}하고 있어요». `label` 은 고정, `title` · `count.unit` 은 같은 대상(patterns §24)
