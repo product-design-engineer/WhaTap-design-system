@@ -25,6 +25,7 @@ import AiProgressStep, { type AiProgressCount, type AiProgressStepStatus } from 
  * - 움직이는 곳은 글로우 하나. 펼친 상세(막대 · 단계)는 멈춰 있다. 펼친 상세에 [[AiStageMotion]] 을 더하지 않는다.
  * - 글로우는 진행 중에만. 완료 · 중단이면 멈춘 글자. `prefers-reduced-motion` 이면 글로우 없이 글자만(컴포넌트가 따른다).
  * - 펼침은 이 한 줄이 맡는다(`aria-expanded`). 상세 아래에 「접기」 를 따로 두지 않는다.
+ * - 펼침 사용 여부는 `expandable` 로 고른다. 끄면 셰브런 · 클릭 · 호버 없이 상태 한 줄(`<div>`)만 선다. 상세를 보일 자리가 없을 때만 끈다.
  * - `steps` 는 [[AiProgress]] 의 `steps` 와 같은 모양이다(`stage` · `marker` 는 쓰지 않는다). 같은 서버 이벤트에서 만든다.
  * - 색은 토큰만. 글로우는 `--color-text-disabled` 바탕 위를 `--color-text-primary` 가 지나간다(차이를 크게 둔다).
  *   글로우가 멈추면(완료 · 중단 · 동작 줄이기) 글자는 `--color-text-tertiary` 로 읽힌다.
@@ -39,6 +40,7 @@ import AiProgressStep, { type AiProgressCount, type AiProgressStepStatus } from 
  * | 완료 · 중단 문장 | 같은 줄 · 글로우 없음 | `--color-text-tertiary` · «N단계 완료 · {초}초» / «중단했어요 · {초}초» |
  * | 펼친 상세 | 위 4px · 아래 4px · 막대 다음 단계 목록 | 막대: 칸 높이 4 · 간격 3 · 트랙 `--color-surface-100` · 채움 `--color-brand-blue`. 단계: [[AiProgressStep]] 단독 격자(16px · 8px) |
  * | 포커스 | 2px `--color-brand-blue` · 바깥 2px · radius 4 | |
+ * | 펼침 끔(`expandable={false}`) | 같은 한 줄 · 셰브런 없음 · 커서 기본 · 호버 색 변화 없음 | 같은 글자 · 글로우는 그대로 |
  *
  * 접근성: 문장에 `role="status"` · `aria-live="polite"`(단계 전환 · 완료 · 중단 때만 바뀐다) · 버튼 `aria-expanded` · `aria-controls`.
  * 글로우는 장식이다. 동작 줄이기면 글자만 남는다.
@@ -80,6 +82,11 @@ export type AiProgressCompactProps = {
   stoppedTitle?: ReactNode;
   /** true 면 글로우를 멈춘다. 미지정이면 `prefers-reduced-motion` 을 따른다(CSS). */
   still?: boolean;
+  /**
+   * 상세 펼침 사용 여부. 기본 true(문장을 누르면 상세 연산 정보를 조회).
+   * false 면 셰브런 · 클릭 없이 상태 문장 한 줄만 선다(상세를 보일 수 없는 자리 · 상세를 다른 곳에서 보이는 자리).
+   */
+  expandable?: boolean;
 };
 
 const Chevron = ({ up }: { up: boolean }) => (
@@ -100,10 +107,11 @@ export default function AiProgressCompact({
   doneTitle,
   stoppedTitle = "중단했어요",
   still,
+  expandable = true,
 }: AiProgressCompactProps) {
   const [innerOpen, setInnerOpen] = useState(false);
   const [detailId] = useState(() => `wds-ai-progress-compact-${++seq}`);
-  const open = expanded ?? innerOpen;
+  const open = expandable && (expanded ?? innerOpen);
   const toggle = () => {
     if (expanded === undefined) setInnerOpen(!open);
     onExpandedChange?.(!open);
@@ -136,17 +144,31 @@ export default function AiProgressCompact({
 
   return (
     <div className="wds-ai-progress-compact">
-      <button type="button" className="wds-ai-progress-compact-row" aria-expanded={open} aria-controls={detailId} onClick={toggle}>
-        <span
-          className={`wds-ai-progress-compact-text${running && !still ? " wds-ai-shimmer" : ""}`}
-          role="status"
-          aria-live="polite"
-        >
-          {sentence}
-        </span>
-        {meta && <span className="wds-ai-progress-compact-meta">{meta}</span>}
-        <Chevron up={open} />
-      </button>
+      {(() => {
+        const inner = (
+          <>
+            <span
+              className={`wds-ai-progress-compact-text${running && !still ? " wds-ai-shimmer" : ""}`}
+              role="status"
+              aria-live="polite"
+            >
+              {sentence}
+            </span>
+            {meta && <span className="wds-ai-progress-compact-meta">{meta}</span>}
+            {expandable && <Chevron up={open} />}
+          </>
+        );
+        /* 펼침을 끄면 버튼이 아니라 상태 한 줄이다(누를 것이 없는데 누를 수 있어 보이지 않게). */
+        return expandable ? (
+          <button type="button" className="wds-ai-progress-compact-row" aria-expanded={open} aria-controls={detailId} onClick={toggle}>
+            {inner}
+          </button>
+        ) : (
+          <div className="wds-ai-progress-compact-row" data-static="">
+            {inner}
+          </div>
+        );
+      })()}
       {open && (
         <div className="wds-ai-progress-compact-detail" id={detailId}>
           <div className="wds-ai-progress-bar" aria-hidden="true">

@@ -171,6 +171,7 @@ export type AiProgressItem = {
 | `expanded` · `onExpandedChange` | `boolean?` | 내부 상태(접힘) | 상세 펼침 |
 | `startingTitle` · `doneTitle` · `stoppedTitle` | `ReactNode` | 한국어 기본 문장 | 문구 교체 |
 | `still` | `boolean?` | `prefers-reduced-motion` | 글로우 멈춤 |
+| `expandable` | `boolean` | `true` | 상세 펼침 사용 여부. `false` 면 셰브런 · 클릭 없이 상태 한 줄만 |
 
 - **언제 무엇을**: 대상 하나짜리 짧은 대기 · 이어 묻는 질문 · 좁은 자리는 `AiProgressCompact`. 기다림 자체를 보여야 하는 대표 연산(원인 진단 · 통합 분석)은 `AiProgress` 카드. 한 대기에 둘을 함께 두지 않는다
 - 예상 시간 · 「완료되면 알림」 · 「중단」 · 30초 지연 사유는 카드에만 있다. 간편 버전의 중단은 위젯 `onStop`(송신 자리 ■)으로

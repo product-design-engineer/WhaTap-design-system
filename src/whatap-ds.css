@@ -2139,7 +2139,8 @@ html, body, #root {
   display: flex; align-items: center; gap: 6px; width: 100%; padding: 4px 0; border: 0; background: transparent; cursor: pointer;
   font: inherit; text-align: left; color: var(--color-text-tertiary);
 }
-.wds-ai-progress-compact-row:hover { color: var(--color-text-secondary); }
+.wds-ai-progress-compact-row:not([data-static]):hover { color: var(--color-text-secondary); }
+.wds-ai-progress-compact-row[data-static] { cursor: default; }
 .wds-ai-progress-compact-row:focus-visible { outline: 2px solid var(--color-brand-blue); outline-offset: 2px; border-radius: 4px; }
 .wds-ai-progress-compact-text { min-width: 0; font-size: var(--text-md); line-height: var(--leading-normal); color: var(--color-text-tertiary); }
 .wds-ai-progress-compact-meta { flex: none; font-size: var(--text-base); color: var(--color-text-tertiary); font-family: var(--font-family-numeric); font-variant-numeric: tabular-nums; }

@@ -53,6 +53,8 @@ const meta: Meta<typeof AiProgressCompact> = {
     phase: { control: "inline-radio", options: ["running", "done", "stopped"] },
     elapsed: { control: { type: "range", min: 0, max: 12, step: 1 } },
     still: { control: "boolean" },
+    expandable: { control: "boolean" },
+    expanded: { control: "boolean" },
   },
 };
 export default meta;
@@ -75,6 +77,12 @@ export const DoneExpanded: Story = { args: { phase: "done", elapsed: 12, steps: 
 
 /** 중단 — «중단했어요 · 6초». 펼치면 끝난 단계와 발견, 멈춘 단계. */
 export const Stopped: Story = { args: { phase: "stopped", elapsed: 6, steps: stepsAt(6), expanded: true } };
+
+/** 펼침 끔 — `expandable={false}`. 셰브런 · 클릭 없이 상태 한 줄만. 상세를 보일 자리가 없을 때. */
+export const NotExpandable: Story = { args: { phase: "running", elapsed: 6, steps: stepsAt(6), expandable: false } };
+
+/** 펼침 끔 · 완료. */
+export const NotExpandableDone: Story = { args: { phase: "done", elapsed: 12, steps: stepsAt(12), expandable: false } };
 
 /** 글로우 멈춤 — 동작 줄이기 설정과 같은 모양. */
 export const Still: Story = { args: { phase: "running", elapsed: 6, steps: stepsAt(6), still: true } };
