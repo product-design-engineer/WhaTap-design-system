@@ -2075,6 +2075,7 @@ html, body, #root {
 }
 .wds-ai-progress-top { display: flex; flex-direction: column; gap: 10px; padding: 12px 12px 10px; }
 .wds-ai-progress-title { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.wds-ai-progress-title[data-done] { gap: 8px; }
 .wds-ai-progress-title-text { flex: 1; min-width: 0; font-size: var(--text-md); font-weight: var(--font-weight-bold); color: var(--color-text-primary); line-height: var(--leading-normal); }
 .wds-ai-progress-elapsed { flex: none; font-size: var(--text-base); color: var(--color-text-tertiary); font-family: var(--font-family-numeric); font-variant-numeric: tabular-nums; }
 .wds-ai-progress-preview { padding-left: 42px; font-size: var(--text-base); color: var(--color-text-tertiary); line-height: var(--leading-normal); }

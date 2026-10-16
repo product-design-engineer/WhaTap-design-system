@@ -203,7 +203,8 @@ export default function AiProgress({
   const motionStep = current ?? steps[0];
   const head =
     phase === "done" ? (
-      <span style={{ display: "grid", placeItems: "center", width: 32, height: 32, flex: "none" }}>
+      /* 완료면 단계 줄과 같은 틀(16px 칸 · 간격 8px) — 아이콘과 제목이 아래 단계의 아이콘 · 이름과 같은 선에 선다. */
+      <span className="wds-ai-progress-step-mark" style={{ width: 16, marginTop: 0 }}>
         <DoneMark />
       </span>
     ) : motionStep ? (
@@ -244,7 +245,7 @@ export default function AiProgress({
   return (
     <AiCard padding={0} gap={0} className="overflow-hidden">
       <div className="wds-ai-progress-top">
-        <div className="wds-ai-progress-title">
+        <div className="wds-ai-progress-title" data-done={phase === "done" ? "" : undefined}>
           {head}
           <span className="wds-ai-progress-title-text" role="status" aria-live="polite">
             {title}
