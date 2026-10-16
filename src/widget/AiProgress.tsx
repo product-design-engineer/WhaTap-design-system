@@ -10,7 +10,8 @@ import AiProgressStep, { type AiProgressCount, type AiProgressStepStatus } from 
  * ## Purpose
  * 기다리는 동안 세 가지를 보인다. 어느 단계에 있는지 · 얼마나 진행됐는지 · 기다리는 동안 무엇을 할 수 있는지.
  * 경과 시간에 따라 카드가 바뀐다.
- * - 0~2초: 보내는 순간 «질문을 확인하고 있어요» 와 함께 모든 단계를 흐리게 미리 깐다(끝이 어디인지 알린다)
+ * - 0~2초: 보내는 순간 «질문을 확인하고 있어요» 한 줄과 단계 이름 한 줄(«데이터 수집 → 데이터 분석 → 분석 정보 작성»)만.
+ *   끝이 어디인지는 알리되 막대 · 단계 목록은 아직 깔지 않는다(첫 단계가 시작되면 선다)
  * - 단계 진행: 서버 이벤트로 단계가 넘어간다. 진행 단계에 실제 처리 수, 머리 그림은 단계 성격대로 움직인다
  * - 10초~: 하단 줄에 예상 시간(`expected`) · 「완료되면 알림」 · 「중단」
  * - 30초~: 하단 줄이 경고 면으로 바뀌고 지연 사유(`delayReason`)를 말한다
@@ -215,6 +216,8 @@ export default function AiProgress({
     ) : null;
 
   const running = phase === "running";
+  /* 0~2초 — 아무 단계도 시작 전. 머리와 단계 이름 한 줄만 둔다. */
+  const starting = running && steps.every((s) => s.status === "pending");
   const late = running && delayReason != null && elapsed >= lateAfter;
   const long = running && elapsed >= longAfter && (expected != null || onNotifyChange || onStop);
   const actions = (
@@ -248,6 +251,16 @@ export default function AiProgress({
           </span>
           <span className="wds-ai-progress-elapsed">{secs}초</span>
         </div>
+        {starting ? (
+          <span className="wds-ai-progress-preview">
+            {steps.map((s, i) => (
+              <span key={i}>
+                {i > 0 && <span aria-hidden="true"> → </span>}
+                {s.label}
+              </span>
+            ))}
+          </span>
+        ) : (
         <div className="wds-ai-progress-bar" aria-hidden="true">
           {steps.map((s, i) => {
             const w = s.status === "done" ? 1 : s.status === "active" ? Math.max(0, Math.min(1, s.progress)) : 0;
@@ -258,7 +271,9 @@ export default function AiProgress({
             );
           })}
         </div>
+        )}
       </div>
+      {!starting && (
       <ul className="wds-ai-progress-steps">
         {view.map((s, i) => (
           <AiProgressStep
@@ -271,6 +286,7 @@ export default function AiProgress({
           />
         ))}
       </ul>
+      )}
       {phase === "stopped" && stoppedNote != null && <div className="wds-ai-progress-note">{stoppedNote}</div>}
       {late ? (
         <div className="wds-ai-progress-foot" data-late="">

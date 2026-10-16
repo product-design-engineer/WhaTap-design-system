@@ -65,7 +65,7 @@ type Story = StoryObj<typeof AiProgress>;
 
 const noop = () => {};
 
-/** 0~2초 — 보내는 순간. 세 단계를 흐리게 미리 깔아 끝이 어디인지 알린다. */
+/** 0~2초 — 보내는 순간. 머리 한 줄과 단계 이름 한 줄만. 끝이 어디인지는 알리되 막대 · 목록은 아직 없다. */
 export const Starting: Story = { args: { phase: "running", elapsed: 1, steps: stepsAt(1, "normal") } };
 
 /** 단계 진행 — 진행 단계에 실제 처리 수(에이전트 8 / 12). 머리 그림은 수집. */

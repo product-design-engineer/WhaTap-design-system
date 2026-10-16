@@ -29,7 +29,7 @@ const meta: Meta<typeof AiProgressStep> = {
 export default meta;
 type Story = StoryObj<typeof AiProgressStep>;
 
-/** 대기 — 처음부터 흐리게 깔아 끝이 어디인지 보인다. */
+/** 대기 — 첫 단계가 시작된 뒤 남은 단계. 흐리게 둔다. */
 export const Pending: Story = { args: { status: "pending", label: "분석 정보 작성" } };
 
 /** 진행 — 분모가 있을 때만 처리 수를 보인다. */
