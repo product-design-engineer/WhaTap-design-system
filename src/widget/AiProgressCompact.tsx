@@ -116,12 +116,13 @@ export default function AiProgressCompact({
 
   let sentence: ReactNode;
   let meta: string;
+  /* 완료 · 중단은 카드의 윗줄과 같은 글자 «N단계 완료 · {초}초». 메타 칸은 비운다. */
   if (phase === "done") {
-    sentence = doneTitle ?? `${n}단계 완료`;
-    meta = `${secs}초`;
+    sentence = <>{doneTitle ?? `${n}단계 완료`} · <span className="font-numeric tabular-nums">{secs}초</span></>;
+    meta = "";
   } else if (phase === "stopped") {
-    sentence = stoppedTitle;
-    meta = `${secs}초`;
+    sentence = <>{stoppedTitle} · <span className="font-numeric tabular-nums">{secs}초</span></>;
+    meta = "";
   } else {
     sentence = current ? current.title : startingTitle;
     meta = current ? `${activeIdx + 1}/${n} · ${secs}초` : `${secs}초`;
@@ -142,7 +143,7 @@ export default function AiProgressCompact({
         >
           {sentence}
         </span>
-        <span className="wds-ai-progress-compact-meta">{meta}</span>
+        {meta && <span className="wds-ai-progress-compact-meta">{meta}</span>}
         <Chevron up={open} />
       </button>
       {open && (
