@@ -26,7 +26,8 @@ import AiProgressStep, { type AiProgressCount, type AiProgressStepStatus } from 
  * - 글로우는 진행 중에만. 완료 · 중단이면 멈춘 글자. `prefers-reduced-motion` 이면 글로우 없이 글자만(컴포넌트가 따른다).
  * - 펼침은 이 한 줄이 맡는다(`aria-expanded`). 상세 아래에 「접기」 를 따로 두지 않는다.
  * - `steps` 는 [[AiProgress]] 의 `steps` 와 같은 모양이다(`stage` · `marker` 는 쓰지 않는다). 같은 서버 이벤트에서 만든다.
- * - 색은 토큰만. 글로우는 `--color-text-tertiary` 바탕 위를 `--color-text-primary` 가 지나간다.
+ * - 색은 토큰만. 글로우는 `--color-text-disabled` 바탕 위를 `--color-text-primary` 가 지나간다(차이를 크게 둔다).
+ *   글로우가 멈추면(완료 · 중단 · 동작 줄이기) 글자는 `--color-text-tertiary` 로 읽힌다.
  *
  * ## Spec
  * 한 줄 버튼(전체 폭 · 왼쪽 정렬 · 배경 없음) + 펼친 상세. 값은 `whatap-ds.css` 의 `.wds-ai-progress-compact*` · `.wds-ai-shimmer`.
@@ -34,7 +35,7 @@ import AiProgressStep, { type AiProgressCount, type AiProgressStepStatus } from 
  * | 부위 | 치수 · 간격 | 글자 · 색 |
  * |---|---|---|
  * | 한 줄 | padding 4px 0 · 사이 6px · 세로 가운데 | 문장 `--text-md` 13px regular · 줄높이 1.4 / 진행 중 `.wds-ai-shimmer` / 메타(«2/3 · 14초») `--text-base` 12px `--color-text-tertiary` · numeric · tabular-nums / 셰브런 12px 아래(펼치면 위) |
- * | 글로우 | 배경 그라데이션 폭 250% · 2s linear 무한 · 오른쪽 → 왼쪽 위치 이동 | 바탕 `--color-text-tertiary` · 빛 `--color-text-primary`(35% ~ 65% 구간) · `background-clip: text` |
+ * | 글로우 | 배경 그라데이션 폭 250% · 2s linear 무한 · 오른쪽 → 왼쪽 위치 이동 | 바탕 `--color-text-disabled` · 빛 `--color-text-primary`(35% ~ 65% 구간, 50% 가 가장 진함) · `background-clip: text` |
  * | 완료 · 중단 문장 | 같은 줄 · 글로우 없음 | `--color-text-tertiary` · «N단계 완료 · {초}초» / «중단했어요 · {초}초» |
  * | 펼친 상세 | 위 4px · 아래 4px · 막대 다음 단계 목록 | 막대: 칸 높이 4 · 간격 3 · 트랙 `--color-surface-100` · 채움 `--color-brand-blue`. 단계: [[AiProgressStep]] 단독 격자(16px · 8px) |
  * | 포커스 | 2px `--color-brand-blue` · 바깥 2px · radius 4 | |

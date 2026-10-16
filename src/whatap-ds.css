@@ -2145,14 +2145,15 @@ html, body, #root {
 .wds-ai-progress-compact-meta { flex: none; font-size: var(--text-base); color: var(--color-text-tertiary); font-family: var(--font-family-numeric); font-variant-numeric: tabular-nums; }
 .wds-ai-progress-compact-detail { display: flex; flex-direction: column; gap: 6px; padding: 4px 0; }
 .wds-ai-progress-compact-steps { padding: 0 0 2px; }
-/* 글로우 — 글자 위를 빛이 왼쪽에서 오른쪽으로 훑는다. 바탕 tertiary 위를 primary 가 지나간다.
+/* 글로우 — 글자 위를 빛이 왼쪽에서 오른쪽으로 훑는다. 바탕 disabled 위를 primary 가 지나간다
+   (2026-10-16 바탕을 tertiary 에서 disabled 로 옅게 · 빛과의 차이를 키움).
    «아직 일하는 중» 의 표시다. 진행 중에만 붙이고, 동작 줄이기면 글자만 남긴다. */
 @keyframes wdsAiShimmer {
   from { background-position: 100% 0; }
   to { background-position: 0% 0; }
 }
 .wds-ai-shimmer {
-  background-image: linear-gradient(90deg, var(--color-text-tertiary) 0%, var(--color-text-tertiary) 35%, var(--color-text-primary) 50%, var(--color-text-tertiary) 65%, var(--color-text-tertiary) 100%);
+  background-image: linear-gradient(90deg, var(--color-text-disabled) 0%, var(--color-text-disabled) 35%, var(--color-text-primary) 50%, var(--color-text-disabled) 65%, var(--color-text-disabled) 100%);
   background-size: 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;
