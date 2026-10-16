@@ -2118,6 +2118,9 @@ html, body, #root {
   font: inherit; font-size: var(--text-base); color: var(--color-text-tertiary); text-align: left;
 }
 .wds-ai-progress-toggle > :first-child { justify-self: center; }
+.wds-ai-progress-toggle-act { display: inline-flex; align-items: center; gap: 4px; }
+/* 완료 · 펼침 — 윗줄 아래 막대. 윗줄과 단계 목록 사이에 머리와 같은 간격(10px)을 둔다. */
+.wds-ai-progress-done-bar { padding: 2px var(--wds-ai-progress-pad) 10px; }
 .wds-ai-progress-toggle:hover { color: var(--color-text-secondary); }
 .wds-ai-progress-toggle:focus-visible { outline: 2px solid var(--color-brand-blue); outline-offset: -2px; border-radius: 8px; }
 .wds-ai-progress-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

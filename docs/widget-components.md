@@ -122,7 +122,7 @@ export type AiChatAttachment =
 
 ### AiProgress
 
-10초 넘게 걸리는 AI 연산의 진행 카드(대기 표현 V2). 머리(단계 그림 32px · 제목 · 경과 초) · 단계 수로 나눈 막대 · 단계 목록 · 하단 줄. 경과 시간대별로 바뀐다: 0~2초 «질문을 확인하고 있어요» + 단계 이름 한 줄(막대 · 목록 없음) → 단계 진행(처리 수) → 10초~ 예상 시간 · 「완료되면 알림」 · 「중단」 → 30초~ 경고 면 지연 사유 → 완료 «3단계 완료 · 23초 · 과정 보기» 로 접힘 · 중단 «여기서 멈췄어요». Composite(Ai). `AiCard` · `AiStageMotion` · `AiProgressStep` · `Button` 조합.
+10초 넘게 걸리는 AI 연산의 진행 카드(대기 표현 V2). 머리(단계 그림 32px · 제목 · 경과 초) · 단계 수로 나눈 막대 · 단계 목록 · 하단 줄. 경과 시간대별로 바뀐다: 0~2초 «질문을 확인하고 있어요» + 단계 이름 한 줄(막대 · 목록 없음) → 단계 진행(처리 수) → 10초~ 예상 시간 · 「완료되면 알림」 · 「중단」 → 30초~ 경고 면 지연 사유 → 완료 «3단계 완료 · 23초» 윗줄로 접힘(펼치기 · 접기는 늘 그 윗줄 오른쪽 끝) · 중단 «여기서 멈췄어요». Composite(Ai). `AiCard` · `AiStageMotion` · `AiProgressStep` · `Button` 조합.
 
 ```ts
 export type AiProgressItem = {
@@ -149,7 +149,7 @@ export type AiProgressItem = {
 | `notify` · `onNotifyChange` | `boolean` · `(v) => void` | `false` · — | 주면 「완료되면 알림」 토글 |
 | `onStop` | `() => void` | — | 주면 「중단」 |
 | `expanded` · `onExpandedChange` | `boolean?` | 내부 상태(접힘) | 완료 뒤 펼침 |
-| `startingTitle` · `doneTitle` · `stoppedTitle` · `stoppedNote` | `ReactNode` | 한국어 기본 문장 | 문구 교체(다국어) |
+| `startingTitle` · `doneTitle` · `stoppedTitle` · `stoppedNote` | `ReactNode` | 한국어 기본 문장(`doneTitle` 은 «N단계 완료») | 문구 교체(다국어) |
 | `still` | `boolean?` | `prefers-reduced-motion` | 머리 그림 멈춤 |
 
 - **개발 스펙**(격자 · 치수 · 토큰 · 상태 → 화면 · 서버 이벤트 계약 · 접근성 · 모션)은 소스 docstring `## Spec` 이 정본이다. 같은 내용이 Storybook Docs 탭 「개발 스펙」 과 DS MCP `get_component("AiProgress")` 의 `## Spec` 에 나온다. `AiProgressStep` · `AiStageMotion` 도 같다
