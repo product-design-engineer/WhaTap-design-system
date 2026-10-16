@@ -322,7 +322,7 @@ AI 위젯 영역의 모든 컴포넌트는 다음 primitive 를 **반드시 comp
 
 | 정본 | 들어가야 하는 것 |
 |---|---|
-| **코드** | `src/` 컴포넌트 · docstring 4섹션(Purpose · When to use · When NOT to use · Composition rules) · `index.ts` export · 필요한 CSS · 토큰 |
+| **코드** | `src/` 컴포넌트 · docstring 4섹션(Purpose · When to use · When NOT to use · Composition rules) · 개발자가 그대로 구현할 값이 있으면 `## Spec`(치수 · 토큰 · 상태 · 데이터 계약. `components.json` `spec` → MCP `get_component` · 스토리는 `stories/_spec.ts` `withSpec` 로 Docs 탭에) · `index.ts` export · 필요한 CSS · 토큰 |
 | **Storybook** | 계층 title 의 스토리(변형 · 상태마다) · autodocs 설명 |
 | **Figma 정본** (`2LktjSjKZDnCuWo5CQ6828`) | 컴포넌트 페이지 · 세트(코드 prop 과 같은 기준의 variant · property · slot) · 색 · 여백 · 반경 · 글자는 WDS 변수 · 스타일 연결(미연결 0) · 설명(출처 · 코드 경로 · Figma 구현 노트) · 📄 문서 프레임 · 라이브러리 게시 |
 | **카탈로그** (AI 가 읽고 실행하는 자리) | `docs/*-components.md` 또는 `primitives.md` 등재 · 정책이 걸리면 `patterns.md` · 필요하면 `SKILL.md` · `GUIDE.md` · `static/public/llms.txt` · 생성물(`components.json` · `policies.json` · `DESIGN.md`)은 `pnpm build:design` 으로 확인 |

@@ -48,6 +48,8 @@ type ComponentDoc = {
   whenToUse: string[];
   whenNotToUse: string[];
   compositionRules: string[];
+  /** 개발 스펙(docstring `## Spec` 절 원문 markdown) — 치수 · 토큰 · 상태 · 데이터 계약. 없으면 null. */
+  spec?: string | null;
   do: string[];
   dont: string[];
   example: string | null;
@@ -121,6 +123,7 @@ function rulesBlock(c: ComponentDoc): string[] {
         (p) => `- \`${p.name}\`${p.required ? "" : "?"}: \`${p.type}\`${p.description ? ` — ${p.description}` : ""}`,
       ),
     );
+  if (c.spec) out.push(``, `## Spec (개발 스펙)`, c.spec);
   if (c.example) out.push(``, `## Example`, "```tsx", c.example, "```");
   return out;
 }

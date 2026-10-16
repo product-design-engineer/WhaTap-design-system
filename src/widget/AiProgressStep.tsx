@@ -25,6 +25,20 @@ import type { ReactNode } from "react";
  * - 발견 칩은 경고 면(`--color-status-warning-soft` · 글자 `--color-tone-text-warning`). 판정 문장이 아니라 관측 사실 한 줄.
  * - 색은 토큰만. 완료 체크 안의 흰 획만 컬러 위 고정 흰색 예외다.
  *
+ * ## Spec
+ * `<li>` 한 줄. 격자 2칸(아이콘 열 | 글자 열) · 위아래 padding 5px. 둘째 줄과 발견 칩은 글자 열에 선다.
+ * 열 폭과 간격은 [[AiProgress]] 격자 변수를 따른다(`--wds-ai-progress-col` 32px · `--wds-ai-progress-gap` 8px). 단독으로 쓰면 16px · 8px. 마커는 아이콘 열 가운데.
+ *
+ * | 상태 | 마커(14×14 칸 · 위 2px) | 이름 | 둘째 줄 |
+ * |---|---|---|---|
+ * | `pending` | 점 6px `--color-border-divider` | `--text-base` regular `--color-text-disabled` | 없음 |
+ * | `active` | 고리 12px · 선 2px `--color-brand-blue` · 안 `--color-brand-blue-tint` | `--text-base` medium `--color-text-primary` | `{unit} {value} / {total}` · `--color-brand-blue-deep` · 숫자 numeric · tabular-nums · 천 단위 구분 · value 는 내림하고 total 을 넘지 않게 자른다. `count` 가 없으면 `detail` |
+ * | `done` | 원 14px `--color-status-success` + 흰 체크(선 1.4) | 같음 | `detail` · `--text-base` `--color-text-tertiary` |
+ * | `halted` | 빈 원 14px(선 1.4) + 가로 막대 · `--color-text-disabled` | 같음 | `haltedText` · `--color-text-tertiary` |
+ *
+ * 발견 칩: 위 4px · padding 3px 8px · radius 4px · 폭은 내용만큼(최대 100%) · `--text-base` medium · 면 `--color-status-warning-soft` · 글자 `--color-tone-text-warning` · 글자 «{findingPrefix} · {내용}». 나타날 때 한 번 `wdsAiRise` 0.3s(동작 줄이기면 없음).
+ * 스크린리더: 이름 뒤 숨은 글자 « · 대기 / 진행 중 / 완료 / 중단».
+ *
  * @example
  * ```tsx
  * <AiProgressStep status="active" label="데이터 분석" count={{ value: 812, total: 1284, unit: "트랜잭션" }}

@@ -39,6 +39,60 @@ import AiProgressStep, { type AiProgressCount, type AiProgressStepStatus } from 
  * - 완료 뒤 답변은 `.wds-ai-reveal` 로 감싸 제목 → 본문 → 근거 순으로 한 번 등장시킨다(④ 정보 표현).
  * - 동작 줄이기 설정이면 머리 그림 · 칩 · 하단 줄이 움직이지 않는다. 진행은 글자와 숫자로 알린다.
  *
+ * ## Spec
+ * 너비는 부모를 채운다(위젯 본문 448px). 값은 전부 토큰이고 CSS 는 `whatap-ds.css` 의 `.wds-ai-progress-*` 블록이다.
+ *
+ * **격자** 카드 전체가 열 둘을 공유한다. 바깥 여백 12px(`--wds-ai-progress-pad`) · 아이콘 열 32px(`--wds-ai-progress-col`, 머리 그림 크기) · 열 간격 8px(`--wds-ai-progress-gap`) · 글자 열(나머지).
+ * 글자 열 시작선 = 카드 왼쪽 52px(12 + 32 + 8).
+ *
+ * | 열 | 서는 것 |
+ * |---|---|
+ * | 아이콘 열(가운데 정렬) | 머리 그림 32px · 완료 체크 14px · 단계 마커 14px · 접힘 줄 체크 14px |
+ * | 글자 열(시작선 52px) | 제목 · 시작 미리보기 · 단계 이름 · 둘째 줄 · 발견 칩 · 하단 문장 · 중단 안내 · 접힘 글자 · 「접기」 |
+ * | 오른쪽 끝(여백 12px) | 경과 초 · 하단 버튼 · 셰브런 |
+ * | 두 열을 걸침 | 막대(12px ~ 오른쪽 12px) · 하단 줄 면 · 위 구분선(카드 끝에서 끝) |
+ *
+ * | 부위 | 치수 · 간격 | 글자 · 색 |
+ * |---|---|---|
+ * | 카드 | `AiCard` padding 0 · gap 0 · radius 8px · border 1px · overflow hidden | 면 `--color-card` · 선 `--color-border-default` |
+ * | 머리 | padding 12px 12px 10px · 세로 gap 10px | |
+ * | 제목 줄 | 격자 [32px · 8px · 글자 · 경과] · 최소 높이 32px · 세로 가운데. 완료면 그림 대신 체크 14px 를 아이콘 열 가운데 | 제목 `--text-md` 13px bold `--color-text-primary` · 줄높이 1.4 / 경과 `--text-base` 12px `--color-text-tertiary` · numeric · tabular-nums · `{내림 초}초` |
+ * | 시작 미리보기(0~2초) | 글자 열 시작선 · 제목 줄과 사이 4px · 막대 · 목록 없음 | `--text-base` `--color-text-tertiary` · 단계 이름을 « → » 로 잇는다 |
+ * | 막대 | 단계 수만큼 같은 폭 칸 · gap 3px · 높이 4px · radius 2px | 트랙 `--color-surface-100` · 채움 `--color-brand-blue`. 칸 채움 = 완료 100% · 진행 `progress` · 대기 0 |
+ * | 단계 목록 | `<ul>` padding 0 12px 6px · 행은 [[AiProgressStep]] | |
+ * | 하단 줄(10초~) | padding 8px 12px 8px 52px(문장이 글자 열 시작선) · border-top 1px · gap 8px · 줄바꿈 허용 · 문장 칸 최소 160px | 문장 `--text-base` `--color-text-secondary` / 버튼 [[Button]] outline · md(24px) · tertiary. 알림 켜짐 = tone primary · 글자 «완료되면 알려드릴게요» |
+ * | 하단 줄(30초~) | 같은 틀 | 면 `--color-status-warning-soft` · 문장 `--color-tone-text-warning` |
+ * | 중단 안내 | padding 8px 12px 8px 52px · border-top 1px | `--text-base` `--color-text-secondary` |
+ * | 접힘 한 줄 · 「접기」 | 버튼 전체 폭 · padding 8px 12px · 격자 [32px(체크 · 「접기」 는 빈칸) · 8px · 글자 · 셰브런 12px] | `--text-base` `--color-text-tertiary` · hover `--color-text-secondary` · focus 2px `--color-brand-blue` 안쪽 |
+ *
+ * **상태 → 화면**
+ *
+ * | 조건 | 제목 | 머리 그림 | 막대 · 목록 | 하단 |
+ * |---|---|---|---|---|
+ * | running · 진행 단계 없음 | `startingTitle` | 첫 단계 그림 progress 0 | 미리보기 한 줄 | 없음 |
+ * | running · 진행 단계 i | `steps[i].title (i+1/N)` | `steps[i].stage` · `steps[i].progress` | 표시 | `elapsed ≥ longAfter(10)` 이면 `expected` 줄 · `delayReason` 이 있고 `elapsed ≥ lateAfter(30)` 이면 경고 줄 |
+ * | done · 접힘(기본) | 한 줄 «N단계 완료 · {초}초 · 과정 보기» | 없음 | 없음 | 없음 |
+ * | done · 펼침 | `doneTitle` | 완료 체크 | 표시 | 「접기」 |
+ * | stopped | `stoppedTitle` | 진행 중이던 그림을 멈춘 채로 | 진행 단계 → `halted` · 대기 단계는 지운다 | `stoppedNote` |
+ *
+ * 하단 줄은 `expected` · `onNotifyChange` · `onStop` 중 하나라도 있을 때만 선다. 버튼은 넘긴 콜백만 그린다.
+ *
+ * **데이터 계약(서버 이벤트 → `steps`)**
+ *
+ * | 이벤트 | 바꾸는 값 |
+ * |---|---|
+ * | 요청 접수 | `phase="running"` · 모든 단계 `pending` · `elapsed` 0 부터 1초 간격 갱신 |
+ * | 단계 시작 `{stage}` | 그 단계 `status="active"` · `progress=0` |
+ * | 처리 수 `{value, total}` | `count` 와 `progress = value / total`. total 을 모르면 `count` 를 비우고 `progress` 도 0 으로 둔다 |
+ * | 중간 발견 `{text}` | 그 단계 `findings` 에 추가(관측 사실 한 줄). `analyze` 의 첫 발견 시점을 `marker` 로 |
+ * | 단계 완료 `{summary}` | `status="done"` · `progress=1` · `detail` |
+ * | 응답 완료 | `phase="done"` · `elapsed` 는 걸린 시간으로 고정 |
+ * | 중단(사용자) | `phase="stopped"` · `elapsed` 고정. 컴포넌트가 진행 단계를 `halted` 로 바꾼다 |
+ *
+ * **접근성** 제목에 `role="status"` · `aria-live="polite"`(단계 전환 · 완료 · 중단 때만 바뀐다. 처리 수는 읽지 않는다) · 막대와 그림은 `aria-hidden` · 단계 상태는 숨은 글자(« · 진행 중»)로 · 접힘 버튼 `aria-expanded` · 알림 버튼 `aria-pressed`.
+ *
+ * **모션** 움직이는 곳은 머리 그림 하나([[AiStageMotion]]). 발견 칩 · 하단 줄은 나타날 때 한 번 `wdsAiRise` 0.3s ease-out(불투명 0→1 · 아래 4px→0). 완료 답변은 `.wds-ai-reveal`: 자식마다 0.32s, 지연 0 · 0.12 · 0.24 · 0.36s(넷째부터 같음). `prefers-reduced-motion` 이면 모두 없음.
+ *
  * @example
  * ```tsx
  * <AiProgress
@@ -113,7 +167,7 @@ export type AiProgressProps = {
 };
 
 const Chevron = ({ up = false }: { up?: boolean }) => (
-  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" style={{ marginLeft: "auto", transform: up ? "rotate(-90deg)" : undefined }}>
+  <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" style={{ transform: up ? "rotate(-90deg)" : undefined }}>
     <path d="M4.5 3l3 3-3 3" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round" />
   </svg>
 );
@@ -166,7 +220,7 @@ export default function AiProgress({
   /* 완료 · 접힘 — 한 줄. */
   if (phase === "done" && !open) {
     return (
-      <AiCard padding={0} gap={0} className="overflow-hidden">
+      <AiCard padding={0} gap={0} className="wds-ai-progress overflow-hidden">
         <button type="button" className="wds-ai-progress-toggle" aria-expanded={false} onClick={() => setOpen(true)}>
           <DoneMark />
           <span>
@@ -203,10 +257,8 @@ export default function AiProgress({
   const motionStep = current ?? steps[0];
   const head =
     phase === "done" ? (
-      /* 완료면 단계 줄과 같은 틀(16px 칸 · 간격 8px) — 아이콘과 제목이 아래 단계의 아이콘 · 이름과 같은 선에 선다. */
-      <span className="wds-ai-progress-step-mark" style={{ width: 16, marginTop: 0 }}>
-        <DoneMark />
-      </span>
+      /* 완료 체크도 아이콘 열 가운데 — 아래 단계 마커와 같은 세로선, 제목은 단계 이름과 같은 시작선. */
+      <DoneMark />
     ) : motionStep ? (
       <AiStageMotion
         stage={motionStep.stage}
@@ -243,9 +295,9 @@ export default function AiProgress({
   );
 
   return (
-    <AiCard padding={0} gap={0} className="overflow-hidden">
+    <AiCard padding={0} gap={0} className="wds-ai-progress overflow-hidden">
       <div className="wds-ai-progress-top">
-        <div className="wds-ai-progress-title" data-done={phase === "done" ? "" : undefined}>
+        <div className="wds-ai-progress-title">
           {head}
           <span className="wds-ai-progress-title-text" role="status" aria-live="polite">
             {title}
@@ -302,7 +354,8 @@ export default function AiProgress({
       ) : null}
       {phase === "done" && (
         <button type="button" className="wds-ai-progress-toggle" aria-expanded onClick={() => setOpen(false)}>
-          접기
+          <span aria-hidden="true" />
+          <span>접기</span>
           <Chevron up />
         </button>
       )}

@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { withSpec } from "../_spec";
+
+/** 개발 스펙을 꺼낼 컴포넌트 이름(설명 문자열과 섞이지 않게 식별자로 둔다 — 카탈로그 생성기가 문자열 리터럴을 이어 붙인다). */
+const SPEC_OF = "AiStageMotion";
 import { AiStageMotion } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof AiStageMotion> = {
@@ -10,9 +14,11 @@ const meta: Meta<typeof AiStageMotion> = {
     layout: "centered",
     docs: {
       description: {
-        component:
+        component: withSpec(
+          SPEC_OF,
           "**AI 연산 단계 그림.** 수집 · 분석 · 작성 세 종류. 반복 재생이 아니라 `progress`(0~1, 처리 수 ÷ 전체)를 받아 그린다. " +
           "[[AiProgress]] 머리 32px 자리에서 단계가 바뀔 때 그림만 바뀐다. 동작 줄이기 설정이면 움직임 없이 진행 상태만 그린다.",
+        ),
       },
     },
   },

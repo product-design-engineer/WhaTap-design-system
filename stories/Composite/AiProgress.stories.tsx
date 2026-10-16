@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { withSpec } from "../_spec";
+
+/** 개발 스펙을 꺼낼 컴포넌트 이름(설명 문자열과 섞이지 않게 식별자로 둔다 — 카탈로그 생성기가 문자열 리터럴을 이어 붙인다). */
+const SPEC_OF = "AiProgress";
 import { AiProgress, AnswerSkeleton, UserBubble, type AiProgressItem } from "@whatap/design-system/widget";
 
 /* ── 예시 시나리오: «어제 오후 3시쯤 결제 API 응답시간이 갑자기 느려진 원인» ──
@@ -47,10 +51,12 @@ const meta: Meta<typeof AiProgress> = {
     backgrounds: { default: "surface-muted" },
     docs: {
       description: {
-        component:
+        component: withSpec(
+          SPEC_OF,
           "**10초 넘게 걸리는 AI 연산의 진행 카드(대기 표현 V2).** 어느 단계에 있는지 · 얼마나 진행됐는지 · 기다리는 동안 무엇을 할 수 있는지를 경과 시간대별로 보인다. " +
           "막대는 % 가 아니라 단계 수로 나눈 칸이고, 진행 칸만 실제 처리 수의 비율로 채운다. 10초부터 예상 시간 · 「완료되면 알림」 · 「중단」, 30초부터 지연 사유. " +
           "완료되면 «3단계 완료 · 23초» 한 줄로 접힌다. 기존 `LoadingMessage`(0~2초) · `Reasoning` · `StepsTimeline` 의 긴 대기 용도를 이 카드 하나로 모은다.",
+        ),
       },
     },
   },

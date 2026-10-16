@@ -1,4 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { withSpec } from "../_spec";
+
+/** 개발 스펙을 꺼낼 컴포넌트 이름(설명 문자열과 섞이지 않게 식별자로 둔다 — 카탈로그 생성기가 문자열 리터럴을 이어 붙인다). */
+const SPEC_OF = "AiProgressStep";
 import { AiProgressStep } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof AiProgressStep> = {
@@ -9,9 +13,11 @@ const meta: Meta<typeof AiProgressStep> = {
     layout: "padded",
     docs: {
       description: {
-        component:
+        component: withSpec(
+          SPEC_OF,
           "**진행 카드의 단계 한 줄.** 상태 넷: 대기 · 진행 · 완료 · 중단. 진행 단계에는 실제 처리 수, 완료 단계에는 무엇을 했는지 한 줄, " +
           "단계 아래에는 중간 발견 칩. [[AiProgress]] 가 `steps.map` 으로 그린다.",
+        ),
       },
     },
   },

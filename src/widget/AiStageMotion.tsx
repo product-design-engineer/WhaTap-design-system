@@ -29,6 +29,17 @@ import { useEffect, useId, useState } from "react";
  *   `still` 로 직접 멈출 수도 있다(중단된 작업 등).
  * - 장식 그림이다(`aria-hidden`). 진행을 말하는 글자는 [[AiProgress]] 제목 · [[AiProgressStep]] 처리 수가 맡는다.
  *
+ * ## Spec
+ * SVG `viewBox="0 0 32 32"` · 한 변 `size`(기본 32) · `aria-hidden`. 시계는 `requestAnimationFrame`(멈춤이면 돌지 않는다). `progress` 는 0~1 로 자른다.
+ *
+ * | 종류 | 그리는 것 | 진행 연결 | 시간 움직임(멈춤이면 없음) |
+ * |---|---|---|---|
+ * | `collect` | 가운데 고리 r5.2(선 1 · `--color-brand-blue` 25%) + 반지름 13 원 위 점 12개(r1.3) | 모인 점 수 = ⌊progress × 12⌋, 모인 점은 반지름 3.4 · `--color-brand-blue`. 다음 점은 소수부만큼 ease-in-out 으로 안쪽 이동(r1.5) | 남은 점(`--color-text-disabled`) 불투명 0.55 + 0.35·sin(3t + k) |
+ * | `analyze` | 바닥선 y27(`--color-border-divider`) · 꺾은선 점 12개(회색 `--color-text-disabled` 선 1.4) | 스캔 x = 3 + 26 × progress. 그 왼쪽만 `--color-brand-blue` 선 1.6, 스캔 세로선(55%) + 머리 점. `progress ≥ marker` 면 이상 점 (17.4, 9) r1.9 `--color-status-warning` + 둘레 r3.4 22% | 머리 점 반지름 1.8~2.6 · sin(6t) |
+ * | `write` | 문서 18×25 (7, 3.5) radius 2.5 · 면 `--color-card` · 선 `--color-border-divider`. 줄 넷 y 10.5 · 15 · 19.5 · 24, 길이 12 · 12 · 12 · 7.5, 트랙 `--color-surface-100` 선 1.6 | i 번째 줄 채움 = clamp(progress × 4 − i, 0, 1) · `--color-brand-blue` | 커서(높이 4.4 · `--color-text-primary`) 2.2Hz 깜빡임(불투명 1 ↔ 0.15) |
+ *
+ * 멈춤(`still` 또는 `prefers-reduced-motion`)이면 진행 상태만 그린다: 이동 중인 점은 바깥에, 남은 점 불투명 0.8, 머리 점 r2, 커서 불투명 1.
+ *
  * @example
  * ```tsx
  * <AiStageMotion stage="analyze" progress={done / total} marker={0.3} />
