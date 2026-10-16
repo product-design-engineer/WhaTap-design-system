@@ -152,6 +152,7 @@ export type AiProgressItem = {
 | `startingTitle` · `doneTitle` · `stoppedTitle` · `stoppedNote` | `ReactNode` | 한국어 기본 문장(`doneTitle` 은 «N단계 완료») | 문구 교체(다국어) |
 | `still` | `boolean?` | `prefers-reduced-motion` | 머리 그림 멈춤 |
 
+- **Figma 정본**(`2LktjSjKZDnCuWo5CQ6828`): 페이지 `AiProgress` 485:2 · 세트 485:317(state 7) / `AiProgressStep` 483:2 · 세트 483:47(status 4) / `AiStageMotion` 482:2 · 세트 482:90(stage 3 × progress 3). 색 · 반경 · 간격은 WDS 변수, 글자는 WDS 텍스트 스타일(미연결 0). 라이브러리 게시는 사람이 한다
 - **개발 스펙**(격자 · 치수 · 토큰 · 상태 → 화면 · 서버 이벤트 계약 · 접근성 · 모션)은 소스 docstring `## Spec` 이 정본이다. 같은 내용이 Storybook Docs 탭 「개발 스펙」 과 DS MCP `get_component("AiProgress")` 의 `## Spec` 에 나온다. `AiProgressStep` · `AiStageMotion` 도 같다
 - 함께 쓰는 것: 작성 단계에서만 `AnswerSkeleton still` · 위젯 `onStop` · 완료 답변을 `.wds-ai-reveal` 로 감싸기
 - 진행률을 시간으로 계산하지 않는다. 분모 모르는 단계에 `count` 를 주지 않는다
