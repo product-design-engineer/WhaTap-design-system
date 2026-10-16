@@ -13,6 +13,7 @@
  * ## When NOT to use
  * - 단계별 도구 호출 진행 (✓ / spinner 타임라인) → [[StepsTimeline]].
  * - 결과를 담은 본문 메시지 → [[AiCard]] 기반 카드.
+ * - 2초를 넘길 수 있는 단계 연산 → [[AiProgress]]. 그 카드의 0~2초 상태가 이 안내를 흡수한다.
  *
  * ## Composition rules
  * - `text` 한 줄만 받음 — 멀티라인/마크업은 비대상.

@@ -23,6 +23,9 @@ export const Default: Story = {};
 /** 항목이 많은 답변을 기다릴 때. */
 export const ManyBullets: Story = { args: { bullets: 6 } };
 
+/** 반짝임 없음 — [[AiProgress]] 아래에 깔 때. 움직이는 곳은 진행 카드 머리 그림 하나다. */
+export const Still: Story = { args: { still: true } };
+
 /** caption 없는 짧은 답변용. */
 export const WithoutCaption: Story = { args: { caption: false } };
 

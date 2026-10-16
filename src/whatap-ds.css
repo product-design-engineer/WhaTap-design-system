@@ -2066,6 +2066,76 @@ html, body, #root {
 @media (prefers-reduced-motion: reduce) {
   .wds-widget-frame-reveal { transition: none; }
 }
+/* ── AiProgress — 10초 넘는 AI 연산의 진행 카드 ───────────────────────────────
+   머리(단계 그림 · 제목 · 경과) · 단계 막대 · 단계 목록 · 하단 줄(10초 · 30초) · 접힌 한 줄.
+   움직이는 곳은 머리 그림 하나다. 발견 칩과 하단 줄은 나타날 때 한 번만 올라온다(반복 없음). */
+@keyframes wdsAiRise {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+/* 격자 — 카드 전체가 열 둘을 공유한다. 아이콘 열(32px · 머리 그림 크기)과 글자 열(8px 뒤).
+   머리 그림 · 완료 체크 · 단계 마커는 아이콘 열 가운데, 제목 · 단계 이름 · 둘째 줄 · 발견 칩 ·
+   미리보기 · 하단 문장 · 중단 안내 · 접힘 글자는 모두 글자 열 시작선에 선다. 막대만 두 열을 걸친다. */
+.wds-ai-progress { --wds-ai-progress-pad: 12px; --wds-ai-progress-col: 32px; --wds-ai-progress-gap: 8px; }
+.wds-ai-progress-top { display: flex; flex-direction: column; gap: 10px; padding: var(--wds-ai-progress-pad) var(--wds-ai-progress-pad) 10px; }
+.wds-ai-progress-title { display: grid; grid-template-columns: var(--wds-ai-progress-col) minmax(0, 1fr) auto; column-gap: var(--wds-ai-progress-gap); align-items: center; min-height: 32px; }
+.wds-ai-progress-title > :first-child { justify-self: center; }
+.wds-ai-progress-title-text { min-width: 0; font-size: var(--text-md); font-weight: var(--font-weight-bold); color: var(--color-text-primary); line-height: var(--leading-normal); }
+.wds-ai-progress-elapsed { font-size: var(--text-base); color: var(--color-text-tertiary); font-family: var(--font-family-numeric); font-variant-numeric: tabular-nums; }
+.wds-ai-progress-preview { margin-top: -6px; /* 제목 줄과 사이 4px(머리 gap 10 − 6) */ padding-left: calc(var(--wds-ai-progress-col) + var(--wds-ai-progress-gap)); font-size: var(--text-base); color: var(--color-text-tertiary); line-height: var(--leading-normal); }
+.wds-ai-progress-bar { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; }
+.wds-ai-progress-seg { position: relative; display: block; height: 4px; overflow: hidden; border-radius: 2px; background: var(--color-surface-100); }
+.wds-ai-progress-seg-fill { position: absolute; inset: 0 auto 0 0; border-radius: 2px; background: var(--color-brand-blue); }
+.wds-ai-progress-steps { display: flex; flex-direction: column; margin: 0; padding: 0 var(--wds-ai-progress-pad) 6px; list-style: none; }
+.wds-ai-progress-step { display: grid; grid-template-columns: var(--wds-ai-progress-col, 16px) minmax(0, 1fr); column-gap: var(--wds-ai-progress-gap, 8px); padding: 5px 0; }
+.wds-ai-progress-step-mark { display: grid; place-items: center; justify-self: center; width: 14px; height: 14px; margin-top: 2px; }
+.wds-ai-progress-step-label { font-size: var(--text-base); font-weight: var(--font-weight-medium); color: var(--color-text-primary); line-height: var(--leading-normal); }
+.wds-ai-progress-step[data-status="pending"] .wds-ai-progress-step-label { font-weight: var(--font-weight-regular); color: var(--color-text-disabled); }
+.wds-ai-progress-step-detail { grid-column: 2; font-size: var(--text-base); color: var(--color-text-tertiary); line-height: var(--leading-normal); }
+.wds-ai-progress-step[data-status="active"] .wds-ai-progress-step-detail { color: var(--color-brand-blue-deep); }
+.wds-ai-progress-find {
+  grid-column: 2; width: fit-content; max-width: 100%; margin-top: 4px; padding: 3px 8px; border-radius: 4px;
+  font-size: var(--text-base); font-weight: var(--font-weight-medium); line-height: var(--leading-normal);
+  background: var(--color-status-warning-soft); color: var(--color-tone-text-warning);
+  animation: wdsAiRise 0.3s ease-out;
+}
+/* 하단 · 중단 안내 · 접힘 줄은 왼쪽 여백에 아이콘 열을 더해 글자 열에서 시작한다. */
+.wds-ai-progress-foot {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  padding: 8px var(--wds-ai-progress-pad) 8px calc(var(--wds-ai-progress-pad) + var(--wds-ai-progress-col) + var(--wds-ai-progress-gap));
+  border-top: 1px solid var(--color-border-default); animation: wdsAiRise 0.3s ease-out;
+}
+.wds-ai-progress-foot[data-late] { background: var(--color-status-warning-soft); }
+.wds-ai-progress-foot-msg { flex: 1; min-width: 160px; font-size: var(--text-base); color: var(--color-text-secondary); line-height: var(--leading-normal); }
+.wds-ai-progress-foot[data-late] .wds-ai-progress-foot-msg { color: var(--color-tone-text-warning); }
+.wds-ai-progress-note {
+  padding: 8px var(--wds-ai-progress-pad) 8px calc(var(--wds-ai-progress-pad) + var(--wds-ai-progress-col) + var(--wds-ai-progress-gap));
+  border-top: 1px solid var(--color-border-default); font-size: var(--text-base); color: var(--color-text-secondary); line-height: var(--leading-normal);
+}
+.wds-ai-progress-toggle {
+  display: grid; grid-template-columns: var(--wds-ai-progress-col) minmax(0, 1fr) auto; column-gap: var(--wds-ai-progress-gap); align-items: center;
+  width: 100%; padding: 8px var(--wds-ai-progress-pad); border: 0; background: transparent; cursor: pointer;
+  font: inherit; font-size: var(--text-base); color: var(--color-text-tertiary); text-align: left;
+}
+.wds-ai-progress-toggle > :first-child { justify-self: center; }
+.wds-ai-progress-toggle-act { display: inline-flex; align-items: center; gap: 4px; }
+/* 완료 · 펼침 — 윗줄 아래 막대. 윗줄과 단계 목록 사이에 머리와 같은 간격(10px)을 둔다. */
+.wds-ai-progress-done-bar { padding: 2px var(--wds-ai-progress-pad) 10px; }
+.wds-ai-progress-toggle:hover { color: var(--color-text-secondary); }
+.wds-ai-progress-toggle:focus-visible { outline: 2px solid var(--color-brand-blue); outline-offset: -2px; border-radius: 8px; }
+.wds-ai-progress-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+/* 완료 순간의 답변 등장(④ 정보 표현). 답변 카드의 자식이 제목 → 본문 → 근거 순으로 한 번 올라온다.
+   완료 이벤트에서 한 번만 붙인다 — 다시 그릴 때마다 붙이면 매번 재생된다. */
+.wds-ai-reveal > * { animation: wdsAiRise 0.32s ease-out both; }
+.wds-ai-reveal > :nth-child(2) { animation-delay: 0.12s; }
+.wds-ai-reveal > :nth-child(3) { animation-delay: 0.24s; }
+.wds-ai-reveal > :nth-child(4),
+.wds-ai-reveal > :nth-child(4) ~ * { animation-delay: 0.36s; }
+/* 답변 자리 표시의 반짝임을 끈다. 진행 카드가 떠 있을 때는 그 머리 그림만 움직인다. */
+.ai-skeleton[data-still] { animation: none; background: var(--color-surface-100); }
+@media (prefers-reduced-motion: reduce) {
+  .wds-ai-progress-find, .wds-ai-progress-foot, .wds-ai-reveal > * { animation: none; }
+}
 /* 옵션바 항목 자동 배치 — 「폭이 넉넉하면 라벨을 값 왼쪽에」.
    기준은 뷰포트가 아니라 **행이 실제로 쓸 수 있는 폭**이다(container query). 사이드바(240)와
    AI 위젯(480)이 열리면 같은 화면에서도 행이 좁아지는데, 뷰포트 기준이면 그때도 라벨을 옆에

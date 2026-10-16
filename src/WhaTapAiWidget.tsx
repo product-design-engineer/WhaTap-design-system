@@ -42,6 +42,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 import AiClickCursor from "./widget/ClickCursor";
+import SendButton from "./widget/SendButton";
 import AiActionChip from "./widget/ActionChip";
 import AiAttachmentChip from "./widget/AttachmentChip";
 import AiUnavailableNotice, {
@@ -76,6 +77,7 @@ export default function WhaTapAiWidget({
   inputCaption,
   usagePill,
   titleBadge,
+  onStop,
 }: {
   open: boolean;
   onClose?: () => void;
@@ -139,6 +141,12 @@ export default function WhaTapAiWidget({
    * preset 사유만 쓰려면 `{ reason: "quota" }` 처럼 전달.
    */
   unavailable?: AiUnavailableNoticeProps;
+  /**
+   * AI 가 답을 만드는 중이면 넘긴다. 송신 버튼 자리가 중단 버튼(■)이 되고, 누르면 이 함수가 불린다.
+   * 입력창은 막지 않는다 — 작업 중에도 다음 질문을 미리 쓸 수 있다. 대신 Enter 로 보내지는 않는다
+   * (끝나고 보낸다). 진행 표시는 [[AiProgress]] 가 본문에서 맡는다. 끝나면 `undefined` 로 되돌린다.
+   */
+  onStop?: () => void;
 }) {
   const isUnavailable = unavailable != null;
   // editable mode: parent 가 inputValue 를 지정하지 않으면 사용자가 직접 입력.
@@ -148,7 +156,7 @@ export default function WhaTapAiWidget({
   const hasInput = effectiveValue.trim().length > 0;
 
   const handleSubmit = () => {
-    if (!hasInput || !onSubmit) return;
+    if (onStop || !hasInput || !onSubmit) return;
     onSubmit(effectiveValue);
     setTyped("");
   };
@@ -406,8 +414,11 @@ export default function WhaTapAiWidget({
                 {usagePill !== undefined && usagePill !== null && <UsagePill>{usagePill}</UsagePill>}
               </div>
               <div className="flex gap-8px items-center shrink-0">
-                {/* 전송 버튼 — input에 텍스트가 있으면 활성(blue) */}
+                {/* 전송 버튼 — input에 텍스트가 있으면 활성(blue). 작업 중(onStop)이면 같은 자리가 중단 버튼 */}
                 <div className="relative shrink-0" style={isUnavailable ? UNAVAILABLE_DIM : undefined}>
+                {onStop ? (
+                  <SendButton mode="stop" onClick={onStop} />
+                ) : (
                 <button
                   type="button"
                   disabled={!hasInput}
@@ -433,6 +444,7 @@ export default function WhaTapAiWidget({
                     />
                   </svg>
                 </button>
+                )}
                 {showSendCursor && (
                   <AiClickCursor style={{ right: -18, top: 6 }} />
                 )}

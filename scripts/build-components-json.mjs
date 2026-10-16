@@ -13,7 +13,9 @@
  * `docs/components.json` — `staticDirs` 로 `/design-system/components.json` 에 서빙되어
  * MCP 서버가 런타임에 fetch 한다(재빌드 없이 최신). 컴포넌트당:
  *   name · layer · title · storyId · file · purpose · whenToUse · whenNotToUse
- *   · compositionRules · do[] · dont[] · props[] · stories[] · example
+ *   · compositionRules · do[] · dont[] · props[] · stories[] · example · spec
+ *   (`spec` = docstring `## Spec` 절 원문. 치수 · 토큰 · 상태 · 데이터 계약처럼 개발자가 그대로 구현하는 값.
+ *   목록으로 쪼개지 않고 markdown 그대로 싣는다 — 표가 섞여 있다.)
  *
  * ## Do / Don't 의 출처 — 표기를 하나로
  * 정본은 **docstring 4섹션**이다. `## Do` · `## Don't` 를 명시하면 그대로 쓰고, 없으면 유도한다:
@@ -54,6 +56,13 @@ function docBlockOf(src) {
     .map((l) => l.replace(/^\s*\*ㅤ?/, "").replace(/^\s?/, ""))
     .join("\n")
     .trim();
+}
+
+/** `## Spec …` 절 원문(제목 뒤 꼬리말 허용 — `## Spec (실 위젯 마크업 1:1)`). 줄 앞 공백만 정리하고 표 · 목록은 그대로 둔다. */
+function specOf(doc) {
+  const m = doc.match(/^##\s+Spec\b[^\n]*$([\s\S]*?)(?=^##\s+|^@|$(?![\s\S]))/m);
+  const body = m ? m[1].replace(/^\n+|\s+$/g, "") : "";
+  return body || null;
 }
 
 /** `## <name>` 섹션 본문. 없으면 "".
@@ -402,6 +411,7 @@ for (const sf of storyFiles) {
     whenToUse: bullets(whenToUse),
     whenNotToUse: bullets(whenNotToUse),
     compositionRules: bullets(compositionRules),
+    spec: specOf(docText),
     // 스토리 블록과 docstring 유도가 같은 말을 하는 경우가 있어 중복 제거.
     do: dedupe(explicitDo.length ? explicitDo : [...fromStory.do, ...bullets(whenToUse)]),
     dont: dedupe(explicitDont.length ? explicitDont : [...fromStory.dont, ...derivedDont]),
