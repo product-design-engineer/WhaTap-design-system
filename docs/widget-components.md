@@ -155,6 +155,7 @@ export type AiProgressItem = {
 - **개발 스펙**(격자 · 치수 · 토큰 · 상태 → 화면 · 서버 이벤트 계약 · 접근성 · 모션)은 소스 docstring `## Spec` 이 정본이다. 같은 내용이 Storybook Docs 탭 「개발 스펙」 과 DS MCP `get_component("AiProgress")` 의 `## Spec` 에 나온다. `AiProgressStep` · `AiStageMotion` 도 같다
 - 함께 쓰는 것: 작성 단계에서만 `AnswerSkeleton still` · 위젯 `onStop` · 완료 답변을 `.wds-ai-reveal` 로 감싸기
 - 진행률을 시간으로 계산하지 않는다. 분모 모르는 단계에 `count` 를 주지 않는다
+- 제목은 상황에 맞게: «{처리하는 대상}을/를 {동작}하고 있어요». `label` 은 고정, `title` · `count.unit` 은 같은 대상(patterns §24)
 
 ### AiProgressStep
 
@@ -171,7 +172,7 @@ export type AiProgressItem = {
 
 ### AiStageMotion
 
-진행 카드 머리의 단계 그림(32px). Primitives(Ai). 반복 루프가 아니라 `progress` 를 받아 그린다. `collect` 바깥 점 12개가 가운데로 모인다 · `analyze` 선 그래프 위를 스캔 선이 지나가고 `marker` 를 넘으면 이상 구간이 경고 색으로 남는다 · `write` 문서에 줄이 한 줄씩 그어진다. 동작 줄이기 설정이면 멈춘다. 장식(`aria-hidden`).
+진행 카드 머리의 단계 그림(32px). Primitives(Ai). 반복 루프가 아니라 `progress` 를 받아 그린다. `collect` 바깥 점 8개가 가운데 도착점으로 모인다 · `analyze` 꺾은선이 왼쪽부터 파랑으로 바뀌고 `marker` 를 넘으면 봉우리에 이상 점이 남는다 · `write` 줄 셋이 한 줄씩 그어진다. 모양은 회색 · 파랑 두 색 · 선 1.5 하나. 동작 줄이기 설정이면 멈춘다. 장식(`aria-hidden`).
 
 | Prop | Type | Default | 설명 |
 |---|---|---|---|

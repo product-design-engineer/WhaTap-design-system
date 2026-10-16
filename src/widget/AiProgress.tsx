@@ -29,6 +29,11 @@ import AiProgressStep, { type AiProgressCount, type AiProgressStepStatus } from 
  * - 끝난 도구 호출 기록을 접어 두는 자리 → [[StepsTimeline]] · [[ToolCallStep]].
  *
  * ## Composition rules
+ * - **제목은 상황에 맞게 쓴다.** 문형은 «{지금 처리하는 대상}을/를 {동작}하고 있어요». 대상은 이번 질문이 실제로 다루는
+ *   데이터 이름(트랜잭션 · 로그 · 성능 지표 · 쿼리 …)이고 「데이터」 처럼 뭉뚱그리지 않는다. 동작은 단계 종류에서 온다
+ *   (`collect` 수집하고 · `analyze` 분석하고 · `write` 정리하고). 예시 문장을 그대로 복사해 모든 화면에 쓰지 않는다.
+ * - 단계 이름(`label`)은 고정이다(데이터 수집 · 데이터 분석 · 분석 정보 작성). 상황에 따라 바뀌는 것은 `title` 과 `count.unit` 뿐이고,
+ *   둘은 같은 대상을 가리킨다(제목이 «로그를 분석하고 있어요» 면 단위도 «로그»).
  * - 진행 막대는 % 가 아니라 **단계 수로 나눈 칸**이다. 진행 중인 칸만 처리 수의 비율로 채운다.
  * - 움직이는 곳은 머리 그림([[AiStageMotion]]) 하나다. 단계 목록 · 막대 · 답변 자리 표시는 멈춰 있다.
  *   그래서 함께 까는 [[AnswerSkeleton]] 은 `still` 로 반짝임을 끈다. 자리 표시는 마지막 단계(작성)에서만 깐다.
@@ -114,9 +119,9 @@ export type AiProgressPhase = "running" | "done" | "stopped";
 export type AiProgressItem = {
   /** 머리 그림 종류. 이 단계가 진행 중일 때 머리에 그려진다. */
   stage: AiStage;
-  /** 단계 이름. «데이터 수집». */
+  /** 단계 이름. 고정 «데이터 수집» · «데이터 분석» · «분석 정보 작성». */
   label: ReactNode;
-  /** 이 단계가 진행 중일 때 카드 제목. «성능 지표를 수집하고 있어요». */
+  /** 이 단계가 진행 중일 때 카드 제목. «{대상}을/를 {동작}하고 있어요» — 대상은 이번 질문이 다루는 데이터 이름(«트랜잭션을 분석하고 있어요» · «로그를 분석하고 있어요»). */
   title: ReactNode;
   status: AiProgressStepStatus;
   /** 0~1. 이 단계의 처리 비율(처리 수 ÷ 전체). 막대 칸과 머리 그림이 함께 쓴다. */
@@ -132,6 +137,7 @@ export type AiProgressItem = {
 };
 
 export type AiProgressProps = {
+  /** 단계(서버 이벤트에서 만든다). 각 `title` 은 상황에 맞게 «{처리하는 대상}을/를 {동작}하고 있어요», `label` 은 고정, `title` 과 `count.unit` 은 같은 대상. */
   steps: AiProgressItem[];
   /** 진행 중 · 완료 · 중단. 진행 중인데 진행 단계가 없으면 0~2초 «질문 확인» 상태다. */
   phase: AiProgressPhase;

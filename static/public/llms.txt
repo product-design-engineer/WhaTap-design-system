@@ -81,7 +81,7 @@ import { MiniLineChart } from "@whatap/design-system/chart";   // 차트 전용 
 │   ├── 진입점 → AiInlinePrompt (헤더 내장) · AiAssistantButton (FAB)
 │   ├── 입력 → AiPromptInput + AiSendButton
 │   ├── 응답 카드 → AiCard + AiSectionHeading + AiBulletList + AiToneBadge
-│   ├── 기다리는 동안 (10초 넘는 단계 연산) → AiProgress(AiStageMotion · AiProgressStep) + 작성 단계에서만 AnswerSkeleton still · 위젯 onStop (patterns §24)
+│   ├── 기다리는 동안 (10초 넘는 단계 연산) → AiProgress(AiStageMotion · AiProgressStep) + 작성 단계에서만 AnswerSkeleton still · 위젯 onStop (patterns §24) · 제목은 «{처리하는 대상}을/를 {동작}하고 있어요», label 고정, title 과 count.unit 은 같은 대상
 │   ├── 짧은 대기 (2초 안팎) → LoadingMessage
 │   ├── 추론 과정 → AiReasoning + AiStepsTimeline + AiToolCallStep
 │   ├── 비용/분류 → AiCostTable · AiClassificationTable · AiCostBreakdown
