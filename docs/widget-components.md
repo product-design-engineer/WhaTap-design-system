@@ -178,6 +178,7 @@ export type AiProgressItem = {
 - 문장 규칙은 카드와 같다: «{처리하는 대상}을/를 {동작}하고 있어요»
 - `.wds-ai-shimmer` 는 따로 쓸 수 있는 글로우 클래스다. 진행 중인 AI 문장에만, 동작 줄이기면 글자만 남는다
 - 개발 스펙은 소스 docstring `## Spec`(Storybook Docs 탭 · MCP `get_component("AiProgressCompact")`)
+- **Figma 정본**: 페이지 `AiProgressCompact` 491:2 · 세트 491:155(state 5 + `expandable` BOOLEAN). 글로우는 한 순간을 칠했다(text/disabled + 가운데 text/primary). 상세 단계 아이콘 열은 변수 `ai-progress/col`(컬렉션 `WDS · AiProgress`, card 32 · compact 16 · 코드 `--wds-ai-progress-col`)의 compact 모드. 게시는 사람이 한다
 
 ### AiProgressStep
 
