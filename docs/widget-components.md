@@ -29,6 +29,7 @@ AI 위젯 본체(`WhaTapAiWidget`)와 그 안에 표시되는 20여 종의 메�
 | `showSendCursor` | `boolean` | `false` | 데모용 자동 클릭 커서 표시 |
 | `onSubmit` | `(value: string) => void` | — | 입력 submit |
 | `inputPlaceholder` | `string` | `"어떤 작업을 함께 할까요?"` | — |
+| `onStop` | `() => void` | — | AI 가 답을 만드는 중이면 넘긴다. 송신 버튼 자리가 중단 버튼(■)이 되고 Enter 로 보내지 않는다. 입력창은 열려 있다. 끝나면 `undefined` (patterns §24) |
 
 **사용 패턴:**
 
@@ -117,6 +118,70 @@ export type AiChatAttachment =
 
 ## 메시지 카드 — 진행 상태 (Reasoning / Tool calls)
 
+> **10초를 넘길 수 있는 단계 연산은 아래 [[AiProgress]] 하나로.** `AiReasoning` · `AiStepsTimeline` · `AiLoadingMessage` 는 짧은 대기(2초 안팎) · 끝난 과정의 기록용으로 남는다(patterns §24).
+
+### AiProgress
+
+10초 넘게 걸리는 AI 연산의 진행 카드(대기 표현 V2). 머리(단계 그림 32px · 제목 · 경과 초) · 단계 수로 나눈 막대 · 단계 목록 · 하단 줄. 경과 시간대별로 바뀐다: 0~2초 «질문을 확인하고 있어요» + 단계 미리 깔기 → 단계 진행(처리 수) → 10초~ 예상 시간 · 「완료되면 알림」 · 「중단」 → 30초~ 경고 면 지연 사유 → 완료 «3단계 완료 · 23초 · 과정 보기» 로 접힘 · 중단 «여기서 멈췄어요». Composite(Ai). `AiCard` · `AiStageMotion` · `AiProgressStep` · `Button` 조합.
+
+```ts
+export type AiProgressItem = {
+  stage: "collect" | "analyze" | "write"; // 머리 그림
+  label: ReactNode;                        // 단계 이름 «데이터 수집»
+  title: ReactNode;                        // 진행 중 카드 제목 «성능 지표를 수집하고 있어요»
+  status: "pending" | "active" | "done" | "halted";
+  progress: number;                        // 0~1 처리 수 ÷ 전체
+  count?: { value: number; total: number; unit: string };
+  detail?: ReactNode;                      // 완료 뒤 한 줄
+  findings?: ReactNode[];                  // 중간 발견
+  marker?: number;                         // analyze 이상 구간 표시 시점
+};
+```
+
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `steps` | `AiProgressItem[]` | — | 단계(서버 이벤트에서 만든다) |
+| `phase` | `"running" \| "done" \| "stopped"` | — | 진행 중인데 진행 단계가 없으면 0~2초 상태 |
+| `elapsed` | `number` | — | 경과 초. 완료면 걸린 시간 |
+| `expected` | `ReactNode?` | — | 10초부터 하단 줄 문장. 근거 없으면 비운다 |
+| `delayReason` | `ReactNode?` | — | 30초부터 경고 면 하단 줄 |
+| `longAfter` · `lateAfter` | `number` | `10` · `30` | 하단 줄 · 지연 사유 시점(초) |
+| `notify` · `onNotifyChange` | `boolean` · `(v) => void` | `false` · — | 주면 「완료되면 알림」 토글 |
+| `onStop` | `() => void` | — | 주면 「중단」 |
+| `expanded` · `onExpandedChange` | `boolean?` | 내부 상태(접힘) | 완료 뒤 펼침 |
+| `startingTitle` · `doneTitle` · `stoppedTitle` · `stoppedNote` | `ReactNode` | 한국어 기본 문장 | 문구 교체(다국어) |
+| `still` | `boolean?` | `prefers-reduced-motion` | 머리 그림 멈춤 |
+
+- 함께 쓰는 것: 작성 단계에서만 `AnswerSkeleton still` · 위젯 `onStop` · 완료 답변을 `.wds-ai-reveal` 로 감싸기
+- 진행률을 시간으로 계산하지 않는다. 분모 모르는 단계에 `count` 를 주지 않는다
+
+### AiProgressStep
+
+[[AiProgress]] 의 단계 한 줄. Primitives(Ai). 상태 넷: `pending` 회색 점 · 흐린 이름 / `active` 파란 고리 + 처리 수 «에이전트 8 / 12» / `done` 초록 체크 + 한 줄 / `halted` 빈 원 + «여기서 멈췄어요». 아래에 발견 칩(경고 면 `--color-status-warning-soft` · 글자 `--color-tone-text-warning`). `<li>` 를 그리므로 `<ul>` 안에 둔다.
+
+| Prop | Type | 설명 |
+|---|---|---|
+| `status` | `AiProgressStepStatus` | |
+| `label` | `ReactNode` | 단계 이름 |
+| `count` | `{ value; total; unit }?` | `active` 에서만 보인다 |
+| `detail` | `ReactNode?` | `done` 한 줄(`active` 에 `count` 없으면 대신) |
+| `haltedText` | `ReactNode?` | 기본 «여기서 멈췄어요» |
+| `findings` · `findingPrefix` | `ReactNode[]?` · `ReactNode?` | 발견 칩 · 머리말 기본 «발견» |
+
+### AiStageMotion
+
+진행 카드 머리의 단계 그림(32px). Primitives(Ai). 반복 루프가 아니라 `progress` 를 받아 그린다. `collect` 바깥 점 12개가 가운데로 모인다 · `analyze` 선 그래프 위를 스캔 선이 지나가고 `marker` 를 넘으면 이상 구간이 경고 색으로 남는다 · `write` 문서에 줄이 한 줄씩 그어진다. 동작 줄이기 설정이면 멈춘다. 장식(`aria-hidden`).
+
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `stage` | `"collect" \| "analyze" \| "write"` | — | |
+| `progress` | `number` | — | 0~1 |
+| `size` | `number` | `32` | 설명 화면은 96 |
+| `still` | `boolean?` | `prefers-reduced-motion` | |
+| `marker` | `number?` | — | `analyze` 이상 구간 시점 |
+
+- 완료 순간 그림(④ 정보 표현)은 컴포넌트가 아니라 CSS 클래스 `.wds-ai-reveal` 이다. 답변 카드에 완료 이벤트에서 한 번만 붙인다
+
 ### AiReasoning
 
 추론 진행 단계 표시. 회색 칩 + 활성 spinner + 체크.
@@ -159,7 +224,7 @@ Agent tool invocation 블록. `stepsCompleted` + running spinner + tool 이름 +
 
 ### AiLoadingMessage
 
-데이터 수집 중 로딩 메시지. 차트 아이콘 + 텍스트.
+데이터 수집 중 로딩 메시지. 차트 아이콘 + 텍스트. 2초 안에 끝나는 대기 전용이다. 더 길면 [[AiProgress]] 의 0~2초 상태가 이 역할을 맡는다.
 
 | Prop | Default |
 |---|---|

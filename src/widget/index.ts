@@ -50,6 +50,14 @@ export type {
   AiPromptSuggestion,
 } from "./InlinePrompt";
 
+// 진행 표시 — 10초 넘는 AI 연산(대기 표현 V2)
+export { default as AiProgress } from "./AiProgress";
+export type { AiProgressProps, AiProgressItem, AiProgressPhase } from "./AiProgress";
+export { default as AiProgressStep } from "./AiProgressStep";
+export type { AiProgressStepProps, AiProgressStepStatus, AiProgressCount } from "./AiProgressStep";
+export { default as AiStageMotion } from "./AiStageMotion";
+export type { AiStageMotionProps, AiStage } from "./AiStageMotion";
+
 // Message cards
 export { default as AlertRulePreview } from "./AlertRulePreview";
 export { default as ChatExchange } from "./ChatExchange";

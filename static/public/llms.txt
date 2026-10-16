@@ -81,6 +81,8 @@ import { MiniLineChart } from "@whatap/design-system/chart";   // 차트 전용 
 │   ├── 진입점 → AiInlinePrompt (헤더 내장) · AiAssistantButton (FAB)
 │   ├── 입력 → AiPromptInput + AiSendButton
 │   ├── 응답 카드 → AiCard + AiSectionHeading + AiBulletList + AiToneBadge
+│   ├── 기다리는 동안 (10초 넘는 단계 연산) → AiProgress(AiStageMotion · AiProgressStep) + 작성 단계에서만 AnswerSkeleton still · 위젯 onStop (patterns §24)
+│   ├── 짧은 대기 (2초 안팎) → LoadingMessage
 │   ├── 추론 과정 → AiReasoning + AiStepsTimeline + AiToolCallStep
 │   ├── 비용/분류 → AiCostTable · AiClassificationTable · AiCostBreakdown
 │   └── 대시보드 제안 → AiDashboardProposal + ProposalSection + AiChoiceButtons

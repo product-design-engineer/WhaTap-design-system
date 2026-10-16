@@ -15,6 +15,7 @@
  * - 단일 tool 호출 + 결과 서술 → [[ToolCallStep]].
  * - 카드 형태의 reasoning 단계 묶음 → [[Reasoning]].
  * - 단순 로딩 표시 → [[LoadingMessage]].
+ * - 10초를 넘길 수 있는 진행 중 대기 → [[AiProgress]] (단계 칸 · 처리 수 · 중간 발견 · 중단).
  *
  * ## Composition rules
  * - 카드 없는 단독 블록 — 외형 카드가 필요하면 [[AiCard]] 로 감싸 composition.
