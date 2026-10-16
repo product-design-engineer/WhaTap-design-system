@@ -248,6 +248,8 @@
     --color-surface-100: #F1F2F4;
     /* @role 가장 진한 중성 면 | @use 데이터 없음 셀 · 비활성 블록 */
     --color-surface-200: #EAEAEA;
+    /* @role 스켈레톤 글로우 빛 띠의 정점 | @use .ai-skeleton 의 좌→우 빛 띠 | @avoid 일반 표면 · 선택 강조 (브랜드 틴트는 --color-brand-blue-tint) */
+    --color-skeleton-glow: #DCE7FD;
 
     /* Neutral Solid — 중립(무채색) 강조면. tone="tertiary" 버튼의 채움/hover 가 여기서 온다.
        위에 올리는 전경은 고정 흰색(대비 라이트 8.4:1 · 다크 10.3:1). 다크는 .dark 에서 반전. 정의: tokens.css */
@@ -1615,24 +1617,29 @@ html, body, #root {
 .ai-symbol-spin {
   animation: ai-symbol-spin 10s linear infinite;
 }
-/* 스켈레톤 — 응답 대기 자리표시자. 좌→우 shimmer. reduced-motion 이면 정적. (tokens.css 와 동일) */
+/* 스켈레톤 — 응답 대기 자리표시자. 회색 바탕 위를 빛 띠(--color-skeleton-glow)가 좌→우로 훑는 글로우.
+   빛 띠는 라이트·다크 모두 바탕보다 밝다(구 surface-100→50 은 차이가 거의 없고 다크에선 오히려 어두워져 안 보였다).
+   reduced-motion 이면 빛 띠 없이 정적 회색. (tokens.css 와 동일) */
 @keyframes aiSkeletonShimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  from { background-position: -600px 0; }
+  to   { background-position: 900px 0; }
 }
 .ai-skeleton {
   border-radius: 4px;
-  background: linear-gradient(
+  background-color: var(--color-surface-100);
+  background-image: linear-gradient(
     90deg,
-    var(--color-surface-100) 25%,
-    var(--color-surface-50) 37%,
-    var(--color-surface-100) 63%
+    transparent 25%,
+    var(--color-skeleton-glow) 50%,
+    transparent 75%
   );
-  background-size: 200% 100%;
-  animation: aiSkeletonShimmer 1.4s ease-in-out infinite;
+  /* 빛 띠는 px 고정 폭 · px 이동 — 막대 길이와 무관하게 모든 막대에서 같은 x 에 놓인다(한 줄기 빛). */
+  background-size: 600px 100%;
+  background-repeat: no-repeat;
+  animation: aiSkeletonShimmer 1.8s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  .ai-skeleton { animation: none; }
+  .ai-skeleton { animation: none; background-image: none; }
 }
 .ai-symbol-anim {
   animation: ai-symbol-spin 10s linear infinite, ai-symbol-pulse 3s ease-in-out infinite;
@@ -2132,7 +2139,7 @@ html, body, #root {
 .wds-ai-reveal > :nth-child(4),
 .wds-ai-reveal > :nth-child(4) ~ * { animation-delay: 0.36s; }
 /* 답변 자리 표시의 반짝임을 끈다. 진행 카드가 떠 있을 때는 그 머리 그림만 움직인다. */
-.ai-skeleton[data-still] { animation: none; background: var(--color-surface-100); }
+.ai-skeleton[data-still] { animation: none; background-image: none; }
 /* ── AiProgressCompact — 진행 카드의 간편 버전. 실행 내용 한 줄 + 펼치면 상세 연산 정보 ──────────── */
 .wds-ai-progress-compact { display: flex; flex-direction: column; min-width: 0; }
 .wds-ai-progress-compact-row {
@@ -2230,6 +2237,7 @@ html, body, #root {
   --color-surface-50: #14181E;
   --color-surface-100: #1B2026;
   --color-surface-200: #232932;
+  --color-skeleton-glow: #2F3F5E;
   /* 중립 강조면 — 다크에서는 밝아지지 않는다(전경이 계속 흰색이므로 어두운 단계를 유지). 정의: tokens.css */
   --color-neutral-solid: #3A414D;
   --color-neutral-solid-deep: #4A515C;

@@ -50,6 +50,7 @@
   --color-surface-50: #F5F5F5;  /* 용도: 가장 옅은 보조 표면 — hover 배경, muted 셀, 입력 비활성 */
   --color-surface-100: #F1F2F4; /* 용도: 중간 보조 표면 — active row, 트랙(progress/skeleton), 선택 강조 */
   --color-surface-200: #EAEAEA; /* 용도: 가장 진한 보조 표면 — switch off 트랙, 구분 블록, 무채색 채움 */
+  --color-skeleton-glow: #DCE7FD; /* 용도: 스켈레톤 위를 훑는 빛 띠의 정점 — surface-100 바탕보다 밝고 옅은 브랜드 틴트 */
 
   /* Neutral Solid — 중립(무채색) 강조면. tone="tertiary" 버튼의 채움/hover.
      위 전경은 고정 흰색(라이트 8.4:1 · 다크 10.3:1). 다크 값은 하단 `.dark` 블록에서 반전. */
@@ -737,25 +738,28 @@ html, body, #root {
   transform-origin: bottom;
   animation: aiBarGrow 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
-/* 스켈레톤 — 응답 대기 구간의 자리표시자. 좌→우 shimmer 로 "멈춘 게 아니라 오는 중"을 보인다.
-   prefers-reduced-motion 이면 shimmer 없이 정적 회색만 남긴다. */
+/* 스켈레톤 — 응답 대기 구간의 자리표시자. 빛 띠(--color-skeleton-glow)가 좌→우로 훑는 글로우로 "멈춘 게 아니라 오는 중"을 보인다.
+   prefers-reduced-motion 이면 빛 띠 없이 정적 회색만 남긴다. */
 @keyframes aiSkeletonShimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  from { background-position: -600px 0; }
+  to   { background-position: 900px 0; }
 }
 .ai-skeleton {
   border-radius: 4px;
-  background: linear-gradient(
+  background-color: var(--color-surface-100);
+  background-image: linear-gradient(
     90deg,
-    var(--color-surface-100) 25%,
-    var(--color-surface-50) 37%,
-    var(--color-surface-100) 63%
+    transparent 25%,
+    var(--color-skeleton-glow) 50%,
+    transparent 75%
   );
-  background-size: 200% 100%;
-  animation: aiSkeletonShimmer 1.4s ease-in-out infinite;
+  /* 빛 띠는 px 고정 폭 · px 이동 — 막대 길이와 무관하게 모든 막대에서 같은 x 에 놓인다(한 줄기 빛). */
+  background-size: 600px 100%;
+  background-repeat: no-repeat;
+  animation: aiSkeletonShimmer 1.8s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  .ai-skeleton { animation: none; }
+  .ai-skeleton { animation: none; background-image: none; }
 }
 
 .ai-reasoning-dots::after {
@@ -840,6 +844,7 @@ html, body, #root {
   --color-surface-50: #14181E;
   --color-surface-100: #1B2026;
   --color-surface-200: #232932;
+  --color-skeleton-glow: #2F3F5E; /* 다크에서도 바탕보다 «밝아지는» 빛 */
 
   /* 중립 강조면 — 전경이 계속 흰색이므로 다크에서도 어두운 단계를 유지한다. */
   --color-neutral-solid: #3A414D;

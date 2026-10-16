@@ -70,6 +70,7 @@ colors:
   surface-50:                "#F5F5F5"    # Color
   surface-100:               "#F1F2F4"    # Color
   surface-200:               "#EAEAEA"    # Color
+  skeleton-glow:             "#DCE7FD"    # Color — 스켈레톤 글로우 빛 띠 정점 (다크 #2F3F5E)
 
   # Neutral Solid — 중립(무채색) 강조면. tone="tertiary" 버튼의 채움/hover.
   #  위 전경은 고정 흰색(라이트 8.4:1 · 다크 10.3:1). 다크에서도 어두운 단계를 유지한다.
