@@ -172,7 +172,7 @@ export type AiProgressItem = {
 
 ### AiStageMotion
 
-진행 카드 머리의 단계 그림(32px). Primitives(Ai). 반복 루프가 아니라 `progress` 를 받아 그린다. `collect` 바깥 점 8개가 가운데 도착점으로 모인다 · `analyze` 꺾은선이 왼쪽부터 파랑으로 바뀌고 `marker` 를 넘으면 봉우리에 이상 점이 남는다 · `write` 줄 셋이 한 줄씩 그어진다. 모양은 회색 · 파랑 두 색 · 선 1.5 하나. 동작 줄이기 설정이면 멈춘다. 장식(`aria-hidden`).
+진행 카드 머리의 단계 그림(32px). Primitives(Ai). 반복 루프가 아니라 `progress` 를 받아 그린다. `collect` 바깥 점 12개가 가운데로 모인다 · `analyze` 선 그래프 위를 스캔 선이 지나가고 `marker` 를 넘으면 이상 구간이 경고 색으로 남는다 · `write` 문서에 줄이 한 줄씩 그어진다. 동작 줄이기 설정이면 멈춘다. 장식(`aria-hidden`).
 
 | Prop | Type | Default | 설명 |
 |---|---|---|---|

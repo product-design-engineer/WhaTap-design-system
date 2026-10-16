@@ -7,9 +7,9 @@ import { useEffect, useId, useState } from "react";
  * 10초 넘게 걸리는 AI 연산에서 «지금 무슨 일을 하는 중인가» 를 단계 성격에 맞는 그림으로 보인다.
  * 반복 재생 루프가 아니라 **`progress`(0~1) 를 받아 그린다.** 그림이 실제 진행과 함께 움직이므로
  * 진행이 멈추면 그림도 멈춘다. 세 종류다.
- * - `collect` 데이터 수집: 바깥 점 8개가 가운데 도착점으로 모인다. 모인 점 수 = 수집이 끝난 비율
- * - `analyze` 데이터 분석: 꺾은선 하나가 왼쪽부터 파랑으로 바뀐다. `marker` 를 넘으면 봉우리에 이상 점이 경고 색으로 남는다
- * - `write` 분석 정보 작성: 줄 셋이 한 줄씩 그어진다. 그어진 줄 = 작성이 끝난 항목 비율
+ * - `collect` 데이터 수집: 바깥 점 12개가 가운데로 모인다. 모인 점 수 = 수집이 끝난 비율
+ * - `analyze` 데이터 분석: 선 그래프 위를 스캔 선이 지나간다. `marker` 를 넘으면 이상 구간 점이 경고 색으로 남는다
+ * - `write` 분석 정보 작성: 문서 위에 줄이 한 줄씩 그어진다. 그어진 줄 = 작성이 끝난 항목 비율
  *
  * ## When to use
  * - [[AiProgress]] 머리의 32px 자리 (기본 용법. AiProgress 가 단계에 맞춰 자동으로 고른다).
@@ -24,7 +24,7 @@ import { useEffect, useId, useState } from "react";
  * ## Composition rules
  * - 한 화면에서 움직이는 곳은 하나다. 진행 카드에 이 그림을 하나만 둔다(단계 목록 · 막대는 멈춰 있다).
  * - `progress` 는 서버가 보낸 처리 수의 비율(처리 수 ÷ 전체)이다. 시간으로 계산한 가짜 비율을 넣지 않는다.
- * - 모양은 단순하게: 색은 회색(남은 것 `--color-text-disabled`) · 파랑(진행 `--color-brand-blue`) 둘이고, 경고색(`--color-status-warning`)은 분석의 이상 점 하나에만. 선 굵기는 1.5 하나. 16px 로 줄여도 읽혀야 한다. 요소를 더하지 않는다(테두리 · 바닥선 · 장식 고리 금지).
+ * - 색은 토큰만: 진행 `--color-brand-blue` · 남은 것 `--color-text-disabled` · 이상 구간 `--color-status-warning`.
  * - `prefers-reduced-motion` 이면 자동으로 멈춘다(점 이동 · 맥박 · 커서 깜빡임 없음, 진행 상태만 그린다).
  *   `still` 로 직접 멈출 수도 있다(중단된 작업 등).
  * - 장식 그림이다(`aria-hidden`). 진행을 말하는 글자는 [[AiProgress]] 제목 · [[AiProgressStep]] 처리 수가 맡는다.
@@ -34,12 +34,11 @@ import { useEffect, useId, useState } from "react";
  *
  * | 종류 | 그리는 것 | 진행 연결 | 시간 움직임(멈춤이면 없음) |
  * |---|---|---|---|
- * | `collect` | 가운데 도착점 r2 파랑 + 반지름 12 원 위 점 8개(r1.6) | 모인 점 수 = ⌊progress × 8⌋, 모인 점은 반지름 7 · 파랑(도착점과 떨어져 꽃 모양으로 뭉치지 않게). 다음 점은 소수부만큼 ease-in-out 으로 안쪽 이동(파랑) | 없음(진행 연결 이동만) |
- * | `analyze` | 꺾은선 점 10개 · 회색 선 1.5 | 머리 x = 3 + 26 × progress. 그 왼쪽만 파랑 선 1.5 + 머리 점. `progress ≥ marker` 면 봉우리 (17.5, 9) 에 이상 점 r2.2 `--color-status-warning` | 머리 점 반지름 1.8~2.6 · sin(6t) |
- * | `write` | 줄 셋 y 10 · 16 · 22, x 7 부터 길이 18 · 18 · 11 · 회색 45% 선 1.5(문서 테두리 없음) | i 번째 줄 채움 = clamp(progress × 3 − i, 0, 1) · 파랑 | 커서(높이 5 · 파랑 선 1.5) 2.2Hz 깜빡임(불투명 1 ↔ 0.15) |
+ * | `collect` | 가운데 고리 r5.2(선 1 · `--color-brand-blue` 25%) + 반지름 13 원 위 점 12개(r1.3) | 모인 점 수 = ⌊progress × 12⌋, 모인 점은 반지름 3.4 · `--color-brand-blue`. 다음 점은 소수부만큼 ease-in-out 으로 안쪽 이동(r1.5) | 남은 점(`--color-text-disabled`) 불투명 0.55 + 0.35·sin(3t + k) |
+ * | `analyze` | 바닥선 y27(`--color-border-divider`) · 꺾은선 점 12개(회색 `--color-text-disabled` 선 1.4) | 스캔 x = 3 + 26 × progress. 그 왼쪽만 `--color-brand-blue` 선 1.6, 스캔 세로선(55%) + 머리 점. `progress ≥ marker` 면 이상 점 (17.4, 9) r1.9 `--color-status-warning` + 둘레 r3.4 22% | 머리 점 반지름 1.8~2.6 · sin(6t) |
+ * | `write` | 문서 18×25 (7, 3.5) radius 2.5 · 면 `--color-card` · 선 `--color-border-divider`. 줄 넷 y 10.5 · 15 · 19.5 · 24, 길이 12 · 12 · 12 · 7.5, 트랙 `--color-surface-100` 선 1.6 | i 번째 줄 채움 = clamp(progress × 4 − i, 0, 1) · `--color-brand-blue` | 커서(높이 4.4 · `--color-text-primary`) 2.2Hz 깜빡임(불투명 1 ↔ 0.15) |
  *
- * 색은 회색 · 파랑 둘(경고색은 이상 점 하나). 선 굵기 1.5 하나.
- * 멈춤(`still` 또는 `prefers-reduced-motion`)이면 진행 상태만 그린다: 이동 중인 점은 바깥에, 머리 점 r2, 커서 불투명 1.
+ * 멈춤(`still` 또는 `prefers-reduced-motion`)이면 진행 상태만 그린다: 이동 중인 점은 바깥에, 남은 점 불투명 0.8, 머리 점 r2, 커서 불투명 1.
  *
  * @example
  * ```tsx
@@ -97,46 +96,45 @@ function useClock(running: boolean) {
   return t;
 }
 
-/* 모양 규칙(2026-10-16): 색은 회색(남은 것) · 파랑(진행) 둘, 경고색은 분석의 이상 점 하나에만.
-   선 굵기는 1.5 하나. 16px 로 줄여도 무엇인지 읽혀야 한다. 움직임은 진행 연결 + 한 곳의 맥박 · 깜빡임만. */
-const STROKE = 1.5;
-const GRAY = "var(--color-text-disabled)";
-const BLUE = "var(--color-brand-blue)";
-
-/* ── ① 데이터 수집 — 바깥 점 8개가 가운데 도착점으로 모인다 ─────────────── */
-const N_DOTS = 8;
-const R_OUT = 12;
-const R_IN = 7;
-function Collect({ frac, still }: { frac: number; still: boolean }) {
-  const got = frac * N_DOTS;
-  const dots = Array.from({ length: N_DOTS }, (_, k) => {
-    const ang = (k / N_DOTS) * Math.PI * 2 - Math.PI / 2;
-    let rad = R_OUT;
-    let fill = GRAY;
+/* ── ① 데이터 수집 ─────────────────────────────────────────────────── */
+function Collect({ frac, time, still }: { frac: number; time: number; still: boolean }) {
+  const n = 12;
+  const got = frac * n;
+  const dots = Array.from({ length: n }, (_, k) => {
+    const ang = (k / n) * Math.PI * 2 - Math.PI / 2;
+    const R = 13;
+    const r0 = 3.4;
+    let rad = R;
+    let fill = "var(--color-text-disabled)";
+    let r = 1.3;
+    let op = 1;
     if (k < Math.floor(got)) {
-      rad = R_IN;
-      fill = BLUE;
+      rad = r0;
+      fill = "var(--color-brand-blue)";
     } else if (k === Math.floor(got) && frac < 1) {
-      rad = R_OUT + (R_IN - R_OUT) * (still ? 0 : ease(got - k));
-      fill = BLUE;
+      const p = still ? 0 : ease(got - k);
+      rad = R + (r0 - R) * p;
+      fill = "var(--color-brand-blue)";
+      r = 1.5;
+    } else {
+      op = still ? 0.8 : 0.55 + 0.35 * Math.sin(time * 3 + k);
     }
-    return <circle key={k} cx={f2(16 + Math.cos(ang) * rad)} cy={f2(16 + Math.sin(ang) * rad)} r={1.6} fill={fill} />;
+    return <circle key={k} cx={f2(16 + Math.cos(ang) * rad)} cy={f2(16 + Math.sin(ang) * rad)} r={r} fill={fill} opacity={f2(op)} />;
   });
   return (
     <>
-      <circle cx="16" cy="16" r="2" fill={BLUE} />
+      <circle cx="16" cy="16" r="5.2" fill="none" stroke="var(--color-brand-blue)" strokeOpacity=".25" strokeWidth="1" />
       {dots}
     </>
   );
 }
 
-/* ── ② 데이터 분석 — 꺾은선 하나. 지나간 부분이 파랑으로 바뀌는 것이 곧 스캔이다 ── */
+/* ── ② 데이터 분석 ─────────────────────────────────────────────────── */
 const PTS: [number, number][] = [
-  [3, 21], [6, 20], [9, 21.5], [12, 19.5], [15, 20.5], [17.5, 9], [20, 11], [23, 19], [26, 20], [29, 19],
+  [3, 22], [5.4, 21], [7.8, 22.5], [10.2, 20.5], [12.6, 21.5], [15, 20],
+  [17.4, 9], [19.8, 11], [22.2, 19], [24.6, 20.5], [27, 19.5], [29, 21],
 ];
 const POLY = PTS.map((p) => p.join(",")).join(" ");
-/** 이상 지점 — 꺾은선의 봉우리. */
-const PEAK = PTS[5];
 function yAt(x: number) {
   for (let i = 0; i < PTS.length - 1; i++) {
     const [ax, ay] = PTS[i];
@@ -155,41 +153,53 @@ function Analyze({ frac, time, still, marker, clipId }: { frac: number; time: nu
           <rect x="0" y="0" width={f2(x)} height="32" />
         </clipPath>
       </defs>
-      <polyline points={POLY} fill="none" stroke={GRAY} strokeWidth={STROKE} strokeLinejoin="round" strokeLinecap="round" />
-      <polyline points={POLY} fill="none" stroke={BLUE} strokeWidth={STROKE} strokeLinejoin="round" strokeLinecap="round" clipPath={`url(#${clipId})`} />
-      {marker != null && frac >= marker && <circle cx={PEAK[0]} cy={PEAK[1]} r="2.2" fill="var(--color-status-warning)" />}
-      {frac < 1 && <circle cx={f2(x)} cy={f2(yAt(x))} r={f2(pr)} fill={BLUE} />}
+      <line x1="3" y1="27" x2="29" y2="27" stroke="var(--color-border-divider)" strokeWidth="1" />
+      <polyline points={POLY} fill="none" stroke="var(--color-text-disabled)" strokeWidth="1.4" strokeLinejoin="round" strokeLinecap="round" />
+      <polyline points={POLY} fill="none" stroke="var(--color-brand-blue)" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" clipPath={`url(#${clipId})`} />
+      {frac < 1 && (
+        <>
+          <line x1={f2(x)} y1="4" x2={f2(x)} y2="27" stroke="var(--color-brand-blue)" strokeWidth="1" strokeOpacity=".55" />
+          <circle cx={f2(x)} cy={f2(yAt(x))} r={f2(pr)} fill="var(--color-brand-blue)" />
+        </>
+      )}
+      {marker != null && frac >= marker && (
+        <>
+          <circle cx="17.4" cy="9" r="3.4" fill="var(--color-status-warning)" fillOpacity=".22" />
+          <circle cx="17.4" cy="9" r="1.9" fill="var(--color-status-warning)" />
+        </>
+      )}
     </>
   );
 }
 
-/* ── ③ 분석 정보 작성 — 줄 셋이 차례로 그어진다(문서 테두리 없음) ────────── */
-const ROWS: [number, number][] = [[10, 18], [16, 18], [22, 11]];
+/* ── ③ 분석 정보 작성 ──────────────────────────────────────────────── */
+const ROWS: [number, number][] = [[10.5, 12], [15, 12], [19.5, 12], [24, 7.5]];
 function Write({ frac, time, still }: { frac: number; time: number; still: boolean }) {
-  let cx = 7;
-  let cy = ROWS[0][0];
+  let cx = 10;
+  let cy = 10.5;
   const lines = ROWS.map(([y, w], i) => {
-    const p = clamp(frac * ROWS.length - i, 0, 1);
+    const p = clamp(frac * 4 - i, 0, 1);
     if (p > 0 && p < 1) {
-      cx = 7 + w * p + 1.5;
+      cx = 10 + w * p + 1.2;
       cy = y;
     }
     if (p >= 1 && i < ROWS.length - 1) {
-      cx = 7;
+      cx = 10;
       cy = ROWS[i + 1][0];
     }
     return (
       <g key={i}>
-        <line x1="7" y1={y} x2={7 + w} y2={y} stroke={GRAY} strokeOpacity=".45" strokeWidth={STROKE} strokeLinecap="round" />
-        {p > 0 && <line x1="7" y1={y} x2={f2(7 + w * p)} y2={y} stroke={BLUE} strokeWidth={STROKE} strokeLinecap="round" />}
+        <line x1="10" y1={y} x2={10 + w} y2={y} stroke="var(--color-surface-100)" strokeWidth="1.6" strokeLinecap="round" />
+        {p > 0 && <line x1="10" y1={y} x2={f2(10 + w * p)} y2={y} stroke="var(--color-brand-blue)" strokeWidth="1.6" strokeLinecap="round" />}
       </g>
     );
   });
   const blink = still ? 1 : Math.floor(time * 2.2) % 2 ? 0.15 : 1;
   return (
     <>
+      <rect x="7" y="3.5" width="18" height="25" rx="2.5" fill="var(--color-card)" stroke="var(--color-border-divider)" strokeWidth="1" />
       {lines}
-      {frac < 1 && <line x1={f2(cx)} y1={f2(cy - 2.5)} x2={f2(cx)} y2={f2(cy + 2.5)} stroke={BLUE} strokeWidth={STROKE} strokeLinecap="round" opacity={blink} />}
+      {frac < 1 && <line x1={f2(cx)} y1={f2(cy - 2.2)} x2={f2(cx)} y2={f2(cy + 2.2)} stroke="var(--color-text-primary)" strokeWidth="1" opacity={blink} />}
     </>
   );
 }
@@ -211,7 +221,7 @@ export default function AiStageMotion({ stage, progress, size = 32, still, marke
       data-stage={stage}
       style={{ display: "block", flex: "none" }}
     >
-      {stage === "collect" && <Collect frac={frac} still={isStill} />}
+      {stage === "collect" && <Collect frac={frac} time={time} still={isStill} />}
       {stage === "analyze" && <Analyze frac={frac} time={time} still={isStill} marker={marker} clipId={clipId} />}
       {stage === "write" && <Write frac={frac} time={time} still={isStill} />}
     </svg>
