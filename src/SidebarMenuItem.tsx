@@ -54,6 +54,7 @@ export default function SidebarMenuItem({
   item,
   iconOnly = false,
 }: {
+  /** 메뉴 항목 한 건 — 아이콘 · 라벨 · active, `children` 이 배열이면 펼침 행(caret), 아니면 단일 행(`onClick`). */
   item: MenuItem;
   /** Min(collapsed) 사이드바용 — 라벨·caret·자식 숨기고 아이콘만 32px 행 중앙 렌더. 라벨은 [[Tooltip]]. */
   iconOnly?: boolean;

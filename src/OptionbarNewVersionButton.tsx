@@ -29,7 +29,9 @@ export default function OptionbarNewVersionButton({
   href = "#",
   label = "신규 버전",
 }: {
+  /** 링크 대상 URL — 버튼을 감싼 `<a href>` 로 들어간다. 기본 "#"(이동 없음 — 실제 화면은 반드시 넘긴다). */
   href?: string;
+  /** 버튼 글자(sparkle 아이콘과 chevron 사이). 기본 "신규 버전". */
   label?: string;
 }) {
   return (

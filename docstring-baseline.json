@@ -45,18 +45,6 @@
       "whenToUse": 2,
       "undocumentedProps": 2
     },
-    "Composite/OptionbarPage": {
-      "whenToUse": 2,
-      "undocumentedProps": 4
-    },
-    "Composite/PageHeader": {
-      "whenToUse": 2,
-      "undocumentedProps": 3
-    },
-    "Composite/Pagination": {
-      "whenToUse": 2,
-      "undocumentedProps": 2
-    },
     "Composite/Reasoning": {
       "whenToUse": 2,
       "undocumentedProps": 2
@@ -65,29 +53,9 @@
       "whenToUse": 2,
       "undocumentedProps": 3
     },
-    "Composite/SelectPopover": {
-      "whenToUse": 3,
-      "undocumentedProps": 5
-    },
-    "Composite/Sidebar": {
-      "whenToUse": 2,
-      "undocumentedProps": 3
-    },
     "Composite/StepsTimeline": {
       "whenToUse": 2,
       "undocumentedProps": 3
-    },
-    "Composite/ThemeToggle": {
-      "whenToUse": 2,
-      "undocumentedProps": 2
-    },
-    "Composite/TimeChip": {
-      "whenToUse": 2,
-      "undocumentedProps": 1
-    },
-    "Composite/TimeRangeSelector": {
-      "whenToUse": 2,
-      "undocumentedProps": 8
     },
     "Composite/TopologyCanvas": {
       "whenToUse": 2,
@@ -181,33 +149,9 @@
       "whenToUse": 2,
       "undocumentedProps": 3
     },
-    "Primitives/OptionbarNewVersionButton": {
-      "whenToUse": 2,
-      "undocumentedProps": 2
-    },
-    "Primitives/OptionbarValueDisplay": {
-      "whenToUse": 2,
-      "undocumentedProps": 1
-    },
-    "Primitives/PageHeaderNotificationItem": {
-      "whenToUse": 2,
-      "undocumentedProps": 2
-    },
-    "Primitives/PageHeaderProfileMenuItem": {
-      "whenToUse": 2,
-      "undocumentedProps": 2
-    },
-    "Primitives/PresetSelect": {
-      "whenToUse": 2,
-      "undocumentedProps": 3
-    },
     "Primitives/QuickActionChip": {
       "whenToUse": 2,
       "undocumentedProps": 2
-    },
-    "Primitives/RadioGroup": {
-      "whenToUse": 3,
-      "undocumentedProps": 1
     },
     "Primitives/ReasoningStep": {
       "whenToUse": 2,
@@ -216,38 +160,6 @@
     "Primitives/ReceiverChannelItem": {
       "whenToUse": 2,
       "undocumentedProps": 2
-    },
-    "Primitives/SidebarCopyright": {
-      "whenToUse": 3,
-      "undocumentedProps": 1
-    },
-    "Primitives/SidebarMenuItem": {
-      "whenToUse": 3,
-      "undocumentedProps": 1
-    },
-    "Primitives/SidebarOrgSwitcher": {
-      "whenToUse": 3,
-      "undocumentedProps": 2
-    },
-    "Primitives/SidebarProjectSwitcher": {
-      "whenToUse": 3,
-      "undocumentedProps": 1
-    },
-    "Primitives/Slider": {
-      "whenToUse": 2,
-      "undocumentedProps": 2
-    },
-    "Primitives/Stage": {
-      "whenToUse": 2,
-      "undocumentedProps": 2
-    },
-    "Primitives/StatCard": {
-      "whenToUse": 2,
-      "undocumentedProps": 5
-    },
-    "Primitives/Switch": {
-      "whenToUse": 2,
-      "undocumentedProps": 1
     },
     "Primitives/Symbol": {
       "whenToUse": 2,
@@ -260,10 +172,6 @@
     "Primitives/ThreadDivider": {
       "whenToUse": 2,
       "undocumentedProps": 1
-    },
-    "Primitives/Toast": {
-      "whenToUse": 2,
-      "undocumentedProps": 6
     },
     "Primitives/ToolCallStep": {
       "whenToUse": 2,
@@ -284,18 +192,6 @@
     "Primitives/TopologyZoomControl": {
       "whenToUse": 2,
       "undocumentedProps": 1
-    },
-    "Primitives/Web · WebCtaButton": {
-      "whenToUse": 3,
-      "undocumentedProps": 1
-    },
-    "Shell/Widget": {
-      "whenToUse": 2,
-      "undocumentedProps": 10
-    },
-    "Shell/WidgetFrame": {
-      "whenToUse": 3,
-      "undocumentedProps": 2
     }
   }
 }

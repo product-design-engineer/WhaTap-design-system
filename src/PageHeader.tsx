@@ -93,8 +93,11 @@ export default function PageHeader({
   language,
   labels,
 }: {
+  /** 페이지 타이틀 — 좌측 `text-2xl` medium 한 줄(줄바꿈 없음). 예: "K8s-GPU / GPU 트렌드". */
   title: string;
+  /** AI 진입 버튼의 활성(위젯 열림) 표시 — true 면 강조 그라데이션 + `aria-pressed`. 기본 false. controlled. */
   aiActive?: boolean;
+  /** AI 진입 버튼 클릭 시. 인자 없음 — `aiActive` 전환과 위젯 열기는 호출측. `hideAi` 면 버튼이 없어 호출되지 않는다. */
   onAiToggle?: () => void;
   /**
    * AI 진입점(WhaTap AI 버튼)을 숨긴다. 기본 false — 헤더 구성 불변 정책은 그대로다.

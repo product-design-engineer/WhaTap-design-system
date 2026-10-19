@@ -79,10 +79,15 @@ export default function WhaTapAiWidget({
   titleBadge,
   onStop,
 }: {
+  /** 패널 열림 — true 면 폭 480px, false 면 0 으로 접힌다(0.4s 전환). controlled — Sidebar 접힘과 함께 호출측이 소유. */
   open: boolean;
+  /** 헤더 닫기(×) 클릭 시. 인자 없음 — `open` 을 false 로 바꾸는 것은 호출측. */
   onClose?: () => void;
+  /** 헤더 「새로운 세션 추가」(+) 클릭 시. 인자 없음 — `messages` 비우기 등 세션 초기화는 호출측. */
   onNewSession?: () => void;
+  /** 헤더 「전체 크기」 클릭 시. 인자 없음 — 전체 화면 전환은 호출측(위젯은 폭을 바꾸지 않는다). */
   onFullscreen?: () => void;
+  /** 랜딩 인사말의 사용자 이름(「{user} 님, 안녕하세요」). 기본 "Wha-tap Kim" — 예시 값, 실제 화면은 반드시 넘긴다. `intro` 를 주면 쓰이지 않는다. */
   user?: string;
   /**
    * 헤더 제목 「WhaTap AI」 옆에 서는 뱃지. 이 대화가 «무엇으로 나가는가» 를 상시로 말한다
@@ -92,6 +97,7 @@ export default function WhaTapAiWidget({
    * 붙어야 뜻이 선다. 헤더에 숫자까지 넣으면 위젯 꼭대기가 과금 계기판이 된다.
    */
   titleBadge?: import("react").ReactNode;
+  /** 랜딩 인사말에 굵게 서는 현재 화면 이름(「{pageHighlight} 분석을 함께 하겠습니다」). 기본 "애플리케이션 대시보드" — 예시 값, 실제 화면은 반드시 넘긴다. `intro` 를 주면 쓰이지 않는다. */
   pageHighlight?: string;
   /**
    * 환영 문단 전체를 갈아끼운다. 주면 `user`·`pageHighlight` 로 조립하는 기본 문장을 쓰지 않는다.
@@ -100,9 +106,13 @@ export default function WhaTapAiWidget({
    * `pageHighlight` 만 바꿔서는 해결되지 않는다. 그럴 때 문단을 통째로 받는다.
    */
   intro?: import("react").ReactNode;
+  /** 랜딩 인사말 아래 빠른 액션 칩 라벨 배열. 기본 「현재 상태 요약 · 이상 징후 진단 · 슬로우 트랜잭션 분석」 예시 값. 칩은 표시만 하고 클릭 콜백은 없다. */
   actions?: WidgetAction[];
+  /** 본문 대화 스택 — 랜딩 아래에 세로(16px 간격)로 쌓을 메시지 노드(보통 [[AiChatExchange]] 등). `unavailable` 이면 그리지 않는다. */
   messages?: import("react").ReactNode;
+  /** 입력창 값을 고정한다(읽기 전용 데모). 미지정(기본)이면 사용자가 직접 입력하는 editable mode — 이때만 `onSubmit` 이 불린다. */
   inputValue?: string;
+  /** 랜딩(AI 심볼 · 인사말 · 액션 칩) 표시 여부. 기본 true. 대화가 시작된 뒤 false 로 내리면 `messages` 만 남는다. */
   showLanding?: boolean;
   /** 입력 영역 위에 노출할 첨부 파일 칩들 (Figma 27087:3416). */
   attachments?: { name: string; mime?: string }[];

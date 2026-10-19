@@ -52,7 +52,10 @@ interface SwitchBaseProps
 
 /** 접근성 이름 셋 중 하나는 필수 — 빠지면 타입 에러. */
 export type SwitchProps = SwitchBaseProps &
-  ({ label: string } | { "aria-label": string } | { "aria-labelledby": string });
+  ({
+    /** 접근성 이름 — 화면에 그리지 않고 `aria-label` 로 들어간다. 이것 · `aria-label` · `aria-labelledby` 중 하나는 필수. */
+    label: string;
+  } | { "aria-label": string } | { "aria-labelledby": string });
 
 const DIMS: Record<SwitchSize, { w: number; h: number; k: number }> = {
   sm: { w: 40, h: 22, k: 16 },

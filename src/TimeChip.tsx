@@ -50,6 +50,7 @@ export type TimeChipProps = {
   tone?: "neutral" | "warning";
   /** 값의 성격을 말하는 아이콘(예: 스냅샷 셔터). 장식 금지. */
   leadingIcon?: ReactNode;
+  /** 내부 [[Chip]] 루트 요소에 덧붙는 클래스. 배치(여백 · 폭)용. 색 · 크기 override 금지. */
   className?: string;
 };
 

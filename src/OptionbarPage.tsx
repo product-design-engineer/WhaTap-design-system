@@ -105,10 +105,14 @@ export default function OptionbarPage({
   size = "sm",
 }: {
   liveTime?: string;
+  /** 「시간」 항목 [[LiveTimerCompact]] 의 녹색 알약 태그(조회 구간, 기본 "10분"). `items` 를 주면 쓰이지 않는다. */
   durationLabel?: string;
+  /** 「시간」 항목 일시정지 상태 — true 면 시계가 멈추고 배지가 STOP(기본 false). controlled — 전환은 호출측. */
   paused?: boolean;
+  /** 「시간」 항목의 일시정지/재생 버튼을 누를 때. 인자 없음 — `paused` 를 뒤집는 것은 호출측. */
   onTogglePause?: () => void;
   instanceLabel?: string;
+  /** 「인스턴스」 항목 좌측 상태 dot — ok(**기본**) / warn / error / idle. `items` 를 주면 쓰이지 않는다. */
   instanceStatus?: InstanceStatus;
   databaseLabel?: string;
   presetLabel?: string;

@@ -77,7 +77,9 @@ export interface SliderProps
   valueText?: (value: number) => string;
   /** 시각 라벨이 없을 때의 이름(= aria-label). */
   label?: string;
+  /** 비활성 — 끌 수 없고 루트에 `data-disabled` 가 붙어 흐리게 선다. 기본 false. */
   disabled?: boolean;
+  /** 루트 `.wds-slider` 요소에 덧붙는 클래스. 배치(여백 · 폭)용. 색 · 크기 override 금지. */
   className?: string;
 }
 

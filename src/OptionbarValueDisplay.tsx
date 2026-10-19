@@ -46,6 +46,7 @@ export default function OptionbarValueDisplay({
   size = "sm",
   display = "text",
 }: {
+  /** 표시할 읽기 전용 값(예: "ORA11K"). 넘치면 말줄임되고 `title` 툴팁으로 전체가 보인다. */
   value: string;
   /** 높이 — sm(24px, **기본**) / md(32px). */
   size?: OptionbarValueDisplaySize;

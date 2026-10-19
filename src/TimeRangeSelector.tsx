@@ -45,13 +45,21 @@ export default function TimeRangeSelector({
   onNext,
   onPickDate,
 }: {
+  /** 컨트롤 위 bold 라벨. 기본 "시간". 빈 문자열이면 라벨 줄을 그리지 않는다. */
   title?: string;
+  /** 구간 시작 시각(연 · 월 · 일 · 시 · 분 문자열). 기본값은 2026-05-15 13:27 예시 값 — 실제 화면은 반드시 넘긴다. */
   start?: DateParts;
+  /** 구간 끝 시각. 기본값은 2026-05-15 13:37 예시 값 — 실제 화면은 반드시 넘긴다. */
   end?: DateParts;
+  /** 끝 시각 뒤 녹색 알약에 쓰는 구간 길이(기본 "10분"). `start`·`end` 와 자동 동기화되지 않는다. */
   durationLabel?: string;
+  /** 좌측 LIVE 아이콘 버튼 클릭 시. 인자 없음 — 실시간 전환은 호출측. */
   onLive?: () => void;
+  /** 「이전」(‹) 버튼 클릭 시. 인자 없음 — 구간 이동 계산과 `start`·`end` 갱신은 호출측. */
   onPrev?: () => void;
+  /** 「다음」(›) 버튼 클릭 시. 인자 없음 — 구간 이동 계산과 `start`·`end` 갱신은 호출측. */
   onNext?: () => void;
+  /** 달력 아이콘 버튼 클릭 시. 인자 없음 — 날짜 선택 UI 는 이 컴포넌트에 없어 호출측이 연다. */
   onPickDate?: () => void;
 }) {
   return (

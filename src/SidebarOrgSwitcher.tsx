@@ -43,7 +43,9 @@ export default function SidebarOrgSwitcher({
   onClick,
   collapsed = false,
 }: {
+  /** 조직 컨텍스트 — `label`(굵은 한 줄, 넘치면 말줄임) · `icon`(생략 시 여백, collapsed 면 행 자체 생략) · `badge` 칩. */
   org: OrgContext;
+  /** 스위처 클릭 시(조직 목록 · 관리 진입). 인자 없음. */
   onClick?: () => void;
   /** true면 부모 폭 40px 높이 행 — 심볼 아이콘만 중앙 표시. */
   collapsed?: boolean;

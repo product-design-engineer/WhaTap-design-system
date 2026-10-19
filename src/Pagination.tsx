@@ -42,11 +42,13 @@ import type { ReactNode } from "react";
 export type PaginationProps = {
   /** 현재 페이지(1-base). */
   page: number;
+  /** 전체 페이지 수 — 8 이하면 번호 전부, 넘으면 1~5 + 말줄임 + 마지막. 1 이어도 컨트롤은 남는다. */
   totalPages: number;
   /** 페이지당 행 수 — 좌측 요약 문구에만 쓴다. */
   pageSize: number;
   /** 필터 적용 후 전체 건수 — 좌측 요약 문구. */
   total: number;
+  /** 번호 · 이전 · 다음 클릭 시 이동할 페이지(1-base)를 받는다. controlled — `page` 갱신은 호출측. */
   onChange: (page: number) => void;
   /** 좌측 요약 문구 숨김 — 상단에 이미 같은 건수를 적어 둔 화면용. */
   hideSummary?: boolean;
