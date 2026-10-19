@@ -58,6 +58,7 @@ export type AiProgressCount = {
 };
 
 export type AiProgressStepProps = {
+  /** 단계 상태 — 왼쪽 표식과 아랫줄을 정한다. `pending` 회색 점 · `active` 파란 고리 + 처리 수(또는 `detail`) · `done` 완료 체크 + `detail` · `halted` 회색 대시 + `haltedText`. */
   status: AiProgressStepStatus;
   /** 단계 이름. «데이터 수집». */
   label: ReactNode;

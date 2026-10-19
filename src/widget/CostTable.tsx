@@ -53,12 +53,15 @@ export default function CostTable({
   savingsValue,
   delay = 0,
 }: {
+  /** 카드 좌상단 대문자 캡션 (기본 «Cost Analysis»). */
   caption?: string;
+  /** 비교 항목 한 줄 = 한 행 (예: 현행 / 제안 — label · detail · cost). 행마다 [[CostTableRow]] 로 그린다. `label` 이 React key 라 행끼리 겹치지 않게. */
   rows: CostRow[];
   /** "약 30.1% 비용 절감" 같은 풋라인 (선택) */
   savingsLabel?: string;
   /** "₩2,502,000 / 월" 같은 보조 라인 (선택) */
   savingsValue?: string;
+  /** 진입 애니메이션 지연 (ms, 카드 `animationDelay`) — 카드 stagger 용. 기본 0. */
   delay?: number;
 }) {
   return (

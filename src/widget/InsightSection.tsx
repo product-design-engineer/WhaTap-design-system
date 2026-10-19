@@ -32,8 +32,11 @@ export default function InsightSection({
   body,
   delay = 0,
 }: {
+  /** 본문 위 굵은 소제목 (13px). 생략하면 본문만. */
   title?: string;
+  /** 인사이트 본문 (13px) — 줄바꿈 문자를 그대로 살린다 (`white-space: pre-wrap`). */
   body: string;
+  /** 진입 애니메이션 지연 (ms, 바깥 래퍼 `animationDelay`) — 여러 섹션을 차례로 띄우는 stagger 용. 기본 0. */
   delay?: number;
 }) {
   return (

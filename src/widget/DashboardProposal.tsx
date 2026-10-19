@@ -58,6 +58,7 @@ export default function DashboardProposal({
   sections: ProposalSection[];
   /** 끝맺음 확인 질문 (예: "이 구성으로 …해도 좋을까요?") */
   closingQuestion: string;
+  /** [[AiCard]] 진입 애니메이션 지연 (ms) — 여러 카드를 차례로 띄우는 stagger 용. 기본 0. */
   delay?: number;
 }) {
   return (

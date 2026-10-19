@@ -162,6 +162,7 @@ export default function AiTargetMesh({
   onSelect,
   legend,
 }: {
+  /** 대상 종류 하나 = 점 군집 하나 (`short` · `label` · `total` · `warning` · `critical` · `missing` …). 등폭 열로 나란히 서고(6개 기준), 점 하나가 뜻하는 개수(축척)는 전 종류의 최대 `total` 로 함께 정한다. `label` 이 React key 라 겹치지 않게. */
   items: TargetMeshItem[];
   /** 앞에서부터 몇 개 군집을 켤지. 미지정이면 전부 켠다(판정 완료 상태). */
   revealedCount?: number;

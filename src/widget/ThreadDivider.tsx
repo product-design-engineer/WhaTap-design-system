@@ -34,6 +34,7 @@ export type ThreadDividerProps = {
   children?: ReactNode;
   /** 스크린리더용 문장. 글자가 문자열이면 생략해도 그 글자를 쓴다. */
   label?: string;
+  /** 바깥 구분선 `<div>` 에 붙는 클래스 — 배치(여백 · 폭)용. 색 · 크기 override 금지. */
   className?: string;
 };
 

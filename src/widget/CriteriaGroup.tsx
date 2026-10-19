@@ -38,7 +38,9 @@ export default function CriteriaGroup({
   background,
   dotColor,
 }: {
+  /** 기준 이름 — 굵은 첫 줄 (예: «고활용»). */
   title: string;
+  /** 기준 설명 — 제목 아래 보조 줄 (예: «≥ 80% — 즉시 추가 자원 필요»). */
   detail: string;
   /** 행 배경색 (부모 TONE_BG[tone]) */
   background: CSSProperties["background"];

@@ -68,11 +68,13 @@ export type AiProgressCompactItem = {
 export type AiProgressCompactProps = {
   /** 단계. [[AiProgress]] 의 `steps` 를 그대로 넘겨도 된다(같은 모양). */
   steps: AiProgressCompactItem[];
+  /** 진행 중 · 완료 · 중단. 진행 중이면 진행 단계 문장 + «i/N · {초}초», 완료 · 중단이면 «…· {초}초» 한 줄로 바뀐다. 중단이면 진행 단계를 `halted` 로 바꾸고 대기 단계는 지운다. */
   phase: AiProgressCompactPhase;
   /** 경과 초. 완료면 걸린 시간. */
   elapsed: number;
   /** 상세 펼침(제어). 미지정이면 접힌 채로 시작하는 내부 상태. */
   expanded?: boolean;
+  /** 상태 문장 줄을 누를 때 다음 펼침 값으로 호출 (어느 `phase` 든). `expanded` 를 넘겼다면(제어) 부모가 이 값으로 바꿔 줘야 펼쳐진다. `expandable={false}` 면 부르지 않는다. */
   onExpandedChange?: (next: boolean) => void;
   /** 진행 단계가 아직 없을 때 문장. 기본 «질문을 확인하고 있어요». */
   startingTitle?: ReactNode;

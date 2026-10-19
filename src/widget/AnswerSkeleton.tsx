@@ -33,6 +33,7 @@ import { AiCard } from "./_primitives";
  * ```
  */
 export default function AnswerSkeleton({
+  /** 자리 표시 불릿 줄 수 — 실제 답변의 불릿 수에 맞춘다 (기본 3). 줄마다 폭이 7%씩 짧아진다. */
   bullets = 3,
   /** 카드 등장 지연 — 여러 카드를 stagger 로 깔 때 사용. */
   delay = 0,

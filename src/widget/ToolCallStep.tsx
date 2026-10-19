@@ -41,11 +41,17 @@ export default function ToolCallStep({
   defaultOpen = true,
   delay = 0,
 }: {
+  /** 헤더 «N step(s) …» 의 단계 수 — 1이면 단수 «step». */
   stepsCompleted: number;
+  /** true 면 헤더가 «running» + 회전 스피너, false 면 «completed» (기본 false). */
   running?: boolean;
+  /** 펼쳤을 때 헤더 아래 고정폭 글꼴 칩으로 보이는 도구 이름 (예: `query_metrics`). 생략하면 칩 없음. */
   toolName?: string;
+  /** 도구 결과를 풀어 쓴 본문 (13px, 줄바꿈 유지). 접힘과 무관하게 항상 보인다. */
   body?: string;
+  /** 처음에 도구 이름 칩을 펼쳐 둘지 (기본 true). 이후 헤더 클릭으로 내부에서 접고 편다 — 비제어. */
   defaultOpen?: boolean;
+  /** 진입 애니메이션 지연 (ms, 바깥 래퍼 `animationDelay`) — stagger 용. 기본 0. */
   delay?: number;
 }) {
   const [open, setOpen] = useState(defaultOpen);

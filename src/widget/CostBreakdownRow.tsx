@@ -31,7 +31,10 @@ import type { CostBreakdownRow as CostBreakdownRowData } from "./CostBreakdown";
  * ))}
  * ```
  */
-export default function CostBreakdownRow({ row }: { row: CostBreakdownRowData }) {
+export default function CostBreakdownRow({ row }: {
+  /** GPU 한 장의 낭비 비용 데이터 (`gpu` · `pod` · `avg` · `idle` · `daily`) — 5열 격자 한 줄. 값은 표시용 문자열 그대로 찍고 `daily` 만 오른쪽 정렬 · 굵게. */
+  row: CostBreakdownRowData;
+}) {
   return (
     <div
       className="grid items-center px-8px py-6px gap-4px border-t border-color-var-color-border-default"

@@ -1,5 +1,7 @@
 interface AiQuickActionChipProps {
+  /** 칩 글자 — 바로 보낼 수 있는 추천 질문 · 동작 한 구절. */
   label: string;
+  /** 칩 클릭 시 호출 (인자 없음). 보통 `label` 을 프롬프트로 보내는 동작을 연결한다. */
   onClick?: () => void;
 }
 

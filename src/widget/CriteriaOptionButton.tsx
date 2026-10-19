@@ -49,6 +49,7 @@ export default function CriteriaOptionButton({
   locked,
   onClick,
 }: {
+  /** 버튼 글자 (예: «이 기준으로 진행»). 한 줄 — 줄바꿈 없이 그린다. */
   label: string;
   /** filled blue 강조 (선택됨) */
   selected: boolean;
@@ -58,6 +59,7 @@ export default function CriteriaOptionButton({
   pending: boolean;
   /** 선택 확정 후 잠금 (disabled + pointer-events none) */
   locked: boolean;
+  /** 버튼 클릭 시 호출 (인자 없음). 선택 · 잠금 상태는 부모가 `selected` · `locked` 로 넘겨 바꾼다 — `locked` 면 호출되지 않는다. */
   onClick: () => void;
 }) {
   return (

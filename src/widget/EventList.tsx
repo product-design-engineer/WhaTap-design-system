@@ -71,7 +71,9 @@ export default function EventList({
   caption?: string;
   /** 요약 한 줄. 예: "16건 (Critical 3 / Warning 13)" */
   summary?: string;
+  /** 알림 한 건 = 한 행 (`time` · `severity` · `source` · `message`). 행마다 [[EventListItem]] 로 그리고 `severity` 가 톤 배지를 정한다. */
   rows: EventRow[];
+  /** [[AiCard]] 진입 애니메이션 지연 (ms) — 여러 카드를 차례로 띄우는 stagger 용. 기본 0. */
   delay?: number;
 }) {
   return (

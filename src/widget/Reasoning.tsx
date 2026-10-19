@@ -44,7 +44,9 @@ export default function Reasoning({
   steps,
   delay = 0,
 }: {
+  /** 추론 단계 목록 (위→아래 순서) — 한 항목 `{ label, running }` 이 한 줄. 줄마다 [[ReasoningStep]] 로 그린다 (`running` 이면 진행 점, 아니면 체크). */
   steps: ReasoningStep[];
+  /** 진입 애니메이션 지연 (ms, 카드 `animationDelay`) — 여러 카드를 차례로 띄우는 stagger 용. 기본 0. */
   delay?: number;
 }) {
   return (

@@ -31,6 +31,7 @@ export default function ReasoningStep({
   label,
   running,
 }: {
+  /** 단계 문장 (12px 보조 글자색). `running` 이면 뒤에 진행 점 애니메이션이 붙는다. */
   label: string;
   /** true면 점 애니메이션 진행 중, false면 완료(체크) */
   running?: boolean;

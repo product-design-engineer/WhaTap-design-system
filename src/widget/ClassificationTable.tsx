@@ -69,10 +69,15 @@ export default function ClassificationTable({
   rows,
   delay = 0,
 }: {
+  /** 표 바로 위 📊 굵은 제목. 생략하면 제목 줄 없음. */
   caption?: string;
+  /** 맨 위 본문 설명 문단 (13px). 생략하면 없음. */
   description?: string;
+  /** 설명 아래 ⚠️ 경고 띠 (warning 톤 배경). 생략하면 없음. */
   warning?: string;
+  /** GPU 한 장 = 한 행 (GPU · 모델명 · 평균 · 최대 · 최소 · Pod · 분류). 행마다 [[ClassificationTableRow]] 로 그리고 `tone` 이 분류 배지를 정한다. */
   rows: ClassificationRow[];
+  /** 진입 애니메이션 지연 (ms, 바깥 래퍼 `animationDelay`) — 카드 stagger 용. 기본 0. */
   delay?: number;
 }) {
   return (

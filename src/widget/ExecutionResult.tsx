@@ -40,6 +40,7 @@ const VARIANT_LABEL: Record<ExecutionResultVariant, { emoji: string; title: stri
 };
 
 export type AiExecutionResultProps = {
+  /** 실행 결과 종류 — 헤더 이모지 · 제목을 정한다. `success` ✅ «실행 완료» / `failure` ⚠️ «실행 실패» / `unknown` ❔ «알수 없는 오류». */
   variant: ExecutionResultVariant;
   /** 타임스탬프 (yyyy-mm-dd HH:MM:SS) */
   timestamp: string;

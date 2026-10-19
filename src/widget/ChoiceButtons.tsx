@@ -40,8 +40,11 @@ export default function ChoiceButtons({
   secondary,
   delay = 0,
 }: {
+  /** 위쪽 강조(파란 채움) 버튼 — `{ label, hint, onClick }`. 권장 선택지. */
   primary: Choice;
+  /** 아래쪽 보조(파란 테두리) 버튼 — `{ label, hint, onClick }`. 대안 선택지. */
   secondary: Choice;
+  /** 진입 애니메이션 지연 (ms, 바깥 래퍼 `animationDelay`) — stagger 용. 기본 0. */
   delay?: number;
 }) {
   return (

@@ -59,10 +59,13 @@ export default function ReceiverChannels({
   onToggle,
   delay = 0,
 }: {
+  /** 카드 📬 헤딩 텍스트 (기본 «알림 수신 채널»). */
   caption?: string;
+  /** 수신 채널 한 개 = 한 행 (`key` · `label` · `detail` · `enabled` · `paid`). 행마다 [[ReceiverChannelItem]] 로 그리고 `key` 가 아이콘을 정한다. 켜짐 상태는 이 배열이 정본이다. */
   channels: ChannelState[];
   /** 토글 클릭. 미지정이면 행 클릭 비활성. */
   onToggle?: (key: ChannelKey, next: boolean) => void;
+  /** [[AiCard]] 진입 애니메이션 지연 (ms) — 여러 카드를 차례로 띄우는 stagger 용. 기본 0. */
   delay?: number;
 }) {
   return (

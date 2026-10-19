@@ -103,7 +103,10 @@ export function AiCard({
  * <AiCaption>최근 5분 액티브 스레드 상태</AiCaption>
  * ```
  */
-export function AiCaption({ children }: { children: ReactNode }) {
+export function AiCaption({ children }: {
+  /** 캡션 텍스트 — 대문자 · 자간 넓힘으로 그린다 (예: `"Cost Analysis"`). 짧은 라벨 한 줄. */
+  children: ReactNode;
+}) {
   return (
     <span
       className="text-sm font-bold text-tertiary tracking-caps uppercase leading-none"

@@ -38,11 +38,13 @@ export default function UsageChart({
   highlightThreshold = 50,
   delay = 0,
 }: {
+  /** 카드 좌상단 대문자 캡션 (기본 «Hourly GPU Utilization»). 오른쪽 «0–23시» 범위 표기는 고정. */
   caption?: string;
   /** 24개 hourly 사용률 (0~100). null이면 데이터 없음 */
   values: (number | null)[];
   /** 이 값을 넘으면 짙은 색 강조 */
   highlightThreshold?: number;
+  /** 카드 진입 애니메이션 지연 (ms). 막대는 여기에 +100ms 뒤 35ms 간격으로 차례로 자란다. 기본 0. */
   delay?: number;
 }) {
   const HEIGHT = 96;
