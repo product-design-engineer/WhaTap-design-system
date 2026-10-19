@@ -28,6 +28,14 @@
  * - chart 영역이 flex-1 (높이 가변)
  * - legend 행 + 통계값 행 + footer 슬롯
  *
+ * 선 끝 값 배지 (`series[].endLabel`, patterns §25):
+ * - 계열마다 지금 값을 선이 끝나는 자리 오른쪽에 배지로 단다. 회색 다발 위 강조 계열(§22)처럼 범례 한 줄에
+ *   값을 다 싣지 못할 때 쓴다. 계열이 넷 이하면 배지 대신 [[WidgetFrame]] `legend[].value`.
+ * - 이름이 빈 계열(회색 다발)에는 달지 않는다. 한 차트에 다섯까지. 넘는 배지는 그리지 않는다.
+ * - 배지가 있으면 플롯 오른쪽에 배지 칸(`--wds-widget-end-gutter`)을 비운다. 배지는 플롯 밖에 서서 선을 가리지 않는다.
+ * - 글자는 카드 바탕 위 `text-primary`, 계열 색은 테두리와 선 끝 점만 맡는다(§17: 글자에 계열 색을 쓰지 않는다).
+ * - 배지끼리 겹치면 위아래로 밀어 띄운다. 선 끝 점은 제자리에 남는다.
+ *
  * @example
  * ```tsx
  * <MiniMultiLineChart
@@ -40,12 +48,18 @@
  * />
  * ```
  */
-import type { CSSProperties, ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import AiTriggerButton from "../widget/TriggerButton";
 
 /** Y축 눈금 칸 폭 — 토큰 하나(`--wds-widget-axis-gutter`)로 모든 그래프의 Y축 선을 같은 x 에 세운다. */
 const GUTTER = "var(--wds-widget-axis-gutter)";
 const PAD_RIGHT = 8;
+/** 선 끝 값 배지 칸 폭. 배지가 있을 때만 플롯 오른쪽을 이만큼 비운다. */
+const END_GUTTER = "var(--wds-widget-end-gutter)";
+/** 배지 한 개 높이(9px 글자 + 위아래 1px 여백 + 테두리) + 사이 1px. 겹침을 밀어낼 때의 최소 간격. */
+const BADGE_STEP = 14;
+/** 한 차트에 다는 배지 상한. §22 강조 권장 상한과 같다. */
+const MAX_BADGES = 5;
 const PAD_BOTTOM = 14;
 const PAD_TOP = 4;
 
@@ -58,6 +72,11 @@ export type MiniMultiLineChartSeries = {
   color: string;
   /** true 이면 선 아래를 12% 투명도 면으로 채움. 기본 false. */
   showArea?: boolean;
+  /**
+   * 선 끝 값 배지 글자(단위 포함, 예: "86%"). 주면 선이 끝나는 자리 오른쪽에 배지가 선다(patterns §25).
+   * 이름(`label`)이 빈 계열에는 달지 않는다. 한 차트에 다섯까지.
+   */
+  endLabel?: string;
 };
 
 export type MiniMultiLineChartProps = {
@@ -131,6 +150,26 @@ export default function MiniMultiLineChart({
           : "";
       return { ...s, polyStr, areaStr };
     });
+
+  /* ── 선 끝 값 배지: 이름 있는 계열만, 다섯까지 ──────────────────── */
+  const badgeCandidates = series.filter((s) => s.values.length > 0 && s.label && s.endLabel);
+  const badges = badgeCandidates.slice(0, MAX_BADGES).map((s) => {
+    const last = s.values[s.values.length - 1];
+    return { label: s.label, text: s.endLabel as string, color: s.color, ratio: yMaxNice > 0 ? 1 - last / yMaxNice : 1 };
+  });
+  const right = badges.length ? END_GUTTER : `${PAD_RIGHT}px`;
+
+  /* 배지끼리 겹침을 밀어내려면 플롯 높이(px)가 필요하다. 재기 전에는 제자리(비율)에 둔다. */
+  const areaRef = useRef<HTMLDivElement>(null);
+  const [areaH, setAreaH] = useState(0);
+  useEffect(() => {
+    const el = areaRef.current;
+    if (!el || !badges.length || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver((entries) => setAreaH(entries[0].contentRect.height));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [badges.length]);
+  const badgeTops = spreadBadges(badges.map((b) => b.ratio), areaH - PAD_TOP - PAD_BOTTOM);
 
   const yTicks = yMaxNice > 0 ? [1, 0.5, 0] : [0];
   const hasLegend = series.some((s) => s.label);
@@ -215,13 +254,13 @@ export default function MiniMultiLineChart({
       )}
 
       {/* ── Chart area (flex-1) ────────────────────────────────────────── */}
-      <div className="flex-1 min-h-0 relative">
+      <div ref={areaRef} className="flex-1 min-h-0 relative">
         {/* X-axis line */}
         <div
           className="absolute bg-color-var-color-border-divider"
           style={{
             left: GUTTER,
-            right: PAD_RIGHT,
+            right,
             bottom: PAD_BOTTOM,
             height: 1,
           }}
@@ -243,7 +282,7 @@ export default function MiniMultiLineChart({
             className="absolute"
             style={{
               left: GUTTER,
-              right: PAD_RIGHT,
+              right,
               top: `calc(${PAD_TOP}px + (100% - ${PAD_TOP + PAD_BOTTOM}px) * ${1 - ratio})`,
               height: 0,
               borderTop: "1px dashed var(--color-border-default)",
@@ -260,7 +299,7 @@ export default function MiniMultiLineChart({
           style={{
             left: GUTTER,
             top: PAD_TOP,
-            width: `calc(100% - ${GUTTER} - ${PAD_RIGHT}px)`,
+            width: `calc(100% - ${GUTTER} - ${right})`,
             height: `calc(100% - ${PAD_TOP + PAD_BOTTOM}px)`,
           }}
         >
@@ -319,7 +358,7 @@ export default function MiniMultiLineChart({
                 className="absolute text-chart text-tertiary leading-none whitespace-nowrap"
                 style={{
                   fontFamily: "var(--font-family-numeric)",
-                  left: `calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${ratio})`,
+                  left: `calc(${GUTTER} + (100% - ${GUTTER} - ${right}) * ${ratio})`,
                   bottom: 2,
                   transform:
                     i === 0
@@ -333,6 +372,39 @@ export default function MiniMultiLineChart({
               </span>
             );
           })}
+
+          {/* 선 끝 값 배지: 점은 선 끝 제자리, 배지는 플롯 밖 배지 칸에서 겹치지 않게 */}
+          {badges.map((b, i) => (
+            <span key={`end-${b.label}`}>
+              <span
+                aria-hidden
+                className="absolute rounded-full"
+                style={{
+                  left: `calc(100% - ${right})`,
+                  top: `calc(${PAD_TOP}px + (100% - ${PAD_TOP + PAD_BOTTOM}px) * ${b.ratio})`,
+                  width: 5,
+                  height: 5,
+                  background: b.color,
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+              <span
+                role="img"
+                aria-label={`${b.label} ${b.text}`}
+                className="absolute bg-card text-chart text-primary font-semibold leading-none whitespace-nowrap rounded-2px"
+                style={{
+                  fontFamily: "var(--font-family-numeric)",
+                  left: `calc(100% - ${right} + 5px)`,
+                  top: badgeTops ? badgeTops[i] : `calc(${PAD_TOP}px + (100% - ${PAD_TOP + PAD_BOTTOM}px) * ${b.ratio})`,
+                  transform: "translateY(-50%)",
+                  padding: "1px 3px",
+                  border: `1px solid ${b.color}`,
+                }}
+              >
+                {b.text}
+              </span>
+            </span>
+          ))}
         </div>
       </div>
 
@@ -343,6 +415,22 @@ export default function MiniMultiLineChart({
 }
 
 /* ── Helpers (MiniLineChart 와 동일) ───────────────────────────────── */
+
+/**
+ * 배지 세로 위치(px) — 선 끝 높이에 두되, 이웃과 BADGE_STEP 보다 가까우면 아래로 밀고,
+ * 바닥을 넘으면 위로 되민다. 플롯 높이를 아직 못 쟀으면 null(비율 위치를 쓴다).
+ */
+function spreadBadges(ratios: number[], plotH: number): number[] | null {
+  if (plotH <= 0 || !ratios.length) return null;
+  const order = ratios.map((r, i) => ({ i, y: PAD_TOP + plotH * r })).sort((a, b) => a.y - b.y);
+  for (let k = 1; k < order.length; k++) order[k].y = Math.max(order[k].y, order[k - 1].y + BADGE_STEP);
+  const bottom = PAD_TOP + plotH;
+  if (order[order.length - 1].y > bottom) order[order.length - 1].y = bottom;
+  for (let k = order.length - 2; k >= 0; k--) order[k].y = Math.min(order[k].y, order[k + 1].y - BADGE_STEP);
+  const out: number[] = [];
+  for (const o of order) out[o.i] = o.y;
+  return out;
+}
 
 function niceMax(v: number): number {
   if (v <= 0) return 0;
