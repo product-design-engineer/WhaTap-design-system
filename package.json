@@ -1,6 +1,6 @@
 {
   "name": "@whatap/design-system",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "private": false,
   "type": "module",
   "description": "WhaTap AI Assistant design system — chrome + widget cards + tokens. Consumed as a Vercel-hosted tarball; the `source` export condition serves the DS's own Storybook/Vitest from src.",
