@@ -24,7 +24,7 @@ const GUIDANCE: { context: string; family: "korean" | "numeric"; reason: string 
   { context: "SVG 차트 axis · peak 라벨", family: "numeric", reason: "숫자 가독성 + 등폭 비례 우수" },
   { context: "DataTable numeric 컬럼", family: "numeric", reason: "자릿수 정렬 정확" },
   { context: "시계 · 타이머 digit (LIVE)", family: "numeric", reason: "모노스페이스 느낌, digit 흔들림 없음" },
-  { context: "큰 metric 숫자 (₩, %, count)", family: "numeric", reason: "MigPlan total · KPI 카드" },
+  { context: "큰 metric 숫자 (₩, %, count)", family: "numeric", reason: "PlanProposal total · KPI 카드" },
   { context: "ISO date · hex 색상 코드", family: "numeric", reason: "한국어 텍스트와 시각 구분" },
 ];
 

@@ -109,7 +109,7 @@ tokens.font.weight.bold.value     // 700 — 강한 강조 (Caption · SectionHe
 | `body` | korean · md(13px) · regular · normal · default | AiBulletList md · AiUserBubble |
 | `bodySmall` | korean · base(12px) · regular · relaxed · default | AiBulletList sm · dim 본문 |
 | `label` | korean · xs(10px) · medium · none · default | AiToneBadge text |
-| `metric` | **numeric** · lg(14px) · bold · none · metric | LiveTimer digit · AiMigPlan total · KPI |
+| `metric` | **numeric** · lg(14px) · bold · none · metric | LiveTimer digit · PlanProposal total · KPI |
 | `chartLabel` | **numeric** · chart(9px) · regular · none · default | MiniLineChart axis · peak |
 | `tableHeaderCompact` | korean · xs(10px) · bold · none · default | DataTable compact 헤더 |
 | `tableCellCompact` | korean · sm(11px) · regular · snug · default | DataTable compact 셀 |
@@ -123,7 +123,7 @@ tokens.font.weight.bold.value     // 700 — 강한 강조 (Caption · SectionHe
 | SVG 차트 axis · peak 라벨 | `numeric` | 숫자 가독성 + 등폭 비례 우수 |
 | DataTable numeric 컬럼 | `numeric` | 자릿수 정렬 정확 |
 | 시계 · 타이머 digit (LIVE) | `numeric` | 모노스페이스 느낌, digit 흔들림 없음 |
-| 큰 metric 숫자 (₩, %, count) | `numeric` | AiMigPlan total · KPI 카드 |
+| 큰 metric 숫자 (₩, %, count) | `numeric` | PlanProposal total · KPI 카드 |
 | ISO date · hex 색상 코드 | `numeric` | 한국어 텍스트와 시각 구분 |
 
 ## Spacing / Sizing Scale

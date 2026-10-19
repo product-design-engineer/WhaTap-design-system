@@ -73,10 +73,6 @@
       "whenToUse": 3,
       "undocumentedProps": 1
     },
-    "Composite/MigPlan": {
-      "whenToUse": 2,
-      "undocumentedProps": 9
-    },
     "Composite/OptionbarPage": {
       "whenToUse": 2,
       "undocumentedProps": 4
@@ -284,10 +280,6 @@
     "Primitives/MessageActions": {
       "whenToUse": 2,
       "undocumentedProps": 3
-    },
-    "Primitives/MigPlanRow": {
-      "whenToUse": 2,
-      "undocumentedProps": 1
     },
     "Primitives/Multiline": {
       "whenToUse": 2,

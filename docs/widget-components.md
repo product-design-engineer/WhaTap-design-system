@@ -441,25 +441,28 @@ export type ProposalSection = { emoji: string; title: string; bullets: string[] 
 | `closingQuestion: string` | — |
 | `delay` | `0` |
 
-### AiMigPlan
+### PlanProposal
 
-MIG 통합 기획. heading + bullets + 3컬럼 표 + 월 환산 + 우선순위 액션.
+> 구 `MigPlan` · `AiMigPlan`(«MIG 통합 기획», 2026-10-19 이름 변경 — 옛 이름은 @deprecated 별칭). GPU MIG 전용이 아니라 모든 계획 제안에 쓴다.
+
+실행 계획 제안. heading + 요약 bullets + 3열 비교 표(`columns` · [[PlanProposalRow]]) + 합계 띠 + 우선순위 액션. 읽기 전용 — 적용 CTA 는 ChoiceButtons 로 분리.
 
 ```ts
-export type MigPlanRow = { label: string; config: string; monthly: string; highlight?: boolean };
-export type MigAction = { step: number; body: string };
+export type PlanProposalItem = { label: string; detail?: string; value?: string; highlight?: boolean };
+export type PlanProposalStep = { step: number; body: string };
 ```
 
 | Prop | Default |
 |---|---|
-| `heading` | `"MIG 통합 기획 (A100 핵심 활용 전략)"` |
+| `heading` | `"실행 계획 제안"` — 제안 내용을 말하는 제목으로 바꿔 쓴다 |
 | `bullets?: string[]` | — |
-| `rows?: MigPlanRow[]` | — |
-| `totalLabel` | `"통합 비용 요약"` |
+| `columns` | `["항목", "구성", "비용"]` |
+| `rows?: PlanProposalItem[]` | — |
+| `totalLabel` | `"합계"` |
 | `total?: string` | — |
 | `totalNote?: string` | — |
 | `actionsHeading` | `"우선순위 액션"` |
-| `actions?: MigAction[]` | — |
+| `actions?: PlanProposalStep[]` | — |
 | `delay` | `0` |
 
 ### AiAlertRulePreview
@@ -541,7 +544,7 @@ AI 응답 하단 피드백 액션. 좋아요 / 싫어요 / 복사.
       ]} />
       <AiClassificationTable rows={classification} delay={120} />
       <AiCostTable rows={cost} savingsLabel="예상 절감" savingsValue="₩320,000/월" delay={240} />
-      <AiMigPlan rows={mig} total="₩1,580,000" actions={actions} delay={360} />
+      <PlanProposal heading="GPU 분할 제안 — A100 활용 전략" columns={["워크로드", "분할 구성", "월 비용"]} rows={mig} total="₩1,580,000" actions={actions} delay={360} />
       <AiChoiceButtons
         primary={{ label: "MIG 적용 계획서 만들기", onClick: makePlan }}
         secondary={{ label: "다른 옵션 보기", onClick: showAlternatives }}

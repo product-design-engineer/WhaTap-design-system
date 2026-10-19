@@ -48,7 +48,7 @@ const PATTERNS: { key: PatternKey; sample: string; usage: string }[] = [
   { key: "body", sample: "최근 5분 동안 httpc 가 압도적 dominant 입니다.", usage: "AiBulletList md · UserBubble" },
   { key: "bodySmall", sample: "분류 결과 — 즉시 조치 필요", usage: "AiBulletList sm · dim 본문" },
   { key: "label", sample: "고활용", usage: "AiToneBadge text" },
-  { key: "metric", sample: "1,234,567", usage: "LiveTimer digit · MigPlan total" },
+  { key: "metric", sample: "1,234,567", usage: "LiveTimer digit · PlanProposal total" },
   { key: "chartLabel", sample: "13:34", usage: "MiniLineChart axis/peak" },
   { key: "tableHeaderCompact", sample: "Max(%)", usage: "DataTable compact 헤더" },
   { key: "tableCellCompact", sample: "82.4", usage: "DataTable compact 셀" },

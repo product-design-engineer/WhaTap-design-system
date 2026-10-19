@@ -13,7 +13,7 @@
  * ## When NOT to use
  * - 실행 **전** 미리보기 / 승인 요청 → [[AlertRulePreview]] + [[ChoiceButtons]].
  * - 진행 중(스피너) 상태 표시 → 도구 호출 진행 표시 컴포넌트.
- * - 구성 제안 안내 → [[DashboardProposal]] / [[MigPlan]].
+ * - 구성 제안 안내 → [[DashboardProposal]] / [[PlanProposal]].
  *
  * ## Composition rules
  * - 이 컴포넌트는 `AiCard` chrome 없이 자체 `flex-col` 레이아웃 (헤더+타임스탬프 전용 구조).

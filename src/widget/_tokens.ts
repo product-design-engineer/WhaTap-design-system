@@ -407,7 +407,7 @@ export const tokens = {
       },
       metric: {
         value: { family: "numeric", size: "lg", weight: "bold", lineHeight: "none", tracking: "metric" },
-        description: "강조 metric 숫자 — 14px Bold / -0.2px / leading-none / numeric. LiveTimer · AiMigPlan total.",
+        description: "강조 metric 숫자 — 14px Bold / -0.2px / leading-none / numeric. LiveTimer · PlanProposal total.",
       },
       chartLabel: {
         value: { family: "numeric", size: "chart", weight: "regular", lineHeight: "none", tracking: "default" },
