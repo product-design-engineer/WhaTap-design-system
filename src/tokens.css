@@ -613,6 +613,7 @@
   --wds-widget-body-pb: 12px;
   --wds-widget-row-gap: 4px;
   --wds-widget-axis-gutter: 28px;
+  --wds-widget-end-gutter: 44px;
 }
 
 html, body, #root {

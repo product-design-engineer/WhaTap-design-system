@@ -49,6 +49,7 @@ import TriggerButton from "./widget/TriggerButton";
  *   실제 이동 · 재배치는 격자(보드)가 맡는다 — 격자 라이브러리의 손잡이 선택자로 이 두 클래스를 넘긴다.
  *   배치가 정해진 대시보드에서는 켜지 않는다(제목 · 메뉴를 누르려다 칸이 밀린다).
  * - **범례는 본문 오른쪽 위 한 줄**(`legend`). 헤더 오른쪽은 메뉴 자리라 범례를 올리지 않는다.
+ * - **지금 값**은 계열이 넷 이하면 범례 이름 뒤(`legend[].value`, 굵게), 계열 하나면 `summary`, 강조 계열이 여럿이면 [[MiniMultiLineChart]] 선 끝 배지(patterns §25). 한 칸에 두 방식을 함께 쓰지 않는다.
  *   **모든 차트 칸에 둔다 — 계열이 하나여도**(2026-10-08 사용자 결정). 이름은 제목이 아니라 계열 이름(「전체 APM」 「평균」 「usr」).
  *   예외는 이름표가 본문 안에 이미 있는 것뿐이다: [[BarList]](줄 이름) · [[MiniDonutChart]](옆 열) · [[ApdexChart]](띠 이름) · 숫자 칸([[KpiCard]] · [[KpiField]]).
  *   속도 구분(아크 · 히트맵)은 `SPEED_LEGEND`, GPU 맵은 `HEX_GRID_LEGEND` 를 그대로 넘긴다(칸 수를 붙이면 `hexGridLegend(items)` → `Critical 3`). 계열이 넷을 넘으면 줄바꿈 없이 넘치는 만큼 잘린다 — 그런 칸은 계열을 줄인다.
@@ -86,6 +87,11 @@ export type WidgetFrameLegendItem = {
   label: string;
   /** 시리즈 색 토큰(`var(--color-chart-series-N)`). hex 금지. */
   color: string;
+  /**
+   * 지금 값(단위 포함, 예: "86%"). 이름 뒤에 굵게 붙는다(patterns §25). 계열이 넷 이하일 때만.
+   * 그보다 많으면 범례에 값을 싣지 않고 [[MiniMultiLineChart]] `endLabel`(선 끝 배지)로. 한 칸에 둘을 함께 쓰지 않는다.
+   */
+  value?: ReactNode;
 };
 
 export type WidgetFrameProps = {
@@ -239,6 +245,11 @@ export default function WidgetFrame({
                       <li key={l.label} className="flex items-center gap-4px text-sm text-secondary whitespace-nowrap">
                         <span aria-hidden className="shrink-0 rounded-2px" style={{ width: 8, height: 8, background: l.color }} />
                         {l.label}
+                        {l.value != null && (
+                          <span className="text-primary font-semibold" style={{ fontFamily: "var(--font-family-numeric)" }}>
+                            {l.value}
+                          </span>
+                        )}
                       </li>
                     ))}
                   </ul>

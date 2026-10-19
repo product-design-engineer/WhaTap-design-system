@@ -443,7 +443,7 @@ export type DataTableProps<T> = {
 | `menu` | `ActionMenuAction[]` | — | 헤더 메뉴 둘째 칸 ⋮ 더보기 안의 줄(설정 · 복사 · 상세로 이동). 주면 선다 |
 | `onAsk` | `() => void` | — | AI 진입점. ⋮ 첫 줄 「AI 에게 묻기」 + 헤더 맨 앞 호버 지름길(같은 동작). AI 위젯을 여는 화면에서만 |
 | `draggable` | `boolean` | `false` | 헤더를 끌기 손잡이로(`.wds-widget-frame-handle`, 메뉴 `.wds-widget-frame-actions` 제외). 배치하는 보드에서만 |
-| `legend` | `{ label, color }[]` | — | 본문 오른쪽 위 한 줄 범례. 모든 차트 칸에(계열 하나여도). 이름표가 본문 안에 있는 BarList · 도넛 · Apdex · 숫자 칸만 제외. 속도 구분 `SPEED_LEGEND` |
+| `legend` | `{ label, color, value? }[]` | — | 본문 오른쪽 위 한 줄 범례. 모든 차트 칸에(계열 하나여도). 이름표가 본문 안에 있는 BarList · 도넛 · Apdex · 숫자 칸만 제외. 속도 구분 `SPEED_LEGEND`. `value` 는 지금 값(이름 뒤에 굵게) · 계열 넷 이하일 때만(§25) |
 | `bleed` | `boolean` | `false` | 본문 안쪽 여백 없앰. 표 · 히트맵 · 아크처럼 본문이 가장자리를 가질 때만 |
 | `state` | `"ready" \| "no-data" \| "collect-gap"` | `"ready"` | `ready` 가 아니면 본문 대신 [[EmptyState]] |
 | `stateTitle` / `stateDescription` | `ReactNode` | 상태별 기본 문장 / — | 빈 상태 두 줄 |
@@ -454,6 +454,8 @@ export type DataTableProps<T> = {
 - **헤더 오른쪽 아이콘 메뉴는 ⛶ 전체 화면 + ⋮ 더보기 둘로 고정**(순서 고정). 나머지 행동은 전부 더보기 안으로. AI 위젯을 여는 화면이면 `onAsk` 로 맨 앞에 호버 지름길(AI)이 더해져 [AI][⛶][⋮] — ⋮ 첫 줄 「AI 에게 묻기」도 함께 선다
 - **헤더는 제목 · 메뉴만.** 값 · 건수 · 단위 · 시간 범위를 헤더에 두지 않는다. 값은 본문 첫 줄 `summary`, 시간은 옵션바
 - **범례는 본문 오른쪽 위 한 줄.** 헤더 오른쪽은 메뉴 자리다. 계열이 셋을 넘거나 글이 길면 본문 안 차트 옆 열로
+- **지금 값은 계열 수로 자리를 고른다**(§25). 하나는 `summary`, 둘 ~ 넷은 `legend[].value`, 강조 계열이 여럿이면 MiniMultiLineChart 선 끝 배지(`series[].endLabel`). 한 칸에 한 방식
+- **Figma 정본**: MiniMultiLineChart 세트 342:69 에 `endBadges` 축(4 variant · 배지 변형 507:30 등) · 변수 `wds/widget-end-gutter`(VariableID:507:29, 44 · `WDS · Size`). WidgetFrame 범례 값 예시 507:235(같은 페이지). 게시는 사람이 한다
 - 세 칸 사이에 구분선을 긋지 않는다. 같은 표면 안이라 여백이 경계다
 - 껍데기를 가진 차트(MiniLineChart · MiniMultiLineChart · MiniDonutChart · KpiCard · HexGrid)는 `frame={false}` 로 끄고 넣는다. 켠 채 넣으면 카드가 두 겹이 된다
 - AI 진입점은 껍데기에 두지 않는다(§15)
@@ -511,7 +513,7 @@ export type DataTableProps<T> = {
 
 아래 차트들은 단독으로 세우면 **스스로 껍데기나 바깥 여백**을 그린다. 대시보드 격자에서는 늘 `frame={false}` 로 끄고 [[WidgetFrame]] 에 담는다. 그러면 제목 · 범위 · 메뉴(⛶ + ⋮) · 범례 · 본문 여백이 모든 칸에서 같은 자리 · 같은 모양이 된다(patterns §15).
 
-**본문 간격 토큰** — `--wds-widget-body-px`(12) · `--wds-widget-body-pb`(12) · `--wds-widget-row-gap`(4) · `--wds-widget-axis-gutter`(28). WidgetFrame 이 앞의 셋을, 그래프가 축 칸을 쓴다. **축 글자**는 모든 그래프가 `text-chart`(9px) · 숫자 서체 · tertiary.
+**본문 간격 토큰** — `--wds-widget-body-px`(12) · `--wds-widget-body-pb`(12) · `--wds-widget-row-gap`(4) · `--wds-widget-axis-gutter`(28) · `--wds-widget-end-gutter`(44). WidgetFrame 이 앞의 셋을, 그래프가 축 칸을 쓴다. 배지 칸은 MiniMultiLineChart 에 선 끝 값 배지(`endLabel`)가 있을 때만 플롯 오른쪽에 비운다(§25). **축 글자**는 모든 그래프가 `text-chart`(9px) · 숫자 서체 · tertiary.
 
 | 차트 | `frame={false}` 에서 빠지는 것 | WidgetFrame 쪽에서 채우는 것 |
 |---|---|---|

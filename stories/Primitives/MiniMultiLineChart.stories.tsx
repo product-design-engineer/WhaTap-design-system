@@ -107,3 +107,70 @@ export const InWidgetFrame: Story = {
     </div>
   ),
 };
+
+/** 지금 값 · 계열 넷 이하: 범례 이름 뒤에 값을 굵게(WidgetFrame `legend[].value`). 플롯은 그대로 둔다(patterns §25). */
+export const LegendValues: Story = {
+  render: () => (
+    <div style={{ width: 420, height: 240 }}>
+      <WidgetFrame
+        title="백분위 TTFT"
+        onFullscreen={() => {}}
+        menu={[{ key: "detail", label: "상세로 이동" }]}
+        legend={[
+          { label: "p50", color: "var(--color-chart-series-1)", value: "46ms" },
+          { label: "p95", color: "var(--color-chart-series-2)", value: "96ms" },
+          { label: "p99", color: "var(--color-chart-series-3)", value: "149ms" },
+        ]}
+      >
+        <MiniMultiLineChart
+          title="백분위 TTFT"
+          frame={false}
+          unit="ms"
+          xLabels={X}
+          series={[
+            { label: "p50", values: P50, color: "var(--color-chart-series-1)" },
+            { label: "p95", values: P95, color: "var(--color-chart-series-2)" },
+            { label: "p99", values: P99, color: "var(--color-chart-series-3)" },
+          ]}
+        />
+      </WidgetFrame>
+    </div>
+  ),
+};
+
+/* 서버 20대 CPU: 강조 셋 + 회색 다발(§22). 값은 결정적으로 만든다(스냅샷이 흔들리지 않게). */
+const BUNDLE = Array.from({ length: 17 }, (_, k) => X.map((_, i) => Math.round(14 + (k % 6) * 2 + 5 * Math.sin(i * 0.8 + k))));
+const HOT = [
+  { label: "web-01", values: [78, 80, 83, 81, 84, 86, 85, 87, 85, 86], color: "var(--color-chart-series-1)", endLabel: "86%" },
+  { label: "web-02", values: [40, 38, 42, 45, 41, 44, 47, 43, 46, 45], color: "var(--color-chart-series-2)", endLabel: "45%" },
+  { label: "batch-03", values: [22, 35, 28, 31, 40, 36, 33, 38, 41, 43], color: "var(--color-chart-series-3)", endLabel: "43%" },
+];
+
+/**
+ * 선 끝 값 배지 · 강조 계열이 여럿: 회색 다발 위 강조 계열에만 `endLabel`(patterns §25).
+ * 배지는 플롯 오른쪽 배지 칸(`--wds-widget-end-gutter`)에 서서 선을 가리지 않고, 가까운 배지(45% · 43%)는 위아래로 밀려 띄워진다.
+ * 범례에는 강조 계열 이름만 둔다(값은 배지가 말한다).
+ */
+export const EndBadges: Story = {
+  render: () => (
+    <div style={{ width: 420, height: 240 }}>
+      <WidgetFrame
+        title="CPU 사용률"
+        onFullscreen={() => {}}
+        menu={[{ key: "detail", label: "상세로 이동" }]}
+        legend={HOT.map(({ label, color }) => ({ label, color }))}
+      >
+        <MiniMultiLineChart
+          title="CPU 사용률"
+          frame={false}
+          unit="%"
+          xLabels={X}
+          series={[
+            ...BUNDLE.map((values) => ({ label: "", values, color: "var(--color-chart-neutral)" })),
+            ...HOT,
+          ]}
+        />
+      </WidgetFrame>
+    </div>
+  ),
+};

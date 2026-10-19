@@ -768,6 +768,8 @@
     --wds-widget-row-gap: 4px;
     /* @role 그래프 Y축 눈금 칸 폭 — 한 줄의 Y축 선을 같은 x 에 세운다 | @use MiniLineChart · MiniMultiLineChart · ScatterHeatmap | @avoid 차트마다 다른 눈금 칸 폭 */
     --wds-widget-axis-gutter: 28px;
+    /* @role 선 끝 값 배지 칸 폭. 배지가 있을 때만 플롯 오른쪽을 비운다 | @use MiniMultiLineChart endLabel | @avoid 배지를 플롯 안에 겹쳐 선을 가리기 */
+    --wds-widget-end-gutter: 44px;
 
     /* ── Component tokens: DateTimeBlock ── */
     /* @role 연도 칸 폭 | @use DateTimeBlock */
