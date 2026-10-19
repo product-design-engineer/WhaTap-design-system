@@ -11,7 +11,7 @@
   - `primitives.md` / `chrome-components.md` / `widget-components.md` — 컴포넌트 카탈로그 (텍스트 형태)
   - `tokens.md` — 토큰 정의 (CSS 변수 ↔ 디자인 의미)
   - `patterns.md` — **Part 1 인터랙션 패턴**(`P1`… 컴포넌트 횡단 시퀀스 — 파괴적 액션 확인 · 완료 통보 · 즉시반영 vs 폼제출 · 기본/선택 항목 그룹) + **Part 2 구현 정책**(`1`… 기존 번호 유지). MCP `search_components` 가 이 파일을 함께 검색한다.
-  - `components.json` — **기계 판독 규칙 카탈로그(자동 생성 · 직접 편집 금지).** 컴포넌트별 Purpose · ✅Do · ❌Don't · Composition rules · props · 스토리 id. `scripts/build-components-json.mjs` 가 **소스 docstring + 스토리**에서 유도하고 MCP `get_component`·`get_do_dont` 가 이걸 읽는다 — Do/Don't 를 따로 손으로 쓰지 않는다(표기 단일화 규칙은 `docs/SKILL.md`). 강제: `pnpm lint:docstrings`.
+  - `components.json` — **기계 판독 규칙 카탈로그(자동 생성 · 직접 편집 금지).** 컴포넌트별 Purpose · ✅Do · ❌Don't · Composition rules · props · 스토리 id. `scripts/build-components-json.mjs` 가 **소스 docstring + 스토리**에서 유도하고 MCP `get_component`·`get_do_dont` 가 이걸 읽는다 — Do/Don't 를 따로 손으로 쓰지 않는다(표기 단일화 규칙은 `docs/SKILL.md`). **템플릿 섹션(Purpose · When to use · When NOT to use · Composition rules · 선택 Spec · Do · Don't) 밖의 `## …` 는 배달되지 않는다** — 쓰지 않는다. 강제: `pnpm lint:docstrings`(템플릿 밖 섹션 0 · 깊이 래칫 `docstring-baseline.json`).
   - `tokens.json` — **기계 판독 토큰 카탈로그(자동 생성 · 직접 편집 금지).** 토큰별 tier·값·다크값·`@role`/`@use`/`@avoid`·유틸 클래스·사용 컴포넌트 · `@distinct <집합>` 을 선언한 토큰은 그 집합과의 **측정된 변별**(`distinctFrom`, 차트 계열 ↔ Severity). `scripts/build-tokens-json.mjs` 가 **`whatap-ds.css` 의 선언 + 그 위 주석**에서 유도하고 MCP `get_tokens`·`search_tokens` 가 이걸 읽는다 — 의미를 다른 파일에 두지 않는다. 강제: `pnpm lint:token-docs`(전 토큰 `@role` 필수, 동결선 0).
   - `STORIES_ROADMAP.md` — Storybook 카탈로그 추가 작업 목록
 

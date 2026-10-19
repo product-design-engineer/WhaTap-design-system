@@ -23,7 +23,8 @@
  * - 키보드: ArrowLeft/ArrowRight 활성 이동 (disabled 건너뜀), Home/End 양 끝
  * - 색 토큰만 — brand-blue / text-primary / text-tertiary / surface-100
  *
- * ## variant 비교
+ * ## Spec
+ * variant 비교
  * | variant     | 모양                                              | 사용 |
  * |-------------|---------------------------------------------------|------|
  * | `large`     | 라벨 + 하단 underline (활성), 라벨 사이 여백 큼   | 페이지 본문 섹션 — 밑줄이 컨테이너를 가로지를 때만 |

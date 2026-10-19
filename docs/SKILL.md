@@ -100,6 +100,10 @@ DS는 **Tailwind를 쓰지 않습니다.** `style.css`(= `whatap-ds.css`)는 외
 | ✅ **Do** | `## Do` 가 있으면 그대로 · 없으면 `When to use` 불릿 |
 | ❌ **Don't** | `## Don't` 가 있으면 그대로 · 없으면 `When NOT to use` + `Composition rules` 의 **금지형 문장**(금지·말 것·안 된다…) |
 
+**템플릿 섹션은 7개뿐이다** — 필수 4 + 선택 `## Spec`(치수 · 토큰 · 상태 · ARIA · 구성도 등 구현값) · `## Do` · `## Don't`. 생성기는 이 밖의 `## …` 를 읽지 않으므로 `## ARIA` · `## Why this exists` 같은 섹션은 **Storybook 에만 보이고 AI 에게는 배달되지 않는다**(2026-10-19 실측 15섹션 — Pagination 「페이지가 하나여도 컨트롤을 세운다」 정책이 그중 하나였다). 배경은 Purpose 에, 규칙은 Composition rules 에, 구현값은 Spec 에 둔다. `lint:docstrings` 가 템플릿 밖 섹션을 차단한다.
+
+**깊이도 본다(래칫).** `## When to use` 불릿 2개 이상(= ✅ Do 두 줄 이상) · 설명 없는 prop 0. prop 설명은 타입 블록 또는 구조 분해 인자 위의 `/** … */` 어느 쪽이든 읽힌다. 도입 시점 미달(109종)은 `docstring-baseline.json` `depth` 에 수치로 동결돼 있고, 나빠지면 실패 · 나아지면 `--update` 로 선을 줄이게 한다.
+
 특별히 강조할 컴포넌트만 docstring 에 `## Do` / `## Don't` 를 명시해 승격한다(그 컴포넌트에서 실제로 사고가 났던 것들). 스토리 설명의 `✅ Do — … / ❌ Don't — …` 블록도 같은 표기이며 함께 수집된다.
 
 **기계 판독 출력:** [`components.json`](./components.json) — `scripts/build-components-json.mjs` 가 위 규칙대로 생성하고 `/design-system/components.json` 으로 서빙한다. MCP `get_component` 와 `get_do_dont` 가 이 파일을 읽는다. **직접 편집 금지** — docstring 을 고치고 재생성(`pnpm build:design`).
