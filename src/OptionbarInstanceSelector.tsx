@@ -65,6 +65,7 @@ export default function OptionbarInstanceSelector({
   onToggle,
   size = "sm",
 }: {
+  /** 선택 상자 위 제목 (12px bold, 기본 「인스턴스」). 빈 문자열이면 제목 줄을 그리지 않는다. */
   title?: string;
   /** 고정 폭(px). `fullWidth` 가 참이면 무시된다. */
   width?: number;
@@ -75,8 +76,11 @@ export default function OptionbarInstanceSelector({
   fullWidth?: boolean;
   /** 선택된 인스턴스 라벨 (예: "DMX-3-12-949") */
   label: string;
+  /** 라벨 앞 상태 점 색 — ok(초록, **기본**) / warn(주황) / error(빨강) / idle(회색). */
   status?: InstanceStatus;
+  /** 목록이 열렸는지 (기본 false). true 면 chevron 이 위로 뒤집힌다 — 목록 자체는 호출측이 띄운다. */
   open?: boolean;
+  /** 선택 상자를 누를 때. 인자 없음 — `open` 전환과 목록 표시는 호출측이 한다. */
   onToggle?: () => void;
   /** 높이 — sm(24px, **기본**) / md(32px). */
   size?: OptionbarInstanceSelectorSize;

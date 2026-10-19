@@ -30,6 +30,7 @@
  */
 
 export type CountryFlagProps = {
+  /** 언어 코드 — ko · en · ja (대소문자 무관). 그 외 코드는 아무것도 그리지 않는다. */
   code: string;
   /** 가로 크기(px). 세로는 2/3(30×20 비율). 생략하면 부모를 100% 채운다. */
   size?: number;

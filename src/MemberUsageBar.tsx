@@ -37,6 +37,7 @@ export type MemberUsageBarProps = {
   value: string;
   /** 전체 사용량 대비 비율 0~100. */
   percent: number;
+  /** 루트 요소(이름 · 값 줄 + 게이지 세로 묶음)에 덧붙는 클래스 — 배치(여백 · 폭)용. 색 · 크기 override 금지. */
   className?: string;
 };
 

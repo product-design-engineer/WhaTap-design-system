@@ -56,7 +56,9 @@ export type DisclosureProps = {
   onOpenChange?: (open: boolean) => void;
   /** 머리말 글자 크기. `sm` 은 캡션 · 좁은 패널용. */
   size?: DisclosureSize;
+  /** 머리말 버튼을 막아 열림 상태를 바꾸지 못하게 한다 (기본 false). */
   disabled?: boolean;
+  /** 루트 요소(`wds-disclosure`)에 덧붙는 클래스 — 배치(여백 · 폭)용. 색 · 크기 override 금지. */
   className?: string;
 };
 

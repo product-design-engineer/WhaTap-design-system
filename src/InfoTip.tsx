@@ -45,6 +45,7 @@ export type InfoTipProps = {
   placement?: TooltipPlacement;
   /** 강제 표시 (Storybook · 디자인 확인용). */
   open?: boolean;
+  /** 트리거 버튼(`wds-info-tip`, ⓘ 아이콘)에 덧붙는 클래스 — 배치(여백 · 정렬)용. 색 · 크기 override 금지. */
   className?: string;
 };
 

@@ -102,7 +102,9 @@ const SIZE = {
 export default function LiveTimerCompact({
   /** 시계 표시 문자열. 미지정 시 시스템 시각으로 자동 갱신. */
   time,
+  /** 일시정지 상태 (기본 false). true 면 시계 · progress 갱신을 멈추고 배지가 LIVE → STOP, 버튼이 재생 아이콘으로 바뀐다. */
   paused = false,
+  /** 왼쪽 일시정지/재생 버튼을 누를 때(클릭 · Enter · Space). 인자 없음 — `paused` 전환은 호출측이 한다. */
   onTogglePause,
   /** polling 한 cycle (ms). 기본 5000ms. `showPollingProgress` 시 fill 한 cycle 길이. */
   refreshIntervalMs = 5000,

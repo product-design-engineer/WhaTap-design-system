@@ -82,7 +82,9 @@ export type DataTableColumn<T> = {
 export type DataTableSort = { key: string; dir: "asc" | "desc" };
 
 export type DataTableProps<T> = {
+  /** 컬럼 정의 — 순서대로 헤더와 셀 트랙(width 고정 · flex fr)을 만든다. */
   columns: DataTableColumn<T>[];
+  /** 행 데이터 — 한 원소가 한 행. 셀 값은 컬럼 `key` 로 읽거나 `render` 가 그린다. */
   rows: T[];
   /** 현재 정렬 상태. `sortable` 컬럼 헤더에 방향 표식이 뜬다. */
   sort?: DataTableSort;
@@ -91,6 +93,7 @@ export type DataTableProps<T> = {
    * 미지정이면 헤더는 눌리지 않는다(표식만 표시).
    */
   onSortChange?: (next: DataTableSort) => void;
+  /** 밀도 — default(**기본**, 헤더 12px · 행 13px · 패딩 12/10) / compact(헤더 10px · 행 11px · 패딩 8/6, 100+ 행 raw log 전용). */
   density?: "compact" | "default";
   /** 행 클릭 핸들러. 없으면 hover 효과만. */
   onRowClick?: (row: T, idx: number) => void;

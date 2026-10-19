@@ -29,8 +29,11 @@
  */
 
 export type KpiCardProps = {
+  /** 카드 상단 제목 줄 (13px medium). `frame={false}` 면 그리지 않는다 — 제목은 감싸는 프레임이 소유. */
   title: string;
+  /** 가운데 큰 지표 값 (32px bold 숫자 글꼴). 서식이 끝난 문자열로 넘긴다. */
   value: string;
+  /** 값 뒤에 붙는 단위 (16px, 보조 색 · 예: "%" · "ms"). 없으면 생략. */
   unit?: string;
   /** stagger 진입 애니메이션 delay(ms) */
   delay?: number;

@@ -25,7 +25,10 @@
  * <h2 className="heading-2"><Multiline>{page.heading}</Multiline></h2>
  * ```
  */
-export default function Multiline({ children }: { children: string | null | undefined }) {
+export default function Multiline({ children }: {
+  /** 줄바꿈(`\n`)이 든 평문. 줄마다 `<br />` 로 끊어 그린다. 비거나 null 이면 아무것도 그리지 않는다. */
+  children: string | null | undefined;
+}) {
   if (!children) return null;
   return (
     <>

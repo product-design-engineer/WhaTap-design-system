@@ -57,6 +57,7 @@ export type ConfirmDialogOutcome = {
 };
 
 export type ConfirmDialogProps = {
+  /** 모달 열림 여부 (controlled). */
   open: boolean;
   /** 실행 이름. 「알림 규칙 삭제」 · 「플랜에서 제외」 처럼 무엇을 하는 모달인지. */
   title: ReactNode;
@@ -74,7 +75,9 @@ export type ConfirmDialogProps = {
   tone?: ConfirmDialogTone;
   /** 실행 중(비동기). 실행 버튼이 로딩으로 바뀐다. */
   loading?: boolean;
+  /** 실행 버튼(confirmLabel)을 누를 때. 닫기는 호출측이 직접 한다. */
   onConfirm: () => void;
+  /** 취소 버튼 · 닫기(X) · Esc · 바깥 클릭으로 물러날 때. */
   onClose: () => void;
   /** 기본 `sm`. 되읽을 값이 많으면 `md`. */
   size?: ModalSize;

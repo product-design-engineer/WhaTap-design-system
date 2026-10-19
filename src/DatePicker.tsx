@@ -45,11 +45,13 @@ const SIZE: Record<DatePickerSize, { h: number; padLeft: number; text: string }>
 export type DatePickerProps = {
   /** `YYYY-MM-DD`. */
   value: string;
+  /** 년 · 월 · 일 칸 중 하나가 바뀔 때 — 자릿수를 채운 `YYYY-MM-DD` 문자열을 받는다. */
   onChange?: (next: string) => void;
   /** 달력 버튼 클릭. 미지정 시 버튼을 그리지 않는다. */
   onCalendarClick?: () => void;
   /** [[TextField]] 와 같은 스케일 — sm 24 / md 28 / **lg 32(기본)**. */
   size?: DatePickerSize;
+  /** 비활성 — 세 입력 칸과 달력 버튼을 막고 전체를 흐리게(불투명도 0.6) 그린다 (기본 false). */
   disabled?: boolean;
   "aria-label"?: string;
 };

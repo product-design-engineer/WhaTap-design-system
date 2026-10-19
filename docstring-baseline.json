@@ -13,10 +13,6 @@
       "whenToUse": 2,
       "undocumentedProps": 5
     },
-    "Composite/Autocomplete": {
-      "whenToUse": 3,
-      "undocumentedProps": 4
-    },
     "Composite/Chart · Heatmap": {
       "whenToUse": 2,
       "undocumentedProps": 2
@@ -24,10 +20,6 @@
     "Composite/ClassificationTable": {
       "whenToUse": 2,
       "undocumentedProps": 5
-    },
-    "Composite/ConfirmDialog": {
-      "whenToUse": 2,
-      "undocumentedProps": 3
     },
     "Composite/CostBreakdown": {
       "whenToUse": 2,
@@ -49,29 +41,9 @@
       "whenToUse": 2,
       "undocumentedProps": 1
     },
-    "Composite/DataTable": {
-      "whenToUse": 2,
-      "undocumentedProps": 3
-    },
     "Composite/EventList": {
       "whenToUse": 2,
       "undocumentedProps": 2
-    },
-    "Composite/InfoTip": {
-      "whenToUse": 3,
-      "undocumentedProps": 1
-    },
-    "Composite/InstanceSelectPanel": {
-      "whenToUse": 2,
-      "undocumentedProps": 6
-    },
-    "Composite/LandingHeader": {
-      "whenToUse": 2,
-      "undocumentedProps": 3
-    },
-    "Composite/MailTemplate": {
-      "whenToUse": 3,
-      "undocumentedProps": 1
     },
     "Composite/OptionbarPage": {
       "whenToUse": 2,
@@ -125,24 +97,12 @@
       "whenToUse": 2,
       "undocumentedProps": 9
     },
-    "Primitives/ActiveTransactionSpeedWidget": {
-      "whenToUse": 2,
-      "undocumentedProps": 8
-    },
     "Primitives/AiProgressStep": {
       "whenToUse": 2,
       "undocumentedProps": 1
     },
     "Primitives/AnswerSkeleton": {
       "whenToUse": 2,
-      "undocumentedProps": 1
-    },
-    "Primitives/Breadcrumb": {
-      "whenToUse": 2,
-      "undocumentedProps": 1
-    },
-    "Primitives/Button": {
-      "whenToUse": 3,
       "undocumentedProps": 1
     },
     "Primitives/Caption": {
@@ -205,77 +165,21 @@
       "whenToUse": 2,
       "undocumentedProps": 2
     },
-    "Primitives/DataTableRow": {
-      "whenToUse": 2,
-      "undocumentedProps": 3
-    },
-    "Primitives/DatePicker": {
-      "whenToUse": 2,
-      "undocumentedProps": 2
-    },
-    "Primitives/DateTimeBlock": {
-      "whenToUse": 2,
-      "undocumentedProps": 2
-    },
-    "Primitives/Disclosure": {
-      "whenToUse": 3,
-      "undocumentedProps": 2
-    },
-    "Primitives/EmptyState": {
-      "whenToUse": 3,
-      "undocumentedProps": 1
-    },
     "Primitives/ExecutionResult": {
       "whenToUse": 2,
       "undocumentedProps": 1
-    },
-    "Primitives/HeaderPillButton": {
-      "whenToUse": 2,
-      "undocumentedProps": 2
     },
     "Primitives/InsightSection": {
       "whenToUse": 2,
       "undocumentedProps": 3
     },
-    "Primitives/InstanceListItem": {
-      "whenToUse": 2,
-      "undocumentedProps": 1
-    },
-    "Primitives/KpiCard": {
-      "whenToUse": 2,
-      "undocumentedProps": 3
-    },
-    "Primitives/KpiField": {
-      "whenToUse": 2,
-      "undocumentedProps": 1
-    },
-    "Primitives/LiveTimerCompact": {
-      "whenToUse": 2,
-      "undocumentedProps": 2
-    },
     "Primitives/LoadingMessage": {
-      "whenToUse": 2,
-      "undocumentedProps": 1
-    },
-    "Primitives/MemberUsageBar": {
       "whenToUse": 2,
       "undocumentedProps": 1
     },
     "Primitives/MessageActions": {
       "whenToUse": 2,
       "undocumentedProps": 3
-    },
-    "Primitives/Multiline": {
-      "whenToUse": 2,
-      "undocumentedProps": 1
-    },
-    "Primitives/OptionbarInstanceSelector": {
-      "whenToUse": 2,
-      "undocumentedProps": 4
-    },
-    "Primitives/OptionbarItem": {
-      "whenToUse": 2,
-      "undocumentedProps": 2
     },
     "Primitives/OptionbarNewVersionButton": {
       "whenToUse": 2,
@@ -381,17 +285,9 @@
       "whenToUse": 2,
       "undocumentedProps": 1
     },
-    "Primitives/Web · CountryFlag": {
-      "whenToUse": 2,
-      "undocumentedProps": 1
-    },
     "Primitives/Web · WebCtaButton": {
       "whenToUse": 3,
       "undocumentedProps": 1
-    },
-    "Shell/DashboardLayout": {
-      "whenToUse": 2,
-      "undocumentedProps": 5
     },
     "Shell/Widget": {
       "whenToUse": 2,

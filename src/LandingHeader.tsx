@@ -82,8 +82,11 @@ export type LandingHeaderProps = {
   themeToggle?: ReactNode;
   /** 640px 미만에서 쓸 축약 테마 토글. 없으면 `themeToggle` 이 항상 노출된다. */
   themeToggleCompact?: ReactNode;
+  /** 로그인 링크 (라벨 · 주소 · 부가 onClick). 테마 토글 오른쪽 텍스트 링크. 없으면 생략. */
   signIn?: LandingHeaderAction;
+  /** 맨 오른쪽 주 행동 링크 (예: 「무료 체험」, `wds-landing-header-cta`). 없으면 생략. */
   cta?: LandingHeaderAction;
+  /** 루트 `<header>`(`wds-landing-header`)에 덧붙는 클래스 — 배치(위치 · 여백)용. 색 · 크기 override 금지. */
   className?: string;
 };
 

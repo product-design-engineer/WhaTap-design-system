@@ -50,7 +50,9 @@ export default function OptionbarItem({
   children,
   layout = "inline",
 }: {
+  /** 항목 제목 (12px bold, 예: 「기간」 · 「인스턴스」). 빈 문자열이면 제목을 그리지 않는다. */
   title: string;
+  /** 제목 옆(또는 아래)에 놓일 컨트롤 — Select · DatePicker · 인스턴스 선택 등. */
   children: ReactNode;
   /** inline: 타이틀을 콘텐츠 좌측에 나란히(**기본**) · stack: 타이틀 위·콘텐츠 아래 · auto: 행 폭으로 자동 전환 */
   layout?: "stack" | "inline" | "auto";

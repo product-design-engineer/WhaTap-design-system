@@ -58,6 +58,7 @@ export type EmptyStateProps = {
   action?: ReactNode;
   /** 세로 여백. `sm` 은 모달 · 좁은 패널용. */
   size?: EmptyStateSize;
+  /** 루트 요소(가운데 정렬 세로 묶음)에 덧붙는 클래스 — 배치(여백 · 폭)용. 색 · 크기 override 금지. */
   className?: string;
 };
 

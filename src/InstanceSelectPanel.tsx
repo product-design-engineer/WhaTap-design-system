@@ -52,13 +52,19 @@ export type InstanceSelectPanelProps = {
   items: InstanceSelectItem[];
   /** 선택된 인스턴스 이름. */
   selected?: string;
+  /** 목록 행을 누를 때 — 그 인스턴스 이름을 받는다. */
   onSelect?: (name: string) => void;
+  /** 상단 탭 범위 — all(전체, **기본**) / cluster(클러스터 소속만). controlled. */
   scope?: InstanceSelectScope;
+  /** 상단 All · Cluster 탭을 바꿀 때 — 다음 범위를 받는다. */
   onScopeChange?: (next: InstanceSelectScope) => void;
+  /** 검색어 (기본 빈 문자열). 이름에 대소문자 무시 부분 일치로 목록을 좁힌다. controlled. */
   query?: string;
+  /** 검색 입력이 바뀔 때 — 새 검색어를 받는다. */
   onQueryChange?: (next: string) => void;
   /** 비활성 인스턴스 표시 여부. */
   showIdle?: boolean;
+  /** «비활성화된 인스턴스 표시» 스위치를 바꿀 때 — 다음 on/off 값을 받는다. */
   onShowIdleChange?: (next: boolean) => void;
   /** 패널 폭(px). 기본 340. */
   width?: number;
