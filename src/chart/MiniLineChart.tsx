@@ -71,10 +71,15 @@ export default function MiniLineChart({
   aiTriggerTooltip = "이 차트를 WhaTap AI로 분석",
   frame = true,
 }: {
+  /** 카드 제목 줄 글자(`frame` 일 때만 그린다). AI 트리거 콜백의 `metric` 으로도 넘어간다. */
   title: string;
+  /** 선 하나의 값 — 왼쪽 끝부터 오른쪽 끝까지 고르게 편다. Y축 천장은 최댓값을 올림한 값, 최고점에 ▼ + 값 라벨. */
   values: number[];
+  /** X축 글자 — 값 개수와 무관하게 plot 폭에 고르게 놓는다(양 끝은 안쪽 정렬). 기본은 시연용 시각 7개. */
   xLabels?: string[];
+  /** 세로 점선 기준선의 가로 위치 — plot 폭 대비 0~1 비율. 기본 0.08. */
   markerAt?: number;
+  /** 제목 줄 오른쪽에 «Top Stat» 버튼을 둘지. 클릭 동작은 없다(표시 전용). `frame` 일 때만. 기본 `false`. */
   showTopStat?: boolean;
   color?: string;
   /**

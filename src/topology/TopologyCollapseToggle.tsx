@@ -42,6 +42,7 @@ export default function TopologyCollapseToggle({
   tone?: TopologyTone;
   /** false 면 클릭 불가한 장식 뱃지(리프 노드용). */
   interactive?: boolean;
+  /** 뱃지를 누를 때 불린다(인자 없음). 접힘 상태는 `collapsed` 로 호출부가 쥔다(제어형). `interactive={false}` 면 불리지 않는다. */
   onToggle?: () => void;
 }) {
   const cls =

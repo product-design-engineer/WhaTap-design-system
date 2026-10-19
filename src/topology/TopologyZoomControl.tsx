@@ -32,6 +32,7 @@ export default function TopologyZoomControl({
 }: {
   /** 현재 배율(1 = 100%). */
   scale: number;
+  /** 축소 · 확대 버튼을 누를 때 다음 배율로 불린다 — 0.1 단위, `TOPOLOGY_ZOOM`(0.25~2)으로 자른 값. 캔버스 `view.scale` 에 반영한다(제어형). */
   onScaleChange: (next: number) => void;
 }) {
   const step = (delta: number) =>

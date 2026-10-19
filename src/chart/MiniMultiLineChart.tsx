@@ -80,8 +80,11 @@ export type MiniMultiLineChartSeries = {
 };
 
 export type MiniMultiLineChartProps = {
+  /** 카드 제목 줄 글자(`frame` 일 때만 그린다). AI 트리거 콜백의 `metric` 으로도 넘어간다. */
   title: string;
+  /** 선 목록 — 모든 계열이 Y축 하나를 공유한다(천장 = 전체 최댓값 올림). 색은 `var(--color-chart-series-N)` — 계열 순서 고정. */
   series: MiniMultiLineChartSeries[];
+  /** X축 글자 — 값 개수와 무관하게 plot 폭에 고르게 놓는다. 기본은 시연용 시각 7개. */
   xLabels?: string[];
   /** Y축 라벨에 붙는 단위 (예: "ms", "%"). */
   unit?: string;
@@ -95,11 +98,14 @@ export type MiniMultiLineChartProps = {
   footer?: ReactNode;
   /** stagger 진입 애니메이션 delay(ms). */
   delay?: number;
+  /** 주면 제목 옆 ⓘ 대신 AI 트리거 버튼을 둔다. 누르면 `{ metric: title, series }` 로 불린다. 제목 줄이 있는 `frame` 일 때만 보인다. */
   onAiTrigger?: (ctx: {
     metric: string;
     series: { label: string; values: number[] }[];
   }) => void;
+  /** AI 트리거 노출 방식 — `always`(상시) · `hover`(카드 hover 시에만). 기본 `always`. */
   aiTriggerReveal?: "always" | "hover";
+  /** AI 트리거 버튼 [[Tooltip]] 문구. 기본 «이 차트를 WhaTap AI로 분석». */
   aiTriggerTooltip?: string;
   /**
    * 껍데기(카드 표면 · 테두리 · 여백 · 제목 줄 · ⋮ · 헤더 범례)를 그릴지. 기본 `true`.

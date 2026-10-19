@@ -44,6 +44,7 @@ export type BarListRow = {
 };
 
 export type BarListProps = {
+  /** 줄 목록 — 위에서부터 이 순서대로 그린다(정렬은 호출부 몫). 막대 길이는 `ratio`(0~1), 색은 `var(--color-chart-series-N)` — 계열 순서 고정. */
   rows: BarListRow[];
   /**
    * 자기 바깥 여백(좌우 · 아래 8px)을 둘지. 기본 `true`.

@@ -69,6 +69,7 @@ export type HexItem = {
 };
 
 export type HexGridProps = {
+  /** 헥사곤 목록 — 이 순서로 행을 채운다(한 행 개수는 `columns` ±2 안에서 영역을 가장 잘 채우는 값). 색은 `tone`, `id` 는 고유해야 한다(하이라이트 · 툴팁 기준). */
   items: HexItem[];
   /** 한 행의 최대 헥사곤 수 (기본 6) */
   columns?: number;

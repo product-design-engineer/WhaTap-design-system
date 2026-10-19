@@ -35,12 +35,15 @@ export default function TopologyMinimap({
   width = 168,
   height,
 }: {
+  /** 캔버스와 같은 그래프. 좌표는 [[layoutTopology]] 가 다시 구한다 — 캔버스와 같은 엔진이라 위치가 일치한다. */
   graph: TopologyGraph;
   /** 캔버스와 공유하는 뷰포트 상태. */
   view: TopologyView;
   /** 캔버스가 화면에서 차지하는 실제 폭/높이(px) — 보이는 영역 계산에 필요. */
   viewportWidth: number;
+  /** 캔버스 뷰포트의 실제 높이(px). `viewportWidth` 와 짝으로 보이는 영역 사각형을 역산한다. */
   viewportHeight: number;
+  /** 미니맵 폭(px). 기본 168. 그래프 전체를 이 폭 · 높이 안에 축소해 담는다. */
   width?: number;
   /** 미지정 시 **그래프 종횡비**로 정한다 — 고정 높이면 넓적한 그래프에서 아래가 크게 빈다. */
   height?: number;

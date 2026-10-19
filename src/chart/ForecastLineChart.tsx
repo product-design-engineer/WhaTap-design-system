@@ -90,6 +90,7 @@ export type ForecastLineChartSeries = {
 };
 
 export type ForecastLineChartProps = {
+  /** 계열 목록 — 관측(실선) · 예측(점선) · 도달 마커. 색은 계열마다 토큰으로(`var(--color-chart-series-N)`, 계열 순서 고정). `highlightId` 계열은 맨 위에 그린다. */
   series: ForecastLineChartSeries[];
   /** x 범위(도메인 단위). 음수 = 과거, 0 = 지금, 양수 = 미래. */
   xDomain: [number, number];

@@ -48,6 +48,7 @@ export type UsageGaugeProps = {
   label: string;
   /** 성격. 기준(몇 %부터 warning 인지)은 호출부가 정한다. */
   tone?: UsageGaugeTone;
+  /** 트랙(바깥 막대) 요소에 붙는 클래스 — 배치(여백 · 폭)용. 색 · 크기 override 금지. */
   className?: string;
 };
 

@@ -34,8 +34,11 @@ export default function TopologyPort({
   tone = "default",
   radius = 5,
 }: {
+  /** 중심 x — 엣지와 같은 `<svg>` 좌표. 값은 [[layoutTopology]] 가 낸 엣지 끝점을 그대로 쓴다. */
   x: number;
+  /** 중심 y — 엣지와 같은 `<svg>` 좌표. 값은 [[layoutTopology]] 가 낸 엣지 끝점을 그대로 쓴다. */
   y: number;
+  /** 연결 상태 — `default` · `ok` · `alert`. 색은 `TOPOLOGY_PORT_FILL` 유틸 클래스가 정한다. 기본 `default`. */
   tone?: TopologyTone;
   /** 도트 반경(px). 기본 5 — 레퍼런스 기준. */
   radius?: number;
