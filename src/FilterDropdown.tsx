@@ -25,7 +25,8 @@
  * - options 모드: `options` + `value` + `onChange` 다중 선택 Checkbox 자동 렌더
  * - 자유 children: 사용자가 panel 본문 자유 구성 (Apply/Cancel 등 footer 추가 가능)
  *
- * ## ARIA
+ * ## Spec
+ * ARIA
  * - 트리거: `aria-haspopup="listbox"` + `aria-expanded`
  * - 패널: `role="dialog"` (작은 panel)
  *

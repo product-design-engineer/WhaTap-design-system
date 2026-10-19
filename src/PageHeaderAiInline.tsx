@@ -6,14 +6,6 @@
  * AI 위젯 호출 trigger 가 인라인 prompt 의 송신으로 이동 — 별도 토글 entry 없음.
  * 48px 높이 invariant 유지. 좌측 타이틀 + 중앙 inline prompt(max 480px) + 우측 chrome(고객지원/벨/아바타).
  *
- * ## 차이 (vs PageHeader)
- * - ✅ AiInlinePrompt — 중앙, flex-grow + max-w-[480px]
- * - ⚖️ AiAssistantButton (WhaTap AI 토글) — `onAiToggle` 주입 시에만 렌더(기본 없음).
- *      실제 제품 헤더(액티브 트랜잭션 등)는 **토글 pill 과 prompt 를 함께** 둔다:
- *      prompt 는 "새로 묻기", pill 은 "이미 열린 위젯 닫기/다시 열기" 라 서로 대체되지 않는다.
- * - 좌측 그룹: Title + (AI pill) + Docs — Docs 는 Title 바로 우측에 인접 배치
- * - 우측 chrome: 고객지원 / 🔔 / Avatar — Docs 제외, 유지
- *
  * ## When to use
  * - inline prompt 가 AI 위젯 호출 entry 인 페이지 (위젯 토글 별도 entry 불필요).
  * - PageHeader 의 가용 공간이 prompt 를 수용할 만큼 wide 한 페이지.
@@ -25,6 +17,15 @@
  * - inline prompt 는 [[feedback_page_header_invariant]] 정책 따라 `max-w-480px` cap, w-full 100% 강제 금지.
  * - 우측 chrome 잠식 금지 — `flex-1 + max-width` 컨테이너로 가용 공간만 흡수.
  * - 48px height invariant 유지 — inline prompt 자체가 ~32px 이라 안전하게 들어감.
+ *
+ * ## Spec
+ * 구성 — [[PageHeader]] 와 다른 점
+ * - ✅ AiInlinePrompt — 중앙, flex-grow + max-w-[480px]
+ * - ⚖️ AiAssistantButton (WhaTap AI 토글) — `onAiToggle` 주입 시에만 렌더(기본 없음).
+ *      실제 제품 헤더(액티브 트랜잭션 등)는 **토글 pill 과 prompt 를 함께** 둔다:
+ *      prompt 는 "새로 묻기", pill 은 "이미 열린 위젯 닫기/다시 열기" 라 서로 대체되지 않는다.
+ * - 좌측 그룹: Title + (AI pill) + Docs — Docs 는 Title 바로 우측에 인접 배치
+ * - 우측 chrome: 고객지원 / 🔔 / Avatar — Docs 제외, 유지
  *
  * @example
  * ```tsx

@@ -8,7 +8,25 @@
  * 단위. 위젯이 호출처별로 다른 입력 chrome 을 가져선 안 되며, 다른 페이지·시나리오 (검색 prompt /
  * 명령창 등) 에서 같은 입력 UX 가 필요하면 본 컴포넌트를 그대로 import.
  *
- * ## Composition (Figma 27087:3416 verbatim)
+ * ## When to use
+ * - `WhaTapAiWidget` 내부 입력 영역 (현재 인라인 마크업의 추출 대상).
+ * - 외부에서 AI 자연어 입력 UX 가 필요한 경우 (예: 인라인 검색 prompt, fullscreen 명령창).
+ *
+ * ## When NOT to use
+ * - 일반 form text input → 표준 `<input>` 또는 `<textarea>` 사용.
+ * - 한 줄 검색창 → 별도 search input (multi-line, 첨부, 토큰 pill 불필요).
+ *
+ * ## Composition rules
+ * - 토큰 pill (`tokenInput` / `tokenOutput`) 는 [[TokenUsageBadge]] (Figma 29424:19317) — pill 형 inline.
+ * - 송신 버튼은 [[SendButton]] (24×24 squared) — input 텍스트 있으면 활성 자동 전환.
+ * - 첨부 chip 행은 `attachments` prop 있을 때만 노출. mime 미지정 시 "CSV" 로 fallback.
+ * - 캡션 "AI 응답은 정확하지 않을 수 있습니다…" 는 prototype 전역 정책 — 임의로 제거하지 말 것.
+ * - **Controlled vs Editable.** `value` 가 정의되면 controlled(parent 가 텍스트 통제) — onChange 필수.
+ *   `value` 가 `undefined` 면 editable mode(내부 typed state). 시연 시나리오에서 placeholder 만
+ *   보여주려면 controlled 로 빈 문자열 고정 + readOnly 효과.
+ *
+ * ## Spec
+ * 구성 (Figma 27087:3416 verbatim)
  * ```
  * ┌─ ai-input-wrapper (2px border, conditional var(--color-brand-blue-bg-2) / var(--color-brand-blue)) ─┐
  * │ [첨부 chips 행 — attachments prop 있을 때만]                    │
@@ -19,25 +37,6 @@
  * └────────────────────────────────────────────────────────────────┘
  * AI 응답은 정확하지 않을 수 있습니다. 중요한 결정은 반드시 확인해 주세요.  ← 하단 caption
  * ```
- *
- * ## When to use
- * - `WhaTapAiWidget` 내부 입력 영역 (현재 인라인 마크업의 추출 대상).
- * - 외부에서 AI 자연어 입력 UX 가 필요한 경우 (예: 인라인 검색 prompt, fullscreen 명령창).
- *
- * ## When NOT to use
- * - 일반 form text input → 표준 `<input>` 또는 `<textarea>` 사용.
- * - 한 줄 검색창 → 별도 search input (multi-line, 첨부, 토큰 pill 불필요).
- *
- * ## Controlled vs Editable mode
- * - `value` 가 정의되면 controlled (parent 가 텍스트 통제) — onChange 필수.
- * - `value` 가 `undefined` 면 editable mode (내부 typed state).
- * - 시연 시나리오에서 placeholder 만 보여주려면 controlled 로 빈 문자열 고정 + readOnly 효과.
- *
- * ## Composition rules
- * - 토큰 pill (`tokenInput` / `tokenOutput`) 는 [[TokenUsageBadge]] (Figma 29424:19317) — pill 형 inline.
- * - 송신 버튼은 [[SendButton]] (24×24 squared) — input 텍스트 있으면 활성 자동 전환.
- * - 첨부 chip 행은 `attachments` prop 있을 때만 노출. mime 미지정 시 "CSV" 로 fallback.
- * - 캡션 "AI 응답은 정확하지 않을 수 있습니다…" 는 prototype 전역 정책 — 임의로 제거하지 말 것.
  *
  * @example
  * ```tsx

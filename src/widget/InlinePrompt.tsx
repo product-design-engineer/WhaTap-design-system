@@ -8,15 +8,6 @@
  * 배열 순서: `[chip…] [input grow] [+ attach] [⬆ send]` — 정보 → 입력 → 액션 흐름.
  * PageHeader 우측, 카드 헤더, 모달 푸터 등 세로 공간이 한정된 자리에 사용.
  *
- * ## 차이 (vs PromptInput)
- * - ❌ TokenUsageBadge (토큰 입력/출력 pill)
- * - ❌ 하단 caption
- * - ❌ 첨부 chip **행** (별도 row 없음, 같은 행에 인라인 compact chip 으로 들어감)
- * - ❌ multi-line textarea — 단일 라인 `<input>` 으로 축소
- * - ✅ 첨부 버튼 (+ icon)
- * - ✅ 첨부 chip — 같은 행 안에 compact (max-w-[120px] · truncate · xs font)
- * - ✅ 송신 버튼 ([[SendButton]])
- *
  * ## When to use
  * - PageHeader 우측 inline prompt — chrome 48px 안에 들어가야 함.
  * - 카드 / 모달 / sub-section 의 빠른 질문 입력.
@@ -30,24 +21,26 @@
  * - 첨부 chip 는 같은 행에 inline 으로 들어감. 다수 첨부 시 가로 스크롤이 아니라 chip 자체가 truncate.
  * - 송신 버튼은 [[SendButton]] 채택, 입력값 유무로 active 자동 전환.
  * - border 색은 토큰 binding (`--color-brand-blue` / `--color-brand-blue-bg-2`) — 인라인 hex 금지.
+ * - **Suggestions channel(선택).** `suggestions` prop 으로 페이지 컨텍스트에 특화된 chip 제안을
+ *   input focus 시 input 아래로 floating dropdown 으로 펼친다. **한 줄 invariant 는 보존** — chip 들은
+ *   inline row 가 아닌 별도 floating panel 에 위치. chip 클릭 → input value = `suggestion.query`,
+ *   focus 유지 · 송신은 사용자 액션(⬆ 또는 Enter). dropdown 폭 = input 폭 anchor 100%(typeahead 표준).
+ * - **Rolling placeholder(옵션).** `rollingPlaceholders`(제품별 핵심 prompt 배열) 주입 시 입력이 비어
+ *   있으면 placeholder 가 세로로 롤링(순환)된다. 미주입이면 종전대로 정적 1개(`placeholder`) — opt-in.
+ *   a11y: 네이티브 placeholder 는 비우고 `aria-label` 로 힌트 유지, 롤링 텍스트는 `aria-hidden`.
+ * - **송신 버튼은 롤링 중에도 비활성 유지**(`hasInput` 기준 그대로). 롤링 텍스트는 힌트일 뿐
+ *   입력값이 아니므로(`placeholder ≠ value`) 빈 입력에서 활성화하면 사용자가 입력하지 않은 prompt 가
+ *   전송되는 오발송이 된다. "클릭→입력" 빠른 진입은 `suggestions` chip 채널이 맡는다.
  *
- * ## Suggestions channel (선택)
- * `suggestions` prop 으로 페이지 컨텍스트에 특화된 chip 제안을 input focus 시 input 아래로
- * floating dropdown 으로 펼침. **한 줄 invariant 는 보존** — chip 들은 inline row 가 아닌
- * 별도 floating panel 에 위치.
- * - chip 클릭 → input value = `suggestion.query`, focus 유지. 송신은 사용자 액션 (⬆ 또는 Enter).
- * - dropdown 폭 = input 폭 anchor 100% (typeahead 표준 패턴).
- *
- * ## Rolling placeholder (옵션)
- * `rollingPlaceholders` (제품별 핵심 prompt 배열) 주입 시, 입력이 비어 있을 때
- * placeholder 가 세로로 롤링(순환)됨. **미주입이면 종전대로 정적 1개** (`placeholder`).
- * 기본 동작 불변 — 롤링은 opt-in. a11y: 네이티브 placeholder 는 비우고 `aria-label`
- * 로 힌트 유지, 롤링 텍스트는 `aria-hidden` 데코레이션.
- *
- * **송신 버튼은 롤링 중에도 비활성 유지** (`hasInput` 기준 그대로). 근거: 롤링 텍스트는
- * placeholder(힌트)일 뿐 실제 입력값이 아니므로(`placeholder ≠ value`), 빈 입력에서 버튼을
- * 활성화하면 사용자가 입력하지 않은 prompt 가 전송되는 오발송이 됨. "클릭→입력" 빠른 진입은
- * `suggestions` chip 채널이 담당하고, placeholder 는 영감/예시 역할로 분리.
+ * ## Spec
+ * 구성 — [[PromptInput]] 와 다른 점
+ * - ❌ TokenUsageBadge (토큰 입력/출력 pill)
+ * - ❌ 하단 caption
+ * - ❌ 첨부 chip **행** (별도 row 없음, 같은 행에 인라인 compact chip 으로 들어감)
+ * - ❌ multi-line textarea — 단일 라인 `<input>` 으로 축소
+ * - ✅ 첨부 버튼 (+ icon)
+ * - ✅ 첨부 chip — 같은 행 안에 compact (max-w-[120px] · truncate · xs font)
+ * - ✅ 송신 버튼 ([[SendButton]])
  *
  * @example
  * ```tsx

@@ -76,6 +76,15 @@ function section(doc, name) {
   return (m?.[1] ?? "").trim();
 }
 
+/** 템플릿이 아는 섹션. 이 밖의 `## …` 는 생성기가 읽지 않으므로 **AI 에게 배달되지 않는다**
+ *  (Storybook autodocs 에서만 보인다). 게이트(check-docstrings)가 이 목록으로 차단한다 —
+ *  실측(2026-10-19): 13파일 18섹션 중 15섹션이 components.json 에 없었다(Pagination 「표와 한 세트」 정책 등). */
+const KNOWN_SECTIONS = [/^Purpose$/i, /^When to use$/i, /^When NOT to use$/i, /^Composition rules$/i, /^Spec\b/i, /^Do$/i, /^Don't$/i];
+function extraSectionsOf(doc) {
+  if (!doc) return [];
+  return [...doc.matchAll(/^##\s+(.+?)\s*$/gm)].map((m) => m[1]).filter((h) => !KNOWN_SECTIONS.some((re) => re.test(h)));
+}
+
 /** 섹션 본문 → 불릿 배열. 불릿이 없으면 문단 전체를 1건으로. */
 function bullets(text) {
   if (!text) return [];
@@ -117,7 +126,36 @@ function exampleOf(doc) {
  *   ① `export type XProps = { ... }`  ② default export 함수 시그니처의 인라인 객체 타입
  * 타입 추론기가 아니므로 **틀리면 비우는 쪽**으로 동작한다(거짓 props 표보다 빈칸이 낫다).
  */
+/**
+ * 구조 분해 인자에 붙은 prop 주석 — `({ /** 설명 *\/ liveTime, size = "sm" }: {...})`.
+ * 타입 블록 대신 여기에 설명을 다는 관례가 넓게 쓰인다(OptionbarPage · AnswerSkeleton 등). 이걸
+ * 안 읽던 동안 그 설명들은 소스에만 있고 MCP 에는 «설명 없음» 으로 나갔다.
+ */
+function destructuredDocsOf(src, name) {
+  const docs = new Map();
+  const m = src.match(new RegExp(`export\\s+(?:default\\s+)?function\\s+${name}\\s*(?:<[^>]*>)?\\s*\\(\\s*\\{`));
+  if (!m) return docs;
+  const start = m.index + m[0].length - 1;
+  let depth = 0, end = -1;
+  for (let i = start; i < src.length; i++) {
+    if (src[i] === "{") depth++;
+    else if (src[i] === "}") { depth--; if (depth === 0) { end = i; break; } }
+  }
+  if (end < 0) return docs;
+  const body = src.slice(start + 1, end);
+  for (const d of body.matchAll(/\/\*\*([\s\S]*?)\*\/\s*([A-Za-z_$][\w$]*)/g)) {
+    const text = d[1].split("\n").map((l) => l.replace(/^\s*\*?\s?/, "").trim()).filter(Boolean).join(" ");
+    if (text) docs.set(d[2], text);
+  }
+  return docs;
+}
+
 function propsOf(src, name) {
+  const fromDestructure = destructuredDocsOf(src, name);
+  return propsOfType(src, name).map((p) => (p.description ? p : { ...p, description: fromDestructure.get(p.name) ?? null }));
+}
+
+function propsOfType(src, name) {
   // 컴포넌트 시그니처(`export [default] function X(...)`)에서 props 타입 주석을 먼저 본다.
   const sig = src.match(
     new RegExp(`export\\s+(?:default\\s+)?function\\s+${name}\\s*(?:<[^>]*>)?\\s*\\(\\s*\\{[\\s\\S]*?\\}\\s*:\\s*([A-Za-z_$][\\w$]*|\\{)`),
@@ -412,6 +450,8 @@ for (const sf of storyFiles) {
     whenNotToUse: bullets(whenNotToUse),
     compositionRules: bullets(compositionRules),
     spec: specOf(docText),
+    /* 템플릿 밖 섹션 이름 — 배달되지 않는 문서. 게이트가 0 을 요구한다. */
+    extraSections: extraSectionsOf(docText),
     // 스토리 블록과 docstring 유도가 같은 말을 하는 경우가 있어 중복 제거.
     do: dedupe(explicitDo.length ? explicitDo : [...fromStory.do, ...bullets(whenToUse)]),
     dont: dedupe(explicitDont.length ? explicitDont : [...fromStory.dont, ...derivedDont]),

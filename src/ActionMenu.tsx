@@ -34,7 +34,8 @@
  * - 항목이 일곱을 넘으면 메뉴가 아니라 목록이다 — 검색이 붙는 [[FilterDropdown]] 이나
  *   별도 화면으로 옮긴다.
  *
- * ## ARIA
+ * ## Spec
+ * ARIA
  * - 트리거: `aria-haspopup="menu"` + `aria-expanded`
  * - 패널: `role="menu"`, 줄은 `role="menuitem"`
  * - `↑`/`↓` 로 줄 사이 이동, `Esc` 로 닫고 트리거로 포커스 복귀
