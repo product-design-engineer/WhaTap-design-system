@@ -455,6 +455,7 @@ export type DataTableProps<T> = {
 - **헤더는 제목 · 메뉴만.** 값 · 건수 · 단위 · 시간 범위를 헤더에 두지 않는다. 값은 본문 첫 줄 `summary`, 시간은 옵션바
 - **범례는 본문 오른쪽 위 한 줄.** 헤더 오른쪽은 메뉴 자리다. 계열이 셋을 넘거나 글이 길면 본문 안 차트 옆 열로
 - **지금 값은 계열 수로 자리를 고른다**(§25). 하나는 `summary`, 둘 ~ 넷은 `legend[].value`, 강조 계열이 여럿이면 MiniMultiLineChart 선 끝 배지(`series[].endLabel`). 한 칸에 한 방식
+- **Figma 정본**: MiniMultiLineChart 세트 342:69 에 `endBadges` 축(4 variant · 배지 변형 507:30 등) · 변수 `wds/widget-end-gutter`(VariableID:507:29, 44 · `WDS · Size`). WidgetFrame 범례 값 예시 507:235(같은 페이지). 게시는 사람이 한다
 - 세 칸 사이에 구분선을 긋지 않는다. 같은 표면 안이라 여백이 경계다
 - 껍데기를 가진 차트(MiniLineChart · MiniMultiLineChart · MiniDonutChart · KpiCard · HexGrid)는 `frame={false}` 로 끄고 넣는다. 켠 채 넣으면 카드가 두 겹이 된다
 - AI 진입점은 껍데기에 두지 않는다(§15)
