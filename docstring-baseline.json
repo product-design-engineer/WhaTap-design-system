@@ -18,7 +18,7 @@
       "undocumentedProps": 4
     },
     "Composite/Chart · Heatmap": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 2
     },
     "Composite/ClassificationTable": {
@@ -38,7 +38,7 @@
       "undocumentedProps": 3
     },
     "Composite/CriteriaOptionButton": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 2
     },
     "Composite/CriteriaSelection": {
@@ -62,7 +62,7 @@
       "undocumentedProps": 1
     },
     "Composite/InstanceSelectPanel": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 6
     },
     "Composite/LandingHeader": {
@@ -82,12 +82,8 @@
       "undocumentedProps": 3
     },
     "Composite/Pagination": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 2
-    },
-    "Composite/ProposalSection": {
-      "whenToUse": 1,
-      "undocumentedProps": 0
     },
     "Composite/Reasoning": {
       "whenToUse": 2,
@@ -110,7 +106,7 @@
       "undocumentedProps": 3
     },
     "Composite/ThemeToggle": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 2
     },
     "Composite/TimeChip": {
@@ -122,19 +118,19 @@
       "undocumentedProps": 8
     },
     "Composite/TopologyCanvas": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 3
     },
     "Composite/TopologyToolbar": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 9
     },
     "Primitives/ActiveTransactionSpeedWidget": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 8
     },
     "Primitives/AiProgressStep": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 1
     },
     "Primitives/AnswerSkeleton": {
@@ -153,12 +149,8 @@
       "whenToUse": 3,
       "undocumentedProps": 1
     },
-    "Primitives/Chart · ApdexChart": {
-      "whenToUse": 1,
-      "undocumentedProps": 0
-    },
     "Primitives/Chart · BarList": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 1
     },
     "Primitives/Chart · ForecastLineChart": {
@@ -168,10 +160,6 @@
     "Primitives/Chart · GpuStatusBar": {
       "whenToUse": 2,
       "undocumentedProps": 1
-    },
-    "Primitives/Chart · HeatmapLegend": {
-      "whenToUse": 1,
-      "undocumentedProps": 0
     },
     "Primitives/Chart · HexGrid": {
       "whenToUse": 4,
@@ -222,7 +210,7 @@
       "undocumentedProps": 3
     },
     "Primitives/DatePicker": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 2
     },
     "Primitives/DateTimeBlock": {
@@ -236,10 +224,6 @@
     "Primitives/EmptyState": {
       "whenToUse": 3,
       "undocumentedProps": 1
-    },
-    "Primitives/EventListItem": {
-      "whenToUse": 1,
-      "undocumentedProps": 0
     },
     "Primitives/ExecutionResult": {
       "whenToUse": 2,
@@ -322,11 +306,11 @@
       "undocumentedProps": 1
     },
     "Primitives/ReasoningStep": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 1
     },
     "Primitives/ReceiverChannelItem": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 2
     },
     "Primitives/SidebarCopyright": {
@@ -365,10 +349,6 @@
       "whenToUse": 2,
       "undocumentedProps": 2
     },
-    "Primitives/TabButton": {
-      "whenToUse": 1,
-      "undocumentedProps": 0
-    },
     "Primitives/TargetMesh": {
       "whenToUse": 2,
       "undocumentedProps": 1
@@ -376,10 +356,6 @@
     "Primitives/ThreadDivider": {
       "whenToUse": 2,
       "undocumentedProps": 1
-    },
-    "Primitives/TimelineStepItem": {
-      "whenToUse": 1,
-      "undocumentedProps": 0
     },
     "Primitives/Toast": {
       "whenToUse": 2,
@@ -393,20 +369,16 @@
       "whenToUse": 2,
       "undocumentedProps": 1
     },
-    "Primitives/TopologyEdge": {
-      "whenToUse": 1,
-      "undocumentedProps": 0
-    },
     "Primitives/TopologyMinimap": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 3
     },
     "Primitives/TopologyPort": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 3
     },
     "Primitives/TopologyZoomControl": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 1
     },
     "Primitives/Web · CountryFlag": {

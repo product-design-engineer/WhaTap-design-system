@@ -9,6 +9,7 @@ import { TOPOLOGY_ZOOM } from "./layout";
  *
  * ## When to use
  * - [[TopologyCanvas]] 위에 얹는 뷰포트 컨트롤(보통 미니맵 하단).
+ * - 휠이나 트랙패드 없이(버튼 · 키보드로) 배율을 한 단계씩 바꾸고 지금 배율을 확인해야 할 때.
  *
  * ## When NOT to use
  * - 값 증감 일반 폼 컨트롤 → `TextField` + 스텝퍼.

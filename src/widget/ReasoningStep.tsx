@@ -8,6 +8,7 @@
  *
  * ## When to use
  * - [[Reasoning]] 가 `steps.map` 으로 단계마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
+ * - 추론 단계 줄의 상태 표시(진행 spinner + 점 애니메이션 · 완료 체크)를 고치거나 Figma 와 대조할 때.
  *
  * ## When NOT to use
  * - 카드 전체(라벨 + 목록) → [[Reasoning]] 를 사용.

@@ -11,6 +11,7 @@ import type { LaidOutEdge } from "./layout";
  *
  * ## When to use
  * - [[TopologyCanvas]] 가 `layout.edges.map` 으로 엣지마다 렌더하는 **기본 용법**.
+ * - [[TopologyCanvas]] 의 연결선 모양(라벨 위치 · 세로 구간 회전 · 경보 강조 `tone="alert"`)을 고치거나 Figma 와 대조할 때.
  *
  * ## When NOT to use
  * - 곡선/유기적 연결(마인드맵 등) — 이 컴포넌트는 직교 경로 전용이다.

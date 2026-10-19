@@ -21,6 +21,7 @@ export { TOPOLOGY_ZOOM, clampScale } from "./layout";
  *
  * ## When to use
  * - 토폴로지를 보여주는 모든 화면의 본문 (Shell 페이지가 조립해 쓴다).
+ * - 서비스 · 인스턴스 사이의 호출 관계와 경보 경로를 확대 · 이동하며 따라가야 할 때(확대해도 선이 노드에서 떨어지지 않는다).
  *
  * ## When NOT to use
  * - 노드 하나만 보여줄 때 → [[TopologyNode]] 직접 사용.

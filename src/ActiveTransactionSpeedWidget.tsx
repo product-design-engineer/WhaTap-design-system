@@ -8,6 +8,7 @@
  *
  * ## When to use
  * - Application 대시보드의 실시간 트래픽 요약
+ * - 좁은 대시보드 칸에 흐름만 남겨 세울 때 — `compact`. 흐름을 눌러 액티브 트랜잭션 상세로 넘어가야 하면 `onOpenDetail`.
  *
  * ## When NOT to use
  * - 지금 실행 중인 트랜잭션의 **분포**(normal/slow/very slow 비율)를 보여 줄 때 → [[ActiveTransactionArc]].

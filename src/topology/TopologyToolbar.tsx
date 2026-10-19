@@ -15,6 +15,7 @@ export type TopologyDirection = "in" | "out";
  *
  * ## When to use
  * - [[TopologyCanvas]] 를 쓰는 화면의 조회 조건 영역.
+ * - 캔버스가 무엇을 보여줄지(지표 · 호출 방향 In/Out · 검색어)를 바꾸고, 조건을 처음으로 되돌려야(`onReset`) 할 때.
  *
  * ## When NOT to use
  * - 목록/표의 필터 → [[FilterBar]] (칩 기반 다중 필터).

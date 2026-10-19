@@ -11,6 +11,7 @@ import Switch from "./Switch";
  *
  * ## When to use
  * - 헤더/설정의 라이트·다크 테마 스위치.
+ * - 화면 일부(미리보기 영역 등)만 테마를 바꿔 보일 때 — `applyTo` 로 대상 엘리먼트를 좁힌다. 새로고침 뒤에도 고른 테마를 유지하려면 `persistKey`.
  *
  * ## When NOT to use
  * - 일반 ON/OFF 토글 → [[Switch]] 직접 사용.

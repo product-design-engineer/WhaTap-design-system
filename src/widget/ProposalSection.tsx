@@ -9,6 +9,7 @@ import { AiBulletList } from "./_primitives";
  *
  * ## When to use
  * - [[DashboardProposal]] 가 `sections.map` 으로 섹션마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
+ * - 제안 섹션 모양(이모지 헤딩 · 굵은 제목 · bullet)을 고치거나 Figma 와 대조할 때 — 섹션 하나의 정본이 여기다.
  *
  * ## When NOT to use
  * - 제안 카드 전체(인트로 + 위치 + 섹션들 + 확인 질문) → [[DashboardProposal]].

@@ -10,6 +10,7 @@ import { TOPOLOGY_PORT_FILL, type TopologyTone } from "./_tokens";
  *
  * ## When to use
  * - [[TopologyCanvas]] 가 엣지마다 `source`/`target` 두 지점에 렌더하는 **기본 용법**.
+ * - [[TopologyCanvas]] 의 연결점 모양(정상 · 경보 tone)을 고치거나 Figma 와 대조할 때.
  *
  * ## When NOT to use
  * - 상태만 나타내는 목록 앞 점 → `Chip` 의 dot 또는 status dot 유틸.

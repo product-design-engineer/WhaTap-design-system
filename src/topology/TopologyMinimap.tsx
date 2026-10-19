@@ -11,6 +11,7 @@ import type { TopologyView } from "./TopologyCanvas";
  *
  * ## When to use
  * - pan/zoom 이 있는 [[TopologyCanvas]] 옆(보통 좌하단)에.
+ * - 그래프가 한 화면을 넘어 확대해서 볼 때 — 지금 보는 영역이 전체 중 어디인지 잃지 않게.
  *
  * ## When NOT to use
  * - 노드가 한 화면에 다 들어오는 작은 그래프 — 미니맵이 같은 그림을 두 번 보여줄 뿐이다.

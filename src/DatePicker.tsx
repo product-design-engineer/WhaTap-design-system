@@ -8,6 +8,7 @@
  *
  * ## When to use
  * - 히트맵·보고서의 「시작일」처럼 단일 날짜 기준.
+ * - 키보드로 날짜를 바로 고치는 사람과 달력에서 짚는 사람이 같은 칸을 쓸 때. 달력이 필요 없는 자리(값 표시 · 직접 입력만)는 `onCalendarClick` 을 빼고 쓴다.
  *
  * ## When NOT to use
  * - 시작~끝 구간 + LIVE → [[TimeRangeSelector]].

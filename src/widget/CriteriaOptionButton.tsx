@@ -10,6 +10,7 @@ import AiClickCursor from "./ClickCursor";
  *
  * ## When to use
  * - [[CriteriaSelection]] 가 `options.map` 으로 옵션마다 렌더 (기본 용법).
+ * - 기준 버튼의 상태 모양(selected · dimmed · pending 자동 클릭 손)을 고치거나 Figma 와 대조할 때 — 버튼 한 개의 정본이 여기다.
  *
  * ## When NOT to use
  * - 정보성 기준 그룹 행(비-인터랙티브) → [[CriteriaGroup]].
