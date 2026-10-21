@@ -48,11 +48,10 @@
  * />
  * ```
  */
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { AXIS_GUTTER as GUTTER, PlotAxisLines, ValueAxisLabels, ValueGrid, axisTicks, niceMax } from "./_valueAxis";
 import AiTriggerButton from "../widget/TriggerButton";
 
-/** Y축 눈금 칸 폭 — 토큰 하나(`--wds-widget-axis-gutter`)로 모든 그래프의 Y축 선을 같은 x 에 세운다. */
-const GUTTER = "var(--wds-widget-axis-gutter)";
 const PAD_RIGHT = 8;
 /** 선 끝 값 배지 칸 폭. 배지가 있을 때만 플롯 오른쪽을 이만큼 비운다. */
 const END_GUTTER = "var(--wds-widget-end-gutter)";
@@ -171,7 +170,8 @@ export default function MiniMultiLineChart({
   }, [badges.length]);
   const badgeTops = spreadBadges(badges.map((b) => b.ratio), areaH - PAD_TOP - PAD_BOTTOM);
 
-  const yTicks = yMaxNice > 0 ? [1, 0.5, 0] : [0];
+  const yTicks = axisTicks(yMaxNice);
+  const yAt = (r: number) => `calc(${PAD_TOP}px + (100% - ${PAD_TOP + PAD_BOTTOM}px) * ${r})`;
   const hasLegend = series.some((s) => s.label);
 
   return (
@@ -255,41 +255,8 @@ export default function MiniMultiLineChart({
 
       {/* ── Chart area (flex-1) ────────────────────────────────────────── */}
       <div ref={areaRef} className="flex-1 min-h-0 relative">
-        {/* X-axis line */}
-        <div
-          className="absolute bg-color-var-color-border-divider"
-          style={{
-            left: GUTTER,
-            right,
-            bottom: PAD_BOTTOM,
-            height: 1,
-          }}
-        />
-        {/* Y-axis line */}
-        <div
-          className="absolute bg-color-var-color-border-divider"
-          style={{
-            left: GUTTER,
-            top: PAD_TOP,
-            bottom: PAD_BOTTOM,
-            width: 1,
-          }}
-        />
-        {/* Y축 수평 그리드 라인 — 모든 tick 위치에 점선 */}
-        {yTicks.map((ratio) => (
-          <div
-            key={`grid-${ratio}`}
-            className="absolute"
-            style={{
-              left: GUTTER,
-              right,
-              top: `calc(${PAD_TOP}px + (100% - ${PAD_TOP + PAD_BOTTOM}px) * ${1 - ratio})`,
-              height: 0,
-              borderTop: "1px dashed var(--color-border-default)",
-              opacity: 0.5,
-            }}
-          />
-        ))}
+        <PlotAxisLines top={PAD_TOP} bottom={PAD_BOTTOM} right={right} />
+        <ValueGrid ticks={yTicks} yAt={yAt} right={right} />
 
         {/* SVG — plot 영역에만 absolute 배치 */}
         <svg
@@ -328,26 +295,7 @@ export default function MiniMultiLineChart({
 
         {/* HTML overlay — px 고정 텍스트 */}
         <div className="absolute inset-0 pointer-events-none">
-          {/* Y축 라벨 */}
-          {yTicks.map((ratio) => (
-            <span
-              key={ratio}
-              className="absolute text-chart text-tertiary leading-none"
-              style={
-                {
-                  fontFamily: "var(--font-family-numeric)",
-                  top: `calc(${PAD_TOP}px + (100% - ${PAD_TOP + PAD_BOTTOM}px) * ${1 - ratio})`,
-                  transform: "translateY(-50%)",
-                  left: 0,
-                  textAlign: "right",
-                  paddingRight: 4,
-                  width: GUTTER,
-                } as CSSProperties
-              }
-            >
-              {formatY(yMaxNice * ratio) + unit}
-            </span>
-          ))}
+          <ValueAxisLabels ticks={yTicks} yAt={yAt} max={yMaxNice} unit={unit} />
 
           {/* X축 시간 라벨 */}
           {xLabels.map((label, i) => {
@@ -430,26 +378,6 @@ function spreadBadges(ratios: number[], plotH: number): number[] | null {
   const out: number[] = [];
   for (const o of order) out[o.i] = o.y;
   return out;
-}
-
-function niceMax(v: number): number {
-  if (v <= 0) return 0;
-  const mag = Math.pow(10, Math.floor(Math.log10(v)));
-  const norm = v / mag;
-  let nice: number;
-  if (norm <= 1) nice = 1;
-  else if (norm <= 2) nice = 2;
-  else if (norm <= 4) nice = 4;
-  else if (norm <= 5) nice = 5;
-  else nice = 10;
-  return nice * mag;
-}
-
-function formatY(v: number): string {
-  if (v >= 1000) return Math.round(v / 100) / 10 + "K";
-  if (v >= 100) return Math.round(v).toString();
-  if (v === 0) return "0";
-  return Number.isInteger(v) ? String(v) : v.toFixed(0);
 }
 
 function InfoIcon() {

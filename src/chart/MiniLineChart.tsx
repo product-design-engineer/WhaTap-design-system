@@ -39,12 +39,10 @@
  * />
  * ```
  */
-import type { CSSProperties } from "react";
 import AiTriggerButton from "../widget/TriggerButton";
+import { AXIS_GUTTER as GUTTER, PlotAxisLines, ValueAxisLabels, ValueGrid, axisTicks, niceMax } from "./_valueAxis";
 
 const CHART_HEIGHT = 96;
-/** Y축 눈금 칸 폭 — 토큰 하나(`--wds-widget-axis-gutter`)로 모든 그래프의 Y축 선을 같은 x 에 세운다. */
-const GUTTER = "var(--wds-widget-axis-gutter)";
 const PAD_RIGHT = 8;
 const PAD_TOP_PX = 14;
 const PAD_BOTTOM_PX = 16;
@@ -126,7 +124,8 @@ export default function MiniLineChart({
   const peakXRatio = peakIdx >= 0 && values.length > 1 ? peakIdx / (values.length - 1) : 0;
   const peakYRatio = peakIdx >= 0 && yMaxNice > 0 ? 1 - values[peakIdx] / yMaxNice : 0;
 
-  const yTicks = yMaxNice > 0 ? [1, 0.5, 0] : [0];
+  const yTicks = axisTicks(yMaxNice);
+  const yAt = (r: number) => PAD_TOP_PX + PLOT_H_PX * r;
 
   return (
     <div
@@ -183,31 +182,8 @@ export default function MiniLineChart({
 
       {/* 차트 영역 (SVG는 정확히 plot 사각형에만 absolute 배치) */}
       <div className="relative w-full" style={{ height: CHART_HEIGHT }}>
-        {/* X-axis (plot 하단) */}
-        <div
-          className="absolute h-1px bg-color-var-color-border-divider"
-          style={{ left: GUTTER, right: PAD_RIGHT, top: PAD_TOP_PX + PLOT_H_PX }}
-        />
-        {/* Y-axis (plot 좌측) */}
-        <div
-          className="absolute w-1px bg-color-var-color-border-divider"
-          style={{ left: GUTTER, top: PAD_TOP_PX, height: PLOT_H_PX }}
-        />
-        {/* Y축 수평 그리드 라인 — 모든 tick 위치에 점선 */}
-        {yTicks.map((ratio) => (
-          <div
-            key={`grid-${ratio}`}
-            className="absolute"
-            style={{
-              left: GUTTER,
-              right: PAD_RIGHT,
-              top: PAD_TOP_PX + PLOT_H_PX * (1 - ratio),
-              height: 0,
-              borderTop: "1px dashed var(--color-border-default)",
-              opacity: 0.5,
-            }}
-          />
-        ))}
+        <PlotAxisLines top={PAD_TOP_PX} bottom={PAD_BOTTOM_PX} right={PAD_RIGHT} />
+        <ValueGrid ticks={yTicks} yAt={yAt} right={PAD_RIGHT} />
         {/* 좌측 검정 점선 reference */}
         <div
           className="absolute"
@@ -255,25 +231,7 @@ export default function MiniLineChart({
         {/* HTML overlay — px 고정 텍스트 */}
         <div className="absolute inset-0 pointer-events-none">
           {/* Y축 라벨 */}
-          {yTicks.map((ratio) => (
-            <span
-              key={ratio}
-              className="absolute text-chart text-tertiary leading-none"
-              style={
-                {
-                  fontFamily: "var(--font-family-numeric)",
-                  top: `${PAD_TOP_PX + PLOT_H_PX * (1 - ratio)}px`,
-                  transform: "translateY(-50%)",
-                  left: 0,
-                  textAlign: "right",
-                  paddingRight: 4,
-                  width: GUTTER,
-                } as CSSProperties
-              }
-            >
-              {formatY(yMaxNice * ratio) + unit}
-            </span>
-          ))}
+          <ValueAxisLabels ticks={yTicks} yAt={yAt} max={yMaxNice} unit={unit} />
 
           {/* peak ▼ + 값 라벨 — SVG polyline의 peak 점과 동일 좌표계 사용
               (GUTTER + plotWidth × peakXRatio, PAD_TOP_PX + PLOT_H_PX × peakYRatio).
@@ -334,24 +292,6 @@ export default function MiniLineChart({
   );
 }
 
-function niceMax(v: number): number {
-  if (v <= 0) return 0;
-  const mag = Math.pow(10, Math.floor(Math.log10(v)));
-  const norm = v / mag;
-  let nice: number;
-  if (norm <= 1) nice = 1;
-  else if (norm <= 2) nice = 2;
-  else if (norm <= 4) nice = 4;
-  else if (norm <= 5) nice = 5;
-  else nice = 10;
-  return nice * mag;
-}
-function formatY(v: number): string {
-  if (v >= 1000) return Math.round(v / 100) / 10 + "K";
-  if (v >= 100) return Math.round(v).toString();
-  if (v === 0) return "0";
-  return Number.isInteger(v) ? String(v) : v.toFixed(0);
-}
 function formatPeak(v: number): string {
   if (v >= 1_000_000) return (v / 1_000_000).toFixed(1) + "M";
   if (v >= 10_000) return (v / 1000).toFixed(2) + "K";

@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { AXIS_GUTTER as GUTTER, PlotAxisLines, ValueAxisLabels, ValueGrid, axisTicks, formatAxisValue } from "./_valueAxis";
 
 /**
  * ForecastLineChart: 관측은 실선, 예측은 점선. 「지금」 세로선 · 임계 띠 · 도달 마커를 한 판에. Primitives layer.
@@ -61,8 +61,6 @@ import type { CSSProperties } from "react";
  * ```
  */
 
-/** Y축 눈금 칸 폭: 모든 그래프가 같은 토큰을 쓴다. */
-const GUTTER = "var(--wds-widget-axis-gutter)";
 const PAD_RIGHT = 8;
 const PAD_BOTTOM = 14;
 /** 천장 위 도달 글자가 잘리지 않을 만큼. */
@@ -119,11 +117,6 @@ const THRESHOLD_TONE = {
   warning: { line: "var(--color-status-warning)", band: "var(--color-status-warning-soft)" },
 } as const;
 
-function formatY(v: number): string {
-  if (v >= 1000) return Math.round(v / 100) / 10 + "K";
-  return Number.isInteger(v) ? String(v) : v.toFixed(0);
-}
-
 export default function ForecastLineChart({
   series,
   xDomain,
@@ -152,7 +145,7 @@ export default function ForecastLineChart({
 
   const showNow = x0 <= 0 && 0 <= x1;
   const tone = THRESHOLD_TONE[threshold?.tone ?? "critical"];
-  const yTicks = [1, 0.5, 0];
+  const yTicks = axisTicks(yMax);
   /* 강조 계열을 맨 뒤에 그려 위로 올린다. */
   const ordered = highlightId ? [...series.filter((s) => s.id !== highlightId), ...series.filter((s) => s.id === highlightId)] : series;
   const opacityOf = (s: ForecastLineChartSeries) => (highlightId && s.id !== highlightId ? DIM_OPACITY : 1);
@@ -175,13 +168,7 @@ export default function ForecastLineChart({
         )}
 
         {/* 격자: 눈금마다 점선 (천장 포함) */}
-        {yTicks.map((ratio) => (
-          <div
-            key={`grid-${ratio}`}
-            className="absolute"
-            style={{ left: GUTTER, right: PAD_RIGHT, top: top(1 - ratio), height: 0, borderTop: "1px dashed var(--color-border-default)" }}
-          />
-        ))}
+        <ValueGrid ticks={yTicks} yAt={top} right={PAD_RIGHT} />
 
         {/* 임계선 */}
         {threshold && (
@@ -236,8 +223,7 @@ export default function ForecastLineChart({
         </svg>
 
         {/* 축: 선 위에 그려 바닥선이 묻히지 않게 */}
-        <div className="absolute bg-color-var-color-border-divider" style={{ left: GUTTER, right: PAD_RIGHT, bottom: PAD_BOTTOM, height: 1 }} />
-        <div className="absolute bg-color-var-color-border-divider" style={{ left: GUTTER, top: PAD_TOP, bottom: PAD_BOTTOM, width: 1 }} />
+        <PlotAxisLines top={PAD_TOP} bottom={PAD_BOTTOM} right={PAD_RIGHT} />
 
         {/* 마커: 지금 값 점 · 도달 원. 선과 같은 plot 좌표 */}
         {ordered.map((s) => {
@@ -296,28 +282,10 @@ export default function ForecastLineChart({
                 transform: "translateY(-100%)",
               }}
             >
-              {threshold.label ?? formatY(threshold.value) + unit}
+              {threshold.label ?? formatAxisValue(threshold.value) + unit}
             </span>
           )}
-          {yTicks.map((ratio) => (
-            <span
-              key={ratio}
-              className="absolute text-chart text-tertiary leading-none"
-              style={
-                {
-                  fontFamily: "var(--font-family-numeric)",
-                  top: top(1 - ratio),
-                  transform: "translateY(-50%)",
-                  left: 0,
-                  textAlign: "right",
-                  paddingRight: 4,
-                  width: GUTTER,
-                } as CSSProperties
-              }
-            >
-              {formatY(yMax * ratio) + unit}
-            </span>
-          ))}
+          <ValueAxisLabels ticks={yTicks} yAt={top} max={yMax} unit={unit} />
           {axisLabels.map((l) => {
             const ratio = rx(l.x);
             return (
