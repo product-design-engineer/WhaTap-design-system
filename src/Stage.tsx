@@ -32,7 +32,9 @@ export default function Stage({
   badge,
   children,
 }: {
+  /** 화면 우상단 fixed 라벨(시나리오 이름 등). 미지정이면 그리지 않는다. */
   badge?: string;
+  /** 16:9 무대 안에 그릴 페이지 전체(보통 [[DashboardLayout]] 등). 넘치면 잘린다(`overflow-hidden`). */
   children: ReactNode;
 }) {
   return (

@@ -15,6 +15,7 @@ export type TopologyDirection = "in" | "out";
  *
  * ## When to use
  * - [[TopologyCanvas]] 를 쓰는 화면의 조회 조건 영역.
+ * - 캔버스가 무엇을 보여줄지(지표 · 호출 방향 In/Out · 검색어)를 바꾸고, 조건을 처음으로 되돌려야(`onReset`) 할 때.
  *
  * ## When NOT to use
  * - 목록/표의 필터 → [[FilterBar]] (칩 기반 다중 필터).
@@ -49,16 +50,25 @@ export default function TopologyToolbar({
   onDirectionChange,
   onReset,
 }: {
+  /** 빠른 검색 [[TextField]] 값(제어형). */
   query: string;
+  /** 검색어를 입력하거나 지울 때 다음 값으로 불린다. 호출부가 `query` 에 반영한다. */
   onQueryChange: (next: string) => void;
   /** 편집 모드 — 즉시 반영되는 설정이라 Switch. */
   editing: boolean;
+  /** 편집 [[Switch]] 를 켜고 끌 때 다음 값으로 불린다(즉시 반영). 호출부가 `editing` 에 반영한다. */
   onEditingChange: (next: boolean) => void;
+  /** 지표 [[Select]] 의 선택값 — `metricOptions` 의 `value` 중 하나(제어형). */
   metric: string;
+  /** 지표를 고를 때 그 `value` 로 불린다. 호출부가 `metric` 에 반영한다. */
   onMetricChange: (next: string) => void;
+  /** 지표 [[Select]] 선택지 — `value`(식별) + `label`(화면 글자). */
   metricOptions: { value: string; label: string }[];
+  /** 흐름 방향 — `in`(들어오는) · `out`(나가는). 고른 쪽 버튼이 contained 로 칠해진다(제어형). */
   direction: TopologyDirection;
+  /** In/Out 버튼을 누를 때 그 방향으로 불린다. 이미 고른 쪽을 눌러도 불린다. */
   onDirectionChange: (next: TopologyDirection) => void;
+  /** 「초기화」 버튼을 누를 때 불린다(인자 없음). 무엇을 되돌릴지는 페이지가 정한다 — 툴바는 상태가 없다. */
   onReset: () => void;
 }) {
   return (

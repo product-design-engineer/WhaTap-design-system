@@ -44,6 +44,7 @@ export default function SidebarProjectSwitcher({
   collapsed = false,
   onClick,
 }: {
+  /** 프로젝트 컨텍스트 — 제품 아이콘 · 그룹 줄(`groupLabel`/`groupBadge`, 둘 다 없으면 생략) · 프로젝트명 줄. collapsed 에서 `productIcon` 이 없으면 행을 그리지 않는다. */
   project: ProjectContext;
   /** true면 부모 폭 40px 높이 행 — 제품 아이콘만 중앙 표시. */
   collapsed?: boolean;

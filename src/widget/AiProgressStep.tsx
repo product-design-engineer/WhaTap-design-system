@@ -13,6 +13,7 @@ import type { ReactNode } from "react";
  *
  * ## When to use
  * - [[AiProgress]] 가 `steps.map` 으로 렌더한다(기본 용법). 보통 단독으로 쓰지 않는다.
+ * - [[AiProgressCompact]] 를 펼쳤을 때 단계 줄을 그릴 때 — 진행 카드와 같은 한 줄 모양을 쓴다.
  *
  * ## When NOT to use
  * - 2초 안에 끝나는 짧은 진행 → [[ReasoningStep]] (점 애니메이션 한 줄).
@@ -57,6 +58,7 @@ export type AiProgressCount = {
 };
 
 export type AiProgressStepProps = {
+  /** 단계 상태 — 왼쪽 표식과 아랫줄을 정한다. `pending` 회색 점 · `active` 파란 고리 + 처리 수(또는 `detail`) · `done` 완료 체크 + `detail` · `halted` 회색 대시 + `haltedText`. */
   status: AiProgressStepStatus;
   /** 단계 이름. «데이터 수집». */
   label: ReactNode;

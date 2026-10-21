@@ -47,8 +47,11 @@ export default function StepsTimeline({
   defaultOpen = true,
   delay = 0,
 }: {
+  /** 타임라인 단계 목록 — 한 항목 `{ label, running }` 이 한 줄. 줄마다 [[TimelineStepItem]] 로 그리고, 헤더는 «N steps» (진행 중인 단계가 있으면 «…» 를 붙인다). */
   steps: TimelineStep[];
+  /** 처음에 단계 목록을 펼쳐 둘지 (기본 true). 이후 헤더 클릭으로 내부에서 접고 편다 — 비제어. */
   defaultOpen?: boolean;
+  /** 진입 애니메이션 지연 (ms, 바깥 래퍼 `animationDelay`) — stagger 용. 기본 0. */
   delay?: number;
 }) {
   const [open, setOpen] = useState(defaultOpen);

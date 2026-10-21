@@ -13,6 +13,7 @@ import type { TabsItem, TabsVariant } from "./Tabs";
  *
  * ## When to use
  * - [[Tabs]] 가 `items.map` 으로 각 탭을 렌더할 때(기본 용법). 보통 단독 사용하지 않음.
+ * - [[Tabs]] 의 탭 버튼 모양(아이콘 슬롯 · 선택/비활성 · large 밑줄)을 고치거나 Figma 와 대조할 때 — 탭 버튼 한 개의 정본이 여기다.
  *
  * ## When NOT to use
  * - 탭이 아닌 일반 버튼 → `Button`.

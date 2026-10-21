@@ -50,10 +50,15 @@ export default function AlertRulePreview({
   notesTitle = "참고",
   delay = 0,
 }: {
+  /** 카드 상단 📋 헤딩 텍스트 (기본 «알림 규칙 상세»). */
   title?: string;
+  /** 항목 / 내용 2열 표의 행 목록 — 한 항목이 `{ label, value }` 한 행. */
   fields: AlertRuleField[];
+  /** 표 아래 ℹ️ 참고 블록의 글머리 항목. 비거나 생략하면 블록 자체를 그리지 않는다. */
   notes?: string[];
+  /** 참고 블록 제목 (기본 «참고»). `notes` 가 있을 때만 보인다. */
   notesTitle?: string;
+  /** [[AiCard]] 진입 애니메이션 지연 (ms) — 여러 카드를 차례로 띄우는 stagger 용. 기본 0. */
   delay?: number;
 }) {
   return (

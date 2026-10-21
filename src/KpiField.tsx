@@ -40,6 +40,7 @@ export type KpiFieldProps = {
   label: string;
   /** 값. 굵게 선다. 다른 크기가 필요하면 여기서 감싼다. */
   children: ReactNode;
+  /** 루트 요소(라벨 · 값 세로 묶음)에 덧붙는 클래스 — 배치(여백 · 폭)용. 색 · 크기 override 금지. */
   className?: string;
 };
 

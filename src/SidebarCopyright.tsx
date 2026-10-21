@@ -34,6 +34,7 @@ export default function SidebarCopyright({
   year = 2026,
   text,
 }: {
+  /** 기본 문구 `Copyright {year} WhaTap` 의 연도. 기본 2026. `text` 를 주면 쓰이지 않는다. */
   year?: number;
   /**
    * 문구 전체를 갈아 끼운다. 미지정이면 `Copyright {year} WhaTap`.

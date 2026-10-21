@@ -9,6 +9,7 @@ import type { TimelineStep } from "./StepsTimeline";
  *
  * ## When to use
  * - [[StepsTimeline]] 가 `steps.map` 으로 단계마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
+ * - 단계 카드 줄 모양(완료 ✓ · 진행 spinner · 라벨 말줄임 · 화살표)을 고치거나 Figma 와 대조할 때.
  *
  * ## When NOT to use
  * - 헤더(`N steps`)·접기/펼치기·등장 애니메이션 → 부모 [[StepsTimeline]] 가 책임.

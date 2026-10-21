@@ -216,8 +216,11 @@ export default function Sidebar({
   footerText,
   onLogoClick,
 }: {
+  /** 제품 레일에서 강조할 제품 키 — 아이콘 파일명에서 `product-`·`.svg` 를 뗀 값(예: "gpu", "app"). 기본 "gpu". */
   activeProduct?: string;
+  /** 상단 프로젝트 스위처 컨텍스트. 기본 `DEFAULT_PROJECT`(「그룹명」·「프로젝트명」 예시 값 — 실제 화면은 반드시 넘긴다). 프로젝트 컨텍스트가 없는 화면은 넘기지 말고 `hideProjectSwitcher`. */
   project?: ProjectContext;
+  /** 본문 메뉴 트리 — 항목마다 [[SidebarMenuItem]] 한 행. 기본 `K8S_GPU_MENU`(K8s-GPU 예시 값 — 실제 화면은 반드시 넘긴다). */
   menu?: MenuItem[];
   /**
    * 접힘 상태 — **controlled**. 지정하면 min(80px)/max(240px)를 부모가 소유(AI 위젯 동기화 등,

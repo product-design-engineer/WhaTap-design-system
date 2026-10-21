@@ -73,12 +73,19 @@ export default function CriteriaSelection({
   selectionDelay = 450,
   autoPick,
 }: {
+  /** 카드 좌상단 대문자 캡션 (기본 «Reasoning»). */
   heading?: string;
+  /** 캡션 아래 본문 문단 (13px) — 기준을 제안하는 이유 설명. */
   body: string;
+  /** «📊 제안 분류 기준» 아래 기준 행 목록 — 한 항목 `{ tone, title, detail }` 이 한 행. 행마다 [[CriteriaGroup]] 로 그리고 `tone` 이 배경 · 도트 색을 정한다. */
   groups: CriterionGroup[];
+  /** «📌 참고 사항» 글머리 항목. 비거나 생략하면 블록 자체를 그리지 않는다. */
   notes?: string[];
+  /** 하단 선택 버튼 목록 — 한 항목 `{ key, label }` 이 [[CriteriaOptionButton]] 하나. 하나를 고르면 나머지는 흐려지고 전부 잠긴다. */
   options: CriteriaOption[];
+  /** 옵션 선택 시 고른 `key` 로 한 번 호출 — 클릭 후 `selectionDelay` ms 뒤에 부른다. 선택 상태는 내부에서 관리하고 되돌릴 수 없다. */
   onSelect?: (key: string) => void;
+  /** 진입 애니메이션 지연 (ms, 카드 `animationDelay`) — 여러 카드를 차례로 띄우는 stagger 용. 기본 0. */
   delay?: number;
   /** 클릭→onSelect 사이 시각적 강조 유지 시간(ms) */
   selectionDelay?: number;

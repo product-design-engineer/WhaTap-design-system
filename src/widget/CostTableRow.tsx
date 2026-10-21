@@ -34,6 +34,7 @@ export default function CostTableRow({
   row,
   isFirst = false,
 }: {
+  /** 비교 항목 한 줄 (`label` · `detail` · `cost` · `highlight`) — 왼쪽에 라벨 + 설명, 오른쪽에 비용. `highlight` 면 연한 파란 배경 + 파란 비용 글자 (제안안 강조). */
   row: CostRow;
   /** 첫 행 여부 — false 면 상단 구분 보더(border-t) 표시 */
   isFirst?: boolean;

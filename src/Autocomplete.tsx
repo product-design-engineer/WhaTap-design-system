@@ -68,12 +68,15 @@ export type AutocompleteProps = {
   label?: ReactNode;
   /** 입력 문자열. controlled 만 받는다 — 좁히기 결과가 화면 다른 곳과 이어지는 경우가 많다. */
   value: string;
+  /** 입력이 바뀔 때마다 새 문자열을 받는다. 호출과 함께 후보 목록이 펼쳐진다. */
   onChange: (next: string) => void;
   /** 후보 전체. 좁히기는 이 컴포넌트가 한다(`filter={false}` 면 준 대로 그린다). */
   options: AutocompleteOption[];
   /** 하나를 골랐을 때. 입력을 어떻게 둘지는 호출측이 정한다(위 규칙 참고). */
   onSelect: (option: AutocompleteOption) => void;
+  /** 입력 높이 — sm(24px) / md(28px) / lg(32px, **기본**). 후보 행 높이도 함께 따라간다. */
   size?: AutocompleteSize;
+  /** 빈 입력에 보이는 안내 문구 (예: 「이름 · 이메일로 찾기」). */
   placeholder?: string;
   /** 좁힌 결과가 없을 때 목록 자리에 적을 문장. */
   emptyText?: string;
@@ -88,6 +91,7 @@ export type AutocompleteProps = {
   filter?: false | ((option: AutocompleteOption, query: string) => boolean);
   /** 입력이 비어 있어도 후보를 펼칠지. 기본 true — 무엇을 고를 수 있는지 먼저 보여 준다. */
   openOnFocus?: boolean;
+  /** 입력 비활성 — 후보 목록도 열리지 않는다 (기본 false). */
   disabled?: boolean;
   /** 외부 className — 바깥 wrapper. */
   className?: string;

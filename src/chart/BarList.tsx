@@ -8,6 +8,7 @@
  *
  * ## When to use
  * - 대상 종류별 현재 값 비교: 액티브 스테이터스(Method · SQL · HTTPS · DBC · SOCKET), 상태별 건수.
+ * - 정확한 값(숫자)과 상대 크기(막대)를 한 줄에서 함께 읽어야 할 때 — 숫자만 두면 암산, 막대만 두면 값을 못 읽는다.
  *
  * ## When NOT to use
  * - 시간에 따른 변화 → [[MiniBarChart]] · [[MiniMultiLineChart]].
@@ -43,6 +44,7 @@ export type BarListRow = {
 };
 
 export type BarListProps = {
+  /** 줄 목록 — 위에서부터 이 순서대로 그린다(정렬은 호출부 몫). 막대 길이는 `ratio`(0~1), 색은 `var(--color-chart-series-N)` — 계열 순서 고정. */
   rows: BarListRow[];
   /**
    * 자기 바깥 여백(좌우 · 아래 8px)을 둘지. 기본 `true`.

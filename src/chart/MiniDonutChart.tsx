@@ -43,7 +43,9 @@ export type DonutSegment = {
 };
 
 export type MiniDonutChartProps = {
+  /** 카드 제목 줄 글자. `frame` 일 때만 그린다 — `frame={false}` 면 [[WidgetFrame]] `title` 이 맡는다. */
   title: string;
+  /** 도넛 조각 + 옆 범례 행. 이 순서로 12시부터 돌며, 조각 길이는 합계 대비 `value` 비율. 색은 `var(--color-chart-series-N)` — 계열 순서 고정. */
   segments: DonutSegment[];
   /** 도넛 중앙 큰 숫자 */
   centerLabel?: string;

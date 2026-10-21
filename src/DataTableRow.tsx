@@ -44,8 +44,11 @@ import Tooltip from "./Tooltip";
  * ```
  */
 export type DataTableRowProps<T> = {
+  /** 이 행의 데이터 — 셀 값은 컬럼 `key` 로 읽거나 `render` 에 넘긴다. */
   row: T;
+  /** 행 순번(0부터). `render` · `tooltip` · `onRowClick` 에 그대로 넘어간다. */
   rowIndex: number;
+  /** 부모 [[DataTable]] 의 컬럼 정의 — 순서대로 셀을 그린다. */
   columns: DataTableColumn<T>[];
   /** grid-template-columns 값 — 부모가 계산한 트랙 정의. */
   gridTemplate: string;

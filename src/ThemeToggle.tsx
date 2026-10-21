@@ -11,6 +11,7 @@ import Switch from "./Switch";
  *
  * ## When to use
  * - 헤더/설정의 라이트·다크 테마 스위치.
+ * - 화면 일부(미리보기 영역 등)만 테마를 바꿔 보일 때 — `applyTo` 로 대상 엘리먼트를 좁힌다. 새로고침 뒤에도 고른 테마를 유지하려면 `persistKey`.
  *
  * ## When NOT to use
  * - 일반 ON/OFF 토글 → [[Switch]] 직접 사용.
@@ -35,6 +36,7 @@ export interface ThemeToggleProps {
   value?: ThemeMode;
   /** uncontrolled 초기값. default "light". */
   defaultValue?: ThemeMode;
+  /** 토글 시 다음 모드("light" | "dark")를 받는다. uncontrolled 면 스스로 전환, `value` 를 주면 호출측이 갱신. */
   onChange?: (mode: ThemeMode) => void;
   /** [[Switch]] 크기. */
   size?: "sm" | "md";
@@ -42,6 +44,7 @@ export interface ThemeToggleProps {
   applyTo?: HTMLElement | "documentElement" | null;
   /** localStorage 키(옵션). 주면 저장·복원. */
   persistKey?: string;
+  /** 내부 [[Switch]] 버튼(`.wds-switch`)에 덧붙는 클래스. 배치(여백 · 폭)용. 색 · 크기 override 금지. */
   className?: string;
 }
 

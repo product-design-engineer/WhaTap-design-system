@@ -9,6 +9,7 @@ import { TOPOLOGY_ZOOM } from "./layout";
  *
  * ## When to use
  * - [[TopologyCanvas]] 위에 얹는 뷰포트 컨트롤(보통 미니맵 하단).
+ * - 휠이나 트랙패드 없이(버튼 · 키보드로) 배율을 한 단계씩 바꾸고 지금 배율을 확인해야 할 때.
  *
  * ## When NOT to use
  * - 값 증감 일반 폼 컨트롤 → `TextField` + 스텝퍼.
@@ -31,6 +32,7 @@ export default function TopologyZoomControl({
 }: {
   /** 현재 배율(1 = 100%). */
   scale: number;
+  /** 축소 · 확대 버튼을 누를 때 다음 배율로 불린다 — 0.1 단위, `TOPOLOGY_ZOOM`(0.25~2)으로 자른 값. 캔버스 `view.scale` 에 반영한다(제어형). */
   onScaleChange: (next: number) => void;
 }) {
   const step = (delta: number) =>

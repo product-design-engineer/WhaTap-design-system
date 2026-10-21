@@ -51,10 +51,13 @@ export default function PresetSelect({
   onManage,
   size = "sm",
 }: {
+  /** 현재 선택된 프리셋 이름(예: "Default") — dropdown 버튼 안 한 줄, 넘치면 말줄임. */
   label: string;
   /** dropdown 버튼 너비 (px). 기본 230. */
   width?: number;
+  /** dropdown 버튼 클릭 시. 인자 없음 — 목록 팝오버는 이 컴포넌트에 없어 호출측이 연다. */
   onOpenList?: () => void;
+  /** 우측 「프리셋 관리」 아이콘 버튼 클릭 시. 인자 없음. */
   onManage?: () => void;
   /** 높이 — sm(24px, **기본**) / md(28px) / lg(32px). 한 줄의 다른 옵션바 컨트롤과 같은 값을 쓴다. */
   size?: PresetSelectSize;

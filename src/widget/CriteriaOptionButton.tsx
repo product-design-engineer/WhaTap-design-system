@@ -10,6 +10,7 @@ import AiClickCursor from "./ClickCursor";
  *
  * ## When to use
  * - [[CriteriaSelection]] 가 `options.map` 으로 옵션마다 렌더 (기본 용법).
+ * - 기준 버튼의 상태 모양(selected · dimmed · pending 자동 클릭 손)을 고치거나 Figma 와 대조할 때 — 버튼 한 개의 정본이 여기다.
  *
  * ## When NOT to use
  * - 정보성 기준 그룹 행(비-인터랙티브) → [[CriteriaGroup]].
@@ -48,6 +49,7 @@ export default function CriteriaOptionButton({
   locked,
   onClick,
 }: {
+  /** 버튼 글자 (예: «이 기준으로 진행»). 한 줄 — 줄바꿈 없이 그린다. */
   label: string;
   /** filled blue 강조 (선택됨) */
   selected: boolean;
@@ -57,6 +59,7 @@ export default function CriteriaOptionButton({
   pending: boolean;
   /** 선택 확정 후 잠금 (disabled + pointer-events none) */
   locked: boolean;
+  /** 버튼 클릭 시 호출 (인자 없음). 선택 · 잠금 상태는 부모가 `selected` · `locked` 로 넘겨 바꾼다 — `locked` 면 호출되지 않는다. */
   onClick: () => void;
 }) {
   return (

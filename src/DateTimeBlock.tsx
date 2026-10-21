@@ -50,7 +50,9 @@ export default function DateTimeBlock({
   parts,
   side,
 }: {
+  /** 초기 표시 값 — 년 · 월 · 일 · 시 · 분 문자열. 자릿수를 0 으로 채워 그린다(uncontrolled, defaultValue). */
   parts: DateParts;
+  /** 범위의 어느 쪽인지 — start(시작) / end(종료). 각 칸의 aria-label 접두와 탭 순서 기준값이 갈린다. */
   side: "start" | "end";
 }) {
   const inputCls =

@@ -36,7 +36,9 @@ export default function PageHeaderProfileMenuItem({
   item,
   onClick,
 }: {
+  /** 프로필 메뉴 항목 — `item.label` 을 한 줄로 렌더. `item.onClick` 은 이 컴포넌트가 부르지 않는다(부모가 `onClick` 안에서 호출). */
   item: ProfileMenuItem;
+  /** 행 클릭 시. 인자 없음 — [[PageHeader]] 는 여기서 드롭다운을 닫고 `item.onClick` 을 부른다. */
   onClick?: () => void;
 }) {
   return (

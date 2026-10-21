@@ -60,6 +60,7 @@ export default function DashboardLayout({
   footerText,
   onLogoClick,
 }: {
+  /** main 오른쪽(헤더 아래 같은 행)에 붙는 위젯 · 패널 — 예: [[WhaTapAiWidget]]. 폭 애니메이션은 자식이 소유. */
   children?: ReactNode;
   /** 우측 컬럼 최상단(48px PageHeader 자리). 위젯과 같은 행이 아니라 그 위 →
    *  widget이 열려도 헤더는 폭 변화 없이 우측 컬럼 전체를 차지(공통 정책:
@@ -67,6 +68,7 @@ export default function DashboardLayout({
   header?: ReactNode;
   /** 헤더 아래, widget과 같은 행. widget이 열리면 width로 밀려 좁아짐. */
   main?: ReactNode;
+  /** 우측 위젯이 열려 있는지 (기본 false). true 면 사용자 접힘 상태와 무관하게 Sidebar 를 강제로 접는다. */
   widgetOpen?: boolean;
   /**
    * 사용자 접힘 초기값(uncontrolled) — 로고 헤더 chevron 으로 스스로 min/max 전환.
@@ -75,8 +77,11 @@ export default function DashboardLayout({
   defaultCollapsed?: boolean;
   /** chevron 토글 시 사용자 접힘 의도(다음 상태)를 알림 — 소비자가 접힘 상태를 추적하고 싶을 때. */
   onCollapsedChange?: (collapsed: boolean) => void;
+  /** [[Sidebar]] 로 그대로 넘긴다 — 제품 레일에서 강조할 제품 키 (예: "gpu" · "app"). 미지정 시 "gpu". */
   activeProduct?: string;
+  /** [[Sidebar]] 로 그대로 넘긴다 — 상단 프로젝트 스위처에 보일 프로젝트 컨텍스트. 미지정 시 Sidebar 의 DEFAULT_PROJECT(예시 값) — 실제 화면은 반드시 넘긴다. */
   project?: ProjectContext;
+  /** [[Sidebar]] 로 그대로 넘긴다 — 사이드 메뉴 항목 트리. 미지정 시 K8S_GPU_MENU. */
   menu?: MenuItem[];
   /**
    * Sidebar 상단 프로젝트 스위처 숨김 — Sidebar 로 passthrough.

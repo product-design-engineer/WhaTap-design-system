@@ -10,6 +10,7 @@ import type { EventSeverity, EventRow } from "./EventList";
  *
  * ## When to use
  * - [[EventList]] 가 `rows.map` 으로 항목마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
+ * - 이벤트 행 모양(시간 고정폭 · 심각도 칩 · 메시지 말줄임)을 고치거나 Figma 와 대조할 때 — 행 한 줄의 정본이 여기다.
  *
  * ## When NOT to use
  * - 카드 chrome / 헤딩 / 요약 줄 → 부모 [[EventList]] 가 책임.

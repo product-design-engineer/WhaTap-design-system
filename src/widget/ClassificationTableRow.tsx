@@ -43,6 +43,7 @@ export default function ClassificationTableRow({
   badgeDot,
   badgeLabel,
 }: {
+  /** GPU 한 장의 분류 데이터 (`gpu` · `model` · `avg` · `max` · `min` · `pod` · `tone` · `badge`) — 7열 격자 한 줄로 그린다. `badge` 가 있으면 `badgeLabel` 대신 쓴다. `tone` 은 이 행이 읽지 않는다 (부모가 배지 색으로 바꿔 넘김). */
   row: ClassificationRow;
   /** 배지 배경색 (부모 TONE_BADGE 매핑의 bg) */
   badgeBg: string;

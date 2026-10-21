@@ -88,14 +88,19 @@ const SIZE: Record<SelectPopoverSize, { h: number; padX: number; text: string }>
 export type SelectPopoverProps = {
   /** 상단 라벨 — [[Select]] 와 같은 필드 라벨 규칙(11px 고정). */
   label?: ReactNode;
+  /** 선택지 묶음 배열 — 묶음마다 헤더(`label`, 비우면 생략) + 옵션 목록. 갈래가 하나면 묶음 하나로 넘긴다. */
   groups: SelectPopoverGroup[];
+  /** 현재 선택된 옵션의 `value` — 트리거 글자와 목록 강조가 이 값을 따른다. controlled. */
   value: string;
+  /** 옵션을 고를 때 그 `value` 를 받는다. 팝오버는 스스로 닫지만 `value` 갱신은 호출측. */
   onChange: (next: string) => void;
+  /** 기본 트리거 높이 — sm(24px) / md(28px) / lg(32px, **기본**). [[Select]] 와 같은 spec. `inline` · `trigger` 에선 쓰이지 않는다. */
   size?: SelectPopoverSize;
   /** 목록 최대 높이(px). 기본 268. */
   maxListHeight?: number;
   /** 트리거 폭(px). 미지정 시 내용에 맞춘다. `trigger` 를 주면 쓰이지 않는다. */
   width?: number;
+  /** 트리거 비활성 — 눌러도 열리지 않고 흐리게(불투명도 0.6) 선다. 기본 false. */
   disabled?: boolean;
   /**
    * 기본 트리거(Select 형 컨트롤) 대신 쓸 ReactElement. `onClick` · `aria-haspopup` ·

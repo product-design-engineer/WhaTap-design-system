@@ -32,10 +32,15 @@ export type StatCardTone = "neutral" | "success" | "warning" | "critical" | "inf
 export type StatCardTrend = "up" | "down" | "stable";
 
 export type StatCardProps = {
+  /** 지표 이름 — 값 위 `text-sm` tertiary 한 줄, 넘치면 말줄임. */
   label: string;
+  /** 표시할 값(포맷 끝난 문자열, 예: "1,234") — `text-xl` bold numeric. */
   value: string;
+  /** 값 뒤 단위(예: "ms", "%"). 미지정이면 생략. */
   unit?: string;
+  /** 좌측 6px 상태 dot 색 — neutral(**기본**) / success / warning / critical / info. 값 글자색은 바뀌지 않는다. */
   tone?: StatCardTone;
+  /** 값 뒤 추세 화살표 — up(▲ success 색) / down(▼ error 색) / stable(─). 미지정이면 생략. */
   trend?: StatCardTrend;
   /** stagger 진입 애니메이션 delay(ms) */
   delay?: number;

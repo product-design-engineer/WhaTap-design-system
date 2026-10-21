@@ -10,6 +10,7 @@ import { TOPOLOGY_PORT_FILL, type TopologyTone } from "./_tokens";
  *
  * ## When to use
  * - [[TopologyCanvas]] 가 엣지마다 `source`/`target` 두 지점에 렌더하는 **기본 용법**.
+ * - [[TopologyCanvas]] 의 연결점 모양(정상 · 경보 tone)을 고치거나 Figma 와 대조할 때.
  *
  * ## When NOT to use
  * - 상태만 나타내는 목록 앞 점 → `Chip` 의 dot 또는 status dot 유틸.
@@ -33,8 +34,11 @@ export default function TopologyPort({
   tone = "default",
   radius = 5,
 }: {
+  /** 중심 x — 엣지와 같은 `<svg>` 좌표. 값은 [[layoutTopology]] 가 낸 엣지 끝점을 그대로 쓴다. */
   x: number;
+  /** 중심 y — 엣지와 같은 `<svg>` 좌표. 값은 [[layoutTopology]] 가 낸 엣지 끝점을 그대로 쓴다. */
   y: number;
+  /** 연결 상태 — `default` · `ok` · `alert`. 색은 `TOPOLOGY_PORT_FILL` 유틸 클래스가 정한다. 기본 `default`. */
   tone?: TopologyTone;
   /** 도트 반경(px). 기본 5 — 레퍼런스 기준. */
   radius?: number;

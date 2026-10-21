@@ -13,6 +13,8 @@ import type { CSSProperties } from "react";
  *
  * ## When to use
  * - 애플리케이션 대시보드의 Apdex 칸.
+ * - 지금 Apdex 값이 어느 등급(Excellent · Good · Poor · Unacceptable)에 걸렸는지와 그 추이를 함께 보여야 할 때. 대시보드 칸 안에서는
+ *   [[WidgetFrame]] 이 제목 줄을 진다(`frame`).
  *
  * ## When NOT to use
  * - 경계 없는 일반 비율 · 사용률 → [[MiniMultiLineChart]] · [[UsageGauge]].

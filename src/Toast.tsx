@@ -56,11 +56,17 @@ export default function Toast({
   onClose,
   durationMs = 4500,
 }: {
+  /** 표시 여부 — true 면 `document.body` 포털로 화면 상단 가운데에 뜬다. controlled — 닫힘은 `onClose` 에서 호출측이 false 로. */
   open: boolean;
+  /** 좌측 상태 dot 색 — success(**기본**, 흰 체크 포함) / info / warning / error. */
   variant?: ToastVariant;
+  /** 알림 문장 — `text-md` bold 한 줄(줄바꿈 없음). */
   message: string;
+  /** 문장 뒤 텍스트 버튼 글자(예: "되돌리기"). 미지정이면 버튼 없음. */
   actionLabel?: string;
+  /** 액션 버튼 클릭 시. 인자 없음 — 호출 직후 `onClose` 도 불린다. */
   onAction?: () => void;
+  /** 닫아야 할 때 — × 버튼 · 액션 버튼 뒤 · `durationMs` 경과 시. 인자 없음. `open` 을 false 로 바꾸는 것은 호출측. */
   onClose?: () => void;
   /** 자동 dismiss 시간 (ms). 0이면 수동 닫기만. */
   durationMs?: number;

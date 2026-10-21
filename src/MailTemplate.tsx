@@ -75,6 +75,7 @@ export type MailTemplateProps = {
   footer?: ReactNode;
   /** 로고 이미지 주소. 메일 HTML 에서는 절대 주소여야 한다. */
   logoSrc?: string;
+  /** 루트 요소(회색 메일 바탕)에 덧붙는 클래스 — 배치(여백 · 폭)용. 색 · 크기 override 금지. */
   className?: string;
 };
 

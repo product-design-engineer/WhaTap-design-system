@@ -175,6 +175,7 @@ export type AiProgressProps = {
   onStop?: () => void;
   /** 완료 뒤 펼침 상태(제어). 미지정이면 접힌 채로 시작하는 내부 상태. */
   expanded?: boolean;
+  /** 완료(`phase="done"`) 윗줄의 «과정 보기» / «접기» 를 누를 때 다음 펼침 값으로 호출. `expanded` 를 넘겼다면(제어) 부모가 이 값으로 바꿔 줘야 열리고 닫힌다. */
   onExpandedChange?: (next: boolean) => void;
   /** 0~2초 제목. 기본 «질문을 확인하고 있어요». */
   startingTitle?: ReactNode;

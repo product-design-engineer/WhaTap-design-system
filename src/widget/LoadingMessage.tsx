@@ -29,6 +29,7 @@
 export default function LoadingMessage({
   text = "분석에 필요한 데이터를 수집중입니다.",
 }: {
+  /** 아이콘 옆 대기 문구 (기본 «분석에 필요한 데이터를 수집중입니다.»). */
   text?: string;
 }) {
   return (

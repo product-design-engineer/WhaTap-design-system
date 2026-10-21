@@ -75,6 +75,7 @@ export type WebCtaButtonProps = {
   href: string;
   /** SPA 라우터 링크 컴포넌트 주입용. 기본 "a". */
   renderAs?: ElementType;
+  /** 버튼 라벨 — 짧은 행동 문구(예: "무료로 시작하기"). `.wds-web-cta-label` 안에 들어가고 화살표는 `arrow` 가 붙인다. */
   children: ReactNode;
 } & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "children">;
 

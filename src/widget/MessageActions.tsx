@@ -41,8 +41,11 @@ export default function MessageActions({
 }: {
   /** 위쪽 var(--color-border-default) 디바이더 표시 여부 */
   divider?: boolean;
+  /** 👍 버튼 클릭마다 호출 (인자 없음) — 켤 때와 다시 눌러 끌 때 모두. 눌림 상태는 내부에서 관리한다 (비제어). */
   onLike?: () => void;
+  /** 👎 버튼 클릭마다 호출 (인자 없음) — 켤 때와 다시 눌러 끌 때 모두. 눌림 상태는 내부에서 관리한다 (비제어). */
   onDislike?: () => void;
+  /** 복사 버튼 클릭 시 호출 (인자 없음). 컴포넌트는 1.4초 체크 표시만 하고 클립보드 복사는 하지 않으니 여기서 직접 복사한다. */
   onCopy?: () => void;
 }) {
   const [reaction, setReaction] = useState<Reaction>(null);

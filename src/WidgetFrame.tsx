@@ -132,7 +132,9 @@ export type WidgetFrameProps = {
   stateDescription?: ReactNode;
   /** 본문 아래 한 줄: 출처 · 마지막 수집 시각. 범례는 `legend`. */
   footer?: ReactNode;
+  /** 본문 콘텐츠 — 차트 · 표 · [[KpiField]] 등. `state` 가 `ready` 가 아니면 그리지 않는다. */
   children?: ReactNode;
+  /** 루트 `.wds-widget-frame` 요소에 덧붙는 클래스. 배치(여백 · 폭 · 격자 칸)용. 색 · 크기 override 금지. */
   className?: string;
 };
 

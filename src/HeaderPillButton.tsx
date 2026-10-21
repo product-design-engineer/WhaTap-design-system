@@ -48,7 +48,9 @@ export default function HeaderPillButton({
   size = "md",
   ...rest
 }: {
+  /** 라벨 왼쪽 아이콘 — md 16px / sm 14px 상자 안에 가운데 놓인다. */
   icon: ReactNode;
+  /** 버튼 라벨 텍스트 (아이콘 오른쪽, 4px 간격). */
   children: ReactNode;
   /** 사이즈. 기본 `"md"`(32px). 헤더 컨트롤 축소 시 `"sm"`(24px). */
   size?: HeaderPillButtonSize;

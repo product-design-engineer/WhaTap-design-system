@@ -41,6 +41,7 @@ export default function Breadcrumb({
   items,
   renderLink,
 }: {
+  /** 위치 경로 — 앞에서부터 상위 → 현재 페이지 순. 마지막 항목이 현재 페이지. 비면 아무것도 그리지 않는다. */
   items: BreadcrumbItem[];
   /** 소비앱의 라우터 링크를 끼우는 자리. 주지 않으면 `<a href>` 로 그린다. */
   renderLink?: (href: string, style: CSSProperties, children: ReactNode) => ReactNode;

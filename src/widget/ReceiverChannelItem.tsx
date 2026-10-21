@@ -10,6 +10,7 @@ import type { ChannelKey, ChannelState } from "./ReceiverChannels";
  *
  * ## When to use
  * - [[ReceiverChannels]] 가 `channels.map` 으로 항목마다 렌더 (기본 용법). 보통 단독 사용하지 않음.
+ * - 채널 행 모양(아이콘 · 유료 배지 · 보조 정보 · Switch)을 고치거나 Figma 와 대조할 때 — 행 한 줄의 정본이 여기다.
  *
  * ## When NOT to use
  * - 카드 chrome / 헤딩 → 부모 [[ReceiverChannels]] 가 책임.
@@ -54,11 +55,13 @@ export default function ReceiverChannelItem({
   channelKey: ChannelKey;
   /** 표시할 이모지 아이콘. 부모가 `CHANNEL_ICON[key]` 로 매핑해 주입 */
   icon: string;
+  /** 채널 이름 — 굵은 첫 줄 (예: «이메일»). 스위치 접근성 이름 «{label} 수신» 에도 쓴다. */
   label: ChannelState["label"];
   /** 표시할 보조 정보. 예: "kyungho.oh@whatap.io", "010-****-1234" */
   detail?: ChannelState["detail"];
   /** 유료 프로젝트 전용 채널 표시 (SMS / WhatsApp) */
   paid?: ChannelState["paid"];
+  /** 수신 켜짐 여부 — 오른쪽 [[Switch]] 의 checked. 제어 값이라 `onToggle` 을 받은 부모가 바꿔 넘겨야 바뀐다. */
   enabled: ChannelState["enabled"];
   /** 토글 클릭. 미지정이면 행 클릭 비활성. */
   onToggle?: (key: ChannelKey, next: boolean) => void;

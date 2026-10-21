@@ -8,6 +8,7 @@
  *
  * ## When to use
  * - Application 대시보드의 실시간 트래픽 요약
+ * - 좁은 대시보드 칸에 흐름만 남겨 세울 때 — `compact`. 흐름을 눌러 액티브 트랜잭션 상세로 넘어가야 하면 `onOpenDetail`.
  *
  * ## When NOT to use
  * - 지금 실행 중인 트랜잭션의 **분포**(normal/slow/very slow 비율)를 보여 줄 때 → [[ActiveTransactionArc]].
@@ -87,13 +88,21 @@ function computeBarSegments(totalBars: number) {
 }
 
 export type ActiveTransactionSpeedWidgetProps = {
+  /** 헤더 제목 (기본 「액티브 트랜잭션 스피드」). */
   title?: string;
+  /** 왼쪽 RPS 기준값 (기본 113). 화면 값은 이 값을 중심으로 ±80 출렁인다. */
   baseRps?: number;
+  /** 오른쪽 TPS 기준값 (기본 116). 화면 값은 이 값을 중심으로 ±80 출렁인다. */
   baseTps?: number;
+  /** tone 별 건수 기준값 (normal · warning · critical · sum). 표시 건수와 bullet tone 비율이 여기서 출렁인다. */
   baseTotals?: SpeedTotals;
+  /** true 면 bullet 흐름 · 수치 출렁임을 멈춘다 (기본 false). 데모 · 캡처용. */
   paused?: boolean;
+  /** 초당 새로 나오는 bullet 개수 (기본 12). */
   spawnRate?: number;
+  /** 헤더 오른쪽 «상세 보기» 화살표 버튼을 누를 때. 주지 않으면 버튼이 없다. */
   onOpenDetail?: () => void;
+  /** 좁은 칸용 축소 모드 — 양옆 수치 칸 72→56px, 숫자 글자 한 단계 작게 (기본 false). */
   compact?: boolean;
 };
 

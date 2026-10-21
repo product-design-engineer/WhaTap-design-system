@@ -77,6 +77,7 @@ export interface RadioGroupProps<V extends string = string> {
   "aria-labelledby"?: string;
   /** 같은 화면에 묶음이 여럿일 때 구분할 name. 없으면 자동. */
   name?: string;
+  /** 루트 `radiogroup` 요소(`.wds-radio-group`)에 덧붙는 클래스. 배치(여백 · 폭)용. 색 · 크기 override 금지. */
   className?: string;
 }
 

@@ -21,6 +21,7 @@ export { TOPOLOGY_ZOOM, clampScale } from "./layout";
  *
  * ## When to use
  * - 토폴로지를 보여주는 모든 화면의 본문 (Shell 페이지가 조립해 쓴다).
+ * - 서비스 · 인스턴스 사이의 호출 관계와 경보 경로를 확대 · 이동하며 따라가야 할 때(확대해도 선이 노드에서 떨어지지 않는다).
  *
  * ## When NOT to use
  * - 노드 하나만 보여줄 때 → [[TopologyNode]] 직접 사용.
@@ -51,12 +52,15 @@ export default function TopologyCanvas({
   onToggle,
   className = "",
 }: {
+  /** 노드 · 엣지 데이터. 좌표는 받지 않는다 — [[layoutTopology]] 가 매번 배치 · 라우팅해 좌표를 소유한다. */
   graph: TopologyGraph;
   /** 뷰포트 상태(controlled). */
   view: TopologyView;
+  /** 여백 드래그(이동) · 휠(커서 기준 확대/축소, 배율 clamp) 때 다음 뷰로 불린다. 호출부가 `view` 에 반영해야 움직인다. */
   onViewChange: (next: TopologyView) => void;
   /** 그룹 노드 접기/펼치기 — id 를 돌려준다. */
   onToggle?: (id: string) => void;
+  /** 뷰포트 루트(`overflow-hidden` 상자)에 붙는 클래스 — 배치(여백 · 폭 · 높이)용. 색 · 크기 override 금지. */
   className?: string;
 }) {
   // 그래프가 바뀔 때만 재계산 — 이동/확대는 transform 이라 레이아웃과 무관하다.

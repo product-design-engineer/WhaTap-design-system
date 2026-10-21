@@ -43,6 +43,7 @@ export type GpuStatusCategory = {
 };
 
 export type GpuStatusBarProps = {
+  /** 열(상태 범주) 목록 — 왼쪽부터 이 순서. `positive` 는 아래 막대, `negative` 는 그 위에 쌓는 오류 띠. `positive.color` 를 비우면 열 순서대로 `--color-chart-series-1 · 3 · 6` 을 쓴다. */
   categories: GpuStatusCategory[];
   /** Y축 최대값 (기본: positive+negative 중 최대) */
   max?: number;

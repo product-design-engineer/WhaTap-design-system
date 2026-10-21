@@ -39,6 +39,7 @@ export type InstanceListItemProps = {
   clusterLabel?: string;
   /** 선택 상태. */
   selected?: boolean;
+  /** 행을 누를 때 (보통 이 인스턴스를 선택). 인자 없음. */
   onClick?: () => void;
 };
 

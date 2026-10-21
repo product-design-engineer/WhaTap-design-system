@@ -66,6 +66,7 @@ export type ButtonProps = {
   loading?: boolean;
   /** 전체 폭 채우기. */
   fullWidth?: boolean;
+  /** 버튼 라벨 텍스트(아이콘을 함께 둘 수 있다 — 가로 나열 · 사이즈별 gap). loading 중에는 자리만 남고 숨는다. */
   children: ReactNode;
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children">;
 

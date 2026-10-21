@@ -31,9 +31,11 @@ export default function AiSymbol({
   color,
   className = "",
 }: {
+  /** 가로 · 세로 크기 (px, 정사각). 기본 16. */
   size?: number;
   /** 주면 그라데이션 대신 이 한 가지 색으로 칠한다. 색이 있는 면 위에 놓일 때만 쓴다. */
   color?: string;
+  /** `<svg>` 루트에 붙는 클래스 — 배치(여백 · 정렬)용. 색 · 크기 override 금지 (크기는 `size`). */
   className?: string;
 }) {
   const id = `aiSymGrad-${size}`;

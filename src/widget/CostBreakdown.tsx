@@ -65,12 +65,15 @@ export default function CostBreakdown({
   toneColor: string;
   /** "A100 40GB 참고 비용 ₩2,800/hr (온프레미스라 실비는…) 기준 일일 환산" */
   context?: string;
+  /** GPU 한 장 = 한 행 (GPU · Pod · 평균 사용률 · 유휴 비율 · 일일 낭비). 행마다 [[CostBreakdownRow]] 로 그린다. */
   rows: CostBreakdownRow[];
   /** 소계 (예: "₩268,600/일") */
   subtotal?: string;
   /** "월 환산 — 약 ₩8,058,000/월 (저활용 5개 GPU)" */
   monthly?: string;
+  /** 월 환산 줄 끝에 흐린 글자로 붙는 보충 (예: 산정 근거). `monthly` 가 없으면 보이지 않는다. */
   monthlyNote?: string;
+  /** 진입 애니메이션 지연 (ms, 바깥 래퍼 `animationDelay`) — 카드 stagger 용. 기본 0. */
   delay?: number;
 }) {
   return (

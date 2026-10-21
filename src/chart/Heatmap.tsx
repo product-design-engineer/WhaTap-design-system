@@ -8,6 +8,7 @@
  *
  * ## When to use
  * - 사후 분석 진입 — 어느 날/어느 시간대가 튀었는지 먼저 짚고 상세로 내려갈 때.
+ * - 한 달(`month`, 칸 = 하루)에서 이상한 날을 짚고, 그날 하루(`day`, 칸 = 5분)로 내려가 시간대를 볼 때 — 같은 컴포넌트가 두 축척을 진다.
  *
  * ## When NOT to use
  * - ON/OFF 설정 격자 → [[EventWeekTimeMatrix]].
@@ -45,6 +46,7 @@ const DAY_COLS = 12;
 const DAY_ROWS = 24;
 
 export type HeatmapProps = {
+  /** 축척. `month` = 7열 요일 × 주 행(칸 = 하루) · `day` = 12열 5분 × 24행 시각(칸 = 5분). 라벨 · 칸 높이가 함께 바뀐다. */
   mode: HeatmapMode;
   /** 정규화 값 0~1 (또는 데이터 없음 null) 의 평평한 배열. */
   cells: (number | null)[];
@@ -54,6 +56,7 @@ export type HeatmapProps = {
   labels?: string[];
   /** 선택된 칸 인덱스. */
   selectedIndex?: number;
+  /** 칸을 눌렀을 때 그 칸 인덱스로 불린다. 선택 표시는 `selectedIndex` 로 호출부가 쥔다(제어형). 없으면 칸이 버튼이 되지 않는다. */
   onSelect?: (index: number) => void;
   /** 격자 전체의 스크린리더 이름 — 무엇의 강도인지 적는다. 기본 «월간 히트맵»/«일간 히트맵». */
   ariaLabel?: string;
