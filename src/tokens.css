@@ -50,6 +50,7 @@
   --color-surface-50: #F5F5F5;  /* 용도: 가장 옅은 보조 표면 — hover 배경, muted 셀, 입력 비활성 */
   --color-surface-100: #F1F2F4; /* 용도: 중간 보조 표면 — active row, 트랙(progress/skeleton), 선택 강조 */
   --color-surface-200: #EAEAEA; /* 용도: 가장 진한 보조 표면 — switch off 트랙, 구분 블록, 무채색 채움 */
+  --color-skeleton-glow: #DCE7FD; /* 용도: 스켈레톤 위를 훑는 빛 띠의 정점 — surface-100 바탕보다 밝고 옅은 브랜드 틴트 */
 
   /* Neutral Solid — 중립(무채색) 강조면. tone="tertiary" 버튼의 채움/hover.
      위 전경은 고정 흰색(라이트 8.4:1 · 다크 10.3:1). 다크 값은 하단 `.dark` 블록에서 반전. */
@@ -174,7 +175,7 @@
      랜딩은 라이트/다크를 [data-theme] 로 바꾸므로 다크 값은 아래 .dark 블록에 있다.
      헤더 반투명 면은 이미 있는 --color-header-translucent 를 쓴다(값이 같다). */
   --color-web-landing-fg-rgb: 30, 30, 30;     /* 전경 RGB 트리플 — rgba(var(), a) 로 알파 합성 */
-  --color-web-landing-surface-alt: #f4f6fa;   /* 섹션 교대 배경 (마케팅 리듬, 제품 --color-bg 와 별개 축) */
+  --color-web-landing-surface-alt: #f4f6fa;   /* 섹션 교대 배경 (마케팅 리듬, 제품 --color-bg 와 별개 기준) */
   --color-web-landing-input-bg: #ffffff;      /* URL 입력칸 배경 */
   --color-web-landing-danger: #c81e1e;        /* 에러 문구 — 근백색 카드 위 AA 대비 */
   --shadow-web-landing-focus: 0 0 0 3px rgba(41, 108, 242, 0.18);  /* 그라데이션 입력칸 포커스 링 */
@@ -241,13 +242,14 @@
    *    text-primary text-secondary text-tertiary text-disabled
    *
    *  JS 동적 케이스: `style={{ fontSize: "var(--text-base)" }}` 도 가능 (같은 변수 참조).
-   *  Single source of truth — 이 값을 바꾸면 `detailwind generate` 로 whatap-ds.css 재생성.
+   *  Single source of truth — 이 값을 바꾸면 whatap-ds.css 의 같은 선언도 직접 고친다(값 일치는 lint:token-sync 가 검사).
    *  Sync 대상: src/widget/_tokens.ts 의 value 필드 (display 용) + whatap-ds.css.
    * ────────────────────────────────────────────────────────────────────── */
 
   /* Font Family */
   --font-family-korean: "Noto Sans", "Noto Sans KR", sans-serif;
-  --font-family-numeric: Roboto, "Noto Sans", sans-serif;
+  /* 숫자 줄에 섞인 한글(「8건」 · 「초」)은 Noto Sans KR 로 받는다. 없으면 OS 기본 글꼴로 떨어져 Figma(한글을 Noto Sans KR 로 그림)와 폭이 달라진다. */
+  --font-family-numeric: Roboto, "Noto Sans", "Noto Sans KR", sans-serif;
 
   /* Type Scale — Hybrid (Dense 1px + Display 2배수 인접).
      text-* utility(whatap-ds.css)의 font-size 값. */
@@ -472,22 +474,22 @@
    *  ## seq — 크기/강도 (sequential)
    *  한 색조의 단조 lightness 램프, 옅음→진함. 다크는 anchor 가 뒤집혀 어두움→밝음.
    *
-   *  검증: dataviz validate_palette.js 6개 체크 전부 PASS.
-   *  라이트 최악 인접 CVD ΔE 9.5(deutan) · 정상시야 17.0 · 대비 전부 ≥3:1.
-   *  다크  최악 인접 CVD ΔE 9.6(deutan) · 정상시야 18.3 · 대비 전부 ≥3:1.
+   *  검증: `pnpm lint:chart-palette` 가 런타임 값으로 매번 잰다(대역 · 채도 · 대비 · 인접 ·
+   *  1~3 전체 · 엔티티 순서 · Severity 변별 · 이 파일과의 값 일치). 수치는 그 출력과
+   *  docs/tokens.json `distinctFrom` 이 정본이다 — 여기에 옮겨 적지 않는다.
    *  seq 램프는 단조 L · 인접 ΔL ≥0.06 · 옅은 끝 대비 ≥2:1 통과.
    *
    *  ❌ status 색을 "series 9" 로 쓰지 말 것 — 예약된 의미다.
    *  ❌ 텍스트에 series 색을 쓰지 말 것 — 라벨·값은 text 토큰, 색은 마크가 담당.
    * ────────────────────────────────────────────────────────────────────── */
-  --color-chart-series-1: #296CF2; /* blue */
-  --color-chart-series-2: #C75B1A; /* orange */
-  --color-chart-series-3: #00908A; /* teal */
-  --color-chart-series-4: #9A7B00; /* gold */
-  --color-chart-series-5: #B0349B; /* magenta */
-  --color-chart-series-6: #0E7A56; /* green */
-  --color-chart-series-7: #6B3FD4; /* violet */
-  --color-chart-series-8: #C93B34; /* red */
+  --color-chart-series-1: #1E4E9E; /* navy */
+  --color-chart-series-2: #985521; /* amber */
+  --color-chart-series-3: #06A3A5; /* teal */
+  --color-chart-series-4: #9A7D0B; /* gold */
+  --color-chart-series-5: #B3329D; /* magenta */
+  --color-chart-series-6: #037C58; /* green */
+  --color-chart-series-7: #7130CB; /* violet */
+  --color-chart-series-8: #9F2D48; /* raspberry */
 
   --color-chart-seq-1: #7AB8F0; /* 가장 옅음 */
   --color-chart-seq-2: #4A97E8;
@@ -527,7 +529,7 @@
    *
    *  차트 토큰(series/seq)으로 대체 불가하다: series 는 **계열 정체성**(같은 지표의
    *  서로 다른 계열)이고, 여기서 필요한 것은 **구조와 상태**(캔버스 바닥 · 연결선 ·
-   *  포트 · 경보 경로)다. 의미가 다른 축이라 재사용하면 "3번 계열 = 경보" 같은
+   *  포트 · 경보 경로)다. 의미 기준이 달라 재사용하면 "3번 계열 = 경보" 같은
    *  거짓 등가가 생긴다.
    *
    *  값 출처: 레퍼런스 시안에서 픽셀 샘플링(중앙값)으로 추출. 눈대중 아님.
@@ -611,6 +613,7 @@
   --wds-widget-body-pb: 12px;
   --wds-widget-row-gap: 4px;
   --wds-widget-axis-gutter: 28px;
+  --wds-widget-end-gutter: 44px;
 }
 
 html, body, #root {
@@ -736,25 +739,28 @@ html, body, #root {
   transform-origin: bottom;
   animation: aiBarGrow 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
-/* 스켈레톤 — 응답 대기 구간의 자리표시자. 좌→우 shimmer 로 "멈춘 게 아니라 오는 중"을 보인다.
-   prefers-reduced-motion 이면 shimmer 없이 정적 회색만 남긴다. */
+/* 스켈레톤 — 응답 대기 구간의 자리표시자. 빛 띠(--color-skeleton-glow)가 좌→우로 훑는 글로우로 "멈춘 게 아니라 오는 중"을 보인다.
+   prefers-reduced-motion 이면 빛 띠 없이 정적 회색만 남긴다. */
 @keyframes aiSkeletonShimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  from { background-position: -600px 0; }
+  to   { background-position: 900px 0; }
 }
 .ai-skeleton {
   border-radius: 4px;
-  background: linear-gradient(
+  background-color: var(--color-surface-100);
+  background-image: linear-gradient(
     90deg,
-    var(--color-surface-100) 25%,
-    var(--color-surface-50) 37%,
-    var(--color-surface-100) 63%
+    transparent 25%,
+    var(--color-skeleton-glow) 50%,
+    transparent 75%
   );
-  background-size: 200% 100%;
-  animation: aiSkeletonShimmer 1.4s ease-in-out infinite;
+  /* 빛 띠는 px 고정 폭 · px 이동 — 막대 길이와 무관하게 모든 막대에서 같은 x 에 놓인다(한 줄기 빛). */
+  background-size: 600px 100%;
+  background-repeat: no-repeat;
+  animation: aiSkeletonShimmer 1.8s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  .ai-skeleton { animation: none; }
+  .ai-skeleton { animation: none; background-image: none; }
 }
 
 .ai-reasoning-dots::after {
@@ -839,6 +845,7 @@ html, body, #root {
   --color-surface-50: #14181E;
   --color-surface-100: #1B2026;
   --color-surface-200: #232932;
+  --color-skeleton-glow: #2F3F5E; /* 다크에서도 바탕보다 «밝아지는» 빛 */
 
   /* 중립 강조면 — 전경이 계속 흰색이므로 다크에서도 어두운 단계를 유지한다. */
   --color-neutral-solid: #3A414D;
@@ -909,14 +916,14 @@ html, body, #root {
 
   /* Chart — 같은 8색조를 **다크 표면(--color-card #181C22)용으로 다시 스텝**한 것.
      자동 반전이 아니라 선택된 값이다(검증 근거는 :root 블록 주석 참조). */
-  --color-chart-series-1: #5B92F7;
-  --color-chart-series-2: #D9762E;
-  --color-chart-series-3: #1FA9A2;
-  --color-chart-series-4: #B08D14;
-  --color-chart-series-5: #CE4FB6;
-  --color-chart-series-6: #2FA97D;
-  --color-chart-series-7: #9A7DF0;
-  --color-chart-series-8: #E8635C;
+  --color-chart-series-1: #406CAA;
+  --color-chart-series-2: #9F6620;
+  --color-chart-series-3: #12A7A8;
+  --color-chart-series-4: #A9912B;
+  --color-chart-series-5: #D249B8;
+  --color-chart-series-6: #04896A;
+  --color-chart-series-7: #B264FB;
+  --color-chart-series-8: #AA618D;
 
   /* seq — 다크에서는 anchor 가 뒤집힌다: 어두움(작음) → 밝음(큼). */
   --color-chart-seq-1: #3A5480;

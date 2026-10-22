@@ -23,7 +23,8 @@
  * - `showResetAll`: 1+ dropdown 에 선택 있을 때 "전체 초기화" 버튼 노출
  * - 가로 wrap — 좁은 화면에서 자연 줄바꿈
  *
- * ## Composition graph
+ * ## Spec
+ * 구성 트리
  * ```
  * FilterBar
  *  ├─ TextField (search slot — 외부 주입)

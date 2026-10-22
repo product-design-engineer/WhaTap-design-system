@@ -12,15 +12,15 @@ const meta: Meta<typeof FilterSelect> = {
     docs: {
       description: {
         component:
-          "**여는 자리만 맡는 버튼.** 고른 값이 없으면 축 이름을, 고르고 나면 「첫 값 외 N」 요약을 " +
-          "자기 얼굴로 쓴다. 고른 값이 있으면 **테두리와 글자색만** 바뀐다 — 배경을 칠하면 축이 " +
+          "**여는 자리만 맡는 버튼.** 고른 값이 없으면 기준 이름을, 고르고 나면 「첫 값 외 N」 요약을 " +
+          "자기 얼굴로 쓴다. 고른 값이 있으면 **테두리와 글자색만** 바뀐다 — 배경을 칠하면 기준이 " +
           "네다섯 서는 필터 줄이 얼룩진다. 열리는 목록은 [[FilterDropdown]], 고른 낱낱은 아래 줄의 " +
           "[[Chip]] 이 진다.",
       },
     },
   },
   argTypes: {
-    label: { description: "축 이름. 고른 값이 없을 때 얼굴.", control: "text" },
+    label: { description: "기준 이름. 고른 값이 없을 때 얼굴.", control: "text" },
     summary: { description: "고른 값 요약 — 「첫 값 외 N」.", control: "text" },
     active: { description: "고른 값이 하나라도 있는가.", control: "boolean" },
   },
@@ -28,7 +28,7 @@ const meta: Meta<typeof FilterSelect> = {
 export default meta;
 type Story = StoryObj<typeof FilterSelect>;
 
-/** 비어 있음 — 축 이름이 선다. */
+/** 비어 있음 — 기준 이름이 선다. */
 export const Idle: Story = { args: { label: "상태", active: false } };
 
 /** 하나 고름. */
@@ -37,7 +37,7 @@ export const One: Story = { args: { label: "상태", summary: "사용 중", acti
 /** 여럿 고름 — 「첫 값 외 N」. */
 export const Many: Story = { args: { label: "상태", summary: "사용 중 외 2", active: true } };
 
-/** 필터 줄 — 축이 나란히 선다. minWidth 132 라 들쭉날쭉하지 않다. */
+/** 필터 줄 — 기준이 나란히 선다. minWidth 132 라 들쭉날쭉하지 않다. */
 export const Row: Story = {
   render: () => {
     const Demo = () => {

@@ -1,23 +1,23 @@
 # @whatap/design-system — 컴포넌트·디자인 시스템 정책
 
-본 패키지는 WhaTap-AI-Assistant 의 단일 컴포넌트 출처. Storybook 카탈로그 + tokens.css 단일 출처 + `exports` 로 `.` (루트 컴포넌트) · `./widget` (AI 위젯) 분리.
+본 패키지는 WhaTap-AI-Assistant 의 단일 컴포넌트 출처. Storybook 카탈로그 + tokens.css 단일 출처 + `exports` 로 `.` (루트 컴포넌트) · `./widget` (AI 위젯) · `./chart` (데이터 시각화 — Chart Art) 분리.
 
 ## 디렉토리 구성
 
-- `src/` — 컴포넌트 소스 + `tokens.css` + `widget/` (AI 카테고리)
+- `src/` — 컴포넌트 소스 + `tokens.css` + `widget/` (AI 카테고리) + `chart/` (데이터 시각화 — 차트·게이지·히트맵, `./chart` 진입점. 루트 배럴도 재수출) + `topology/` (노드-엣지 그래프)
 - `stories/` — Storybook 카탈로그 (Tokens 메타 + Primitives / Composite / Shell 3-Layer, AI 는 각 계층 `Ai/` 하위그룹)
 - `docs/` — markdown 카탈로그 (단일 출처 문서)
   - `SKILL.md` — 본 디자인 시스템 사용 절차
   - `primitives.md` / `chrome-components.md` / `widget-components.md` — 컴포넌트 카탈로그 (텍스트 형태)
   - `tokens.md` — 토큰 정의 (CSS 변수 ↔ 디자인 의미)
   - `patterns.md` — **Part 1 인터랙션 패턴**(`P1`… 컴포넌트 횡단 시퀀스 — 파괴적 액션 확인 · 완료 통보 · 즉시반영 vs 폼제출 · 기본/선택 항목 그룹) + **Part 2 구현 정책**(`1`… 기존 번호 유지). MCP `search_components` 가 이 파일을 함께 검색한다.
-  - `components.json` — **기계 판독 규칙 카탈로그(자동 생성 · 직접 편집 금지).** 컴포넌트별 Purpose · ✅Do · ❌Don't · Composition rules · props · 스토리 id. `scripts/build-components-json.mjs` 가 **소스 docstring + 스토리**에서 유도하고 MCP `get_component`·`get_do_dont` 가 이걸 읽는다 — Do/Don't 를 따로 손으로 쓰지 않는다(표기 단일화 규칙은 `docs/SKILL.md`). 강제: `pnpm lint:docstrings`.
-  - `tokens.json` — **기계 판독 토큰 카탈로그(자동 생성 · 직접 편집 금지).** 토큰별 tier·값·다크값·`@role`/`@use`/`@avoid`·유틸 클래스·사용 컴포넌트. `scripts/build-tokens-json.mjs` 가 **`whatap-ds.css` 의 선언 + 그 위 주석**에서 유도하고 MCP `get_tokens`·`search_tokens` 가 이걸 읽는다 — 의미를 다른 파일에 두지 않는다. 강제: `pnpm lint:token-docs`(전 토큰 `@role` 필수, 동결선 0).
+  - `components.json` — **기계 판독 규칙 카탈로그(자동 생성 · 직접 편집 금지).** 컴포넌트별 Purpose · ✅Do · ❌Don't · Composition rules · props · 스토리 id. `scripts/build-components-json.mjs` 가 **소스 docstring + 스토리**에서 유도하고 MCP `get_component`·`get_do_dont` 가 이걸 읽는다 — Do/Don't 를 따로 손으로 쓰지 않는다(표기 단일화 규칙은 `docs/SKILL.md`). **템플릿 섹션(Purpose · When to use · When NOT to use · Composition rules · 선택 Spec · Do · Don't) 밖의 `## …` 는 배달되지 않는다** — 쓰지 않는다. 강제: `pnpm lint:docstrings`(템플릿 밖 섹션 0 · 깊이 래칫 `docstring-baseline.json`).
+  - `tokens.json` — **기계 판독 토큰 카탈로그(자동 생성 · 직접 편집 금지).** 토큰별 tier·값·다크값·`@role`/`@use`/`@avoid`·유틸 클래스·사용 컴포넌트 · `@distinct <집합>` 을 선언한 토큰은 그 집합과의 **측정된 변별**(`distinctFrom`, 차트 계열 ↔ Severity). `scripts/build-tokens-json.mjs` 가 **`whatap-ds.css` 의 선언 + 그 위 주석**에서 유도하고 MCP `get_tokens`·`search_tokens` 가 이걸 읽는다 — 의미를 다른 파일에 두지 않는다. 강제: `pnpm lint:token-docs`(전 토큰 `@role` 필수, 동결선 0).
   - `STORIES_ROADMAP.md` — Storybook 카탈로그 추가 작업 목록
 
 ## 카탈로그 — 단일 3-Layer 체계 (Primitives · Composite · Shell)
 
-Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분류한다. (구 `Chrome` / `WhaTap AI` / `Foundation` / `Page` 카테고리는 폐지 → 계층으로 흡수.) AI 전용 에셋은 폐지하지 않고 **각 계층 안 `Ai/` 접두 하위그룹**으로 묶어 발견성을 유지한다.
+Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 기준**으로 분류한다. (구 `Chrome` / `WhaTap AI` / `Foundation` / `Page` 카테고리는 폐지 → 계층으로 흡수.) AI 전용 에셋은 폐지하지 않고 **각 계층 안 `Ai/` 접두 하위그룹**으로 묶어 발견성을 유지한다.
 
 | 카탈로그 그룹 | 의미 | 소스 | 예 |
 |---|---|---|---|
@@ -25,6 +25,7 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 | **Primitives/Ai/** | AI 위젯 리프 프리미티브 | `src/widget/` | AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList, AiSymbol, AiUserBubble, ReasoningStep … |
 | **Composite/** | 프리미티브를 1단계 조합 | `src/` 루트 | PageHeader, PageHeaderAiInline, Sidebar, FilterBar, DataTable, FilterDropdown, Tabs, ThemeToggle … |
 | **Composite/Ai/** | AI 진입·응답 합성 위젯 | `src/widget/` | AiChatExchange, AiReasoning, AiDashboardProposal, AiCostTable, InlinePrompt, PromptInput, SendButton … |
+| **`Chart ·` 접두** (Primitives · Composite 안) | 데이터 시각화(차트 · 게이지 · 히트맵). 계층 안 메뉴명 접두 — `Web ·` 와 같은 방식 | `src/chart/`(`./chart` 진입점) · `src/widget/UsageChart` | Chart · MiniLineChart, Chart · BarList, Chart · UsageGauge, Chart · Heatmap … |
 | **Shell/** | 최종 조립 진입점 | `src/` · `src/widget/` | DashboardLayout, Ai/Widget(WhaTapAiWidget), Page/(A~D 페이지 합성 템플릿) |
 | **Tokens** (메타) | `:root` 컬러·폰트·spacing 변수 (참조용; 런타임은 whatap-ds.css) | `src/tokens.css` | Color, Type Scale, Tones … |
 
@@ -35,7 +36,7 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 - AI 진입점·AI 응답 UI 는 **`Ai...` 카테고리만** 사용 (AiInlinePrompt / AiSendButton / AiAssistantButton)
 - 일반 폼/검색은 TextField·Button
 - 페이지의 AI 진입점은 **버튼 대신 AiInlinePrompt 직접 주입 (2-step → 1-step)**
-- **카탈로그 분류와 소스 트리는 같이 움직인다** — `Primitives/Ai/`·`Composite/Ai/` 로 분류했으면 소스도 `src/widget/` 에 둔다(Shell 은 위 표대로 두 트리 허용). 강제: `pnpm lint:ai-boundary`. `check-catalog-folders` 는 `stories/` 안만 보므로 이 축을 볼 수 없다 — 실제로 4종이 카탈로그는 `Ai/`, 소스는 루트인 상태로 있었다. 같은 게이트가 `components.json` 의 `importFrom` 이 **배럴이 실제로 export 하는 진입점**인지도 검산한다.
+- **카탈로그 분류와 소스 트리는 같이 움직인다** — `Primitives/Ai/`·`Composite/Ai/` 로 분류했으면 소스도 `src/widget/` 에 둔다(Shell 은 위 표대로 두 트리 허용). 강제: `pnpm lint:ai-boundary`. `check-catalog-folders` 는 `stories/` 안만 보므로 이 기준을 볼 수 없다 — 실제로 4종이 카탈로그는 `Ai/`, 소스는 루트인 상태로 있었다. 같은 게이트가 `components.json` 의 `importFrom` 이 **배럴이 실제로 export 하는 진입점**인지도 검산한다.
 
 ## 아키텍처 — 2-Tier Token + 3-Layer Component
 
@@ -60,7 +61,7 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
    - 마케팅 컴포넌트가 SaaS 전용 레이아웃 토큰(`--wds-page-px` 등)을 참조 → 위반
    - SaaS 컴포넌트가 `--color-web-*` 를 참조 → 위반
    - 일반 UI 에서 `--color-chart-series-*` 를 끌어다 씀 → 위반
-5. **Storybook 카탈로그 그룹.** 마케팅 컴포넌트는 `Shell/Web · *` 또는 `Primitives/Web · *` 로 묶는다. 차트는 기존 계층(Primitives/Composite) 내에서 이름에 `Chart` 가 드러나면 충분하다.
+5. **Storybook 카탈로그 그룹.** 마케팅 컴포넌트는 `Shell/Web · *` 또는 `Primitives/Web · *` 로, 차트(데이터 시각화)는 `Primitives/Chart · *` 또는 `Composite/Chart · *` 로 묶는다(2026-10-14 개정 — 이전에는 «이름에 `Chart` 가 드러나면 충분» 이었으나 `Heatmap` · `BarList` · `UsageGauge` 처럼 이름만으로 차트인지 드러나지 않는 것이 많았다). 계층은 그대로이고 접두는 메뉴명에만 붙는다 — 폴더(`check-catalog-folders`)와 `component:` 이름은 바뀌지 않는다. 스토리 id 에는 가운뎃점이 남는다(`primitives-chart-·-minilinechart`).
 
 **현재 이름 → 정책 정렬 대상 (마이그레이션):**
 
@@ -83,7 +84,7 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 
 - UI 컴포넌트는 **Semantic 토큰만 참조**. Global 직접 참조 금지.
 - Component 토큰(3계층)은 variant×tone 조합이 복잡한 것만 선택 도입 (`--wds-btn-*`).
-- 차트 색은 **역할 토큰**으로 고른다 — `--color-chart-series-1..8`(계열 정체성, 고정 순서·순환 금지) · `--color-chart-seq-1..4`(크기/강도). 구 `--color-palette-{hex}` 36색은 폐지(값이 이름이라 선택 규칙이 없고 다크가 없었다). all-pairs 상한 3슬롯 — scatter/bubble/map/small-multiples 는 3계열까지, 그 이상은 facet. 팔레트 변경 시 dataviz `validate_palette.js` 재실행 필수(눈으로 판단 금지). 전문: `docs/tokens.md` → Chart.
+- 차트 색은 **역할 토큰**으로 고른다 — `--color-chart-series-1..8`(계열 정체성, 고정 순서·순환 금지) · `--color-chart-seq-1..4`(크기/강도). 구 `--color-palette-{hex}` 36색은 폐지(값이 이름이라 선택 규칙이 없고 다크가 없었다). all-pairs 상한 3슬롯 — scatter/bubble/map/small-multiples 는 3계열까지, 그 이상은 facet. 계열 색은 Severity · info 와도 정상시야 ΔE ≥ 15 (§23). 팔레트 조건은 **`pnpm lint:chart-palette`**(`pnpm test` 포함)가 런타임 값으로 집행한다 — 대역 · 채도 · 대비 · 인접 · 1~3 전체 · 엔티티 순서 · Severity · 사본(`tokens.css` 라이트 · 다크, `DESIGN.md`) 일치. 측정값은 문서에 옮겨 적지 않는다(정본: 게이트 출력 · `tokens.json` `distinctFrom`). 새 후보를 고를 때도 눈으로 판단 금지. 전문: `docs/tokens.md` → Chart · 규칙 정본: `docs/patterns.md` §17~23(색 역할 · 3계열 상한 · 이중 축 · 검증기 · 레거시 흡수 · 많은 계열 · Severity 변별).
 
 **🔒 페이지 좌·우 거터 — 단일 토큰 규칙 (`--wds-page-px`)**
 - 페이지의 좌·우 거터는 **단 하나의 토큰 `--wds-page-px`(24px)** 이 소유한다. 헤더(`--wds-header-px`)·옵션바·본문(`--wds-content-px`)은 모두 이 값을 **alias 로 참조** → 한 곳만 바꾸면 헤더·옵션바·테이블 가장자리가 함께 정렬된다.
@@ -100,9 +101,9 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 축**으로 분�
 | **Composite** | Primitives 를 1단계 조합 | Primitives 만 import. **Composite 끼리 import 금지** | 34 (Ai/ 포함) |
 | **Shell** | Composite + Primitives 를 최종 조립하는 진입점 | 모든 계층 import 가능 | 6 (DashboardLayout · Ai/Widget · Page A·B·D · TopologyOverview) |
 
-**Primitives** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, Switch, DataTable, MiniLineChart, LiveTimerCompact, AiCard, AiCaption … + **인라인 추출 Parts**(SidebarMenuItem · PageHeaderNotificationItem · PageHeaderProfileMenuItem · ProductRailItem · BottomRailItem · TabButton · CostBreakdownRow · ClassificationTableRow · CostTableRow · MigPlanRow · EventListItem · ReasoningStep · TimelineStepItem · CriteriaGroup · ReceiverChannelItem · AiActionChip · AiAttachmentChip · AiQuickActionChip)
+**Primitives** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, Switch, DataTable, ChartGrid, ChartValueAxis, LiveTimerCompact, AiCard, AiCaption … + **인라인 추출 Parts**(SidebarMenuItem · PageHeaderNotificationItem · PageHeaderProfileMenuItem · ProductRailItem · BottomRailItem · TabButton · CostBreakdownRow · ClassificationTableRow · CostTableRow · PlanProposalRow · EventListItem · ReasoningStep · TimelineStepItem · CriteriaGroup · ReceiverChannelItem · AiActionChip · AiAttachmentChip · AiQuickActionChip)
 
-**Composite** — FilterBar · PageHeader · PageHeaderAiInline · OptionbarPage · Sidebar(=SidebarMenuItem) · ThemeToggle · AiChatExchange · AiReasoning · InlinePrompt … + **추출 Parts**(DataTableRow · FilterDropdownOptionItem · FilterChipItem · CriteriaOptionButton · ProposalSection · AiAlertRulePreview)
+**Composite** — FilterBar · PageHeader · PageHeaderAiInline · OptionbarPage · Sidebar(=SidebarMenuItem) · ThemeToggle · AiChatExchange · AiReasoning · InlinePrompt · 값축 차트 4종(MiniLineChart · MiniMultiLineChart · MiniBarChart · ForecastLineChart = ChartGrid + ChartValueAxis) … + **추출 Parts**(DataTableRow · FilterDropdownOptionItem · FilterChipItem · CriteriaOptionButton · ProposalSection · AiAlertRulePreview)
 
 **Shell** — DashboardLayout(=Sidebar) · WhaTapAiWidget(`Shell/Ai/Widget`) · Page 합성 템플릿(A 기본 대시보드 · B AI 전용 · D 상세)
 
@@ -189,7 +190,7 @@ style={{ background: tokens.color.surface.critical.value }}     // ❌ 라이트
 
 ## 스타일 — 일반 CSS (Tailwind 미사용 · 흔적 0)
 
-런타임 스타일은 외부 CSS 프레임워크 흔적이 0인 **자체 소유 일반 CSS** `src/whatap-ds.css` (= export `./style.css`·`./whatap-ds.css`). 내부에 `--tw-*`·`@property`·`.foo-\[…\]`(escape 클래스명) 없음. 유틸 클래스명은 escape 없는 일반 식별자(`gap-4px`·`hover-opacity-70` 등).
+런타임 스타일은 외부 CSS 프레임워크 흔적이 0인 **자체 소유 일반 CSS** `src/whatap-ds.css` (= export `./style.css`·`./whatap-ds.css`). 내부에 `--tw-*`·`.foo-\[…\]`(escape 클래스명) 없음. `@property` 는 각도 보간용 네이티브 1곳(`--glow-angle`)만 있고 `@layer base` 와 같은 방식으로 줄 단위 면제된다 — 프레임워크 산출물이 아니다. 유틸 클래스명은 escape 없는 일반 식별자(`gap-4px`·`hover-opacity-70` 등).
 
 **`@layer base` 는 한 곳에 의도적으로 있다** — preflight 전역 reset 전용이다. 이 파일은 unlayered 로 import 되는데 reset 까지 unlayered 면 **소비자 쪽** utility 를 cascade 에서 이겨 소비 페이지 스타일을 무력화한다. 그래서 preflight 만 base 레이어로 내렸다(아래 utilities 섹션은 unlayered 유지). 프레임워크 산출물이 아니라 네이티브 cascade layer 다. `npm run lint:no-tailwind` 가 이 한 줄만 `/* no-tailwind-ok: … */` 로 면제하고 나머지 `@layer`·Tailwind 의존성·설정 파일·`--tw-*` 는 전부 차단한다(면제는 **줄 단위**라 새 `@layer` 는 그대로 잡힌다).
 
@@ -321,9 +322,9 @@ AI 위젯 영역의 모든 컴포넌트는 다음 primitive 를 **반드시 comp
 
 | 정본 | 들어가야 하는 것 |
 |---|---|
-| **코드** | `src/` 컴포넌트 · docstring 4섹션(Purpose · When to use · When NOT to use · Composition rules) · `index.ts` export · 필요한 CSS · 토큰 |
+| **코드** | `src/` 컴포넌트 · docstring 4섹션(Purpose · When to use · When NOT to use · Composition rules) · 개발자가 그대로 구현할 값이 있으면 `## Spec`(치수 · 토큰 · 상태 · 데이터 계약. `components.json` `spec` → MCP `get_component` · 스토리는 `stories/_spec.ts` `withSpec` 로 Docs 탭에) · `index.ts` export · 필요한 CSS · 토큰 |
 | **Storybook** | 계층 title 의 스토리(변형 · 상태마다) · autodocs 설명 |
-| **Figma 정본** (`2LktjSjKZDnCuWo5CQ6828`) | 컴포넌트 페이지 · 세트(코드 prop 과 같은 축의 variant · property · slot) · 색 · 여백 · 반경 · 글자는 WDS 변수 · 스타일 연결(미연결 0) · 설명(출처 · 코드 경로 · Figma 구현 노트) · 📄 문서 프레임 · 라이브러리 게시 |
+| **Figma 정본** (`2LktjSjKZDnCuWo5CQ6828`) | 컴포넌트 페이지 · 세트(코드 prop 과 같은 기준의 variant · property · slot) · 색 · 여백 · 반경 · 글자는 WDS 변수 · 스타일 연결(미연결 0) · 설명(출처 · 코드 경로 · Figma 구현 노트) · 📄 문서 프레임 · 라이브러리 게시 |
 | **카탈로그** (AI 가 읽고 실행하는 자리) | `docs/*-components.md` 또는 `primitives.md` 등재 · 정책이 걸리면 `patterns.md` · 필요하면 `SKILL.md` · `GUIDE.md` · `static/public/llms.txt` · 생성물(`components.json` · `policies.json` · `DESIGN.md`)은 `pnpm build:design` 으로 확인 |
 
 - 세 정본은 **같은 PR 흐름**에서 맞춘다. 코드만 먼저 병합하고 Figma 를 나중에 두지 않는다 — AI 는 카탈로그를 읽고 그대로 실행하므로, 한쪽에만 있는 컴포넌트는 다른 쪽에서 «없는 것» 으로 다시 만들어진다.

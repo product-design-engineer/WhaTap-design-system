@@ -247,7 +247,7 @@ export const tokens = {
           "한국어 본문 — 위젯 카드 내 메시지·라벨·제목. Latin glyph 도 Noto Sans 가 처리.",
       },
       numeric: {
-        value: "Roboto, 'Noto Sans', sans-serif",
+        value: "Roboto, 'Noto Sans', 'Noto Sans KR', sans-serif",
         description:
           "숫자·메트릭 — 차트 라벨, 테이블의 numeric 컬럼, 통계 강조 숫자에 사용.",
       },
@@ -407,7 +407,7 @@ export const tokens = {
       },
       metric: {
         value: { family: "numeric", size: "lg", weight: "bold", lineHeight: "none", tracking: "metric" },
-        description: "강조 metric 숫자 — 14px Bold / -0.2px / leading-none / numeric. LiveTimer · AiMigPlan total.",
+        description: "강조 metric 숫자 — 14px Bold / -0.2px / leading-none / numeric. LiveTimer · PlanProposal total.",
       },
       chartLabel: {
         value: { family: "numeric", size: "chart", weight: "regular", lineHeight: "none", tracking: "default" },

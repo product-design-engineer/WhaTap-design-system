@@ -2,6 +2,25 @@
 
 > `@whatap/design-system` — WhaTap SaaS 의 단일 컴포넌트·토큰 출처. Primitives · Chrome · AI Widget 카드 + 토큰(@theme static). 프론트엔드 엔지니어가 자기 AI 작업 환경에서 인터페이스 작업에 그대로 사용하기 위한 디자인 시스템.
 
+## 설치 (소비자)
+
+```bash
+# 최신 (main 배포마다 자동 갱신)
+npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-latest.tgz
+
+# 버전 고정
+npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-0.1.10.tgz
+```
+```tsx
+import "@whatap/design-system/style.css";   // 진입점에서 1회 — 토큰+유틸+전역+.dark 포함
+import { DashboardLayout, Button, DataTable } from "@whatap/design-system";
+import { AiCard } from "@whatap/design-system/widget";
+import { MiniLineChart } from "@whatap/design-system/chart";   // 차트 전용 진입점 (루트에서도 재수출)
+```
+- repo clone·collaborator 초대 불필요. npm·pnpm·yarn 모두 가능.
+- 버전 목록: `/releases/index.json`
+- 상세: [ONBOARDING.md](/design-system/ONBOARDING.md)
+
 ## 지식 주입 (catalog)
 
 - [DESIGN.md](/design-system/DESIGN.md): 전체 합본 카탈로그(SKILL→tokens→primitives→chrome→ai-entry→widget→patterns). AI 컨텍스트에 한 번에 주입용.
@@ -39,7 +58,9 @@
 │   ├── 표 → DataTable + Pagination + FilterBar
 │   ├── 필터 → FilterBar + FilterDropdown + FilterChip
 │   ├── 위젯 한 칸 (대시보드 격자) → WidgetFrame(헤더 · 본문 · 푸터) + 본문 컴포넌트 (patterns §15)
+│   ├── 범례 견본 → ChartSwatch(마크 모양 — 선 line · 면/막대/조각/칸 square) · WidgetFrame legend[].shape (patterns §26)
 │   ├── 차트 (미니) → MiniLineChart · MiniMultiLineChart · MiniBarChart(막대 · 누적 · TOP-N 범주 categories + valueLabels) · ApdexChart · ForecastLineChart(관측 실선 · 예측 점선 · 임계 띠) · BarList(가로 막대 줄) · MiniDonutChart · ScatterHeatmap · Heatmap (대시보드 칸에서는 frame={false} + WidgetFrame)
+│   ├── 차트 공통 요소 (DS 안에서 새 차트를 만들 때) → ChartGrid(격자 · 마크 아래) + ChartValueAxis(축선 · 눈금 글자 · 마크 위) + ChartPeakMarker(최고점 ▼) + ChartTimeAxis(X축 시간 글자) — 차트 안에서 다시 그리지 않는다 (patterns §26)
 │   ├── 통계 카드 → StatCard · KpiCard (대시보드 칸에서는 frame={false} + WidgetFrame)
 │   └── 토폴로지 → TopologyCanvas + TopologyNode + TopologyEdge + TopologyToolbar
 │
@@ -49,7 +70,8 @@
 │   ├── 선택 (다중) → FilterDropdown
 │   ├── 날짜/시간 → DatePicker · TimeRangeSelector
 │   ├── ON/OFF → Switch (즉시 적용) · Checkbox (폼 제출)
-│   └── 행동 메뉴 → ActionMenu + ActionMenuItem
+│   ├── 행동 메뉴 → ActionMenu + ActionMenuItem
+│   └── 화면 언어 → PageHeader `language` (PageHeaderLanguageMenu · 지구본 24px · 라벨은 그 언어 자기 이름)
 │
 ├── 알림 / 피드백
 │   ├── 시스템 알림 → Toast
@@ -61,6 +83,9 @@
 │   ├── 진입점 → AiInlinePrompt (헤더 내장) · AiAssistantButton (FAB)
 │   ├── 입력 → AiPromptInput + AiSendButton
 │   ├── 응답 카드 → AiCard + AiSectionHeading + AiBulletList + AiToneBadge
+│   ├── 기다리는 동안 (10초 넘는 단계 연산) → AiProgress(AiStageMotion · AiProgressStep) + 작성 단계에서만 AnswerSkeleton still · 위젯 onStop (patterns §24) · 제목은 «{처리하는 대상}을/를 {동작}하고 있어요», label 고정, title 과 count.unit 은 같은 대상
+│   ├── 기다리는 동안 · 간편 (대상 하나 · 이어 묻기 · 좁은 자리) → AiProgressCompact(실행 내용 한 줄 + .wds-ai-shimmer 글로우, 누르면 상세 조회)
+│   ├── 짧은 대기 (2초 안팎) → LoadingMessage
 │   ├── 추론 과정 → AiReasoning + AiStepsTimeline + AiToolCallStep
 │   ├── 비용/분류 → AiCostTable · AiClassificationTable · AiCostBreakdown
 │   └── 대시보드 제안 → AiDashboardProposal + ProposalSection + AiChoiceButtons

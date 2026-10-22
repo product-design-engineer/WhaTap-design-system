@@ -42,6 +42,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 import AiClickCursor from "./widget/ClickCursor";
+import SendButton from "./widget/SendButton";
 import AiActionChip from "./widget/ActionChip";
 import AiAttachmentChip from "./widget/AttachmentChip";
 import AiUnavailableNotice, {
@@ -51,6 +52,9 @@ import AiUnavailableNotice, {
 const WIDGET_WIDTH = 480;
 
 export type WidgetAction = string;
+
+/** 쓸 수 없는 입력창에서 입력칸 · 첨부 · 전송만 흐리고 막는다. 재원 알약은 빼고(위 설명). */
+const UNAVAILABLE_DIM = { opacity: 0.5, pointerEvents: "none" } as const;
 
 export default function WhaTapAiWidget({
   open,
@@ -73,6 +77,7 @@ export default function WhaTapAiWidget({
   inputCaption,
   usagePill,
   titleBadge,
+  onStop,
 }: {
   open: boolean;
   onClose?: () => void;
@@ -83,7 +88,7 @@ export default function WhaTapAiWidget({
    * 헤더 제목 「WhaTap AI」 옆에 서는 뱃지. 이 대화가 «무엇으로 나가는가» 를 상시로 말한다
    * (재원 이름 — 무료 · plan 이름).
    *
-   * 잔량은 여기 적지 않는다. 종류와 잔량은 다른 축이고, 잔량은 «보내는 자리»(입력창 pill)에
+   * 잔량은 여기 적지 않는다. 종류와 잔량은 다른 기준이고, 잔량은 «보내는 자리»(입력창 pill)에
    * 붙어야 뜻이 선다. 헤더에 숫자까지 넣으면 위젯 꼭대기가 과금 계기판이 된다.
    */
   titleBadge?: import("react").ReactNode;
@@ -136,6 +141,12 @@ export default function WhaTapAiWidget({
    * preset 사유만 쓰려면 `{ reason: "quota" }` 처럼 전달.
    */
   unavailable?: AiUnavailableNoticeProps;
+  /**
+   * AI 가 답을 만드는 중이면 넘긴다. 송신 버튼 자리가 중단 버튼(■)이 되고, 누르면 이 함수가 불린다.
+   * 입력창은 막지 않는다 — 작업 중에도 다음 질문을 미리 쓸 수 있다. 대신 Enter 로 보내지는 않는다
+   * (끝나고 보낸다). 진행 표시는 [[AiProgress]] 가 본문에서 맡는다. 끝나면 `undefined` 로 되돌린다.
+   */
+  onStop?: () => void;
 }) {
   const isUnavailable = unavailable != null;
   // editable mode: parent 가 inputValue 를 지정하지 않으면 사용자가 직접 입력.
@@ -145,7 +156,7 @@ export default function WhaTapAiWidget({
   const hasInput = effectiveValue.trim().length > 0;
 
   const handleSubmit = () => {
-    if (!hasInput || !onSubmit) return;
+    if (onStop || !hasInput || !onSubmit) return;
     onSubmit(effectiveValue);
     setTyped("");
   };
@@ -347,11 +358,12 @@ export default function WhaTapAiWidget({
             className="ai-input-wrapper relative bg-card flex flex-col gap-4px items-center justify-center p-12px shrink-0 rounded-8px transition-all duration-200 w-full"
             style={{
               border: hasInput ? "2px solid var(--color-brand-blue)" : "2px solid var(--color-brand-blue-bg-2)",
-              opacity: isUnavailable ? 0.5 : 1,
-              pointerEvents: isUnavailable ? "none" : undefined,
             }}
             aria-disabled={isUnavailable || undefined}
           >
+            {/* 쓸 수 없을 때 흐리고 막는 것은 입력칸 · 첨부 · 전송뿐이다. 재원 알약(usagePill)은 그 상태에서
+                빠져나가는 길(「범위에 추가」 · 「결제권한자에게 요청」 · 「납부하기」)이라 또렷하게 두고 누를 수 있게 한다.
+                전에는 감싸는 상자 전체에 opacity · pointer-events 를 걸어 알약까지 마우스로 누를 수 없었다. */}
             {/* 첨부 파일 칩 행 (Figma 27087:3416) */}
             {attachments && attachments.length > 0 && (
               <div className="flex gap-6px items-center w-full overflow-x-auto pb-4px">
@@ -360,7 +372,7 @@ export default function WhaTapAiWidget({
                 ))}
               </div>
             )}
-            <div className="flex gap-0 items-center p-2px w-full">
+            <div className="flex gap-0 items-center p-2px w-full" style={isUnavailable ? UNAVAILABLE_DIM : undefined}>
               <textarea
                 placeholder={isUnavailable ? "지금은 WhaTap AI 를 사용할 수 없습니다" : inputPlaceholder}
                 rows={1}
@@ -389,6 +401,7 @@ export default function WhaTapAiWidget({
                 <button
                   type="button"
                   aria-label="파일 또는 이미지 추가"
+                  style={isUnavailable ? UNAVAILABLE_DIM : undefined}
                   className="group-plus flex items-center justify-center p-2px rounded-4px shrink-0 size-20px cursor-pointer border-0 bg-card hover-bg-invert transition-colors"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-colors">
@@ -401,8 +414,11 @@ export default function WhaTapAiWidget({
                 {usagePill !== undefined && usagePill !== null && <UsagePill>{usagePill}</UsagePill>}
               </div>
               <div className="flex gap-8px items-center shrink-0">
-                {/* 전송 버튼 — input에 텍스트가 있으면 활성(blue) */}
-                <div className="relative shrink-0">
+                {/* 전송 버튼 — input에 텍스트가 있으면 활성(blue). 작업 중(onStop)이면 같은 자리가 중단 버튼 */}
+                <div className="relative shrink-0" style={isUnavailable ? UNAVAILABLE_DIM : undefined}>
+                {onStop ? (
+                  <SendButton mode="stop" onClick={onStop} />
+                ) : (
                 <button
                   type="button"
                   disabled={!hasInput}
@@ -428,6 +444,7 @@ export default function WhaTapAiWidget({
                     />
                   </svg>
                 </button>
+                )}
                 {showSendCursor && (
                   <AiClickCursor style={{ right: -18, top: 6 }} />
                 )}

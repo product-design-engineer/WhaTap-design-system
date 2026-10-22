@@ -10,15 +10,23 @@ metadata:
 
 # WhaTap Design System (@whatap/design-system)
 
-WhaTap 제품의 단일 컴포넌트 출처(별도 git repo, 빌드 산출물 없는 소스온리). 소비 측(프로토타입)은 `link:` 심링크로 import — DS 수정이 자동 반영(HMR).
+WhaTap 제품의 단일 컴포넌트 출처. 빌드된 패키지(JS + 타입 + CSS)를 Vercel 호스팅 tarball로 배포하며, DS 동시 개발 시에는 `link:` 심링크도 지원.
 
 원본 소스는 `src/`. 이 문서는 실제 코드와 1:1 동기화된 카탈로그입니다.
 
 ## 설치 / Import
 
-> 외부 repo·신규 엔지니어(접근 권한·사전조건·설치 순서)는 [`ONBOARDING.md`](./ONBOARDING.md)의 체크리스트를 먼저 참고하세요. (private repo collaborator 초대 + Vite·TS·React19 · 스타일은 일반 CSS style.css)
+> 상세 절차·사전조건·트러블슈팅: [`ONBOARDING.md`](./ONBOARDING.md)
 
-### 소비 (link: 심링크)
+### 소비 (tarball — 권장)
+
+```bash
+npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-latest.tgz
+```
+
+repo 접근 불필요. Vite·Next.js·webpack 모두 추가 설정 없이 동작. main 배포마다 자동 갱신.
+
+### DS 동시 개발 (link: 심링크)
 
 소비자 프로토타입의 `package.json` 에:
 
@@ -46,6 +54,9 @@ import {
 // 위젯 (AI 카테고리) subpath
 import { AiCard, AiSectionHeading, TONE_DOT } from "@whatap/design-system/widget";
 
+// 차트 (데이터 시각화 · Chart Art) subpath — 루트에서도 같은 이름을 재수출한다
+import { MiniLineChart, Heatmap } from "@whatap/design-system/chart";
+
 // 스타일시트 (소비자 진입점에서 1회) — 토큰+유틸+전역+.dark 전부 포함
 import "@whatap/design-system/style.css";
 ```
@@ -60,14 +71,14 @@ import "@whatap/design-system/style.css";
 
 DS는 **Tailwind를 쓰지 않습니다.** `style.css`(= `whatap-ds.css`)는 외부 프레임워크 흔적이 0인 자체 일반 CSS(클래스명도 escape 없는 식별자)라, 컴포넌트가 쓰는 모든 유틸·토큰·전역·`.dark`가 이미 포함됩니다. 소비 앱에 Tailwind·`@source` 설정 **불필요**. (토큰만 필요하면 `@whatap/design-system/tokens.css`.) 자세한 내용은 repo root `CLAUDE.md`.
 
-> ⚠️ `whatap-ds.css` 는 `scripts/detailwind.mjs` 생성물입니다. 컴포넌트 className 추가/변경 시 `node scripts/detailwind.mjs generate` 로 재생성.
+> ⚠️ `whatap-ds.css` 는 **직접 편집한다**(hand-maintained). `scripts/detailwind.mjs generate` 는 최초 1회 변환용이었고 **재실행 금지** — 가드가 거부한다(CLAUDE.md «스타일»). 새 유틸 · 토큰은 이 파일에 바로 추가한다.
 
-### 새 소비 프로토타입 추가 시
+### 새 소비 프로젝트 추가 시
 
-1. `package.json` 에 `"@whatap/design-system": "link:<상대경로>/WhaTap-design-system"`
-2. vite `resolve.dedupe: ['react','react-dom']`
-3. 진입점에 `import "@whatap/design-system/style.css"` (Tailwind 불필요)
-4. `import { ... } from "@whatap/design-system"`
+1. `npm i https://whatap-design-system-storybook.vercel.app/releases/whatap-design-system-latest.tgz`
+2. 진입점에 `import "@whatap/design-system/style.css"` (Tailwind 불필요)
+3. `import { ... } from "@whatap/design-system"`
+4. (DS 동시 개발 시에만) `link:` 심링크 + vite `resolve.dedupe: ['react','react-dom']`
 
 자세한 절차·사전조건(협업자 초대 등): [`ONBOARDING.md`](./ONBOARDING.md) · [`AI-INTEGRATION.md`](./AI-INTEGRATION.md).
 
@@ -89,6 +100,10 @@ DS는 **Tailwind를 쓰지 않습니다.** `style.css`(= `whatap-ds.css`)는 외
 | ✅ **Do** | `## Do` 가 있으면 그대로 · 없으면 `When to use` 불릿 |
 | ❌ **Don't** | `## Don't` 가 있으면 그대로 · 없으면 `When NOT to use` + `Composition rules` 의 **금지형 문장**(금지·말 것·안 된다…) |
 
+**템플릿 섹션은 7개뿐이다** — 필수 4 + 선택 `## Spec`(치수 · 토큰 · 상태 · ARIA · 구성도 등 구현값) · `## Do` · `## Don't`. 생성기는 이 밖의 `## …` 를 읽지 않으므로 `## ARIA` · `## Why this exists` 같은 섹션은 **Storybook 에만 보이고 AI 에게는 배달되지 않는다**(2026-10-19 실측 15섹션 — Pagination 「페이지가 하나여도 컨트롤을 세운다」 정책이 그중 하나였다). 배경은 Purpose 에, 규칙은 Composition rules 에, 구현값은 Spec 에 둔다. `lint:docstrings` 가 템플릿 밖 섹션을 차단한다.
+
+**깊이도 본다(래칫).** `## When to use` 불릿 2개 이상(= ✅ Do 두 줄 이상) · 설명 없는 prop 0. prop 설명은 타입 블록 또는 구조 분해 인자 위의 `/** … */` 어느 쪽이든 읽힌다. 도입 시점 미달(109종)은 `docstring-baseline.json` `depth` 에 수치로 동결돼 있고, 나빠지면 실패 · 나아지면 `--update` 로 선을 줄이게 한다.
+
 특별히 강조할 컴포넌트만 docstring 에 `## Do` / `## Don't` 를 명시해 승격한다(그 컴포넌트에서 실제로 사고가 났던 것들). 스토리 설명의 `✅ Do — … / ❌ Don't — …` 블록도 같은 표기이며 함께 수집된다.
 
 **기계 판독 출력:** [`components.json`](./components.json) — `scripts/build-components-json.mjs` 가 위 규칙대로 생성하고 `/design-system/components.json` 으로 서빙한다. MCP `get_component` 와 `get_do_dont` 가 이 파일을 읽는다. **직접 편집 금지** — docstring 을 고치고 재생성(`pnpm build:design`).
@@ -97,7 +112,7 @@ DS는 **Tailwind를 쓰지 않습니다.** `style.css`(= `whatap-ds.css`)는 외
 
 ## 디자인 시스템 구조
 
-트리는 **컴포넌트 3계층(Primitives · Composite · Shell)** 과 동일한 축. AI 전용 에셋은 별도 카테고리가 아니라 각 계층 안 **`Ai/` 하위그룹**.
+트리는 **컴포넌트 3계층(Primitives · Composite · Shell)** 과 동일한 기준. AI 전용 에셋은 별도 카테고리가 아니라 각 계층 안 **`Ai/` 하위그룹**.
 
 ```
 WhaTap Design System (@whatap/design-system)
@@ -108,12 +123,14 @@ WhaTap Design System (@whatap/design-system)
 │   │                    Switch / Checkbox / Chip / FilterChip / DataTableRow /
 │   │                    SidebarMenuItem / MiniLineChart / WhaTap Symbol …
 │   └─ Ai/              ─ AiCard / AiCaption / AiSectionHeading / AiToneBadge /
-│                          AiBulletList / AiSymbol / AiUserBubble / ReasoningStep …
+│                          AiBulletList / AiSymbol / AiUserBubble / ReasoningStep /
+│                          AiProgressStep / AiStageMotion …
 ├─ Composite (29)      ─ 프리미티브 1단계 조합 (Composite 끼리 import 금지)
 │   │                    PageHeader / PageHeaderAiInline / Sidebar / FilterBar /
 │   │                    DataTable / FilterDropdown / OptionbarPage / ThemeToggle …
 │   └─ Ai/              ─ AiChatExchange / AiReasoning / AiDashboardProposal /
-│                          AiCostTable / InlinePrompt / PromptInput / SendButton …
+│                          AiCostTable / InlinePrompt / PromptInput / SendButton /
+│                          AiProgress / AiProgressCompact …
 └─ Shell (5)           ─ 최종 조립 진입점 (전 계층 import 가능)
                          DashboardLayout / Ai/Widget(WhaTapAiWidget) /
                          Page(A 기본 · B AI 전용 · D 상세)

@@ -11,6 +11,19 @@
  *   ③ 스토리 `parameters.docs.description.component` (카탈로그에서 사람이 읽는 첫 줄)
  *   ④ Do/Don't 가 **유도 가능**할 것 — When NOT to use 또는 Composition rules 의 금지형 문장이
  *      하나도 없으면 «하지 말 것»이 비게 되므로 실패다. 표기는 SKILL.md 의 단일 규칙을 따른다.
+ *   ⑤ **템플릿 밖 `##` 섹션 0** — 생성기는 템플릿 섹션(Purpose · When to use · When NOT to use ·
+ *      Composition rules · Spec · Do · Don't)만 읽는다. 그 밖의 `## ARIA` · `## Why this exists` 같은
+ *      섹션은 Storybook 에서만 보이고 MCP 로는 **배달되지 않는다**. 실측(2026-10-19) 13파일 18섹션 중
+ *      15섹션이 그랬다 — Pagination 「페이지가 하나여도 컨트롤을 세운다」 정책을 AI 는 몰랐다.
+ *      동결 없이 0 이다(그때 전부 표준 섹션으로 옮겼다).
+ *
+ * ## 깊이 — 있는 것과 충분한 것은 다르다 (래칫)
+ * 4섹션이 «있는지» 만 보면 불릿 하나짜리 When to use(→ Do 한 줄)와 설명 없는 prop(→ MCP 에 타입만)이
+ * 통과한다. 소스가 있는 컴포넌트에 둘을 더 요구한다:
+ *   ⑥ `## When to use` 불릿 2개 이상
+ *   ⑦ 설명 없는 prop 0 — 타입 블록 또는 구조 분해 인자 위의 `/** … *\/` 어느 쪽이든 된다
+ * 도입 시점의 미달은 `depth` 에 **수치로** 동결했다. 동결 항목은 그 수치보다 나빠지면 실패하고,
+ * 나아지면 「동결선이 낡았다」 로 실패해 `--update` 로 줄이게 한다(선이 아래로만 움직인다).
  *
  * 스토리 파일 안에서 정의되는 합성 템플릿(`Shell/Page/*`)과 Tokens 메타 스토리는 소스
  * docstring 이 있을 수 없다 — 이들에겐 ③만 요구한다.
@@ -50,9 +63,9 @@ for (const c of targets) {
      두고 서로 엇갈리게 만든다. 스토리 안에서 정의되는 합성 템플릿에는 이것이 유일한 문서다. */
   if (!c.summary && !c.sourceFile) missing.push("story description");
   /* 스토리 안에서 정의되는 합성 템플릿(`Shell/Page/*` 등)에는 「언제 쓰나」도 요구한다 —
-     그것이 **컴포넌트 이름을 모르는 사람이 «하려는 일»로 검색해 도달하는 축**이고
+     그것이 **컴포넌트 이름을 모르는 사람이 «하려는 일»로 검색해 도달하는 기준**이고
      (`search_components` 가 whenToUse 를 이름 다음 순위로 본다), 소스 docstring 이 없는
-     이들에게는 스토리 설명이 그 축을 담을 유일한 자리다. 표기는 docstring 과 같은
+     이들에게는 스토리 설명이 그 기준을 담을 유일한 자리다. 표기는 docstring 과 같은
      `## When to use` 섹션. */
   if (!c.sourceFile && !c.whenToUse.length) missing.push("story ## When to use");
   if (c.sourceFile) {
@@ -66,36 +79,93 @@ for (const c of targets) {
   if (missing.length) violations.push({ title: c.title, file: c.sourceFile ?? c.storyFile, missing });
 }
 
+/* ── 깊이(래칫) ───────────────────────────────────────────────────────────── */
+const depthNow = {};
+for (const c of targets) {
+  if (!c.sourceFile) continue;
+  const whenToUse = c.whenToUse.length;
+  const undocumentedProps = (c.props ?? []).filter((p) => !(p.description ?? "").trim()).length;
+  if (whenToUse < 2 || undocumentedProps > 0) depthNow[c.title] = { whenToUse, undocumentedProps, file: c.sourceFile };
+}
+/* ⑤ 템플릿 밖 섹션 — 동결 없음. */
+for (const c of targets) {
+  if (c.extraSections?.length) {
+    const v = violations.find((x) => x.title === c.title);
+    const msg = `템플릿 밖 섹션(배달 안 됨): ${c.extraSections.map((h) => `## ${h}`).join(" · ")}`;
+    if (v) v.missing.push(msg);
+    else violations.push({ title: c.title, file: c.sourceFile ?? c.storyFile, missing: [msg], noFreeze: true });
+  }
+}
+
 const key = (v) => `${v.title}`;
-const current = violations.map(key).sort();
+const current = violations.filter((v) => !v.noFreeze).map(key).sort();
+
+const base = existsSync(BASELINE) ? JSON.parse(readFileSync(BASELINE, "utf8")) : {};
+const frozen = base.frozen ?? [];
+const frozenDepth = base.depth ?? {};
+const frozenSet = new Set(frozen);
+const fresh = violations.filter((v) => v.noFreeze || !frozenSet.has(key(v)));
+const fixed = frozen.filter((k) => !current.includes(k));
+
+/* 깊이: 동결 수치보다 나빠졌거나(신규 포함) · 나아졌는데 선을 안 줄였거나. */
+const depthWorse = [];
+const depthBetter = [];
+for (const [title, now] of Object.entries(depthNow)) {
+  const f = frozenDepth[title];
+  const allowW = f ? f.whenToUse : 2;
+  const allowP = f ? f.undocumentedProps : 0;
+  const bad = [];
+  if (now.whenToUse < Math.min(allowW, 2)) bad.push(`When to use 불릿 ${now.whenToUse}개 (2개 이상${f ? ` · 동결 ${f.whenToUse}` : ""})`);
+  if (now.undocumentedProps > allowP) bad.push(`설명 없는 prop ${now.undocumentedProps}개 (0${f ? ` · 동결 ${f.undocumentedProps}` : ""})`);
+  if (bad.length) depthWorse.push({ title, file: now.file, bad });
+  else if (f && (now.whenToUse > f.whenToUse || now.undocumentedProps < f.undocumentedProps)) depthBetter.push(title);
+}
+for (const title of Object.keys(frozenDepth)) if (!depthNow[title]) depthBetter.push(title);
+
+const depthSnapshot = () =>
+  Object.fromEntries(
+    Object.entries(depthNow)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([t, v]) => [t, { whenToUse: v.whenToUse, undocumentedProps: v.undocumentedProps }]),
+  );
 
 if (update) {
-  writeFileSync(BASELINE, JSON.stringify({ frozen: current }, null, 2) + "\n");
-  console.log(`docstring baseline 갱신 — ${current.length}건 동결 (신규만 차단)`);
+  /* 동결선은 줄이는 방향으로만 움직인다 — 신규 · 악화가 있으면 거부한다(그걸 동결하는 길을 막는다). */
+  /* 단 한 번 — 기준선에 `depth` 키가 아직 없을 때(이 래칫 도입 시점)만 현재 미달을 동결한다. */
+  const bootstrap = !("depth" in base);
+  if (fresh.length || (depthWorse.length && !bootstrap)) {
+    console.error(`✗ --update 거부 — 신규 위반 ${fresh.length}건 · 깊이 악화 ${depthWorse.length}건이 있습니다. 먼저 고치세요.`);
+    process.exit(1);
+  }
+  writeFileSync(BASELINE, JSON.stringify({ frozen: current, depth: depthSnapshot() }, null, 2) + "\n");
+  console.log(`docstring baseline 갱신 — 구조 ${current.length}건 · 깊이 ${Object.keys(depthNow).length}건 동결 (신규만 차단)`);
   process.exit(0);
 }
 
-const frozen = existsSync(BASELINE) ? JSON.parse(readFileSync(BASELINE, "utf8")).frozen : [];
-const frozenSet = new Set(frozen);
-const fresh = violations.filter((v) => !frozenSet.has(key(v)));
-const fixed = frozen.filter((k) => !current.includes(k));
-
+let failed = false;
 if (fresh.length) {
+  failed = true;
   console.error(`✗ docstring 표준 위반 ${fresh.length}건 (신규):\n`);
   for (const v of fresh) console.error(`  ${v.title}\n    ${v.file}\n    누락: ${v.missing.join(" · ")}`);
   console.error(
-    `\n표준: Purpose / When to use / When NOT to use / Composition rules + @example (소스) + 스토리 description.` +
-      `\nDo/Don't 는 여기서 유도됩니다 — docs/SKILL.md 「Do / Don't 단일 표기」 참고.`,
+    `\n표준: Purpose / When to use / When NOT to use / Composition rules (+ 선택 Spec · Do · Don't) + @example (소스) + 스토리 description.` +
+      `\n그 밖의 \`## …\` 섹션은 배달되지 않습니다 — 내용을 위 섹션으로 옮기세요. docs/SKILL.md 「Do / Don't 단일 표기」 참고.`,
   );
-  process.exit(1);
 }
+if (depthWorse.length) {
+  failed = true;
+  console.error(`\n✗ docstring 깊이 미달 ${depthWorse.length}건:\n`);
+  for (const v of depthWorse) console.error(`  ${v.title}\n    ${v.file}\n    ${v.bad.join(" · ")}`);
+  console.error(`\nprop 설명은 타입 블록 또는 구조 분해 인자 위에 \`/** … */\` 로 씁니다.`);
+}
+if (failed) process.exit(1);
 
-if (fixed.length) {
-  console.error(`✗ 동결 목록이 낡았습니다 — ${fixed.length}건이 해소됐습니다:\n  ${fixed.join("\n  ")}`);
-  console.error(`\n\`node scripts/check-docstrings.mjs --update\` 로 동결선을 줄이세요(늘리는 방향은 신규 위반이라 막힙니다).`);
+if (fixed.length || depthBetter.length) {
+  console.error(`✗ 동결선이 낡았습니다 — 구조 ${fixed.length}건 · 깊이 ${depthBetter.length}건이 나아졌습니다:\n  ${[...fixed, ...depthBetter].join("\n  ")}`);
+  console.error(`\n\`node scripts/check-docstrings.mjs --update\` 로 동결선을 줄이세요(늘리는 방향은 거부됩니다).`);
   process.exit(1);
 }
 
 console.log(
-  `✓ docstring 표준 OK — 컴포넌트 ${targets.length} (완전 ${targets.length - violations.length} · 동결 ${violations.length})`,
+  `✓ docstring 표준 OK — 컴포넌트 ${targets.length} (완전 ${targets.length - violations.length} · 동결 ${violations.length}) · 깊이 동결 ${Object.keys(depthNow).length}`,
 );

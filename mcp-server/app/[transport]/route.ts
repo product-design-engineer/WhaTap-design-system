@@ -48,6 +48,8 @@ type ComponentDoc = {
   whenToUse: string[];
   whenNotToUse: string[];
   compositionRules: string[];
+  /** 개발 스펙(docstring `## Spec` 절 원문 markdown) — 치수 · 토큰 · 상태 · 데이터 계약. 없으면 null. */
+  spec?: string | null;
   do: string[];
   dont: string[];
   example: string | null;
@@ -121,6 +123,7 @@ function rulesBlock(c: ComponentDoc): string[] {
         (p) => `- \`${p.name}\`${p.required ? "" : "?"}: \`${p.type}\`${p.description ? ` — ${p.description}` : ""}`,
       ),
     );
+  if (c.spec) out.push(``, `## Spec (개발 스펙)`, c.spec);
   if (c.example) out.push(``, `## Example`, "```tsx", c.example, "```");
   return out;
 }
@@ -372,7 +375,7 @@ const handler = createMcpHandler(
         const tokens = q.split(/\s+/).filter(Boolean);
 
         /* 필드별 가중치 — **whenToUse 를 이름 다음으로 높게** 둔다. 개발자는 컴포넌트 이름을
-           모르는 상태로 "무엇을 하려는지"로 찾아오고, 그 축의 정본이 whenToUse 다.
+           모르는 상태로 "무엇을 하려는지"로 찾아오고, 그 기준의 정본이 whenToUse 다.
            (교체 전 이 도구는 title·스토리 name·id 만 봤다 → 한국어 의도 질의는 전부 무매칭이었고
             폴백으로 DESIGN.md 를 grep 했는데 그건 120종 중 51종이 없는 손유지 합본이었다.) */
         const FIELDS: { key: string; w: number; of: (c: ComponentDoc) => string[] }[] = [

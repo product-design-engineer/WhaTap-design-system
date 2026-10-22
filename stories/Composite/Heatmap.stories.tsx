@@ -6,7 +6,7 @@ import { Heatmap, HeatmapLegend } from "@whatap/design-system";
  * Stories for [[Heatmap]] — 시간 격자 위 지표 강도.
  */
 const meta: Meta<typeof Heatmap> = {
-  title: "Composite/Heatmap",
+  title: "Composite/Chart · Heatmap",
   component: Heatmap,
   tags: ["autodocs"],
   parameters: {

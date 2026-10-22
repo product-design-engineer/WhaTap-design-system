@@ -39,7 +39,7 @@ export type Tone = "high" | "mid" | "low" | "idle" | "neutral";
 
 ```ts
 tokens.font.family.korean.value   // 'Noto Sans', 'Noto Sans KR', sans-serif
-tokens.font.family.numeric.value  // Roboto, 'Noto Sans', sans-serif
+tokens.font.family.numeric.value  // Roboto, 'Noto Sans', 'Noto Sans KR', sans-serif
 ```
 
 - `korean` — 위젯 본문, 헤딩, 라벨 (한국어 + 영문 혼합)
@@ -109,7 +109,7 @@ tokens.font.weight.bold.value     // 700 — 강한 강조 (Caption · SectionHe
 | `body` | korean · md(13px) · regular · normal · default | AiBulletList md · AiUserBubble |
 | `bodySmall` | korean · base(12px) · regular · relaxed · default | AiBulletList sm · dim 본문 |
 | `label` | korean · xs(10px) · medium · none · default | AiToneBadge text |
-| `metric` | **numeric** · lg(14px) · bold · none · metric | LiveTimer digit · AiMigPlan total · KPI |
+| `metric` | **numeric** · lg(14px) · bold · none · metric | LiveTimer digit · PlanProposal total · KPI |
 | `chartLabel` | **numeric** · chart(9px) · regular · none · default | MiniLineChart axis · peak |
 | `tableHeaderCompact` | korean · xs(10px) · bold · none · default | DataTable compact 헤더 |
 | `tableCellCompact` | korean · sm(11px) · regular · snug · default | DataTable compact 셀 |
@@ -123,7 +123,7 @@ tokens.font.weight.bold.value     // 700 — 강한 강조 (Caption · SectionHe
 | SVG 차트 axis · peak 라벨 | `numeric` | 숫자 가독성 + 등폭 비례 우수 |
 | DataTable numeric 컬럼 | `numeric` | 자릿수 정렬 정확 |
 | 시계 · 타이머 digit (LIVE) | `numeric` | 모노스페이스 느낌, digit 흔들림 없음 |
-| 큰 metric 숫자 (₩, %, count) | `numeric` | AiMigPlan total · KPI 카드 |
+| 큰 metric 숫자 (₩, %, count) | `numeric` | PlanProposal total · KPI 카드 |
 | ISO date · hex 색상 코드 | `numeric` | 한국어 텍스트와 시각 구분 |
 
 ## Spacing / Sizing Scale
@@ -365,25 +365,29 @@ hover 시 표면이 뒤집히는 아이콘 버튼(첨부 `+` 버튼 등)은 `bla
 | **seq** (sequential) | `--color-chart-seq-1..4` | **크기** — 얼마나 큰가 |
 | **neutral** | `--color-chart-neutral` | **판정 밖**: 대조군 · 평탄 계열. 상태색을 쓰는 차트에서 대상이 아닌 계열을 회색으로 낮춘다(ForecastLineChart) |
 
-**series 규칙**
-- **1번부터 순서대로 배정하고 순환하지 않습니다.** 순서 자체가 CVD 안전 장치이므로 바꾸지 않습니다.
-- 9번째 계열은 새 색을 만드는 게 아니라 "기타"로 접거나 small multiples 로 쪼갭니다.
-- **색은 엔티티를 따라갑니다** — 필터로 계열 수가 바뀌어도 남은 계열의 색은 그대로. 순위에 따라 색을 다시 칠하지 마세요.
-- ⚠️ **all-pairs 상한 3슬롯.** scatter · bubble · choropleth · small-multiples 처럼 임의의 두 마크가 맞닿는 형태는 **3계열까지**만 안전합니다(측정: 라이트 20.7 / 다크 16.5). 4번째를 넣으면 orange↔gold 가 정상시야 ΔE 11.0 으로 무너집니다 — **팔레트로 해결되지 않으므로** facet 으로 쪼갭니다.
+**규칙은 [`patterns.md`](./patterns.md) 가 정본이다** — 이 절은 토큰과 측정값만 둔다.
 
-**seq 규칙** — 한 색조의 단조 lightness 램프. 라이트는 옅음→진함, **다크는 anchor 가 뒤집혀** 어두움→밝음입니다(자동 반전이 아니라 선택된 값). 순서 없는 항목에 seq 를 쓰면 없는 순서를 부여해 잘못 읽힙니다.
+| 무엇을 정하나 | 정책 |
+|---|---|
+| 색이 무엇을 말하나 → 어느 토큰 묶음 · series 순서 · 순환 금지 · 엔티티를 따라가는 색 | §17 `chart-color-role` |
+| 맞닿는 차트는 3계열까지 | §18 `chart-all-pairs-cap` |
+| 이중 축 금지 | §19 `chart-no-dual-axis` |
+| 팔레트를 바꿀 때 검증기 | §20 `chart-palette-validate` |
+| 레거시(D-032 `--wds-chart-*`) 흡수 · 엔티티 슬롯 | §21 `chart-legacy-absorb` |
+| 계열이 9개 이상일 때 | §22 `chart-many-series` |
+| 계열 색 ↔ Severity 색 변별 | §23 `chart-series-vs-severity` |
 
-**금지**
-- ❌ status 색을 "series 9"로 재사용 — 예약된 의미입니다.
-- ❌ 라벨·값 텍스트에 series 색 — 텍스트는 text 토큰, 색은 마크가 담당합니다.
-- ❌ 이중 축(dual-axis) 차트 — 스케일이 다른 두 지표는 차트를 둘로 나눕니다.
+**seq** 는 한 색조의 단조 lightness 램프다. 라이트는 옅음→진함, **다크는 anchor 가 뒤집혀** 어두움→밝음이다(자동 반전이 아니라 고른 값).
 
-**검증 근거** (dataviz `validate_palette.js`, 6개 체크):
+**측정값은 여기에 적지 않는다** — 손으로 옮긴 수치는 값을 바꾸는 순간 낡는다(2026-10-14 재조정 때 옛 수치가 다섯 군데에 남아 있었다).
 
-| | 최악 인접 CVD ΔE | 정상시야 최악 | 대비 |
-|---|---|---|---|
-| 라이트 | 9.5 (deutan) | 17.0 | 전부 ≥3:1 |
-| 다크 | 9.6 (deutan) | 18.3 | 전부 ≥3:1 |
+| 보고 싶은 것 | 정본 |
+|---|---|
+| 대역 · 채도 · 대비 · 인접 · 1~3 전체 · 엔티티 순서 · Severity 최악 쌍 (라이트 · 다크) | `pnpm lint:chart-palette` 출력 — `pnpm test` 가 매번 잰다 |
+| 계열 슬롯별 Severity · info 와의 거리 (모든 쌍 · 정상시야 / protan / deutan) | `docs/tokens.json` 의 `distinctFrom` — MCP `get_tokens` 가 읽는다 |
+| 값 · 다크 값 | `docs/tokens.json` 의 `value` · `dark` (런타임 `whatap-ds.css` 에서 생성) |
+
+식은 dataviz `validate_palette.js` 와 같다(`scripts/lib/color-distance.mjs`). 이력: 첫 후보는 gold 밝기 대역 초과로, 엔티티 순서의 첫 배치는 dbc↔socket 이웃에서, 2026-10-14 재조정의 계산 후보는 hex 반올림 뒤 대역 · 채도 경계에서 FAIL 했다.
 
 seq 램프는 단조 L · 인접 ΔL ≥ 0.06 · 옅은 끝 대비 ≥ 2:1 · 단일 색조 전부 통과. **팔레트를 바꿀 때는 눈으로 판단하지 말고 검증기를 다시 돌리세요.**
 
@@ -394,7 +398,7 @@ seq 램프는 단조 L · 인접 ΔL ≥ 0.06 · 옅은 끝 대비 ≥ 2:1 · �
 | 토큰 | 자리 |
 |---|---|
 | `--color-web-landing-fg-rgb` | 전경 RGB 트리플. `rgba(var(--color-web-landing-fg-rgb), 0.6)` 처럼 알파를 합성해 본문·보더·아이콘을 칠함 |
-| `--color-web-landing-surface-alt` | 섹션 교대 배경 (마케팅 리듬. 제품의 `--color-bg` 와 다른 축) |
+| `--color-web-landing-surface-alt` | 섹션 교대 배경 (마케팅 리듬. 제품의 `--color-bg` 와 다른 기준) |
 | `--color-web-landing-input-bg` | 히어로 URL 입력칸 바탕 |
 | `--color-web-landing-danger` | 입력 검증 실패 문구. 배지·도트 원색은 `--color-status-error` |
 | `--shadow-web-landing-focus` | 그라데이션 입력칸 포커스 링 |

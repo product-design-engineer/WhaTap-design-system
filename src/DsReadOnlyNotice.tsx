@@ -5,8 +5,7 @@
  * 소비자(엔지니어)가 UI 작업 레이어에서 토큰·컴포넌트·Atom·위젯을
  * 역으로 수정하려 할 때 표시하는 불변 정책 안내 창.
  *
- * ## 불변 정책 (Immutable Policy)
- * 소비 레이어에서의 override · 재정의 · CSS 덮어쓰기 · 토큰 값 변경은
+ * 불변 정책(Immutable Policy): 소비 레이어에서의 override · 재정의 · CSS 덮어쓰기 · 토큰 값 변경은
  * 예외 없이 금지. 변경은 디자인 시스템 repo에서만 수행.
  *
  * ## When to use

@@ -37,7 +37,7 @@ const { components } = JSON.parse(readFileSync(join(root, "docs/components.json"
 
 /* ── 공개 export 수집 (값 export 만) ─────────────────────────────────────── */
 const exported = new Map(); // name → barrel
-for (const b of ["src/index.ts", "src/widget/index.ts"]) {
+for (const b of ["src/index.ts", "src/widget/index.ts", "src/chart/index.ts"]) {
   const p = join(root, b);
   if (!existsSync(p)) continue;
   const src = readFileSync(p, "utf8");

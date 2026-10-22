@@ -125,13 +125,19 @@ export type OrgContext = { label: string; icon?: string; badge?: string }; // ba
 | `profileMenu` | `ProfileMenuItem[]` | — | 우상단 **아바타 클릭 드롭다운**(계정 정보·엔터프라이즈 관리·전환·로그아웃 등). 미지정 시 정적 아바타 |
 | `roleBadge` | `string` | — | 프로필 드롭다운 **헤더**에 표시할 역할(예: `"OWNER"`) → "OWNER · 내 계정". **아바타 옆 독립 칩 아님** |
 | `notifications` | `NotificationItem[]` | — | **벨 빨간 점 + 드롭다운**. 1건↑일 때만 인디케이터 |
+| `language` | `PageHeaderLanguage` | — | **언어 설정**. 주면 벨 왼쪽에 지구본 24px 트리거([[PageHeaderLanguageMenu]]). 라벨은 그 언어 자기 이름(한국어 · English · 日本語) |
+| `labels` | `PageHeaderLabels` | 한국어 | 헤더 고정 글자(`support` 고객지원 · `notifications` 알림 · `myAccount` 내 계정). 화면 언어가 한국어가 아닐 때 번역해 넘긴다 |
 
 ```ts
 export type ProfileMenuItem = { label: string; onClick?: () => void };
 export type NotificationItem = { label: string; onClick?: () => void };
+export type PageHeaderLanguage = { value: string; options: { code: string; label: string }[]; onChange?: (code: string) => void; title?: string };
+export type PageHeaderLabels = { support?: string; notifications?: string; myAccount?: string };
 ```
 
-타이틀 + AI 버튼 + Docs + 고객지원 + **bell(notifications 시 빨간 점)** + **avatar(profileMenu 드롭다운 · roleBadge 헤더)** 가 항상 한 줄에 모두 표시됩니다.
+**언어 설정 정책:** 언어 트리거는 벨 · 아바타와 같은 **24px 아이콘 트리거**다(글자 pill 아님). 그래서 켜도 오른쪽 줄의 크기와 16px 간격이 그대로다. 선택지 라벨을 지금 언어로 번역하지 않는다. 읽지 못하는 언어로 들어온 사람이 자기 언어를 찾을 수 있어야 한다. 헤더는 고른 값만 알리고, 저장과 화면 다시 그리기는 소비 레이어가 한다.
+
+타이틀 + AI 버튼 + Docs + 고객지원 + (언어 · `language` 시) + **bell(notifications 시 빨간 점)** + **avatar(profileMenu 드롭다운 · roleBadge 헤더)** 가 항상 한 줄에 모두 표시됩니다.
 
 **사용자 메뉴 정책:** 우상단 사용자 영역은 **아바타 드롭다운 1개**로 일원화. 역할(`roleBadge`)은 **드롭다운 헤더**로 표시하고, 아바타 옆에 별도 역할 칩(2번째 트리거)을 두지 않는다.
 
@@ -437,7 +443,7 @@ export type DataTableProps<T> = {
 | `menu` | `ActionMenuAction[]` | — | 헤더 메뉴 둘째 칸 ⋮ 더보기 안의 줄(설정 · 복사 · 상세로 이동). 주면 선다 |
 | `onAsk` | `() => void` | — | AI 진입점. ⋮ 첫 줄 「AI 에게 묻기」 + 헤더 맨 앞 호버 지름길(같은 동작). AI 위젯을 여는 화면에서만 |
 | `draggable` | `boolean` | `false` | 헤더를 끌기 손잡이로(`.wds-widget-frame-handle`, 메뉴 `.wds-widget-frame-actions` 제외). 배치하는 보드에서만 |
-| `legend` | `{ label, color }[]` | — | 본문 오른쪽 위 한 줄 범례. 모든 차트 칸에(계열 하나여도). 이름표가 본문 안에 있는 BarList · 도넛 · Apdex · 숫자 칸만 제외. 속도 구분 `SPEED_LEGEND` |
+| `legend` | `{ label, color, value? }[]` | — | 본문 오른쪽 위 한 줄 범례. 모든 차트 칸에(계열 하나여도). 이름표가 본문 안에 있는 BarList · 도넛 · Apdex · 숫자 칸만 제외. 속도 구분 `SPEED_LEGEND`. `value` 는 지금 값(이름 뒤에 굵게) · 계열 넷 이하일 때만(§25) |
 | `bleed` | `boolean` | `false` | 본문 안쪽 여백 없앰. 표 · 히트맵 · 아크처럼 본문이 가장자리를 가질 때만 |
 | `state` | `"ready" \| "no-data" \| "collect-gap"` | `"ready"` | `ready` 가 아니면 본문 대신 [[EmptyState]] |
 | `stateTitle` / `stateDescription` | `ReactNode` | 상태별 기본 문장 / — | 빈 상태 두 줄 |
@@ -448,6 +454,8 @@ export type DataTableProps<T> = {
 - **헤더 오른쪽 아이콘 메뉴는 ⛶ 전체 화면 + ⋮ 더보기 둘로 고정**(순서 고정). 나머지 행동은 전부 더보기 안으로. AI 위젯을 여는 화면이면 `onAsk` 로 맨 앞에 호버 지름길(AI)이 더해져 [AI][⛶][⋮] — ⋮ 첫 줄 「AI 에게 묻기」도 함께 선다
 - **헤더는 제목 · 메뉴만.** 값 · 건수 · 단위 · 시간 범위를 헤더에 두지 않는다. 값은 본문 첫 줄 `summary`, 시간은 옵션바
 - **범례는 본문 오른쪽 위 한 줄.** 헤더 오른쪽은 메뉴 자리다. 계열이 셋을 넘거나 글이 길면 본문 안 차트 옆 열로
+- **지금 값은 계열 수로 자리를 고른다**(§25). 하나는 `summary`, 둘 ~ 넷은 `legend[].value`, 강조 계열이 여럿이면 MiniMultiLineChart 선 끝 배지(`series[].endLabel`). 한 칸에 한 방식
+- **Figma 정본**: MiniMultiLineChart 세트 342:69 에 `endBadges` 축(4 variant · 배지 변형 507:30 등) · 변수 `wds/widget-end-gutter`(VariableID:507:29, 44 · `WDS · Size`). WidgetFrame 범례 값 예시 507:235(같은 페이지). 게시는 사람이 한다
 - 세 칸 사이에 구분선을 긋지 않는다. 같은 표면 안이라 여백이 경계다
 - 껍데기를 가진 차트(MiniLineChart · MiniMultiLineChart · MiniDonutChart · KpiCard · HexGrid)는 `frame={false}` 로 끄고 넣는다. 켠 채 넣으면 카드가 두 겹이 된다
 - AI 진입점은 껍데기에 두지 않는다(§15)
@@ -479,9 +487,46 @@ export type DataTableProps<T> = {
 
 ---
 
+## 차트 공통 요소 — ChartGrid · ChartValueAxis · ChartPeakMarker (Primitives)
+
+값축이 있는 차트가 함께 쓰는 플롯 부품(patterns §26). 차트는 이 둘을 **조합**하고 격자 · 눈금을 다시 그리지 않는다 — 그래서 MiniLineChart · MiniMultiLineChart · MiniBarChart · ForecastLineChart 는 Composite 계층이다. `@whatap/design-system/chart` 에서 가져온다.
+
+| 부품 | 그리는 것 | 놓는 순서 |
+|---|---|---|
+| [[ChartGrid]] | 눈금(최대 · 절반 · 0)마다 가로 점선 · `--color-border-soft` | 마크 **아래** |
+| [[ChartValueAxis]] | X 바닥선 · Y 세로선(`--color-border-divider`) + 눈금 글자(`text-chart` · 숫자 서체 · tertiary, 단위 접미사) | 마크 **위** |
+| [[ChartPeakMarker]] | 최고점 값 말풍선(카드 바탕 · `text-xs` 굵게) + ▼(계열 색). `label` · `color` · `left` · `top` — ▼ 끝이 (`left`, `top`) 에 닿는다(§5) | 덧그림 겹, 맨 위 |
+
+| Prop (둘 공통) | Type | Default |
+|---|---|---|
+| `max` | `number` — 이미 보기 좋은 값으로 올린 최대. 0 이면 바닥 눈금 하나 | — |
+| `padTop` | `number` (px) | `4` |
+| `padBottom` | `number` (px) — X축 글자 자리 | `14` |
+| `right` | `number \| string` — 선 끝 배지 칸이 있으면 `var(--wds-widget-end-gutter)` | `8` |
+| `unit` (ChartValueAxis) | `string` — 축 제목 대신 단위 | `""` |
+
+```tsx
+<div className="relative" style={{ height: 120 }}>
+  <ChartGrid max={100} />
+  {/* 선 · 막대 */}
+  <ChartValueAxis max={100} unit="%" />
+</div>
+```
+
+- 범례 견본은 [[ChartSwatch]](Primitives) — 마크 모양을 따른다. 선 = `shape="line"`(8×2), 면 · 막대 · 조각 · 칸 = 기본 사각(8×8). [[WidgetFrame]] 범례 항목은 `{ label, color, shape }` — 선 차트 칸이면 `shape: "line"`.
+  Figma 정본: 페이지 ChartSwatch `549:2` · 세트 `549:5`(`shape` square · line, 칠은 인스턴스에서 마크 색 변수로).
+- 높이가 정해진 `position: relative` 플롯 상자 안에 둔다. 두 부품에 **같은 `max` · 여백**을 줘야 글자와 점선이 같은 높이에 선다.
+- 축 제목은 그리지 않는다(§26 결정). 오른쪽 두 번째 Y축은 금지(§19).
+- X축 시간 · 범주 글자는 차트마다 놓는 규칙이 달라 차트가 그린다.
+  → (2026-10-22) **시간 글자는 [[ChartTimeAxis]](Primitives)** 가 놓는다 — `labels` · `positions`(0 ~ 1, 없으면 같은 간격) · `right`. 범주 글자는 여전히 [[MiniBarChart]] `categories`.
+  Figma 정본: 페이지 ChartTimeAxis `551:2` · 세트 `551:13`(`right` 2 variant, TEXT `first` · `second` · `third` · `last`). 예시 프레임은 요소 다섯으로 조립한 선 차트.
+- **Figma 정본**: 페이지 ChartGrid `545:2` · 세트 `545:16`, 페이지 ChartValueAxis `545:3` · 세트 `546:22`(`ticks` × `right` 4 variant, ChartValueAxis 는 TEXT `max` · `mid` · `zero`). 페이지 ChartPeakMarker `547:2` · 컴포넌트 `548:2`(TEXT `label`, ▼ 칠은 `color/chart/series-1` — 다른 계열이면 인스턴스에서 바꾼다). 두 부품을 겹친 예시 프레임이 페이지마다 있다. 기존 Figma 차트 세트(MiniLineChart 등)는 아직 자기 격자 · 축을 그린다(`border/default`) — 인스턴스로 바꾸는 것은 후속.
+
+---
+
 ## MiniLineChart
 
-96px 소형 라인 차트. 모니터링 카드용. **SVG plot + HTML overlay**가 같은 좌표계로 정렬되어 peak 라벨이 line max 픽셀과 1:1 매칭됩니다 ([patterns.md](./patterns.md#5-chart-peak-alignment)).
+96px 소형 라인 차트. 모니터링 카드용. **SVG plot + HTML overlay**가 같은 좌표계로 정렬되어 peak 라벨이 line max 픽셀과 1:1 매칭됩니다 ([patterns.md](./patterns.md#5-chart-peak-alignment)). Composite — 값축 · 격자는 [[ChartGrid]] · [[ChartValueAxis]].
 
 | Prop | Type | Default |
 |---|---|---|
@@ -505,7 +550,7 @@ export type DataTableProps<T> = {
 
 아래 차트들은 단독으로 세우면 **스스로 껍데기나 바깥 여백**을 그린다. 대시보드 격자에서는 늘 `frame={false}` 로 끄고 [[WidgetFrame]] 에 담는다. 그러면 제목 · 범위 · 메뉴(⛶ + ⋮) · 범례 · 본문 여백이 모든 칸에서 같은 자리 · 같은 모양이 된다(patterns §15).
 
-**본문 간격 토큰** — `--wds-widget-body-px`(12) · `--wds-widget-body-pb`(12) · `--wds-widget-row-gap`(4) · `--wds-widget-axis-gutter`(28). WidgetFrame 이 앞의 셋을, 그래프가 축 칸을 쓴다. **축 글자**는 모든 그래프가 `text-chart`(9px) · 숫자 서체 · tertiary.
+**본문 간격 토큰** — `--wds-widget-body-px`(12) · `--wds-widget-body-pb`(12) · `--wds-widget-row-gap`(4) · `--wds-widget-axis-gutter`(28) · `--wds-widget-end-gutter`(44). WidgetFrame 이 앞의 셋을, 그래프가 축 칸을 쓴다. 배지 칸은 MiniMultiLineChart 에 선 끝 값 배지(`endLabel`)가 있을 때만 플롯 오른쪽에 비운다(§25). **축 글자**는 모든 그래프가 `text-chart`(9px) · 숫자 서체 · tertiary.
 
 | 차트 | `frame={false}` 에서 빠지는 것 | WidgetFrame 쪽에서 채우는 것 |
 |---|---|---|
@@ -570,7 +615,9 @@ Apdex × 100 을 네 구간 띠(Excellent 94 · Good 85 · Poor 70 · Unacceptab
 
 ## BarList
 
-값 · 이름 · 가로 막대 한 줄을 여러 줄(액티브 스테이터스). 막대 길이는 줄마다 받은 `ratio`(0~1), 색은 시리즈 토큰.
+값 · 이름 · 가로 막대 한 줄을 여러 줄(액티브 스테이터스). 막대 길이는 줄마다 받은 `ratio`(0~1), 색은 시리즈 토큰 — 엔티티 계열이면 고정 슬롯(method 1 · sql 3 · httpc 7 · dbc 2 · socket 5, patterns §21). **Composite** — 줄은 [[BarListItem]](Primitives: 값 칸 88px 고정 · 막대 줄 높이 60% · 최소 4px)이 그린다.
+
+Figma 정본: BarListItem 페이지 `552:15` · 컴포넌트 `552:22`(TEXT `value` · `label`, 막대 길이 = track 오른쪽 안쪽 여백 = 폭 × (1 − ratio)) · BarList 세트 `351:333` 은 줄 5개가 BarListItem 인스턴스(엔티티 슬롯 색 · 스토리 비율).
 
 | Prop | Type | Default |
 |---|---|---|

@@ -14,7 +14,7 @@
       "id": "no-tailwind-plain-css",
       "name": "Tailwind 미사용 · 일반 CSS",
       "status": "auto",
-      "invariant": "런타임 스타일은 외부 CSS 프레임워크 의존 없는 일반 CSS(`whatap-ds.css`). 의존성·CSS 산출물 어디에도 Tailwind 흔적이 없어야 한다 — `@layer` · `--tw-*` · `@property` · escape 클래스명(`.foo-\\[…\\]`) · `tailwind*` 의존성. 유틸 클래스명은 escape 없는 일반 식별자.",
+      "invariant": "런타임 스타일은 외부 CSS 프레임워크 의존 없는 일반 CSS(`whatap-ds.css`). 의존성·CSS 산출물 어디에도 Tailwind 흔적이 없어야 한다 — `--tw-*` · escape 클래스명(`.foo-\\[…\\]`) · `tailwind*` 의존성 · 설정 파일, 그리고 면제 표시 없는 `@layer` · `@property`. 의도된 네이티브 사용 2곳(`@layer base` preflight · `@property --glow-angle`)은 줄 단위 `no-tailwind-ok` 로만 허용된다. 유틸 클래스명은 escape 없는 일반 식별자.",
       "prevents": "Tailwind 재도입 · CSS 내 프레임워크 흔적",
       "command": "test (scripts/check-no-tailwind.mjs)",
       "inCI": true
@@ -56,6 +56,15 @@
       "inCI": true
     },
     {
+      "id": "chart-palette",
+      "name": "차트 계열 팔레트",
+      "status": "auto",
+      "invariant": "차트 계열 8색(`--color-chart-series-*`)은 라이트 · 다크 각각 **실제 런타임 값으로** 밝기 대역 · 채도 하한 · 카드 표면 대비 3:1 · 인접 쌍 정상시야 ΔE ≥ 15 · 색각 이상 ≥ 8(6~8 경고) · 슬롯 1~3 모든 쌍(§18) · 레거시 엔티티 순서 1·3·7·2·5·6 이웃(§21) · **모든 Severity 색과 info 와 정상시야 ΔE ≥ 15**(§23)를 지킨다. 사본(`tokens.css` 라이트 · 다크, 루트 `DESIGN.md`)은 런타임 값과 같아야 한다. 식은 dataviz `validate_palette.js` 와 같다(`scripts/lib/color-distance.mjs`).",
+      "prevents": "사람이 검증기를 돌려야만 지켜지던 차트 색 조건의 누락 — 실측(2026-10-14): 계열 8슬롯 중 6개가 Severity 색과 구별되지 않았고(series-8 ↔ error ΔE 4.7, series-1 = status-info 같은 값) 모든 게이트가 통과했다. `token-sync` R2 는 첫 선언만 비교해 다크 사본이 갈라져도 통과했다",
+      "command": "test (scripts/check-chart-palette.mjs)",
+      "inCI": true
+    },
+    {
       "id": "layer-deps",
       "name": "3-Layer 의존 방향",
       "status": "auto",
@@ -68,7 +77,7 @@
       "id": "no-cycle",
       "name": "순환 참조 금지",
       "status": "auto",
-      "invariant": "`src/` 의 **런타임** import 그래프에 순환이 없어야 한다(ESLint `import-x/no-cycle`). `layer-deps` 가 볼 수 없는 축이다 — 그쪽은 계층 *방향*만 보므로 같은 계층 안의 A→B→A 는 통과한다. ⚠️ **false green 주의**: `import-x/parsers` 로 `.ts`/`.tsx` 파서를 등록하지 않으면 그래프가 1-hop 에서 끊겨 순환이 있어도 조용히 통과한다 — 실측으로 확인했다. 규칙을 손보면 일부러 2파일 순환을 넣어 발화를 다시 확인할 것. ESLint 표면은 **의도적으로 이 규칙만** 둔다(포맷팅·네이밍·hooks·a11y 는 린트하지 않는다 — 넓게 켜면 상시 red 가 되고 팀이 red 를 무시하기 시작한다).",
+      "invariant": "`src/` 의 **런타임** import 그래프에 순환이 없어야 한다(ESLint `import-x/no-cycle`). `layer-deps` 가 볼 수 없는 기준이다 — 그쪽은 계층 *방향*만 보므로 같은 계층 안의 A→B→A 는 통과한다. ⚠️ **false green 주의**: `import-x/parsers` 로 `.ts`/`.tsx` 파서를 등록하지 않으면 그래프가 1-hop 에서 끊겨 순환이 있어도 조용히 통과한다 — 실측으로 확인했다. 규칙을 손보면 일부러 2파일 순환을 넣어 발화를 다시 확인할 것. ESLint 표면은 **의도적으로 이 규칙만** 둔다(포맷팅·네이밍·hooks·a11y 는 린트하지 않는다 — 넓게 켜면 상시 red 가 되고 팀이 red 를 무시하기 시작한다).",
       "prevents": "초기화 순서에 따라 undefined 가 되는 순환 import · 번들 분할 실패",
       "command": "lint:cycles (pnpm)",
       "inCI": true
@@ -140,8 +149,8 @@
       "id": "docstring-standard",
       "name": "docstring 4섹션 표준",
       "status": "auto",
-      "invariant": "컴포넌트 docstring = Purpose / When to use / When NOT to use / Composition rules + `@example`. **Do/Don't 는 여기서 유도되므로**(`## Don't` 명시가 없으면 When NOT to use + Composition rules 의 금지형 문장) 금지형 문장이 하나도 없으면 실패한다 — 유도 결과가 빈 컴포넌트는 «하지 말 것»이 없는 컴포넌트로 배달된다. 스토리 안에서 정의되는 합성 템플릿(`Shell/Page/*`)은 docstring 이 있을 수 없으므로 스토리 description 을 대신 요구한다. 검사 대상은 파싱을 두 번 구현하지 않고 **AI 에게 실제로 배달되는 산출물**(`docs/components.json`)이다.",
-      "prevents": "컴포넌트 오선택 · 사용 가이드 부재 · **규칙이 소스에만 있고 소비 AI 에는 도달하지 않는 상태** — 실측: 108종 중 26종이 스토리 설명 없이 들어와 있었고, policy(사람 검토) 상태로 오래 방치돼 있었다",
+      "invariant": "컴포넌트 docstring = Purpose / When to use / When NOT to use / Composition rules + `@example`. **Do/Don't 는 여기서 유도되므로**(`## Don't` 명시가 없으면 When NOT to use + Composition rules 의 금지형 문장) 금지형 문장이 하나도 없으면 실패한다 — 유도 결과가 빈 컴포넌트는 «하지 말 것»이 없는 컴포넌트로 배달된다. 스토리 안에서 정의되는 합성 템플릿(`Shell/Page/*`)은 docstring 이 있을 수 없으므로 스토리 description 을 대신 요구한다. 검사 대상은 파싱을 두 번 구현하지 않고 **AI 에게 실제로 배달되는 산출물**(`docs/components.json`)이다. 템플릿 밖 `##` 섹션은 생성기가 읽지 않아 배달되지 않으므로 0 을 요구하고(동결 없음), 깊이(When to use 2개 이상 · 설명 없는 prop 0)는 도입 시점 수치를 래칫으로 동결한다.",
+      "prevents": "컴포넌트 오선택 · 사용 가이드 부재 · **규칙이 소스에만 있고 소비 AI 에는 도달하지 않는 상태** — 실측: 108종 중 26종이 스토리 설명 없이 들어와 있었고, policy(사람 검토) 상태로 오래 방치돼 있었다 · 2026-10-19 템플릿 밖 섹션 15개(ARIA · 정책 · variant 표)가 MCP 에 배달되지 않고 있었다",
       "command": "lint:docstrings (scripts/check-docstrings.mjs)",
       "inCI": true
     },

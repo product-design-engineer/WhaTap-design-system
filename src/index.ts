@@ -53,18 +53,10 @@ export { default as CardHead } from "./CardHead";
 export type { CardHeadProps, CardHeadTabs } from "./CardHead";
 export { default as WidgetFrame } from "./WidgetFrame";
 export type { WidgetFrameProps, WidgetFrameState, WidgetFrameLegendItem } from "./WidgetFrame";
-export { default as HeatmapCell, heatmapScaleColor } from "./HeatmapCell";
-export type { HeatmapCellProps } from "./HeatmapCell";
-export { default as HeatmapLegend } from "./HeatmapLegend";
-export type { HeatmapLegendProps } from "./HeatmapLegend";
-export { default as Heatmap } from "./Heatmap";
-export type { HeatmapProps, HeatmapMode } from "./Heatmap";
 export { default as InstanceListItem } from "./InstanceListItem";
 export type { InstanceListItemProps, InstanceListItemStatus } from "./InstanceListItem";
 export { default as InstanceSelectPanel } from "./InstanceSelectPanel";
 export type { InstanceSelectPanelProps, InstanceSelectItem, InstanceSelectScope } from "./InstanceSelectPanel";
-export { default as MetricBarCell } from "./MetricBarCell";
-export type { MetricBarCellProps, MetricBarSegment } from "./MetricBarCell";
 export { default as LabeledField } from "./LabeledField";
 export type { LabeledFieldProps } from "./LabeledField";
 export { default as DatePicker } from "./DatePicker";
@@ -78,8 +70,6 @@ export { default as KpiField } from "./KpiField";
 export type { KpiFieldProps } from "./KpiField";
 export { default as StatCard } from "./StatCard";
 export type { StatCardProps, StatCardTone, StatCardTrend } from "./StatCard";
-export { default as UsageGauge } from "./UsageGauge";
-export type { UsageGaugeProps, UsageGaugeTone } from "./UsageGauge";
 export { default as MemberUsageBar } from "./MemberUsageBar";
 export type { MemberUsageBarProps } from "./MemberUsageBar";
 export { default as FilterSelect } from "./FilterSelect";
@@ -148,32 +138,8 @@ export { default as EventWeekTimeMatrix } from "./EventWeekTimeMatrix";
 export type { EventWeekTimeMatrixProps } from "./EventWeekTimeMatrix";
 export { default as LiveTimerCompact } from "./LiveTimerCompact";
 export type { LiveTimerCompactSize } from "./LiveTimerCompact";
-export { default as GpuStatusBar } from "./GpuStatusBar";
-export type { GpuStatusBarProps, GpuStatusCategory, GpuStatusSegment } from "./GpuStatusBar";
-export { default as HexGrid, HEX_GRID_LEGEND, hexGridLegend } from "./HexGrid";
-export type { HexGridProps, HexItem, HexTone } from "./HexGrid";
 export { default as KpiCard } from "./KpiCard";
 export type { KpiCardProps } from "./KpiCard";
-export { default as MiniBarChart } from "./MiniBarChart";
-export type { MiniBarChartProps, MiniBarChartSeries } from "./MiniBarChart";
-export { default as ApdexChart } from "./ApdexChart";
-export type { ApdexChartProps } from "./ApdexChart";
-export { default as ForecastLineChart } from "./ForecastLineChart";
-export type { ForecastLineChartProps, ForecastLineChartSeries, ForecastPoint } from "./ForecastLineChart";
-export { default as BarList } from "./BarList";
-export type { BarListProps, BarListRow } from "./BarList";
-export { default as ActiveTransactionArc, SPEED_LEGEND } from "./ActiveTransactionArc";
-export type { ActiveTransactionArcProps } from "./ActiveTransactionArc";
-export { default as ScatterHeatmap, SCATTER_HEATMAP_DEMO_DOTS } from "./ScatterHeatmap";
-export type { ScatterHeatmapProps, ScatterDot } from "./ScatterHeatmap";
-export { default as MiniDonutChart } from "./MiniDonutChart";
-export type { MiniDonutChartProps, DonutSegment } from "./MiniDonutChart";
-export { default as MiniLineChart } from "./MiniLineChart";
-export { default as MiniMultiLineChart } from "./MiniMultiLineChart";
-export type {
-  MiniMultiLineChartProps,
-  MiniMultiLineChartSeries,
-} from "./MiniMultiLineChart";
 export { default as OptionbarInstanceSelector } from "./OptionbarInstanceSelector";
 export type { InstanceStatus, OptionbarInstanceSelectorSize } from "./OptionbarInstanceSelector";
 export { default as OptionbarItem } from "./OptionbarItem";
@@ -185,7 +151,7 @@ export type { OptionbarValueDisplaySize, OptionbarValueDisplayVariant } from "./
 export { default as LandingHeader } from "./LandingHeader";
 export type { LandingHeaderProps, LandingHeaderNavItem, LandingHeaderAction } from "./LandingHeader";
 export { default as PageHeader } from "./PageHeader";
-export type { ProfileMenuItem, NotificationItem } from "./PageHeader";
+export type { ProfileMenuItem, NotificationItem, PageHeaderLanguage, PageHeaderLabels } from "./PageHeader";
 export { default as PageHeaderAiInline } from "./PageHeaderAiInline";
 export type { PageHeaderAiInlineProps } from "./PageHeaderAiInline";
 export { default as PresetSelect } from "./PresetSelect";
@@ -228,6 +194,8 @@ export type { DsReadOnlyNoticeProps } from "./DsReadOnlyNotice";
 //   Chrome parts
 export { default as PageHeaderNotificationItem } from "./PageHeaderNotificationItem";
 export { default as PageHeaderProfileMenuItem } from "./PageHeaderProfileMenuItem";
+export { default as PageHeaderLanguageMenu } from "./PageHeaderLanguageMenu";
+export type { LanguageOption } from "./PageHeaderLanguageMenu";
 export { default as DataTableRow } from "./DataTableRow";
 export { default as FilterDropdownOptionItem } from "./FilterDropdownOptionItem";
 export { default as TabButton } from "./TabButton";
@@ -240,7 +208,8 @@ export { default as QuickActionChip } from "./widget/QuickActionChip";
 export { default as CostBreakdownRow } from "./widget/CostBreakdownRow";
 export { default as ClassificationTableRow } from "./widget/ClassificationTableRow";
 export { default as CostTableRow } from "./widget/CostTableRow";
-export { default as MigPlanRow } from "./widget/MigPlanRow";
+export { default as PlanProposalRow } from "./widget/PlanProposalRow";
+/** @deprecated Use PlanProposalRow */ export { default as MigPlanRow } from "./widget/PlanProposalRow";
 export { default as EventListItem } from "./widget/EventListItem";
 export { default as ReasoningStep } from "./widget/ReasoningStep";
 export { default as TimelineStepItem } from "./widget/TimelineStepItem";
@@ -252,6 +221,10 @@ export { default as ActionChip } from "./widget/ActionChip";
 /** @deprecated Use ActionChip */ export { default as AiActionChip } from "./widget/ActionChip";
 export { default as AttachmentChip } from "./widget/AttachmentChip";
 /** @deprecated Use AttachmentChip */ export { default as AiAttachmentChip } from "./widget/AttachmentChip";
+
+// Chart — 데이터 시각화(Chart Art). 전용 진입점 `@whatap/design-system/chart` 가 정본,
+// 루트에서도 재수출해 기존 import 를 깨지 않는다.
+export * from "./chart";
 
 // Topology — 노드-엣지 그래프(레이아웃 엔진 + 프리미티브)
 export * from "./topology";

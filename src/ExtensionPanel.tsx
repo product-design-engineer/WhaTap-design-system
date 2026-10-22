@@ -17,7 +17,13 @@
  * - 독립 모달/다이얼로그 → [[Modal]].
  * - 목록 행 상세(추후) → Drawer.
  *
- * ## Layout policy
+ * ## Composition rules
+ * - 헤더 높이 40px 고정 (WhaTapAiWidget 헤더와 정렬).
+ * - 색·경계는 시맨틱 토큰만 사용. 인라인 hex 금지.
+ * - 본문은 `children` 으로 받는다. 내부 레이아웃을 강제하지 않는다.
+ *
+ * ## Spec
+ * 레이아웃
  * - 기본 폭: 480px. 좌측 핸들을 드래그하여 320px ~ 720px 범위에서 조절 가능.
  * - `open` 이 false 면 0 으로 접힌다. 열릴 때는 `transition: width 0.4s ease-in-out`.
  * - 드래그 중에는 transition 을 끄고 포인터를 따라간다. 놓으면 transition 을 복원한다.
@@ -25,11 +31,6 @@
  * - 본문: 스크롤 가능한 콘텐츠 영역. `children` 으로 자유 구성.
  * - 좌측 border 로 main 영역과 시각적으로 분리.
  * - DashboardLayout 의 children 슬롯에 WhaTapAiWidget 과 나란히 또는 단독으로 배치.
- *
- * ## Composition rules
- * - 헤더 높이 40px 고정 (WhaTapAiWidget 헤더와 정렬).
- * - 색·경계는 시맨틱 토큰만 사용. 인라인 hex 금지.
- * - 본문은 `children` 으로 받는다. 내부 레이아웃을 강제하지 않는다.
  *
  * @example
  * ```tsx

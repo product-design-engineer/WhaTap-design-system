@@ -11,6 +11,15 @@ const meta: Meta<typeof TabButton> = {
   title: "Primitives/TabButton",
   component: TabButton,
   tags: ["autodocs"],
+  // 실제로는 [[Tabs]] 의 `role="tablist"` 안에 선다. 단독 시연에도 그 부모를 세운다 —
+  // 부모 없는 tab 은 보조기술에 탭 묶음 밖 고아로 읽힌다(aria-required-parent).
+  decorators: [
+    (Story) => (
+      <div role="tablist" aria-label="TabButton 시연">
+        <Story />
+      </div>
+    ),
+  ],
   parameters: { layout: "padded" },
   args: {
     spec: { h: 32, padX: 14, gap: 6, text: "text-base" },

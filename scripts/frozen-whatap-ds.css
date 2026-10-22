@@ -132,7 +132,7 @@
 
     /* ── Typography (Semantic) ── */
     --font-family-korean: "Noto Sans", "Noto Sans KR", sans-serif;
-    --font-family-numeric: Roboto, "Noto Sans", sans-serif;
+    --font-family-numeric: Roboto, "Noto Sans", "Noto Sans KR", sans-serif;
     --font-family-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
     --font-family-korean-kr-only: "Noto Sans KR", sans-serif;
     --font-family-korean-inter: Inter, "Noto Sans KR", sans-serif;

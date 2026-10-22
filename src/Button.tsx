@@ -8,16 +8,6 @@
  * Spec: @whatap/wds Button-specs.md 기반 (Figma 5701-33519). 3 variant × 4 size × 4 tone +
  * disabled / loading / fullWidth.
  *
- * ## 위계 — variant 가 강조 단계, tone 이 색
- * 강조 위계는 **variant** 가 담는다(contained=1차 CTA · outline=2차 · basic=3차 텍스트).
- * `tone` 은 그 위의 **색 의미**다 — primary(브랜드) · tertiary(중립 무채색) · warning · critical.
- * 그래서 "3차 강조"는 `variant="basic"`, "무채색"은 `tone="tertiary"` 로 각각 표현한다.
- *
- * ## 구현 노트 — 동적 variant×tone 색은 CSS custom property 로
- * runtime 에 조립되는 variant×tone 색은 정적 유틸 클래스로 표현할 수 없으므로,
- * **inline CSS custom property** 로 전달 (`--wds-btn-bg`, `--wds-btn-fg`, `--wds-btn-border`,
- * `--wds-btn-bg-hover`). `tokens.css` 의 `.wds-btn` 규칙이 이 변수들을 적용 — hover 까지 정상.
- *
  * ## When to use
  * - 사용자 실행 trigger (제출 / 적용 / 닫기 / 등록 등).
  * - Primary CTA, Secondary action, 위험 동작 (delete 등).
@@ -30,12 +20,21 @@
  * - icon-only 압축 버튼 (size 16-20px) → 인라인 OK.
  *
  * ## Composition rules
+ * - **위계는 variant 가, 색은 tone 이 진다.** 강조 위계는 variant(contained=1차 CTA · outline=2차 ·
+ *   basic=3차 텍스트), `tone` 은 그 위의 색 의미(primary 브랜드 · tertiary 중립 무채색 · warning ·
+ *   critical). 그래서 "3차 강조"는 `variant="basic"`, "무채색"은 `tone="tertiary"` 로 각각 표현한다.
  * - 모든 색은 토큰 (`var(--color-brand-blue)` 등) — 인라인 hex 금지.
  * - 사이즈는 spec 4 단계만 — custom px 금지.
  * - 한 화면의 CTA 는 contained primary 하나. 그 옆 취소/닫기는 **outline·basic tertiary** 로 —
  *   취소에 tone="primary" 를 쓰면 파란 두 버튼이 CTA 자리를 다툰다.
  * - 위험한 실행 확인 대화의 취소도 tertiary. critical 은 실행 버튼 쪽만.
  * - loading=true → 자동 disabled + spinner overlay.
+ *
+ * ## Spec
+ * 동적 variant×tone 색은 CSS custom property 로 전달한다.
+ * runtime 에 조립되는 variant×tone 색은 정적 유틸 클래스로 표현할 수 없으므로,
+ * **inline CSS custom property** 로 전달 (`--wds-btn-bg`, `--wds-btn-fg`, `--wds-btn-border`,
+ * `--wds-btn-bg-hover`). `tokens.css` 의 `.wds-btn` 규칙이 이 변수들을 적용 — hover 까지 정상.
  *
  * @example
  * ```tsx

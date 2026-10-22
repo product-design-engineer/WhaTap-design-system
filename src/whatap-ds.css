@@ -5,8 +5,8 @@
  * CSS 식별자, 색/타이포/보더/transition 값은 토큰(:root) 또는 인라인 상수로 직접 표기.
  * 구조: 토큰(:root) → preflight → utilities → 전역(keyframes·.ai-*·.dark). 자체완결.
  *
- * 생성: node scripts/detailwind.mjs generate  (컴포넌트 className/토큰 변경 시 재생성)
- * 진실 원본: scripts/frozen-whatap-ds.css (구 빌드 1회 스냅샷, 미배포)
+ * 이 파일을 직접 편집한다(hand-maintained). scripts/detailwind.mjs 는 최초 1회 변환에 쓴 도구이고
+ * 재실행하면 수동 추가분이 사라진다 — 가드가 거부한다. 변환 당시 스냅샷: scripts/frozen-whatap-ds.css(미배포).
  * ============================================================================ */
 
 /* ── tokens (:root) ─────────────────────────────────────────────────────── */
@@ -248,6 +248,8 @@
     --color-surface-100: #F1F2F4;
     /* @role 가장 진한 중성 면 | @use 데이터 없음 셀 · 비활성 블록 */
     --color-surface-200: #EAEAEA;
+    /* @role 스켈레톤 글로우 빛 띠의 정점 | @use .ai-skeleton 의 좌→우 빛 띠 | @avoid 일반 표면 · 선택 강조 (브랜드 틴트는 --color-brand-blue-tint) */
+    --color-skeleton-glow: #DCE7FD;
 
     /* Neutral Solid — 중립(무채색) 강조면. tone="tertiary" 버튼의 채움/hover 가 여기서 온다.
        위에 올리는 전경은 고정 흰색(대비 라이트 8.4:1 · 다크 10.3:1). 다크는 .dark 에서 반전. 정의: tokens.css */
@@ -329,7 +331,7 @@
     --color-product-gauge: #B443DD;
 
     /* Heatmap Scale — 강도 8단 순차 스케일.
-       차트 계열색(--color-chart-series-*)과 다른 축이다: 계열은 «누구인지», 이 스케일은 «얼마나»를 말한다.
+       차트 계열색(--color-chart-series-*)과 다른 기준이다: 계열은 «누구인지», 이 스케일은 «얼마나»를 말한다.
        값이 아니라 위치(0·20·40…100)로 이름 붙여 stop 을 바꿔도 참조가 안 깨진다. */
     /* @role 강도 스케일 최저 stop | @use Heatmap 칸 배경 | @avoid 텍스트 전경 */
     --color-heatmap-0: #1B69C6;
@@ -603,7 +605,7 @@
     /* @role 한글 본문·라벨 기본 서체 | @use 한글이 섞인 모든 UI 텍스트 */
     --font-family-korean: "Noto Sans", "Noto Sans KR", sans-serif;
     /* @role 수치 서체(자릿수 정렬) | @use 지표·표 수치 · 시각 | @avoid 한글 라벨 */
-    --font-family-numeric: Roboto, "Noto Sans", sans-serif;
+    --font-family-numeric: Roboto, "Noto Sans", "Noto Sans KR", sans-serif;
     /* @role 코드·로그용 고정폭 서체 | @use SQL·로그 원문 */
     --font-family-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
     /* @role 한글 전용 서체 변형 */
@@ -653,22 +655,22 @@
     /* Chart — 데이터 시각화 전용. 역할로 고른다: 정체성(series) vs 크기(seq).
        구 --color-palette-{hex} 36색을 대체. 정의·검증 근거: tokens.css
        series 는 고정 순서로 1번부터 배정하고 순환하지 않는다(all-pairs 상한 3슬롯). */
-    /* @role 차트 계열 1 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
-    --color-chart-series-1: #296CF2;
-    /* @role 차트 계열 2 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
-    --color-chart-series-2: #C75B1A;
-    /* @role 차트 계열 3 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
-    --color-chart-series-3: #00908A;
-    /* @role 차트 계열 4 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
-    --color-chart-series-4: #9A7B00;
-    /* @role 차트 계열 5 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
-    --color-chart-series-5: #B0349B;
-    /* @role 차트 계열 6 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
-    --color-chart-series-6: #0E7A56;
-    /* @role 차트 계열 7 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
-    --color-chart-series-7: #6B3FD4;
-    /* @role 차트 계열 8 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) */
-    --color-chart-series-8: #C93B34;
+    /* @role 차트 계열 1 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why brand-blue · status-info 와 같은 값이던 파랑을 남색으로 내렸다 — 첫 계열과 «정보» 배지가 같은 말을 하지 않게(info 와 정상시야 ΔE 15). 레거시 method(파랑)의 색조는 유지 */
+    --color-chart-series-1: #1E4E9E;
+    /* @role 차트 계열 2 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why 주황은 warning · error · critical 과 ΔE 15 를 넘길 수 없어 amber 로 비켰다. 레거시 dbc(주황)의 색조 계열 유지 */
+    --color-chart-series-2: #985521;
+    /* @role 차트 계열 3 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why 원래 teal 을 유지하되 다크에서 success 와 ΔE 15 를 넘기도록 밝기를 조정했다. 레거시 sql(청록) */
+    --color-chart-series-3: #06A3A5;
+    /* @role 차트 계열 4 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why gold 유지. 다크에서 warning 과 ΔE 15 경계 — 4번째 계열이 2번(amber)과 붙는 것이 §18 3계열 상한의 이유다 */
+    --color-chart-series-4: #9A7D0B;
+    /* @role 차트 계열 5 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why magenta 유지. 레거시 socket(분홍)을 받는 슬롯 — 8번 빨강에 두면 dbc(2) 와 이웃해 검증기 FAIL */
+    --color-chart-series-5: #B3329D;
+    /* @role 차트 계열 6 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why green 유지. 다크에서 success 와 ΔE 15 를 넘기도록 청록 쪽으로 조정했다. 레거시 resultset(초록) */
+    --color-chart-series-6: #037C58;
+    /* @role 차트 계열 7 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why violet 유지. info 와 ΔE 15 를 넘기도록 보라 쪽으로 조정했다. 레거시 httpc(보라) */
+    --color-chart-series-7: #7130CB;
+    /* @role 차트 계열 8 의 정체성 색 | @use 계열 순서 고정 · 같은 계열은 화면이 달라도 같은 번호 | @avoid 크기/강도 표현 · 순환 재사용 (all-pairs 상한 3계열) · Severity 색과 ΔE 15 미만 (§23) | @distinct severity | @why 빨강은 error · critical 과 구별되지 않아 raspberry 로 옮겼다 — 다크에서 대비 3:1 을 지키는 빨강은 Severity 빨강과 ΔE 15 이상 떨어질 수 없다는 것이 탐색으로 확인됐다 */
+    --color-chart-series-8: #9F2D48;
 
     /* @role 순차 스케일 1 단계 (크기·강도) | @use 히트맵 · 농도 표현 | @avoid 계열 구분 (series 사용) */
     --color-chart-seq-1: #7AB8F0;
@@ -715,7 +717,7 @@
     --color-shadow-flood: #000000;
 
     /* Topology — 노드-엣지 그래프 전용 역할 토큰(구조·상태). 차트 series/seq 로
-       대체 불가 — 의미 축이 다르다. 값 출처·금지사항: tokens.css */
+       대체 불가 — 의미 기준이 다르다. 값 출처·금지사항: tokens.css */
     /* @role 토폴로지 캔버스 배경 그라데이션 시작 */
     --color-topology-canvas-from: #F1F6FB;
     /* @role 토폴로지 캔버스 배경 그라데이션 끝 */
@@ -766,6 +768,8 @@
     --wds-widget-row-gap: 4px;
     /* @role 그래프 Y축 눈금 칸 폭 — 한 줄의 Y축 선을 같은 x 에 세운다 | @use MiniLineChart · MiniMultiLineChart · ScatterHeatmap | @avoid 차트마다 다른 눈금 칸 폭 */
     --wds-widget-axis-gutter: 28px;
+    /* @role 선 끝 값 배지 칸 폭. 배지가 있을 때만 플롯 오른쪽을 비운다 | @use MiniMultiLineChart endLabel | @avoid 배지를 플롯 안에 겹쳐 선을 가리기 */
+    --wds-widget-end-gutter: 44px;
 
     /* ── Component tokens: DateTimeBlock ── */
     /* @role 연도 칸 폭 | @use DateTimeBlock */
@@ -1615,24 +1619,29 @@ html, body, #root {
 .ai-symbol-spin {
   animation: ai-symbol-spin 10s linear infinite;
 }
-/* 스켈레톤 — 응답 대기 자리표시자. 좌→우 shimmer. reduced-motion 이면 정적. (tokens.css 와 동일) */
+/* 스켈레톤 — 응답 대기 자리표시자. 회색 바탕 위를 빛 띠(--color-skeleton-glow)가 좌→우로 훑는 글로우.
+   빛 띠는 라이트·다크 모두 바탕보다 밝다(구 surface-100→50 은 차이가 거의 없고 다크에선 오히려 어두워져 안 보였다).
+   reduced-motion 이면 빛 띠 없이 정적 회색. (tokens.css 와 동일) */
 @keyframes aiSkeletonShimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  from { background-position: -600px 0; }
+  to   { background-position: 900px 0; }
 }
 .ai-skeleton {
   border-radius: 4px;
-  background: linear-gradient(
+  background-color: var(--color-surface-100);
+  background-image: linear-gradient(
     90deg,
-    var(--color-surface-100) 25%,
-    var(--color-surface-50) 37%,
-    var(--color-surface-100) 63%
+    transparent 25%,
+    var(--color-skeleton-glow) 50%,
+    transparent 75%
   );
-  background-size: 200% 100%;
-  animation: aiSkeletonShimmer 1.4s ease-in-out infinite;
+  /* 빛 띠는 px 고정 폭 · px 이동 — 막대 길이와 무관하게 모든 막대에서 같은 x 에 놓인다(한 줄기 빛). */
+  background-size: 600px 100%;
+  background-repeat: no-repeat;
+  animation: aiSkeletonShimmer 1.8s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  .ai-skeleton { animation: none; }
+  .ai-skeleton { animation: none; background-image: none; }
 }
 .ai-symbol-anim {
   animation: ai-symbol-spin 10s linear infinite, ai-symbol-pulse 3s ease-in-out infinite;
@@ -1986,6 +1995,8 @@ html, body, #root {
   white-space: nowrap;
 }
 .wds-slider-mark[data-active] { color: var(--color-text-primary); font-weight: 600; }
+/* floor 아래 눈금 — 범위를 보여 주려고 세우지만 고를 수 없다. */
+.wds-slider-mark[data-disabled] { color: var(--color-text-disabled); }
 /* ── RadioGroup — 서로 배타인 선택지 중 하나 ──────────────────────────────────
    네이티브 radio 는 보이지 않게 두되 포커스 · 키보드 · 낭독은 그대로 받는다. 보이는 원은 바로 뒤 형제
    `.wds-radio-circle` 이 그린다 — 고르면 테두리가 브랜드색이 되고 가운데 점이 선다. 원 지름 16px 은
@@ -2064,6 +2075,105 @@ html, body, #root {
 @media (prefers-reduced-motion: reduce) {
   .wds-widget-frame-reveal { transition: none; }
 }
+/* ── AiProgress — 10초 넘는 AI 연산의 진행 카드 ───────────────────────────────
+   머리(단계 그림 · 제목 · 경과) · 단계 막대 · 단계 목록 · 하단 줄(10초 · 30초) · 접힌 한 줄.
+   움직이는 곳은 머리 그림 하나다. 발견 칩과 하단 줄은 나타날 때 한 번만 올라온다(반복 없음). */
+@keyframes wdsAiRise {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+/* 격자 — 카드 전체가 열 둘을 공유한다. 아이콘 열(32px · 머리 그림 크기)과 글자 열(8px 뒤).
+   머리 그림 · 완료 체크 · 단계 마커는 아이콘 열 가운데, 제목 · 단계 이름 · 둘째 줄 · 발견 칩 ·
+   미리보기 · 하단 문장 · 중단 안내 · 접힘 글자는 모두 글자 열 시작선에 선다. 막대만 두 열을 걸친다. */
+.wds-ai-progress { --wds-ai-progress-pad: 12px; --wds-ai-progress-col: 32px; --wds-ai-progress-gap: 8px; }
+.wds-ai-progress-top { display: flex; flex-direction: column; gap: 10px; padding: var(--wds-ai-progress-pad) var(--wds-ai-progress-pad) 10px; }
+.wds-ai-progress-title { display: grid; grid-template-columns: var(--wds-ai-progress-col) minmax(0, 1fr) auto; column-gap: var(--wds-ai-progress-gap); align-items: center; min-height: 32px; }
+.wds-ai-progress-title > :first-child { justify-self: center; }
+.wds-ai-progress-title-text { min-width: 0; font-size: var(--text-md); font-weight: var(--font-weight-bold); color: var(--color-text-primary); line-height: var(--leading-normal); }
+.wds-ai-progress-elapsed { font-size: var(--text-base); color: var(--color-text-tertiary); font-family: var(--font-family-numeric); font-variant-numeric: tabular-nums; }
+.wds-ai-progress-preview { margin-top: -6px; /* 제목 줄과 사이 4px(머리 gap 10 − 6) */ padding-left: calc(var(--wds-ai-progress-col) + var(--wds-ai-progress-gap)); font-size: var(--text-base); color: var(--color-text-tertiary); line-height: var(--leading-normal); }
+.wds-ai-progress-bar { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; }
+.wds-ai-progress-seg { position: relative; display: block; height: 4px; overflow: hidden; border-radius: 2px; background: var(--color-surface-100); }
+.wds-ai-progress-seg-fill { position: absolute; inset: 0 auto 0 0; border-radius: 2px; background: var(--color-brand-blue); }
+.wds-ai-progress-steps { display: flex; flex-direction: column; margin: 0; padding: 0 var(--wds-ai-progress-pad) 6px; list-style: none; }
+.wds-ai-progress-step { display: grid; grid-template-columns: var(--wds-ai-progress-col, 16px) minmax(0, 1fr); column-gap: var(--wds-ai-progress-gap, 8px); padding: 5px 0; }
+.wds-ai-progress-step-mark { display: grid; place-items: center; justify-self: center; width: 14px; height: 14px; margin-top: 2px; }
+.wds-ai-progress-step-label { font-size: var(--text-base); font-weight: var(--font-weight-medium); color: var(--color-text-primary); line-height: var(--leading-normal); }
+.wds-ai-progress-step[data-status="pending"] .wds-ai-progress-step-label { font-weight: var(--font-weight-regular); color: var(--color-text-disabled); }
+.wds-ai-progress-step-detail { grid-column: 2; font-size: var(--text-base); color: var(--color-text-tertiary); line-height: var(--leading-normal); }
+.wds-ai-progress-step[data-status="active"] .wds-ai-progress-step-detail { color: var(--color-brand-blue-deep); }
+.wds-ai-progress-find {
+  grid-column: 2; width: fit-content; max-width: 100%; margin-top: 4px; padding: 3px 8px; border-radius: 4px;
+  font-size: var(--text-base); font-weight: var(--font-weight-medium); line-height: var(--leading-normal);
+  background: var(--color-status-warning-soft); color: var(--color-tone-text-warning);
+  animation: wdsAiRise 0.3s ease-out;
+}
+/* 하단 · 중단 안내 · 접힘 줄은 왼쪽 여백에 아이콘 열을 더해 글자 열에서 시작한다. */
+.wds-ai-progress-foot {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  padding: 8px var(--wds-ai-progress-pad) 8px calc(var(--wds-ai-progress-pad) + var(--wds-ai-progress-col) + var(--wds-ai-progress-gap));
+  border-top: 1px solid var(--color-border-default); animation: wdsAiRise 0.3s ease-out;
+}
+.wds-ai-progress-foot[data-late] { background: var(--color-status-warning-soft); }
+.wds-ai-progress-foot-msg { flex: 1; min-width: 160px; font-size: var(--text-base); color: var(--color-text-secondary); line-height: var(--leading-normal); }
+.wds-ai-progress-foot[data-late] .wds-ai-progress-foot-msg { color: var(--color-tone-text-warning); }
+.wds-ai-progress-note {
+  padding: 8px var(--wds-ai-progress-pad) 8px calc(var(--wds-ai-progress-pad) + var(--wds-ai-progress-col) + var(--wds-ai-progress-gap));
+  border-top: 1px solid var(--color-border-default); font-size: var(--text-base); color: var(--color-text-secondary); line-height: var(--leading-normal);
+}
+.wds-ai-progress-toggle {
+  display: grid; grid-template-columns: var(--wds-ai-progress-col) minmax(0, 1fr) auto; column-gap: var(--wds-ai-progress-gap); align-items: center;
+  width: 100%; padding: 8px var(--wds-ai-progress-pad); border: 0; background: transparent; cursor: pointer;
+  font: inherit; font-size: var(--text-base); color: var(--color-text-tertiary); text-align: left;
+}
+.wds-ai-progress-toggle > :first-child { justify-self: center; }
+.wds-ai-progress-toggle-act { display: inline-flex; align-items: center; gap: 4px; }
+/* 완료 · 펼침 — 윗줄 아래 막대. 윗줄과 단계 목록 사이에 머리와 같은 간격(10px)을 둔다. */
+.wds-ai-progress-done-bar { padding: 2px var(--wds-ai-progress-pad) 10px; }
+.wds-ai-progress-toggle:hover { color: var(--color-text-secondary); }
+.wds-ai-progress-toggle:focus-visible { outline: 2px solid var(--color-brand-blue); outline-offset: -2px; border-radius: 8px; }
+.wds-ai-progress-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+/* 완료 순간의 답변 등장(④ 정보 표현). 답변 카드의 자식이 제목 → 본문 → 근거 순으로 한 번 올라온다.
+   완료 이벤트에서 한 번만 붙인다 — 다시 그릴 때마다 붙이면 매번 재생된다. */
+.wds-ai-reveal > * { animation: wdsAiRise 0.32s ease-out both; }
+.wds-ai-reveal > :nth-child(2) { animation-delay: 0.12s; }
+.wds-ai-reveal > :nth-child(3) { animation-delay: 0.24s; }
+.wds-ai-reveal > :nth-child(4),
+.wds-ai-reveal > :nth-child(4) ~ * { animation-delay: 0.36s; }
+/* 답변 자리 표시의 반짝임을 끈다. 진행 카드가 떠 있을 때는 그 머리 그림만 움직인다. */
+.ai-skeleton[data-still] { animation: none; background-image: none; }
+/* ── AiProgressCompact — 진행 카드의 간편 버전. 실행 내용 한 줄 + 펼치면 상세 연산 정보 ──────────── */
+.wds-ai-progress-compact { display: flex; flex-direction: column; min-width: 0; }
+.wds-ai-progress-compact-row {
+  display: flex; align-items: center; gap: 6px; width: 100%; padding: 4px 0; border: 0; background: transparent; cursor: pointer;
+  font: inherit; text-align: left; color: var(--color-text-tertiary);
+}
+.wds-ai-progress-compact-row:not([data-static]):hover { color: var(--color-text-secondary); }
+.wds-ai-progress-compact-row[data-static] { cursor: default; }
+.wds-ai-progress-compact-row:focus-visible { outline: 2px solid var(--color-brand-blue); outline-offset: 2px; border-radius: 4px; }
+.wds-ai-progress-compact-text { min-width: 0; font-size: var(--text-md); line-height: var(--leading-normal); color: var(--color-text-tertiary); }
+.wds-ai-progress-compact-meta { flex: none; font-size: var(--text-base); color: var(--color-text-tertiary); font-family: var(--font-family-numeric); font-variant-numeric: tabular-nums; }
+.wds-ai-progress-compact-detail { display: flex; flex-direction: column; gap: 6px; padding: 4px 0; }
+.wds-ai-progress-compact-steps { padding: 0 0 2px; }
+/* 글로우 — 글자 위를 빛이 왼쪽에서 오른쪽으로 훑는다. 바탕 disabled 위를 primary 가 지나간다
+   (2026-10-16 바탕을 tertiary 에서 disabled 로 옅게 · 빛과의 차이를 키움).
+   «아직 일하는 중» 의 표시다. 진행 중에만 붙이고, 동작 줄이기면 글자만 남긴다. */
+@keyframes wdsAiShimmer {
+  from { background-position: 100% 0; }
+  to { background-position: 0% 0; }
+}
+.wds-ai-shimmer {
+  background-image: linear-gradient(90deg, var(--color-text-disabled) 0%, var(--color-text-disabled) 35%, var(--color-text-primary) 50%, var(--color-text-disabled) 65%, var(--color-text-disabled) 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: wdsAiShimmer 2s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wds-ai-progress-find, .wds-ai-progress-foot, .wds-ai-reveal > * { animation: none; }
+  .wds-ai-shimmer { animation: none; background-image: none; -webkit-text-fill-color: currentColor; }
+}
 /* 옵션바 항목 자동 배치 — 「폭이 넉넉하면 라벨을 값 왼쪽에」.
    기준은 뷰포트가 아니라 **행이 실제로 쓸 수 있는 폭**이다(container query). 사이드바(240)와
    AI 위젯(480)이 열리면 같은 화면에서도 행이 좁아지는데, 뷰포트 기준이면 그때도 라벨을 옆에
@@ -2129,6 +2239,7 @@ html, body, #root {
   --color-surface-50: #14181E;
   --color-surface-100: #1B2026;
   --color-surface-200: #232932;
+  --color-skeleton-glow: #2F3F5E;
   /* 중립 강조면 — 다크에서는 밝아지지 않는다(전경이 계속 흰색이므로 어두운 단계를 유지). 정의: tokens.css */
   --color-neutral-solid: #3A414D;
   --color-neutral-solid-deep: #4A515C;
@@ -2175,14 +2286,14 @@ html, body, #root {
   --color-status-warning-soft-border: #4A3714;
 
   /* Chart — 다크 표면용으로 다시 스텝한 값(자동 반전 아님). 정의: tokens.css */
-  --color-chart-series-1: #5B92F7;
-  --color-chart-series-2: #D9762E;
-  --color-chart-series-3: #1FA9A2;
-  --color-chart-series-4: #B08D14;
-  --color-chart-series-5: #CE4FB6;
-  --color-chart-series-6: #2FA97D;
-  --color-chart-series-7: #9A7DF0;
-  --color-chart-series-8: #E8635C;
+  --color-chart-series-1: #406CAA;
+  --color-chart-series-2: #9F6620;
+  --color-chart-series-3: #12A7A8;
+  --color-chart-series-4: #A9912B;
+  --color-chart-series-5: #D249B8;
+  --color-chart-series-6: #04896A;
+  --color-chart-series-7: #B264FB;
+  --color-chart-series-8: #AA618D;
 
   /* seq — 다크는 anchor 가 뒤집힌다: 어두움(작음) → 밝음(큼). */
   --color-chart-seq-1: #3A5480;

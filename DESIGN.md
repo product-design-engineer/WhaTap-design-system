@@ -70,6 +70,7 @@ colors:
   surface-50:                "#F5F5F5"    # Color
   surface-100:               "#F1F2F4"    # Color
   surface-200:               "#EAEAEA"    # Color
+  skeleton-glow:             "#DCE7FD"    # Color — 스켈레톤 글로우 빛 띠 정점 (다크 #2F3F5E)
 
   # Neutral Solid — 중립(무채색) 강조면. tone="tertiary" 버튼의 채움/hover.
   #  위 전경은 고정 흰색(라이트 8.4:1 · 다크 10.3:1). 다크에서도 어두운 단계를 유지한다.
@@ -190,15 +191,15 @@ colors:
 
   # Chart — Series (categorical) · 계열 정체성. 고정 순서, 1번부터 배정, 순환 금지.
   #  ⚠️ all-pairs 상한 3슬롯 — scatter/bubble/map/small-multiples 는 3계열까지.
-  #  검증(dataviz validate_palette.js): 라이트 최악 인접 CVD ΔE 9.5 · 정상시야 17.0 · 대비 ≥3:1
-  chart-series-1:            "#296CF2"    # Color — blue
-  chart-series-2:            "#C75B1A"    # Color — orange
-  chart-series-3:            "#00908A"    # Color — teal
-  chart-series-4:            "#9A7B00"    # Color — gold
-  chart-series-5:            "#B0349B"    # Color — magenta
-  chart-series-6:            "#0E7A56"    # Color — green
-  chart-series-7:            "#6B3FD4"    # Color — violet
-  chart-series-8:            "#C93B34"    # Color — red
+  #  검증: pnpm lint:chart-palette (값 일치 포함) · 측정값 정본은 docs/tokens.json distinctFrom
+  chart-series-1:            "#1E4E9E"    # Color — navy
+  chart-series-2:            "#985521"    # Color — amber
+  chart-series-3:            "#06A3A5"    # Color — teal
+  chart-series-4:            "#9A7D0B"    # Color — gold
+  chart-series-5:            "#B3329D"    # Color — magenta
+  chart-series-6:            "#037C58"    # Color — green
+  chart-series-7:            "#7130CB"    # Color — violet
+  chart-series-8:            "#9F2D48"    # Color — raspberry
 
   # Chart — Sequential · 크기/강도. 한 색조 단조 램프, 옅음→진함 (다크는 anchor 반전).
   chart-seq-1:               "#7AB8F0"    # Color
@@ -246,7 +247,7 @@ typography:
   # Font Family
   family-sans:           '"Noto Sans KR", "Noto Sans", ui-sans-serif, system-ui, sans-serif'
   family-korean:         '"Noto Sans", "Noto Sans KR", sans-serif'
-  family-numeric:        'Roboto, "Noto Sans", sans-serif'
+  family-numeric:        'Roboto, "Noto Sans", "Noto Sans KR", sans-serif'
   family-mono:           '"JetBrains Mono", "SF Mono", Menlo, Consolas, monospace'
   family-korean-kr:      '"Noto Sans KR", sans-serif'
   family-korean-inter:   'Inter, "Noto Sans KR", sans-serif'

@@ -1,6 +1,6 @@
 {
   "name": "@whatap/design-system",
-  "version": "0.1.10",
+  "version": "0.1.13",
   "private": false,
   "type": "module",
   "description": "WhaTap AI Assistant design system — chrome + widget cards + tokens. Consumed as a Vercel-hosted tarball; the `source` export condition serves the DS's own Storybook/Vitest from src.",
@@ -16,6 +16,12 @@
       "types": "./dist/widget.d.ts",
       "import": "./dist/widget.js",
       "default": "./dist/widget.js"
+    },
+    "./chart": {
+      "source": "./src/chart/index.ts",
+      "types": "./dist/chart.d.ts",
+      "import": "./dist/chart.js",
+      "default": "./dist/chart.js"
     },
     "./tokens.css": "./src/tokens.css",
     "./style.css": "./dist/style.css",
@@ -36,7 +42,7 @@
     "build:components-json": "node scripts/build-components-json.mjs",
     "lint:docstrings": "node scripts/check-docstrings.mjs",
     "lint:design": "node scripts/design-lint.js",
-    "test": "node scripts/check-catalog-folders.mjs && node scripts/check-ai-boundary.mjs && node scripts/check-docstrings.mjs && node scripts/check-wikilinks.mjs && node scripts/check-token-docs.mjs && node scripts/check-policy-docs.mjs && node scripts/check-catalog-coverage.mjs && node scripts/design-lint.js && node scripts/check-no-raw-colors.mjs && node scripts/check-layer-deps.mjs && node scripts/check-token-sync.mjs && node scripts/check-no-tailwind.mjs && node scripts/check-css-structure.mjs && node scripts/check-guardrails-meta.mjs && pnpm lint:cycles && vitest run",
+    "test": "node scripts/check-catalog-folders.mjs && node scripts/check-ai-boundary.mjs && node scripts/check-docstrings.mjs && node scripts/check-wikilinks.mjs && node scripts/check-token-docs.mjs && node scripts/check-policy-docs.mjs && node scripts/check-catalog-coverage.mjs && node scripts/design-lint.js && node scripts/check-no-raw-colors.mjs && node scripts/check-layer-deps.mjs && node scripts/check-token-sync.mjs && node scripts/check-chart-palette.mjs && node scripts/check-no-tailwind.mjs && node scripts/check-css-structure.mjs && node scripts/check-guardrails-meta.mjs && pnpm lint:cycles && vitest run",
     "test:visual": "node scripts/visual-snap.mjs",
     "test:visual:update": "node scripts/visual-snap.mjs --update",
     "lint:tokens": "node scripts/check-no-raw-colors.mjs",
@@ -45,6 +51,7 @@
     "lint:layers": "node scripts/check-layer-deps.mjs",
     "typecheck": "tsc --noEmit",
     "lint:token-sync": "node scripts/check-token-sync.mjs",
+    "lint:chart-palette": "node scripts/check-chart-palette.mjs",
     "lint:no-tailwind": "node scripts/check-no-tailwind.mjs",
     "lint:css-structure": "node scripts/check-css-structure.mjs",
     "lint:guardrails": "node scripts/check-guardrails-meta.mjs",

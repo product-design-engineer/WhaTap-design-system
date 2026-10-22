@@ -65,6 +65,12 @@ export interface SliderProps
   step?: number;
   /** 정해진 값 — 크기순 배열. 값의 간격과 상관없이 같은 간격의 눈금에 놓인다. */
   stops?: readonly number[];
+  /**
+   * 정해진 값 — 고를 수 있는 가장 작은 값. 이보다 작은 눈금은 흐리게 서고 고를 수 없다.
+   * 그쪽으로 끌면 손잡이는 `floor` 에서 멈춘다. `floor` 가 눈금 사이 값이면 두 눈금 사이 비율 위치에 선다
+   * (예: 눈금 0 · 20만 사이의 15만). 눈금은 그대로 두어 범위 전체가 한눈에 보이게 한다.
+   */
+  floor?: number;
   /** 눈금 아래 글자. `stops` 면 눈금마다, 연속이면 양 끝(min · max)에만 선다. 없으면 눈금 글자 없음. */
   markLabel?: (value: number) => ReactNode;
   /** 스크린리더가 읽는 값 문장(aria-valuetext). 없으면 숫자 그대로. */
@@ -95,6 +101,8 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider(
     max = 100,
     step = 1,
     stops,
+    floor,
+    onKeyDown: userKeyDown,
     markLabel,
     valueText,
     label,
@@ -114,13 +122,26 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider(
   const index = discrete
     ? stops!.reduce((best, v, i) => (Math.abs(v - current) < Math.abs(stops![best] - current) ? i : best), 0)
     : 0;
+  /* 눈금 번호 축 위의 위치. 눈금 사이 값(floor)이면 두 눈금 사이 비율로 잰다. */
+  const posOf = (v: number) => {
+    if (!discrete) return v;
+    const s = stops!;
+    if (v <= s[0]) return 0;
+    for (let i = 0; i < s.length - 1; i++) if (v <= s[i + 1]) return i + (v - s[i]) / (s[i + 1] - s[i] || 1);
+    return s.length - 1;
+  };
+  const hasFloor = discrete && floor !== undefined && floor > stops![0];
+  const floorPos = hasFloor ? posOf(floor!) : 0;
   const lo = discrete ? 0 : min;
   const hi = discrete ? stops!.length - 1 : max;
-  const pos = discrete ? index : current;
+  const pos = discrete ? (hasFloor && current <= floor! ? floorPos : index) : current;
   const ratio = hi > lo ? Math.min(1, Math.max(0, (pos - lo) / (hi - lo))) : 0;
 
   const commit = (raw: number) => {
-    const next = discrete ? stops![raw] : raw;
+    /* floor 가 있으면 input 은 소수 위치를 받는다. 가장 가까운 눈금으로 붙이고, floor 아래면 floor 에 멈춘다. */
+    const snapped = discrete ? Math.round(raw) : raw;
+    const picked = discrete ? stops![Math.min(stops!.length - 1, Math.max(0, snapped))] : raw;
+    const next = hasFloor && picked < floor! ? floor! : picked;
     if (value === undefined) setInternal(next);
     onChange?.(next);
   };
@@ -136,12 +157,28 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider(
         className="wds-slider-input"
         min={lo}
         max={hi}
-        step={discrete ? 1 : step}
+        step={discrete ? (hasFloor ? "any" : 1) : step}
         value={pos}
         disabled={disabled}
         aria-label={label}
         aria-valuetext={valueText ? valueText(current) : undefined}
         onChange={(e) => commit(Number(e.currentTarget.value))}
+        /* step="any" 이면 키보드 한 칸이 눈금 하나가 아니게 된다. floor 가 있을 때만 키 이동을 눈금 단위로 직접 맡는다. */
+        onKeyDown={(e) => {
+          userKeyDown?.(e);
+          if (!hasFloor || e.defaultPrevented) return;
+          const n = stops!.length - 1;
+          const at = current <= floor! ? floorPos : index;
+          const key = e.key;
+          let to: number | null = null;
+          if (key === "ArrowRight" || key === "ArrowUp" || key === "PageUp") to = Math.min(n, Math.floor(at) + 1);
+          else if (key === "ArrowLeft" || key === "ArrowDown" || key === "PageDown") to = Math.max(0, Math.ceil(at) - 1);
+          else if (key === "Home") to = 0;
+          else if (key === "End") to = n;
+          if (to === null) return;
+          e.preventDefault();
+          commit(to);
+        }}
         /* 채운 구간의 끝. 손잡이 중심과 맞도록 양 끝 반지름만큼 안쪽에서 잰다. */
         style={{ "--wds-slider-fill": `calc(${THUMB / 2}px + (100% - ${THUMB}px) * ${ratio})` } as CSSProperties}
         {...rest}
@@ -152,7 +189,8 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(function Slider(
             <span
               key={v}
               className="wds-slider-mark"
-              data-active={(discrete ? i === index : v === current) || undefined}
+              data-active={(discrete ? i === index && !(hasFloor && current <= floor! && v !== floor) : v === current) || undefined}
+              data-disabled={(hasFloor && v < floor!) || undefined}
               style={markStyle(markRatio(v, i))}
             >
               {markLabel(v)}

@@ -19,10 +19,9 @@ pnpm build-storybook                     # 정적 빌드 검증
 ## 1. 핵심 아키텍처·정책 (반드시 숙지)
 
 ### No-Tailwind (흔적 0) — 절대 재도입 금지
-- 런타임 스타일 = 자체 일반 CSS **`src/whatap-ds.css`** (export `./style.css`). 내부에 `@layer`·`--tw-*`·`@property`·escape 클래스명(`.foo-\[..\]`) **없음**. 유틸 클래스명은 escape 없는 식별자(`gap-4px`·`hover-opacity-70`).
+- 런타임 스타일 = 자체 일반 CSS **`src/whatap-ds.css`** (export `./style.css`). 내부에 `--tw-*`·escape 클래스명(`.foo-\[..\]`) **없음**. `@layer base`(preflight 전용) 1곳과 네이티브 `@property` 1곳은 의도된 예외로, 줄 단위 면제 표시(`no-tailwind-ok`)가 붙어 있다. 유틸 클래스명은 escape 없는 식별자(`gap-4px`·`hover-opacity-70`).
 - `src/tokens.css` = 참조용 순수 `:root` 토큰.
-- **생성기 `scripts/detailwind.mjs`**: `whatap-ds.css` 생성 + tsx className 코드모드. 진실 원본 `scripts/frozen-whatap-ds.css`(1회 스냅샷, 미배포).
-  - ⚠️ **`node scripts/detailwind.mjs generate` 는 원본(escaped className) tsx 에서만 실행.** 이미 codemod된 트리에서 재실행하면 유틸 누락 — 가드가 중단시킴. 증분 변경은 `src/whatap-ds.css` **직접 편집** + 새 의미 유틸은 EXTRAS(스크립트)에도 반영.
+- **`src/whatap-ds.css` 는 직접 편집한다(hand-maintained).** `scripts/detailwind.mjs` 는 최초 1회 변환(escaped className tsx → 일반 CSS) 도구였고 **재실행 금지** — 가드가 중단시킨다. 변환 당시 스냅샷 `scripts/frozen-whatap-ds.css`(미배포).
 - 소비자: `import "@whatap/design-system/style.css"` 한 줄. Tailwind·`@source`·PostCSS 불필요.
 
 ### 다크 모드
@@ -35,7 +34,7 @@ pnpm build-storybook                     # 정적 빌드 검증
 
 ### 카탈로그 분류 (Storybook 좌측 트리)
 - **Primitives** — 원자 부품 (Button 포함) · **Chrome** — 페이지 틀 + 합성 위젯 (+ `Parts/`) · **WhaTap AI** — AI 위젯/진입/카드 (+ `Parts/`) · **Page** — 전체 페이지 합성 템플릿(A–D) · **Tokens** · **Foundation**(WhaTap Symbol).
-- 3-Layer(Foundation/Composite/Shell)는 코드 의존 계층, 카탈로그 분류와 별개 축. 정책 전문: repo `CLAUDE.md`.
+- 3-Layer(Foundation/Composite/Shell)는 코드 의존 계층, 카탈로그 분류와 별개 기준. 정책 전문: repo `CLAUDE.md`.
 
 ## 2. 이번 세션에 main 에 반영된 작업 (PR #1~#3 처리 완료)
 
@@ -48,9 +47,7 @@ pnpm build-storybook                     # 정적 빌드 검증
 
 ## 3. 보류·후속 후보 (선택)
 
-- **무동작(no-op) 텍스트 유틸**: `text-secondary`/`tertiary`/`disabled`·`font-numeric` 는 규칙 없는 no-op(Tailwind 시절부터). 색 위계 실제 적용하려면 `whatap-ds.css` 에 `.text-secondary{color:var(--color-text-secondary)}` 등 추가 — 단 라이트 픽셀 변경이므로 확인 후.
 - **다크 폴리시 잔여**: `hover-bg-black`(WhaTapAiWidget 소형 아이콘 버튼)·위젯 카드(AiUserBubble `#f5f5f5` 등)는 chrome 범위 밖이라 이번 다크 대응에서 제외 — 필요 시 토큰화.
-- **node_modules stale**: `node_modules/.pnpm` 에 옛 tailwind 디렉토리 잔존(lockfile 0, 미참조). `rm -rf node_modules && pnpm install` 로 정리 가능(필수 아님).
 - **DESIGN.md 합본**: `pnpm build:design` 가 docs 7종 → `DESIGN.md` 합본 (storybook/build 직전 자동). docs 수정 시 재생성됨.
 
 ## 4. 주요 파일 지도
@@ -59,7 +56,7 @@ pnpm build-storybook                     # 정적 빌드 검증
 |---|---|
 | 정책 정본 | `CLAUDE.md` (No-Tailwind·다크·구조정책·카탈로그·DataTable 등) |
 | 토큰 | `src/tokens.css` (참조용 :root) |
-| 런타임 CSS | `src/whatap-ds.css` (생성물) + `scripts/detailwind.mjs` + `scripts/frozen-whatap-ds.css` |
+| 런타임 CSS | `src/whatap-ds.css` (직접 편집 · hand-maintained) — `scripts/detailwind.mjs` 는 최초 변환 도구(재실행 금지) |
 | 카탈로그 정렬 | `.storybook/preview.tsx` (storySort) |
 | 카탈로그 문서 | `docs/SKILL.md` · `docs/ONBOARDING.md` · `docs/patterns.md` · `docs/tokens.md` · `stories/0-Introduction.mdx` |
 | Parts(추출) | `src/*Item.tsx`·`src/*Row.tsx`·`src/TabButton.tsx` 등 + `src/widget/*Row.tsx`·`*Step.tsx`·`*Chip.tsx` |
