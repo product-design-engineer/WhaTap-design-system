@@ -332,6 +332,18 @@ AI 위젯 영역의 모든 컴포넌트는 다음 primitive 를 **반드시 comp
 - 의존을 넣다가 **다른 정책과 부딪히면**(예: 타이포 위계 §10) 의존을 그대로 옮기지 말고 어느 쪽을 고칠지 먼저 정한다.
 - Figma 게시는 플러그인 API 로 할 수 없다. 사람이 게시해야 하므로 PR 본문에 「게시 필요」 를 적는다.
 
+### 🔒 핵심 정책 — Figma ↔ Storybook 1:1 매핑과 링크를 항상 유지
+
+> **이 정책은 불변(immutable)입니다.** (2026-10-22 사용자 지시 — «항상 유지 · 핵심 정책»)
+
+정본 Figma 의 컴포넌트와 Storybook 문서 페이지는 **1:1** 로 짝지어지고, Figma 컴포넌트의 **문서 링크(`documentationLinks`)에 그 Storybook 주소**가 들어 있다. 한쪽에만 있는 컴포넌트 · 이름이 다른 짝 · 링크 없는 컴포넌트는 결함이다.
+
+- **원장:** `docs/figma-map.json` — 카탈로그 컴포넌트마다 Figma 노드 id(아직 없으면 `null`). Figma 에만 있는 하위 부품(셀 · 옵션 행 등)은 `figmaParts` 에 부모 문서와 함께.
+- **게이트:** `pnpm lint:figma-map`(`pnpm test` 포함) — 카탈로그 전부가 원장에 있는지 · 원장에만 있는 키가 없는지 · `null` 이 동결선(`scripts/figma-map-baseline.json`)보다 늘지 않는지. CI 에는 Figma 접근이 없으므로 노드 존재와 링크 값은 Figma 플러그인으로 대조한다.
+- **링크 주소:** `https://whatap-design-system-storybook.vercel.app` + `components.json` 의 `docsUrl`.
+- **언제 갱신하나:** 컴포넌트 신설 · 이름 변경 · 계층 이동(스토리 id 변경) 때 같은 흐름에서 원장과 Figma 링크를 고친다. 스토리 id 가 바뀌는 PR 은 **병합 · 배포 뒤** 링크를 다시 건다 — 배포 전 주소를 걸면 링크가 깨진다.
+- 아이콘 · 에셋 · `_` 접두 내부 컴포넌트 · deprecated 페이지 · 시안 주석 장치(FlowNote)는 짝 대상이 아니다.
+
 ### 🔒 불변 정책 — 소비자(엔지니어)의 역방향 수정 금지
 
 > **이 정책은 불변(immutable)입니다. 예외 없음.**

@@ -98,6 +98,17 @@ export const GATE_ROSTER = [
       "사람이 검증기를 돌려야만 지켜지던 차트 색 조건의 누락 — 실측(2026-10-14): 계열 8슬롯 중 6개가 Severity 색과 구별되지 않았고(series-8 ↔ error ΔE 4.7, series-1 = status-info 같은 값) 모든 게이트가 통과했다. `token-sync` R2 는 첫 선언만 비교해 다크 사본이 갈라져도 통과했다",
   },
   {
+    id: "figma-storybook-map",
+    name: "Figma ↔ Storybook 1:1 원장",
+    status: "auto",
+    script: "scripts/check-figma-map.mjs",
+    pipeline: null,
+    invariant:
+      "카탈로그(Primitives · Composite · Shell)의 **모든 컴포넌트가 `docs/figma-map.json` 에 Figma 정본 노드 id(또는 null)로 있다**. 원장에만 있는 키는 없다. `figma: null`(Figma 에 아직 없음)은 동결선 이름만 허용하고 늘릴 수 없다. Figma 쪽 문서 링크(documentationLinks) = Storybook 배포 주소 + docsUrl(핵심 정책, 2026-10-22).",
+    prevents:
+      "한쪽에만 있는 컴포넌트가 다른 쪽에서 «없는 것» 으로 다시 만들어지는 일 — 실측(2026-10-22): 카탈로그 184 중 66 이 Figma 에 없었고, Figma 컴포넌트 191 개 중 Storybook 링크가 걸린 것은 0 이었다",
+  },
+  {
     id: "layer-deps",
     name: "3-Layer 의존 방향",
     status: "auto",
