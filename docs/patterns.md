@@ -1250,6 +1250,7 @@ series 는 네 가지를 지킨다.
 | 격자 | 세로 점선 | [[ChartGrid]] `vertical`(칸 수) — 분포 차트에만([[ScatterHeatmap]] 22칸) | 있음 (2026-10-22) |
 | 격자 | 임계 기준선 | [[ForecastLineChart]] `threshold` 만 | 차트마다 따로 |
 | 막대 | 범주 · 단계 세로 막대(몫 + 나머지, 구간 글자) | [[ChartStackedColumn]] (Primitives) — [[GpuStatusBar]] 가 조합 | 있음 (2026-10-22) |
+| 막대 | 칸 막대 하나(값 · 0 · 모름) | [[ChartBar]] (Primitives) — [[UsageChart]] 가 조합. 0 은 바닥 2px, 모름은 칸 전체 `surface-100` | 있음 (2026-10-22) |
 | 축 | 범주축 이름(칸 등분 · 가운데 · 말줄임) | [[ChartCategoryAxis]] (Primitives) — [[GpuStatusBar]]. [[MiniBarChart]] `categories` 는 아직 자기 글자 | 있음 · MiniBar 는 차트마다 따로 |
 | 범례 | 스와치 + 이름 + 지금 값 | [[WidgetFrame]] `legend` · `SPEED_LEGEND` · `hexGridLegend` | 있음 |
 | 범례 | 스와치 모양 | [[ChartSwatch]] (Primitives) — 마크 모양을 따른다: 선 = `line`(8×2), 면 · 막대 · 조각 · 칸 = `square`(8×8). [[WidgetFrame]] `legend[].shape` · [[MiniMultiLineChart]] · [[MiniDonutChart]] · [[ActiveTransactionArc]] · [[HexGrid]] 가 조합한다 | 있음 (2026-10-22 네 모양 → 하나) |

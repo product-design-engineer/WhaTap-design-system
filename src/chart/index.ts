@@ -11,6 +11,8 @@
  */
 
 export { default as ChartGrid } from "./ChartGrid";
+export { default as ChartBar } from "./ChartBar";
+export type { ChartBarProps } from "./ChartBar";
 export type { ChartGridProps } from "./ChartGrid";
 export { default as ChartCategoryAxis } from "./ChartCategoryAxis";
 export type { ChartCategoryAxisProps } from "./ChartCategoryAxis";

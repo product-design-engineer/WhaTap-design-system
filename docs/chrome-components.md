@@ -498,6 +498,7 @@ export type DataTableProps<T> = {
 | [[ChartPeakMarker]] | 최고점 값 말풍선(카드 바탕 · `text-xs` 굵게) + ▼(계열 색). `label` · `color` · `left` · `top` — ▼ 끝이 (`left`, `top`) 에 닿는다(§5) | 덧그림 겹, 맨 위 |
 | [[ChartCategoryAxis]] | 범주 막대 아래 이름 — 칸 등분 · 가운데 · 말줄임(title 에 전체). `labels` · `padBottom`(18) · `right` · `gap`(4) | 덧그림 |
 | [[ChartStackedColumn]] | 세로 막대 하나 — 구간을 아래에서 위로(`segments[0]` 바닥), 몫은 계열 색 + 안 글자(흰색), 나머지는 `surface-200` + 바깥 글자. `max` 는 값축과 같게 | 막대 칸 |
+| [[ChartBar]] | 칸 바닥에서 자라는 막대 하나 — `ratio`(0~1, 최소 2px) · `null` = 모름(칸 전체 `surface-100`) · `delay` 진입 애니메이션 | 가로 flex 줄 |
 
 | Prop (둘 공통) | Type | Default |
 |---|---|---|
