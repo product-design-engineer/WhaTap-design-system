@@ -62,7 +62,7 @@ export default function SidebarProjectSwitcher({
   }
 
   return (
-    <button type="button" onClick={onClick} className="flex items-start shrink-0 cursor-pointer">
+    <button type="button" onClick={onClick} className="flex items-center shrink-0 cursor-pointer">
       <div className="flex h-40px items-center justify-between pr-8px w-240px bg-card border-b border-r border-color-var-color-border-default">
         {project.productIcon ? (
           <div className="flex items-center justify-center shrink-0 size-40px">
@@ -86,7 +86,8 @@ export default function SidebarProjectSwitcher({
               )}
               <p
                 className="text-base text-secondary overflow-hidden text-ellipsis min-w-0 tracking-normal"
-                style={{ fontFamily: NOTO_LIGHT, fontWeight: "var(--font-weight-regular)" }}
+                /* 줄 높이 1 (Figma 정본 100%). `.text-base` 가 `.leading-none` 보다 뒤에 선언돼 클래스로는 이기지 못한다. */
+                style={{ fontFamily: NOTO_LIGHT, fontWeight: "var(--font-weight-regular)", lineHeight: "var(--leading-none)" }}
               >
                 {project.groupLabel}
               </p>
