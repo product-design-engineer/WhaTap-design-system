@@ -529,6 +529,21 @@ export type DataTableProps<T> = {
 
 ---
 
+## ActiveTransactionSpeedWidget
+
+실시간 트래픽 흐름 위젯 — 등급별 점이 왼쪽에서 오른쪽으로 흐르고 RPS · TPS · 등급별 개수 · 속도 막대가 함께 움직인다. **Composite** — 좌우 RPS · TPS 는 [[SpeedStat]](Primitives: 라벨 위 큰 숫자, 폭 72 · compact 56 고정). 흐르는 점 · 속도 막대는 이 위젯의 마크라 위젯이 그린다. 등급별 개수 색은 판정 등급 토큰 `--color-chart-speed-*`(patterns §17) — Arc · Hitmap 의 `SPEED_LEGEND` 와 같다. 실데이터 없는 데모 · 캡처는 `paused`.
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `string` | 「액티브 트랜잭션 스피드」 |
+| `baseRps` · `baseTps` | `number` | 113 · 116 |
+| `baseTotals` | `{ normal, warning, critical, sum }` | — |
+| `paused` | `boolean` | `false` |
+| `compact` | `boolean` | `false` |
+| `onOpenDetail` | `() => void` | — |
+
+Figma 정본: ActiveTransactionSpeedWidget `374:5` · SpeedStat `564:15`.
+
 ## MiniLineChart
 
 96px 소형 라인 차트. 모니터링 카드용. **SVG plot + HTML overlay**가 같은 좌표계로 정렬되어 peak 라벨이 line max 픽셀과 1:1 매칭됩니다 ([patterns.md](./patterns.md#5-chart-peak-alignment)). Composite — 값축 · 격자는 [[ChartGrid]] · [[ChartValueAxis]].

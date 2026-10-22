@@ -129,7 +129,7 @@
       "whenToUse": 1,
       "undocumentedProps": 9
     },
-    "Primitives/ActiveTransactionSpeedWidget": {
+    "Composite/ActiveTransactionSpeedWidget": {
       "whenToUse": 1,
       "undocumentedProps": 8
     },
