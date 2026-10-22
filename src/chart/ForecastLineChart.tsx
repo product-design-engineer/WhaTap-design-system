@@ -1,7 +1,9 @@
-import { AXIS_GUTTER as GUTTER, PlotAxisLines, ValueAxisLabels, ValueGrid, axisTicks, formatAxisValue } from "./_valueAxis";
+import ChartGrid from "./ChartGrid";
+import ChartValueAxis from "./ChartValueAxis";
+import { AXIS_GUTTER as GUTTER, formatAxisValue } from "./_axisScale";
 
 /**
- * ForecastLineChart: 관측은 실선, 예측은 점선. 「지금」 세로선 · 임계 띠 · 도달 마커를 한 판에. Primitives layer.
+ * ForecastLineChart: 관측은 실선, 예측은 점선. 「지금」 세로선 · 임계 띠 · 도달 마커를 한 판에. Composite layer.
  *
  * ## Purpose
  * «이대로 가면 언제 닿는가» 를 화면에서 확인하게 한다. 디스크 고갈 · 용량 소진처럼 판정이 **기울기의 연장**에서 나오는
@@ -25,6 +27,7 @@ import { AXIS_GUTTER as GUTTER, PlotAxisLines, ValueAxisLabels, ValueGrid, axisT
  * - 한계 대비 지금 소비량 하나 → [[UsageGauge]].
  *
  * ## Composition rules
+ * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
  * - 껍데기(카드 · 제목 · 메뉴 · 범례)는 그리지 않는다. 대시보드 칸에서는 [[WidgetFrame]] 이 맡는다(patterns §15).
  *   범례는 같은 색 토큰을 WidgetFrame `legend` 로 넘기고, 칸에 꼭 필요한 값(추세 구간 · 지평)은 `summary` 에 둔다.
  * - `frame={false}` 면 바깥 좌우 여백(8px)을 뺀다. WidgetFrame 안에서는 늘 `frame={false}`.
@@ -145,7 +148,6 @@ export default function ForecastLineChart({
 
   const showNow = x0 <= 0 && 0 <= x1;
   const tone = THRESHOLD_TONE[threshold?.tone ?? "critical"];
-  const yTicks = axisTicks(yMax);
   /* 강조 계열을 맨 뒤에 그려 위로 올린다. */
   const ordered = highlightId ? [...series.filter((s) => s.id !== highlightId), ...series.filter((s) => s.id === highlightId)] : series;
   const opacityOf = (s: ForecastLineChartSeries) => (highlightId && s.id !== highlightId ? DIM_OPACITY : 1);
@@ -168,7 +170,7 @@ export default function ForecastLineChart({
         )}
 
         {/* 격자: 눈금마다 점선 (천장 포함) */}
-        <ValueGrid ticks={yTicks} yAt={top} right={PAD_RIGHT} />
+        <ChartGrid max={yMax} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={PAD_RIGHT} />
 
         {/* 임계선 */}
         {threshold && (
@@ -223,7 +225,7 @@ export default function ForecastLineChart({
         </svg>
 
         {/* 축: 선 위에 그려 바닥선이 묻히지 않게 */}
-        <PlotAxisLines top={PAD_TOP} bottom={PAD_BOTTOM} right={PAD_RIGHT} />
+        <ChartValueAxis max={yMax} unit={unit} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={PAD_RIGHT} />
 
         {/* 마커: 지금 값 점 · 도달 원. 선과 같은 plot 좌표 */}
         {ordered.map((s) => {
@@ -285,7 +287,6 @@ export default function ForecastLineChart({
               {threshold.label ?? formatAxisValue(threshold.value) + unit}
             </span>
           )}
-          <ValueAxisLabels ticks={yTicks} yAt={top} max={yMax} unit={unit} />
           {axisLabels.map((l) => {
             const ratio = rx(l.x);
             return (

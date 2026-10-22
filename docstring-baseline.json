@@ -161,7 +161,7 @@
       "whenToUse": 1,
       "undocumentedProps": 1
     },
-    "Primitives/Chart · ForecastLineChart": {
+    "Composite/Chart · ForecastLineChart": {
       "whenToUse": 2,
       "undocumentedProps": 1
     },
@@ -181,11 +181,11 @@
       "whenToUse": 2,
       "undocumentedProps": 2
     },
-    "Primitives/Chart · MiniLineChart": {
+    "Composite/Chart · MiniLineChart": {
       "whenToUse": 2,
       "undocumentedProps": 5
     },
-    "Primitives/Chart · MiniMultiLineChart": {
+    "Composite/Chart · MiniMultiLineChart": {
       "whenToUse": 2,
       "undocumentedProps": 6
     },

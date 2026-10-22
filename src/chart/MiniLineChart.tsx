@@ -16,6 +16,7 @@
  * - 정밀한 인터랙션(zoom·tooltip·다중 시리즈)이 필요한 본격 차트 → 전용 차트 라이브러리
  *
  * ## Composition rules
+ * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 안쪽 여백 · 제목 줄 · Top Stat · ⋮ · AI 트리거를 뺀다).
  *   [[WidgetFrame]] 안에 넣을 때 쓴다. 제목 · 범위 · 메뉴는 WidgetFrame 이 맡는다(patterns §15).
  * - **SVG font-size 단위 정책 (feedback-svg-text-units)**: SVG 내부에는 텍스트를
@@ -40,7 +41,9 @@
  * ```
  */
 import AiTriggerButton from "../widget/TriggerButton";
-import { AXIS_GUTTER as GUTTER, PlotAxisLines, ValueAxisLabels, ValueGrid, axisTicks, niceMax } from "./_valueAxis";
+import ChartGrid from "./ChartGrid";
+import ChartValueAxis from "./ChartValueAxis";
+import { AXIS_GUTTER as GUTTER, niceMax } from "./_axisScale";
 
 const CHART_HEIGHT = 96;
 const PAD_RIGHT = 8;
@@ -124,8 +127,6 @@ export default function MiniLineChart({
   const peakXRatio = peakIdx >= 0 && values.length > 1 ? peakIdx / (values.length - 1) : 0;
   const peakYRatio = peakIdx >= 0 && yMaxNice > 0 ? 1 - values[peakIdx] / yMaxNice : 0;
 
-  const yTicks = axisTicks(yMaxNice);
-  const yAt = (r: number) => PAD_TOP_PX + PLOT_H_PX * r;
 
   return (
     <div
@@ -182,8 +183,7 @@ export default function MiniLineChart({
 
       {/* 차트 영역 (SVG는 정확히 plot 사각형에만 absolute 배치) */}
       <div className="relative w-full" style={{ height: CHART_HEIGHT }}>
-        <PlotAxisLines top={PAD_TOP_PX} bottom={PAD_BOTTOM_PX} right={PAD_RIGHT} />
-        <ValueGrid ticks={yTicks} yAt={yAt} right={PAD_RIGHT} />
+        <ChartGrid max={yMaxNice} padTop={PAD_TOP_PX} padBottom={PAD_BOTTOM_PX} right={PAD_RIGHT} />
         {/* 좌측 검정 점선 reference */}
         <div
           className="absolute"
@@ -231,7 +231,7 @@ export default function MiniLineChart({
         {/* HTML overlay — px 고정 텍스트 */}
         <div className="absolute inset-0 pointer-events-none">
           {/* Y축 라벨 */}
-          <ValueAxisLabels ticks={yTicks} yAt={yAt} max={yMaxNice} unit={unit} />
+          <ChartValueAxis max={yMaxNice} unit={unit} padTop={PAD_TOP_PX} padBottom={PAD_BOTTOM_PX} right={PAD_RIGHT} />
 
           {/* peak ▼ + 값 라벨 — SVG polyline의 peak 점과 동일 좌표계 사용
               (GUTTER + plotWidth × peakXRatio, PAD_TOP_PX + PLOT_H_PX × peakYRatio).
