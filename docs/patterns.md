@@ -974,7 +974,7 @@ series 는 네 가지를 지킨다.
 | 2 | 면 / 누적면 | 면 = `showArea` · 누적면 = StackedAreaChart | 면 있음 · 누적면 신규 |
 | 3 | 세로 막대 | [[MiniBarChart]] | 있음 |
 | 4 | 가로 막대 | [[BarList]] = [[BarListItem]] 줄 조합 | 있음 (2026-10-22 Composite 로) |
-| 5 | 누적 막대 / 단일 누적 바 | [[MiniBarChart]] 누적 · 단일 누적 바 = [[GpuStatusBar]] 정비 | A단계 — 옮김 + §17 순환 위반 수정 |
+| 5 | 누적 막대 / 단일 누적 바 | [[MiniBarChart]] 누적 · 단계별 누적 막대 = [[GpuStatusBar]]([[ChartStackedColumn]] 조합) · 단일 누적 바(페이지 로드 타임라인 · 심각도 분포) = SegmentBar | 누적 · 단계 막대 있음(2026-10-22 GpuStatusBar Composite) · 단일 누적 바 신규 |
 | 6 | 산점도 / 버블 | ScatterChart | 신규 |
 | 7 | 박스플롯 | BoxPlotChart | 신규 |
 | 8 | 파이 / 도넛 | [[MiniDonutChart]] | 있음 |
@@ -1243,13 +1243,14 @@ series 는 네 가지를 지킨다.
 | 플롯 | 그리기 영역 · 플롯 여백 | 각 차트 `frame={false}` · `--wds-widget-axis-gutter` · `--wds-widget-end-gutter` | 있음 (토큰) · 영역 계산은 차트마다 따로 |
 | 축 | 값축(Y) — 눈금 셋(최대 · 절반 · 0) · 깔끔한 최대값 계산 · 단위 접미사 · 축선(X 바닥 · Y 세로) | [[ChartValueAxis]] (Primitives) — [[MiniLineChart]] · [[MiniMultiLineChart]] · [[MiniBarChart]] · [[ForecastLineChart]] 가 조합한다(Composite) | 있음 (2026-10-22 4벌 → 1) |
 | 축 | 시간축(X) 글자 | [[ChartTimeAxis]] (Primitives) — 양 끝 안쪽 정렬 · 사이 가운데 · 바닥 2px. [[MiniLineChart]] · [[MiniMultiLineChart]] · [[MiniBarChart]] · [[ForecastLineChart]](`positions`) · [[ApdexChart]] 가 조합한다. [[ScatterHeatmap]] 은 눈금 꼭지 + 양쪽 16px 균등 배치로 아직 다른 규칙 | 있음 (2026-10-22 5벌 → 1) · ScatterHeatmap 은 차트마다 따로 |
-| 축 | 범주축(X) 글자 | [[MiniBarChart]] `categories` — 막대마다 바로 아래 가운데 · 칸 폭 말줄임 | 있음 (한 곳) |
 | 축 | 축 글자 | `text-chart` · 숫자 서체 · `text-tertiary` (§15) | 있음 |
 | 축 | 보조 Y축 | — | 금지 (§19) |
 | 축 | 축 제목 | — 쓰지 않는다. 단위는 눈금 접미사 | 정해짐 (아래) |
 | 격자 | 가로 점선 | [[ChartGrid]] (Primitives) — `--color-border-soft` 점선 하나, 불투명도로 색을 흉내 내지 않는다 · [[ScatterHeatmap]] 10칸 격자는 같은 색을 따로 그린다 | 있음 (4벌 → 1) · ScatterHeatmap 은 차트마다 따로 |
 | 격자 | 세로 점선 | [[ScatterHeatmap]] 만 | 차트마다 따로 |
 | 격자 | 임계 기준선 | [[ForecastLineChart]] `threshold` 만 | 차트마다 따로 |
+| 막대 | 범주 · 단계 세로 막대(몫 + 나머지, 구간 글자) | [[ChartStackedColumn]] (Primitives) — [[GpuStatusBar]] 가 조합 | 있음 (2026-10-22) |
+| 축 | 범주축 이름(칸 등분 · 가운데 · 말줄임) | [[ChartCategoryAxis]] (Primitives) — [[GpuStatusBar]]. [[MiniBarChart]] `categories` 는 아직 자기 글자 | 있음 · MiniBar 는 차트마다 따로 |
 | 범례 | 스와치 + 이름 + 지금 값 | [[WidgetFrame]] `legend` · `SPEED_LEGEND` · `hexGridLegend` | 있음 |
 | 범례 | 스와치 모양 | [[ChartSwatch]] (Primitives) — 마크 모양을 따른다: 선 = `line`(8×2), 면 · 막대 · 조각 · 칸 = `square`(8×8). [[WidgetFrame]] `legend[].shape` · [[MiniMultiLineChart]] · [[MiniDonutChart]] · [[ActiveTransactionArc]] · [[HexGrid]] 가 조합한다 | 있음 (2026-10-22 네 모양 → 하나) |
 | 범례 | 색 범례 바 (순차 · 강도) | [[HeatmapLegend]] | 있음 |

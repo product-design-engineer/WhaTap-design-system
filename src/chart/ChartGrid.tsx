@@ -1,4 +1,4 @@
-import { AXIS_GUTTER, axisTicks, plotY } from "./_axisScale";
+import { AXIS_GUTTER, plotY, tickStops } from "./_axisScale";
 
 /**
  * ChartGrid — 값축 눈금마다 가로 점선을 긋는 플롯 격자. Primitives layer.
@@ -21,7 +21,7 @@ import { AXIS_GUTTER, axisTicks, plotY } from "./_axisScale";
  * - **마크보다 먼저(아래)** 그린다. 위에 그리면 점선이 선 · 막대를 끊는다.
  * - `position: relative` 이고 높이가 정해진 플롯 상자 안에 둔다. 가로는 `--wds-widget-axis-gutter` 에서 시작해
  *   오른쪽 `right` 까지, 세로는 상자 높이에서 `padTop` · `padBottom` 을 뺀 플롯 안에 눈금을 나눈다.
- * - 눈금은 [[ChartValueAxis]] 와 같은 셋(최대 · 절반 · 0). `max` 가 0 이면 바닥 하나.
+ * - 눈금은 기본 셋(최대 · 절반 · 0). `max` 가 0 이면 바닥 하나. 눈금이 데이터에서 오는 차트(단계 값 · 판정 경계)는 `ticks` 로 값을 준다 — [[ChartValueAxis]] 와 같은 `ticks`.
  * - 색은 `--color-border-soft` 하나. 불투명도로 색을 흉내 내지 않는다(§26 결정).
  *
  * ## Spec
@@ -29,7 +29,7 @@ import { AXIS_GUTTER, axisTicks, plotY } from "./_axisScale";
  * |---|---|
  * | 선 | 1px dashed `--color-border-soft` |
  * | 가로 범위 | 왼쪽 `--wds-widget-axis-gutter`(28px) ~ 오른쪽 `right`(기본 8px) |
- * | 눈금 위치 | `padTop + (상자 높이 − padTop − padBottom) × (1 − ratio)`, ratio ∈ {1, 0.5, 0} |
+ * | 눈금 위치 | `padTop + (상자 높이 − padTop − padBottom) × (1 − ratio)`, ratio ∈ {1, 0.5, 0} 또는 `ticks` 값 ÷ `max` |
  * | 접근성 | 장식 — `aria-hidden` |
  *
  * @example
@@ -44,6 +44,8 @@ import { AXIS_GUTTER, axisTicks, plotY } from "./_axisScale";
 export type ChartGridProps = {
   /** 값축 최대(이미 보기 좋은 값으로 올린 것). 0 이면 바닥 눈금 하나만. */
   max: number;
+  /** 눈금 값 목록. 없으면 최대 · 절반 · 0. 데이터에서 오는 눈금(단계 값 · 판정 경계)에 쓴다. `max` 밖 값은 버린다. */
+  ticks?: number[];
   /** 플롯 위 여백(px). 상자 위 끝에서 최대 눈금까지. 기본 4. */
   padTop?: number;
   /** 플롯 아래 여백(px). 바닥 눈금에서 상자 아래 끝까지 — X축 글자 자리. 기본 14. */
@@ -52,10 +54,10 @@ export type ChartGridProps = {
   right?: number | string;
 };
 
-export default function ChartGrid({ max, padTop = 4, padBottom = 14, right = 8 }: ChartGridProps) {
+export default function ChartGrid({ max, ticks, padTop = 4, padBottom = 14, right = 8 }: ChartGridProps) {
   return (
     <>
-      {axisTicks(max).map((ratio) => (
+      {tickStops(max, ticks).map(({ ratio }) => (
         <div
           key={`grid-${ratio}`}
           aria-hidden
