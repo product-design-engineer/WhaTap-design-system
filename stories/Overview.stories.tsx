@@ -241,7 +241,7 @@ export const ByWhatYouAreBuilding: Story = {
 
 /** 한 장 요약 — 전부 훑을 때. 훑는 것이라 읽기 폭 제한을 받지 않는다. */
 export const AllAtOnce: Story = {
-  name: "한 장으로 훑기",
+  name: "정책 목록",
   render: () => (
     <div className="bg-bg" style={{ padding: 24 }}>
       <p className="text-base text-secondary" style={{ width: "100%", lineHeight: 1.7, marginBottom: 20 }}>
