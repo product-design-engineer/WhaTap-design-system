@@ -25,6 +25,15 @@ export function formatAxisValue(v: number): string {
   return Number.isInteger(v) ? String(v) : v.toFixed(0);
 }
 
+/** 최고점 값 글자. 눈금보다 정밀하게 — 1000 이상은 소수 둘째 자리 K, 100 미만은 소수 첫째 자리. */
+export function formatPeakValue(v: number): string {
+  if (v >= 1_000_000) return (v / 1_000_000).toFixed(1) + "M";
+  if (v >= 1000) return (v / 1000).toFixed(2) + "K";
+  if (v >= 100) return Math.round(v).toString();
+  if (v === 0) return "0";
+  return Number.isInteger(v) ? String(v) : v.toFixed(1);
+}
+
 /** 눈금 위치(최대 대비 비율). 최대가 0 이면 바닥 하나. */
 export function axisTicks(max: number): number[] {
   return max > 0 ? [1, 0.5, 0] : [0];

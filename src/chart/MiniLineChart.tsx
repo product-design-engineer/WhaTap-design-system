@@ -17,6 +17,7 @@
  *
  * ## Composition rules
  * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
+ * - 최고점은 [[ChartPeakMarker]] 가 그린다. 차트는 SVG 와 같은 식으로 최고점 좌표만 계산해 넘긴다(§5).
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 안쪽 여백 · 제목 줄 · Top Stat · ⋮ · AI 트리거를 뺀다).
  *   [[WidgetFrame]] 안에 넣을 때 쓴다. 제목 · 범위 · 메뉴는 WidgetFrame 이 맡는다(patterns §15).
  * - **SVG font-size 단위 정책 (feedback-svg-text-units)**: SVG 내부에는 텍스트를
@@ -42,8 +43,9 @@
  */
 import AiTriggerButton from "../widget/TriggerButton";
 import ChartGrid from "./ChartGrid";
+import ChartPeakMarker from "./ChartPeakMarker";
 import ChartValueAxis from "./ChartValueAxis";
-import { AXIS_GUTTER as GUTTER, niceMax } from "./_axisScale";
+import { AXIS_GUTTER as GUTTER, formatPeakValue, niceMax } from "./_axisScale";
 
 const CHART_HEIGHT = 96;
 const PAD_RIGHT = 8;
@@ -237,30 +239,12 @@ export default function MiniLineChart({
               (GUTTER + plotWidth × peakXRatio, PAD_TOP_PX + PLOT_H_PX × peakYRatio).
               ▼ tip(svg path 끝점)이 peak 점에 정확히 닿도록 transform 보정. */}
           {peakIdx >= 0 && (
-            <div
-              className="absolute flex flex-col items-center"
-              style={{
-                left: `calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${peakXRatio})`,
-                top: `${PAD_TOP_PX + PLOT_H_PX * peakYRatio}px`,
-                transform: "translate(-50%, -100%)",
-              }}
-            >
-              {/* peak 라벨에 배경을 깐다 — 최고점이 plot 좌상단에 가까우면 라벨이 Y축 눈금 위로
-                  올라앉아 「10082%」처럼 두 수치가 한 덩어리로 읽힌다. 배경 없이 색만 바꾸면
-                  겹친 자리에서 어느 글자가 어느 수치인지 여전히 구분되지 않는다. */}
-              <span
-                className="text-xs font-bold text-primary leading-none whitespace-nowrap bg-card rounded-2px"
-                style={{
-                  fontFamily: "var(--font-family-numeric)",
-                  padding: "1px 3px",
-                }}
-              >
-                {formatPeak(max) + unit}
-              </span>
-              <svg width="8" height="5" viewBox="0 0 8 5" className="mt-1px block">
-                <path d="M0 0h8L4 5z" fill={color} />
-              </svg>
-            </div>
+            <ChartPeakMarker
+              label={formatPeakValue(max) + unit}
+              color={color}
+              left={`calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${peakXRatio})`}
+              top={PAD_TOP_PX + PLOT_H_PX * peakYRatio}
+            />
           )}
 
           {/* X축 시간 라벨 */}
@@ -292,14 +276,6 @@ export default function MiniLineChart({
   );
 }
 
-function formatPeak(v: number): string {
-  if (v >= 1_000_000) return (v / 1_000_000).toFixed(1) + "M";
-  if (v >= 10_000) return (v / 1000).toFixed(2) + "K";
-  if (v >= 1000) return (v / 1000).toFixed(2) + "K";
-  if (v >= 100) return Math.round(v).toString();
-  if (v === 0) return "0";
-  return Number.isInteger(v) ? String(v) : v.toFixed(1);
-}
 function InfoIcon() {
   return (
     <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">

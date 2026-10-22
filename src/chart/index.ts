@@ -12,6 +12,8 @@
 
 export { default as ChartGrid } from "./ChartGrid";
 export type { ChartGridProps } from "./ChartGrid";
+export { default as ChartPeakMarker } from "./ChartPeakMarker";
+export type { ChartPeakMarkerProps } from "./ChartPeakMarker";
 export { default as ChartSwatch } from "./ChartSwatch";
 export type { ChartSwatchProps, ChartSwatchShape } from "./ChartSwatch";
 export { default as ChartValueAxis } from "./ChartValueAxis";

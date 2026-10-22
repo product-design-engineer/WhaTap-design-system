@@ -60,7 +60,7 @@ import { MiniLineChart } from "@whatap/design-system/chart";   // 차트 전용 
 │   ├── 위젯 한 칸 (대시보드 격자) → WidgetFrame(헤더 · 본문 · 푸터) + 본문 컴포넌트 (patterns §15)
 │   ├── 범례 견본 → ChartSwatch(마크 모양 — 선 line · 면/막대/조각/칸 square) · WidgetFrame legend[].shape (patterns §26)
 │   ├── 차트 (미니) → MiniLineChart · MiniMultiLineChart · MiniBarChart(막대 · 누적 · TOP-N 범주 categories + valueLabels) · ApdexChart · ForecastLineChart(관측 실선 · 예측 점선 · 임계 띠) · BarList(가로 막대 줄) · MiniDonutChart · ScatterHeatmap · Heatmap (대시보드 칸에서는 frame={false} + WidgetFrame)
-│   ├── 차트 공통 요소 (DS 안에서 새 차트를 만들 때) → ChartGrid(격자 · 마크 아래) + ChartValueAxis(축선 · 눈금 글자 · 마크 위) — 차트 안에서 다시 그리지 않는다 (patterns §26)
+│   ├── 차트 공통 요소 (DS 안에서 새 차트를 만들 때) → ChartGrid(격자 · 마크 아래) + ChartValueAxis(축선 · 눈금 글자 · 마크 위) + ChartPeakMarker(최고점 ▼) — 차트 안에서 다시 그리지 않는다 (patterns §26)
 │   ├── 통계 카드 → StatCard · KpiCard (대시보드 칸에서는 frame={false} + WidgetFrame)
 │   └── 토폴로지 → TopologyCanvas + TopologyNode + TopologyEdge + TopologyToolbar
 │
