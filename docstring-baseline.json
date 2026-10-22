@@ -153,7 +153,7 @@
       "whenToUse": 3,
       "undocumentedProps": 1
     },
-    "Primitives/Chart · ApdexChart": {
+    "Composite/Chart · ApdexChart": {
       "whenToUse": 1,
       "undocumentedProps": 0
     },

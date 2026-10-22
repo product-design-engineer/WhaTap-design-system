@@ -1,7 +1,8 @@
 import type { CSSProperties } from "react";
+import ChartTimeAxis from "./ChartTimeAxis";
 
 /**
- * ApdexChart — Apdex(× 100) 를 만족 구간 띠 위에 선과 값으로. Primitives layer.
+ * ApdexChart — Apdex(× 100) 를 만족 구간 띠 위에 선과 값으로. Composite layer.
  *
  * ## Purpose
  * Apdex 는 숫자 하나로는 «좋은가» 가 읽히지 않는다. 71.2 가 괜찮은지는 구간 경계(94 · 85 · 70)를 알아야 판단된다.
@@ -19,6 +20,7 @@ import type { CSSProperties } from "react";
  * - 경계가 다른 점수(SLO 달성률 등) → 이 컴포넌트의 경계는 Apdex 표준으로 고정이다. 다른 점수를 Apdex 띠에 얹지 않는다.
  *
  * ## Composition rules
+ * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 껍데기(카드 · 제목 · 메뉴)는 그리지 않는다. 대시보드 칸에서는 [[WidgetFrame]] 이 맡는다(patterns §15). 제목은 「Apdex」.
  * - `frame={false}` 면 바깥 좌우 여백(8px)을 뺀다. WidgetFrame 안에서는 늘 `frame={false}`.
  * - 띠 · 구간 이름 색은 Apdex 토큰(`--color-chart-apdex-*-bg` · `--color-chart-apdex-*`), 선은 `--color-chart-series-1`.
@@ -140,23 +142,7 @@ export default function ApdexChart({ value, values = [], xLabels = [], frame = t
               {t}
             </span>
           ))}
-          {xLabels.map((label, i) => {
-            const ratio = xLabels.length > 1 ? i / (xLabels.length - 1) : 0;
-            return (
-              <span
-                key={i}
-                className="absolute text-chart text-tertiary leading-none whitespace-nowrap"
-                style={{
-                  fontFamily: "var(--font-family-numeric)",
-                  left: `calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${ratio})`,
-                  bottom: 2,
-                  transform: i === 0 ? "translateX(0)" : i === xLabels.length - 1 ? "translateX(-100%)" : "translateX(-50%)",
-                }}
-              >
-                {label}
-              </span>
-            );
-          })}
+          <ChartTimeAxis labels={xLabels} right={PAD_RIGHT} />
         </div>
       </div>
     </div>
