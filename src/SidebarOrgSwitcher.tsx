@@ -57,7 +57,7 @@ export default function SidebarOrgSwitcher({
   }
 
   return (
-    <button onClick={onClick} className="flex h-40px items-start w-full shrink-0 cursor-pointer">
+    <button onClick={onClick} className="flex h-40px items-center w-full shrink-0 cursor-pointer">
       <div className="flex flex-col h-full items-start justify-center pr-8px w-240px bg-card border-r border-b border-color-var-color-border-default">
         <div className="flex items-center justify-between w-full">
           {org.icon ? (
