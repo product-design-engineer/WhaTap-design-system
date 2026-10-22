@@ -8,7 +8,7 @@ import { ScatterHeatmap, SCATTER_HEATMAP_DEMO_DOTS, SPEED_LEGEND, WidgetFrame } 
  * 3-tone: normal(blue) / warning(orange) / critical(red).
  */
 const meta: Meta<typeof ScatterHeatmap> = {
-  title: "Primitives/Chart · ScatterHeatmap",
+  title: "Composite/Chart · ScatterHeatmap",
   component: ScatterHeatmap,
   tags: ["autodocs"],
   parameters: {

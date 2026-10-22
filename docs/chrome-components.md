@@ -503,6 +503,7 @@ export type DataTableProps<T> = {
 |---|---|---|
 | `max` | `number` — 이미 보기 좋은 값으로 올린 최대. 0 이면 바닥 눈금 하나 | — |
 | `ticks` | `number[]` — 눈금 값(데이터에서 오는 눈금: 단계 값 · 판정 경계). 없으면 최대 · 절반 · 0 | — |
+| `vertical` (ChartGrid) | `number` — 세로 점선 칸 수. 분포 차트에만(ScatterHeatmap 22) | — |
 | `padTop` | `number` (px) | `4` |
 | `padBottom` | `number` (px) — X축 글자 자리 | `14` |
 | `right` | `number \| string` — 선 끝 배지 칸이 있으면 `var(--wds-widget-end-gutter)` | `8` |

@@ -23,6 +23,7 @@ import { AXIS_GUTTER, plotY, tickStops } from "./_axisScale";
  *   오른쪽 `right` 까지, 세로는 상자 높이에서 `padTop` · `padBottom` 을 뺀 플롯 안에 눈금을 나눈다.
  * - 눈금은 기본 셋(최대 · 절반 · 0). `max` 가 0 이면 바닥 하나. 눈금이 데이터에서 오는 차트(단계 값 · 판정 경계)는 `ticks` 로 값을 준다 — [[ChartValueAxis]] 와 같은 `ticks`.
  * - 색은 `--color-border-soft` 하나. 불투명도로 색을 흉내 내지 않는다(§26 결정).
+ * - 세로 점선(`vertical`)은 분포 차트에만. 선 · 막대 차트에 주면 마크를 끊는다.
  *
  * ## Spec
  * | 항목 | 값 |
@@ -52,9 +53,15 @@ export type ChartGridProps = {
   padBottom?: number;
   /** 플롯 오른쪽 끝(px 또는 CSS 길이). 선 끝 값 배지 칸이 있으면 `var(--wds-widget-end-gutter)`. 기본 8. */
   right?: number | string;
+  /**
+   * 세로 격자 칸 수. 주면 플롯 가로를 이 수로 나눠 세로 점선을 긋는다(왼쪽 끝은 Y축 선이라 빼고, 오른쪽 끝은 긋는다).
+   * 분포 차트처럼 X 위치를 읽어야 할 때만([[ScatterHeatmap]]). 선 · 막대 차트는 주지 않는다 — 세로 점선이 마크를 끊는다.
+   */
+  vertical?: number;
 };
 
-export default function ChartGrid({ max, ticks, padTop = 4, padBottom = 14, right = 8 }: ChartGridProps) {
+export default function ChartGrid({ max, ticks, padTop = 4, padBottom = 14, right = 8, vertical }: ChartGridProps) {
+  const rightLen = typeof right === "number" ? `${right}px` : right;
   return (
     <>
       {tickStops(max, ticks).map(({ ratio }) => (
@@ -71,6 +78,22 @@ export default function ChartGrid({ max, ticks, padTop = 4, padBottom = 14, righ
           }}
         />
       ))}
+      {vertical
+        ? Array.from({ length: vertical }, (_, k) => (k + 1) / vertical).map((ratio) => (
+            <div
+              key={`vgrid-${ratio}`}
+              aria-hidden
+              className="absolute"
+              style={{
+                left: `calc(${AXIS_GUTTER} + (100% - ${AXIS_GUTTER} - ${rightLen}) * ${ratio})`,
+                top: padTop,
+                bottom: padBottom,
+                width: 0,
+                borderLeft: "1px dashed var(--color-border-soft)",
+              }}
+            />
+          ))
+        : null}
     </>
   );
 }
