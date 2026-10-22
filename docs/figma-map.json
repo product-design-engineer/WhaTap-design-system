@@ -1,0 +1,594 @@
+{
+  "_comment": "Figma 정본 ↔ Storybook 1:1 매핑 원장(핵심 정책, 2026-10-22). 카탈로그(components.json · Primitives/Composite/Shell)의 모든 컴포넌트가 키로 있어야 한다. figma = 정본 파일의 COMPONENT/COMPONENT_SET 노드 id, null = Figma 에 아직 없음(동결선 scripts/figma-map-baseline.json — 줄일 수만 있다). figmaParts = Storybook 문서가 부모 컴포넌트에 있는 Figma 하위 부품. Figma 쪽 문서 링크(documentationLinks)는 https://whatap-design-system-storybook.vercel.app + docsUrl. 게이트: pnpm lint:figma-map.",
+  "figmaFile": "2LktjSjKZDnCuWo5CQ6828",
+  "storybook": "https://whatap-design-system-storybook.vercel.app",
+  "components": {
+    "ActionChip": {
+      "figma": null
+    },
+    "ActionMenu": {
+      "figma": null
+    },
+    "ActionMenuItem": {
+      "figma": null
+    },
+    "ActiveTransactionArc": {
+      "figma": "347:267"
+    },
+    "ActiveTransactionSpeedWidget": {
+      "figma": "374:5"
+    },
+    "AiBulletList": {
+      "figma": "13:56"
+    },
+    "AiCaption": {
+      "figma": "210:2"
+    },
+    "AiCard": {
+      "figma": "14:2"
+    },
+    "AiProgress": {
+      "figma": "485:317"
+    },
+    "AiProgressCompact": {
+      "figma": "491:155"
+    },
+    "AiProgressStep": {
+      "figma": "483:47"
+    },
+    "AiSectionHeading": {
+      "figma": "13:33"
+    },
+    "AiStageMotion": {
+      "figma": "482:90"
+    },
+    "AiSymbol": {
+      "figma": "25:7"
+    },
+    "AiTargetMesh": {
+      "figma": null
+    },
+    "AiToneBadge": {
+      "figma": "13:17"
+    },
+    "AlertRulePreview": {
+      "figma": "45:11"
+    },
+    "AnswerSkeleton": {
+      "figma": "493:86"
+    },
+    "ApdexChart": {
+      "figma": "351:264"
+    },
+    "AssistantButton": {
+      "figma": "18:16"
+    },
+    "AttachmentChip": {
+      "figma": null
+    },
+    "Autocomplete": {
+      "figma": null
+    },
+    "BarList": {
+      "figma": "351:333"
+    },
+    "BarListItem": {
+      "figma": "552:22"
+    },
+    "BottomRailItem": {
+      "figma": "162:1426"
+    },
+    "Breadcrumb": {
+      "figma": null
+    },
+    "Button": {
+      "figma": "12:399"
+    },
+    "CardHead": {
+      "figma": "336:3"
+    },
+    "ChartGrid": {
+      "figma": "545:16"
+    },
+    "ChartPeakMarker": {
+      "figma": "548:2"
+    },
+    "ChartSwatch": {
+      "figma": "549:5"
+    },
+    "ChartTimeAxis": {
+      "figma": "551:13"
+    },
+    "ChartValueAxis": {
+      "figma": "546:22"
+    },
+    "ChatExchange": {
+      "figma": "49:58"
+    },
+    "Checkbox": {
+      "figma": "72:50"
+    },
+    "Chip": {
+      "figma": "73:77"
+    },
+    "ChoiceButtons": {
+      "figma": "27:5"
+    },
+    "ClassificationTable": {
+      "figma": "41:53"
+    },
+    "ClassificationTableRow": {
+      "figma": "41:52"
+    },
+    "ClickCursor": {
+      "figma": "26:26"
+    },
+    "ConfirmDialog": {
+      "figma": "370:187"
+    },
+    "Context": {
+      "figma": null
+    },
+    "CostBreakdown": {
+      "figma": "42:105"
+    },
+    "CostBreakdownRow": {
+      "figma": "42:14"
+    },
+    "CostTable": {
+      "figma": "40:13"
+    },
+    "CostTableRow": {
+      "figma": "40:12"
+    },
+    "CountryFlag": {
+      "figma": null
+    },
+    "CriteriaGroup": {
+      "figma": "47:27"
+    },
+    "CriteriaOptionButton": {
+      "figma": null
+    },
+    "CriteriaSelection": {
+      "figma": "47:28"
+    },
+    "DashboardBuildingProgress": {
+      "figma": "57:71"
+    },
+    "DashboardLayout": {
+      "figma": "66:859"
+    },
+    "DashboardProposal": {
+      "figma": "48:16"
+    },
+    "DataTable": {
+      "figma": "58:55"
+    },
+    "DataTableRow": {
+      "figma": "58:12"
+    },
+    "DatePicker": {
+      "figma": null
+    },
+    "DateTimeBlock": {
+      "figma": "54:2"
+    },
+    "Disclosure": {
+      "figma": null
+    },
+    "DsReadOnlyNotice": {
+      "figma": null
+    },
+    "EmptyState": {
+      "figma": "190:18"
+    },
+    "EventList": {
+      "figma": "38:2"
+    },
+    "EventListItem": {
+      "figma": "37:29"
+    },
+    "EventWeekTimeMatrix": {
+      "figma": "59:5"
+    },
+    "ExecutionResult": {
+      "figma": "29:56"
+    },
+    "ExtensionPanel": {
+      "figma": null
+    },
+    "FilterBar": {
+      "figma": null
+    },
+    "FilterChip": {
+      "figma": null
+    },
+    "FilterChipItem": {
+      "figma": null
+    },
+    "FilterDropdown": {
+      "figma": null
+    },
+    "FilterDropdownOptionItem": {
+      "figma": null
+    },
+    "FilterSelect": {
+      "figma": "183:5207"
+    },
+    "ForecastLineChart": {
+      "figma": "416:210"
+    },
+    "GpuStatusBar": {
+      "figma": null
+    },
+    "HeaderPillButton": {
+      "figma": "60:23"
+    },
+    "Heatmap": {
+      "figma": null
+    },
+    "HeatmapCell": {
+      "figma": null
+    },
+    "HeatmapLegend": {
+      "figma": null
+    },
+    "HexGrid": {
+      "figma": "341:162"
+    },
+    "Icons": {
+      "figma": null
+    },
+    "InfoTip": {
+      "figma": "401:22"
+    },
+    "InlinePrompt": {
+      "figma": "51:32"
+    },
+    "InsightSection": {
+      "figma": "27:2"
+    },
+    "InstanceListItem": {
+      "figma": null
+    },
+    "InstanceSelectPanel": {
+      "figma": null
+    },
+    "KpiCard": {
+      "figma": "340:4895"
+    },
+    "KpiField": {
+      "figma": "183:5160"
+    },
+    "LabeledField": {
+      "figma": null
+    },
+    "LandingHeader": {
+      "figma": null
+    },
+    "ListRow": {
+      "figma": null
+    },
+    "LiveTimerCompact": {
+      "figma": "52:40"
+    },
+    "LoadingMessage": {
+      "figma": "26:27"
+    },
+    "MailTemplate": {
+      "figma": "318:3"
+    },
+    "MemberUsageBar": {
+      "figma": "183:5283"
+    },
+    "MessageActions": {
+      "figma": "28:104"
+    },
+    "MetricBarCell": {
+      "figma": null
+    },
+    "MiniBarChart": {
+      "figma": "351:209"
+    },
+    "MiniDonutChart": {
+      "figma": "341:40"
+    },
+    "MiniLineChart": {
+      "figma": "340:28"
+    },
+    "MiniMultiLineChart": {
+      "figma": "342:69"
+    },
+    "Modal": {
+      "figma": "75:98"
+    },
+    "Multiline": {
+      "figma": null
+    },
+    "Notice": {
+      "figma": "189:92"
+    },
+    "OptionbarInstanceSelector": {
+      "figma": "55:74"
+    },
+    "OptionbarItem": {
+      "figma": null
+    },
+    "OptionbarNewVersionButton": {
+      "figma": null
+    },
+    "OptionbarPage": {
+      "figma": "65:2"
+    },
+    "OptionbarValueDisplay": {
+      "figma": null
+    },
+    "PageDashboard": {
+      "figma": null
+    },
+    "PageDetail": {
+      "figma": null
+    },
+    "PageHeader": {
+      "figma": "61:102"
+    },
+    "PageHeaderAiInline": {
+      "figma": "61:103"
+    },
+    "PageHeaderLanguageMenu": {
+      "figma": "411:34"
+    },
+    "PageHeaderNotificationItem": {
+      "figma": null
+    },
+    "PageHeaderProfileMenuItem": {
+      "figma": null
+    },
+    "PageTopology": {
+      "figma": null
+    },
+    "PageWidget": {
+      "figma": null
+    },
+    "Pagination": {
+      "figma": "194:112"
+    },
+    "PlanProposal": {
+      "figma": "43:11"
+    },
+    "PlanProposalRow": {
+      "figma": "43:10"
+    },
+    "PresetSelect": {
+      "figma": "322:14"
+    },
+    "ProductRailItem": {
+      "figma": "162:19"
+    },
+    "PromptInput": {
+      "figma": "50:41"
+    },
+    "ProposalSection": {
+      "figma": "48:2"
+    },
+    "QuickActionChip": {
+      "figma": null
+    },
+    "RadioGroup": {
+      "figma": "328:58"
+    },
+    "Reasoning": {
+      "figma": "32:14"
+    },
+    "ReasoningStep": {
+      "figma": "32:13"
+    },
+    "ReceiverChannelItem": {
+      "figma": "46:82"
+    },
+    "ReceiverChannels": {
+      "figma": "46:83"
+    },
+    "ScatterHeatmap": {
+      "figma": "348:1379"
+    },
+    "Select": {
+      "figma": "76:183"
+    },
+    "SelectPopover": {
+      "figma": "389:164"
+    },
+    "SendButton": {
+      "figma": "16:6"
+    },
+    "Sidebar": {
+      "figma": "171:739"
+    },
+    "SidebarCopyright": {
+      "figma": "162:1430"
+    },
+    "SidebarLogoHeader": {
+      "figma": "166:84"
+    },
+    "SidebarMenuItem": {
+      "figma": "166:40"
+    },
+    "SidebarOrgSwitcher": {
+      "figma": "167:107"
+    },
+    "SidebarProjectSwitcher": {
+      "figma": "168:126"
+    },
+    "Slider": {
+      "figma": "329:27"
+    },
+    "Stage": {
+      "figma": "57:8"
+    },
+    "StatCard": {
+      "figma": null
+    },
+    "StepsTimeline": {
+      "figma": "34:65"
+    },
+    "SubHeaderBar": {
+      "figma": null
+    },
+    "SummaryBanner": {
+      "figma": null
+    },
+    "Switch": {
+      "figma": "72:67"
+    },
+    "TabButton": {
+      "figma": "74:41"
+    },
+    "Tabs": {
+      "figma": "338:114"
+    },
+    "TextField": {
+      "figma": "76:98"
+    },
+    "ThemeToggle": {
+      "figma": null
+    },
+    "ThreadDivider": {
+      "figma": "378:3"
+    },
+    "TimeChip": {
+      "figma": null
+    },
+    "TimelineStepItem": {
+      "figma": "34:21"
+    },
+    "TimeRangeSelector": {
+      "figma": "54:4"
+    },
+    "Toast": {
+      "figma": "15:23"
+    },
+    "ToolbarIconButton": {
+      "figma": "324:20"
+    },
+    "ToolCallStep": {
+      "figma": "33:40"
+    },
+    "Tooltip": {
+      "figma": "75:10"
+    },
+    "TopologyCanvas": {
+      "figma": null
+    },
+    "TopologyCollapseToggle": {
+      "figma": null
+    },
+    "TopologyEdge": {
+      "figma": null
+    },
+    "TopologyMinimap": {
+      "figma": null
+    },
+    "TopologyNode": {
+      "figma": null
+    },
+    "TopologyPort": {
+      "figma": null
+    },
+    "TopologyToolbar": {
+      "figma": null
+    },
+    "TopologyZoomControl": {
+      "figma": null
+    },
+    "TriggerButton": {
+      "figma": null
+    },
+    "UnavailableNotice": {
+      "figma": null
+    },
+    "UsageChart": {
+      "figma": "44:2"
+    },
+    "UsageGauge": {
+      "figma": "183:5216"
+    },
+    "UserBubble": {
+      "figma": "26:32"
+    },
+    "Web · CtaBanner": {
+      "figma": null
+    },
+    "Web · HeroBanner": {
+      "figma": null
+    },
+    "Web · MegaMenu": {
+      "figma": null
+    },
+    "Web · Pill": {
+      "figma": null
+    },
+    "Web · Section": {
+      "figma": null
+    },
+    "Web · ServiceChip": {
+      "figma": null
+    },
+    "WebBreadcrumb": {
+      "figma": null
+    },
+    "WebCtaButton": {
+      "figma": null
+    },
+    "WebDateLabel": {
+      "figma": null
+    },
+    "WebSearchField": {
+      "figma": null
+    },
+    "WhaTap Symbol": {
+      "figma": "23:80",
+      "figmaName": "WhaTapSymbol"
+    },
+    "WhaTapAiWidget": {
+      "figma": "64:54"
+    },
+    "WidgetFrame": {
+      "figma": "332:568"
+    }
+  },
+  "figmaParts": {
+    "AlertRuleField": {
+      "figma": "45:10",
+      "docsOf": "AlertRulePreview"
+    },
+    "BuildingProgressStep": {
+      "figma": "57:22",
+      "docsOf": "DashboardBuildingProgress"
+    },
+    "DataTableHeaderCell": {
+      "figma": "301:110",
+      "docsOf": "DataTable"
+    },
+    "DataTableCell": {
+      "figma": "301:147",
+      "docsOf": "DataTable"
+    },
+    "EventTimeCell": {
+      "figma": "59:4",
+      "docsOf": "EventWeekTimeMatrix"
+    },
+    "SelectPopoverOption": {
+      "figma": "388:12",
+      "docsOf": "SelectPopover"
+    },
+    "SelectPopoverGroupHeader": {
+      "figma": "388:13",
+      "docsOf": "SelectPopover"
+    },
+    "RadioGroup Item": {
+      "figma": "328:29",
+      "docsOf": "RadioGroup"
+    }
+  }
+}

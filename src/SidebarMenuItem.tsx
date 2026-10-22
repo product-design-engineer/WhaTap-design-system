@@ -127,7 +127,8 @@ export default function SidebarMenuItem({
         className="flex flex-col items-start shrink-0 w-full cursor-pointer"
       >
         <div className="flex h-32px items-center justify-between overflow-clip px-8px py-6px shrink-0 w-full hover-bg-surface-100">
-          <div className="flex gap-4px items-start shrink-0">
+          {/* 아이콘 · 이름은 행 세로 가운데. 글자가 커져도(브라우저 글자 확대) ▼ 와 한 줄에 선다. */}
+          <div className="flex gap-4px items-center shrink-0">
             <div className="shrink-0 size-16px flex items-center justify-center">
               <img alt="" className="size-16px" src={icon(item.icon)} />
             </div>
