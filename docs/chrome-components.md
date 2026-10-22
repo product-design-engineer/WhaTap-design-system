@@ -487,7 +487,7 @@ export type DataTableProps<T> = {
 
 ---
 
-## 차트 공통 요소 — ChartGrid · ChartValueAxis (Primitives)
+## 차트 공통 요소 — ChartGrid · ChartValueAxis · ChartPeakMarker (Primitives)
 
 값축이 있는 차트가 함께 쓰는 플롯 부품(patterns §26). 차트는 이 둘을 **조합**하고 격자 · 눈금을 다시 그리지 않는다 — 그래서 MiniLineChart · MiniMultiLineChart · MiniBarChart · ForecastLineChart 는 Composite 계층이다. `@whatap/design-system/chart` 에서 가져온다.
 
@@ -495,6 +495,7 @@ export type DataTableProps<T> = {
 |---|---|---|
 | [[ChartGrid]] | 눈금(최대 · 절반 · 0)마다 가로 점선 · `--color-border-soft` | 마크 **아래** |
 | [[ChartValueAxis]] | X 바닥선 · Y 세로선(`--color-border-divider`) + 눈금 글자(`text-chart` · 숫자 서체 · tertiary, 단위 접미사) | 마크 **위** |
+| [[ChartPeakMarker]] | 최고점 값 말풍선(카드 바탕 · `text-xs` 굵게) + ▼(계열 색). `label` · `color` · `left` · `top` — ▼ 끝이 (`left`, `top`) 에 닿는다(§5) | 덧그림 겹, 맨 위 |
 
 | Prop (둘 공통) | Type | Default |
 |---|---|---|
