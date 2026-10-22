@@ -85,9 +85,9 @@ export const InWidgetFrame: Story = {
         onFullscreen={() => {}}
         menu={[{ key: "detail", label: "상세로 이동" }]}
         legend={[
-          { label: "p50", color: "var(--color-chart-series-1)" },
-          { label: "p95", color: "var(--color-chart-series-2)" },
-          { label: "p99", color: "var(--color-chart-series-3)" },
+          { label: "p50", color: "var(--color-chart-series-1)", shape: "line" },
+          { label: "p95", color: "var(--color-chart-series-2)", shape: "line" },
+          { label: "p99", color: "var(--color-chart-series-3)", shape: "line" },
         ]}
       >
         <MiniMultiLineChart
@@ -117,9 +117,9 @@ export const LegendValues: Story = {
         onFullscreen={() => {}}
         menu={[{ key: "detail", label: "상세로 이동" }]}
         legend={[
-          { label: "p50", color: "var(--color-chart-series-1)", value: "46ms" },
-          { label: "p95", color: "var(--color-chart-series-2)", value: "96ms" },
-          { label: "p99", color: "var(--color-chart-series-3)", value: "149ms" },
+          { label: "p50", color: "var(--color-chart-series-1)", shape: "line", value: "46ms" },
+          { label: "p95", color: "var(--color-chart-series-2)", shape: "line", value: "96ms" },
+          { label: "p99", color: "var(--color-chart-series-3)", shape: "line", value: "149ms" },
         ]}
       >
         <MiniMultiLineChart
@@ -158,7 +158,7 @@ export const EndBadges: Story = {
         title="CPU 사용률"
         onFullscreen={() => {}}
         menu={[{ key: "detail", label: "상세로 이동" }]}
-        legend={HOT.map(({ label, color }) => ({ label, color }))}
+        legend={HOT.map(({ label, color }) => ({ label, color, shape: "line" as const }))}
       >
         <MiniMultiLineChart
           title="CPU 사용률"

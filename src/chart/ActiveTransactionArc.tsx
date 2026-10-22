@@ -15,6 +15,7 @@
  * - 범용 도넛 → [[MiniDonutChart]].
  *
  * ## Composition rules
+ * - 범례 견본은 [[ChartSwatch]] 를 조합한다(마크 모양을 따른다, patterns §26). 그래서 Composite 계층이다.
  * - 위젯 chrome(CardChrome, FlexBoardWidget 등)은 소비자가 감싼다.
  * - 이 컴포넌트는 본문만 렌더한다 — `h-full` 부모 안에서 채워진다.
  * - 회전 오버레이는 12s linear infinite.
@@ -30,6 +31,7 @@
  * <ActiveTransactionArc maxTx={{ name: "api-gw-01", value: 42 }} agent={{ active: 12, inactive: 3 }} />
  * ```
  */
+import ChartSwatch from "./ChartSwatch";
 
 export type ActiveTransactionArcProps = {
   /** Max TX 이름. */
@@ -147,7 +149,7 @@ export default function ActiveTransactionArc({
 function LegendDot({ color, label }: { color: string; label: string }) {
   return (
     <div className="flex items-center gap-4px min-w-0">
-      <div className="rounded-2px shrink-0" style={{ width: 10, height: 10, background: color }} />
+      <ChartSwatch color={color} />
       <span className="text-sm text-primary leading-none truncate" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}>{label}</span>
     </div>
   );

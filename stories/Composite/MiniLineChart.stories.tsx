@@ -96,7 +96,7 @@ export const WithStaggerDelay: Story = {
 export const InWidgetFrame: Story = {
   render: () => (
     <div style={{ width: 320, height: 180 }}>
-      <WidgetFrame title="CPU Usage" legend={[{ label: "사용률", color: "var(--color-chart-series-1)" }]} onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
+      <WidgetFrame title="CPU Usage" legend={[{ label: "사용률", color: "var(--color-chart-series-1)", shape: "line" }]} onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
         <MiniLineChart title="CPU Usage" values={[12, 18, 25, 38, 52, 47, 35]} unit="%" frame={false} />
       </WidgetFrame>
     </div>

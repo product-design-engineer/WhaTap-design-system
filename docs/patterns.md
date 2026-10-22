@@ -1218,7 +1218,7 @@ series 는 네 가지를 지킨다.
 | 격자 | 세로 점선 | [[ScatterHeatmap]] 만 | 차트마다 따로 |
 | 격자 | 임계 기준선 | [[ForecastLineChart]] `threshold` 만 | 차트마다 따로 |
 | 범례 | 스와치 + 이름 + 지금 값 | [[WidgetFrame]] `legend` · `SPEED_LEGEND` · `hexGridLegend` | 있음 |
-| 범례 | 스와치 모양 | 마크 모양을 따른다 — 선 = 선, 면 · 막대 · 조각 · 칸 = 사각(결정 아래). 지금은 WidgetFrame 8px 사각 · [[MiniDonutChart]] 8px 원 · [[MiniMultiLineChart]](frame 켬) 8×2 선 · [[ActiveTransactionArc]] 10px 사각 | 정해짐 · **차트마다 따로 (넷)** — 공통 부품 3순위 |
+| 범례 | 스와치 모양 | [[ChartSwatch]] (Primitives) — 마크 모양을 따른다: 선 = `line`(8×2), 면 · 막대 · 조각 · 칸 = `square`(8×8). [[WidgetFrame]] `legend[].shape` · [[MiniMultiLineChart]] · [[MiniDonutChart]] · [[ActiveTransactionArc]] · [[HexGrid]] 가 조합한다 | 있음 (2026-10-22 네 모양 → 하나) |
 | 범례 | 색 범례 바 (순차 · 강도) | [[HeatmapLegend]] | 있음 |
 | 범례 | 오른쪽 세로 목록 · 플롯 위 오버레이 · 분리 패널 | 본문 오른쪽 위 한 줄 (§15) | 이관 |
 | 범례 | 순위 번호(①②③) | — 색은 순위가 아니라 개체 (§22) | 공백 |
@@ -1242,7 +1242,7 @@ series 는 네 가지를 지킨다.
 
 1. ~~**값축 + 가로 격자**~~ — **완료(2026-10-22).** 공개 Primitives [[ChartGrid]](격자 · 마크 아래) · [[ChartValueAxis]](축선 + 눈금 글자 · 마크 위) — 카탈로그 · Storybook(`Primitives/Chart · *`)에 보인다. 이것을 조합하는 값축 차트 4종은 3계층 규칙대로 **Composite**(`Composite/Chart · *`)로 옮겼다. DS 안에서 네 차트를 import 하는 컴포넌트가 없어 연쇄 승격이 없다. 숫자 계산(`niceMax` · `formatAxisValue` · `axisTicks` · `plotY`)은 그리는 부품이 아니라 내부 `src/chart/_axisScale.ts`. 격자 색은 `border-soft` 하나로 정했다. 렌더 비교(24스토리 × 라이트 · 다크): 격자 색 차이는 감지 문턱 아래, [[MiniLineChart]] X 바닥선이 다른 셋과 같은 자리로 1px 올라갔고, 선 차트의 축선이 면 채움 위에 그려져 선명해졌다(막대 · 예측과 같은 «바닥선이 마크에 묻히지 않게»). 다음 공통 부품도 같은 방식이다 — 부품은 Primitives, 조합하는 차트는 Composite.
 2. ~~**최고점 ▼ 라벨**~~ — **완료(2026-10-22).** [[ChartPeakMarker]] — 받은 점에 ▼ 끝을 맞추고 말풍선에 카드 바탕(§5). 복제는 없었지만(MiniLineChart 1벌) 선 · 면 · 누적면이 함께 쓸 요소라 먼저 부품으로 세웠다. [[MiniBarChart]] `peak` 는 ▼ 없는 막대 위 값 글자라 «막대 값 라벨» 이다.
-3. **범례 스와치** — 마크 모양을 따른다(결정). 넷을 이 규칙으로 맞춘다.
+3. ~~**범례 스와치**~~ — **완료(2026-10-22).** [[ChartSwatch]] 하나로 맞췄다. 도넛 견본 원 → 사각(조각), 아크 10px → 8px. 선 차트 칸의 WidgetFrame 범례는 `shape: "line"`. 견본을 그리게 된 도넛 · 아크 · 헥사는 Composite 로 옮겼다(DS 안 import 0 — 연쇄 없음).
 
 **판단 지점 처분** — 조사 문서가 «규칙이 필요하다» 고 적은 공통 요소 판단.
 
@@ -1274,7 +1274,7 @@ DS 도 예외가 아니다. 값축 계산은 4벌, 점선 격자는 5벌이고 �
 ✅ 판단 지점은 «정해짐(근거 절)» 또는 «결정 필요» 로 처분하고 표에 남긴다
 
 ❌ 새 차트 안에서 값축 · 점선 격자를 또 그리기 — [[ChartGrid]] · [[ChartValueAxis]] 를 조합한다. 최고점은 [[ChartPeakMarker]]
-❌ 차트가 자기 범례 스와치 모양을 정하기 — 이미 넷으로 갈렸다
+❌ 차트가 자기 범례 견본을 그리기 — [[ChartSwatch]] 를 쓴다. 선 차트 칸 범례에 사각 견본(`shape` 빠뜨림)
 ❌ 데이터가 없을 때 축과 격자만 남긴 플롯 — `state` 로 문장을 세운다
 ❌ «결정 필요» 항목을 가장 가까운 기존 규칙으로 근사해 정하기 — 결정을 따로 남긴다
 

@@ -513,6 +513,8 @@ export type DataTableProps<T> = {
 </div>
 ```
 
+- 범례 견본은 [[ChartSwatch]](Primitives) — 마크 모양을 따른다. 선 = `shape="line"`(8×2), 면 · 막대 · 조각 · 칸 = 기본 사각(8×8). [[WidgetFrame]] 범례 항목은 `{ label, color, shape }` — 선 차트 칸이면 `shape: "line"`.
+  Figma 정본: 페이지 ChartSwatch `549:2` · 세트 `549:5`(`shape` square · line, 칠은 인스턴스에서 마크 색 변수로).
 - 높이가 정해진 `position: relative` 플롯 상자 안에 둔다. 두 부품에 **같은 `max` · 여백**을 줘야 글자와 점선이 같은 높이에 선다.
 - 축 제목은 그리지 않는다(§26 결정). 오른쪽 두 번째 Y축은 금지(§19).
 - X축 시간 · 범주 글자는 차트마다 놓는 규칙이 달라 차트가 그린다.

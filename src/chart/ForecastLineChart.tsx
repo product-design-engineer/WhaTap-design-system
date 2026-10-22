@@ -47,8 +47,8 @@ import { AXIS_GUTTER as GUTTER, formatAxisValue } from "./_axisScale";
  *   title="디스크 고갈 추세"
  *   summary="추세 6시간 · 지평 24시간"
  *   legend={[
- *     { label: "ip-10-21-13-171 /data", color: "var(--color-status-error)" },
- *     { label: "dev-yard /backup", color: "var(--color-chart-neutral)" },
+ *     { label: "ip-10-21-13-171 /data", color: "var(--color-status-error)", shape: "line" },
+ *     { label: "dev-yard /backup", color: "var(--color-chart-neutral)", shape: "line" },
  *   ]}
  * >
  *   <ForecastLineChart
