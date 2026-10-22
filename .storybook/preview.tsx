@@ -79,6 +79,15 @@ const preview: Preview = {
     },
   },
   decorators: [
+    // Docs 페이지의 문서 본문 스타일(p · h* · ul 의 여백 · 글자 크기 · 줄 높이)이 미리보기 안 컴포넌트에
+    // 새지 않게 막는다. Storybook 은 `.sb-unstyled` 안쪽을 그 스타일에서 뺀다. 상자는 display: contents 라
+    // Canvas 레이아웃에는 끼어들지 않는다. (2026-10-22 Docs 에서 사이드바 이름표 <p> 가 줄 높이 22.75px ·
+    // 아래 여백 14px 를 받아 위로 쏠렸다.)
+    (Story) => (
+      <div className="sb-unstyled" style={{ display: 'contents' }}>
+        <Story />
+      </div>
+    ),
     // 우측 상단 툴바에 Light/Dark 토글 추가 — <html> 에 `.dark` 클래스를 토글한다.
     // whatap-ds.css 의 `.dark` 토큰이 cascade 되어 모든 story 가 다크로 전환된다.
     withThemeByClassName({
