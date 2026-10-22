@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { AXIS_GUTTER as GUTTER, PlotAxisLines, ValueAxisLabels, ValueGrid, axisTicks, formatAxisValue, niceMax } from "./_valueAxis";
 
 /**
  * MiniBarChart — 시간 구간마다 막대 하나. 계열이 둘 이상이면 누적 막대. 범주(서버 TOP-N)마다 막대 하나도 된다. Primitives layer.
@@ -61,8 +61,6 @@ import type { CSSProperties } from "react";
  * ```
  */
 
-/** Y축 눈금 칸 폭 — 모든 그래프가 같은 토큰을 쓴다. */
-const GUTTER = "var(--wds-widget-axis-gutter)";
 const PAD_RIGHT = 8;
 const PAD_BOTTOM = 14;
 const PAD_TOP = 4;
@@ -111,21 +109,6 @@ export type MiniBarChartProps = {
   frame?: boolean;
 };
 
-function niceMax(v: number): number {
-  if (v <= 0) return 0;
-  const mag = Math.pow(10, Math.floor(Math.log10(v)));
-  const norm = v / mag;
-  const nice = norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 4 ? 4 : norm <= 5 ? 5 : 10;
-  return nice * mag;
-}
-
-function formatY(v: number): string {
-  if (v >= 1000) return Math.round(v / 100) / 10 + "K";
-  if (v >= 100) return Math.round(v).toString();
-  if (v === 0) return "0";
-  return Number.isInteger(v) ? String(v) : v.toFixed(0);
-}
-
 export default function MiniBarChart({
   series,
   xLabels = [],
@@ -140,31 +123,18 @@ export default function MiniBarChart({
   const n = Math.max(0, ...series.map((s) => s.values.length));
   const totals = Array.from({ length: n }, (_, i) => series.reduce((sum, s) => sum + (s.values[i] ?? 0), 0));
   const top = yMax ?? niceMax(Math.max(0, ...totals));
-  const yTicks = top > 0 ? [1, 0.5, 0] : [0];
+  const yTicks = axisTicks(top);
   const maxIdx = n > 0 ? totals.indexOf(Math.max(...totals)) : -1;
   const peakIdx = peak ? maxIdx : -1;
   const padTop = valueLabels ? PAD_TOP_VALUES : PAD_TOP;
   const padBottom = isCategory ? PAD_BOTTOM_CATEGORIES : PAD_BOTTOM;
   const plotH = `(100% - ${padTop + padBottom}px)`;
+  const yAt = (r: number) => `calc(${padTop}px + ${plotH} * ${r})`;
 
   return (
     <div className="flex flex-col h-full min-h-0 w-full" style={{ padding: frame ? "0 8px" : 0 }}>
       <div className="flex-1 min-h-0 relative">
-        {/* 격자 — 눈금마다 점선 */}
-        {yTicks.map((ratio) => (
-          <div
-            key={`grid-${ratio}`}
-            className="absolute"
-            style={{
-              left: GUTTER,
-              right: PAD_RIGHT,
-              top: `calc(${padTop}px + ${plotH} * ${1 - ratio})`,
-              height: 0,
-              borderTop: "1px dashed var(--color-border-default)",
-              opacity: 0.5,
-            }}
-          />
-        ))}
+        <ValueGrid ticks={yTicks} yAt={yAt} right={PAD_RIGHT} />
 
         {/* 막대 — 그래프 영역에만. 구간마다 한 칸, 칸 사이 1px */}
         <div
@@ -201,7 +171,7 @@ export default function MiniBarChart({
                     padding: "1px 2px",
                   }}
                 >
-                  {formatY(totals[i]) + unit}
+                  {formatAxisValue(totals[i]) + unit}
                 </span>
               )}
               {isCategory && categories[i] !== undefined && (
@@ -218,30 +188,11 @@ export default function MiniBarChart({
         </div>
 
         {/* 축 — 막대 위에 그려 바닥선이 막대에 묻히지 않게 */}
-        <div className="absolute bg-color-var-color-border-divider" style={{ left: GUTTER, right: PAD_RIGHT, bottom: padBottom, height: 1 }} />
-        <div className="absolute bg-color-var-color-border-divider" style={{ left: GUTTER, top: padTop, bottom: padBottom, width: 1 }} />
+        <PlotAxisLines top={padTop} bottom={padBottom} right={PAD_RIGHT} />
 
         {/* 글자 — px 고정 */}
         <div className="absolute inset-0 pointer-events-none">
-          {yTicks.map((ratio) => (
-            <span
-              key={ratio}
-              className="absolute text-chart text-tertiary leading-none"
-              style={
-                {
-                  fontFamily: "var(--font-family-numeric)",
-                  top: `calc(${padTop}px + ${plotH} * ${1 - ratio})`,
-                  transform: "translateY(-50%)",
-                  left: 0,
-                  textAlign: "right",
-                  paddingRight: 4,
-                  width: GUTTER,
-                } as CSSProperties
-              }
-            >
-              {formatY(top * ratio) + unit}
-            </span>
-          ))}
+          <ValueAxisLabels ticks={yTicks} yAt={yAt} max={top} unit={unit} />
           {!isCategory && xLabels.map((label, i) => {
             const ratio = xLabels.length > 1 ? i / (xLabels.length - 1) : 0;
             return (
