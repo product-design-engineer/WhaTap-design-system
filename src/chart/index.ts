@@ -40,6 +40,8 @@ export { default as ForecastLineChart } from "./ForecastLineChart";
 export type { ForecastLineChartProps, ForecastLineChartSeries, ForecastPoint } from "./ForecastLineChart";
 export { default as BarList } from "./BarList";
 export type { BarListProps, BarListRow } from "./BarList";
+export { default as BarListItem } from "./BarListItem";
+export type { BarListItemProps } from "./BarListItem";
 export { default as ActiveTransactionArc, SPEED_LEGEND } from "./ActiveTransactionArc";
 export type { ActiveTransactionArcProps } from "./ActiveTransactionArc";
 export { default as ScatterHeatmap, SCATTER_HEATMAP_DEMO_DOTS } from "./ScatterHeatmap";

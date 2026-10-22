@@ -613,7 +613,7 @@ Apdex × 100 을 네 구간 띠(Excellent 94 · Good 85 · Poor 70 · Unacceptab
 
 ## BarList
 
-값 · 이름 · 가로 막대 한 줄을 여러 줄(액티브 스테이터스). 막대 길이는 줄마다 받은 `ratio`(0~1), 색은 시리즈 토큰.
+값 · 이름 · 가로 막대 한 줄을 여러 줄(액티브 스테이터스). 막대 길이는 줄마다 받은 `ratio`(0~1), 색은 시리즈 토큰 — 엔티티 계열이면 고정 슬롯(method 1 · sql 3 · httpc 7 · dbc 2 · socket 5, patterns §21). **Composite** — 줄은 [[BarListItem]](Primitives: 값 칸 88px 고정 · 막대 줄 높이 60% · 최소 4px)이 그린다.
 
 | Prop | Type | Default |
 |---|---|---|

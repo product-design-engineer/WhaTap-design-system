@@ -973,7 +973,7 @@ series 는 네 가지를 지킨다.
 | 1 | 선 | [[MiniLineChart]] · [[MiniMultiLineChart]] | 있음 |
 | 2 | 면 / 누적면 | 면 = `showArea` · 누적면 = StackedAreaChart | 면 있음 · 누적면 신규 |
 | 3 | 세로 막대 | [[MiniBarChart]] | 있음 |
-| 4 | 가로 막대 | [[BarList]] | A단계 — Primitives 에서 옮김 |
+| 4 | 가로 막대 | [[BarList]] = [[BarListItem]] 줄 조합 | 있음 (2026-10-22 Composite 로) |
 | 5 | 누적 막대 / 단일 누적 바 | [[MiniBarChart]] 누적 · 단일 누적 바 = [[GpuStatusBar]] 정비 | A단계 — 옮김 + §17 순환 위반 수정 |
 | 6 | 산점도 / 버블 | ScatterChart | 신규 |
 | 7 | 박스플롯 | BoxPlotChart | 신규 |
