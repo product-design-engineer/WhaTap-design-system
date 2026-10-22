@@ -1209,12 +1209,12 @@ series 는 네 가지를 지킨다.
 | 툴바 | 설정 · 이미지 저장 · CSV · 복제 · 상세 이동 | ⋮ `menu` 의 줄 | 이관 |
 | 툴바 | 차트 타입 전환 토글 | ⋮ 안 (§21) | 이관 |
 | 플롯 | 그리기 영역 · 플롯 여백 | 각 차트 `frame={false}` · `--wds-widget-axis-gutter` · `--wds-widget-end-gutter` | 있음 (토큰) · 영역 계산은 차트마다 따로 |
-| 축 | 값축(Y) — 눈금 셋(최대 · 절반 · 0) · 깔끔한 최대값 계산 · 단위 접미사 · 축선(X 바닥 · Y 세로) | 내부 모듈 `src/chart/_valueAxis.tsx`(카탈로그 밖) — [[MiniLineChart]] · [[MiniMultiLineChart]] · [[MiniBarChart]] · [[ForecastLineChart]] 가 쓴다 | 있음 (2026-10-21 4벌 → 1) |
+| 축 | 값축(Y) — 눈금 셋(최대 · 절반 · 0) · 깔끔한 최대값 계산 · 단위 접미사 · 축선(X 바닥 · Y 세로) | [[ChartValueAxis]] (Primitives) — [[MiniLineChart]] · [[MiniMultiLineChart]] · [[MiniBarChart]] · [[ForecastLineChart]] 가 조합한다(Composite) | 있음 (2026-10-22 4벌 → 1) |
 | 축 | 시간축(X) · 범주축 | 각 차트 `xLabels` · [[MiniBarChart]] `categories`(칸 폭 말줄임) | 차트마다 따로 |
 | 축 | 축 글자 | `text-chart` · 숫자 서체 · `text-tertiary` (§15) | 있음 |
 | 축 | 보조 Y축 | — | 금지 (§19) |
 | 축 | 축 제목 | — 쓰지 않는다. 단위는 눈금 접미사 | 정해짐 (아래) |
-| 격자 | 가로 점선 | `_valueAxis` `ValueGrid` — `--color-border-soft` 점선 하나, 불투명도로 색을 흉내 내지 않는다 · [[ScatterHeatmap]] 10칸 격자는 같은 색을 따로 그린다 | 있음 (4벌 → 1) · ScatterHeatmap 은 차트마다 따로 |
+| 격자 | 가로 점선 | [[ChartGrid]] (Primitives) — `--color-border-soft` 점선 하나, 불투명도로 색을 흉내 내지 않는다 · [[ScatterHeatmap]] 10칸 격자는 같은 색을 따로 그린다 | 있음 (4벌 → 1) · ScatterHeatmap 은 차트마다 따로 |
 | 격자 | 세로 점선 | [[ScatterHeatmap]] 만 | 차트마다 따로 |
 | 격자 | 임계 기준선 | [[ForecastLineChart]] `threshold` 만 | 차트마다 따로 |
 | 범례 | 스와치 + 이름 + 지금 값 | [[WidgetFrame]] `legend` · `SPEED_LEGEND` · `hexGridLegend` | 있음 |
@@ -1240,7 +1240,7 @@ series 는 네 가지를 지킨다.
 
 **공통 부품으로 먼저 뽑을 것** (차트마다 따로인 것 중 벌 수가 많은 순서). 뽑을 때 동작을 바꾸지 않는다 — 지금 차트들이 그리는 결과가 기준이다.
 
-1. ~~**값축 + 가로 격자**~~ — **완료(2026-10-21).** 내부 모듈 `src/chart/_valueAxis.tsx`(`niceMax` · `formatAxisValue` · `axisTicks` · `ValueGrid` · `PlotAxisLines` · `ValueAxisLabels`). 격자 색은 `border-soft` 하나로 정했다. 렌더 비교(24스토리 × 라이트 · 다크): 격자 색 차이는 감지 문턱 아래, [[MiniLineChart]] X 바닥선이 다른 셋과 같은 자리(플롯 안 마지막 1px)로 1px 올라간 것만 달라졌다. 공개 컴포넌트가 아니라 내부 모듈인 것은 차트(Primitives)끼리 import 하면 계층 규칙에 걸리기 때문이다 — Parts 계층 판정은 CLAUDE.md 의 미결정 항목이다.
+1. ~~**값축 + 가로 격자**~~ — **완료(2026-10-22).** 공개 Primitives [[ChartGrid]](격자 · 마크 아래) · [[ChartValueAxis]](축선 + 눈금 글자 · 마크 위) — 카탈로그 · Storybook(`Primitives/Chart · *`)에 보인다. 이것을 조합하는 값축 차트 4종은 3계층 규칙대로 **Composite**(`Composite/Chart · *`)로 옮겼다. DS 안에서 네 차트를 import 하는 컴포넌트가 없어 연쇄 승격이 없다. 숫자 계산(`niceMax` · `formatAxisValue` · `axisTicks` · `plotY`)은 그리는 부품이 아니라 내부 `src/chart/_axisScale.ts`. 격자 색은 `border-soft` 하나로 정했다. 렌더 비교(24스토리 × 라이트 · 다크): 격자 색 차이는 감지 문턱 아래, [[MiniLineChart]] X 바닥선이 다른 셋과 같은 자리로 1px 올라갔고, 선 차트의 축선이 면 채움 위에 그려져 선명해졌다(막대 · 예측과 같은 «바닥선이 마크에 묻히지 않게»). 다음 공통 부품도 같은 방식이다 — 부품은 Primitives, 조합하는 차트는 Composite.
 2. **최고점 ▼ 라벨** — §5 좌표 일치 · 배경. 3벌.
 3. **범례 스와치** — 마크 모양을 따른다(결정). 넷을 이 규칙으로 맞춘다.
 
@@ -1273,7 +1273,7 @@ DS 도 예외가 아니다. 값축 계산은 4벌, 점선 격자는 5벌이고 �
 ✅ 같은 요소를 세 번째로 그리게 되면 공통 부품으로 뽑는다
 ✅ 판단 지점은 «정해짐(근거 절)» 또는 «결정 필요» 로 처분하고 표에 남긴다
 
-❌ 새 차트 안에서 값축 · 점선 격자를 또 그리기 — `src/chart/_valueAxis.tsx` 를 쓴다. 최고점 ▼ 도 네 번째 벌을 만들지 않는다
+❌ 새 차트 안에서 값축 · 점선 격자를 또 그리기 — [[ChartGrid]] · [[ChartValueAxis]] 를 조합한다. 최고점 ▼ 도 네 번째 벌을 만들지 않는다
 ❌ 차트가 자기 범례 스와치 모양을 정하기 — 이미 넷으로 갈렸다
 ❌ 데이터가 없을 때 축과 격자만 남긴 플롯 — `state` 로 문장을 세운다
 ❌ «결정 필요» 항목을 가장 가까운 기존 규칙으로 근사해 정하기 — 결정을 따로 남긴다
