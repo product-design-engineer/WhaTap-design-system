@@ -5,7 +5,7 @@ import { DashboardBuildingProgress } from "@whatap/design-system";
  * Stories for [[DashboardBuildingProgress]] — 대시보드 구성/적용 중 공용 로딩 화면.
  */
 const meta: Meta<typeof DashboardBuildingProgress> = {
-  title: "Primitives/DashboardBuildingProgress",
+  title: "Composite/DashboardBuildingProgress",
   component: DashboardBuildingProgress,
   tags: ["autodocs"],
   parameters: {

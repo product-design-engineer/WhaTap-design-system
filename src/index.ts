@@ -10,6 +10,8 @@
  */
 
 // Primitives — 재사용 building block (페이지·위젯·다른 컴포넌트가 조립용으로 호출)
+export { default as SpeedStat } from "./SpeedStat";
+export type { SpeedStatProps } from "./SpeedStat";
 export { default as ActiveTransactionSpeedWidget } from "./ActiveTransactionSpeedWidget";
 export type {
   ActiveTransactionSpeedWidgetProps,
@@ -127,6 +129,8 @@ export { default as WebSearchField } from "./WebSearchField";
 export type { WebSearchFieldProps, WebSearchFieldSize } from "./WebSearchField";
 export { default as FilterBar } from "./FilterBar";
 export type { FilterBarProps, FilterBarDropdownConfig, FilterBarSize } from "./FilterBar";
+export { default as BuildingProgressStep } from "./BuildingProgressStep";
+export type { BuildingProgressStepProps, BuildingProgressStepState } from "./BuildingProgressStep";
 export { default as DashboardBuildingProgress } from "./DashboardBuildingProgress";
 export type { DashboardBuildingProgressProps } from "./DashboardBuildingProgress";
 export { default as DashboardLayout } from "./DashboardLayout";
@@ -134,6 +138,8 @@ export { default as DataTable } from "./DataTable";
 export type { DataTableColumn, DataTableProps, DataTableSort } from "./DataTable";
 export { default as Pagination } from "./Pagination";
 export type { PaginationProps } from "./Pagination";
+export { default as EventTimeCell } from "./EventTimeCell";
+export type { EventTimeCellProps } from "./EventTimeCell";
 export { default as EventWeekTimeMatrix } from "./EventWeekTimeMatrix";
 export type { EventWeekTimeMatrixProps } from "./EventWeekTimeMatrix";
 export { default as LiveTimerCompact } from "./LiveTimerCompact";

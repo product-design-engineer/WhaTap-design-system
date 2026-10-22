@@ -380,7 +380,7 @@ export type DataTableProps<T> = {
 
 ## EventWeekTimeMatrix
 
-요일(7) × 시간(24) 알림 수신 매트릭스. 셀 ON = Tone "low" 배경(#e8f4ff), OFF = 회색 격자.
+요일(7) × 시간(24) 알림 수신 매트릭스. **Composite** — 칸과 범례 견본은 [[EventTimeCell]](Primitives)이 그린다: 켜짐 = 칠 `--color-brand-blue` · 테두리 `--color-brand-blue-deep`, 꺼짐 = 칠 `--color-surface-100` · 테두리 `--color-border-strong`. 칸은 `aria-pressed` + «월 09시 수신» 이름. Figma 정본 EventTimeCell `59:4`.
 
 | Prop | Type | Default | 설명 |
 |---|---|---|---|
@@ -498,11 +498,13 @@ export type DataTableProps<T> = {
 | [[ChartPeakMarker]] | 최고점 값 말풍선(카드 바탕 · `text-xs` 굵게) + ▼(계열 색). `label` · `color` · `left` · `top` — ▼ 끝이 (`left`, `top`) 에 닿는다(§5) | 덧그림 겹, 맨 위 |
 | [[ChartCategoryAxis]] | 범주 막대 아래 이름 — 칸 등분 · 가운데 · 말줄임(title 에 전체). `labels` · `padBottom`(18) · `right` · `gap`(4) | 덧그림 |
 | [[ChartStackedColumn]] | 세로 막대 하나 — 구간을 아래에서 위로(`segments[0]` 바닥), 몫은 계열 색 + 안 글자(흰색), 나머지는 `surface-200` + 바깥 글자. `max` 는 값축과 같게 | 막대 칸 |
+| [[ChartBar]] | 칸 바닥에서 자라는 막대 하나 — `ratio`(0~1, 최소 2px) · `null` = 모름(칸 전체 `surface-100`) · `delay` 진입 애니메이션 | 가로 flex 줄 |
 
 | Prop (둘 공통) | Type | Default |
 |---|---|---|
 | `max` | `number` — 이미 보기 좋은 값으로 올린 최대. 0 이면 바닥 눈금 하나 | — |
 | `ticks` | `number[]` — 눈금 값(데이터에서 오는 눈금: 단계 값 · 판정 경계). 없으면 최대 · 절반 · 0 | — |
+| `vertical` (ChartGrid) | `number` — 세로 점선 칸 수. 분포 차트에만(ScatterHeatmap 22) | — |
 | `padTop` | `number` (px) | `4` |
 | `padBottom` | `number` (px) — X축 글자 자리 | `14` |
 | `right` | `number \| string` — 선 끝 배지 칸이 있으면 `var(--wds-widget-end-gutter)` | `8` |
@@ -526,6 +528,21 @@ export type DataTableProps<T> = {
 - **Figma 정본**: 페이지 ChartGrid `545:2` · 세트 `545:16`, 페이지 ChartValueAxis `545:3` · 세트 `546:22`(`ticks` × `right` 4 variant, ChartValueAxis 는 TEXT `max` · `mid` · `zero`). 페이지 ChartPeakMarker `547:2` · 컴포넌트 `548:2`(TEXT `label`, ▼ 칠은 `color/chart/series-1` — 다른 계열이면 인스턴스에서 바꾼다). 두 부품을 겹친 예시 프레임이 페이지마다 있다. 기존 Figma 차트 세트(MiniLineChart 등)는 아직 자기 격자 · 축을 그린다(`border/default`) — 인스턴스로 바꾸는 것은 후속.
 
 ---
+
+## ActiveTransactionSpeedWidget
+
+실시간 트래픽 흐름 위젯 — 등급별 점이 왼쪽에서 오른쪽으로 흐르고 RPS · TPS · 등급별 개수 · 속도 막대가 함께 움직인다. **Composite** — 좌우 RPS · TPS 는 [[SpeedStat]](Primitives: 라벨 위 큰 숫자, 폭 72 · compact 56 고정). 흐르는 점 · 속도 막대는 이 위젯의 마크라 위젯이 그린다. 등급별 개수 색은 판정 등급 토큰 `--color-chart-speed-*`(patterns §17) — Arc · Hitmap 의 `SPEED_LEGEND` 와 같다. 실데이터 없는 데모 · 캡처는 `paused`.
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `string` | 「액티브 트랜잭션 스피드」 |
+| `baseRps` · `baseTps` | `number` | 113 · 116 |
+| `baseTotals` | `{ normal, warning, critical, sum }` | — |
+| `paused` | `boolean` | `false` |
+| `compact` | `boolean` | `false` |
+| `onOpenDetail` | `() => void` | — |
+
+Figma 정본: ActiveTransactionSpeedWidget `374:5` · SpeedStat `564:15`.
 
 ## MiniLineChart
 
@@ -780,7 +797,7 @@ WhaTap AI 핀휠 그라데이션 심볼. 위젯 헤더, AI 토글 버튼, 인사
 
 ## DashboardBuildingProgress
 
-대시보드 구성 중 진행 로딩 화면. spinner + 단계별 체크. (AI가 "대시보드를 만들고 있어요" 상태일 때 본문 영역에 표시.)
+대시보드 구성 중 진행 로딩 화면. spinner + 단계별 체크. (AI가 "대시보드를 만들고 있어요" 상태일 때 본문 영역에 표시.) **Composite** — 단계 줄은 [[BuildingProgressStep]](Primitives: `done` · `active` · `pending`). Figma 정본 BuildingProgressStep `57:22`.
 
 ```ts
 export type DashboardBuildingProgressProps = {

@@ -129,7 +129,7 @@
       "whenToUse": 1,
       "undocumentedProps": 9
     },
-    "Primitives/ActiveTransactionSpeedWidget": {
+    "Composite/ActiveTransactionSpeedWidget": {
       "whenToUse": 1,
       "undocumentedProps": 8
     },
@@ -189,7 +189,7 @@
       "whenToUse": 2,
       "undocumentedProps": 6
     },
-    "Primitives/Chart · UsageChart": {
+    "Composite/Chart · UsageChart": {
       "whenToUse": 2,
       "undocumentedProps": 2
     },
@@ -241,7 +241,7 @@
       "whenToUse": 1,
       "undocumentedProps": 0
     },
-    "Primitives/ExecutionResult": {
+    "Composite/ExecutionResult": {
       "whenToUse": 2,
       "undocumentedProps": 1
     },
@@ -369,7 +369,7 @@
       "whenToUse": 1,
       "undocumentedProps": 0
     },
-    "Primitives/TargetMesh": {
+    "Composite/TargetMesh": {
       "whenToUse": 2,
       "undocumentedProps": 1
     },

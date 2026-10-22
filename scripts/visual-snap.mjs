@@ -52,8 +52,8 @@ const SHOTS = [
   // 차트 — series(정체성)·seq(크기) 램프. 라이트만 보면 다크 anchor 반전을 놓친다.
   { id: "tokens-color--chart-series", theme: "light" },
   { id: "tokens-color--chart-series", theme: "dark" },
-  { id: "primitives-chart-·-usagechart--hourly-gpu", theme: "light" },
-  { id: "primitives-chart-·-usagechart--hourly-gpu", theme: "dark" },
+  { id: "composite-chart-·-usagechart--hourly-gpu", theme: "light" },
+  { id: "composite-chart-·-usagechart--hourly-gpu", theme: "dark" },
   { id: "composite-chart-·-minilinechart--cpu-usage", theme: "light" },
   // 수신 채널 — mock 토글을 Switch 프리미티브로 교체한 자리(라이트/다크 both).
   { id: "composite-ai-aireceiverchannels--interactive", theme: "light" },

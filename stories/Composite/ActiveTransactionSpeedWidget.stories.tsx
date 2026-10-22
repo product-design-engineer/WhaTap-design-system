@@ -8,7 +8,7 @@ import { ActiveTransactionSpeedWidget } from "@whatap/design-system";
  * 정지 상태(`paused`)를 기본 스토리로 두고, 움직이는 상태는 별도 스토리로 둔다.
  */
 const meta: Meta<typeof ActiveTransactionSpeedWidget> = {
-  title: "Primitives/ActiveTransactionSpeedWidget",
+  title: "Composite/ActiveTransactionSpeedWidget",
   component: ActiveTransactionSpeedWidget,
   tags: ["autodocs"],
   parameters: {

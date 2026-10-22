@@ -1,9 +1,9 @@
 /**
- * UsageChart — 시간대별 GPU 사용률 막대 차트 카드.
+ * UsageChart — 시간대별 GPU 사용률 막대 차트 카드. Composite layer.
  *
  * ## Purpose
  * 24개 시간 슬롯(0–23시)의 사용률(%)을 막대로 표시하는 미니 차트. `highlightThreshold`
- * 이상인 막대는 짙은 색으로 강조하고, `null` 슬롯은 데이터 없음(회색)으로 표현. 진입 시
+ * 이상인 막대는 짙은 색으로 강조하고, `null` 슬롯은 데이터 없음(칸 전체 옅은 면)으로 표현. 진입 시
  * 각 막대가 하단에서 순차 성장(35ms 스태거)하는 애니메이션. 흰 카드 chrome 자체 보유.
  *
  * ## When to use
@@ -16,11 +16,12 @@
  * - 24슬롯이 아닌 임의 시계열/다계열 차트 → 전용 차트 컴포넌트 검토.
  *
  * ## Composition rules
+ * - 요소를 조합한다 — 캡션 [[AiCaption]] · 막대 [[ChartBar]](칸마다 하나). 차트 안에서 막대를 다시 그리지 않는다(patterns §26).
+ *   그래서 Composite 계층이다.
  * - 자체 카드 chrome(흰 배경/보더/라운드/패딩)을 보유 — [[AiCard]] 로 감싸지 않음.
  * - `values` 는 0~100 또는 `null`(데이터 없음) 배열. 통상 길이 24.
- * - 강조 막대 색은 토큰(`--color-brand-blue-soft`, `--color-surface-100`) 사용. 단,
- *   비강조 막대는 인라인 hex(`#b7dbff`)가 남아 있어 토큰화는 차후 정리 대상.
- * - `caption` 은 상단 uppercase 라벨([[AiCaption]] 격).
+ * - 막대 색은 크기 스케일 토큰 — 임계 미만 `--color-chart-seq-2`, 이상 `--color-chart-seq-4`(§17 크기).
+ *   데이터 없음은 [[ChartBar]] 가 `--color-surface-100` 칸 전체로 비운다 — 0 과 «모름» 을 가른다.
  * - `delay` 는 부모 메시지 시퀀스의 stagger 지연(ms)이며 막대 스태거의 기준점.
  *
  * @example
@@ -32,6 +33,9 @@
  * />
  * ```
  */
+import ChartBar from "../chart/ChartBar";
+import { AiCaption } from "./_primitives";
+
 export default function UsageChart({
   caption = "Hourly GPU Utilization",
   values,
@@ -41,7 +45,7 @@ export default function UsageChart({
   caption?: string;
   /** 24개 hourly 사용률 (0~100). null이면 데이터 없음 */
   values: (number | null)[];
-  /** 이 값을 넘으면 짙은 색 강조 */
+  /** 이 값 이상이면 짙은 색 강조 */
   highlightThreshold?: number;
   delay?: number;
 }) {
@@ -52,12 +56,7 @@ export default function UsageChart({
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="flex items-center justify-between">
-        <span
-          className="text-sm font-bold text-tertiary tracking-caps uppercase"
-          style={{ fontFamily: "var(--font-family-korean)" }}
-        >
-          {caption}
-        </span>
+        <AiCaption>{caption}</AiCaption>
         <span
           className="text-xs text-disabled tracking-default"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
@@ -65,31 +64,16 @@ export default function UsageChart({
           0–23시
         </span>
       </div>
-      <div
-        className="flex items-end gap-2px w-full"
-        style={{ height: HEIGHT }}
-      >
-        {values.map((v, i) => {
-          const h = v === null ? 0 : Math.max(2, (v / 100) * HEIGHT);
-          const isHigh = (v ?? 0) >= highlightThreshold;
-          const barDelay = delay + 100 + i * 35;
-          return (
-            <div
-              key={i}
-              className="ai-anim-bar flex-1 min-w-0 rounded-2px"
-              style={{
-                height: h,
-                background: v === null
-                  ? "var(--color-surface-100)"
-                  : isHigh
-                    ? "var(--color-chart-seq-4)"
-                    : "var(--color-chart-seq-2)",
-                animationDelay: `${barDelay}ms`,
-              }}
-              title={v === null ? "" : `${i}시 · ${v.toFixed(1)}%`}
-            />
-          );
-        })}
+      <div className="flex items-end gap-2px w-full" style={{ height: HEIGHT }}>
+        {values.map((v, i) => (
+          <ChartBar
+            key={i}
+            ratio={v === null ? null : v / 100}
+            color={(v ?? 0) >= highlightThreshold ? "var(--color-chart-seq-4)" : "var(--color-chart-seq-2)"}
+            title={v === null ? `${i}시 · 데이터 없음` : `${i}시 · ${v.toFixed(1)}%`}
+            delay={delay + 100 + i * 35}
+          />
+        ))}
       </div>
     </div>
   );
