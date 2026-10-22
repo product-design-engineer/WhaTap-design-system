@@ -113,7 +113,7 @@ export default function CriteriaSelection({
       style={{ animationDelay: `${delay}ms` }}
     >
       <span
-        className="text-sm font-bold text-tertiary tracking-caps uppercase leading-none"
+        className="text-sm font-bold text-tertiary tracking-caps uppercase"
         style={{ fontFamily: "var(--font-family-korean)" }}
       >
         {heading}
@@ -129,7 +129,7 @@ export default function CriteriaSelection({
       {/* 분류 기준 그룹 */}
       <div className="flex flex-col gap-6px">
         <div
-          className="text-base font-bold text-primary tracking-default leading-normal"
+          className="text-base font-bold text-primary tracking-default"
           style={{ fontFamily: "var(--font-family-korean)" }}
         >
           📊 제안 분류 기준
@@ -149,7 +149,7 @@ export default function CriteriaSelection({
       {notes && notes.length > 0 && (
         <div className="flex flex-col gap-4px">
           <div
-            className="text-base font-bold text-primary tracking-default leading-normal"
+            className="text-base font-bold text-primary tracking-default"
             style={{ fontFamily: "var(--font-family-korean)" }}
           >
             📌 참고 사항
@@ -158,7 +158,7 @@ export default function CriteriaSelection({
             {notes.map((n, i) => (
               <li
                 key={i}
-                className="text-base text-secondary tracking-default leading-normal list-disc list-outside"
+                className="text-base text-secondary tracking-default list-disc list-outside"
                 style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
               >
                 {n}
@@ -169,7 +169,7 @@ export default function CriteriaSelection({
       )}
 
       <p
-        className="text-base text-secondary tracking-default leading-normal"
+        className="text-base text-secondary tracking-default"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
       >
         이 기준으로 진행해도 될까요? 다른 임계값을 원하시면 알려주세요.

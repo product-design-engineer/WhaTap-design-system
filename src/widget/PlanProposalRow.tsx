@@ -58,19 +58,19 @@ export default function PlanProposalRow({
       }}
     >
       <span
-        className="text-base font-bold text-primary tracking-default leading-snug"
+        className="text-base font-bold text-primary tracking-default"
         style={{ fontFamily: "var(--font-family-korean)" }}
       >
         {label}
       </span>
       <span
-        className="text-sm text-secondary tracking-default leading-snug"
+        className="text-sm text-secondary tracking-default"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
       >
         {detail ?? config}
       </span>
       <span
-        className="text-base font-bold text-primary tracking-default leading-none text-right"
+        className="text-base font-bold text-primary tracking-default text-right"
         style={{ fontFamily: "var(--font-family-numeric)" }}
       >
         {value ?? monthly}

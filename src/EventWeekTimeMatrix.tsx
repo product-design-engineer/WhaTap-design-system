@@ -57,7 +57,7 @@ export default function EventWeekTimeMatrix({
   return (
     <div className="flex flex-col gap-6px">
       {caption && (
-        <span className="text-base font-bold text-primary tracking-default leading-normal">
+        <span className="text-base font-bold text-primary tracking-default">
           {caption}
         </span>
       )}
@@ -85,7 +85,7 @@ export default function EventWeekTimeMatrix({
           className="grid items-center"
           style={{ gridTemplateColumns: "28px repeat(24, 1fr)", gap: "2px" }}
         >
-          <span className="text-sm text-secondary font-medium leading-none">
+          <span className="text-sm text-secondary font-medium">
             {dayLabels[d]}
           </span>
           {row.map((on, h) => (

@@ -145,7 +145,7 @@ export default function AiWidget({ open = true, variant = "slide", onClose }: Ai
             </svg>
           </button>
         </div>
-        <div className="text-center text-xs leading-snug" style={{ color: "var(--color-text-tertiary)" }}>
+        <div className="text-center text-xs" style={{ color: "var(--color-text-tertiary)" }}>
           AI 응답은 정확하지 않을 수 있습니다. 중요한 결정은 반드시 확인해 주세요.
         </div>
       </div>

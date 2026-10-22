@@ -86,7 +86,7 @@ export default function StatCard({
 
       {/* 라벨 + 값 */}
       <div className="flex flex-col min-w-0">
-        <span className="text-sm text-tertiary truncate leading-tight">{label}</span>
+        <span className="text-sm text-tertiary truncate">{label}</span>
         <div className="flex items-baseline gap-4px">
           <span
             className="text-xl font-bold text-primary leading-none"
@@ -95,11 +95,11 @@ export default function StatCard({
             {value}
           </span>
           {unit && (
-            <span className="text-sm text-tertiary leading-none">{unit}</span>
+            <span className="text-sm text-tertiary">{unit}</span>
           )}
           {trend && (
             <span
-              className="text-xs leading-none ml-2px"
+              className="text-xs ml-2px"
               style={{ color: TREND_COLORS[trend] }}
             >
               {TREND_ARROWS[trend]}

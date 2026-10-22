@@ -66,7 +66,7 @@ export default function ActiveTransactionArc({
   /* 칸 안(frame=false) — 아크 왼쪽, 값 오른쪽 한 열(위에서 아래로 Max TX · Agent). 네 귀퉁이에 흩어 두지 않는다.
      Total 은 아크 가운데 하나만 — 같은 값을 두 번 쓰지 않는다. 범례는 WidgetFrame legend(SPEED_LEGEND). */
   if (!frame) {
-    const LABEL = "text-sm text-tertiary leading-none";
+    const LABEL = "text-sm text-tertiary";
     const NUM = { fontFamily: "var(--font-family-numeric)" } as const;
     return (
       <div className="flex h-full items-center min-h-0 w-full" style={{ gap: 16 }}>
@@ -80,7 +80,7 @@ export default function ActiveTransactionArc({
               <span className="text-2xl" style={{ fontWeight: "var(--font-weight-medium)" }}>{maxTx.value}</span>
               <span className="text-sm text-tertiary">초</span>
             </dd>
-            <dd className="text-sm text-secondary leading-tight truncate" title={maxTx.name} style={{ ...NUM, margin: 0 }}>{maxTx.name}</dd>
+            <dd className="text-sm text-secondary truncate" title={maxTx.name} style={{ ...NUM, margin: 0 }}>{maxTx.name}</dd>
           </div>
           <div className="flex flex-col min-w-0" style={{ gap: 4 }}>
             <dt className={LABEL} style={NUM}>Agent</dt>
@@ -100,14 +100,14 @@ export default function ActiveTransactionArc({
       {/* left: Max TX + Elapsed legend */}
       <div className="flex flex-col shrink-0 min-w-0 justify-between" style={{ width: 72 }}>
         <div className="flex flex-col min-w-0">
-          <p className="text-sm text-tertiary leading-none" style={{ fontFamily: "var(--font-family-numeric)" }}>Max TX</p>
-          <p className="text-sm text-primary mt-4px leading-tight truncate" title={maxTx.name} style={{ fontFamily: "var(--font-family-numeric)" }}>{maxTx.name}</p>
-          <p className="text-2xl text-primary mt-4px leading-none" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}>{maxTx.value}</p>
+          <p className="text-sm text-tertiary" style={{ fontFamily: "var(--font-family-numeric)" }}>Max TX</p>
+          <p className="text-sm text-primary mt-4px truncate" title={maxTx.name} style={{ fontFamily: "var(--font-family-numeric)" }}>{maxTx.name}</p>
+          <p className="text-2xl text-primary mt-4px" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}>{maxTx.value}</p>
         </div>
         {/* 범례 — frame 일 때만. 칸 안(frame=false)에서는 WidgetFrame legend 로 본문 오른쪽 위에 선다(SPEED_LEGEND). */}
         {frame && (
           <div className="flex flex-col gap-3px">
-            <p className="text-sm text-tertiary leading-snug" style={{ fontFamily: "var(--font-family-numeric)" }}>Elapsed</p>
+            <p className="text-sm text-tertiary" style={{ fontFamily: "var(--font-family-numeric)" }}>Elapsed</p>
             <LegendDot color="var(--color-chart-speed-very-slow)" label="very slow" />
             <LegendDot color="var(--color-chart-speed-slow)" label="slow" />
             <LegendDot color="var(--color-chart-speed-normal)" label="normal" />
@@ -133,13 +133,13 @@ export default function ActiveTransactionArc({
       {/* right: Agent stats */}
       <div className="flex flex-col shrink-0 justify-between" style={{ width: 44 }}>
         <div className="flex flex-col">
-          <p className="text-sm text-tertiary leading-none" style={{ fontFamily: "var(--font-family-numeric)" }}>Agent</p>
-          <p className="text-sm text-primary mt-4px leading-none" style={{ fontFamily: "var(--font-family-numeric)" }}>Active</p>
-          <p className="text-2xl text-primary text-right mt-2px leading-none" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}>{agent.active}</p>
+          <p className="text-sm text-tertiary" style={{ fontFamily: "var(--font-family-numeric)" }}>Agent</p>
+          <p className="text-sm text-primary mt-4px" style={{ fontFamily: "var(--font-family-numeric)" }}>Active</p>
+          <p className="text-2xl text-primary text-right mt-2px" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}>{agent.active}</p>
         </div>
         <div className="flex flex-col">
-          <p className="text-sm text-primary leading-none" style={{ fontFamily: "var(--font-family-numeric)" }}>Inactive</p>
-          <p className="text-2xl text-primary text-right mt-2px leading-none" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}>{agent.inactive}</p>
+          <p className="text-sm text-primary" style={{ fontFamily: "var(--font-family-numeric)" }}>Inactive</p>
+          <p className="text-2xl text-primary text-right mt-2px" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}>{agent.inactive}</p>
         </div>
       </div>
     </div>
@@ -150,7 +150,7 @@ function LegendDot({ color, label }: { color: string; label: string }) {
   return (
     <div className="flex items-center gap-4px min-w-0">
       <ChartSwatch color={color} />
-      <span className="text-sm text-primary leading-none truncate" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}>{label}</span>
+      <span className="text-sm text-primary truncate" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}>{label}</span>
     </div>
   );
 }

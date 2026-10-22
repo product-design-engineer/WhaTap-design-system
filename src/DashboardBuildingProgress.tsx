@@ -97,7 +97,7 @@ export default function DashboardBuildingProgress({
       {/* title + subtitle */}
       <div className="flex flex-col gap-6px items-center">
         <p
-          className="text-lg font-bold text-primary tracking-default leading-none"
+          className="text-lg font-bold text-primary tracking-default"
           style={{ fontFamily: "var(--font-family-korean)" }}
         >
           {title}

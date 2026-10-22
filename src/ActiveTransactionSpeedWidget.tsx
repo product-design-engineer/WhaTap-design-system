@@ -219,7 +219,7 @@ export default function ActiveTransactionSpeedWidget({
       <div className="flex items-center justify-between shrink-0 w-full">
         <div className="flex gap-4px items-center">
           <span
-            className="text-base font-bold text-primary tracking-default leading-none whitespace-nowrap"
+            className="text-base font-bold text-primary tracking-default whitespace-nowrap"
             style={{ fontFamily: "var(--font-family-korean)" }}
           >
             {title}
@@ -257,7 +257,7 @@ export default function ActiveTransactionSpeedWidget({
           style={{ width: sideW }}
         >
           <span
-            className="text-sm text-tertiary leading-none"
+            className="text-sm text-tertiary"
             style={{
               fontFamily: "var(--font-family-numeric)",
               fontWeight: "var(--font-weight-regular)",
@@ -396,7 +396,7 @@ export default function ActiveTransactionSpeedWidget({
           style={{ width: sideW }}
         >
           <span
-            className="text-sm text-tertiary leading-none"
+            className="text-sm text-tertiary"
             style={{
               fontFamily: "var(--font-family-numeric)",
               fontWeight: "var(--font-weight-regular)",

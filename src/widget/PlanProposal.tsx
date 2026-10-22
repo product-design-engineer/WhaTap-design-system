@@ -120,7 +120,7 @@ export default function PlanProposal({
           {bullets.map((b, i) => (
             <li
               key={i}
-              className="text-base text-secondary tracking-default leading-relaxed list-disc list-outside"
+              className="text-base text-secondary tracking-default list-disc list-outside"
               style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
             >
               {b}
@@ -138,7 +138,7 @@ export default function PlanProposal({
             {columns.map((h) => (
               <span
                 key={h}
-                className="text-sm font-bold text-secondary tracking-default leading-none"
+                className="text-sm font-bold text-secondary tracking-default"
                 style={{ fontFamily: "var(--font-family-korean)" }}
               >
                 {h}
@@ -161,7 +161,7 @@ export default function PlanProposal({
           }}
         >
           <span
-            className="text-base font-bold tracking-default leading-none"
+            className="text-base font-bold tracking-default"
             style={{ fontFamily: "var(--font-family-korean)", color: "var(--color-whatap-blue)" }}
           >
             {totalLabel}
@@ -191,7 +191,7 @@ export default function PlanProposal({
             {actions.map((a) => (
               <li
                 key={a.step}
-                className="text-base text-primary tracking-default leading-relaxed list-decimal list-outside"
+                className="text-base text-primary tracking-default list-decimal list-outside"
                 style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
               >
                 {a.body}

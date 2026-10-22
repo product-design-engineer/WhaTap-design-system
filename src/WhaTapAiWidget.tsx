@@ -214,7 +214,7 @@ export default function WhaTapAiWidget({
               <span
                 data-ds-policy-ok="AI 그라데이션 헤더 위 전경 — 컬러 배경 위 고정 흰색"
                 // raw-color-ok: AI 그라데이션 헤더 위 전경 — 컬러 배경 위 고정 흰색.
-                className="text-lg font-bold text-white tracking-default leading-px-20 whitespace-nowrap"
+                className="text-lg font-bold text-white tracking-default whitespace-nowrap"
                 style={{ fontFamily: "var(--font-family-korean)" }}
               >
                 WhaTap AI
@@ -314,7 +314,7 @@ export default function WhaTapAiWidget({
                   {intro ?? (
                     <>
                       <span
-                        className="font-bold text-lg tracking-default leading-none"
+                        className="font-bold text-lg tracking-default"
                         style={{ fontFamily: "var(--font-family-korean)" }}
                       >
                         {user}
@@ -323,7 +323,7 @@ export default function WhaTapAiWidget({
                         님, 안녕하세요. WhaTap AI입니다.{"\n"}
                       </span>
                       <span
-                        className="font-bold text-lg tracking-default leading-none"
+                        className="font-bold text-lg tracking-default"
                         style={{ fontFamily: "var(--font-family-korean)" }}
                       >
                         {pageHighlight}
@@ -381,7 +381,7 @@ export default function WhaTapAiWidget({
                 disabled={isUnavailable}
                 onChange={editable ? (e) => setTyped(e.target.value) : undefined}
                 onKeyDown={editable ? handleKey : undefined}
-                className="ai-input-textarea w-full text-lg text-primary tracking-default leading-normal resize-none outline-none border-0 bg-transparent placeholder-text-disabled"
+                className="ai-input-textarea w-full text-lg text-primary tracking-default resize-none outline-none border-0 bg-transparent placeholder-text-disabled"
                 style={{
                   fontFamily: "var(--font-family-korean)",
                   fontWeight: "var(--font-weight-regular)",
@@ -484,7 +484,7 @@ function UsagePill({ children }: { children: import("react").ReactNode }) {
       data-node-id="29424:19317"
     >
       <span
-        className="text-xs leading-none text-primary whitespace-nowrap"
+        className="text-xs text-primary whitespace-nowrap"
         style={{ fontFamily: "var(--font-family-korean-inter)", fontWeight: "var(--font-weight-regular)" }}
       >
         {children}

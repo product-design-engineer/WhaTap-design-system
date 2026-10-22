@@ -55,6 +55,16 @@ export const GATE_ROSTER = [
     prevents: "닫는 괄호 누락으로 규칙 수백 개가 조용히 죽는 것(2026-10-01 aiGlowSpin · 155규칙) · 주석 조기 종료 · 결합자로 읽히는 클래스명",
   },
   {
+    id: "dead-leading",
+    name: "지는 leading-* 금지",
+    status: "auto",
+    script: "scripts/check-dead-leading.mjs",
+    pipeline: null,
+    invariant:
+      "`whatap-ds.css` 에서 `.leading-*` 보다 뒤에 선언된 줄 높이 있는 `.text-*`(CSS 에서 읽는다 · 지금은 xs · sm · base · lg · 2xl)와 `leading-*` 를 같은 클래스 문자열에 함께 쓰지 않는다. 함께 쓰면 `leading-*` 는 적용되지 않는다. CSS 순서는 소비 앱 화면이 기대고 있어 옮기지 않는다. 줄 높이를 바꿔야 하면 style `lineHeight` 로.",
+    prevents: "읽는 사람에게는 «줄 높이 1» 인데 화면은 1.5 인 클래스(2026-10-22 사이드바 프로젝트 스위처 두 줄 글자가 1.5px 처짐)",
+  },
+  {
     id: "catalog-build",
     name: "카탈로그 합본 생성",
     status: "auto",

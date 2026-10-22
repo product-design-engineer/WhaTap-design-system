@@ -178,7 +178,7 @@ export default function UnavailableNotice({
         <div className="flex items-center gap-6px">
           <span className="size-8px rounded-full shrink-0" style={{ background: indicator }} />
           <p
-            className="text-lg font-bold text-primary tracking-default leading-normal text-center"
+            className="text-lg font-bold text-primary tracking-default text-center"
             style={{ fontFamily: koFont }}
           >
             {resolvedTitle}

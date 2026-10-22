@@ -215,7 +215,7 @@ export default function PromptInput({
                 style={{ width: 100 }}
               >
                 <p
-                  className="text-base font-bold text-primary tracking-default leading-normal truncate"
+                  className="text-base font-bold text-primary tracking-default truncate"
                   style={{ fontFamily: "var(--font-family-korean)" }}
                   title={a.name}
                 >
@@ -238,7 +238,7 @@ export default function PromptInput({
           {showSuggestion && (
             <div
               aria-hidden
-              className="ai-input-textarea w-full text-lg tracking-default leading-normal pointer-events-none"
+              className="ai-input-textarea w-full text-lg tracking-default pointer-events-none"
               style={{
                 position: "absolute",
                 top: 0,
@@ -269,7 +269,7 @@ export default function PromptInput({
                   : undefined
             }
             onKeyDown={editable || onChange ? handleKey : undefined}
-            className="ai-input-textarea w-full text-lg text-primary tracking-default leading-normal resize-none outline-none border-0 bg-transparent placeholder-text-disabled"
+            className="ai-input-textarea w-full text-lg text-primary tracking-default resize-none outline-none border-0 bg-transparent placeholder-text-disabled"
             style={{
               position: "relative",
               fontFamily: "var(--font-family-korean)",
@@ -317,7 +317,7 @@ export default function PromptInput({
       {caption && (
         <div className="flex gap-0 items-center justify-end px-0 py-4px shrink-0 w-full">
           <p
-            className="text-base text-disabled tracking-normal leading-none whitespace-nowrap"
+            className="text-base text-disabled tracking-normal whitespace-nowrap"
             style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
           >
             {caption}
@@ -341,7 +341,7 @@ function UsagePill({ children }: { children: ReactNode }) {
       data-node-id="29424:19317"
     >
       <span
-        className="text-xs leading-none text-primary whitespace-nowrap"
+        className="text-xs text-primary whitespace-nowrap"
         style={{ fontFamily: "Inter, 'Noto Sans KR', sans-serif", fontWeight: "var(--font-weight-regular)" }}
       >
         {children}
@@ -365,7 +365,7 @@ function TokenUsageBadge({ inputTokens, outputTokens }: { inputTokens: number; o
       data-node-id="29424:19317"
     >
       <span
-        className="text-xs leading-none text-primary whitespace-nowrap"
+        className="text-xs text-primary whitespace-nowrap"
         style={{ fontFamily: "Inter, 'Noto Sans KR', sans-serif", fontWeight: "var(--font-weight-regular)" }}
       >
         토큰 입력 <strong style={{ fontWeight: "var(--font-weight-bold)" }}>{fmt(inputTokens)}</strong>

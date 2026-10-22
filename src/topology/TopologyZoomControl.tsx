@@ -52,7 +52,7 @@ export default function TopologyZoomControl({
       >
         −
       </button>
-      <span className="text-sm text-secondary font-numeric tabular-nums leading-none">
+      <span className="text-sm text-secondary font-numeric tabular-nums">
         {Math.round(scale * 100)}%
       </span>
       <button

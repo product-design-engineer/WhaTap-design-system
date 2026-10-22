@@ -58,7 +58,7 @@ export default function TimeRangeSelector({
     <div className="flex flex-col gap-6px">
       {title && (
         <div
-          className="text-base font-bold text-primary tracking-default leading-none"
+          className="text-base font-bold text-primary tracking-default"
           style={{ fontFamily: "var(--font-family-korean)" }}
         >
           {title}
@@ -94,7 +94,7 @@ export default function TimeRangeSelector({
           <span
             data-ds-policy-ok="success 알약 위 전경 — 컬러 배경 위 고정 흰색"
             // raw-color-ok: success 알약 위 전경 — 컬러 배경 위 고정 흰색.
-            className="flex items-center px-4px h-16px rounded-2px text-base font-bold text-white leading-none"
+            className="flex items-center px-4px h-16px rounded-2px text-base font-bold text-white"
             style={{
               background: "var(--color-status-success)",
               fontFamily: "var(--font-family-numeric)",

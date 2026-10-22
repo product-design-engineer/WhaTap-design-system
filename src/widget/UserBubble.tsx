@@ -45,7 +45,7 @@ export default function UserBubble({ children, className }: AiUserBubbleProps) {
         }}
       >
         <p
-          className="text-lg text-primary tracking-default leading-normal whitespace-pre-wrap"
+          className="text-lg text-primary tracking-default whitespace-pre-wrap"
           style={{
             fontFamily: "var(--font-family-korean)",
             fontWeight: "var(--font-weight-regular)",

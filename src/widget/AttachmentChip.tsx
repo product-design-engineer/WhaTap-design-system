@@ -40,7 +40,7 @@ export default function AttachmentChip({
       style={{ width: 100 }}
     >
       <p
-        className="text-base font-bold text-primary tracking-default leading-normal truncate"
+        className="text-base font-bold text-primary tracking-default truncate"
         style={{ fontFamily: "var(--font-family-korean)" }}
         title={name}
       >
