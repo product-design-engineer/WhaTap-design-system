@@ -87,11 +87,17 @@
     "CardHead": {
       "figma": "336:3"
     },
+    "ChartCategoryAxis": {
+      "figma": "560:4"
+    },
     "ChartGrid": {
       "figma": "545:16"
     },
     "ChartPeakMarker": {
       "figma": "548:2"
+    },
+    "ChartStackedColumn": {
+      "figma": "561:10"
     },
     "ChartSwatch": {
       "figma": "549:5"

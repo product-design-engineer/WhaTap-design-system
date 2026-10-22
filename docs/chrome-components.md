@@ -496,10 +496,13 @@ export type DataTableProps<T> = {
 | [[ChartGrid]] | 눈금(최대 · 절반 · 0)마다 가로 점선 · `--color-border-soft` | 마크 **아래** |
 | [[ChartValueAxis]] | X 바닥선 · Y 세로선(`--color-border-divider`) + 눈금 글자(`text-chart` · 숫자 서체 · tertiary, 단위 접미사) | 마크 **위** |
 | [[ChartPeakMarker]] | 최고점 값 말풍선(카드 바탕 · `text-xs` 굵게) + ▼(계열 색). `label` · `color` · `left` · `top` — ▼ 끝이 (`left`, `top`) 에 닿는다(§5) | 덧그림 겹, 맨 위 |
+| [[ChartCategoryAxis]] | 범주 막대 아래 이름 — 칸 등분 · 가운데 · 말줄임(title 에 전체). `labels` · `padBottom`(18) · `right` · `gap`(4) | 덧그림 |
+| [[ChartStackedColumn]] | 세로 막대 하나 — 구간을 아래에서 위로(`segments[0]` 바닥), 몫은 계열 색 + 안 글자(흰색), 나머지는 `surface-200` + 바깥 글자. `max` 는 값축과 같게 | 막대 칸 |
 
 | Prop (둘 공통) | Type | Default |
 |---|---|---|
 | `max` | `number` — 이미 보기 좋은 값으로 올린 최대. 0 이면 바닥 눈금 하나 | — |
+| `ticks` | `number[]` — 눈금 값(데이터에서 오는 눈금: 단계 값 · 판정 경계). 없으면 최대 · 절반 · 0 | — |
 | `padTop` | `number` (px) | `4` |
 | `padBottom` | `number` (px) — X축 글자 자리 | `14` |
 | `right` | `number \| string` — 선 끝 배지 칸이 있으면 `var(--wds-widget-end-gutter)` | `8` |

@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { AXIS_GUTTER, axisTicks, formatAxisValue, plotY } from "./_axisScale";
+import { AXIS_GUTTER, formatAxisValue, plotY, tickStops } from "./_axisScale";
 
 /**
  * ChartValueAxis — 플롯의 축선(X 바닥 · Y 세로)과 Y축 눈금 글자. Primitives layer.
@@ -22,6 +22,7 @@ import { AXIS_GUTTER, axisTicks, formatAxisValue, plotY } from "./_axisScale";
  * - **마크 다음(위)** 에 그린다. 바닥선이 막대 · 면에 묻히지 않게.
  * - `position: relative` 이고 높이가 정해진 플롯 상자 안에 둔다. [[ChartGrid]] 와 같은 `max` · `padTop` ·
  *   `padBottom` · `right` 를 줘야 눈금 글자와 점선이 같은 높이에 선다.
+ * - 눈금은 기본 셋(최대 · 절반 · 0). 데이터에서 오는 눈금은 `ticks` 로 값을 준다(글자 = 그 값 + 단위).
  * - 축 제목은 그리지 않는다. 단위는 눈금 접미사(`unit`)가 맡는다(§26 결정).
  * - 글자는 `text-chart`(9px) · 숫자 서체 · `text-tertiary`, 눈금 칸 안 오른쪽 정렬(§15). 계열 색을 쓰지 않는다(§17).
  *
@@ -46,6 +47,8 @@ import { AXIS_GUTTER, axisTicks, formatAxisValue, plotY } from "./_axisScale";
 export type ChartValueAxisProps = {
   /** 값축 최대(이미 보기 좋은 값으로 올린 것). 0 이면 바닥 눈금 「0」 하나만. */
   max: number;
+  /** 눈금 값 목록. 없으면 최대 · 절반 · 0. 데이터에서 오는 눈금(단계 값 · 판정 경계)에 쓴다 — [[ChartGrid]] 와 같게. `max` 밖 값은 버린다. */
+  ticks?: number[];
   /** 눈금 글자 뒤 단위(「%」 「ms」). 축 제목 대신 단위를 말한다. */
   unit?: string;
   /** 플롯 위 여백(px). [[ChartGrid]] 와 같게. 기본 4. */
@@ -56,12 +59,12 @@ export type ChartValueAxisProps = {
   right?: number | string;
 };
 
-export default function ChartValueAxis({ max, unit = "", padTop = 4, padBottom = 14, right = 8 }: ChartValueAxisProps) {
+export default function ChartValueAxis({ max, ticks, unit = "", padTop = 4, padBottom = 14, right = 8 }: ChartValueAxisProps) {
   return (
     <>
       <div aria-hidden className="absolute bg-color-var-color-border-divider" style={{ left: AXIS_GUTTER, right, bottom: padBottom, height: 1 }} />
       <div aria-hidden className="absolute bg-color-var-color-border-divider" style={{ left: AXIS_GUTTER, top: padTop, bottom: padBottom, width: 1 }} />
-      {axisTicks(max).map((ratio) => (
+      {tickStops(max, ticks).map(({ ratio, value }) => (
         <span
           key={ratio}
           className="absolute text-chart text-tertiary leading-none pointer-events-none"
@@ -77,7 +80,7 @@ export default function ChartValueAxis({ max, unit = "", padTop = 4, padBottom =
             } as CSSProperties
           }
         >
-          {formatAxisValue(max * ratio) + unit}
+          {formatAxisValue(value) + unit}
         </span>
       ))}
     </>

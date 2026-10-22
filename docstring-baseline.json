@@ -165,7 +165,7 @@
       "whenToUse": 2,
       "undocumentedProps": 1
     },
-    "Primitives/Chart · GpuStatusBar": {
+    "Composite/Chart · GpuStatusBar": {
       "whenToUse": 2,
       "undocumentedProps": 1
     },

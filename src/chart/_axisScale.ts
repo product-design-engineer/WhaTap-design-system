@@ -39,6 +39,15 @@ export function axisTicks(max: number): number[] {
   return max > 0 ? [1, 0.5, 0] : [0];
 }
 
+/**
+ * 눈금 위치와 값. `ticks`(값 목록)를 주면 그 값들에, 없으면 최대 · 절반 · 0 에.
+ * 값이 데이터에서 오는 차트(단계 막대의 단계 값 · 판정 경계)가 `ticks` 를 쓴다. 최대 밖 값은 버린다.
+ */
+export function tickStops(max: number, ticks?: number[]): { ratio: number; value: number }[] {
+  if (!ticks) return axisTicks(max).map((ratio) => ({ ratio, value: max * ratio }));
+  return ticks.filter((v) => v >= 0 && v <= max).map((value) => ({ ratio: max > 0 ? value / max : 0, value }));
+}
+
 /** 플롯 상자 안 세로 위치. ratioFromTop 0 = 플롯 위 끝, 1 = 바닥. 플롯 높이 = 상자 높이 − 위아래 여백. */
 export function plotY(padTop: number, padBottom: number, ratioFromTop: number): string {
   return `calc(${padTop}px + (100% - ${padTop + padBottom}px) * ${ratioFromTop})`;

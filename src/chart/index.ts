@@ -12,6 +12,10 @@
 
 export { default as ChartGrid } from "./ChartGrid";
 export type { ChartGridProps } from "./ChartGrid";
+export { default as ChartCategoryAxis } from "./ChartCategoryAxis";
+export type { ChartCategoryAxisProps } from "./ChartCategoryAxis";
+export { default as ChartStackedColumn } from "./ChartStackedColumn";
+export type { ChartStackedColumnProps, ChartStackedSegment } from "./ChartStackedColumn";
 export { default as ChartPeakMarker } from "./ChartPeakMarker";
 export type { ChartPeakMarkerProps } from "./ChartPeakMarker";
 export { default as ChartSwatch } from "./ChartSwatch";
