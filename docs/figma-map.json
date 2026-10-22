@@ -99,6 +99,9 @@
     "ChartGrid": {
       "figma": "545:16"
     },
+    "ChartLegendItem": {
+      "figma": "567:64"
+    },
     "ChartPeakMarker": {
       "figma": "548:2"
     },
@@ -303,6 +306,9 @@
     "MetricBarCell": {
       "figma": null
     },
+    "MetricStat": {
+      "figma": "564:15"
+    },
     "MiniBarChart": {
       "figma": "351:209"
     },
@@ -437,9 +443,6 @@
     },
     "Slider": {
       "figma": "329:27"
-    },
-    "SpeedStat": {
-      "figma": "564:15"
     },
     "Stage": {
       "figma": "57:8"

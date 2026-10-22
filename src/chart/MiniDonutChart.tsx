@@ -15,7 +15,7 @@
  * - 2개 이하 범주의 단순 진행률 → [[UsageGauge]]
  *
  * ## Composition rules
- * - 범례 견본은 [[ChartSwatch]] 를 조합한다(마크 모양을 따른다, patterns §26). 그래서 Composite 계층이다.
+ * - 범례는 [[ChartLegendItem]] 을 조합한다(`fill` — 값이 오른쪽 끝에 세로로 맞는다, patterns §26). 그래서 Composite 계층이다.
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 안쪽 여백 · 제목 줄을 뺀다). [[WidgetFrame]] 안에 넣을 때 쓴다.
  *   제목은 WidgetFrame `title`, 범위는 `meta`, 범례는 도넛 옆 열 그대로(항목 글이 길어 한 줄 범례로 올리지 않는다), 메뉴는 `onFullscreen` · `menu` 가 맡는다(patterns §15).
  * - Primitives 레이어 (자체 렌더링, DS 컴포넌트 import 0)
@@ -36,7 +36,7 @@
  * />
  * ```
  */
-import ChartSwatch from "./ChartSwatch";
+import ChartLegendItem from "./ChartLegendItem";
 
 export type DonutSegment = {
   label: string;
@@ -168,16 +168,7 @@ export default function MiniDonutChart({
         {/* 범례 */}
         <div className="flex flex-col gap-4px min-w-0 flex-1">
           {arcs.map((arc) => (
-            <div key={arc.label} className="flex items-center gap-6px min-w-0">
-              <ChartSwatch color={arc.color} />
-              <span className="text-sm text-secondary truncate">{arc.label}</span>
-              <span
-                className="text-sm font-medium text-primary ml-auto shrink-0"
-                style={{ fontFamily: "var(--font-family-numeric)" }}
-              >
-                {arc.value}
-              </span>
-            </div>
+            <ChartLegendItem key={arc.label} color={arc.color} label={arc.label} value={arc.value} fill />
           ))}
         </div>
       </div>

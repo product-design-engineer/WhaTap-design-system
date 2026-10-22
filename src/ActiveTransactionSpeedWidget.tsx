@@ -19,7 +19,7 @@
  *   (소비 앱의 public 폴더에 배치)
  * - 색은 DS 토큰 — hex 금지. 등급별 개수(정상 · 느림 · 매우 느림)는 판정 등급 토큰 `--color-chart-speed-*`(§17) —
  *   같은 등급을 쓰는 [[ActiveTransactionArc]] · [[ScatterHeatmap]] 의 `SPEED_LEGEND` 와 같은 색.
- * - 좌우 RPS · TPS 는 [[SpeedStat]] 이 그린다 — 같은 모양이라 좌우 대칭으로 읽힌다. 그래서 Composite 계층이다.
+ * - 좌우 RPS · TPS 는 [[MetricStat]] 이 그린다 — 같은 모양이라 좌우 대칭으로 읽힌다. 그래서 Composite 계층이다.
  * - `compact` 모드로 좁은 카드(Flex 보드 등) 대응
  *
  * @example
@@ -29,7 +29,7 @@
  * ```
  */
 import { useEffect, useMemo, useRef, useState } from "react";
-import SpeedStat from "./SpeedStat";
+import MetricStat from "./MetricStat";
 
 export type SpeedTone = "normal" | "warning" | "critical";
 
@@ -253,7 +253,7 @@ export default function ActiveTransactionSpeedWidget({
       {/* Body */}
       <div className="flex flex-1 min-h-0 w-full items-stretch">
         {/* RPS */}
-        <SpeedStat label="RPS" value={rps} compact={compact} />
+        <MetricStat label="RPS" value={rps} compact={compact} />
 
         {/* Plot area */}
         <div className="flex-1 min-w-0 relative">
@@ -370,7 +370,7 @@ export default function ActiveTransactionSpeedWidget({
         </div>
 
         {/* TPS */}
-        <SpeedStat label="TPS" value={tps} align="end" compact={compact} />
+        <MetricStat label="TPS" value={tps} align="end" compact={compact} />
       </div>
     </div>
   );

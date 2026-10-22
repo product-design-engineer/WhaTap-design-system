@@ -1253,7 +1253,7 @@ series 는 네 가지를 지킨다.
 | 막대 | 칸 막대 하나(값 · 0 · 모름) | [[ChartBar]] (Primitives) — [[UsageChart]] 가 조합. 0 은 바닥 2px, 모름은 칸 전체 `surface-100` | 있음 (2026-10-22) |
 | 축 | 범주축 이름(칸 등분 · 가운데 · 말줄임) | [[ChartCategoryAxis]] (Primitives) — [[GpuStatusBar]]. [[MiniBarChart]] `categories` 는 아직 자기 글자 | 있음 · MiniBar 는 차트마다 따로 |
 | 범례 | 스와치 + 이름 + 지금 값 | [[WidgetFrame]] `legend` · `SPEED_LEGEND` · `hexGridLegend` | 있음 |
-| 범례 | 스와치 모양 | [[ChartSwatch]] (Primitives) — 마크 모양을 따른다: 선 = `line`(8×2), 면 · 막대 · 조각 · 칸 = `square`(8×8). [[WidgetFrame]] `legend[].shape` · [[MiniMultiLineChart]] · [[MiniDonutChart]] · [[ActiveTransactionArc]] · [[HexGrid]] 가 조합한다 | 있음 (2026-10-22 네 모양 → 하나) |
+| 범례 | 스와치 모양 · 항목 | 견본 [[ChartSwatch]] · 항목 [[ChartLegendItem]] (둘 다 Primitives, 같은 견본 그림 = 내부 `_swatch`) — 견본은 마크 모양을 따른다: 선 = `line`(8×2), 면 · 막대 · 조각 · 칸 = `square`(8×8). 항목은 견본 · 이름 · 값 사이 4px, 이름 secondary · 값 semibold primary, 세로 목록은 `fill`. [[WidgetFrame]] `legend` · [[MiniMultiLineChart]] · [[MiniDonutChart]] · [[ActiveTransactionArc]] · [[HexGrid]] 가 조합한다 | 있음 (2026-10-22 견본 네 모양 → 하나 · 항목 다섯 벌 → 하나) |
 | 범례 | 색 범례 바 (순차 · 강도) | [[HeatmapLegend]] | 있음 |
 | 범례 | 오른쪽 세로 목록 · 플롯 위 오버레이 · 분리 패널 | 본문 오른쪽 위 한 줄 (§15) | 이관 |
 | 범례 | 순위 번호(①②③) | — 색은 순위가 아니라 개체 (§22) | 공백 |
@@ -1310,7 +1310,7 @@ DS 도 예외가 아니다. 값축 계산은 4벌, 점선 격자는 5벌이고 �
 ✅ 판단 지점은 «정해짐(근거 절)» 또는 «결정 필요» 로 처분하고 표에 남긴다
 
 ❌ 새 차트 안에서 값축 · 점선 격자를 또 그리기 — [[ChartGrid]] · [[ChartValueAxis]] 를 조합한다. 최고점은 [[ChartPeakMarker]]
-❌ 차트가 자기 범례 견본을 그리기 — [[ChartSwatch]] 를 쓴다. 선 차트 칸 범례에 사각 견본(`shape` 빠뜨림)
+❌ 차트가 자기 범례 항목 · 견본을 그리기 — [[ChartLegendItem]](견본만이면 [[ChartSwatch]])을 쓴다. 선 차트 칸 범례에 사각 견본(`shape` 빠뜨림)
 ❌ 데이터가 없을 때 축과 격자만 남긴 플롯 — `state` 로 문장을 세운다
 ❌ «결정 필요» 항목을 가장 가까운 기존 규칙으로 근사해 정하기 — 결정을 따로 남긴다
 

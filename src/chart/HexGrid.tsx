@@ -1,5 +1,5 @@
 import React, { type ReactNode } from "react";
-import ChartSwatch from "./ChartSwatch";
+import ChartLegendItem from "./ChartLegendItem";
 
 /**
  * HexGrid — 리소스 맵 (헥사곤 그리드). GPU 디바이스 · 서버처럼 개별 장치를 한 칸씩 깐다.
@@ -22,7 +22,7 @@ import ChartSwatch from "./ChartSwatch";
  * - 아이콘 · 텍스트에 붙는 설명 말풍선 → [[Tooltip]] (HexGrid 툴팁은 맵 안 헥사곤 전용)
  *
  * ## Composition rules
- * - 범례 견본은 [[ChartSwatch]] 를 조합한다(마크 모양을 따른다, patterns §26). 그래서 Composite 계층이다.
+ * - 범례는 [[ChartLegendItem]] 을 조합한다(견본은 마크 모양을 따른다, patterns §26). 그래서 Composite 계층이다.
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 여백 · 「GPU Map」 제목 줄 · 범례를 뺀다). [[WidgetFrame]] 안에 넣을 때 쓴다.
  *   범례는 `HEX_GRID_LEGEND` 를 WidgetFrame `legend` 로 넘긴다(같은 색 토큰). 제목 · 메뉴도 WidgetFrame 이 맡는다(patterns §15).
  * - 개수를 범례에 붙일 때는 `hexGridLegend(items)` 를 WidgetFrame `legend` 로 넘긴다 → `Critical 3` 처럼
@@ -244,10 +244,7 @@ export default function HexGrid({
         {/* 범례는 헥사곤이 쓰는 네 톤을 다 말한다. 종전엔 Active · Idle 둘뿐이라 주황 · 빨강이 범례에 없었다. */}
         <div className="flex items-center gap-8px">
           {HEX_GRID_LEGEND.map((l) => (
-            <div key={l.label} className="flex items-center gap-4px">
-              <ChartSwatch color={l.color} />
-              <span className="text-sm text-tertiary">{l.label}</span>
-            </div>
+            <ChartLegendItem key={l.label} color={l.color} label={l.label} />
           ))}
         </div>
       </div>
