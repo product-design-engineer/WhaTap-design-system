@@ -97,23 +97,20 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 기준**으로 �
 
 | Layer | 역할 | 조합 규칙 | 수량(카탈로그) |
 |---|---|---|---|
-| **Primitives** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 | — | 75 (Ai/ 포함) |
+| **Primitives** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 — 단 **리프 Primitive 1개** 합성은 허용(아래 예외) | — | 75 (Ai/ 포함) |
 | **Composite** | Primitives 를 1단계 조합 | Primitives 만 import. **Composite 끼리 import 금지** | 34 (Ai/ 포함) |
 | **Shell** | Composite + Primitives 를 최종 조립하는 진입점 | 모든 계층 import 가능 | 6 (DashboardLayout · Ai/Widget · Page A·B·D · TopologyOverview) |
 
-**Primitives** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, Switch, DataTable, ChartGrid, ChartValueAxis, LiveTimerCompact, AiCard, AiCaption … + **인라인 추출 Parts**(SidebarMenuItem · PageHeaderNotificationItem · PageHeaderProfileMenuItem · ProductRailItem · BottomRailItem · TabButton · CostBreakdownRow · ClassificationTableRow · CostTableRow · PlanProposalRow · EventListItem · ReasoningStep · TimelineStepItem · CriteriaGroup · ReceiverChannelItem · AiActionChip · AiAttachmentChip · AiQuickActionChip)
+**Primitives** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, Switch, DataTable, ChartGrid, ChartValueAxis, LiveTimerCompact, AiCard, AiCaption … + **인라인 추출 Parts**(SidebarMenuItem · PageHeaderNotificationItem · PageHeaderProfileMenuItem · ProductRailItem · BottomRailItem · TabButton · CostBreakdownRow · ClassificationTableRow · CostTableRow · PlanProposalRow · EventListItem · ReasoningStep · TimelineStepItem · CriteriaGroup · ReceiverChannelItem · DataTableRow · AiActionChip · AiAttachmentChip · AiQuickActionChip)
 
-**Composite** — FilterBar · PageHeader · PageHeaderAiInline · OptionbarPage · Sidebar(=SidebarMenuItem) · ThemeToggle · AiChatExchange · AiReasoning · InlinePrompt · 값축 차트 4종(MiniLineChart · MiniMultiLineChart · MiniBarChart · ForecastLineChart = ChartGrid + ChartValueAxis) … + **추출 Parts**(DataTableRow · FilterDropdownOptionItem · FilterChipItem · CriteriaOptionButton · ProposalSection · AiAlertRulePreview)
+**Composite** — FilterBar · PageHeader · PageHeaderAiInline · OptionbarPage · Sidebar(=SidebarMenuItem) · ThemeToggle · AiChatExchange · AiReasoning · InlinePrompt · 값축 차트 4종(MiniLineChart · MiniMultiLineChart · MiniBarChart · ForecastLineChart = ChartGrid + ChartValueAxis) … + **추출 Parts**(FilterDropdownOptionItem · FilterChipItem · CriteriaOptionButton · ProposalSection · AiAlertRulePreview)
 
 **Shell** — DashboardLayout(=Sidebar) · WhaTapAiWidget(`Shell/Ai/Widget`) · Page 합성 템플릿(A 기본 대시보드 · B AI 전용 · D 상세)
 
-> ⚠️ **미해결 — 추출 Parts 의 계층 판정.** 인라인에서 추출한 행/항목 Parts 중 일부는
-> 리프 프리미티브를 **런타임 합성**한다: `SidebarMenuItem`·`ProductRailItem`·`BottomRailItem`·
-> `AiTriggerButton` → [[Tooltip]], `ReceiverChannelItem` → [[Switch]]. 규칙대로 Composite 로
-> 승격하면 이들을 소비하는 부모(`Sidebar`·`AiReceiverChannels` 등 Composite)가
-> *Composite 끼리 import 금지* 에 걸려 Shell 까지 연쇄 승격된다 — 위젯 카드가 Shell 이 되는 것은
-> 의미상 틀리다. 현재는 **관행상 Primitives 에 두고 있다.** 규칙에 "Parts 는 리프 프리미티브
-> 1개 합성 허용" 예외를 명문화할지는 **결정 필요**(이 문서를 임의로 고치지 말 것).
+**리프 1개 예외 (2026-10-23 사용자 결정).** Primitive 는 **리프 Primitive 를 최대 1개** 런타임 import 할 수 있다. "리프" = 스스로는 DS 컴포넌트를 하나도 값 import 하지 않는 Primitive(Tooltip · Switch · Chip 등). 예: `SidebarMenuItem`·`ProductRailItem`·`BottomRailItem`·`DataTableRow`·`AiTriggerButton` → [[Tooltip]], `ReceiverChannelItem` → [[Switch]].
+- **왜:** 규칙대로 Composite 로 올리면 소비 부모(`Sidebar`·`AiReceiverChannels` 등 Composite)가 *Composite 끼리 import 금지* 에 걸려 Shell 까지 연쇄 승격된다 — 위젯 카드가 Shell 이 되는 것은 의미상 틀리다. 부모가 컨트롤을 슬롯으로 주입하는 대안은 상태를 두 경로가 서술하고 `ReactNode` 슬롯이 가짜 컨트롤도 받아 기각했다.
+- **넘으면 Composite:** 리프가 아닌 Primitive 를 쓰거나(2단 합성) 2개 이상을 쓰면 예외 밖이다. `import type` 은 세지 않는다.
+- **강제:** `pnpm lint:layers`(`check-layer-deps`, `pnpm test` 포함) — 예외 안은 정보, 밖은 error.
 
 **신규 컴포넌트 추가 시 반드시 계층을 명시.** Composite 가 다른 Composite 를 import 하면 Shell 로 승격하거나 구조 분리. AI 전용이면 카탈로그 title 을 `<Layer>/Ai/<Name>` 으로 둔다.
 

@@ -125,7 +125,7 @@ export const GATE_ROSTER = [
     script: "scripts/check-layer-deps.mjs",
     pipeline: null,
     invariant:
-      "**Tokens ← Primitives ← Composite ← Shell.** 역방향과 **Composite ↔ Composite** 를 금지한다. 계층의 단일 출처는 **story title prefix**(`check-catalog-folders` 와 같은 규약). **값 import 와 타입 전용 import 를 나눠 센다** — `import type` 은 런타임 의존 그래프를 만들지 않으므로 같은 무게로 세면 실제 구조 문제가 타입 잡음에 묻힌다. 역방향 값 import 동결선은 **0**, Composite↔Composite 5건은 동결 후 신규만 차단. `--update` 는 줄이는 방향만 허용. Primitives↔Primitives 는 **warning** — CLAUDE.md 가 \"결정 필요\"로 남긴 사안을 게이트가 대신 결정하지 않는다.",
+      "**Tokens ← Primitives ← Composite ← Shell.** 역방향과 **Composite ↔ Composite** 를 금지한다. 계층의 단일 출처는 **story title prefix**(`check-catalog-folders` 와 같은 규약). **값 import 와 타입 전용 import 를 나눠 센다** — `import type` 은 런타임 의존 그래프를 만들지 않으므로 같은 무게로 세면 실제 구조 문제가 타입 잡음에 묻힌다. 역방향 값 import 동결선은 **0**, Composite↔Composite 5건은 동결 후 신규만 차단. `--update` 는 줄이는 방향만 허용. Primitives→Primitives 는 **리프 1개 예외**(2026-10-23 결정)만 허용 — 대상이 스스로 DS 컴포넌트를 값 import 하지 않는 리프이고 소스가 그런 대상을 1개만 쓸 때. 리프가 아니거나 2개 이상이면 error(→ Composite 승격).",
     prevents: "순환 참조 · Composite 간 결합으로 인한 연쇄 승격 · 계층 규칙이 문서에만 있고 코드가 갈라지는 상태",
   },
   {
