@@ -5,7 +5,7 @@ import { GpuStatusBar, WidgetFrame } from "@whatap/design-system";
  * Stories for [[GpuStatusBar]] — 단계별 몫과 나머지를 세로 막대로 쌓는 단계 막대 차트.
  */
 const meta: Meta<typeof GpuStatusBar> = {
-  title: "Composite/Chart · GpuStatusBar",
+  title: "Composite/Chart/GpuStatusBar",
   component: GpuStatusBar,
   tags: ["autodocs"],
   parameters: {

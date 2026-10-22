@@ -5,7 +5,7 @@ import { HeatmapLegend } from "@whatap/design-system";
  * Stories for [[HeatmapLegend]] — 히트맵 색을 값으로 되읽는 범례.
  */
 const meta: Meta<typeof HeatmapLegend> = {
-  title: "Primitives/Chart · HeatmapLegend",
+  title: "Primitives/Chart/HeatmapLegend",
   component: HeatmapLegend,
   tags: ["autodocs"],
   parameters: {

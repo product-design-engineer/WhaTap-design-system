@@ -5,7 +5,7 @@ import { ChartGrid, ChartValueAxis } from "@whatap/design-system";
  * Stories for [[ChartValueAxis]] — 플롯 축선과 Y축 눈금 글자.
  */
 const meta: Meta<typeof ChartValueAxis> = {
-  title: "Primitives/Chart · ChartValueAxis",
+  title: "Primitives/Chart/ChartValueAxis",
   component: ChartValueAxis,
   tags: ["autodocs"],
   parameters: {

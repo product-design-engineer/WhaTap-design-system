@@ -17,7 +17,7 @@
       "whenToUse": 3,
       "undocumentedProps": 4
     },
-    "Composite/Chart · Heatmap": {
+    "Composite/Chart/Heatmap": {
       "whenToUse": 1,
       "undocumentedProps": 2
     },
@@ -153,47 +153,47 @@
       "whenToUse": 3,
       "undocumentedProps": 1
     },
-    "Composite/Chart · ApdexChart": {
+    "Composite/Chart/ApdexChart": {
       "whenToUse": 1,
       "undocumentedProps": 0
     },
-    "Composite/Chart · BarList": {
+    "Composite/Chart/BarList": {
       "whenToUse": 1,
       "undocumentedProps": 1
     },
-    "Composite/Chart · ForecastLineChart": {
+    "Composite/Chart/ForecastLineChart": {
       "whenToUse": 2,
       "undocumentedProps": 1
     },
-    "Composite/Chart · GpuStatusBar": {
+    "Composite/Chart/GpuStatusBar": {
       "whenToUse": 2,
       "undocumentedProps": 1
     },
-    "Primitives/Chart · HeatmapLegend": {
+    "Primitives/Chart/HeatmapLegend": {
       "whenToUse": 1,
       "undocumentedProps": 0
     },
-    "Composite/Chart · HexGrid": {
+    "Composite/Chart/HexGrid": {
       "whenToUse": 4,
       "undocumentedProps": 1
     },
-    "Composite/Chart · MiniDonutChart": {
+    "Composite/Chart/MiniDonutChart": {
       "whenToUse": 2,
       "undocumentedProps": 2
     },
-    "Composite/Chart · MiniLineChart": {
+    "Composite/Chart/MiniLineChart": {
       "whenToUse": 2,
       "undocumentedProps": 5
     },
-    "Composite/Chart · MiniMultiLineChart": {
+    "Composite/Chart/MiniMultiLineChart": {
       "whenToUse": 2,
       "undocumentedProps": 6
     },
-    "Composite/Chart · UsageChart": {
+    "Composite/Chart/UsageChart": {
       "whenToUse": 2,
       "undocumentedProps": 2
     },
-    "Primitives/Chart · UsageGauge": {
+    "Primitives/Chart/UsageGauge": {
       "whenToUse": 2,
       "undocumentedProps": 1
     },

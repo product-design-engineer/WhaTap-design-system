@@ -12,7 +12,7 @@ const P99 = [131, 140, 128, 152, 145, 138, 160, 147, 150, 149];
 const X = ["13:27", "13:28", "13:29", "13:30", "13:31", "13:32", "13:33", "13:34", "13:35", "13:36"];
 
 const meta: Meta<typeof MiniMultiLineChart> = {
-  title: "Composite/Chart · MiniMultiLineChart",
+  title: "Composite/Chart/MiniMultiLineChart",
   component: MiniMultiLineChart,
   tags: ["autodocs"],
   parameters: {

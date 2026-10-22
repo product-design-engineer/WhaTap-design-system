@@ -5,7 +5,7 @@ import { MiniLineChart, WidgetFrame } from "@whatap/design-system";
  * Stories for [[MiniLineChart]] — DB/APM/GPU 모니터링 카드용 line chart.
  */
 const meta: Meta<typeof MiniLineChart> = {
-  title: "Composite/Chart · MiniLineChart",
+  title: "Composite/Chart/MiniLineChart",
   component: MiniLineChart,
   tags: ["autodocs"],
   parameters: {

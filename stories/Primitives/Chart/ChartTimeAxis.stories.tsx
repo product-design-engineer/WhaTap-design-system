@@ -5,7 +5,7 @@ import { ChartGrid, ChartTimeAxis, ChartValueAxis } from "@whatap/design-system"
  * Stories for [[ChartTimeAxis]] — 플롯 아래 X축 시간 글자.
  */
 const meta: Meta<typeof ChartTimeAxis> = {
-  title: "Primitives/Chart · ChartTimeAxis",
+  title: "Primitives/Chart/ChartTimeAxis",
   component: ChartTimeAxis,
   tags: ["autodocs"],
   parameters: {

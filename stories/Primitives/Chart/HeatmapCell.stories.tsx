@@ -5,7 +5,7 @@ import { HeatmapCell } from "@whatap/design-system";
  * Stories for [[HeatmapCell]] — 값 하나를 색 한 칸으로 접는 히트맵 셀.
  */
 const meta: Meta<typeof HeatmapCell> = {
-  title: "Primitives/Chart · HeatmapCell",
+  title: "Primitives/Chart/HeatmapCell",
   component: HeatmapCell,
   tags: ["autodocs"],
   parameters: {

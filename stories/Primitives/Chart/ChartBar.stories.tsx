@@ -5,7 +5,7 @@ import { ChartBar } from "@whatap/design-system";
  * Stories for [[ChartBar]] — 칸 바닥에서 자라는 세로 막대 하나.
  */
 const meta: Meta<typeof ChartBar> = {
-  title: "Primitives/Chart · ChartBar",
+  title: "Primitives/Chart/ChartBar",
   component: ChartBar,
   tags: ["autodocs"],
   parameters: {

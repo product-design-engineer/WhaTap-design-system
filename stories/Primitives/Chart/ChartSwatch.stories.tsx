@@ -5,7 +5,7 @@ import { ChartSwatch } from "@whatap/design-system";
  * Stories for [[ChartSwatch]] — 마크 모양을 따르는 범례 견본.
  */
 const meta: Meta<typeof ChartSwatch> = {
-  title: "Primitives/Chart · ChartSwatch",
+  title: "Primitives/Chart/ChartSwatch",
   component: ChartSwatch,
   tags: ["autodocs"],
   parameters: {

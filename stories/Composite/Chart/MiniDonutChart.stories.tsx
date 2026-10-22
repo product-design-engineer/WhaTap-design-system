@@ -7,7 +7,7 @@ import { MiniDonutChart, WidgetFrame } from "@whatap/design-system";
  * 세그먼트 색은 차트 계열 토큰을 **1번부터 순서대로** 배정한다(순환 금지).
  */
 const meta: Meta<typeof MiniDonutChart> = {
-  title: "Composite/Chart · MiniDonutChart",
+  title: "Composite/Chart/MiniDonutChart",
   component: MiniDonutChart,
   tags: ["autodocs"],
   parameters: {

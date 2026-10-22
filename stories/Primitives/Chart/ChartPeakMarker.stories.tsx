@@ -5,7 +5,7 @@ import { ChartGrid, ChartPeakMarker, ChartValueAxis } from "@whatap/design-syste
  * Stories for [[ChartPeakMarker]] — 최고점 값 말풍선 + ▼.
  */
 const meta: Meta<typeof ChartPeakMarker> = {
-  title: "Primitives/Chart · ChartPeakMarker",
+  title: "Primitives/Chart/ChartPeakMarker",
   component: ChartPeakMarker,
   tags: ["autodocs"],
   parameters: {
