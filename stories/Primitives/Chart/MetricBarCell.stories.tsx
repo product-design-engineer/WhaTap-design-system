@@ -5,7 +5,7 @@ import { MetricBarCell } from "@whatap/design-system";
  * Stories for [[MetricBarCell]] — 수치 + 비율 막대 표 셀.
  */
 const meta: Meta<typeof MetricBarCell> = {
-  title: "Primitives/Chart · MetricBarCell",
+  title: "Primitives/Chart/MetricBarCell",
   component: MetricBarCell,
   tags: ["autodocs"],
   parameters: {

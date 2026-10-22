@@ -16,7 +16,7 @@ const make = (n: number): HexItem[] =>
   Array.from({ length: n }, (_, i) => ({ id: `gpu-${i}`, label: String(i), tone: TONES[i % TONES.length] }));
 
 const meta: Meta<typeof HexGrid> = {
-  title: "Composite/Chart · HexGrid",
+  title: "Composite/Chart/HexGrid",
   component: HexGrid,
   tags: ["autodocs"],
   parameters: {

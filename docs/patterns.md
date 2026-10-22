@@ -966,7 +966,7 @@ series 는 네 가지를 지킨다.
 | 헤더: 소스 칩 · 필터 아이콘 · 비교 드롭다운 · 툴바 1~5종 | 이관 대상 | §15 · [[WidgetFrame]] | 헤더는 제목 · 메뉴만. 대상 · 필터는 옵션바, 나머지 행동은 ⋮ 안으로 |
 | 빈 상태: 축만 남은 플롯 | 이관 대상 | [[WidgetFrame]] `no-data` · `collect-gap` | «에이전트 없음» · 로딩은 **공백** |
 
-**Composite 계획표** (2026-10-22 사용자 확정) — 26유형은 모두 `Composite/Chart · *` 에 차트로 있어야 한다. 차트는 Primitives 요소(§26)를 조합하고, 새 유형에 필요한 요소는 먼저 Primitives 로 만든다. 완성 차트가 Primitives 에 있으면 요소로 분해해 Composite 로 옮긴다.
+**Composite 계획표** (2026-10-22 사용자 확정) — 26유형은 모두 `Composite/Chart/*` 에 차트로 있어야 한다. 차트는 Primitives 요소(§26)를 조합하고, 새 유형에 필요한 요소는 먼저 Primitives 로 만든다. 완성 차트가 Primitives 에 있으면 요소로 분해해 Composite 로 옮긴다.
 
 | # | 유형 | Composite 차트 | 상태 |
 |---|---|---|---|
@@ -1275,7 +1275,7 @@ series 는 네 가지를 지킨다.
 
 **공통 부품으로 먼저 뽑을 것** (차트마다 따로인 것 중 벌 수가 많은 순서). 뽑을 때 동작을 바꾸지 않는다 — 지금 차트들이 그리는 결과가 기준이다.
 
-1. ~~**값축 + 가로 격자**~~ — **완료(2026-10-22).** 공개 Primitives [[ChartGrid]](격자 · 마크 아래) · [[ChartValueAxis]](축선 + 눈금 글자 · 마크 위) — 카탈로그 · Storybook(`Primitives/Chart · *`)에 보인다. 이것을 조합하는 값축 차트 4종은 3계층 규칙대로 **Composite**(`Composite/Chart · *`)로 옮겼다. DS 안에서 네 차트를 import 하는 컴포넌트가 없어 연쇄 승격이 없다. 숫자 계산(`niceMax` · `formatAxisValue` · `axisTicks` · `plotY`)은 그리는 부품이 아니라 내부 `src/chart/_axisScale.ts`. 격자 색은 `border-soft` 하나로 정했다. 렌더 비교(24스토리 × 라이트 · 다크): 격자 색 차이는 감지 문턱 아래, [[MiniLineChart]] X 바닥선이 다른 셋과 같은 자리로 1px 올라갔고, 선 차트의 축선이 면 채움 위에 그려져 선명해졌다(막대 · 예측과 같은 «바닥선이 마크에 묻히지 않게»). 다음 공통 부품도 같은 방식이다 — 부품은 Primitives, 조합하는 차트는 Composite.
+1. ~~**값축 + 가로 격자**~~ — **완료(2026-10-22).** 공개 Primitives [[ChartGrid]](격자 · 마크 아래) · [[ChartValueAxis]](축선 + 눈금 글자 · 마크 위) — 카탈로그 · Storybook(`Primitives/Chart/*`)에 보인다. 이것을 조합하는 값축 차트 4종은 3계층 규칙대로 **Composite**(`Composite/Chart/*`)로 옮겼다. DS 안에서 네 차트를 import 하는 컴포넌트가 없어 연쇄 승격이 없다. 숫자 계산(`niceMax` · `formatAxisValue` · `axisTicks` · `plotY`)은 그리는 부품이 아니라 내부 `src/chart/_axisScale.ts`. 격자 색은 `border-soft` 하나로 정했다. 렌더 비교(24스토리 × 라이트 · 다크): 격자 색 차이는 감지 문턱 아래, [[MiniLineChart]] X 바닥선이 다른 셋과 같은 자리로 1px 올라갔고, 선 차트의 축선이 면 채움 위에 그려져 선명해졌다(막대 · 예측과 같은 «바닥선이 마크에 묻히지 않게»). 다음 공통 부품도 같은 방식이다 — 부품은 Primitives, 조합하는 차트는 Composite.
 2. ~~**최고점 ▼ 라벨**~~ — **완료(2026-10-22).** [[ChartPeakMarker]] — 받은 점에 ▼ 끝을 맞추고 말풍선에 카드 바탕(§5). 복제는 없었지만(MiniLineChart 1벌) 선 · 면 · 누적면이 함께 쓸 요소라 먼저 부품으로 세웠다. [[MiniBarChart]] `peak` 는 ▼ 없는 막대 위 값 글자라 «막대 값 라벨» 이다.
 3. ~~**범례 스와치**~~ — **완료(2026-10-22).** [[ChartSwatch]] 하나로 맞췄다. 도넛 견본 원 → 사각(조각), 아크 10px → 8px. 선 차트 칸의 WidgetFrame 범례는 `shape: "line"`. 견본을 그리게 된 도넛 · 아크 · 헥사는 Composite 로 옮겼다(DS 안 import 0 — 연쇄 없음).
 4. ~~**X축 시간 글자**~~ — **완료(2026-10-22).** [[ChartTimeAxis]] — 5벌이 같은 규칙이라 그대로 모았다(렌더 차이 0 목표). 이것을 조합하게 된 [[ApdexChart]] 는 Composite 로 옮겼다. [[ScatterHeatmap]] 의 X축도 2026-10-22 Composite 이동 때 이 규칙으로 통일했다(사용자 «Composite 로 이동» 지시).

@@ -5,7 +5,7 @@ import { BarList, WidgetFrame } from "@whatap/design-system";
  * Stories for [[BarList]] — 값 · 이름 · 가로 막대 한 줄을 여러 줄.
  */
 const meta: Meta<typeof BarList> = {
-  title: "Composite/Chart · BarList",
+  title: "Composite/Chart/BarList",
   component: BarList,
   tags: ["autodocs"],
   parameters: { layout: "padded", backgrounds: { default: "surface-muted" } },

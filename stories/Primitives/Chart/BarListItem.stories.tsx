@@ -5,7 +5,7 @@ import { BarListItem } from "@whatap/design-system";
  * Stories for [[BarListItem]] — 가로 막대 목록의 한 줄.
  */
 const meta: Meta<typeof BarListItem> = {
-  title: "Primitives/Chart · BarListItem",
+  title: "Primitives/Chart/BarListItem",
   component: BarListItem,
   tags: ["autodocs"],
   parameters: {

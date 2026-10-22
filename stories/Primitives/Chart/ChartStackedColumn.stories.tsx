@@ -5,7 +5,7 @@ import { ChartStackedColumn } from "@whatap/design-system";
  * Stories for [[ChartStackedColumn]] — 몫과 나머지를 아래에서 위로 쌓는 세로 막대 하나.
  */
 const meta: Meta<typeof ChartStackedColumn> = {
-  title: "Primitives/Chart · ChartStackedColumn",
+  title: "Primitives/Chart/ChartStackedColumn",
   component: ChartStackedColumn,
   tags: ["autodocs"],
   parameters: {

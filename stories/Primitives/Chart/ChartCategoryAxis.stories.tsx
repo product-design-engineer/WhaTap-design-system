@@ -5,7 +5,7 @@ import { ChartCategoryAxis, ChartGrid, ChartValueAxis } from "@whatap/design-sys
  * Stories for [[ChartCategoryAxis]] — 범주 막대 아래 X축 이름.
  */
 const meta: Meta<typeof ChartCategoryAxis> = {
-  title: "Primitives/Chart · ChartCategoryAxis",
+  title: "Primitives/Chart/ChartCategoryAxis",
   component: ChartCategoryAxis,
   tags: ["autodocs"],
   parameters: {

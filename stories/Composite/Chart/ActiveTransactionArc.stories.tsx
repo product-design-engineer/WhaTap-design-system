@@ -8,7 +8,7 @@ import { ActiveTransactionArc, SPEED_LEGEND, WidgetFrame } from "@whatap/design-
  * 3-column: Max TX / Arc / Agent.
  */
 const meta: Meta<typeof ActiveTransactionArc> = {
-  title: "Composite/Chart · ActiveTransactionArc",
+  title: "Composite/Chart/ActiveTransactionArc",
   component: ActiveTransactionArc,
   tags: ["autodocs"],
   parameters: {

@@ -25,7 +25,7 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 기준**으로 �
 | **Primitives/Ai/** | AI 위젯 리프 프리미티브 | `src/widget/` | AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList, AiSymbol, AiUserBubble, ReasoningStep … |
 | **Composite/** | 프리미티브를 1단계 조합 | `src/` 루트 | PageHeader, PageHeaderAiInline, Sidebar, FilterBar, DataTable, FilterDropdown, Tabs, ThemeToggle … |
 | **Composite/Ai/** | AI 진입·응답 합성 위젯 | `src/widget/` | AiChatExchange, AiReasoning, AiDashboardProposal, AiCostTable, InlinePrompt, PromptInput, SendButton … |
-| **`Chart ·` 접두** (Primitives · Composite 안) | 데이터 시각화(차트 · 게이지 · 히트맵). 계층 안 메뉴명 접두 — `Web ·` 와 같은 방식 | `src/chart/`(`./chart` 진입점) · `src/widget/UsageChart` | Chart · MiniLineChart, Chart · BarList, Chart · UsageGauge, Chart · Heatmap … |
+| **`Chart/` 하위 그룹** (Primitives · Composite 안) | 데이터 시각화(차트 · 게이지 · 히트맵). 계층 안 하위 폴더 — `Ai/` 와 같은 방식. Primitives/Chart = 차트를 이루는 요소, Composite/Chart = 요소를 조합한 차트(26유형 모두 여기, patterns §21 계획표) | `src/chart/`(`./chart` 진입점) · `src/widget/UsageChart` | Primitives/Chart/ChartGrid · ChartValueAxis · ChartBar …, Composite/Chart/MiniLineChart · Heatmap · ScatterHeatmap … |
 | **Shell/** | 최종 조립 진입점 | `src/` · `src/widget/` | DashboardLayout, Ai/Widget(WhaTapAiWidget), Page/(A~D 페이지 합성 템플릿) |
 | **Tokens** (메타) | `:root` 컬러·폰트·spacing 변수 (참조용; 런타임은 whatap-ds.css) | `src/tokens.css` | Color, Type Scale, Tones … |
 
@@ -61,7 +61,7 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 기준**으로 �
    - 마케팅 컴포넌트가 SaaS 전용 레이아웃 토큰(`--wds-page-px` 등)을 참조 → 위반
    - SaaS 컴포넌트가 `--color-web-*` 를 참조 → 위반
    - 일반 UI 에서 `--color-chart-series-*` 를 끌어다 씀 → 위반
-5. **Storybook 카탈로그 그룹.** 마케팅 컴포넌트는 `Shell/Web · *` 또는 `Primitives/Web · *` 로, 차트(데이터 시각화)는 `Primitives/Chart · *` 또는 `Composite/Chart · *` 로 묶는다(2026-10-14 개정 — 이전에는 «이름에 `Chart` 가 드러나면 충분» 이었으나 `Heatmap` · `BarList` · `UsageGauge` 처럼 이름만으로 차트인지 드러나지 않는 것이 많았다). 계층은 그대로이고 접두는 메뉴명에만 붙는다 — 폴더(`check-catalog-folders`)와 `component:` 이름은 바뀌지 않는다. 스토리 id 에는 가운뎃점이 남는다(`primitives-chart-·-minilinechart`).
+5. **Storybook 카탈로그 그룹.** 마케팅 컴포넌트는 `Shell/Web · *` 또는 `Primitives/Web · *` 로, 차트(데이터 시각화)는 **하위 그룹 `Primitives/Chart/*` · `Composite/Chart/*`** 로 묶는다 — 요소는 Primitives/Chart, 요소를 조합한 차트는 Composite/Chart(2026-10-22 개정, 사용자 결정. 이전 `Chart ·` 메뉴명 접두는 `Ai/` 하위 그룹과 규칙이 둘이었고 폴더로 접히지 않았다). 계층은 첫 세그먼트 그대로이고, 스토리 파일은 `stories/<계층>/Chart/` 에 둔다(`check-catalog-folders`). `component:` 이름은 바뀌지 않는다. 스토리 id 는 `primitives-chart-chartgrid` · `composite-chart-minilinechart`. 일반(공통) 컴포넌트는 계층 바로 아래 — `Common` 같은 별도 그룹을 두지 않는다.
 
 **현재 이름 → 정책 정렬 대상 (마이그레이션):**
 

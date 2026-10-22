@@ -5,7 +5,7 @@ import { ChartGrid, ChartValueAxis } from "@whatap/design-system";
  * Stories for [[ChartGrid]] — 값축 눈금마다 긋는 플롯 격자.
  */
 const meta: Meta<typeof ChartGrid> = {
-  title: "Primitives/Chart · ChartGrid",
+  title: "Primitives/Chart/ChartGrid",
   component: ChartGrid,
   tags: ["autodocs"],
   parameters: {
