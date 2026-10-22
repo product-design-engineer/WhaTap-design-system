@@ -10,7 +10,7 @@ import { AiTargetMesh } from "@whatap/design-system/widget";
  *   ③ 수집 실패가 바깥 테두리부터 빈 점으로 헐어 보이는가
  */
 const meta: Meta<typeof AiTargetMesh> = {
-  title: "Primitives/TargetMesh",
+  title: "Composite/TargetMesh",
   component: AiTargetMesh,
   tags: ["autodocs"],
   parameters: {

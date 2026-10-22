@@ -369,7 +369,7 @@
       "whenToUse": 1,
       "undocumentedProps": 0
     },
-    "Primitives/TargetMesh": {
+    "Composite/TargetMesh": {
       "whenToUse": 2,
       "undocumentedProps": 1
     },

@@ -313,6 +313,8 @@ export type ClassificationRow = {
 
 대상 판정 결과의 군집 메시 — **점 하나 = 대상 하나**. 대상 종류마다 군집 하나이고 **군집 면적이 곧 대상 수**(반지름 ∝ √개수). 이상 점은 가운데부터, 수집 실패는 바깥 테두리부터 빈 점.
 
+**Composite** — 군집(열) 하나는 [[TargetMeshCluster]](Primitives: 점 덩어리 + 짧은 이름 + 이상 / 판정 수, 열 1/N 등폭)가 그린다. TargetMesh 는 공통 축척(`meshScaleOf`) · 판정 진행(`revealedCount`) · 범례만 맡는다. Figma 정본 TargetMeshCluster `563:3`.
+
 ```ts
 export type TargetMeshItem = {
   short: string;      // 열 라벨 (짧게)
