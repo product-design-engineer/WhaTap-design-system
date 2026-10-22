@@ -5,7 +5,7 @@ import { BarList, WidgetFrame } from "@whatap/design-system";
  * Stories for [[BarList]] — 값 · 이름 · 가로 막대 한 줄을 여러 줄.
  */
 const meta: Meta<typeof BarList> = {
-  title: "Primitives/Chart · BarList",
+  title: "Composite/Chart · BarList",
   component: BarList,
   tags: ["autodocs"],
   parameters: { layout: "padded", backgrounds: { default: "surface-muted" } },
@@ -14,11 +14,12 @@ const meta: Meta<typeof BarList> = {
 export default meta;
 type Story = StoryObj<typeof BarList>;
 
+/** 엔티티 고정 슬롯(patterns §21): method 1 · sql 3 · httpc 7 · dbc 2 · socket 5. 순서대로 1~5 를 칠하지 않는다. */
 const ROWS = [
   { label: "Method", value: 210, ratio: 0.88, color: "var(--color-chart-series-1)" },
-  { label: "SQL", value: 86, ratio: 0.67, color: "var(--color-chart-series-2)" },
-  { label: "HTTPS", value: 205, ratio: 0.4, color: "var(--color-chart-series-3)" },
-  { label: "DBC", value: 12, ratio: 0.37, color: "var(--color-chart-series-4)" },
+  { label: "SQL", value: 86, ratio: 0.67, color: "var(--color-chart-series-3)" },
+  { label: "HTTPS", value: 205, ratio: 0.4, color: "var(--color-chart-series-7)" },
+  { label: "DBC", value: 12, ratio: 0.37, color: "var(--color-chart-series-2)" },
   { label: "SOCKET", value: 1, ratio: 0.02, color: "var(--color-chart-series-5)" },
 ];
 

@@ -1,5 +1,5 @@
 /**
- * BarList — 값 · 이름 · 가로 막대 한 줄을 여러 줄. Primitives layer.
+ * BarList — 값 · 이름 · 가로 막대 한 줄을 여러 줄. Composite layer.
  *
  * ## Purpose
  * 서로 다른 대상(Method · SQL · HTTPS …)의 «지금 얼마나» 를 한눈에 비교한다. 숫자만 늘어놓으면 크기를 암산해야 하고,
@@ -16,6 +16,7 @@
  * - 한계 대비 소비량 하나 → [[UsageGauge]].
  *
  * ## Composition rules
+ * - 줄은 [[BarListItem]] 이 그린다(목록 행은 컴포넌트로, patterns §26). 그래서 Composite 계층이다.
  * - 껍데기(카드 · 제목 · 메뉴)는 그리지 않는다. 대시보드 칸에서는 [[WidgetFrame]] 이 맡는다(patterns §15).
  * - `frame={false}` 면 바깥 여백(좌우 · 아래 8px)을 뺀다. WidgetFrame 안에서는 늘 `frame={false}`.
  * - 줄은 칸 높이를 똑같이 나눠 쓴다. 막대 두께는 줄 높이의 60%.
@@ -32,6 +33,7 @@
  * </WidgetFrame>
  * ```
  */
+import BarListItem from "./BarListItem";
 
 export type BarListRow = {
   label: string;
@@ -59,26 +61,7 @@ export default function BarList({ rows, frame = true }: BarListProps) {
       style={{ listStyle: "none", margin: 0, padding: frame ? "0 8px 8px" : 0 }}
     >
       {rows.map((r) => (
-        <li key={r.label} className="flex items-center flex-1 min-h-0 w-full" style={{ gap: 8 }}>
-          <span className="flex items-baseline shrink-0" style={{ width: 88, gap: 6 }}>
-            <span
-              className="text-lg font-bold text-primary text-right shrink-0 leading-none"
-              style={{ width: 36, fontFamily: "var(--font-family-numeric)" }}
-            >
-              {r.value}
-            </span>
-            <span className="text-sm text-secondary leading-none whitespace-nowrap truncate" style={{ fontFamily: "var(--font-family-numeric)" }}>
-              {r.label}
-            </span>
-          </span>
-          <span className="flex-1 min-w-0 flex items-center h-full" style={{ padding: "4px 0" }}>
-            <span
-              aria-hidden
-              className="block rounded-2px"
-              style={{ width: `${Math.max(0, Math.min(1, r.ratio)) * 100}%`, height: "60%", minHeight: 4, background: r.color }}
-            />
-          </span>
-        </li>
+        <BarListItem key={r.label} label={r.label} value={r.value} ratio={r.ratio} color={r.color} />
       ))}
     </ul>
   );

@@ -966,6 +966,38 @@ series 는 네 가지를 지킨다.
 | 헤더: 소스 칩 · 필터 아이콘 · 비교 드롭다운 · 툴바 1~5종 | 이관 대상 | §15 · [[WidgetFrame]] | 헤더는 제목 · 메뉴만. 대상 · 필터는 옵션바, 나머지 행동은 ⋮ 안으로 |
 | 빈 상태: 축만 남은 플롯 | 이관 대상 | [[WidgetFrame]] `no-data` · `collect-gap` | «에이전트 없음» · 로딩은 **공백** |
 
+**Composite 계획표** (2026-10-22 사용자 확정) — 26유형은 모두 `Composite/Chart · *` 에 차트로 있어야 한다. 차트는 Primitives 요소(§26)를 조합하고, 새 유형에 필요한 요소는 먼저 Primitives 로 만든다. 완성 차트가 Primitives 에 있으면 요소로 분해해 Composite 로 옮긴다.
+
+| # | 유형 | Composite 차트 | 상태 |
+|---|---|---|---|
+| 1 | 선 | [[MiniLineChart]] · [[MiniMultiLineChart]] | 있음 |
+| 2 | 면 / 누적면 | 면 = `showArea` · 누적면 = StackedAreaChart | 면 있음 · 누적면 신규 |
+| 3 | 세로 막대 | [[MiniBarChart]] | 있음 |
+| 4 | 가로 막대 | [[BarList]] = [[BarListItem]] 줄 조합 | 있음 (2026-10-22 Composite 로) |
+| 5 | 누적 막대 / 단일 누적 바 | [[MiniBarChart]] 누적 · 단일 누적 바 = [[GpuStatusBar]] 정비 | A단계 — 옮김 + §17 순환 위반 수정 |
+| 6 | 산점도 / 버블 | ScatterChart | 신규 |
+| 7 | 박스플롯 | BoxPlotChart | 신규 |
+| 8 | 파이 / 도넛 | [[MiniDonutChart]] | 있음 |
+| 9 | 복합 / 이중 축 | 이중 축은 금지(§19) — 시간축을 맞춘 두 칸으로 표현 | 대체 표현 |
+| 10 | 구역 분할 산점도 | ZoneScatterChart | 신규 |
+| 11 | 숫자 / 집계값 | [[KpiCard]] · [[StatCard]] | 있음 · 카탈로그 위치 정리 |
+| 12 | 막대 게이지 | [[UsageGauge]](요소) + RangeGauge(min · 현재 · Max) | 신규 |
+| 13 | 호 게이지 / 속도계 | [[ActiveTransactionArc]] · [[ActiveTransactionSpeedWidget]] · ArcGauge | 일부 있음 · 호 게이지 신규 |
+| 14 | 이퀄라이저 | EqualizerChart | 신규 |
+| 15 | 블록 / 허니컴 / 그리드 | [[HexGrid]] · BlockGrid | 허니컴 있음 · 블록 신규 |
+| 16 | 상태 타임라인 | StatusTimeline | 신규 |
+| 17 | Hitmap | [[ScatterHeatmap]] | A단계 — Primitives 에서 옮김 |
+| 18 · 19 | 일반 히트맵 · 시간 셀 Cube | [[Heatmap]] | 있음 |
+| 20 | 추세 타일 | TrendTile | 신규 |
+| 21 | 컴파운드아이 | CompoundEye | 신규 · 보존과 대체를 먼저 결정 |
+| 22 | 트리맵 | Treemap | 신규 |
+| 23 | 지도 | GeoMap | 신규 |
+| 24 | 토폴로지 | [[TopologyCanvas]] | 있음 |
+| 25 | Flame / Waterfall | FlameChart · WaterfallChart | 신규 |
+| 26 | 표 안 미니 차트 | [[MetricBarCell]](요소) + Sparkline · RangeBar | 신규 |
+
+순서: **A단계** 완성 차트를 Composite 로(BarList → GpuStatusBar → UsageChart → ScatterHeatmap). **B단계** 신규를 제품 빈도순으로 — 산점도 → 상태 타임라인 → 범위 게이지 → 스파크라인 → 누적면 → 이퀄라이저 → 블록 → 추세 타일 → 호 게이지 → 박스플롯 → 구역 분할 산점도 → 트리맵 → 지도 → Flame · Waterfall → 컴파운드아이. 새 이름은 범용 이름이고, 만들 때 세 정본(코드 · Storybook · Figma)에 함께 넣는다.
+
 **Why.** 레거시를 그대로 옮기면 정본이 둘이 된다. 값을 옮기면 검증을 건너뛴다. D-032 라이트 계열 6색은 흰 배경 대비가 1.61~2.29:1 로 비텍스트 기준 3:1 에 못 미치고, 다크의 method · socket 은 상태색(info · critical)을 그대로 빌려 쓴다 — §17 이 막는 것이다. 그렇다고 의미를 버리면 제품에서 «SQL 은 청록» 을 익힌 사람이 이 DS 차트에서 다시 익혀야 한다. 그래서 의미만 받는다.
 엔티티 슬롯은 레거시와 색조가 가까운 쪽으로 골랐지만 색조만으로 정하지 않았다. 색조만 맞춘 첫 후보(socket → 8 빨강)는 dbc(2 주황)와 이웃해 정상시야 ΔE 7.0(라이트) · 7.5(다크)로 검증기에서 FAIL 했다. socket 을 5(자홍)로 옮긴 배치가 통과했다. 2026-10-14 팔레트 재조정 뒤에도 이 순서로 다시 재서 통과한다 — 라이트 최악 CVD ΔE 9.5 · 정상시야 21.1, 다크 10.9 · 17.4, 대비 전부 3:1 이상.
 공백을 근사하지 않는 것은 «가장 비슷한 토큰» 으로 채우는 순간 그 토큰의 의미가 둘이 되기 때문이다.

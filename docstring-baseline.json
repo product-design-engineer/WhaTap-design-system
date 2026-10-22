@@ -157,7 +157,7 @@
       "whenToUse": 1,
       "undocumentedProps": 0
     },
-    "Primitives/Chart · BarList": {
+    "Composite/Chart · BarList": {
       "whenToUse": 1,
       "undocumentedProps": 1
     },
