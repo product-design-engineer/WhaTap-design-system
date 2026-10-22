@@ -134,6 +134,8 @@ export { default as DataTable } from "./DataTable";
 export type { DataTableColumn, DataTableProps, DataTableSort } from "./DataTable";
 export { default as Pagination } from "./Pagination";
 export type { PaginationProps } from "./Pagination";
+export { default as EventTimeCell } from "./EventTimeCell";
+export type { EventTimeCellProps } from "./EventTimeCell";
 export { default as EventWeekTimeMatrix } from "./EventWeekTimeMatrix";
 export type { EventWeekTimeMatrixProps } from "./EventWeekTimeMatrix";
 export { default as LiveTimerCompact } from "./LiveTimerCompact";

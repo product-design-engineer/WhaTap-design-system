@@ -1,5 +1,5 @@
 /**
- * EventWeekTimeMatrix — 요일(7) × 시간(24) 알림 수신 매트릭스.
+ * EventWeekTimeMatrix — 요일(7) × 시간(24) 알림 수신 매트릭스. Composite layer.
  *
  * ## Purpose
  * 7행(요일) × 24열(시간) boolean 격자를 토글 버튼으로 표현. 각 셀 ON/OFF 로
@@ -20,7 +20,7 @@
  * - **시간 헤더는 6시간 간격(0/6/12/18)만** 표기 — 24개 라벨은 셀 폭보다 넓어 겹침.
  *   빈 칸도 `<span>` 으로 자리를 채워 24열 정렬을 보존.
  * - `onToggle` 미지정이면 read-only (버튼 disabled). 지정 시 셀 클릭으로 토글.
- * - 색은 ON `--color-brand-blue`, OFF `--color-surface-100` 토큰 기반(테두리는 hex stub).
+ * - 칸과 범례 견본은 [[EventTimeCell]] 이 그린다(켜짐 brand-blue · 꺼짐 surface-100, 테두리도 토큰). 그래서 Composite 계층이다.
  * - 각 셀은 `aria-pressed` + 한국어 `aria-label`(요일·시·수신여부)로 접근성 제공.
  *
  * @example
@@ -32,6 +32,7 @@
  * />
  * ```
  */
+import EventTimeCell from "./EventTimeCell";
 
 const DEFAULT_DAY_LABELS = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -89,20 +90,11 @@ export default function EventWeekTimeMatrix({
             {dayLabels[d]}
           </span>
           {row.map((on, h) => (
-            <button
+            <EventTimeCell
               key={h}
-              type="button"
-              disabled={!interactive}
-              onClick={() => interactive && onToggle!(d, h, !on)}
-              className={`h-14px rounded-2px transition-colors ${
-                interactive ? "cursor-pointer hover-brightness-95" : "cursor-default"
-              }`}
-              style={{
-                background: on ? "var(--color-brand-blue)" : "var(--color-surface-100)",
-                border: on ? "1px solid var(--color-brand-blue-deep)" : "1px solid var(--color-border-strong)",
-              }}
-              aria-label={`${dayLabels[d]} ${String(h).padStart(2, "0")}시 ${on ? "수신" : "미수신"}`}
-              aria-pressed={on}
+              on={on}
+              label={`${dayLabels[d]} ${String(h).padStart(2, "0")}시 ${on ? "수신" : "미수신"}`}
+              onClick={interactive ? () => onToggle!(d, h, !on) : undefined}
             />
           ))}
         </div>
@@ -111,11 +103,11 @@ export default function EventWeekTimeMatrix({
       {/* 범례 */}
       <div className="flex items-center gap-10px mt-4px">
         <span className="flex items-center gap-4px">
-          <span className="inline-block w-12px h-10px rounded-2px" style={{ background: "var(--color-brand-blue)", border: "1px solid var(--color-brand-blue-deep)" }} />
+          <EventTimeCell on legend />
           <span className="text-xs text-secondary">수신</span>
         </span>
         <span className="flex items-center gap-4px">
-          <span className="inline-block w-12px h-10px rounded-2px" style={{ background: "var(--color-surface-100)", border: "1px solid var(--color-border-strong)" }} />
+          <EventTimeCell on={false} legend />
           <span className="text-xs text-secondary">미수신</span>
         </span>
       </div>

@@ -380,7 +380,7 @@ export type DataTableProps<T> = {
 
 ## EventWeekTimeMatrix
 
-요일(7) × 시간(24) 알림 수신 매트릭스. 셀 ON = Tone "low" 배경(#e8f4ff), OFF = 회색 격자.
+요일(7) × 시간(24) 알림 수신 매트릭스. **Composite** — 칸과 범례 견본은 [[EventTimeCell]](Primitives)이 그린다: 켜짐 = 칠 `--color-brand-blue` · 테두리 `--color-brand-blue-deep`, 꺼짐 = 칠 `--color-surface-100` · 테두리 `--color-border-strong`. 칸은 `aria-pressed` + «월 09시 수신» 이름. Figma 정본 EventTimeCell `59:4`.
 
 | Prop | Type | Default | 설명 |
 |---|---|---|---|

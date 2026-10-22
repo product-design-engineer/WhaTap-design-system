@@ -6,7 +6,7 @@ import { EventWeekTimeMatrix } from "@whatap/design-system";
  * Stories for [[EventWeekTimeMatrix]] — 요일×시간 알림 수신 매트릭스.
  */
 const meta: Meta<typeof EventWeekTimeMatrix> = {
-  title: "Primitives/EventWeekTimeMatrix",
+  title: "Composite/EventWeekTimeMatrix",
   component: EventWeekTimeMatrix,
   tags: ["autodocs"],
   parameters: {
