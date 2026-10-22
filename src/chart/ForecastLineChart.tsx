@@ -1,4 +1,5 @@
 import ChartGrid from "./ChartGrid";
+import ChartTimeAxis from "./ChartTimeAxis";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER as GUTTER, formatAxisValue } from "./_axisScale";
 
@@ -27,6 +28,7 @@ import { AXIS_GUTTER as GUTTER, formatAxisValue } from "./_axisScale";
  * - 한계 대비 지금 소비량 하나 → [[UsageGauge]].
  *
  * ## Composition rules
+ * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
  * - 껍데기(카드 · 제목 · 메뉴 · 범례)는 그리지 않는다. 대시보드 칸에서는 [[WidgetFrame]] 이 맡는다(patterns §15).
  *   범례는 같은 색 토큰을 WidgetFrame `legend` 로 넘기고, 칸에 꼭 필요한 값(추세 구간 · 지평)은 `summary` 에 둔다.
@@ -287,36 +289,11 @@ export default function ForecastLineChart({
               {threshold.label ?? formatAxisValue(threshold.value) + unit}
             </span>
           )}
-          {axisLabels.map((l) => {
-            const ratio = rx(l.x);
-            return (
-              <span
-                key={`x-${l.x}`}
-                className="absolute text-chart text-tertiary leading-none whitespace-nowrap"
-                style={{
-                  fontFamily: "var(--font-family-numeric)",
-                  left: left(ratio),
-                  bottom: 2,
-                  transform: ratio <= 0 ? "translateX(0)" : ratio >= 1 ? "translateX(-100%)" : "translateX(-50%)",
-                }}
-              >
-                {l.label}
-              </span>
-            );
-          })}
-          {showNow && nowLabel && (
-            <span
-              className="absolute text-chart text-tertiary leading-none whitespace-nowrap"
-              style={{
-                fontFamily: "var(--font-family-numeric)",
-                left: left(rx(0)),
-                bottom: 2,
-                transform: rx(0) <= 0 ? "translateX(0)" : rx(0) >= 1 ? "translateX(-100%)" : "translateX(-50%)",
-              }}
-            >
-              {nowLabel}
-            </span>
-          )}
+          <ChartTimeAxis
+            labels={[...axisLabels.map((l) => l.label), ...(showNow && nowLabel ? [nowLabel] : [])]}
+            positions={[...axisLabels.map((l) => rx(l.x)), ...(showNow && nowLabel ? [rx(0)] : [])]}
+            right={PAD_RIGHT}
+          />
         </div>
       </div>
     </div>

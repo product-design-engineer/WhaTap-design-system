@@ -16,6 +16,7 @@
  * - 정밀한 인터랙션(zoom·tooltip·다중 시리즈)이 필요한 본격 차트 → 전용 차트 라이브러리
  *
  * ## Composition rules
+ * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
  * - 최고점은 [[ChartPeakMarker]] 가 그린다. 차트는 SVG 와 같은 식으로 최고점 좌표만 계산해 넘긴다(§5).
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 안쪽 여백 · 제목 줄 · Top Stat · ⋮ · AI 트리거를 뺀다).
@@ -44,6 +45,7 @@
 import AiTriggerButton from "../widget/TriggerButton";
 import ChartGrid from "./ChartGrid";
 import ChartPeakMarker from "./ChartPeakMarker";
+import ChartTimeAxis from "./ChartTimeAxis";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER as GUTTER, formatPeakValue, niceMax } from "./_axisScale";
 
@@ -248,28 +250,7 @@ export default function MiniLineChart({
           )}
 
           {/* X축 시간 라벨 */}
-          {xLabels.map((label, i) => {
-            const ratio = i / (xLabels.length - 1);
-            return (
-              <span
-                key={i}
-                className="absolute text-chart text-tertiary leading-none whitespace-nowrap"
-                style={{
-                  fontFamily: "var(--font-family-numeric)",
-                  left: `calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${ratio})`,
-                  bottom: 2,
-                  transform:
-                    i === 0
-                      ? "translateX(0)"
-                      : i === xLabels.length - 1
-                        ? "translateX(-100%)"
-                        : "translateX(-50%)",
-                }}
-              >
-                {label}
-              </span>
-            );
-          })}
+          <ChartTimeAxis labels={xLabels} right={PAD_RIGHT} />
         </div>
       </div>
     </div>

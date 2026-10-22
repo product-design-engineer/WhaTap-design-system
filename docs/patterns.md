@@ -1242,7 +1242,8 @@ series 는 네 가지를 지킨다.
 | 툴바 | 차트 타입 전환 토글 | ⋮ 안 (§21) | 이관 |
 | 플롯 | 그리기 영역 · 플롯 여백 | 각 차트 `frame={false}` · `--wds-widget-axis-gutter` · `--wds-widget-end-gutter` | 있음 (토큰) · 영역 계산은 차트마다 따로 |
 | 축 | 값축(Y) — 눈금 셋(최대 · 절반 · 0) · 깔끔한 최대값 계산 · 단위 접미사 · 축선(X 바닥 · Y 세로) | [[ChartValueAxis]] (Primitives) — [[MiniLineChart]] · [[MiniMultiLineChart]] · [[MiniBarChart]] · [[ForecastLineChart]] 가 조합한다(Composite) | 있음 (2026-10-22 4벌 → 1) |
-| 축 | 시간축(X) · 범주축 | 각 차트 `xLabels` · [[MiniBarChart]] `categories`(칸 폭 말줄임) | 차트마다 따로 |
+| 축 | 시간축(X) 글자 | [[ChartTimeAxis]] (Primitives) — 양 끝 안쪽 정렬 · 사이 가운데 · 바닥 2px. [[MiniLineChart]] · [[MiniMultiLineChart]] · [[MiniBarChart]] · [[ForecastLineChart]](`positions`) · [[ApdexChart]] 가 조합한다. [[ScatterHeatmap]] 은 눈금 꼭지 + 양쪽 16px 균등 배치로 아직 다른 규칙 | 있음 (2026-10-22 5벌 → 1) · ScatterHeatmap 은 차트마다 따로 |
+| 축 | 범주축(X) 글자 | [[MiniBarChart]] `categories` — 막대마다 바로 아래 가운데 · 칸 폭 말줄임 | 있음 (한 곳) |
 | 축 | 축 글자 | `text-chart` · 숫자 서체 · `text-tertiary` (§15) | 있음 |
 | 축 | 보조 Y축 | — | 금지 (§19) |
 | 축 | 축 제목 | — 쓰지 않는다. 단위는 눈금 접미사 | 정해짐 (아래) |
@@ -1275,6 +1276,7 @@ series 는 네 가지를 지킨다.
 1. ~~**값축 + 가로 격자**~~ — **완료(2026-10-22).** 공개 Primitives [[ChartGrid]](격자 · 마크 아래) · [[ChartValueAxis]](축선 + 눈금 글자 · 마크 위) — 카탈로그 · Storybook(`Primitives/Chart · *`)에 보인다. 이것을 조합하는 값축 차트 4종은 3계층 규칙대로 **Composite**(`Composite/Chart · *`)로 옮겼다. DS 안에서 네 차트를 import 하는 컴포넌트가 없어 연쇄 승격이 없다. 숫자 계산(`niceMax` · `formatAxisValue` · `axisTicks` · `plotY`)은 그리는 부품이 아니라 내부 `src/chart/_axisScale.ts`. 격자 색은 `border-soft` 하나로 정했다. 렌더 비교(24스토리 × 라이트 · 다크): 격자 색 차이는 감지 문턱 아래, [[MiniLineChart]] X 바닥선이 다른 셋과 같은 자리로 1px 올라갔고, 선 차트의 축선이 면 채움 위에 그려져 선명해졌다(막대 · 예측과 같은 «바닥선이 마크에 묻히지 않게»). 다음 공통 부품도 같은 방식이다 — 부품은 Primitives, 조합하는 차트는 Composite.
 2. ~~**최고점 ▼ 라벨**~~ — **완료(2026-10-22).** [[ChartPeakMarker]] — 받은 점에 ▼ 끝을 맞추고 말풍선에 카드 바탕(§5). 복제는 없었지만(MiniLineChart 1벌) 선 · 면 · 누적면이 함께 쓸 요소라 먼저 부품으로 세웠다. [[MiniBarChart]] `peak` 는 ▼ 없는 막대 위 값 글자라 «막대 값 라벨» 이다.
 3. ~~**범례 스와치**~~ — **완료(2026-10-22).** [[ChartSwatch]] 하나로 맞췄다. 도넛 견본 원 → 사각(조각), 아크 10px → 8px. 선 차트 칸의 WidgetFrame 범례는 `shape: "line"`. 견본을 그리게 된 도넛 · 아크 · 헥사는 Composite 로 옮겼다(DS 안 import 0 — 연쇄 없음).
+4. ~~**X축 시간 글자**~~ — **완료(2026-10-22).** [[ChartTimeAxis]] — 5벌이 같은 규칙이라 그대로 모았다(렌더 차이 0 목표). 이것을 조합하게 된 [[ApdexChart]] 는 Composite 로 옮겼다. [[ScatterHeatmap]] 의 X축은 규칙이 달라(눈금 꼭지 · 균등 배치) 옮기지 않았다 — 맞출지는 결정 필요.
 
 **판단 지점 처분** — 조사 문서가 «규칙이 필요하다» 고 적은 공통 요소 판단.
 
