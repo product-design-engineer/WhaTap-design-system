@@ -1,7 +1,9 @@
-import { AXIS_GUTTER as GUTTER, PlotAxisLines, ValueAxisLabels, ValueGrid, axisTicks, formatAxisValue, niceMax } from "./_valueAxis";
+import ChartGrid from "./ChartGrid";
+import ChartValueAxis from "./ChartValueAxis";
+import { AXIS_GUTTER as GUTTER, formatAxisValue, niceMax } from "./_axisScale";
 
 /**
- * MiniBarChart — 시간 구간마다 막대 하나. 계열이 둘 이상이면 누적 막대. 범주(서버 TOP-N)마다 막대 하나도 된다. Primitives layer.
+ * MiniBarChart — 시간 구간마다 막대 하나. 계열이 둘 이상이면 누적 막대. 범주(서버 TOP-N)마다 막대 하나도 된다. Composite layer.
  *
  * ## Purpose
  * 짧은 구간(5초 · 1분)마다 «얼마나 처리했나 · 얼마나 걸렸나» 를 막대로 세운다. 선은 흐름을 말하고 막대는
@@ -28,6 +30,7 @@ import { AXIS_GUTTER as GUTTER, PlotAxisLines, ValueAxisLabels, ValueGrid, axisT
  * - AI 응답 안의 사용률 막대 → [[UsageChart]](AI 카테고리).
  *
  * ## Composition rules
+ * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
  * - 껍데기(카드 · 제목 · 메뉴 · 범례)는 그리지 않는다. 대시보드 칸에서는 [[WidgetFrame]] 이 맡는다(patterns §15).
  *   범례는 같은 색 토큰을 WidgetFrame `legend` 로 넘긴다.
  * - `frame={false}` 면 바깥 좌우 여백(8px)을 뺀다. WidgetFrame 안에서는 늘 `frame={false}` — 다른 칸 차트와 같은 규칙.
@@ -123,18 +126,16 @@ export default function MiniBarChart({
   const n = Math.max(0, ...series.map((s) => s.values.length));
   const totals = Array.from({ length: n }, (_, i) => series.reduce((sum, s) => sum + (s.values[i] ?? 0), 0));
   const top = yMax ?? niceMax(Math.max(0, ...totals));
-  const yTicks = axisTicks(top);
   const maxIdx = n > 0 ? totals.indexOf(Math.max(...totals)) : -1;
   const peakIdx = peak ? maxIdx : -1;
   const padTop = valueLabels ? PAD_TOP_VALUES : PAD_TOP;
   const padBottom = isCategory ? PAD_BOTTOM_CATEGORIES : PAD_BOTTOM;
   const plotH = `(100% - ${padTop + padBottom}px)`;
-  const yAt = (r: number) => `calc(${padTop}px + ${plotH} * ${r})`;
 
   return (
     <div className="flex flex-col h-full min-h-0 w-full" style={{ padding: frame ? "0 8px" : 0 }}>
       <div className="flex-1 min-h-0 relative">
-        <ValueGrid ticks={yTicks} yAt={yAt} right={PAD_RIGHT} />
+        <ChartGrid max={top} padTop={padTop} padBottom={padBottom} right={PAD_RIGHT} />
 
         {/* 막대 — 그래프 영역에만. 구간마다 한 칸, 칸 사이 1px */}
         <div
@@ -188,11 +189,10 @@ export default function MiniBarChart({
         </div>
 
         {/* 축 — 막대 위에 그려 바닥선이 막대에 묻히지 않게 */}
-        <PlotAxisLines top={padTop} bottom={padBottom} right={PAD_RIGHT} />
+        <ChartValueAxis max={top} unit={unit} padTop={padTop} padBottom={padBottom} right={PAD_RIGHT} />
 
         {/* 글자 — px 고정 */}
         <div className="absolute inset-0 pointer-events-none">
-          <ValueAxisLabels ticks={yTicks} yAt={yAt} max={top} unit={unit} />
           {!isCategory && xLabels.map((label, i) => {
             const ratio = xLabels.length > 1 ? i / (xLabels.length - 1) : 0;
             return (

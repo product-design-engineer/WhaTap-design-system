@@ -14,6 +14,7 @@
  * - 격자형 빈도 → [[EventWeekTimeMatrix]]
  *
  * ## Composition rules
+ * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 안쪽 여백 · 제목 줄 · ⋮ · 헤더 범례 · AI 트리거를 뺀다).
  *   [[WidgetFrame]] 안에 넣을 때 쓴다. 제목은 WidgetFrame `title`, 범위는 `meta`, 범례는 `legend`(시리즈 색 그대로),
  *   메뉴는 `onFullscreen` · `menu` 가 맡는다(patterns §15). 통계값(`stat`) · `footer` 는 본문이라 남는다.
@@ -49,7 +50,9 @@
  * ```
  */
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { AXIS_GUTTER as GUTTER, PlotAxisLines, ValueAxisLabels, ValueGrid, axisTicks, niceMax } from "./_valueAxis";
+import ChartGrid from "./ChartGrid";
+import ChartValueAxis from "./ChartValueAxis";
+import { AXIS_GUTTER as GUTTER, niceMax } from "./_axisScale";
 import AiTriggerButton from "../widget/TriggerButton";
 
 const PAD_RIGHT = 8;
@@ -170,8 +173,6 @@ export default function MiniMultiLineChart({
   }, [badges.length]);
   const badgeTops = spreadBadges(badges.map((b) => b.ratio), areaH - PAD_TOP - PAD_BOTTOM);
 
-  const yTicks = axisTicks(yMaxNice);
-  const yAt = (r: number) => `calc(${PAD_TOP}px + (100% - ${PAD_TOP + PAD_BOTTOM}px) * ${r})`;
   const hasLegend = series.some((s) => s.label);
 
   return (
@@ -255,8 +256,7 @@ export default function MiniMultiLineChart({
 
       {/* ── Chart area (flex-1) ────────────────────────────────────────── */}
       <div ref={areaRef} className="flex-1 min-h-0 relative">
-        <PlotAxisLines top={PAD_TOP} bottom={PAD_BOTTOM} right={right} />
-        <ValueGrid ticks={yTicks} yAt={yAt} right={right} />
+        <ChartGrid max={yMaxNice} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={right} />
 
         {/* SVG — plot 영역에만 absolute 배치 */}
         <svg
@@ -295,7 +295,7 @@ export default function MiniMultiLineChart({
 
         {/* HTML overlay — px 고정 텍스트 */}
         <div className="absolute inset-0 pointer-events-none">
-          <ValueAxisLabels ticks={yTicks} yAt={yAt} max={yMaxNice} unit={unit} />
+          <ChartValueAxis max={yMaxNice} unit={unit} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={right} />
 
           {/* X축 시간 라벨 */}
           {xLabels.map((label, i) => {

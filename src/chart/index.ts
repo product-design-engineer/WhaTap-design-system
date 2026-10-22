@@ -10,6 +10,10 @@
  * 노드-엣지 그래프는 이 배럴이 아니라 `src/topology` 가 소유한다.
  */
 
+export { default as ChartGrid } from "./ChartGrid";
+export type { ChartGridProps } from "./ChartGrid";
+export { default as ChartValueAxis } from "./ChartValueAxis";
+export type { ChartValueAxisProps } from "./ChartValueAxis";
 export { default as HeatmapCell, heatmapScaleColor } from "./HeatmapCell";
 export type { HeatmapCellProps } from "./HeatmapCell";
 export { default as HeatmapLegend } from "./HeatmapLegend";

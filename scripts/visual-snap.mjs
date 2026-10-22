@@ -54,7 +54,7 @@ const SHOTS = [
   { id: "tokens-color--chart-series", theme: "dark" },
   { id: "primitives-chart-·-usagechart--hourly-gpu", theme: "light" },
   { id: "primitives-chart-·-usagechart--hourly-gpu", theme: "dark" },
-  { id: "primitives-chart-·-minilinechart--cpu-usage", theme: "light" },
+  { id: "composite-chart-·-minilinechart--cpu-usage", theme: "light" },
   // 수신 채널 — mock 토글을 Switch 프리미티브로 교체한 자리(라이트/다크 both).
   { id: "composite-ai-aireceiverchannels--interactive", theme: "light" },
   { id: "composite-ai-aireceiverchannels--interactive", theme: "dark" },

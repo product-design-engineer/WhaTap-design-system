@@ -5,7 +5,7 @@ import { MiniBarChart, MiniMultiLineChart, WidgetFrame } from "@whatap/design-sy
  * Stories for [[MiniBarChart]] — 구간마다 막대, 계열이 둘 이상이면 누적.
  */
 const meta: Meta<typeof MiniBarChart> = {
-  title: "Primitives/Chart · MiniBarChart",
+  title: "Composite/Chart · MiniBarChart",
   component: MiniBarChart,
   tags: ["autodocs"],
   parameters: { layout: "padded", backgrounds: { default: "surface-muted" } },

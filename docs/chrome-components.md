@@ -487,9 +487,41 @@ export type DataTableProps<T> = {
 
 ---
 
+## 차트 공통 요소 — ChartGrid · ChartValueAxis (Primitives)
+
+값축이 있는 차트가 함께 쓰는 플롯 부품(patterns §26). 차트는 이 둘을 **조합**하고 격자 · 눈금을 다시 그리지 않는다 — 그래서 MiniLineChart · MiniMultiLineChart · MiniBarChart · ForecastLineChart 는 Composite 계층이다. `@whatap/design-system/chart` 에서 가져온다.
+
+| 부품 | 그리는 것 | 놓는 순서 |
+|---|---|---|
+| [[ChartGrid]] | 눈금(최대 · 절반 · 0)마다 가로 점선 · `--color-border-soft` | 마크 **아래** |
+| [[ChartValueAxis]] | X 바닥선 · Y 세로선(`--color-border-divider`) + 눈금 글자(`text-chart` · 숫자 서체 · tertiary, 단위 접미사) | 마크 **위** |
+
+| Prop (둘 공통) | Type | Default |
+|---|---|---|
+| `max` | `number` — 이미 보기 좋은 값으로 올린 최대. 0 이면 바닥 눈금 하나 | — |
+| `padTop` | `number` (px) | `4` |
+| `padBottom` | `number` (px) — X축 글자 자리 | `14` |
+| `right` | `number \| string` — 선 끝 배지 칸이 있으면 `var(--wds-widget-end-gutter)` | `8` |
+| `unit` (ChartValueAxis) | `string` — 축 제목 대신 단위 | `""` |
+
+```tsx
+<div className="relative" style={{ height: 120 }}>
+  <ChartGrid max={100} />
+  {/* 선 · 막대 */}
+  <ChartValueAxis max={100} unit="%" />
+</div>
+```
+
+- 높이가 정해진 `position: relative` 플롯 상자 안에 둔다. 두 부품에 **같은 `max` · 여백**을 줘야 글자와 점선이 같은 높이에 선다.
+- 축 제목은 그리지 않는다(§26 결정). 오른쪽 두 번째 Y축은 금지(§19).
+- X축 시간 · 범주 글자는 차트마다 놓는 규칙이 달라 차트가 그린다.
+- **Figma 정본**: 페이지 ChartGrid `545:2` · 세트 `545:16`, 페이지 ChartValueAxis `545:3` · 세트 `546:22`(`ticks` × `right` 4 variant, ChartValueAxis 는 TEXT `max` · `mid` · `zero`). 두 부품을 겹친 예시 프레임이 페이지마다 있다. 기존 Figma 차트 세트(MiniLineChart 등)는 아직 자기 격자 · 축을 그린다(`border/default`) — 인스턴스로 바꾸는 것은 후속.
+
+---
+
 ## MiniLineChart
 
-96px 소형 라인 차트. 모니터링 카드용. **SVG plot + HTML overlay**가 같은 좌표계로 정렬되어 peak 라벨이 line max 픽셀과 1:1 매칭됩니다 ([patterns.md](./patterns.md#5-chart-peak-alignment)).
+96px 소형 라인 차트. 모니터링 카드용. **SVG plot + HTML overlay**가 같은 좌표계로 정렬되어 peak 라벨이 line max 픽셀과 1:1 매칭됩니다 ([patterns.md](./patterns.md#5-chart-peak-alignment)). Composite — 값축 · 격자는 [[ChartGrid]] · [[ChartValueAxis]].
 
 | Prop | Type | Default |
 |---|---|---|
