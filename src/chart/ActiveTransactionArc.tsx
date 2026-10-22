@@ -15,7 +15,7 @@
  * - 범용 도넛 → [[MiniDonutChart]].
  *
  * ## Composition rules
- * - 범례 견본은 [[ChartSwatch]] 를 조합한다(마크 모양을 따른다, patterns §26). 그래서 Composite 계층이다.
+ * - 수치는 [[MetricStat]](Max TX = 단위 「초」 + 보조 줄 트랜잭션 이름 · Agent 활성 · 비활성), 범례는 [[ChartLegendItem]] 을 조합한다. 그래서 Composite 계층이다.
  * - 위젯 chrome(CardChrome, FlexBoardWidget 등)은 소비자가 감싼다.
  * - 이 컴포넌트는 본문만 렌더한다 — `h-full` 부모 안에서 채워진다.
  * - 회전 오버레이는 12s linear infinite.
@@ -31,7 +31,8 @@
  * <ActiveTransactionArc maxTx={{ name: "api-gw-01", value: 42 }} agent={{ active: 12, inactive: 3 }} />
  * ```
  */
-import ChartSwatch from "./ChartSwatch";
+import MetricStat from "../MetricStat";
+import ChartLegendItem from "./ChartLegendItem";
 
 export type ActiveTransactionArcProps = {
   /** Max TX 이름. */
@@ -66,53 +67,32 @@ export default function ActiveTransactionArc({
   /* 칸 안(frame=false) — 아크 왼쪽, 값 오른쪽 한 열(위에서 아래로 Max TX · Agent). 네 귀퉁이에 흩어 두지 않는다.
      Total 은 아크 가운데 하나만 — 같은 값을 두 번 쓰지 않는다. 범례는 WidgetFrame legend(SPEED_LEGEND). */
   if (!frame) {
-    const LABEL = "text-sm text-tertiary";
-    const NUM = { fontFamily: "var(--font-family-numeric)" } as const;
     return (
       <div className="flex h-full items-center min-h-0 w-full" style={{ gap: 16 }}>
         <div className="relative h-full shrink-0" style={{ aspectRatio: "1 / 1", maxWidth: "60%" }}>
           <ArcEqualizer total={total} />
         </div>
-        <dl className="flex flex-col justify-center min-w-0 flex-1" style={{ gap: 12, margin: 0 }}>
-          <div className="flex flex-col min-w-0" style={{ gap: 4 }}>
-            <dt className={LABEL} style={NUM}>Max TX</dt>
-            <dd className="flex items-baseline text-primary leading-none" style={{ ...NUM, margin: 0, gap: 2 }}>
-              <span className="text-2xl" style={{ fontWeight: "var(--font-weight-medium)" }}>{maxTx.value}</span>
-              <span className="text-sm text-tertiary">초</span>
-            </dd>
-            <dd className="text-sm text-secondary truncate" title={maxTx.name} style={{ ...NUM, margin: 0 }}>{maxTx.name}</dd>
+        <div className="flex flex-col justify-center min-w-0 flex-1" style={{ gap: 12 }}>
+          <MetricStat label="Max TX" value={maxTx.value} unit="초" caption={maxTx.name} width="auto" />
+          <div className="flex" style={{ gap: 16 }}>
+            <MetricStat label="Agent 활성" value={agent.active} width="auto" />
+            <MetricStat label="Agent 비활성" value={agent.inactive} width="auto" />
           </div>
-          <div className="flex flex-col min-w-0" style={{ gap: 4 }}>
-            <dt className={LABEL} style={NUM}>Agent</dt>
-            <dd className="flex items-baseline text-primary leading-none whitespace-nowrap" style={{ ...NUM, margin: 0, gap: 6 }}>
-              <span className="text-sm text-tertiary">활성</span>
-              <span className="text-2xl" style={{ fontWeight: "var(--font-weight-medium)" }}>{agent.active}</span>
-              <span className="text-sm text-tertiary">· 비활성</span>
-              <span className="text-2xl" style={{ fontWeight: "var(--font-weight-medium)" }}>{agent.inactive}</span>
-            </dd>
-          </div>
-        </dl>
+        </div>
       </div>
     );
   }
   return (
-    <div className={`flex h-full items-stretch min-h-0 w-full gap-6px${frame ? " px-8px pb-8px" : ""}`}>
+    <div className="flex h-full items-stretch min-h-0 w-full gap-6px px-8px pb-8px">
       {/* left: Max TX + Elapsed legend */}
       <div className="flex flex-col shrink-0 min-w-0 justify-between" style={{ width: 72 }}>
-        <div className="flex flex-col min-w-0">
-          <p className="text-sm text-tertiary" style={{ fontFamily: "var(--font-family-numeric)" }}>Max TX</p>
-          <p className="text-sm text-primary mt-4px truncate" title={maxTx.name} style={{ fontFamily: "var(--font-family-numeric)" }}>{maxTx.name}</p>
-          <p className="text-2xl text-primary mt-4px" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}>{maxTx.value}</p>
+        <MetricStat label="Max TX" value={maxTx.value} unit="초" caption={maxTx.name} width="auto" />
+        <div className="flex flex-col gap-3px">
+          <p className="text-sm text-tertiary" style={{ fontFamily: "var(--font-family-numeric)" }}>Elapsed</p>
+          {[...SPEED_LEGEND].reverse().map((l) => (
+            <ChartLegendItem key={l.label} color={l.color} label={l.label} />
+          ))}
         </div>
-        {/* 범례 — frame 일 때만. 칸 안(frame=false)에서는 WidgetFrame legend 로 본문 오른쪽 위에 선다(SPEED_LEGEND). */}
-        {frame && (
-          <div className="flex flex-col gap-3px">
-            <p className="text-sm text-tertiary" style={{ fontFamily: "var(--font-family-numeric)" }}>Elapsed</p>
-            <LegendDot color="var(--color-chart-speed-very-slow)" label="very slow" />
-            <LegendDot color="var(--color-chart-speed-slow)" label="slow" />
-            <LegendDot color="var(--color-chart-speed-normal)" label="normal" />
-          </div>
-        )}
       </div>
       {/* center: arc chart */}
       <div
@@ -130,27 +110,11 @@ export default function ActiveTransactionArc({
           <ArcEqualizer total={total} />
         </div>
       </div>
-      {/* right: Agent stats */}
-      <div className="flex flex-col shrink-0 justify-between" style={{ width: 44 }}>
-        <div className="flex flex-col">
-          <p className="text-sm text-tertiary" style={{ fontFamily: "var(--font-family-numeric)" }}>Agent</p>
-          <p className="text-sm text-primary mt-4px" style={{ fontFamily: "var(--font-family-numeric)" }}>Active</p>
-          <p className="text-2xl text-primary text-right mt-2px" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}>{agent.active}</p>
-        </div>
-        <div className="flex flex-col">
-          <p className="text-sm text-primary" style={{ fontFamily: "var(--font-family-numeric)" }}>Inactive</p>
-          <p className="text-2xl text-primary text-right mt-2px" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}>{agent.inactive}</p>
-        </div>
+      {/* right: Agent stats — 위 활성 · 아래 비활성, 바깥쪽 끝 정렬 */}
+      <div className="flex flex-col shrink-0 justify-between" style={{ width: 56 }}>
+        <MetricStat label="Active" value={agent.active} align="end" width="auto" />
+        <MetricStat label="Inactive" value={agent.inactive} align="end" width="auto" />
       </div>
-    </div>
-  );
-}
-
-function LegendDot({ color, label }: { color: string; label: string }) {
-  return (
-    <div className="flex items-center gap-4px min-w-0">
-      <ChartSwatch color={color} />
-      <span className="text-sm text-primary truncate" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}>{label}</span>
     </div>
   );
 }

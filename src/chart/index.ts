@@ -22,6 +22,8 @@ export { default as ChartPeakMarker } from "./ChartPeakMarker";
 export type { ChartPeakMarkerProps } from "./ChartPeakMarker";
 export { default as ChartSwatch } from "./ChartSwatch";
 export type { ChartSwatchProps, ChartSwatchShape } from "./ChartSwatch";
+export { default as ChartLegendItem } from "./ChartLegendItem";
+export type { ChartLegendItemProps } from "./ChartLegendItem";
 export { default as ChartTimeAxis } from "./ChartTimeAxis";
 export type { ChartTimeAxisProps } from "./ChartTimeAxis";
 export { default as ChartValueAxis } from "./ChartValueAxis";

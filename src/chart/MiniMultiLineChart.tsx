@@ -52,7 +52,7 @@
  */
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import ChartGrid from "./ChartGrid";
-import ChartSwatch from "./ChartSwatch";
+import ChartLegendItem from "./ChartLegendItem";
 import ChartTimeAxis from "./ChartTimeAxis";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER as GUTTER, niceMax } from "./_axisScale";
@@ -224,12 +224,7 @@ export default function MiniMultiLineChart({
             series
               .filter((s) => s.label)
               .map((s, i) => (
-                <span key={i} className="flex items-center gap-3px">
-                  <ChartSwatch color={s.color} shape="line" />
-                  <span className="text-chart text-tertiary whitespace-nowrap">
-                    {s.label}
-                  </span>
-                </span>
+                <ChartLegendItem key={i} color={s.color} shape="line" label={s.label!} />
               ))}
           <MenuDots />
         </div>

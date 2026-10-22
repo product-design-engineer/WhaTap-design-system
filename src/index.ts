@@ -10,8 +10,8 @@
  */
 
 // Primitives — 재사용 building block (페이지·위젯·다른 컴포넌트가 조립용으로 호출)
-export { default as SpeedStat } from "./SpeedStat";
-export type { SpeedStatProps } from "./SpeedStat";
+export { default as MetricStat } from "./MetricStat";
+export type { MetricStatProps } from "./MetricStat";
 export { default as ActiveTransactionSpeedWidget } from "./ActiveTransactionSpeedWidget";
 export type {
   ActiveTransactionSpeedWidgetProps,
