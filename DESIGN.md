@@ -212,6 +212,10 @@ colors:
   chart-speed-slow:          "#FFA012"    # Color — 느림
   chart-speed-very-slow:     "#F34747"    # Color — 매우 느림
 
+  # Chart — Radial · 고리형 막대 바탕(원판 · 칸 구분선). 다크 재매핑 있음.
+  chart-radial-track:        "#DCEFFF"    # Color — 원판 바탕
+  chart-radial-divider:      "#B7DBFF"    # Color — 칸 구분선 · 원판 테두리
+
   # Shadow flood — SVG feDropShadow 의 그림자 색(불투명도는 floodOpacity). 테마 무관.
   shadow-flood:              "#000000"    # Color
 
