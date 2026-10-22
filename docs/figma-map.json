@@ -105,6 +105,9 @@
     "ChartPeakMarker": {
       "figma": "548:2"
     },
+    "ChartRadialBars": {
+      "figma": "568:6918"
+    },
     "ChartStackedColumn": {
       "figma": "561:10"
     },

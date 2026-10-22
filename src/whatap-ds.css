@@ -683,6 +683,10 @@
 
     /* @role 판정 밖 계열 · 대조군의 회색 마크 | @use ForecastLineChart 의 대조군 선(평탄 · 지평 밖) · 비교 기준 계열 | @avoid 텍스트 (text 토큰 사용) · 비활성 표시 (그쪽은 --color-text-disabled) · 계열 정체성 (series 사용) */
     --color-chart-neutral: #8A94A3;
+    /* @role 고리형 막대 차트의 바탕 원판 — 막대가 없는 칸도 자리가 있음을 말한다 | @use ChartRadialBars · ActiveTransactionArc | @avoid 마크 색(그쪽은 series · speed) · 페이지 · 카드 표면(그쪽은 --color-bg · --color-card) */
+    --color-chart-radial-track: #DCEFFF;
+    /* @role 고리형 막대 차트의 칸(부채꼴) 구분선 · 원판 테두리 | @use ChartRadialBars · ActiveTransactionArc | @avoid 일반 보더(그쪽은 --color-border-*) · 마크 색 */
+    --color-chart-radial-divider: #B7DBFF;
 
     /* Chart — Speed · APM 응답 속도 등급. 다크 재매핑 없음(정적 아이콘과 일치). 정의: tokens.css */
     /* @role 응답 속도 등급 — 정상 | @use 액티브 트랜잭션 Arc·히트맵·speed 범례 | @avoid 계열 구분(그쪽은 --color-chart-series-*) · 상태 표시(그쪽은 --color-status-*) */
@@ -1846,6 +1850,17 @@ html, body, #root {
 }
 .wds-mesh-dot { animation: wdsMeshDot 2.8s ease-in-out infinite; }
 
+/* ChartRadialBars sweep — 왼쪽 반원 호가 12초에 한 바퀴 도는 «실시간» 장식(데이터 아님).
+   SVG 상자 전체를 돌리므로 원점은 상자 가운데. 동작 줄이기에서는 멈춘 호만 남는다. */
+@keyframes wdsChartRadialSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.wds-chart-radial-sweep { transform-origin: 50% 50%; animation: wdsChartRadialSpin 12s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .wds-chart-radial-sweep { animation: none; }
+}
+
 /* 군집 열 = <button> — 누르면 그 종류를 묻는 질문이 나간다. 그런데 오브제가 완전히
    평평해서 «누를 수 있다»는 신호가 없었다(툴팁뿐). 신호는 **hover/focus 에만** 준다:
    상시 카드 표면·쉐도우를 얹으면 군집 6개가 stat-tile row(대시보드 어법)가 되고, 위젯
@@ -2302,6 +2317,8 @@ html, body, #root {
   --color-chart-seq-3: #6BA3EE;
   --color-chart-seq-4: #9BC8FF;
   --color-chart-neutral: #6B7380;
+  --color-chart-radial-track: #1B2B40;
+  --color-chart-radial-divider: #2C4766;
 
   /* Topology — 레퍼런스에 다크 시안이 없어 새로 설계한 값(반전 아님).
      층 순서는 라이트와 동일: canvas < group < node. 정의: tokens.css */

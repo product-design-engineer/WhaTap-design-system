@@ -714,7 +714,7 @@ Product-SaaS 안에서 어떤 구현을 선택할지 갈릴 때, 다음 순서�
 ```tsx
 <div className="grid grid-cols-4 gap-12px" style={{ height: 232 }}>
   <WidgetFrame title="액티브 트랜잭션" legend={SPEED_LEGEND}>
-    <ActiveTransactionArc frame={false} total={total} maxTx={maxTx} agent={agent} />
+    <ActiveTransactionArc frame={false} agents={agents} maxTx={maxTx} agent={agent} />
   </WidgetFrame>
   <WidgetFrame title="히트맵" summary="수행 시간(초)">
     <ScatterHeatmap dots={dots} />
@@ -1250,6 +1250,7 @@ series 는 네 가지를 지킨다.
 | 격자 | 세로 점선 | [[ChartGrid]] `vertical`(칸 수) — 분포 차트에만([[ScatterHeatmap]] 22칸) | 있음 (2026-10-22) |
 | 격자 | 임계 기준선 | [[ForecastLineChart]] `threshold` 만 | 차트마다 따로 |
 | 막대 | 범주 · 단계 세로 막대(몫 + 나머지, 구간 글자) | [[ChartStackedColumn]] (Primitives) — [[GpuStatusBar]] 가 조합 | 있음 (2026-10-22) |
+| 막대 | 고리형 막대(칸 = 대상, 안쪽→바깥 줄무늬 쌓기) | [[ChartRadialBars]] (Primitives) — [[ActiveTransactionArc]] 가 조합. 바탕 `--color-chart-radial-track` · 구분선 `--color-chart-radial-divider` · 회전 장식 `sweep` | 있음 (2026-10-22. 그 전엔 정적 이미지 — 데이터와 무관했다) |
 | 막대 | 칸 막대 하나(값 · 0 · 모름) | [[ChartBar]] (Primitives) — [[UsageChart]] 가 조합. 0 은 바닥 2px, 모름은 칸 전체 `surface-100` | 있음 (2026-10-22) |
 | 축 | 범주축 이름(칸 등분 · 가운데 · 말줄임) | [[ChartCategoryAxis]] (Primitives) — [[GpuStatusBar]]. [[MiniBarChart]] `categories` 는 아직 자기 글자 | 있음 · MiniBar 는 차트마다 따로 |
 | 범례 | 스와치 + 이름 + 지금 값 | [[WidgetFrame]] `legend` · `SPEED_LEGEND` · `hexGridLegend` | 있음 |

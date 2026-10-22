@@ -3,7 +3,7 @@
  *
  * ## Purpose
  * APM 대시보드 · Flex 보드 등에서 쓰는 액티브 트랜잭션 도넛 시각화.
- * 동심 arc 세그먼트(normal/slow/very slow)와 회전 오버레이로 구성된다.
+ * 고리는 [[ChartRadialBars]] — 칸 하나 = 에이전트 하나, 안쪽에서 바깥으로 Normal · Slow · Very Slow 줄무늬가 쌓인다. 왼쪽 반원 호가 도는 «실시간» 장식(`sweep`).
  * 3-column 레이아웃: 좌측 Max TX + Elapsed 범례 / 중앙 Arc / 우측 Agent 통계.
  *
  * ## When to use
@@ -15,11 +15,12 @@
  * - 범용 도넛 → [[MiniDonutChart]].
  *
  * ## Composition rules
- * - 수치는 [[MetricStat]](Max TX = 단위 「초」 + 보조 줄 트랜잭션 이름 · Agent 활성 · 비활성), 범례는 [[ChartLegendItem]] 을 조합한다. 그래서 Composite 계층이다.
+ * - 고리는 [[ChartRadialBars]], 수치는 [[MetricStat]](Max TX = 단위 「초」 + 보조 줄 트랜잭션 이름 · Agent 활성 · 비활성), 범례는 [[ChartLegendItem]] 을 조합한다. 그래서 Composite 계층이다.
  * - 위젯 chrome(CardChrome, FlexBoardWidget 등)은 소비자가 감싼다.
  * - 이 컴포넌트는 본문만 렌더한다 — `h-full` 부모 안에서 채워진다.
- * - 회전 오버레이는 12s linear infinite.
- * - 가운데 Total TX 는 `total` 값을 그린다. 에셋(ark-equalizer-ring.svg)에는 고리만 있다 — 종전엔 「334」 가 그림에 박혀 어느 화면이든 같은 숫자였다.
+ * - 고리는 `agents` 로 그린다. 종전엔 정적 이미지(hex 색)라 어떤 값이 와도 고리가 같았고 다크에서 바뀌지 않았다(2026-10-22 교체).
+ * - 가운데 Total TX 는 기본 `agents` 의 합. `total` 을 주면 그 값.
+ * - 회전 장식은 12s linear · 동작 줄이기 설정에서 멈춘다.
  * - `frame={false}` 면 바깥 여백(좌우 · 아래 8px)과 왼쪽 아래 Elapsed 범례를 빼고, **아크 왼쪽 · 값 오른쪽 한 열**(Max TX 「N초」 + 이름 ·
  *   Agent 활성 · 비활성)로 다시 놓는다. 네 귀퉁이에 흩어 두지 않는다. [[WidgetFrame]] 안에 넣을 때 쓴다 — 여백은
  *   WidgetFrame 이 갖고, 범례는 `SPEED_LEGEND` 를 WidgetFrame `legend` 로 넘겨 본문 오른쪽 위에 세운다(patterns §15).
@@ -33,13 +34,16 @@
  */
 import MetricStat from "../MetricStat";
 import ChartLegendItem from "./ChartLegendItem";
+import ChartRadialBars from "./ChartRadialBars";
 
 export type ActiveTransactionArcProps = {
   /** Max TX 이름. */
   maxTx?: { name: string; value: number };
   /** Agent 통계. */
   agent?: { active: number; inactive: number };
-  /** 가운데 Total TX. 그림에 박힌 글자가 아니라 이 값을 그린다. 기본 334. */
+  /** 에이전트별 지금 액티브 트랜잭션 수(속도 등급별) — 고리의 칸 하나 = 에이전트 하나. 기본은 데모 8개. */
+  agents?: ActiveTransactionAgentLoad[];
+  /** 가운데 Total TX. 기본은 `agents` 의 합. */
   total?: number;
   /**
    * 자기 바깥 여백(좌우 · 아래 8px)을 둘지. 기본 `true`.
@@ -47,6 +51,27 @@ export type ActiveTransactionArcProps = {
    */
   frame?: boolean;
 };
+
+/** 에이전트 하나의 지금 액티브 트랜잭션 수 — 응답 속도 등급별. */
+export type ActiveTransactionAgentLoad = {
+  /** 에이전트 이름(칸 툴팁). */
+  name?: string;
+  normal: number;
+  slow: number;
+  verySlow: number;
+};
+
+/** 데모 — 활성 7 · 비활성 1(마지막 칸이 빈다). 합 334. */
+const DEMO_AGENTS: ActiveTransactionAgentLoad[] = [
+  { name: "agent-01", normal: 38, slow: 6, verySlow: 4 },
+  { name: "agent-02", normal: 52, slow: 4, verySlow: 2 },
+  { name: "agent-03", normal: 30, slow: 8, verySlow: 6 },
+  { name: "agent-04", normal: 44, slow: 3, verySlow: 1 },
+  { name: "agent-05", normal: 61, slow: 5, verySlow: 3 },
+  { name: "agent-06", normal: 27, slow: 9, verySlow: 5 },
+  { name: "agent-07", normal: 23, slow: 2, verySlow: 1 },
+  { name: "agent-08", normal: 0, slow: 0, verySlow: 0 },
+];
 
 /**
  * 응답 속도 구분 범례 — Normal(0~3초) · Slow(3~8초) · Very Slow(8초 이상).
@@ -61,16 +86,18 @@ export const SPEED_LEGEND = [
 export default function ActiveTransactionArc({
   maxTx = { name: "TC-1-57-8094", value: 30 },
   agent = { active: 7, inactive: 1 },
-  total = 334,
+  agents = DEMO_AGENTS,
+  total: totalProp,
   frame = true,
 }: ActiveTransactionArcProps) {
+  const total = totalProp ?? agents.reduce((a, g) => a + g.normal + g.slow + g.verySlow, 0);
   /* 칸 안(frame=false) — 아크 왼쪽, 값 오른쪽 한 열(위에서 아래로 Max TX · Agent). 네 귀퉁이에 흩어 두지 않는다.
      Total 은 아크 가운데 하나만 — 같은 값을 두 번 쓰지 않는다. 범례는 WidgetFrame legend(SPEED_LEGEND). */
   if (!frame) {
     return (
       <div className="flex h-full items-center min-h-0 w-full" style={{ gap: 16 }}>
         <div className="relative h-full shrink-0" style={{ aspectRatio: "1 / 1", maxWidth: "60%" }}>
-          <ArcEqualizer total={total} />
+          <ArcEqualizer agents={agents} total={total} />
         </div>
         <div className="flex flex-col justify-center min-w-0 flex-1" style={{ gap: 12 }}>
           <MetricStat label="Max TX" value={maxTx.value} unit="초" caption={maxTx.name} width="auto" />
@@ -107,7 +134,7 @@ export default function ActiveTransactionArc({
             aspectRatio: "1 / 1",
           }}
         >
-          <ArcEqualizer total={total} />
+          <ArcEqualizer agents={agents} total={total} />
         </div>
       </div>
       {/* right: Agent stats — 위 활성 · 아래 비활성, 바깥쪽 끝 정렬 */}
@@ -119,31 +146,24 @@ export default function ActiveTransactionArc({
   );
 }
 
-function ArcEqualizer({ total }: { total: number }) {
+function ArcEqualizer({ agents, total }: { agents: ActiveTransactionAgentLoad[]; total: number }) {
+  /* 고리는 데이터로 그린다 — 칸 = 에이전트, 구간 = 속도 등급(SPEED_LEGEND 순서: 안쪽 Normal → 바깥 Very Slow).
+     가운데 글자 크기는 고리 폭을 따른다(cqw). */
   return (
-    /* 가운데 글자는 그림에 박지 않는다 — 에셋(ark-equalizer-ring.svg)은 고리만, Total 은 이 값을 그린다. 크기는 아크 폭을 따른다(cqw). */
-    <div className="relative w-full h-full" style={{ containerType: "inline-size" }}>
-      <img
-        alt="Active Transaction Chart"
-        className="absolute inset-0 w-full h-full"
-        src="/icons/ark-equalizer-ring.svg"
-      />
-      <div
-        className="absolute inset-0"
-        style={{ animation: "wds-ark-spin 12s linear infinite", transformOrigin: "50% 50%" }}
-      >
-        <img
-          alt=""
-          className="absolute left-0 top-0"
-          src="/icons/ark-oval-left.svg"
-          style={{ width: "50.67%", height: "100%" }}
-        />
-      </div>
-      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none" style={{ fontFamily: "var(--font-family-numeric)" }}>
-        <span className="text-tertiary leading-none" style={{ fontSize: "5.5cqw" }}>Total TX</span>
-        <span className="text-primary leading-none" style={{ fontSize: "15cqw", fontWeight: "var(--font-weight-medium)", marginTop: "1.5cqw" }}>{total}</span>
-      </div>
-      <style>{`@keyframes wds-ark-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
-    </div>
+    <ChartRadialBars
+      sweep
+      ariaLabel={`액티브 트랜잭션 · 에이전트 ${agents.length}개 · 합계 ${total}`}
+      sectors={agents.map((a) => ({
+        label: a.name,
+        segments: [
+          { value: a.normal, color: SPEED_LEGEND[0].color, label: SPEED_LEGEND[0].label },
+          { value: a.slow, color: SPEED_LEGEND[1].color, label: SPEED_LEGEND[1].label },
+          { value: a.verySlow, color: SPEED_LEGEND[2].color, label: SPEED_LEGEND[2].label },
+        ],
+      }))}
+    >
+      <span className="text-tertiary leading-none" style={{ fontFamily: "var(--font-family-numeric)", fontSize: "5.5cqw" }}>Total TX</span>
+      <span className="text-primary leading-none" style={{ fontFamily: "var(--font-family-numeric)", fontSize: "13cqw", fontWeight: "var(--font-weight-medium)", marginTop: "1.5cqw" }}>{total}</span>
+    </ChartRadialBars>
   );
 }
