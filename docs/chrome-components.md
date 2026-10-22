@@ -615,6 +615,8 @@ Apdex × 100 을 네 구간 띠(Excellent 94 · Good 85 · Poor 70 · Unacceptab
 
 값 · 이름 · 가로 막대 한 줄을 여러 줄(액티브 스테이터스). 막대 길이는 줄마다 받은 `ratio`(0~1), 색은 시리즈 토큰 — 엔티티 계열이면 고정 슬롯(method 1 · sql 3 · httpc 7 · dbc 2 · socket 5, patterns §21). **Composite** — 줄은 [[BarListItem]](Primitives: 값 칸 88px 고정 · 막대 줄 높이 60% · 최소 4px)이 그린다.
 
+Figma 정본: BarListItem 페이지 `552:15` · 컴포넌트 `552:22`(TEXT `value` · `label`, 막대 길이 = track 오른쪽 안쪽 여백 = 폭 × (1 − ratio)) · BarList 세트 `351:333` 은 줄 5개가 BarListItem 인스턴스(엔티티 슬롯 색 · 스토리 비율).
+
 | Prop | Type | Default |
 |---|---|---|
 | `rows` | `{ label, value, ratio, color }[]` | — |
