@@ -241,7 +241,7 @@
       "whenToUse": 1,
       "undocumentedProps": 0
     },
-    "Primitives/ExecutionResult": {
+    "Composite/ExecutionResult": {
       "whenToUse": 2,
       "undocumentedProps": 1
     },

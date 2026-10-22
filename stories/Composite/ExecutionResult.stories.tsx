@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ExecutionResult } from "@whatap/design-system/widget";
 
 const meta: Meta<typeof ExecutionResult> = {
-  title: "Primitives/ExecutionResult",
+  title: "Composite/ExecutionResult",
   component: ExecutionResult,
   tags: ["autodocs"],
   parameters: {
