@@ -51,6 +51,7 @@
  */
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import ChartGrid from "./ChartGrid";
+import ChartSwatch from "./ChartSwatch";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER as GUTTER, niceMax } from "./_axisScale";
 import AiTriggerButton from "../widget/TriggerButton";
@@ -222,10 +223,7 @@ export default function MiniMultiLineChart({
               .filter((s) => s.label)
               .map((s, i) => (
                 <span key={i} className="flex items-center gap-3px">
-                  <span
-                    className="inline-block rounded-1px shrink-0"
-                    style={{ width: 8, height: 2, background: s.color }}
-                  />
+                  <ChartSwatch color={s.color} shape="line" />
                   <span className="text-chart text-tertiary whitespace-nowrap">
                     {s.label}
                   </span>

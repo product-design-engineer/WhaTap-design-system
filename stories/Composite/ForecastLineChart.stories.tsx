@@ -94,7 +94,7 @@ export const InWidgetFrame: Story = {
     <WidgetFrame
       title="디스크 고갈 추세"
       summary={`추세 ${WINDOW}시간 · 지평 ${HORIZON}시간`}
-      legend={DISK.map((s) => ({ label: s.label, color: s.color }))}
+      legend={DISK.map((s) => ({ label: s.label, color: s.color, shape: "line" as const }))}
       onFullscreen={() => {}}
       menu={[{ key: "detail", label: "상세로 이동" }]}
     >

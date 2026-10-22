@@ -12,6 +12,8 @@
 
 export { default as ChartGrid } from "./ChartGrid";
 export type { ChartGridProps } from "./ChartGrid";
+export { default as ChartSwatch } from "./ChartSwatch";
+export type { ChartSwatchProps, ChartSwatchShape } from "./ChartSwatch";
 export { default as ChartValueAxis } from "./ChartValueAxis";
 export type { ChartValueAxisProps } from "./ChartValueAxis";
 export { default as HeatmapCell, heatmapScaleColor } from "./HeatmapCell";

@@ -173,11 +173,11 @@
       "whenToUse": 1,
       "undocumentedProps": 0
     },
-    "Primitives/Chart · HexGrid": {
+    "Composite/Chart · HexGrid": {
       "whenToUse": 4,
       "undocumentedProps": 1
     },
-    "Primitives/Chart · MiniDonutChart": {
+    "Composite/Chart · MiniDonutChart": {
       "whenToUse": 2,
       "undocumentedProps": 2
     },

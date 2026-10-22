@@ -4,6 +4,7 @@ import CardHead from "./CardHead";
 import EmptyState from "./EmptyState";
 import ToolbarIconButton from "./ToolbarIconButton";
 import TriggerButton from "./widget/TriggerButton";
+import ChartSwatch, { type ChartSwatchShape } from "./chart/ChartSwatch";
 
 /**
  * WidgetFrame — 대시보드 위젯 한 칸의 껍데기 (헤더 · 본문 · 푸터 + 빈 상태). Shell layer: 본문에 무엇이든 담고 [[CardHead]] · [[ActionMenu]] 를 조립한다.
@@ -49,6 +50,7 @@ import TriggerButton from "./widget/TriggerButton";
  *   실제 이동 · 재배치는 격자(보드)가 맡는다 — 격자 라이브러리의 손잡이 선택자로 이 두 클래스를 넘긴다.
  *   배치가 정해진 대시보드에서는 켜지 않는다(제목 · 메뉴를 누르려다 칸이 밀린다).
  * - **범례는 본문 오른쪽 위 한 줄**(`legend`). 헤더 오른쪽은 메뉴 자리라 범례를 올리지 않는다.
+ * - 범례 견본은 [[ChartSwatch]] — 마크 모양을 따른다. 선 차트 칸이면 항목마다 `shape: "line"`, 막대 · 면 · 조각 · 칸이면 기본(사각)(patterns §26).
  * - **지금 값**은 계열이 넷 이하면 범례 이름 뒤(`legend[].value`, 굵게), 계열 하나면 `summary`, 강조 계열이 여럿이면 [[MiniMultiLineChart]] 선 끝 배지(patterns §25). 한 칸에 두 방식을 함께 쓰지 않는다.
  *   **모든 차트 칸에 둔다 — 계열이 하나여도**(2026-10-08 사용자 결정). 이름은 제목이 아니라 계열 이름(「전체 APM」 「평균」 「usr」).
  *   예외는 이름표가 본문 안에 이미 있는 것뿐이다: [[BarList]](줄 이름) · [[MiniDonutChart]](옆 열) · [[ApdexChart]](띠 이름) · 숫자 칸([[KpiCard]] · [[KpiField]]).
@@ -87,6 +89,8 @@ export type WidgetFrameLegendItem = {
   label: string;
   /** 시리즈 색 토큰(`var(--color-chart-series-N)`). hex 금지. */
   color: string;
+  /** 견본 모양 — 마크를 따른다(patterns §26). 선 계열 `line`, 면 · 막대 · 조각 · 칸 `square`(기본). */
+  shape?: ChartSwatchShape;
   /**
    * 지금 값(단위 포함, 예: "86%"). 이름 뒤에 굵게 붙는다(patterns §25). 계열이 넷 이하일 때만.
    * 그보다 많으면 범례에 값을 싣지 않고 [[MiniMultiLineChart]] `endLabel`(선 끝 배지)로. 한 칸에 둘을 함께 쓰지 않는다.
@@ -243,7 +247,7 @@ export default function WidgetFrame({
                   <ul aria-label="범례" className="flex items-center justify-end gap-12px shrink-0" style={{ listStyle: "none", margin: 0, padding: 0 }}>
                     {legend.map((l) => (
                       <li key={l.label} className="flex items-center gap-4px text-sm text-secondary whitespace-nowrap">
-                        <span aria-hidden className="shrink-0 rounded-2px" style={{ width: 8, height: 8, background: l.color }} />
+                        <ChartSwatch color={l.color} shape={l.shape} />
                         {l.label}
                         {l.value != null && (
                           <span className="text-primary font-semibold" style={{ fontFamily: "var(--font-family-numeric)" }}>
