@@ -127,6 +127,8 @@ export { default as WebSearchField } from "./WebSearchField";
 export type { WebSearchFieldProps, WebSearchFieldSize } from "./WebSearchField";
 export { default as FilterBar } from "./FilterBar";
 export type { FilterBarProps, FilterBarDropdownConfig, FilterBarSize } from "./FilterBar";
+export { default as BuildingProgressStep } from "./BuildingProgressStep";
+export type { BuildingProgressStepProps, BuildingProgressStepState } from "./BuildingProgressStep";
 export { default as DashboardBuildingProgress } from "./DashboardBuildingProgress";
 export type { DashboardBuildingProgressProps } from "./DashboardBuildingProgress";
 export { default as DashboardLayout } from "./DashboardLayout";

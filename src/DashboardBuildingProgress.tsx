@@ -1,5 +1,5 @@
 /**
- * DashboardBuildingProgress — 대시보드 구성/적용 중 노출되는 공용 로딩 화면.
+ * DashboardBuildingProgress — 대시보드 구성/적용 중 노출되는 공용 로딩 화면. Composite layer.
  *
  * ## Purpose
  * gradient ring spinner + 제목/부제 + 단계별 ✓ progress 리스트로 "지금 구성 중"
@@ -16,6 +16,7 @@
  * - 진행률 막대(%) 가 명확한 결정적 작업 → 별도 progress bar
  *
  * ## Composition rules
+ * - 단계 줄은 [[BuildingProgressStep]](완료 · 진행 · 대기)이 그린다 — 목록 행은 컴포넌트로. 그래서 Composite 계층이다.
  * - **정책 feedback-common-components-catalog**: chrome-level 공용 컴포넌트로 재구현 금지.
  * - 단계 진행은 컴포넌트 내부 타이머가 자동 구동 — 전체 시간 ≈ `steps.length × intervalMs`.
  * - `card=true` → 흰색 카드 chrome(border+radius), `false` → 콘텐츠만(부모 배경 위, `flex-1`).
@@ -32,6 +33,7 @@
  * ```
  */
 import { useEffect, useState } from "react";
+import BuildingProgressStep from "./BuildingProgressStep";
 
 export type DashboardBuildingProgressProps = {
   /** 단계별 라벨. 길이 만큼 progress 가 진행. */
@@ -112,39 +114,7 @@ export default function DashboardBuildingProgress({
       {/* step list */}
       <ul className="flex flex-col gap-5px mt-4px">
         {steps.map((s, i) => (
-          <li
-            key={s}
-            className="flex items-center gap-8px text-base"
-            style={{
-              fontFamily: "var(--font-family-korean)",
-              color: i < stepIdx ? "var(--color-text-secondary)" : "var(--color-border-divider)",
-              opacity: i <= stepIdx ? 1 : 0.5,
-              transition: "opacity 200ms, color 200ms",
-            }}
-          >
-            {i < stepIdx ? (
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <circle cx="7" cy="7" r="6.5" fill="var(--color-status-success)" />
-                <path
-                  d="M4 7l2 2 4-4"
-                  data-ds-policy-ok="status-success 원형 위 체크마크 — 컬러 위 고정 흰색"
-                  // raw-color-ok: status-success 원형 위 체크마크 — 컬러 위 고정 흰색.
-                  stroke="#fff"
-                  strokeWidth="1.4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            ) : i === stepIdx ? (
-              <span
-                className="size-12px rounded-full border-1_5px border-color-var-color-brand-blue border-t-transparent"
-                style={{ animation: "aiSymbolRotateSlow 0.9s linear infinite" }}
-              />
-            ) : (
-              <span className="size-12px rounded-full border border-strong" />
-            )}
-            {s}
-          </li>
+          <BuildingProgressStep key={s} label={s} state={i < stepIdx ? "done" : i === stepIdx ? "active" : "pending"} />
         ))}
       </ul>
     </div>

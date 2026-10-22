@@ -81,6 +81,9 @@
     "Breadcrumb": {
       "figma": null
     },
+    "BuildingProgressStep": {
+      "figma": "57:22"
+    },
     "Button": {
       "figma": "12:399"
     },
@@ -573,10 +576,6 @@
     "AlertRuleField": {
       "figma": "45:10",
       "docsOf": "AlertRulePreview"
-    },
-    "BuildingProgressStep": {
-      "figma": "57:22",
-      "docsOf": "DashboardBuildingProgress"
     },
     "DataTableHeaderCell": {
       "figma": "301:110",

@@ -782,7 +782,7 @@ WhaTap AI 핀휠 그라데이션 심볼. 위젯 헤더, AI 토글 버튼, 인사
 
 ## DashboardBuildingProgress
 
-대시보드 구성 중 진행 로딩 화면. spinner + 단계별 체크. (AI가 "대시보드를 만들고 있어요" 상태일 때 본문 영역에 표시.)
+대시보드 구성 중 진행 로딩 화면. spinner + 단계별 체크. (AI가 "대시보드를 만들고 있어요" 상태일 때 본문 영역에 표시.) **Composite** — 단계 줄은 [[BuildingProgressStep]](Primitives: `done` · `active` · `pending`). Figma 정본 BuildingProgressStep `57:22`.
 
 ```ts
 export type DashboardBuildingProgressProps = {
