@@ -84,7 +84,7 @@ export default function ApdexChart({ value, values = [], xLabels = [], frame = t
               className="flex items-end w-full min-h-0"
               style={{ background: z.bg, flex: `${z.to - z.from} 0 0`, padding: "0 4px" }}
             >
-              <span className="text-xs leading-normal whitespace-nowrap" style={{ fontFamily: "var(--font-family-numeric)", color: z.fg }}>
+              <span className="text-xs whitespace-nowrap" style={{ fontFamily: "var(--font-family-numeric)", color: z.fg }}>
                 {z.name}
               </span>
             </div>

@@ -72,7 +72,7 @@ export default function ReceiverChannelItem({
       onClick={() => interactive && onToggle!(channelKey, !enabled)}
     >
       {/* 이모지 아이콘 */}
-      <span className="text-lg leading-none shrink-0 w-20px text-center">
+      <span className="text-lg shrink-0 w-20px text-center">
         {icon}
       </span>
 
@@ -80,7 +80,7 @@ export default function ReceiverChannelItem({
       <div className="flex flex-col flex-1 min-w-0">
         <div className="flex items-center gap-6px">
           <span
-            className="text-base font-bold text-primary tracking-default leading-normal"
+            className="text-base font-bold text-primary tracking-default"
             style={{ fontFamily: "var(--font-family-korean)" }}
           >
             {label}
@@ -101,7 +101,7 @@ export default function ReceiverChannelItem({
         </div>
         {detail && (
           <span
-            className="text-sm text-tertiary tracking-default leading-normal truncate"
+            className="text-sm text-tertiary tracking-default truncate"
             style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
           >
             {detail}

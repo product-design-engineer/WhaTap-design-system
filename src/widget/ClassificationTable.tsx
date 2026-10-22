@@ -95,7 +95,7 @@ export default function ClassificationTable({
         >
           <span className="text-base mt-1px">⚠️</span>
           <span
-            className="text-base text-secondary tracking-default leading-relaxed"
+            className="text-base text-secondary tracking-default"
             style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
           >
             {warning}
@@ -104,7 +104,7 @@ export default function ClassificationTable({
       )}
       {caption && (
         <div
-          className="text-base font-bold text-primary tracking-default leading-normal mt-2px"
+          className="text-base font-bold text-primary tracking-default mt-2px"
           style={{ fontFamily: "var(--font-family-korean)" }}
         >
           📊 {caption}
@@ -119,7 +119,7 @@ export default function ClassificationTable({
           {["GPU", "모델명", "평균", "최대", "최소", "Pod", "분류"].map((h) => (
             <span
               key={h}
-              className="text-sm font-bold text-secondary tracking-default leading-none"
+              className="text-sm font-bold text-secondary tracking-default"
               style={{ fontFamily: "var(--font-family-korean)" }}
             >
               {h}

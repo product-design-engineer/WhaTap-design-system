@@ -112,7 +112,7 @@ export default function Heatmap({
       >
         {mode === "day" && <span />}
         {Array.from({ length: cols }, (_, c) => (
-          <span key={c} className="text-sm text-tertiary text-center leading-none whitespace-nowrap">
+          <span key={c} className="text-sm text-tertiary text-center whitespace-nowrap">
             {mode === "month"
               ? WEEKDAY_LABELS[c]
               : c % 2 === 0
@@ -152,7 +152,7 @@ export default function Heatmap({
             className="grid items-center"
             style={{ gridTemplateColumns: `28px repeat(${cols}, 1fr)`, gap: 4 }}
           >
-            <span className="text-sm text-tertiary leading-none tabular-nums">
+            <span className="text-sm text-tertiary tabular-nums">
               {row % 2 === 0 ? `${row}시` : ""}
             </span>
             {Array.from({ length: cols }, (_, c) => {

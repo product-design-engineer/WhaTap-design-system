@@ -159,7 +159,7 @@ export default function PageHeader({
       {/* 좌측: 타이틀 + AI/Docs */}
       <div className="flex items-center gap-24px shrink-0">
         <p
-          className="text-2xl text-primary tracking-display whitespace-nowrap leading-normal"
+          className="text-2xl text-primary tracking-display whitespace-nowrap"
           style={{
             fontFamily: "var(--font-family-korean)",
             fontWeight: "var(--font-weight-medium)",

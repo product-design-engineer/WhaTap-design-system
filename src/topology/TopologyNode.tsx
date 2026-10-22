@@ -82,7 +82,7 @@ export default function TopologyNode({
       <div className="flex flex-col justify-center gap-2px px-12px min-w-0">
         <p className="text-md font-bold text-primary leading-none truncate">{node.label}</p>
         {node.metric && (
-          <span className="flex items-center gap-4px text-sm text-tertiary leading-none">
+          <span className="flex items-center gap-4px text-sm text-tertiary">
             <span className="font-numeric tabular-nums">{node.metric}</span>
             {node.trend && <TrendArrow direction={node.trend} />}
           </span>

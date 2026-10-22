@@ -114,7 +114,7 @@ export default function GpuStatusBar({ categories, max: maxProp }: GpuStatusBarP
           {[...yTicks].reverse().map((v) => (
             <span
               key={v}
-              className="text-sm text-tertiary leading-none"
+              className="text-sm text-tertiary"
               style={{ fontFamily: "var(--font-family-numeric)" }}
             >
               {v}

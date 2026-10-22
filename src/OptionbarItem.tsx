@@ -62,7 +62,7 @@ export default function OptionbarItem({
       <div className="wds-optionbar-item-auto">
         {title && (
           <div
-            className="text-base font-bold text-primary tracking-default leading-none shrink-0"
+            className="text-base font-bold text-primary tracking-default shrink-0"
             style={{ fontFamily: "var(--font-family-korean)" }}
           >
             {title}
@@ -77,7 +77,7 @@ export default function OptionbarItem({
       <div className="flex flex-row items-center gap-6px">
         {title && (
           <div
-            className="text-base font-bold text-primary tracking-default leading-none shrink-0"
+            className="text-base font-bold text-primary tracking-default shrink-0"
             style={{ fontFamily: "var(--font-family-korean)" }}
           >
             {title}
@@ -91,7 +91,7 @@ export default function OptionbarItem({
     <div className="flex flex-col gap-6px">
       {title && (
         <div
-          className="text-base font-bold text-primary tracking-default leading-none"
+          className="text-base font-bold text-primary tracking-default"
           style={{ fontFamily: "var(--font-family-korean)" }}
         >
           {title}

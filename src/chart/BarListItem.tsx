@@ -49,12 +49,12 @@ export default function BarListItem({ label, value, ratio, color }: BarListItemP
     <li className="flex items-center flex-1 min-h-0 w-full" style={{ gap: 8 }}>
       <span className="flex items-baseline shrink-0" style={{ width: 88, gap: 6 }}>
         <span
-          className="text-lg font-bold text-primary text-right shrink-0 leading-none"
+          className="text-lg font-bold text-primary text-right shrink-0"
           style={{ width: 36, fontFamily: "var(--font-family-numeric)" }}
         >
           {value}
         </span>
-        <span className="text-sm text-secondary leading-none whitespace-nowrap truncate" style={{ fontFamily: "var(--font-family-numeric)" }}>
+        <span className="text-sm text-secondary whitespace-nowrap truncate" style={{ fontFamily: "var(--font-family-numeric)" }}>
           {label}
         </span>
       </span>

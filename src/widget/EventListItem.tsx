@@ -64,7 +64,7 @@ export default function EventListItem({
     >
       {/* 시간 (고정폭) */}
       <span
-        className="shrink-0 text-sm text-tertiary tracking-default leading-relaxed w-42px tabular-nums"
+        className="shrink-0 text-sm text-tertiary tracking-default w-42px tabular-nums"
         style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-medium)" }}
       >
         {time}
@@ -80,7 +80,7 @@ export default function EventListItem({
           style={{ background: TONE_DOT[tone] }}
         />
         <span
-          className="text-xs tracking-default leading-none"
+          className="text-xs tracking-default"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)", color: TONE_TEXT[tone] }}
         >
           {label}
@@ -89,7 +89,7 @@ export default function EventListItem({
 
       {/* source + message — 한 줄 truncate */}
       <span
-        className="text-base text-primary tracking-default leading-relaxed flex-1 min-w-0 truncate"
+        className="text-base text-primary tracking-default flex-1 min-w-0 truncate"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
       >
         <span className="text-secondary">{source}</span>

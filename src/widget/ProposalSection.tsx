@@ -40,9 +40,9 @@ export default function ProposalSection({
   return (
     <div className="flex flex-col gap-4px">
       <div className="flex items-center gap-6px">
-        <span className="text-lg leading-none">{emoji}</span>
+        <span className="text-lg">{emoji}</span>
         <span
-          className="text-base font-bold text-primary tracking-default leading-normal"
+          className="text-base font-bold text-primary tracking-default"
           style={{ fontFamily: "var(--font-family-korean)" }}
         >
           {title}

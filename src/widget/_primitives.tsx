@@ -106,7 +106,7 @@ export function AiCard({
 export function AiCaption({ children }: { children: ReactNode }) {
   return (
     <span
-      className="text-sm font-bold text-tertiary tracking-caps uppercase leading-none"
+      className="text-sm font-bold text-tertiary tracking-caps uppercase"
       style={{ fontFamily: "var(--font-family-korean)" }}
     >
       {children}
@@ -160,7 +160,7 @@ export function AiSectionHeading({
   return (
     <div className="flex items-center gap-6px">
       {emoji ? (
-        <span className="text-lg leading-none">{emoji}</span>
+        <span className="text-lg">{emoji}</span>
       ) : tone ? (
         <span className="size-10px rounded-full" style={{ background: TONE_DOT[tone] }} />
       ) : null}
@@ -225,7 +225,7 @@ export function AiToneBadge({
         style={{ background: TONE_DOT[tone] }}
       />
       <span
-        className="text-xs tracking-default leading-none"
+        className="text-xs tracking-default"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)", color: TONE_TEXT[tone] }}
       >
         {text}
@@ -276,7 +276,7 @@ export function AiBulletList({ items, size = "sm" }: {
   const textCls =
     size === "md"
       ? "text-md text-primary tracking-default leading-normal"
-      : "text-base text-secondary tracking-default leading-relaxed";
+      : "text-base text-secondary tracking-default";
   return (
     <ul className="flex flex-col gap-3px pl-12px">
       {items.map((b, i) => (

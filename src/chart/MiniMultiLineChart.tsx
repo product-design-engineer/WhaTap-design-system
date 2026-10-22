@@ -192,7 +192,7 @@ export default function MiniMultiLineChart({
       <div className="flex items-center justify-between gap-6px shrink-0">
         <div className="flex items-center gap-3px min-w-0">
           <span
-            className="text-base font-bold text-primary tracking-default leading-none truncate"
+            className="text-base font-bold text-primary tracking-default truncate"
             style={{ fontFamily: "var(--font-family-korean)" }}
             title={title}
           >
@@ -240,7 +240,7 @@ export default function MiniMultiLineChart({
       {stat && (
         <div className="flex items-baseline gap-4px shrink-0">
           <span
-            className="text-base font-bold text-primary leading-none"
+            className="text-base font-bold text-primary"
             style={{ fontFamily: "var(--font-family-numeric)" }}
           >
             {stat}

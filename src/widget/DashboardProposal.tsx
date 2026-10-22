@@ -71,9 +71,9 @@ export default function DashboardProposal({
 
       {locationLabel && (
         <div className="flex items-start gap-6px">
-          {locationHeading && <span className="text-lg leading-none">{locationHeading}</span>}
+          {locationHeading && <span className="text-lg">{locationHeading}</span>}
           <span
-            className="text-base font-bold text-primary tracking-default leading-normal"
+            className="text-base font-bold text-primary tracking-default"
             style={{ fontFamily: "var(--font-family-korean)" }}
           >
             {locationLabel}

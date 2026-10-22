@@ -53,13 +53,13 @@ export default function UsageChart({
     >
       <div className="flex items-center justify-between">
         <span
-          className="text-sm font-bold text-tertiary tracking-caps uppercase leading-none"
+          className="text-sm font-bold text-tertiary tracking-caps uppercase"
           style={{ fontFamily: "var(--font-family-korean)" }}
         >
           {caption}
         </span>
         <span
-          className="text-xs text-disabled tracking-default leading-none"
+          className="text-xs text-disabled tracking-default"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
         >
           0–23시

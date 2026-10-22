@@ -80,7 +80,7 @@ export default function EventList({
 
       {summary && (
         <p
-          className="text-base text-secondary tracking-default leading-relaxed"
+          className="text-base text-secondary tracking-default"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
         >
           {summary}
