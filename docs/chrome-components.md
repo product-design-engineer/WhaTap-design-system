@@ -518,6 +518,7 @@ export type DataTableProps<T> = {
 - 높이가 정해진 `position: relative` 플롯 상자 안에 둔다. 두 부품에 **같은 `max` · 여백**을 줘야 글자와 점선이 같은 높이에 선다.
 - 축 제목은 그리지 않는다(§26 결정). 오른쪽 두 번째 Y축은 금지(§19).
 - X축 시간 · 범주 글자는 차트마다 놓는 규칙이 달라 차트가 그린다.
+  → (2026-10-22) **시간 글자는 [[ChartTimeAxis]](Primitives)** 가 놓는다 — `labels` · `positions`(0 ~ 1, 없으면 같은 간격) · `right`. 범주 글자는 여전히 [[MiniBarChart]] `categories`.
 - **Figma 정본**: 페이지 ChartGrid `545:2` · 세트 `545:16`, 페이지 ChartValueAxis `545:3` · 세트 `546:22`(`ticks` × `right` 4 variant, ChartValueAxis 는 TEXT `max` · `mid` · `zero`). 페이지 ChartPeakMarker `547:2` · 컴포넌트 `548:2`(TEXT `label`, ▼ 칠은 `color/chart/series-1` — 다른 계열이면 인스턴스에서 바꾼다). 두 부품을 겹친 예시 프레임이 페이지마다 있다. 기존 Figma 차트 세트(MiniLineChart 등)는 아직 자기 격자 · 축을 그린다(`border/default`) — 인스턴스로 바꾸는 것은 후속.
 
 ---

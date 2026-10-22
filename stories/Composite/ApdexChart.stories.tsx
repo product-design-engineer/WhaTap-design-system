@@ -5,7 +5,7 @@ import { ApdexChart, WidgetFrame } from "@whatap/design-system";
  * Stories for [[ApdexChart]] — Apdex × 100 을 만족 구간 띠 위에 선과 값으로.
  */
 const meta: Meta<typeof ApdexChart> = {
-  title: "Primitives/Chart · ApdexChart",
+  title: "Composite/Chart · ApdexChart",
   component: ApdexChart,
   tags: ["autodocs"],
   parameters: { layout: "padded", backgrounds: { default: "surface-muted" } },

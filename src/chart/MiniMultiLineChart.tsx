@@ -14,6 +14,7 @@
  * - 격자형 빈도 → [[EventWeekTimeMatrix]]
  *
  * ## Composition rules
+ * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 안쪽 여백 · 제목 줄 · ⋮ · 헤더 범례 · AI 트리거를 뺀다).
  *   [[WidgetFrame]] 안에 넣을 때 쓴다. 제목은 WidgetFrame `title`, 범위는 `meta`, 범례는 `legend`(시리즈 색 그대로),
@@ -52,6 +53,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import ChartGrid from "./ChartGrid";
 import ChartSwatch from "./ChartSwatch";
+import ChartTimeAxis from "./ChartTimeAxis";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER as GUTTER, niceMax } from "./_axisScale";
 import AiTriggerButton from "../widget/TriggerButton";
@@ -296,28 +298,7 @@ export default function MiniMultiLineChart({
           <ChartValueAxis max={yMaxNice} unit={unit} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={right} />
 
           {/* X축 시간 라벨 */}
-          {xLabels.map((label, i) => {
-            const ratio = i / (xLabels.length - 1);
-            return (
-              <span
-                key={i}
-                className="absolute text-chart text-tertiary leading-none whitespace-nowrap"
-                style={{
-                  fontFamily: "var(--font-family-numeric)",
-                  left: `calc(${GUTTER} + (100% - ${GUTTER} - ${right}) * ${ratio})`,
-                  bottom: 2,
-                  transform:
-                    i === 0
-                      ? "translateX(0)"
-                      : i === xLabels.length - 1
-                        ? "translateX(-100%)"
-                        : "translateX(-50%)",
-                }}
-              >
-                {label}
-              </span>
-            );
-          })}
+          <ChartTimeAxis labels={xLabels} right={right} />
 
           {/* 선 끝 값 배지: 점은 선 끝 제자리, 배지는 플롯 밖 배지 칸에서 겹치지 않게 */}
           {badges.map((b, i) => (

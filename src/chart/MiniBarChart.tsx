@@ -1,4 +1,5 @@
 import ChartGrid from "./ChartGrid";
+import ChartTimeAxis from "./ChartTimeAxis";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER as GUTTER, formatAxisValue, niceMax } from "./_axisScale";
 
@@ -30,6 +31,7 @@ import { AXIS_GUTTER as GUTTER, formatAxisValue, niceMax } from "./_axisScale";
  * - AI 응답 안의 사용률 막대 → [[UsageChart]](AI 카테고리).
  *
  * ## Composition rules
+ * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
  * - 껍데기(카드 · 제목 · 메뉴 · 범례)는 그리지 않는다. 대시보드 칸에서는 [[WidgetFrame]] 이 맡는다(patterns §15).
  *   범례는 같은 색 토큰을 WidgetFrame `legend` 로 넘긴다.
@@ -193,23 +195,7 @@ export default function MiniBarChart({
 
         {/* 글자 — px 고정 */}
         <div className="absolute inset-0 pointer-events-none">
-          {!isCategory && xLabels.map((label, i) => {
-            const ratio = xLabels.length > 1 ? i / (xLabels.length - 1) : 0;
-            return (
-              <span
-                key={i}
-                className="absolute text-chart text-tertiary leading-none whitespace-nowrap"
-                style={{
-                  fontFamily: "var(--font-family-numeric)",
-                  left: `calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${ratio})`,
-                  bottom: 2,
-                  transform: i === 0 ? "translateX(0)" : i === xLabels.length - 1 ? "translateX(-100%)" : "translateX(-50%)",
-                }}
-              >
-                {label}
-              </span>
-            );
-          })}
+          {!isCategory && <ChartTimeAxis labels={xLabels} right={PAD_RIGHT} />}
         </div>
       </div>
     </div>
