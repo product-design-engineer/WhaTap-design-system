@@ -90,7 +90,7 @@ export default function PageHeaderAiInline({
       {/* 좌측: 타이틀 + Docs — shrink 허용, 타이틀 max-width + ellipsis로 inline prompt 영역 보호 */}
       <div className="flex items-center gap-24px shrink min-w-0">
         <p
-          className="text-2xl text-primary tracking-display whitespace-nowrap leading-normal overflow-hidden text-ellipsis"
+          className="text-2xl text-primary tracking-display whitespace-nowrap overflow-hidden text-ellipsis"
           style={{
             fontFamily: "var(--font-family-korean)",
             fontWeight: "var(--font-weight-medium)",

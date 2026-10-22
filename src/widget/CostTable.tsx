@@ -68,7 +68,7 @@ export default function CostTable({
     >
       <div className="flex items-center justify-between">
         <span
-          className="text-sm font-bold text-tertiary tracking-caps uppercase leading-none"
+          className="text-sm font-bold text-tertiary tracking-caps uppercase"
           style={{ fontFamily: "var(--font-family-korean)" }}
         >
           {caption}
@@ -91,7 +91,7 @@ export default function CostTable({
         >
           {savingsLabel && (
             <span
-              className="text-base font-bold tracking-default leading-none"
+              className="text-base font-bold tracking-default"
               style={{
                 fontFamily: "var(--font-family-korean)",
                 color: "var(--color-whatap-blue)",

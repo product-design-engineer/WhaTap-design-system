@@ -50,7 +50,7 @@ function Grid({ children, min = 280 }: { children: ReactNode; min?: number }) {
 function Label({ entry }: { entry: TokenEntry }) {
   return (
     <div className="flex flex-col gap-0_5 min-w-0">
-      <div className="text-base font-bold leading-none">{tokenLabel(entry.name)}</div>
+      <div className="text-base font-bold">{tokenLabel(entry.name)}</div>
       <div className="text-chart leading-none" style={{ ...nameStyle, opacity: 0.7 }}>{entry.value}</div>
     </div>
   );

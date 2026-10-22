@@ -38,32 +38,32 @@ export default function CostBreakdownRow({ row }: { row: CostBreakdownRowData })
       style={{ gridTemplateColumns: "0.7fr 1.4fr 0.8fr 0.9fr 1fr" }}
     >
       <span
-        className="text-base font-bold text-primary tracking-default leading-none"
+        className="text-base font-bold text-primary tracking-default"
         style={{ fontFamily: "var(--font-family-numeric)" }}
       >
         {row.gpu}
       </span>
       <span
-        className="text-sm text-secondary tracking-default leading-snug truncate"
+        className="text-sm text-secondary tracking-default truncate"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
         title={row.pod}
       >
         {row.pod}
       </span>
       <span
-        className="text-base text-secondary tracking-default leading-none"
+        className="text-base text-secondary tracking-default"
         style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}
       >
         {row.avg}
       </span>
       <span
-        className="text-base text-secondary tracking-default leading-none"
+        className="text-base text-secondary tracking-default"
         style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}
       >
         {row.idle}
       </span>
       <span
-        className="text-base font-bold text-primary tracking-default leading-none text-right"
+        className="text-base font-bold text-primary tracking-default text-right"
         style={{ fontFamily: "var(--font-family-numeric)" }}
       >
         {row.daily}

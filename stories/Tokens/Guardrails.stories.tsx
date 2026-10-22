@@ -57,7 +57,7 @@ function Badge({ status }: { status: Status }) {
   return (
     <span className="inline-flex items-center gap-6px whitespace-nowrap">
       <span className="rounded-full shrink-0" style={{ width: 8, height: 8, background: s.dot }} />
-      <span className="text-sm text-secondary tracking-default leading-none">{s.label}</span>
+      <span className="text-sm text-secondary tracking-default">{s.label}</span>
     </span>
   );
 }
@@ -67,8 +67,8 @@ function Guardrails() {
   return (
     <div className="flex flex-col gap-6 p-6 bg-card" style={{ fontFamily: "var(--font-family-korean)" }}>
       <header className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold text-primary tracking-display leading-tight">Guardrails</h1>
-        <p className="text-base text-tertiary leading-normal max-w-2xl">
+        <h1 className="text-2xl font-bold text-primary tracking-display">Guardrails</h1>
+        <p className="text-base text-tertiary max-w-2xl">
           디자인 시스템이 깨지지 않도록 지키는 불변식. 단일 출처·소스온리 WhaTap 모델에 맞는 게이트만 둡니다.
         </p>
       </header>
@@ -77,7 +77,7 @@ function Guardrails() {
         {(["auto", "policy", "planned"] as Status[]).map((st) => (
           <div key={st} className="flex items-center gap-8px px-3 py-2 border border-color-var-color-border-default rounded-md">
             <Badge status={st} />
-            <span className="text-lg font-bold font-numeric text-primary leading-none tabular-nums">{count(st)}</span>
+            <span className="text-lg font-bold font-numeric text-primary tabular-nums">{count(st)}</span>
           </div>
         ))}
       </section>
@@ -97,9 +97,9 @@ function Guardrails() {
                 <td className="p-2 text-base font-medium text-primary whitespace-nowrap">{g.name}</td>
                 <td className="p-2"><Badge status={g.status} /></td>
                 <td className="p-2 text-sm text-tertiary whitespace-nowrap">{g.inCI ? "돌고 있음" : "—"}</td>
-                <td className="p-2 text-sm text-secondary leading-normal">{g.invariant}</td>
-                <td className="p-2 text-sm text-tertiary leading-normal">{g.prevents}</td>
-                <td className="p-2 text-sm font-numeric text-tertiary leading-normal">{g.command}</td>
+                <td className="p-2 text-sm text-secondary">{g.invariant}</td>
+                <td className="p-2 text-sm text-tertiary">{g.prevents}</td>
+                <td className="p-2 text-sm font-numeric text-tertiary">{g.command}</td>
               </tr>
             ))}
           </tbody>

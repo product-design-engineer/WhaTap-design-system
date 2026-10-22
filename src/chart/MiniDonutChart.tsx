@@ -157,7 +157,7 @@ export default function MiniDonutChart({
                 </span>
               )}
               {centerSub && (
-                <span className="text-xs text-tertiary leading-tight mt-2px">
+                <span className="text-xs text-tertiary mt-2px">
                   {centerSub}
                 </span>
               )}

@@ -53,7 +53,7 @@ export default function Reasoning({
       style={{ animationDelay: `${delay}ms` }}
     >
       <div
-        className="text-sm font-bold text-tertiary tracking-caps uppercase leading-none"
+        className="text-sm font-bold text-tertiary tracking-caps uppercase"
         style={{ fontFamily: "var(--font-family-korean)" }}
       >
         Reasoning

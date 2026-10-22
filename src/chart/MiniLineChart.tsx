@@ -142,7 +142,7 @@ export default function MiniLineChart({
       <div className="flex items-center justify-between gap-6px">
         <div className="flex items-center gap-3px min-w-0">
           <span
-            className="text-base font-bold text-primary tracking-default leading-none truncate"
+            className="text-base font-bold text-primary tracking-default truncate"
             style={{ fontFamily: "var(--font-family-korean)" }}
             title={title}
           >

@@ -67,7 +67,7 @@ export default function ExecutionResult({
       {/* 헤더: 상태 라벨 + 타임스탬프 */}
       <div className="flex items-center justify-between gap-8px">
         <div className="flex items-center gap-6px">
-          <span className="text-lg leading-none">{emoji}</span>
+          <span className="text-lg">{emoji}</span>
           <span
             className="text-md font-bold text-primary tracking-default leading-normal"
             style={{ fontFamily: "var(--font-family-korean)" }}
@@ -76,7 +76,7 @@ export default function ExecutionResult({
           </span>
         </div>
         <span
-          className="text-base text-tertiary tracking-normal leading-normal"
+          className="text-base text-tertiary tracking-normal"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
         >
           {timestamp}
@@ -85,7 +85,7 @@ export default function ExecutionResult({
 
       {/* 본문 */}
       <p
-        className="text-lg font-bold text-primary tracking-default leading-normal"
+        className="text-lg font-bold text-primary tracking-default"
         style={{ fontFamily: "var(--font-family-korean)" }}
       >
         {body}

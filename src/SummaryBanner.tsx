@@ -115,7 +115,7 @@ export default function SummaryBanner({
 
         {summary && (
           <span
-            className="text-base text-tertiary leading-none whitespace-nowrap"
+            className="text-base text-tertiary whitespace-nowrap"
             style={{ fontFamily: "var(--font-family-korean)" }}
           >
             {summary}

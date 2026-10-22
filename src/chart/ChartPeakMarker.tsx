@@ -51,7 +51,7 @@ export default function ChartPeakMarker({ label, color, left, top }: ChartPeakMa
   return (
     <div className="absolute flex flex-col items-center pointer-events-none" style={{ left, top, transform: "translate(-50%, -100%)" }}>
       <span
-        className="text-xs font-bold text-primary leading-none whitespace-nowrap bg-card rounded-2px"
+        className="text-xs font-bold text-primary whitespace-nowrap bg-card rounded-2px"
         style={{ fontFamily: "var(--font-family-numeric)", padding: "1px 3px" }}
       >
         {label}

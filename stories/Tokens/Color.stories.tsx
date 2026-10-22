@@ -131,7 +131,7 @@ function Swatch({ entry }: { entry: TokenEntry }) {
         />
       </div>
       <div className="flex flex-col justify-center gap-0_5 min-w-0">
-        <div className="text-base font-bold text-primary tracking-default leading-none">
+        <div className="text-base font-bold text-primary tracking-default">
           {tokenLabel(entry.name)}
         </div>
         <div
@@ -141,10 +141,10 @@ function Swatch({ entry }: { entry: TokenEntry }) {
           {entry.value}
         </div>
         {described ? (
-          <div className="text-sm text-secondary leading-snug">{described}</div>
+          <div className="text-sm text-secondary">{described}</div>
         ) : (
           // 설명은 CSS 에서 읽을 수 없다 — 새 토큰이면 여기 표시되어 문서화 누락이 드러난다.
-          <div className="text-sm text-disabled leading-snug">설명 미기술 — DESCRIPTIONS 에 추가</div>
+          <div className="text-sm text-disabled">설명 미기술 — DESCRIPTIONS 에 추가</div>
         )}
       </div>
     </div>
@@ -296,7 +296,7 @@ export const TonePairing: StoryObj = {
           >
             <div className="flex items-center gap-1_5 px-2 py-1 rounded-xl bg-card">
               <div className="rounded-full" style={{ width: 6, height: 6, background: indicator.cssVar }} />
-              <span className="text-xs leading-none" style={{ color: toneText.cssVar, fontWeight: 500 }}>
+              <span className="text-xs" style={{ color: toneText.cssVar, fontWeight: 500 }}>
                 {label.value || `(${intent})`}
               </span>
             </div>

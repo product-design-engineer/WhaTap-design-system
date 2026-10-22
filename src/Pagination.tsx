@@ -67,7 +67,7 @@ export default function Pagination({
 }: PaginationProps) {
   const summary = (
     <span
-      className="text-sm text-tertiary leading-none"
+      className="text-sm text-tertiary"
       style={{ fontFamily: "var(--font-family-numeric)" }}
     >
       전체 {total.toLocaleString()}건 · 페이지당 {pageSize}건
@@ -92,7 +92,7 @@ export default function Pagination({
             <span
               key={`ellipsis-${i}`}
               aria-hidden="true"
-              className="flex items-center justify-center text-sm text-tertiary leading-none"
+              className="flex items-center justify-center text-sm text-tertiary"
               style={{ minWidth: 24, height: 24, fontFamily: "var(--font-family-numeric)" }}
             >
               …
@@ -131,7 +131,7 @@ function PageBtn({
       aria-current={active ? "page" : undefined}
       disabled={disabled}
       onClick={onClick}
-      className="flex items-center justify-center rounded-4px text-sm leading-none cursor-pointer transition-colors disabled-cursor-not-allowed"
+      className="flex items-center justify-center rounded-4px text-sm cursor-pointer transition-colors disabled-cursor-not-allowed"
       style={{
         minWidth: 24,
         height: 24,
