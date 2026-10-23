@@ -981,7 +981,7 @@ series 는 네 가지를 지킨다.
 | 9 | 복합 / 이중 축 | 이중 축은 금지(§19) — 시간축을 맞춘 두 칸으로 표현 | 대체 표현 |
 | 10 | 구역 분할 산점도 | ZoneScatterChart | 신규 |
 | 11 | 숫자 / 집계값 | [[KpiCard]] · [[StatCard]] | 있음 · 카탈로그 위치 정리 |
-| 12 | 막대 게이지 | [[UsageGauge]](요소) + RangeGauge(min · 현재 · Max) | 신규 |
+| 12 | 막대 게이지 | [[RangeGauge]] = [[UsageGauge]](채움) + [[ChartPeakMarker]](▼) 조합 · min · 현재 · Max · 임계 띠 | 있음 (2026-10-23) |
 | 13 | 호 게이지 / 속도계 | [[ActiveTransactionArc]] · [[ActiveTransactionSpeedWidget]] · ArcGauge | 일부 있음 · 호 게이지 신규 |
 | 14 | 이퀄라이저 | EqualizerChart | 신규 |
 | 15 | 블록 / 허니컴 / 그리드 | [[HexGrid]] · BlockGrid | 허니컴 있음 · 블록 신규 |
@@ -1264,7 +1264,7 @@ series 는 네 가지를 지킨다.
 | 값 표시 | 큰 숫자 + 단위 | [[KpiCard]] · [[StatCard]] | 있음 |
 | 값 표시 | 델타(▲▼ + 변화값) · 비교 시점 캡션 | — | 공백 (§21) |
 | 게이지 | 트랙 + 채움 | [[UsageGauge]] · [[MetricBarCell]] | 있음 |
-| 게이지 | 범위 라벨(min · Max) · 현재 위치 마커(▼) · 임계 구간 분절 | — | 공백 (§21 범위 바) |
+| 게이지 | 범위 라벨(min · Max) · 현재 위치 마커(▼) · 임계 구간 분절 | [[RangeGauge]] — 양 끝은 이름 + 값(`Min 0mi` · `Allocatable 2,200mi`), ▼ 는 [[ChartPeakMarker]], 임계 구간은 트랙 아래 2px 띠, 채움 색은 값이 든 구간 | 있음 (2026-10-23) |
 | 상태 | 데이터 없음 · 수집 끊김 | [[WidgetFrame]] `state` (`no-data` · `collect-gap`) | 있음 |
 | 상태 | 에이전트 없음 · 로딩 | — | 공백 |
 | 상태 | 축만 남은 빈 플롯 | `state` 로 대체 | 이관 |
