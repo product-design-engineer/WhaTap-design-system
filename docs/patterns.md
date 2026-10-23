@@ -1261,8 +1261,9 @@ series 는 네 가지를 지킨다.
 | 값 라벨 | 최고점 ▼ + 값 | [[ChartPeakMarker]] (Primitives) — [[MiniLineChart]] 가 조합한다 (§5) | 있음 (2026-10-22. 그 전에도 MiniLineChart 1벌이었다 — 10/21 «3벌» 은 `peak` 단어로 센 오기) |
 | 값 라벨 | 선 끝 값 배지 | [[MiniMultiLineChart]] `endLabel` (§25) | 있음 |
 | 값 라벨 | 막대 값 · 최댓값 강조 | [[MiniBarChart]] `valueLabels` (§15) | 있음 |
+| 값 표시 | 마크 hover 값 상자(툴팁) | [[ChartTooltip]] (Primitives) — 상자 · 줄 모양만, 위치는 차트가(§5). 제목 · 값 줄(견본 · 이름 · 값 굵게) · 보조 줄(합계 · 기준). 브라우저 `title` 은 쓰지 않는다(늦게 뜨고 다크를 따르지 않는다). [[ScatterChart]] · [[ZoneScatterChart]] · [[BoxPlotChart]] · [[StatusTimeline]] · [[EqualizerChart]] · [[StackedAreaChart]](세로 안내선) · [[HexGrid]] 가 조합한다 | 있음 (2026-10-23 · HexGrid 자체 상자 → 이것) |
 | 값 표시 | 큰 숫자 + 단위 | [[KpiCard]] · [[StatCard]] | 있음 |
-| 값 표시 | 델타(▲▼ + 변화값) · 비교 시점 캡션 | — | 공백 (§21) |
+| 값 표시 | 델타(▲▼ + 변화값) · 비교 시점 캡션 | [[TrendTile]] — 색은 좋은 방향(`better`) | 있음 (2026-10-23) |
 | 게이지 | 트랙 + 채움 | [[UsageGauge]] · [[MetricBarCell]] | 있음 |
 | 게이지 | 범위 라벨(min · Max) · 현재 위치 마커(▼) · 임계 구간 분절 | [[RangeGauge]] — 양 끝은 이름 + 값(`Min 0mi` · `Allocatable 2,200mi`), ▼ 는 [[ChartPeakMarker]], 임계 구간은 트랙 아래 2px 띠, 채움 색은 값이 든 구간 | 있음 (2026-10-23) |
 | 상태 | 데이터 없음 · 수집 끊김 | [[WidgetFrame]] `state` (`no-data` · `collect-gap`) | 있음 |

@@ -42,7 +42,8 @@
  * | 범례 | `선 p50 · 상자 p25–p75 · 수염 p5–p95 · 점 p99` · `text-sm` tertiary |
  * | 축 | Y 0 ~ p95 최대 × 1.1 올림(`max`) · 눈금 최대 · 절반 · 0 · 단위 `unit` / X [[ChartCategoryAxis]] |
  * | 플롯 여백 | 위 14(p50 숫자) · 아래 18 · 오른쪽 8 · 왼쪽 `--wds-widget-axis-gutter` |
- * | 접근성 | 플롯 `role="img"` · 칸마다 `title`(이름 · p50 · p25–p75 · p5–p95 · p99) |
+ * | hover | 칸 전체가 받는다 · 칸 바탕 `--color-surface-50` · [[ChartTooltip]](이름 · p99 · p95 · p75 · p50 · p25 · p5, 정확한 값) |
+ * | 접근성 | 플롯 `role="img"` + 범례 문장 |
  *
  * @example
  * ```tsx
@@ -51,8 +52,10 @@
  * </WidgetFrame>
  * ```
  */
+import { useState } from "react";
 import ChartCategoryAxis from "./ChartCategoryAxis";
 import ChartGrid from "./ChartGrid";
+import ChartTooltip from "./ChartTooltip";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER, formatAxisValue, niceMax } from "./_axisScale";
 
@@ -120,6 +123,9 @@ export default function BoxPlotChart({ boxes, max, unit = "", color = "var(--col
   const top = max ?? niceMax(Math.max(0, ...stats.flatMap((s) => (s ? [s.p95 * 1.1] : []))));
   const pct = (v: number) => `${top > 0 ? (1 - Math.min(1, Math.max(0, v / top))) * 100 : 100}%`;
   const f = (v: number) => formatAxisValue(v);
+  /* 가리킨 칸 — [[ChartTooltip]] 으로 백분위 여섯을 보인다 */
+  const [hover, setHover] = useState<number | null>(null);
+  const exact = (v: number) => `${v.toLocaleString("en-US", { maximumFractionDigits: 1 })}${unit}`;
   return (
     <div className="flex flex-col h-full min-h-0 w-full gap-4px" style={{ padding: frame ? "0 8px" : 0 }}>
       {frame && <div className="text-sm text-tertiary" style={{ marginLeft: AXIS_GUTTER }}>{BOX_PLOT_LEGEND}</div>}
@@ -132,7 +138,9 @@ export default function BoxPlotChart({ boxes, max, unit = "", color = "var(--col
               <div
                 key={i}
                 className="relative flex-1 min-w-0"
-                title={s ? `${b.label} · p50 ${f(s.p50)}${unit} · p25–p75 ${f(s.p25)}–${f(s.p75)} · p5–p95 ${f(s.p5)}–${f(s.p95)} · p99 ${f(s.p99)}${unit}` : `${b.label} · 값 없음`}
+                onMouseEnter={() => setHover(i)}
+                onMouseLeave={() => setHover(null)}
+                style={{ background: hover === i ? "var(--color-surface-50)" : undefined }}
               >
                 {s && (
                   <svg aria-hidden className="absolute inset-0 overflow-visible" width="100%" height="100%">
@@ -196,6 +204,27 @@ export default function BoxPlotChart({ boxes, max, unit = "", color = "var(--col
                   >
                     {f(s.p50)}
                   </span>
+                )}
+                {hover === i && (
+                  <ChartTooltip
+                    left="50%"
+                    top={s ? pct(s.p75) : "50%"}
+                    flipX={i >= boxes.length / 2}
+                    offset={20}
+                    title={b.label}
+                    rows={
+                      s
+                        ? [
+                            { label: "p99", value: exact(s.p99) },
+                            { label: "p95", value: exact(s.p95) },
+                            { label: "p75", value: exact(s.p75) },
+                            { label: "p50", value: exact(s.p50), color, shape: "line" as const },
+                            { label: "p25", value: exact(s.p25) },
+                            { label: "p5", value: exact(s.p5) },
+                          ]
+                        : [{ label: "값", value: "없음" }]
+                    }
+                  />
                 )}
               </div>
             );

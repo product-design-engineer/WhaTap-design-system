@@ -132,6 +132,9 @@
     "ChartTimeAxis": {
       "figma": "551:13"
     },
+    "ChartTooltip": {
+      "figma": "589:67"
+    },
     "ChartValueAxis": {
       "figma": "546:22"
     },

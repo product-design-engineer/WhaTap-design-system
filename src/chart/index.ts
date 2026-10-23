@@ -26,6 +26,8 @@ export { default as ChartLegendItem } from "./ChartLegendItem";
 export { default as ChartRadialBars } from "./ChartRadialBars";
 export type { ChartRadialBarsProps, ChartRadialSector, ChartRadialSegment } from "./ChartRadialBars";
 export type { ChartLegendItemProps } from "./ChartLegendItem";
+export { default as ChartTooltip } from "./ChartTooltip";
+export type { ChartTooltipProps, ChartTooltipRow } from "./ChartTooltip";
 export { default as ChartTimeAxis } from "./ChartTimeAxis";
 export type { ChartTimeAxisProps } from "./ChartTimeAxis";
 export { default as ChartValueAxis } from "./ChartValueAxis";

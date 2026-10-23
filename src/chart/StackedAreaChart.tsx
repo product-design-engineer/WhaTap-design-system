@@ -41,6 +41,7 @@
  * | 최고점 | `peak` 면 합계 최대 시점에 [[ChartPeakMarker]](값 + 단위, ▼ 색 = 맨 위 계열) |
  * | 플롯 여백 | 위 14(▼ 자리) · 아래 14 · 오른쪽 8 · 왼쪽 `--wds-widget-axis-gutter` |
  * | 단독 범례 | 사각 견본, 플롯 위 오른쪽 · 간격 12 · 위층부터(쌓인 순서와 같은 위아래) |
+ * | hover | 플롯 위 포인터 x → 가장 가까운 시점 · 세로 안내선 1px `--color-border-strong` · [[ChartTooltip]](시점 `pointLabels` · 계열 값 위층부터 · 합계) |
  * | 접근성 | 플롯 `role="img"` + 계열 이름 · 합계 최대 |
  *
  * @example
@@ -50,10 +51,12 @@
  * </WidgetFrame>
  * ```
  */
+import { useState } from "react";
 import ChartGrid from "./ChartGrid";
 import ChartLegendItem from "./ChartLegendItem";
 import ChartPeakMarker from "./ChartPeakMarker";
 import ChartTimeAxis from "./ChartTimeAxis";
+import ChartTooltip from "./ChartTooltip";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER, formatPeakValue, niceMax } from "./_axisScale";
 
@@ -82,6 +85,8 @@ export type StackedAreaChartProps = {
    * `false` 면 플롯만 — [[WidgetFrame]] 안에 넣고 범례는 `stackedAreaLegend(series)` 를 `legend` 로(patterns §15).
    */
   frame?: boolean;
+  /** 시점마다 이름(「14:32」) — 툴팁 제목. 길이는 값 개수와 같게. 없으면 제목 없이. */
+  pointLabels?: ReadonlyArray<string>;
 };
 
 const PAD_TOP = 14;
@@ -111,7 +116,7 @@ export function stackedAreaLegend(series: ReadonlyArray<StackedAreaSeries>) {
     .reverse();
 }
 
-export default function StackedAreaChart({ series: all, xLabels, unit = "", max, peak = false, frame = true }: StackedAreaChartProps) {
+export default function StackedAreaChart({ series: all, xLabels, unit = "", max, peak = false, frame = true, pointLabels }: StackedAreaChartProps) {
   const series = all.slice(0, MAX_SERIES);
   const n = Math.max(0, ...series.map((s) => s.values.length));
   /* 누적 — tops[k][i] = 바닥부터 k 번째 계열까지의 합 */
@@ -123,6 +128,9 @@ export default function StackedAreaChart({ series: all, xLabels, unit = "", max,
   const y = (v: number) => (top > 0 ? VB * (1 - Math.min(1, v / top)) : VB);
   const peakIdx = totals.length ? totals.indexOf(Math.max(...totals)) : -1;
   const plotLeft = `calc(${AXIS_GUTTER} + (100% - ${AXIS_GUTTER} - ${PAD_RIGHT}px) * `;
+  /* 가리킨 시점 */
+  const [hover, setHover] = useState<number | null>(null);
+  const exact = (v: number) => `${v.toLocaleString("en-US", { maximumFractionDigits: 1 })}${unit}`;
 
   return (
     <div className="flex flex-col h-full min-h-0 w-full gap-4px" style={{ padding: frame ? "0 8px" : 0 }}>
@@ -167,6 +175,34 @@ export default function StackedAreaChart({ series: all, xLabels, unit = "", max,
           </svg>
         )}
         <ChartValueAxis max={top} unit={unit} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={PAD_RIGHT} />
+        {/* 시점 고르기 — 플롯 위 포인터 x 에서 가장 가까운 시점. 세로 안내선 + [[ChartTooltip]](계열 값 위층부터 · 합계) */}
+        {n > 1 && (
+          <div
+            className="absolute"
+            style={{ left: AXIS_GUTTER, right: PAD_RIGHT, top: PAD_TOP, bottom: PAD_BOTTOM }}
+            onMouseMove={(ev) => {
+              const r = ev.currentTarget.getBoundingClientRect();
+              setHover(Math.round(Math.min(1, Math.max(0, (ev.clientX - r.left) / r.width)) * (n - 1)));
+            }}
+            onMouseLeave={() => setHover(null)}
+          >
+            {hover != null && (
+              <>
+                <span aria-hidden className="absolute" style={{ left: `${(hover / (n - 1)) * 100}%`, top: 0, bottom: 0, width: 0, borderLeft: "1px solid var(--color-border-strong)" }} />
+                <ChartTooltip
+                  left={`${(hover / (n - 1)) * 100}%`}
+                  top={`${top > 0 ? (1 - Math.min(1, totals[hover] / top)) * 100 : 100}%`}
+                  flipX={hover / (n - 1) > 0.5}
+                  title={pointLabels?.[hover]}
+                  rows={series
+                    .map((sr, k) => ({ label: sr.label, value: exact(Math.max(0, sr.values[hover] ?? 0)), color: colorOf(sr, k) }))
+                    .reverse()}
+                  footer={`합계 ${exact(totals[hover])}`}
+                />
+              </>
+            )}
+          </div>
+        )}
         {peak && peakIdx >= 0 && n > 1 && (
           <ChartPeakMarker
             label={`${formatPeakValue(totals[peakIdx])}${unit}`}

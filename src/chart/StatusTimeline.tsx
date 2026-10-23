@@ -25,7 +25,7 @@
  *   시간축 [[ChartTimeAxis]]. 차트는 마커만 그린다(patterns §26). 그래서 Composite 계층이다.
  * - **높이 = 건수(2026-10-23 결정).** 값축이 높이를 읽게 한다 — 따로 «높이 = 건수» 범례를 두지 않는다. 0 건 마커는 그리지 않는다(빈 구간).
  * - **색 = 심각도** `critical`(`--color-status-error`) · `warning`(`--color-status-warning`) · `info`(`--color-status-info`). 계열 색을 섞지 않는다(§23).
- *   심각도는 색만으로 말하지 않는다 — 범례 이름(Critical · Warning · Info)과 마커 `title` 이 함께 말한다.
+ *   심각도는 색만으로 말하지 않는다 — 범례 이름(Critical · Warning · Info)과 [[ChartTooltip]] 의 심각도 이름이 함께 말한다.
  * - **반전 시간 바는 쓰지 않는다(2026-10-23 결정).** 이 위젯에만 있던 모양이라 공통 시간축으로 맞춘다(§26).
  * - 사건 위치는 `at`(시간 값, `start` ~ `end` 와 같은 단위). 같은 칸에 여럿이면 미리 묶어 건수를 더하고 가장 높은 심각도를 준다.
  * - 범례는 `statusTimelineLegend()` 를 [[WidgetFrame]] `legend` 로(`frame={false}`). 단독(`frame`)이면 플롯 위 오른쪽에 스스로 세운다.
@@ -39,7 +39,8 @@
  * | 격자 | 가로 눈금 3 + 세로 점선 = 시간 글자 사이마다(`xLabels.length − 1`) |
  * | 플롯 여백 | 위 4 · 아래 14 · 오른쪽 8px · 왼쪽 `--wds-widget-axis-gutter`(28px) |
  * | 단독 범례 | Critical · Warning · Info 사각 견본, 플롯 위 오른쪽 · 간격 12px |
- * | 접근성 | 플롯 `role="img"` + 사건 수 요약 / 마커마다 `title`(이름 · 심각도 · 건수) |
+ * | hover | 마커 둘레 12px 세로 칸(플롯 높이 전체) · 가리킨 마커 5px · [[ChartTooltip]](이름 · 시각 `formatAt` · 심각도 · 건수) |
+ * | 접근성 | 플롯 `role="img"` + 사건 수 요약 |
  *
  * @example
  * ```tsx
@@ -48,9 +49,11 @@
  * </WidgetFrame>
  * ```
  */
+import { useState } from "react";
 import ChartGrid from "./ChartGrid";
 import ChartLegendItem from "./ChartLegendItem";
 import ChartTimeAxis from "./ChartTimeAxis";
+import ChartTooltip from "./ChartTooltip";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER, niceMax } from "./_axisScale";
 
@@ -83,6 +86,8 @@ export type StatusTimelineProps = {
    * `false` 면 플롯만 — [[WidgetFrame]] 안에 넣고 범례는 `statusTimelineLegend()` 를 `legend` 로(patterns §15).
    */
   frame?: boolean;
+  /** 툴팁 제목의 시각 표기(`at` → 「14:34」). 없으면 시각을 쓰지 않는다. */
+  formatAt?: (at: number) => string;
 };
 
 const PAD_TOP = 4;
@@ -103,12 +108,16 @@ export function statusTimelineLegend() {
   return SEVERITY_ORDER.map((s) => ({ label: SEVERITY_LABEL[s], color: SEVERITY_COLOR[s] }));
 }
 
-export default function StatusTimeline({ events, start, end, xLabels, max, frame = true }: StatusTimelineProps) {
+export default function StatusTimeline({ events, start, end, xLabels, max, frame = true, formatAt }: StatusTimelineProps) {
   const span = end - start;
   const shown = events.filter((e) => e.count > 0 && e.at >= start && e.at <= end);
   const top = max ?? niceMax(Math.max(0, ...shown.map((e) => e.count)));
   const plot = { left: AXIS_GUTTER, right: PAD_RIGHT, top: PAD_TOP, bottom: PAD_BOTTOM };
   const total = shown.reduce((n, e) => n + e.count, 0);
+  /* 가리킨 마커 — [[ChartTooltip]] 으로 이름 · 심각도 · 건수를 보인다 */
+  const [hover, setHover] = useState<number | null>(null);
+  const xr = (at: number) => (span > 0 ? (at - start) / span : 0);
+  const hr = (count: number) => (top > 0 ? Math.min(1, count / top) : 0);
 
   return (
     <div className="flex flex-col h-full min-h-0 w-full gap-4px" style={{ padding: frame ? "0 8px" : 0 }}>
@@ -130,20 +139,38 @@ export default function StatusTimeline({ events, start, end, xLabels, max, frame
         {/* 마커 — 이 차트의 마크. 좌표는 플롯 상자 안 %, 바닥에서 위로 */}
         <div className="absolute" style={plot}>
           {shown.map((e, i) => (
+            /* 맞히기 쉽게 — 마커(3px) 둘레 12px 세로 칸(플롯 높이 전체)이 hover 를 받는다.
+               칸 높이를 마커 높이에 맞추면 안쪽 마커 % 가 그 칸 기준이 되어 높이가 비율의 제곱으로 줄어든다 */
             <span
               key={i}
-              className="absolute rounded-1px"
-              title={`${e.label ? `${e.label} · ` : ""}${SEVERITY_LABEL[e.severity]} · ${e.count}건`}
-              style={{
-                left: `${span > 0 ? ((e.at - start) / span) * 100 : 0}%`,
-                bottom: 0,
-                width: MARK_W,
-                height: `max(2px, ${top > 0 ? Math.min(1, e.count / top) * 100 : 0}%)`,
-                transform: "translateX(-50%)",
-                background: SEVERITY_COLOR[e.severity],
-              }}
-            />
+              className="absolute flex justify-center"
+              onMouseEnter={() => setHover(i)}
+              onMouseLeave={() => setHover(null)}
+              style={{ left: `${xr(e.at) * 100}%`, bottom: 0, width: 12, height: "100%", transform: "translateX(-50%)" }}
+            >
+              <span
+                className="absolute rounded-1px"
+                style={{
+                  bottom: 0,
+                  width: hover === i ? MARK_W + 2 : MARK_W,
+                  height: `max(2px, ${hr(e.count) * 100}%)`,
+                  background: SEVERITY_COLOR[e.severity],
+                }}
+              />
+            </span>
           ))}
+          {hover != null && shown[hover] && (
+            <ChartTooltip
+              left={`${xr(shown[hover].at) * 100}%`}
+              top={`${(1 - hr(shown[hover].count)) * 100}%`}
+              flipX={xr(shown[hover].at) > 0.5}
+              title={[shown[hover].label, formatAt?.(shown[hover].at)].filter(Boolean).join(" · ") || SEVERITY_LABEL[shown[hover].severity]}
+              rows={[
+                { label: "심각도", value: SEVERITY_LABEL[shown[hover].severity], color: SEVERITY_COLOR[shown[hover].severity] },
+                { label: "건수", value: `${shown[hover].count.toLocaleString("en-US")}건` },
+              ]}
+            />
+          )}
         </div>
         <ChartValueAxis max={top} unit="건" padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={PAD_RIGHT} />
         <ChartTimeAxis labels={xLabels} right={PAD_RIGHT} />
