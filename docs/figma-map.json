@@ -447,6 +447,9 @@
     "ScatterHeatmap": {
       "figma": "348:1379"
     },
+    "SegmentBar": {
+      "figma": "592:49"
+    },
     "Sparkline": {
       "figma": "577:3"
     },

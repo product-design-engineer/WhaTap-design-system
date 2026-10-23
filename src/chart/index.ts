@@ -70,6 +70,8 @@ export { default as ArcGauge } from "./ArcGauge";
 export type { ArcGaugeProps, ArcGaugeThreshold } from "./ArcGauge";
 export { default as TrendTile } from "./TrendTile";
 export type { TrendTileProps } from "./TrendTile";
+export { default as SegmentBar } from "./SegmentBar";
+export type { SegmentBarProps, SegmentBarSegment } from "./SegmentBar";
 export { default as BlockCell } from "./BlockCell";
 export type { BlockCellProps } from "./BlockCell";
 export { default as BlockGrid, blockGridLegend } from "./BlockGrid";
