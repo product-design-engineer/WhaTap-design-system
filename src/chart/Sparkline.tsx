@@ -17,7 +17,8 @@
  * ## Composition rules
  * - 선 1.5px · 계열 색 토큰(`color`). 마지막 점에 지름 4px 점을 찍어 «지금» 을 표시한다.
  * - 바닥선 1px `--color-border-soft` 를 늘 깐다 — 0 에 붙은 선이 바닥과 겹쳐 «0» 으로 읽힌다.
- * - 세로 범위는 0 ~ `max`(없으면 이 선의 최대). 음수는 0 으로 자른다 — 부호 있는 지표는 이 마크로 그리지 않는다.
+ * - 세로 범위는 `min`(기본 0) ~ `max`(없으면 이 선의 최대). 범위 밖은 자른다 — 부호 있는 지표는 이 마크로 그리지 않는다.
+ *   `min` 을 0 이 아닌 값으로 주면(추세 타일의 모양 보기) 바닥선을 긋지 않는다.
  * - 값이 하나뿐이거나 없으면 바닥선만 그린다. 장식이므로 `aria-hidden` — 값은 옆 글자가 말한다.
  * - 폭은 부모를 채운다(`width` 로 고정 가능). 높이는 `height`(기본 20, 최소 16).
  *
@@ -28,7 +29,7 @@
  * | 선 | 1.5px · `color` · 끝 · 이음 둥글게 · `vector-effect: non-scaling-stroke` |
  * | 마지막 점 | 지름 4px · `color` |
  * | 바닥선 | 1px `--color-border-soft` |
- * | 세로 범위 | 0 ~ `max` ?? 값 최대 |
+ * | 세로 범위 | `min`(0) ~ `max` ?? 값 최대 · `min` ≠ 0 이면 바닥선 없음 |
  * | 접근성 | 장식(`aria-hidden`) |
  *
  * @example
@@ -43,6 +44,11 @@ export type SparklineProps = {
   color?: string;
   /** 세로 최대. 같은 열 여러 행을 같은 기준으로 견줄 때 공유한다. 없으면 이 선의 최대. */
   max?: number;
+  /**
+   * 세로 최소. 기본 0 — 바닥선이 «0» 을 뜻한다. 0 에서 먼 값의 **모양**을 보일 때(추세 타일)만 데이터 최소를 준다.
+   * 0 이 아니면 바닥선을 긋지 않는다(«0» 으로 오해된다).
+   */
+  min?: number;
   /** 높이(px). 기본 20, 최소 16. */
   height?: number;
   /** 폭(px). 없으면 부모를 채운다. */
@@ -51,18 +57,21 @@ export type SparklineProps = {
 
 const PAD = 2;
 
-export default function Sparkline({ values, color = "var(--color-chart-series-1)", max, height = 20, width }: SparklineProps) {
+export default function Sparkline({ values, color = "var(--color-chart-series-1)", max, min = 0, height = 20, width }: SparklineProps) {
   const h = Math.max(16, height);
   const top = max ?? Math.max(0, ...values);
   const n = values.length;
-  const y = (v: number) => (top > 0 ? PAD + (h - 2 * PAD) * (1 - Math.min(1, Math.max(0, v) / top)) : h - PAD);
+  const span = top - min;
+  const y = (v: number) => (span > 0 ? PAD + (h - 2 * PAD) * (1 - Math.min(1, Math.max(0, (v - min) / span))) : h - PAD);
   /* viewBox 가로는 0~100 으로 두고 늘린다 — 세로는 px 그대로라 선 굵기 · 점이 찌그러지지 않게 점은 HTML 로 얹는다. */
   const points = values.map((v, i) => `${n > 1 ? (i / (n - 1)) * 100 : 0},${y(v)}`).join(" ");
   const last = n > 1 ? values[n - 1] : null;
   return (
     <span aria-hidden className="relative inline-block align-middle" style={{ width: width ?? "100%", height: h }}>
       <svg className="absolute inset-0 block" width="100%" height={h} viewBox={`0 0 100 ${h}`} preserveAspectRatio="none">
-        <line x1="0" x2="100" y1={h - 0.5} y2={h - 0.5} stroke="var(--color-border-soft)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+        {min === 0 && (
+          <line x1="0" x2="100" y1={h - 0.5} y2={h - 0.5} stroke="var(--color-border-soft)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+        )}
         {n > 1 && (
           <polyline
             points={points}
