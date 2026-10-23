@@ -689,6 +689,22 @@ Figma 정본: 페이지 BoxPlotChart `586:2` · 세트 `586:93`(`frame`).
 
 Figma 정본: ChartArc 페이지 `585:2` · 세트 `585:153`(`level` × `bands`) / ArcGauge 페이지 `585:183` · 세트 `585:226`(`tone` · unit · label · min · max).
 
+## Treemap
+
+계층 구성의 크기를 칸 면적으로 — 묶음(1단계) 안에 항목 칸. **Composite** — [[ChartLegendItem]](묶음 범례) · [[ChartTooltip]] 을 조합하고 칸만 그린다(배치는 내부 squarified `_treemapLayout`).
+
+| Prop | Type | Default |
+|---|---|---|
+| `data` | `{ label, value?, children?: { label, value }[] }[]` | — |
+| `unit` | `string` | `""` |
+| `legend` | 묶음 범례 | `true` |
+
+- 묶음 색 = 계열 슬롯(묶음 순서) · 묶음 없으면 한 색 · 8개 넘으면 「기타」(§22). 상태색 아님.
+- 라벨은 칸 ≥ 56 × 28 일 때만(흰 글자 — 컬러 위 전경 예외), 작은 칸은 툴팁.
+- 양수 · 더할 수 있는 값만. 비율 · 평균 · 증감은 쓰지 않는다.
+
+Figma 정본: 페이지 Treemap `596:2` · 컴포넌트 `596:3`.
+
 ## MetricGrid
 
 같은 대상의 관련 집계 값 여럿을 세로 구분선으로 나눈 숫자 칸 줄. **Composite** — 칸마다 [[MetricStat]].
