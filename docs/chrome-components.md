@@ -629,6 +629,24 @@ Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
 
 Figma 정본: 페이지 ScatterChart `572:6908` · 세트 `572:7311`(`frame` × `marks` dot · bubble). ChartSwatch `shape=dot` `572:39` · ChartLegendItem `shape=dot` `572:6745` · `572:6749` 추가.
 
+## BoxPlotChart
+
+대상(범주)마다 값 분포를 **백분위**로 — 선 p50 · 상자 p25–p75 · 수염 p5–p95 · 점 p99. 경보 · SLO 와 같은 숫자를 말한다. **Composite** — [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCategoryAxis]] 를 조합하고 상자 · 수염 · 점 · p50 숫자를 그린다.
+
+| Prop | Type | Default |
+|---|---|---|
+| `boxes` | `{ label, values?: number[], stats?: { p5, p25, p50, p75, p95, p99 } }[]` | — |
+| `max` · `unit` | Y 최대 · 단위 | p95 최대 × 1.1 올림 · `""` |
+| `color` | 계열 토큰 하나 | series-1 |
+| `frame` | `boolean` — 범례 줄 | `true` |
+
+- 원값을 주면 `boxPlotStats(values)` 가 선형 보간 백분위를 계산한다. APM 서버 백분위는 `stats` 로.
+- Y 는 p95 기준 — 축을 넘는 p99 는 위 끝 ▲ + 값. p50 숫자는 가운데 선 오른쪽.
+- 범례 문장 `BOX_PLOT_LEGEND` 를 늘 보인다(WidgetFrame 안이면 `summary`). 표본 20개 미만이면 쓰지 않는다.
+- 사분위 · Tukey 수염 · 개별 이상치는 쓰지 않는다(2026-10-23 결정 — 운영자의 언어가 아니고 축이 늘어 상자가 눌렸다).
+
+Figma 정본: 페이지 BoxPlotChart `586:2` · 세트 `586:93`(`frame`).
+
 ## ArcGauge · ChartArc
 
 범위 안 지금 값 하나 — 호 길이 + 가운데 큰 숫자. **ArcGauge(Composite)** = **ChartArc(Primitives — 240° 호 트랙 · 채움 · 바깥 임계 띠)** + 가운데 값 · 양 끝 글자. [[RangeGauge]] 와 같은 계약의 둥근 판 — 정사각 칸은 호, 좁고 긴 칸은 막대.
