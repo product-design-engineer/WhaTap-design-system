@@ -42,7 +42,7 @@
  * | 열 머리 | 플롯 위 한 줄 · `text-sm` secondary + 개수 bold · 간격 12 |
  * | 좁은 구역 | 열 폭 < 범위 12% → 이름 · 개수를 플롯 아래 한 줄(`text-chart`) |
  * | 플롯 여백 | 위 4 · 아래 14 · 오른쪽 8 · 왼쪽 `--wds-widget-axis-gutter` |
- * | hover | 점마다 14px 칸 · 가리킨 점은 불투명 + 카드색 2px 고리 · [[ChartTooltip]](이름 · 구역 · X · Y) |
+ * | hover | 점마다 14px 칸 · 가리킨 점은 불투명 + 카드색 2px 고리, 나머지 0.32 · [[ChartTooltip]](이름 · 구역 · X · Y) |
  * | 접근성 | 플롯 `role="img"` + 구역별 개수 요약 |
  *
  * @example
@@ -57,6 +57,7 @@ import ChartTimeAxis from "./ChartTimeAxis";
 import ChartTooltip from "./ChartTooltip";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER, formatAxisValue } from "./_axisScale";
+import { DIM_OPACITY, EMPHASIS_RING, MARK_CLASS } from "./_emphasis";
 
 export type ZoneScatterPoint = {
   x: number;
@@ -200,8 +201,8 @@ export default function ZoneScatterChart({
                 style={{ left: px(clampX(p.x)), top: py(clampY(p.y)), width: 14, height: 14, transform: "translate(-50%, -50%)", zIndex: 2 }}
               >
                 <span
-                  className="block rounded-full"
-                  style={{ width: 6, height: 6, background: color, opacity: on ? 1 : 0.8, boxShadow: `0 0 0 ${on ? 2 : 1}px var(--color-card)` }}
+                  className={`${MARK_CLASS} block rounded-full`}
+                  style={{ width: 6, height: 6, background: color, opacity: on ? 1 : hover ? DIM_OPACITY : 0.8, boxShadow: on ? EMPHASIS_RING : "0 0 0 1px var(--color-card)" }}
                 />
               </span>
             );

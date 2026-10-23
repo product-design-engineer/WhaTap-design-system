@@ -21,6 +21,7 @@
  * - 가로 줄에서는 줄바꿈 없이(`nowrap`) 서고, 줄 간격(12px)은 범례 줄이 정한다.
  * - `fill` 이면 폭을 채우고 이름이 말줄임되며 값은 오른쪽 끝에 붙는다 — 세로 목록에서 값의 자릿수가 세로로 맞는다.
  * - 색은 마크와 같은 토큰. hex 금지.
+ * - 차트 안 범례면 `onHover` 로 그 계열 마크를 강조하고, 다른 계열이 강조 중일 때 `dimmed` 로 흐린다(patterns §26 «강조»).
  *
  * ## Spec
  * | 항목 | 값 |
@@ -38,6 +39,7 @@
  * ```
  */
 import type { ReactNode } from "react";
+import { DIM_OPACITY } from "./_emphasis";
 import { SwatchMark, type ChartSwatchShape } from "./_swatch";
 
 export type ChartLegendItemProps = {
@@ -51,11 +53,20 @@ export type ChartLegendItemProps = {
   value?: ReactNode;
   /** 폭을 채우고 값을 오른쪽 끝에 — 세로 목록용. 기본 false(가로 줄). */
   fill?: boolean;
+  /** 이 항목을 가리킬 때 · 벗어날 때 — 차트가 그 계열 마크를 강조한다(patterns §26 «강조»). */
+  onHover?: (on: boolean) => void;
+  /** 다른 계열이 강조 중이라 이 항목을 흐린다(불투명도 0.32). */
+  dimmed?: boolean;
 };
 
-export default function ChartLegendItem({ color, shape = "square", label, value, fill = false }: ChartLegendItemProps) {
+export default function ChartLegendItem({ color, shape = "square", label, value, fill = false, onHover, dimmed = false }: ChartLegendItemProps) {
   return (
-    <span className={`flex items-center gap-4px text-sm ${fill ? "w-full min-w-0" : "whitespace-nowrap"}`}>
+    <span
+      className={`wds-chart-mark flex items-center gap-4px text-sm ${fill ? "w-full min-w-0" : "whitespace-nowrap"}`}
+      style={{ opacity: dimmed ? DIM_OPACITY : undefined, cursor: onHover ? "default" : undefined }}
+      onMouseEnter={onHover ? () => onHover(true) : undefined}
+      onMouseLeave={onHover ? () => onHover(false) : undefined}
+    >
       <SwatchMark color={color} shape={shape} />
       <span className={`text-secondary ${fill ? "truncate min-w-0" : ""}`} title={fill ? label : undefined}>
         {label}

@@ -42,7 +42,7 @@
  * | 축 | Y 0 ~ 합 최대 올림(`max`) · 눈금 최대 · 절반 · 0 · 단위 `unit` / X 이름 [[ChartCategoryAxis]] |
  * | 값 글자 | `text-chart` 9px · 숫자 서체 · 최대만 bold primary · 나머지 tertiary · 막대 칸 위 2px |
  * | 플롯 여백 | 위 14(값 글자) · 아래 18(이름) · 오른쪽 8 · 왼쪽 `--wds-widget-axis-gutter` |
- * | hover | 막대 칸 전체 · 칸 바탕 `--color-surface-50` · [[ChartTooltip]](이름 · 구간별 값 · 합계 또는 임계) |
+ * | hover | 막대 칸 전체 · 나머지 막대 0.32 · [[ChartTooltip]](이름 · 구간별 값 · 합계 또는 임계) |
  * | 접근성 | 플롯 `role="img"` + 대상 수 · 최대 |
  *
  * @example
@@ -61,6 +61,7 @@ import ChartTooltip from "./ChartTooltip";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER, formatAxisValue, niceMax } from "./_axisScale";
 import { stripeCounts } from "./_stripes";
+import { DIM_OPACITY, MARK_CLASS } from "./_emphasis";
 
 export type EqualizerSegment = {
   /** 양. */
@@ -133,10 +134,10 @@ export default function EqualizerChart({ bars, max, levels = 10, threshold, unit
             return (
               <div
                 key={i}
-                className="relative flex-1 min-w-0 flex justify-center"
+                className={`${MARK_CLASS} relative flex-1 min-w-0 flex justify-center`}
                 onMouseEnter={() => setHover(i)}
                 onMouseLeave={() => setHover(null)}
-                style={{ background: hover === i ? "var(--color-surface-50)" : undefined }}
+                style={{ opacity: hover != null && hover !== i ? DIM_OPACITY : 1 }}
               >
                 <div className="flex h-full" style={{ flexDirection: "column-reverse", width: "60%", maxWidth: 24, gap: CELL_GAP }}>
                   {cells.map((c, k) => (

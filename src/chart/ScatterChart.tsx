@@ -47,7 +47,7 @@
  * | 눈금 | Y 최대 · 절반 · 0 / X 0 · 절반 · 최대 — 격자 가로 3 · 세로 절반 1 + 오른쪽 끝 |
  * | 플롯 여백 | 위 4 · 아래 14 · 오른쪽 8px · 왼쪽 `--wds-widget-axis-gutter`(28px) |
  * | 단독 범례 | 계열 2개 이상 · 플롯 위 오른쪽 · 항목 간격 12px · 아래 4px |
- * | hover | 점마다 최소 14px 칸이 받는다 · 가리킨 점은 불투명 + 카드색 2px 고리 · [[ChartTooltip]](이름 · 계열 · X · Y · 크기) |
+ * | hover | 점마다 최소 14px 칸이 받는다 · 가리킨 점은 불투명 + 카드색 2px 고리, 나머지 0.32 · 범례 항목을 가리키면 그 계열만 남긴다 · [[ChartTooltip]](이름 · 계열 · X · Y · 크기) |
  * | 접근성 | 플롯 `role="img"` + 계열 이름 · 점 수 |
  *
  * @example
@@ -64,6 +64,7 @@ import ChartTimeAxis from "./ChartTimeAxis";
 import ChartTooltip from "./ChartTooltip";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER, formatAxisValue, niceMax } from "./_axisScale";
+import { DIM_OPACITY, EMPHASIS_RING, MARK_CLASS } from "./_emphasis";
 
 export type ScatterChartPoint = {
   x: number;
@@ -138,6 +139,8 @@ export default function ScatterChart({ series: allSeries, xMax, yMax, xUnit = ""
   const summary = `산점도 — ${series.map((s) => `${s.label} ${s.points.length}점`).join(", ")}`;
   /* 가리킨 점 — [[ChartTooltip]] 으로 값을 보인다 */
   const [hover, setHover] = useState<{ si: number; p: ScatterChartPoint } | null>(null);
+  /* 범례를 가리킨 계열 — 그 계열 점만 남기고 나머지를 흐린다 */
+  const [focus, setFocus] = useState<number | null>(null);
   const xr = (v: number) => (xTop > 0 ? v / xTop : 0);
   const yr = (v: number) => (yTop > 0 ? 1 - v / yTop : 1);
 
@@ -145,8 +148,15 @@ export default function ScatterChart({ series: allSeries, xMax, yMax, xUnit = ""
     <div className="flex flex-col h-full min-h-0 w-full gap-4px" style={{ padding: frame ? "0 8px" : 0 }}>
       {frame && series.length > 1 && (
         <div className="flex justify-end gap-12px">
-          {scatterLegend(series).map((l) => (
-            <ChartLegendItem key={l.label} color={l.color} shape="dot" label={l.label} />
+          {scatterLegend(series).map((l, i) => (
+            <ChartLegendItem
+              key={l.label}
+              color={l.color}
+              shape="dot"
+              label={l.label}
+              onHover={(on) => setFocus(on ? i : null)}
+              dimmed={focus != null && focus !== i}
+            />
           ))}
         </div>
       )}
@@ -171,13 +181,14 @@ export default function ScatterChart({ series: allSeries, xMax, yMax, xUnit = ""
                     style={{ left: `${xr(p.x) * 100}%`, top: `${yr(p.y) * 100}%`, width: hit, height: hit, transform: "translate(-50%, -50%)" }}
                   >
                     <span
-                      className="block rounded-full"
+                      className={`${MARK_CLASS} block rounded-full`}
                       style={{
                         width: d,
                         height: d,
                         background: seriesColor(s, si),
-                        opacity: on ? 1 : DOT_OPACITY,
-                        boxShadow: on ? "0 0 0 2px var(--color-card)" : undefined,
+                        /* 강조 — 가리킨 점은 불투명 + 고리, 나머지는 흐림. 범례 계열 강조도 같은 규칙(§26) */
+                        opacity: on ? 1 : hover || (focus != null && focus !== si) ? DIM_OPACITY : DOT_OPACITY,
+                        boxShadow: on ? EMPHASIS_RING : undefined,
                       }}
                     />
                   </span>

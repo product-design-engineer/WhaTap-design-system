@@ -2,6 +2,7 @@ import React, { type ReactNode } from "react";
 import { STATUS_TONE_FILL, STATUS_TONE_TEXT, type StatusTone } from "./_statusTone";
 import ChartLegendItem from "./ChartLegendItem";
 import ChartTooltip from "./ChartTooltip";
+import { DIM_OPACITY } from "./_emphasis";
 
 /**
  * HexGrid — 리소스 맵 (헥사곤 그리드). GPU 디바이스 · 서버처럼 개별 장치를 한 칸씩 깐다.
@@ -136,7 +137,8 @@ export function hexGridLegend(
 }
 
 /** hover 중 나머지 칸 · 하이라이트 밖 칸의 불투명도. */
-const HOVER_DIM_OPACITY = 0.32;
+/* hover 흐림은 차트 공통 값(내부 `_emphasis`) */
+const HOVER_DIM_OPACITY = DIM_OPACITY;
 const HIGHLIGHT_DIM_OPACITY = 0.18;
 
 const TONE_TEXT = STATUS_TONE_TEXT;

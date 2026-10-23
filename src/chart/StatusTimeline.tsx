@@ -39,7 +39,7 @@
  * | 격자 | 가로 눈금 3 + 세로 점선 = 시간 글자 사이마다(`xLabels.length − 1`) |
  * | 플롯 여백 | 위 4 · 아래 14 · 오른쪽 8px · 왼쪽 `--wds-widget-axis-gutter`(28px) |
  * | 단독 범례 | Critical · Warning · Info 사각 견본, 플롯 위 오른쪽 · 간격 12px |
- * | hover | 마커 둘레 12px 칸 · 가리킨 마커 5px · [[ChartTooltip]](이름 · 시각 `formatAt` · 심각도 · 건수) |
+ * | hover | 마커 둘레 12px 칸 · 가리킨 마커 5px, 나머지 0.32 · [[ChartTooltip]](이름 · 시각 `formatAt` · 심각도 · 건수) |
  * | 접근성 | 플롯 `role="img"` + 사건 수 요약 |
  *
  * @example
@@ -56,6 +56,7 @@ import ChartTimeAxis from "./ChartTimeAxis";
 import ChartTooltip from "./ChartTooltip";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER, niceMax } from "./_axisScale";
+import { DIM_OPACITY, MARK_CLASS } from "./_emphasis";
 
 export type StatusTimelineSeverity = "critical" | "warning" | "info";
 
@@ -148,9 +149,10 @@ export default function StatusTimeline({ events, start, end, xLabels, max, frame
               style={{ left: `${xr(e.at) * 100}%`, bottom: 0, width: 12, height: `max(8px, ${hr(e.count) * 100}%)`, transform: "translateX(-50%)" }}
             >
               <span
-                className="absolute rounded-1px"
+                className={`${MARK_CLASS} absolute rounded-1px`}
                 style={{
                   bottom: 0,
+                  opacity: hover != null && hover !== i ? DIM_OPACITY : 1,
                   width: hover === i ? MARK_W + 2 : MARK_W,
                   height: `max(2px, ${hr(e.count) * 100}%)`,
                   background: SEVERITY_COLOR[e.severity],
