@@ -52,3 +52,28 @@ export function tickStops(max: number, ticks?: number[]): { ratio: number; value
 export function plotY(padTop: number, padBottom: number, ratioFromTop: number): string {
   return `calc(${padTop}px + (100% - ${padTop + padBottom}px) * ${ratioFromTop})`;
 }
+
+/**
+ * 시간 구간(ms) 눈금 — 1 · 2 · 5 × 10ⁿ ms 간격 중 눈금이 `target` 개 안팎이 되는 값. Flame · Waterfall 처럼 «경과 시간» 이 X 인 차트.
+ * 구간 안쪽 눈금만 돌려준다(양 끝 포함 여부는 간격이 정한다).
+ */
+export function durationTicks(t0: number, t1: number, target = 6): number[] {
+  const span = t1 - t0;
+  if (!(span > 0)) return [t0];
+  const raw = span / target;
+  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const step = [1, 2, 5, 10].map((m) => m * mag).find((s) => s >= raw) ?? 10 * mag;
+  const out: number[] = [];
+  for (let v = Math.ceil(t0 / step) * step; v <= t1 + 1e-9; v += step) out.push(+v.toFixed(6));
+  return out;
+}
+
+/** 경과 시간 글자 — 1초 미만 `120ms`, 그 위 `1.5s` · `12s`, 1분 이상 `1m 30s`. */
+export function formatDuration(ms: number): string {
+  if (Math.abs(ms) < 1000) return `${Math.round(ms)}ms`;
+  const s = ms / 1000;
+  if (Math.abs(s) < 60) return `${+s.toFixed(s < 10 ? 2 : 1)}s`;
+  const m = Math.floor(s / 60);
+  const r = Math.round(s - m * 60);
+  return r ? `${m}m ${r}s` : `${m}m`;
+}

@@ -959,7 +959,7 @@ series 는 네 가지를 지킨다.
 | 추세 타일 | 대응 | [[TrendTile]] | 캡처 없음 — 문서 1-3 의 요소(지표명 · 현재값 · 추세 방향 · 소형 추이)로 만들었다. **변화 색은 지표의 좋은 방향(`better`)이 정한다(2026-10-23, 추천안)** — [[StatCard]] `trend` 처럼 오름을 늘 같은 색으로 칠하지 않는다. 비교 기준은 글자로 |
 | 트리맵 · 지도 | 대응 | [[Treemap]] · [[GeoMap]] | 트리맵은 배치된 화면을 찾지 못했다(캡처 없음) — 문서 요소로 만들었다(2026-10-23, 추천안): squarified · 묶음 1단계 · 묶음 색 = 계열 슬롯(8 넘으면 «기타», §22) · 56 × 28 미만 칸은 라벨 없이 툴팁. 지도는 값 레이어 없이 모든 국가가 같은 회색이라 «데이터 없음» 과 «값이 고르다» 가 구별되지 않았다 — [[GeoMap]](2026-10-23): 값 없는 국가 = 바탕 회색 · 값 = 순차 4단계 · 전체가 비면 «데이터 없음» · 개수는 버블. 줌 컨트롤은 [[TopologyZoomControl]] 을 `limits` 로 함께 쓴다(§26) |
 | 토폴로지 | 대응 | [[TopologyCanvas]] · [[TopologyNode]] · [[TopologyEdge]] · [[TopologyZoomControl]] | DS 는 **좌→우 계층 배치 · 카드 노드** 전용이다(힘 기반 배치는 다른 엔진이라 범위 밖, `layoutTopology` 명시). 같은 변의 엣지는 슬롯으로 나누고 라벨은 가장 긴 구간 가운데에 둔다 — 나란한 엣지 라벨 겹침은 회귀 테스트가 막는다(2026-10-21 코드 확인). NPM 형(원형 노드 · 크기 = 트래픽 · 힘 배치 · 고립 노드 18개가 세로 일렬로 캔버스 절반을 씀)은 **공백**. 엣지는 `tone`(기본 · 경보) 둘뿐이라 임계 기준 실선 / 점선도 **공백** |
-| Flame · Waterfall | 공백 | 없음 | Waterfall 리소스 타입 11종은 색을 늘리지 않는다(§22 · §18) — 레거시에서도 fetch · xhr, media · image 가 구별되지 않는다. Flame 은 162초를 한 폭에 넣어 앞 2초의 바가 폭의 3% 로 눌리고 바 라벨이 거의 전부 말줄임이다 — 확대 없이는 색 띠로만 읽힌다. 에러 세로선이 촘촘해 배경 무늬처럼 보인다. 만들 때 확대 · 구간 선택을 먼저 정한다 |
+| Flame · Waterfall | 대응 | [[FlameChart]] · [[WaterfallChart]] | Waterfall 리소스 타입 11종은 색을 늘리지 않는다(§22 · §18) — 레거시에서도 fetch · xhr, media · image 가 구별되지 않는다. Flame 은 162초를 한 폭에 넣어 앞 2초의 바가 폭의 3% 로 눌리고 바 라벨이 거의 전부 말줄임이다 — 확대 없이는 색 띠로만 읽힌다. 에러 세로선이 촘촘해 배경 무늬처럼 보인다. — 만들면서 정했다(2026-10-23, 추천안): 시간축 줄을 끌어 확대([[ChartBrush]]) · 폭 40px 미만 막대는 이름 없이([[ChartSpanBar]]) · Flame 색 = 상태 · Waterfall 색 = 단계(타입은 글자) · 에러 시각은 [[StatusTimeline]] 을 위에 |
 | 표 안 비율 막대 | 대응 | [[MetricBarCell]] | **정해짐(2026-10-23, 추천안)** — 0 보다 큰 구간은 최소 2px. 0.01% 대 값이 1px 아래로 사라져 0 으로 읽히던 결함 |
 | 표 안 스파크라인 · 행 색 인덱스 · 범위 바 | 대응 | [[SparklineCell]] · [[Sparkline]] | **정해짐(2026-10-23, 추천안)** — 스파크라인 높이 20(최소 16) + 바닥선, 행 색 인덱스는 짝 차트 계열 토큰일 때만(`indexColor`), 값이 없는 행도 `-` + 빈 자리로 열 정렬 유지. 원 기록: | 행 색 인덱스는 같은 칸 차트의 계열 색과 이어질 때만 뜻이 있다. 스파크라인(GPU 프로세스)은 셀 위 1~2px 선이라 추이가 안 보이고 0% 가 직선과 구별되지 않는다 — 셀 안 최소 높이가 함께 필요하다. 범위 바(서버 인벤토리 Metrics)는 단위가 % 가 아닌 행(Mbps)에서 바가 빠져 열 정렬이 깨진다 — 바를 못 그리는 행도 자리를 비워 둔다 |
 | 범례: 오른쪽 세로 목록 · 플롯 위 오버레이 · 분리 패널 | 이관 대상 | §15 범례 | 본문 오른쪽 위 한 줄로 옮긴다 |
@@ -993,7 +993,7 @@ series 는 네 가지를 지킨다.
 | 22 | 트리맵 | [[Treemap]] = squarified 배치(내부 `_treemapLayout`) · [[ChartLegendItem]] · [[ChartTooltip]] 조합 | 있음 (2026-10-23) |
 | 23 | 지도 | [[GeoMap]] = Natural Earth 110m 국가 도형(내부 `_geoWorld`) · [[ChartLegendItem]] · [[ChartTooltip]] · [[TopologyZoomControl]] 조합 · 단계 구분 / 버블 | 있음 (2026-10-23) |
 | 24 | 토폴로지 | [[TopologyCanvas]] | 있음 |
-| 25 | Flame / Waterfall | FlameChart · WaterfallChart | 신규 |
+| 25 | Flame / Waterfall | [[FlameChart]] · [[WaterfallChart]] = [[ChartSpanBar]](구간 막대) · [[ChartBrush]](축 끌어 확대) · [[ChartTimeAxis]] · [[ChartLegendItem]] · [[ChartTooltip]] 조합 | 있음 (2026-10-23) |
 | 26 | 표 안 미니 차트 | [[SparklineCell]] = [[Sparkline]](요소) 조합 · 비율 막대는 [[MetricBarCell]] · 범위 막대는 [[RangeGauge]] | 있음 (2026-10-23) |
 
 순서: **A단계** 완성 차트를 Composite 로(BarList → GpuStatusBar → UsageChart → ScatterHeatmap). **B단계** 신규를 제품 빈도순으로 — 산점도 → 상태 타임라인 → 범위 게이지 → 스파크라인 → 누적면 → 이퀄라이저 → 블록 → 추세 타일 → 호 게이지 → 박스플롯 → 구역 분할 산점도 → 트리맵 → 지도 → Flame · Waterfall → 컴파운드아이. 새 이름은 범용 이름이고, 만들 때 세 정본(코드 · Storybook · Figma)에 함께 넣는다.
