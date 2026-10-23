@@ -584,6 +584,7 @@ Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
 | HexGrid | 카드 · 「GPU Map」 제목 줄 · 범례 | `title` · `legend={HEX_GRID_LEGEND}`(칸 수를 붙이면 `hexGridLegend(items)`) · 메뉴 |
 | ActiveTransactionArc | 바깥 여백(좌우 · 아래 8px) · 왼쪽 아래 Elapsed 범례 | `title` · `meta` · `legend={SPEED_LEGEND}` · 메뉴 |
 | ScatterHeatmap | 바깥 좌우 여백(8px) | `title` · `meta` · `legend={SPEED_LEGEND}` · 메뉴 |
+| EqualizerChart | 바깥 좌우 여백(8px) | `title` · `legend`(구간 누적이면 `SPEED_LEGEND` 등) · 메뉴 |
 | StackedAreaChart | 바깥 좌우 여백(8px) · 계열 범례 줄 | `title` · `summary` · `legend={stackedAreaLegend(series)}` · 메뉴 |
 | StatusTimeline | 바깥 좌우 여백(8px) · 심각도 범례 줄 | `title` · `summary` · `legend={statusTimelineLegend()}` · 메뉴 |
 | ScatterChart | 바깥 좌우 여백(8px) · 계열 범례 줄 | `title` · `summary` · `legend={scatterLegend(series)}`(원 견본) · 메뉴 |
@@ -627,6 +628,26 @@ Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
 - 단독(`frame`)이면 계열 둘 이상일 때 플롯 위 오른쪽에 원 견본 범례. 대시보드 칸은 `frame={false}` + WidgetFrame `legend={scatterLegend(series)}`.
 
 Figma 정본: 페이지 ScatterChart `572:6908` · 세트 `572:7311`(`frame` × `marks` dot · bubble). ChartSwatch `shape=dot` `572:39` · ChartLegendItem `shape=dot` `572:6745` · `572:6749` 추가.
+
+## EqualizerChart
+
+대상마다 세로 막대를 칸으로 끊어 쌓는다 — 칸 하나 = 축 최대 ÷ `levels`. **Composite** — [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCategoryAxis]] 를 조합하고 칸만 그린다. 호 형태는 [[ChartRadialBars]](같은 칸 계산, 내부 `_stripes`).
+
+| Prop | Type | Default |
+|---|---|---|
+| `bars` | `{ label, segments?: { value, color, label? }[], value? }[]` | — |
+| `max` | `number` — 사용률이면 100 | 합 최대 올림 |
+| `levels` | `number` — 칸 수 | `10` |
+| `threshold` | `number` — `value` 막대 임계 2색 | — |
+| `unit` | `string` | `""` |
+| `valueLabels` | `boolean` — 최대만 굵게 | `true` |
+| `frame` | `boolean` | `true` |
+
+- 색은 구간 누적(`segments`, 속도 등급이면 `--color-chart-speed-*` + WidgetFrame `legend={SPEED_LEGEND}`) 또는 임계 2색(`--color-brand-blue` / `--color-status-warning`) 중 하나.
+- 임계 슬라이더는 화면의 컨트롤 — 차트는 `threshold` 만 받는다.
+- 0 보다 큰 구간은 최소 1칸이라, 작은 구간이 여럿이면 큰 구간 칸이 줄어든다. 정밀 비교는 [[BarList]].
+
+Figma 정본: 페이지 EqualizerChart `579:2` · 세트 `579:431`(`mode` × `frame`).
 
 ## StackedAreaChart
 

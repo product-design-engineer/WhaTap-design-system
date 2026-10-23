@@ -950,7 +950,7 @@ series 는 네 가지를 지킨다.
 | 호 게이지 | 공백 | 없음 | 캡처 없음. [[ActiveTransactionArc]] 는 APM 액티브 트랜잭션 전용 |
 | 스피드 차트 | 대응 | [[ActiveTransactionSpeedWidget]] | 없음 |
 | 컴파운드아이 | 공백 | 없음 | 셀 하나 안에서 두 스케일(부채꼴 · 외곽 링)을 쓰고 값 눈금이 없다. 보존과 치환을 따로 결정한다 |
-| 세로 이퀄라이저 · 리소스 이퀄라이저 | 공백 | 없음 | 상태별 누적과 임계 2색이 같은 이름으로 섞여 있다. 임계 슬라이더 연동도 **공백**. 셀 한 칸의 뜻(고정 단위인가 비율인가)이 정의돼 있지 않다 — 만들 때 먼저 정한다 |
+| 세로 이퀄라이저 · 리소스 이퀄라이저 | 대응 | [[EqualizerChart]] | **정해짐(2026-10-23, 추천안)** — 칸 하나 = 축 최대 ÷ `levels`(기본 10, [[ChartRadialBars]] 와 같은 계산 `_stripes`) · 색은 구간 누적(`segments`) 또는 임계 2색(`value` + `threshold`) 중 하나, 한 차트에 섞지 않는다 · 임계 슬라이더는 차트 계약에 넣지 않고 화면이 조합(`threshold` prop) |
 | 허니컴 | 대응 | [[HexGrid]] · `hexGridLegend` | 0개 상태는 범례에 넣지 않는다(칠해진 색을 센다). 개수에 따른 배치는 [[HexGrid]] 가 정한다 — 칸 비율에 맞춰 `columns` ±2 안에서 칸이 가장 크게 나오는 열 수를 고른다(2026-10-21 코드 확인) |
 | 블록 (서버 인벤토리 맵) · 상태 요약 행 | 공백 | 없음 | 허니컴과 합칠지 용도를 나눌지 따로 결정한다 |
 | 상태 타임라인 (이벤트) | 대응 | [[StatusTimeline]] | **정해짐(2026-10-23, 추천안)** — 높이 = 건수(값축 단위 `건` 이 읽게 한다) · 색 = 심각도 셋(critical · warning · info, 상태 토큰 · 범례 이름과 함께, §23) · 반전 시간 바는 쓰지 않고 공통 [[ChartTimeAxis]](§26) |
@@ -983,7 +983,7 @@ series 는 네 가지를 지킨다.
 | 11 | 숫자 / 집계값 | [[KpiCard]] · [[StatCard]] | 있음 · 카탈로그 위치 정리 |
 | 12 | 막대 게이지 | [[RangeGauge]] = [[UsageGauge]](채움) + [[ChartPeakMarker]](▼) 조합 · min · 현재 · Max · 임계 띠 | 있음 (2026-10-23) |
 | 13 | 호 게이지 / 속도계 | [[ActiveTransactionArc]] · [[ActiveTransactionSpeedWidget]] · ArcGauge | 일부 있음 · 호 게이지 신규 |
-| 14 | 이퀄라이저 | EqualizerChart | 신규 |
+| 14 | 이퀄라이저 | [[EqualizerChart]] = [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCategoryAxis]] 조합 · 호 형태는 [[ChartRadialBars]](같은 칸 규칙) | 있음 (2026-10-23) |
 | 15 | 블록 / 허니컴 / 그리드 | [[HexGrid]] · BlockGrid | 허니컴 있음 · 블록 신규 |
 | 16 | 상태 타임라인 | [[StatusTimeline]] = [[ChartGrid]](`vertical`) · [[ChartValueAxis]](건수) · [[ChartTimeAxis]] 조합 | 있음 (2026-10-23) |
 | 17 | Hitmap | [[ScatterHeatmap]] = [[ChartGrid]](`vertical`) · [[ChartValueAxis]] · [[ChartTimeAxis]] 조합 | 있음 (2026-10-22 Composite 로) |
