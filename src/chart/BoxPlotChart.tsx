@@ -42,7 +42,7 @@
  * | 범례 | `선 p50 · 상자 p25–p75 · 수염 p5–p95 · 점 p99` · `text-sm` tertiary |
  * | 축 | Y 0 ~ p95 최대 × 1.1 올림(`max`) · 눈금 최대 · 절반 · 0 · 단위 `unit` / X [[ChartCategoryAxis]] |
  * | 플롯 여백 | 위 14(p50 숫자) · 아래 18 · 오른쪽 8 · 왼쪽 `--wds-widget-axis-gutter` |
- * | hover | 칸 전체가 받는다 · 칸 바탕 `--color-surface-50` · [[ChartTooltip]](이름 · p99 · p95 · p75 · p50 · p25 · p5, 정확한 값) |
+ * | hover | 칸 전체가 받는다 · 나머지 칸 0.32 · [[ChartTooltip]](이름 · p99 · p95 · p75 · p50 · p25 · p5, 정확한 값) |
  * | 접근성 | 플롯 `role="img"` + 범례 문장 |
  *
  * @example
@@ -58,6 +58,7 @@ import ChartGrid from "./ChartGrid";
 import ChartTooltip from "./ChartTooltip";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER, formatAxisValue, niceMax } from "./_axisScale";
+import { DIM_OPACITY, MARK_CLASS } from "./_emphasis";
 
 export type BoxPlotStats = {
   p5: number;
@@ -137,10 +138,11 @@ export default function BoxPlotChart({ boxes, max, unit = "", color = "var(--col
             return (
               <div
                 key={i}
-                className="relative flex-1 min-w-0"
+                className={`${MARK_CLASS} relative flex-1 min-w-0`}
                 onMouseEnter={() => setHover(i)}
                 onMouseLeave={() => setHover(null)}
-                style={{ background: hover === i ? "var(--color-surface-50)" : undefined }}
+                /* 강조 — 가리킨 칸 밖은 흐린다(§26). 툴팁은 가리킨 칸 안에 있어 흐림을 받지 않는다 */
+                style={{ opacity: hover != null && hover !== i ? DIM_OPACITY : 1 }}
               >
                 {s && (
                   <svg aria-hidden className="absolute inset-0 overflow-visible" width="100%" height="100%">

@@ -1885,6 +1885,14 @@ html, body, #root {
 }
 
 /* 컨트롤의 focus 는 ring — border 로 표현하지 않는다(입력 필드만 focus-border). */
+/* 차트 마크 강조 — 가리킨 마크 밖은 흐리고(불투명도) 가리킨 마크는 고리 · 굵기. 색은 바꾸지 않는다(chart/_emphasis, patterns §26). */
+.wds-chart-mark {
+  transition: opacity 120ms ease, box-shadow 120ms ease, stroke-width 120ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wds-chart-mark { transition: none; }
+}
+
 /* BlockCell — 고를 수 있는 상태 칸(버튼). 칸 칠이 상태색이라 테두리가 아니라 바깥 링으로 포커스를 말한다. */
 .wds-block-cell:focus-visible {
   outline: 2px solid var(--color-brand-blue);

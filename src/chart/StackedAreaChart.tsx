@@ -41,7 +41,7 @@
  * | 최고점 | `peak` 면 합계 최대 시점에 [[ChartPeakMarker]](값 + 단위, ▼ 색 = 맨 위 계열) |
  * | 플롯 여백 | 위 14(▼ 자리) · 아래 14 · 오른쪽 8 · 왼쪽 `--wds-widget-axis-gutter` |
  * | 단독 범례 | 사각 견본, 플롯 위 오른쪽 · 간격 12 · 위층부터(쌓인 순서와 같은 위아래) |
- * | hover | 플롯 위 포인터 x → 가장 가까운 시점 · 세로 안내선 1px `--color-border-strong` · [[ChartTooltip]](시점 `pointLabels` · 계열 값 위층부터 · 합계) |
+ * | hover | 플롯 위 포인터 x → 가장 가까운 시점 · 세로 안내선 1px `--color-border-strong` + 층마다 위 경계 점(6px · 카드색 고리) · [[ChartTooltip]](시점 `pointLabels` · 계열 값 위층부터 · 합계) · 범례 항목을 가리키면 그 층만 남기고 나머지 0.32 |
  * | 접근성 | 플롯 `role="img"` + 계열 이름 · 합계 최대 |
  *
  * @example
@@ -59,6 +59,7 @@ import ChartTimeAxis from "./ChartTimeAxis";
 import ChartTooltip from "./ChartTooltip";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER, formatPeakValue, niceMax } from "./_axisScale";
+import { DIM_OPACITY, EMPHASIS_RING, MARK_CLASS } from "./_emphasis";
 
 export type StackedAreaSeries = {
   /** 계열 이름 — 범례 · 접근성. */
@@ -130,6 +131,8 @@ export default function StackedAreaChart({ series: all, xLabels, unit = "", max,
   const plotLeft = `calc(${AXIS_GUTTER} + (100% - ${AXIS_GUTTER} - ${PAD_RIGHT}px) * `;
   /* 가리킨 시점 */
   const [hover, setHover] = useState<number | null>(null);
+  /* 범례를 가리킨 계열 — 그 층만 남기고 나머지 면을 흐린다 */
+  const [focus, setFocus] = useState<string | null>(null);
   const exact = (v: number) => `${v.toLocaleString("en-US", { maximumFractionDigits: 1 })}${unit}`;
 
   return (
@@ -137,7 +140,13 @@ export default function StackedAreaChart({ series: all, xLabels, unit = "", max,
       {frame && series.length > 1 && (
         <div className="flex justify-end flex-wrap gap-12px">
           {stackedAreaLegend(series).map((l) => (
-            <ChartLegendItem key={l.label} color={l.color} label={l.label} />
+            <ChartLegendItem
+              key={l.label}
+              color={l.color}
+              label={l.label}
+              onHover={(on) => setFocus(on ? l.label : null)}
+              dimmed={focus != null && focus !== l.label}
+            />
           ))}
         </div>
       )}
@@ -159,7 +168,15 @@ export default function StackedAreaChart({ series: all, xLabels, unit = "", max,
             {series.map((s, k) => {
               const upper = tops[k].map((v, i) => `${x(i)},${y(v)}`);
               const lower = (k ? tops[k - 1] : tops[k].map(() => 0)).map((v, i) => `${x(i)},${y(v)}`).reverse();
-              return <polygon key={k} points={[...upper, ...lower].join(" ")} fill={colorOf(s, k)} />;
+              return (
+                <polygon
+                  key={k}
+                  className={MARK_CLASS}
+                  points={[...upper, ...lower].join(" ")}
+                  fill={colorOf(s, k)}
+                  opacity={focus != null && focus !== s.label ? DIM_OPACITY : 1}
+                />
+              );
             })}
             {/* 층 사이 경계는 면을 모두 칠한 뒤에 — 먼저 그으면 위층 면이 덮는다 */}
             {series.slice(0, -1).map((_, k) => (
@@ -189,6 +206,23 @@ export default function StackedAreaChart({ series: all, xLabels, unit = "", max,
             {hover != null && (
               <>
                 <span aria-hidden className="absolute" style={{ left: `${(hover / (n - 1)) * 100}%`, top: 0, bottom: 0, width: 0, borderLeft: "1px solid var(--color-border-strong)" }} />
+                {/* 그 시점 각 층 위 경계의 점 — 어느 값이 어느 층인지 이어 준다 */}
+                {series.map((sr, k) => (
+                  <span
+                    key={k}
+                    aria-hidden
+                    className="absolute rounded-full"
+                    style={{
+                      left: `${(hover / (n - 1)) * 100}%`,
+                      top: `${top > 0 ? (1 - Math.min(1, tops[k][hover] / top)) * 100 : 100}%`,
+                      width: 6,
+                      height: 6,
+                      transform: "translate(-50%, -50%)",
+                      background: colorOf(sr, k),
+                      boxShadow: EMPHASIS_RING,
+                    }}
+                  />
+                ))}
                 <ChartTooltip
                   left={`${(hover / (n - 1)) * 100}%`}
                   top={`${top > 0 ? (1 - Math.min(1, totals[hover] / top)) * 100 : 100}%`}
