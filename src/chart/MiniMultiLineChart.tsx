@@ -20,6 +20,7 @@
  * - ❌ 대상이 많아 선이 엉키는 비교(서버 10대) → [[BarList]] TOP-N 또는 칸 나누기
  *
  * ## Composition rules
+ * - 플롯을 가리키면 [[ChartCrosshair]] 가 시점 안내선 · 계열마다 점 · 값 툴팁을 보인다(제목 = `pointLabels`). 헤더 범례 항목을 가리키면 그 선만 굵게(2px) 남기고 나머지를 흐린다(patterns §26 «강조»).
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 안쪽 여백 · 제목 줄 · ⋮ · 헤더 범례 · AI 트리거를 뺀다).
@@ -59,7 +60,9 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import ChartGrid from "./ChartGrid";
 import ChartLegendItem from "./ChartLegendItem";
+import ChartCrosshair from "./ChartCrosshair";
 import ChartTimeAxis from "./ChartTimeAxis";
+import { DIM_OPACITY, MARK_CLASS } from "./_emphasis";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER as GUTTER, niceMax } from "./_axisScale";
 import AiTriggerButton from "../widget/TriggerButton";
@@ -117,6 +120,8 @@ export type MiniMultiLineChartProps = {
    * `false` 면 본문만 그린다. [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
    */
   frame?: boolean;
+  /** 시점마다 이름(「13:27:05」) — hover 툴팁 제목. 없으면 제목 없이. */
+  pointLabels?: string[];
 };
 
 export default function MiniMultiLineChart({
@@ -133,7 +138,10 @@ export default function MiniMultiLineChart({
   aiTriggerReveal = "always",
   aiTriggerTooltip = "이 차트를 WhaTap AI로 분석",
   frame = true,
+  pointLabels,
 }: MiniMultiLineChartProps) {
+  /* 범례를 가리킨 계열 — 그 선만 남기고 나머지를 흐린다(patterns §26 «강조») */
+  const [focus, setFocus] = useState<string | null>(null);
   const VBW = 1000;
   const VBH = 1000;
 
@@ -230,7 +238,14 @@ export default function MiniMultiLineChart({
             series
               .filter((s) => s.label)
               .map((s, i) => (
-                <ChartLegendItem key={i} color={s.color} shape="line" label={s.label!} />
+                <ChartLegendItem
+                  key={i}
+                  color={s.color}
+                  shape="line"
+                  label={s.label!}
+                  onHover={(on) => setFocus(on ? s.label! : null)}
+                  dimmed={focus != null && focus !== s.label}
+                />
               ))}
           <MenuDots />
         </div>
@@ -272,7 +287,7 @@ export default function MiniMultiLineChart({
           }}
         >
           {plotSeries.map((s, i) => (
-            <g key={i}>
+            <g key={i} className={MARK_CLASS} opacity={focus != null && focus !== s.label ? DIM_OPACITY : 1}>
               {s.showArea && s.areaStr && (
                 <polyline
                   points={s.areaStr}
@@ -285,7 +300,7 @@ export default function MiniMultiLineChart({
                 points={s.polyStr}
                 fill="none"
                 stroke={s.color}
-                strokeWidth="1.2"
+                strokeWidth={focus != null && focus === s.label ? 2 : 1.2}
                 strokeLinejoin="round"
                 strokeLinecap="round"
                 vectorEffect="non-scaling-stroke"
@@ -334,6 +349,17 @@ export default function MiniMultiLineChart({
             </span>
           ))}
         </div>
+        {/* 시점 고르기 — 안내선 · 계열마다 점 · 값 툴팁(patterns §26 «강조») */}
+        <ChartCrosshair
+          count={Math.max(0, ...series.map((s) => s.values.length))}
+          max={yMaxNice}
+          series={series.filter((s) => s.values.length > 0).map((s) => ({ label: s.label ?? "", color: s.color, values: s.values }))}
+          labels={pointLabels}
+          unit={unit}
+          right={right}
+          padTop={PAD_TOP}
+          padBottom={PAD_BOTTOM}
+        />
       </div>
 
       {/* ── Footer ────────────────────────────────────────────────────── */}

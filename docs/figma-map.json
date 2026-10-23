@@ -111,6 +111,9 @@
     "ChartCategoryAxis": {
       "figma": "560:4"
     },
+    "ChartCrosshair": {
+      "figma": "591:3"
+    },
     "ChartGrid": {
       "figma": "545:16"
     },
