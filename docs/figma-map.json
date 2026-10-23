@@ -429,6 +429,9 @@
     "SparklineCell": {
       "figma": "577:62"
     },
+    "StackedAreaChart": {
+      "figma": "578:80"
+    },
     "StatusTimeline": {
       "figma": "574:80"
     },

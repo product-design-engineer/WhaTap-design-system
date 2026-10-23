@@ -584,6 +584,7 @@ Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
 | HexGrid | 카드 · 「GPU Map」 제목 줄 · 범례 | `title` · `legend={HEX_GRID_LEGEND}`(칸 수를 붙이면 `hexGridLegend(items)`) · 메뉴 |
 | ActiveTransactionArc | 바깥 여백(좌우 · 아래 8px) · 왼쪽 아래 Elapsed 범례 | `title` · `meta` · `legend={SPEED_LEGEND}` · 메뉴 |
 | ScatterHeatmap | 바깥 좌우 여백(8px) | `title` · `meta` · `legend={SPEED_LEGEND}` · 메뉴 |
+| StackedAreaChart | 바깥 좌우 여백(8px) · 계열 범례 줄 | `title` · `summary` · `legend={stackedAreaLegend(series)}` · 메뉴 |
 | StatusTimeline | 바깥 좌우 여백(8px) · 심각도 범례 줄 | `title` · `summary` · `legend={statusTimelineLegend()}` · 메뉴 |
 | ScatterChart | 바깥 좌우 여백(8px) · 계열 범례 줄 | `title` · `summary` · `legend={scatterLegend(series)}`(원 견본) · 메뉴 |
 | MiniBarChart | 바깥 좌우 여백(8px) | `title` · `meta` · `legend`(막대 색 그대로) · 메뉴 |
@@ -626,6 +627,25 @@ Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
 - 단독(`frame`)이면 계열 둘 이상일 때 플롯 위 오른쪽에 원 견본 범례. 대시보드 칸은 `frame={false}` + WidgetFrame `legend={scatterLegend(series)}`.
 
 Figma 정본: 페이지 ScatterChart `572:6908` · 세트 `572:7311`(`frame` × `marks` dot · bubble). ChartSwatch `shape=dot` `572:39` · ChartLegendItem `shape=dot` `572:6745` · `572:6749` 추가.
+
+## StackedAreaChart
+
+계열을 아래에서 위로 쌓은 면 — 위 경계 = 합계의 추이, 층 두께 = 각 계열의 몫. **Composite** — [[ChartGrid]] · [[ChartValueAxis]] · [[ChartTimeAxis]] · [[ChartPeakMarker]](합계 최고점) 를 조합하고 면만 그린다.
+
+| Prop | Type | Default |
+|---|---|---|
+| `series` | `{ label, values, slot?: 1..8 }[]` — `series[0]` 이 바닥, 8개까지 | — |
+| `xLabels` | `string[]` | — |
+| `unit` | `string` | `""` |
+| `max` | `number` — Y 고정 | 합계 최대 올림 |
+| `peak` | `boolean` — 합계 최고점 ▼ | `false` |
+| `frame` | `boolean` | `true` |
+
+- 면은 불투명 + 층 사이 카드색 1px. 누적면은 겹치지 않으므로 투명도가 뜻이 없고, 투명하면 범례 견본과 색이 달라 보인다.
+- 크고 안정적인 계열을 바닥에 — 바닥이 평평해야 위층이 읽힌다. 계열끼리 견주는 자리는 [[MiniMultiLineChart]].
+- 범례는 `stackedAreaLegend(series)`(위층부터) 를 WidgetFrame `legend` 로. 별도 범례 패널로 빼지 않는다.
+
+Figma 정본: 페이지 StackedAreaChart `578:2` · 세트 `578:80`(`frame`).
 
 ## SparklineCell · Sparkline
 
