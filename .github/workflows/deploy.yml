@@ -76,11 +76,13 @@ jobs:
       # Vercel 에 사전 빌드된 산출물을 올린다 — 원격 빌드를 쓰면 git 에 커밋된 것만
       # 포함되므로 방금 생성한 tarball 이 빠진다.
       # vercel pull → vercel build(= pnpm build-storybook) → vercel deploy --prebuilt
+      # --archive=tgz: 파일을 하나씩 올리면 무료 플랜 업로드 한도(하루 5000건, api-upload-free)를
+      # 넘는다 — 2026-10-23 #124 · #130 배포가 이걸로 실패했다. 묶음 하나로 올린다.
       - name: Build & deploy Storybook (catalog)
         run: |
           npx --yes vercel@latest pull --yes --environment=production --token="$VERCEL_TOKEN"
           npx vercel build --prod --token="$VERCEL_TOKEN"
-          npx vercel deploy --prebuilt --prod --yes --token="$VERCEL_TOKEN"
+          npx vercel deploy --prebuilt --prod --yes --archive=tgz --token="$VERCEL_TOKEN"
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_STORYBOOK }}
@@ -88,7 +90,7 @@ jobs:
       - name: Deploy MCP server
         working-directory: mcp-server
         run: |
-          npx --yes vercel@latest deploy --prod --yes --token="$VERCEL_TOKEN"
+          npx --yes vercel@latest deploy --prod --yes --archive=tgz --token="$VERCEL_TOKEN"
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_MCP }}
