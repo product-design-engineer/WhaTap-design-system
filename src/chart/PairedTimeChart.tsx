@@ -116,7 +116,7 @@ export default function PairedTimeChart({ top, bottom, count, xLabels, pointLabe
         if (cur.length > 1) runs.push(cur.join(" "));
         return (
           <div key={k} className="relative flex-1 min-h-0" role="img" aria-label={`${p.label} — 최대 ${Math.max(0, ...p.values.map((v) => v ?? 0))}${p.unit ?? ""}`}>
-            <span className="absolute text-sm text-secondary leading-none" style={{ left: `calc(${AXIS_GUTTER} + 4px)`, top: 0 }}>
+            <span className="absolute text-sm text-secondary" style={{ left: `calc(${AXIS_GUTTER} + 4px)`, top: 0, lineHeight: "var(--leading-none)" }}>
               {p.label}
             </span>
             <ChartGrid max={max} padTop={padTop} padBottom={padBottom} right={PAD_RIGHT} />
