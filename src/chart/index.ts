@@ -56,6 +56,8 @@ export { default as BarListItem } from "./BarListItem";
 export type { BarListItemProps } from "./BarListItem";
 export { default as ActiveTransactionArc, SPEED_LEGEND } from "./ActiveTransactionArc";
 export type { ActiveTransactionArcProps, ActiveTransactionAgentLoad } from "./ActiveTransactionArc";
+export { default as StatusTimeline, statusTimelineLegend } from "./StatusTimeline";
+export type { StatusTimelineProps, StatusTimelineEvent, StatusTimelineSeverity } from "./StatusTimeline";
 export { default as ScatterChart, scatterLegend } from "./ScatterChart";
 export type { ScatterChartProps, ScatterChartSeries, ScatterChartSeriesList, ScatterChartPoint } from "./ScatterChart";
 export { default as ScatterHeatmap, SCATTER_HEATMAP_DEMO_DOTS } from "./ScatterHeatmap";
