@@ -689,6 +689,24 @@ Figma 정본: 페이지 BoxPlotChart `586:2` · 세트 `586:93`(`frame`).
 
 Figma 정본: ChartArc 페이지 `585:2` · 세트 `585:153`(`level` × `bands`) / ArcGauge 페이지 `585:183` · 세트 `585:226`(`tone` · unit · label · min · max).
 
+## SegmentBar
+
+전체 하나를 구간으로 나눈 단일 가로 누적 바 + 바 아래 한 줄 범례. **Composite** — [[ChartLegendItem]] · [[ChartTooltip]] 을 조합하고 구간만 그린다.
+
+| Prop | Type | Default |
+|---|---|---|
+| `segments` | `{ label, value, color }[]` | — |
+| `total` · `restLabel` | 전체 · 남는 몫 이름 | 구간 합 · 「나머지」 |
+| `unit` | `string` | `""` |
+| `legendValue` | `"value" \| "percent" \| "both"` | `"value"` |
+| `height` · `legend` | 바 높이 · 범례 그리기 | `12` · `true` |
+
+- 남는 몫은 `--color-surface-200` 이름 구간 — 범례에 없는 빈 구간을 두지 않는다.
+- 범례 한 줄 · 줄바꿈 · 사각 견본. 0 인 구간은 바에서 빠지고 범례에 남는다.
+- hover: 구간 · 범례 → 그 구간만 + 툴팁(값 · 전체의 %).
+
+Figma 정본: 페이지 SegmentBar `592:2` · 세트 `592:49`(`legendValue`).
+
 ## TrendTile
 
 지표 하나의 지금 값 · 비교 시점 대비 변화 · 최근 추이. **Composite** — [[MetricStat]](지표명 · 값 · 단위) + [[Sparkline]](추이, 데이터 최소 ~ 최대) + 변화 줄.
