@@ -42,7 +42,8 @@
  * | 열 머리 | 플롯 위 한 줄 · `text-sm` secondary + 개수 bold · 간격 12 |
  * | 좁은 구역 | 열 폭 < 범위 12% → 이름 · 개수를 플롯 아래 한 줄(`text-chart`) |
  * | 플롯 여백 | 위 4 · 아래 14 · 오른쪽 8 · 왼쪽 `--wds-widget-axis-gutter` |
- * | 접근성 | 플롯 `role="img"` + 구역별 개수 요약 / 점마다 `title` |
+ * | hover | 점마다 14px 칸 · 가리킨 점은 불투명 + 카드색 2px 고리 · [[ChartTooltip]](이름 · 구역 · X · Y) |
+ * | 접근성 | 플롯 `role="img"` + 구역별 개수 요약 |
  *
  * @example
  * ```tsx
@@ -51,7 +52,9 @@
  *   columnLabels={["Idle GPU", "Active GPU", "Effective GPU"]} critical={{ from: 95, label: "Memory Critical" }} />
  * ```
  */
+import { useState } from "react";
 import ChartTimeAxis from "./ChartTimeAxis";
+import ChartTooltip from "./ChartTooltip";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER, formatAxisValue } from "./_axisScale";
 
@@ -126,6 +129,11 @@ export default function ZoneScatterChart({
   const px = (v: number) => `${(v / xMax) * 100}%`;
   const py = (v: number) => `${(1 - v / yMax) * 100}%`;
   const plot = { left: AXIS_GUTTER, right: PAD_RIGHT, top: PAD_TOP, bottom: PAD_BOTTOM };
+  /* 가리킨 점 — [[ChartTooltip]] 으로 값 · 구역을 보인다 */
+  const [hover, setHover] = useState<ZoneScatterPoint | null>(null);
+  const zoneOf = (p: ZoneScatterPoint) => zones?.[rows - 1 - Math.min(rows - 1, indexOf(p.y, yBreaks))]?.[Math.min(cols - 1, indexOf(p.x, xBreaks))];
+  const clampX = (v: number) => Math.min(xMax, Math.max(0, v));
+  const clampY = (v: number) => Math.min(yMax, Math.max(0, v));
   const summary = zones ? zones.flatMap((r, ri) => r.map((z, ci) => `${z} ${counts[ri][ci]}`)).join(", ") : `${points.length}개`;
 
   return (
@@ -180,23 +188,38 @@ export default function ZoneScatterChart({
               </span>
             </div>
           )}
-          {points.map((p, i) => (
-            <span
-              key={i}
-              className="absolute rounded-full"
-              title={`${p.label ?? ""} ${formatAxisValue(p.x)}${xUnit} · ${formatAxisValue(p.y)}${yUnit}`.trim()}
-              style={{
-                left: px(Math.min(xMax, Math.max(0, p.x))),
-                top: py(Math.min(yMax, Math.max(0, p.y))),
-                width: 6,
-                height: 6,
-                transform: "translate(-50%, -50%)",
-                background: color,
-                opacity: 0.8,
-                boxShadow: "0 0 0 1px var(--color-card)",
-              }}
+          {points.map((p, i) => {
+            const on = hover === p;
+            return (
+              /* 맞히기 쉽게 — 14px 투명 칸이 hover 를 받는다 */
+              <span
+                key={i}
+                className="absolute flex items-center justify-center"
+                onMouseEnter={() => setHover(p)}
+                onMouseLeave={() => setHover(null)}
+                style={{ left: px(clampX(p.x)), top: py(clampY(p.y)), width: 14, height: 14, transform: "translate(-50%, -50%)", zIndex: 2 }}
+              >
+                <span
+                  className="block rounded-full"
+                  style={{ width: 6, height: 6, background: color, opacity: on ? 1 : 0.8, boxShadow: `0 0 0 ${on ? 2 : 1}px var(--color-card)` }}
+                />
+              </span>
+            );
+          })}
+          {hover && (
+            <ChartTooltip
+              left={px(clampX(hover.x))}
+              top={py(clampY(hover.y))}
+              flipX={clampX(hover.x) / xMax > 0.5}
+              flipY={1 - clampY(hover.y) / yMax > 0.5}
+              title={hover.label}
+              rows={[
+                ...(zoneOf(hover) ? [{ label: "구역", value: zoneOf(hover) }] : []),
+                { label: "X", value: `${hover.x.toLocaleString("en-US")}${xUnit}`, color, shape: "dot" as const },
+                { label: "Y", value: `${hover.y.toLocaleString("en-US")}${yUnit}` },
+              ]}
             />
-          ))}
+          )}
         </div>
         <ChartValueAxis max={yMax} ticks={ys} unit={yUnit} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={PAD_RIGHT} />
         <ChartTimeAxis labels={xTicks.map((v) => formatAxisValue(v) + xUnit)} positions={xTicks.map((v) => v / xMax)} right={PAD_RIGHT} />

@@ -42,7 +42,8 @@
  * | 축 | Y 0 ~ 합 최대 올림(`max`) · 눈금 최대 · 절반 · 0 · 단위 `unit` / X 이름 [[ChartCategoryAxis]] |
  * | 값 글자 | `text-chart` 9px · 숫자 서체 · 최대만 bold primary · 나머지 tertiary · 막대 칸 위 2px |
  * | 플롯 여백 | 위 14(값 글자) · 아래 18(이름) · 오른쪽 8 · 왼쪽 `--wds-widget-axis-gutter` |
- * | 접근성 | 플롯 `role="img"` + 대상 수 · 최대 / 막대마다 `title`(이름 · 값 · 구간) |
+ * | hover | 막대 칸 전체 · 칸 바탕 `--color-surface-50` · [[ChartTooltip]](이름 · 구간별 값 · 합계 또는 임계) |
+ * | 접근성 | 플롯 `role="img"` + 대상 수 · 최대 |
  *
  * @example
  * ```tsx
@@ -53,8 +54,10 @@
  * <EqualizerChart bars={servers.map((s) => ({ label: s.name, value: s.cpu }))} max={100} unit="%" threshold={80} />
  * ```
  */
+import { useState } from "react";
 import ChartCategoryAxis from "./ChartCategoryAxis";
 import ChartGrid from "./ChartGrid";
+import ChartTooltip from "./ChartTooltip";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER, formatAxisValue, niceMax } from "./_axisScale";
 import { stripeCounts } from "./_stripes";
@@ -109,6 +112,9 @@ export default function EqualizerChart({ bars, max, levels = 10, threshold, unit
   const top = max ?? niceMax(Math.max(0, ...totals));
   const best = Math.max(0, ...totals);
   const cellH = `calc((100% - ${(levels - 1) * CELL_GAP}px) / ${levels})`;
+  /* 가리킨 막대 — [[ChartTooltip]] 으로 구간별 값 · 합계를 보인다 */
+  const [hover, setHover] = useState<number | null>(null);
+  const exact = (v: number) => `${v.toLocaleString("en-US", { maximumFractionDigits: 1 })}${unit}`;
 
   return (
     <div className="flex h-full min-h-0 w-full" style={{ padding: frame ? "0 8px" : 0 }}>
@@ -128,7 +134,9 @@ export default function EqualizerChart({ bars, max, levels = 10, threshold, unit
               <div
                 key={i}
                 className="relative flex-1 min-w-0 flex justify-center"
-                title={`${b.label} · ${formatAxisValue(totals[i])}${unit}${b.segments ? ` (${b.segments.map((s) => `${s.label ?? ""} ${s.value}`.trim()).join(" · ")})` : ""}`}
+                onMouseEnter={() => setHover(i)}
+                onMouseLeave={() => setHover(null)}
+                style={{ background: hover === i ? "var(--color-surface-50)" : undefined }}
               >
                 <div className="flex h-full" style={{ flexDirection: "column-reverse", width: "60%", maxWidth: 24, gap: CELL_GAP }}>
                   {cells.map((c, k) => (
@@ -146,6 +154,17 @@ export default function EqualizerChart({ bars, max, levels = 10, threshold, unit
                   >
                     {formatAxisValue(totals[i])}
                   </span>
+                )}
+                {hover === i && (
+                  <ChartTooltip
+                    left="50%"
+                    top={`${(1 - filled / levels) * 100}%`}
+                    flipX={i >= bars.length / 2}
+                    offset={16}
+                    title={b.label}
+                    rows={segs.map((sg, k) => ({ label: (b.segments?.[k]?.label ?? (threshold != null ? (sg.color === OVER ? "임계 이상" : "임계 미만") : "값")), value: exact(sg.value), color: sg.color }))}
+                    footer={b.segments && b.segments.length > 1 ? `합계 ${exact(totals[i])}` : threshold != null ? `임계 ${exact(threshold)}` : undefined}
+                  />
                 )}
               </div>
             );

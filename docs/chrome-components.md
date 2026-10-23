@@ -522,6 +522,8 @@ export type DataTableProps<T> = {
   Figma 정본: ChartSwatch 페이지 `549:2` · 세트 `549:5` / ChartLegendItem 페이지 `567:47` · 세트 `567:64`(`shape` × `fill` · label · value · showValue, 견본 칠은 인스턴스에서 마크 색 변수로).
 - 고리형 막대는 [[ChartRadialBars]](Primitives) — 칸 하나 = 대상 하나, 구간은 안쪽부터 쌓인 줄무늬(`levels` 단계, 0 보다 큰 구간은 최소 한 줄). 바탕 `--color-chart-radial-track` · 구분선 `--color-chart-radial-divider`. 가운데는 `children`, 회전 장식은 `sweep`(동작 줄이기에서 멈춤). [[ActiveTransactionArc]] 는 `agents`(에이전트별 `{ normal, slow, verySlow }`)로 이것을 그린다 — 종전 정적 이미지는 삭제.
   Figma 정본: ChartRadialBars 페이지 `568:6848` · 세트 `568:6918`(`sweep` · center · showCenter) · 변수 `color/chart/radial-track` `568:2` · `radial-divider` `568:3`. ActiveTransactionArc 세트 `347:267` 은 이 세트 · MetricStat · ChartLegendItem 인스턴스로 다시 짰다.
+- 마크 hover 값 상자는 [[ChartTooltip]](Primitives) — 카드 표면 · 1px 테두리 · 반경 6 · 그림자 · 제목 + 값 줄(견본 · 이름 · 값 굵게) + 보조 줄. `left` · `top` 은 마크 자리(차트가 계산), `flipX` · `flipY` 로 반대쪽에 편다. 자유 내용은 `children`. 차트 마크에 브라우저 `title` 을 쓰지 않는다. ScatterChart · ZoneScatterChart · BoxPlotChart · StatusTimeline(`formatAt`) · EqualizerChart · StackedAreaChart(`pointLabels`, 세로 안내선) · HexGrid 가 쓴다.
+  Figma 정본: 페이지 ChartTooltip `589:10` · 세트 `589:67`(`rows` × `footer` · title).
 - 차트 옆 수치(라벨 위 큰 숫자 · 단위 · 보조 줄)는 [[MetricStat]](Primitives, 옛 이름 SpeedStat) — [[ActiveTransactionSpeedWidget]] RPS · TPS, [[ActiveTransactionArc]] Max TX · Agent.
 - 높이가 정해진 `position: relative` 플롯 상자 안에 둔다. 두 부품에 **같은 `max` · 여백**을 줘야 글자와 점선이 같은 높이에 선다.
 - 축 제목은 그리지 않는다(§26 결정). 오른쪽 두 번째 Y축은 금지(§19).

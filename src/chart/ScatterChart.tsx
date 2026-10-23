@@ -34,6 +34,7 @@
  * - 범례 견본은 원(`dot`, §26). [[WidgetFrame]] 에 넣을 때는 `frame={false}` 와 `scatterLegend(series)` 를 `legend` 로.
  *   단독(`frame`)이면 계열이 둘 이상일 때 플롯 위 오른쪽에 [[ChartLegendItem]] 줄을 세운다.
  * - 축 제목은 쓰지 않는다. 단위는 눈금 접미사(`xUnit` · `yUnit`, §26).
+ * - 점을 가리키면 [[ChartTooltip]] 이 이름 · X · Y · 크기를 보인다(브라우저 `title` 을 쓰지 않는다 — 늦게 뜨고 다크를 따르지 않는다).
  * - `h-full` 부모 안에서 채워진다.
  *
  * ## Spec
@@ -46,7 +47,8 @@
  * | 눈금 | Y 최대 · 절반 · 0 / X 0 · 절반 · 최대 — 격자 가로 3 · 세로 절반 1 + 오른쪽 끝 |
  * | 플롯 여백 | 위 4 · 아래 14 · 오른쪽 8px · 왼쪽 `--wds-widget-axis-gutter`(28px) |
  * | 단독 범례 | 계열 2개 이상 · 플롯 위 오른쪽 · 항목 간격 12px · 아래 4px |
- * | 접근성 | 플롯 `role="img"` + 계열 이름 · 점 수 / 점마다 `title`(이름 · X · Y · size) |
+ * | hover | 점마다 최소 14px 칸이 받는다 · 가리킨 점은 불투명 + 카드색 2px 고리 · [[ChartTooltip]](이름 · 계열 · X · Y · 크기) |
+ * | 접근성 | 플롯 `role="img"` + 계열 이름 · 점 수 |
  *
  * @example
  * ```tsx
@@ -55,9 +57,11 @@
  * </WidgetFrame>
  * ```
  */
+import { useState } from "react";
 import ChartGrid from "./ChartGrid";
 import ChartLegendItem from "./ChartLegendItem";
 import ChartTimeAxis from "./ChartTimeAxis";
+import ChartTooltip from "./ChartTooltip";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER, formatAxisValue, niceMax } from "./_axisScale";
 
@@ -132,6 +136,10 @@ export default function ScatterChart({ series: allSeries, xMax, yMax, xUnit = ""
   const xStops = xTop > 0 ? [0, 0.5, 1] : [0];
   const plot = { left: AXIS_GUTTER, right: PAD_RIGHT, top: PAD_TOP, bottom: PAD_BOTTOM };
   const summary = `산점도 — ${series.map((s) => `${s.label} ${s.points.length}점`).join(", ")}`;
+  /* 가리킨 점 — [[ChartTooltip]] 으로 값을 보인다 */
+  const [hover, setHover] = useState<{ si: number; p: ScatterChartPoint } | null>(null);
+  const xr = (v: number) => (xTop > 0 ? v / xTop : 0);
+  const yr = (v: number) => (yTop > 0 ? 1 - v / yTop : 1);
 
   return (
     <div className="flex flex-col h-full min-h-0 w-full gap-4px" style={{ padding: frame ? "0 8px" : 0 }}>
@@ -151,23 +159,45 @@ export default function ScatterChart({ series: allSeries, xMax, yMax, xUnit = ""
               .sort((a, b) => (b.size ?? 0) - (a.size ?? 0))
               .map((p, pi) => {
                 const d = diameter(p.size);
+                const on = hover?.p === p;
+                /* 맞히기 쉽게 — 보이는 점보다 넓은(최소 14px) 투명 칸이 hover 를 받는다 */
+                const hit = Math.max(14, d);
                 return (
                   <span
                     key={`${si}-${pi}`}
-                    className="absolute rounded-full"
-                    title={`${p.label ?? s.label} · ${p.x}${xUnit}, ${p.y}${yUnit}${p.size != null ? ` · ${p.size}` : ""}`}
-                    style={{
-                      left: `${xTop > 0 ? (p.x / xTop) * 100 : 0}%`,
-                      top: `${yTop > 0 ? (1 - p.y / yTop) * 100 : 100}%`,
-                      width: d,
-                      height: d,
-                      transform: "translate(-50%, -50%)",
-                      background: seriesColor(s, si),
-                      opacity: DOT_OPACITY,
-                    }}
-                  />
+                    className="absolute flex items-center justify-center"
+                    onMouseEnter={() => setHover({ si, p })}
+                    onMouseLeave={() => setHover(null)}
+                    style={{ left: `${xr(p.x) * 100}%`, top: `${yr(p.y) * 100}%`, width: hit, height: hit, transform: "translate(-50%, -50%)" }}
+                  >
+                    <span
+                      className="block rounded-full"
+                      style={{
+                        width: d,
+                        height: d,
+                        background: seriesColor(s, si),
+                        opacity: on ? 1 : DOT_OPACITY,
+                        boxShadow: on ? "0 0 0 2px var(--color-card)" : undefined,
+                      }}
+                    />
+                  </span>
                 );
               }),
+          )}
+          {hover && (
+            <ChartTooltip
+              left={`${xr(hover.p.x) * 100}%`}
+              top={`${yr(hover.p.y) * 100}%`}
+              flipX={xr(hover.p.x) > 0.5}
+              flipY={yr(hover.p.y) > 0.5}
+              title={hover.p.label ?? series[hover.si].label}
+              rows={[
+                ...(hover.p.label ? [{ label: "계열", value: series[hover.si].label, color: seriesColor(series[hover.si], hover.si), shape: "dot" as const }] : []),
+                { label: "X", value: `${hover.p.x.toLocaleString("en-US")}${xUnit}` },
+                { label: "Y", value: `${hover.p.y.toLocaleString("en-US")}${yUnit}` },
+                ...(hover.p.size != null ? [{ label: "크기", value: hover.p.size.toLocaleString("en-US") }] : []),
+              ]}
+            />
           )}
         </div>
         <ChartValueAxis max={yTop} unit={yUnit} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={PAD_RIGHT} />

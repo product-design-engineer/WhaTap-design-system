@@ -28,6 +28,8 @@ const N = 30;
 const wave = (seed: number, base: number, amp: number) =>
   Array.from({ length: N }, (_, i) => Math.max(0, Math.round(base + amp * Math.sin((i + seed) / 4) + ((i * seed) % 5) * 3)));
 const LABELS = ["14:20", "14:30", "14:40", "14:50"];
+/* 시점마다 이름 — 30개(1분 간격) · 툴팁 제목 */
+const POINTS = Array.from({ length: N }, (_, i) => `14:${String(20 + i).padStart(2, "0")}`);
 const GPUS: StackedAreaSeries[] = Array.from({ length: 8 }, (_, k) => ({ label: `A100 ${k}`, values: wave(k + 1, 220 - k * 18, 30 + k * 4) }));
 const CODES: StackedAreaSeries[] = [
   { label: "2xx", values: wave(2, 900, 120) },
@@ -38,7 +40,7 @@ const box = { width: 560, height: 220, border: "1px solid var(--color-border-def
 
 /** 기본 — 상태 코드별 요청 수. 큰 2xx 를 바닥에. */
 export const Default: Story = {
-  args: { series: CODES, xLabels: LABELS, unit: "", peak: true },
+  args: { series: CODES, xLabels: LABELS, unit: "", peak: true, pointLabels: POINTS },
   render: (args) => (
     <div style={box}>
       <StackedAreaChart {...args} />
@@ -48,7 +50,7 @@ export const Default: Story = {
 
 /** 8계열 상한 — GPU 장치별 전력(W). 범례는 플롯 위 오른쪽(라이브의 별도 패널 대신). */
 export const EightSeries: Story = {
-  args: { series: GPUS, xLabels: LABELS, unit: "W", peak: true },
+  args: { series: GPUS, xLabels: LABELS, unit: "W", peak: true, pointLabels: POINTS },
   render: (args) => (
     <div style={{ ...box, height: 260 }}>
       <StackedAreaChart {...args} />
@@ -61,7 +63,7 @@ export const InWidgetFrame: Story = {
   render: () => (
     <div style={{ width: 480, height: 240 }}>
       <WidgetFrame title="Power Usage" summary="Watt" legend={stackedAreaLegend(GPUS.slice(0, 4))} onFullscreen={() => {}}>
-        <StackedAreaChart series={GPUS.slice(0, 4)} xLabels={LABELS} unit="W" peak frame={false} />
+        <StackedAreaChart series={GPUS.slice(0, 4)} xLabels={LABELS} unit="W" peak pointLabels={POINTS} frame={false} />
       </WidgetFrame>
     </div>
   ),

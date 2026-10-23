@@ -1,6 +1,7 @@
 import React, { type ReactNode } from "react";
 import { STATUS_TONE_FILL, STATUS_TONE_TEXT, type StatusTone } from "./_statusTone";
 import ChartLegendItem from "./ChartLegendItem";
+import ChartTooltip from "./ChartTooltip";
 
 /**
  * HexGrid — 리소스 맵 (헥사곤 그리드). GPU 디바이스 · 서버처럼 개별 장치를 한 칸씩 깐다.
@@ -33,7 +34,7 @@ import ChartLegendItem from "./ChartLegendItem";
  *   범례는 `HEX_GRID_LEGEND` 를 WidgetFrame `legend` 로 넘긴다(같은 색 토큰). 제목 · 메뉴도 WidgetFrame 이 맡는다(patterns §15).
  * - 개수를 범례에 붙일 때는 `hexGridLegend(items)` 를 WidgetFrame `legend` 로 넘긴다 → `Critical 3` 처럼
  *   라벨 뒤에 칸 수가 붙는다. 칠해진 색을 센다(톤이 0 개여도 줄은 남는다). 라벨은 `labels` 로 바꾼다.
- * - Primitives 레이어 (자체 렌더링, DS 컴포넌트 import 0). 툴팁 상자도 [[Tooltip]] 을 쓰지 않고 직접 그린다.
+ * - 툴팁 상자는 차트 공통 [[ChartTooltip]](내용은 `renderTooltip`) — 다른 차트 툴팁과 같은 모양이다. 위치는 HexGrid 가 계산한다.
  * - 색은 chart/status 토큰만 사용. 툴팁 상자는 `bg-card` · `--color-border-default` · `--shadow-md` · 텍스트 토큰.
  * - SVG 기반. 헥사곤은 polygon. 툴팁은 SVG 와 **같은 좌표계**(viewBox → 픽셀 환산)로 hover 헥사곤에 붙는
  *   HTML overlay 다(patterns §5). `pointer-events: none` 이라 툴팁 안에 버튼을 넣지 않는다. 행동은 헥사곤 클릭으로.
@@ -390,18 +391,9 @@ export default function HexGrid({
           const flipX = px > size.w / 2;
           const flipY = py > size.h / 2;
           return (
-            <div
-              role="tooltip"
-              className="absolute z-10 pointer-events-none bg-card border border-color-var-color-border-default rounded-6px px-12px py-8px shadow-md text-sm text-primary whitespace-nowrap"
-              style={{
-                left: flipX ? px - off : px + off,
-                top: flipY ? py - off : py + off,
-                transform: `translate(${flipX ? "-100%" : "0"}, ${flipY ? "-100%" : "0"})`,
-                fontFamily: "var(--font-family-korean)",
-              }}
-            >
+            <ChartTooltip left={px} top={py} flipX={flipX} flipY={flipY} offset={off}>
               {renderTooltip(item)}
-            </div>
+            </ChartTooltip>
           );
         })()}
       </div>

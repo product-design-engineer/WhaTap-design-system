@@ -37,6 +37,8 @@ type Story = StoryObj<typeof StatusTimeline>;
 const START = 0;
 const END = 28;
 const LABELS = ["14:22", "14:26", "14:30", "14:34", "14:38", "14:42", "14:46", "14:50"];
+/* 툴팁 제목 시각 — 분 → 「14:34」 */
+const formatAt = (m: number) => { const t = 22 + Math.round(m); return `14:${String(t).padStart(2, "0")}`; };
 const EVENTS: StatusTimelineEvent[] = [
   { at: 1.5, count: 2, severity: "info", label: "배포 시작" },
   { at: 3, count: 1, severity: "info" },
@@ -55,7 +57,7 @@ const box = { width: 560, height: 180, border: "1px solid var(--color-border-def
 
 /** 기본 — 단독이면 심각도 범례를 플롯 위 오른쪽에 세운다. 높이는 값축(건)이 읽게 한다. */
 export const Default: Story = {
-  args: { events: EVENTS, start: START, end: END, xLabels: LABELS },
+  args: { events: EVENTS, start: START, end: END, xLabels: LABELS, formatAt },
   render: (args) => (
     <div style={box}>
       <StatusTimeline {...args} />
@@ -88,7 +90,7 @@ export const InWidgetFrame: Story = {
   render: () => (
     <div style={{ width: 560, height: 200 }}>
       <WidgetFrame title="이벤트 타임라인" summary="최근 30분" legend={statusTimelineLegend()} onFullscreen={() => {}}>
-        <StatusTimeline events={EVENTS} start={START} end={END} xLabels={LABELS} frame={false} />
+        <StatusTimeline events={EVENTS} start={START} end={END} xLabels={LABELS} formatAt={formatAt} frame={false} />
       </WidgetFrame>
     </div>
   ),
@@ -107,7 +109,7 @@ export const UnderMetric: Story = {
         </div>
         <div style={{ height: 150 }}>
           <WidgetFrame title="이벤트" legend={statusTimelineLegend()}>
-            <StatusTimeline events={EVENTS} start={START} end={END} xLabels={LABELS} frame={false} />
+            <StatusTimeline events={EVENTS} start={START} end={END} xLabels={LABELS} formatAt={formatAt} frame={false} />
           </WidgetFrame>
         </div>
       </div>
