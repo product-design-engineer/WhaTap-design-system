@@ -70,6 +70,8 @@ export { default as ArcGauge } from "./ArcGauge";
 export type { ArcGaugeProps, ArcGaugeThreshold } from "./ArcGauge";
 export { default as TrendTile } from "./TrendTile";
 export type { TrendTileProps } from "./TrendTile";
+export { default as MetricGrid } from "./MetricGrid";
+export type { MetricGridProps, MetricGridItem } from "./MetricGrid";
 export { default as PairedTimeChart } from "./PairedTimeChart";
 export type { PairedTimeChartProps, PairedTimePanel } from "./PairedTimeChart";
 export { default as SegmentBar } from "./SegmentBar";
