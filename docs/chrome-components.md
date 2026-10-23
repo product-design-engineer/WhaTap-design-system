@@ -629,6 +629,25 @@ Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
 
 Figma 정본: 페이지 ScatterChart `572:6908` · 세트 `572:7311`(`frame` × `marks` dot · bubble). ChartSwatch `shape=dot` `572:39` · ChartLegendItem `shape=dot` `572:6745` · `572:6749` 추가.
 
+## TrendTile
+
+지표 하나의 지금 값 · 비교 시점 대비 변화 · 최근 추이. **Composite** — [[MetricStat]](지표명 · 값 · 단위) + [[Sparkline]](추이, 데이터 최소 ~ 최대) + 변화 줄.
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` · `value` · `unit` | 지표명 · 값 · 단위 | — |
+| `delta` · `deltaUnit` | 변화(부호) · 단위(`%` `%p` `ms`) | — |
+| `better` | `"up" \| "down" \| "none"` — 좋은 방향 | `"up"` |
+| `compareLabel` | 비교 기준 글자 | 「직전 대비」 |
+| `values` · `color` | 최근 추이 · 스파크라인 색 | — · series-1 |
+| `frame` | `boolean` — 카드 껍데기 | `true` |
+
+- 변화 색 = 개선 `--color-status-success` · 악화 `--color-status-error` · 없음/판정 없음 tertiary. ▲▼ · 부호 · 비교 기준을 함께(§23).
+- 좋은 방향이 없는 지표는 `better="none"`. 누적 카운터 원값은 늘 «개선» 으로 보이니 쓰지 않는다.
+- [[StatCard]] `trend` 는 방향만 받아 색이 지표 방향을 무시한다 — 변화를 판정해야 하면 이것.
+
+Figma 정본: 페이지 TrendTile `584:2` · 세트 `584:99`(`verdict` × `frame` · change · compare).
+
 ## BlockGrid · BlockCell
 
 대상 하나 = 이름 있는 칸 하나를 격자로 깐 상태 맵 — 이름으로 대상을 찾는다. **BlockGrid(Composite)** = **BlockCell(Primitives — 상태 칠 · 이름 말줄임 · 높이 32)** 격자 + 단독 범례 [[ChartLegendItem]]. 이름 없는 분포는 [[HexGrid]] — 상태 어휘 · 색 · 범례는 둘이 같다(내부 `_statusTone`).
@@ -702,6 +721,7 @@ Figma 정본: 페이지 StackedAreaChart `578:2` · 세트 `578:80`(`frame`).
 
 - 인덱스 바는 같은 칸 짝 차트가 있을 때만 — 표와 차트를 잇는 장치(§21). 스토리 `LinkedToChart`.
 - 바닥선이 있어 0 에 붙은 평평함과 중간의 평평함이 갈린다. 부호 있는 지표는 쓰지 않는다.
+- Sparkline `min`(기본 0) — 0 에서 먼 값의 모양을 보일 때(추세 타일)만 데이터 최소를 주고, 그때는 바닥선을 긋지 않는다.
 - [[MetricBarCell]] 은 0 보다 큰 구간을 최소 2px 로 그린다(2026-10-23).
 
 Figma 정본: Sparkline 페이지 `577:2` · 컴포넌트 `577:3` / SparklineCell 페이지 `577:35` · 세트 `577:62`(`index` × `state` · value · unit).

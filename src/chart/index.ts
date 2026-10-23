@@ -56,6 +56,8 @@ export { default as BarListItem } from "./BarListItem";
 export type { BarListItemProps } from "./BarListItem";
 export { default as ActiveTransactionArc, SPEED_LEGEND } from "./ActiveTransactionArc";
 export type { ActiveTransactionArcProps, ActiveTransactionAgentLoad } from "./ActiveTransactionArc";
+export { default as TrendTile } from "./TrendTile";
+export type { TrendTileProps } from "./TrendTile";
 export { default as BlockCell } from "./BlockCell";
 export type { BlockCellProps } from "./BlockCell";
 export { default as BlockGrid, blockGridLegend } from "./BlockGrid";
