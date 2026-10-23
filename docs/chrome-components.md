@@ -785,7 +785,7 @@ Figma 정본: CompoundEyeCell 페이지 `605:2` · 세트 `605:42`(`status` · n
 | `maxColumns` | 한 줄 최대 칸 | `4` |
 | `compact` | 작은 숫자 | `false` |
 
-- 한 줄 4칸까지 · 넘으면 줄바꿈(가로 스크롤 금지) · 칸 이름 한 줄 말줄임(MetricStat 라벨, 2026-10-23).
+- 한 줄 4칸까지 · 넘으면 줄바꿈(가로 스크롤 금지) · 칸 이름 한 줄 말줄임(MetricStat `truncateLabel` — MetricStat 기본은 줄바꿈 그대로, 2026-10-23).
 - 칸은 세 겹까지(이름 · 값 + 단위 · 보조). 하위 분해는 SegmentBar · BarList, 범위는 RangeGauge 를 줄 아래에(화면 조합).
 - 값 색은 primary 하나 — 칸 하나만 색 강조하지 않는다.
 
