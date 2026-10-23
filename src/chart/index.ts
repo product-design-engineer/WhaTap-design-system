@@ -58,7 +58,7 @@ export { default as ActiveTransactionArc, SPEED_LEGEND } from "./ActiveTransacti
 export type { ActiveTransactionArcProps, ActiveTransactionAgentLoad } from "./ActiveTransactionArc";
 export { default as ZoneScatterChart } from "./ZoneScatterChart";
 export type { ZoneScatterChartProps, ZoneScatterPoint } from "./ZoneScatterChart";
-export { default as BoxPlotChart, boxPlotStats } from "./BoxPlotChart";
+export { default as BoxPlotChart, boxPlotStats, BOX_PLOT_LEGEND } from "./BoxPlotChart";
 export type { BoxPlotChartProps, BoxPlotBox, BoxPlotStats } from "./BoxPlotChart";
 export { default as ChartArc } from "./ChartArc";
 export type { ChartArcProps, ChartArcBand } from "./ChartArc";

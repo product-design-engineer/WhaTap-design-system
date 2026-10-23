@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { BoxPlotChart, WidgetFrame } from "@whatap/design-system";
+import { BOX_PLOT_LEGEND, BoxPlotChart, WidgetFrame } from "@whatap/design-system";
 import type { BoxPlotBox } from "@whatap/design-system";
 
 /**
- * Stories for [[BoxPlotChart]] — 대상별 값 분포. 상자 = 1~3사분위 · 선 = 중앙값 · 수염 = Tukey 1.5 × IQR · 점 = 이상치.
+ * Stories for [[BoxPlotChart]] — 대상별 값 분포를 백분위로. 선 p50 · 상자 p25–p75 · 수염 p5–p95 · 점 p99.
  */
 const meta: Meta<typeof BoxPlotChart> = {
   title: "Composite/Chart/BoxPlotChart",
@@ -14,8 +14,9 @@ const meta: Meta<typeof BoxPlotChart> = {
     docs: {
       description: {
         component:
-          "**박스플롯.** [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCategoryAxis]] 를 조합하고 상자 · 수염 · 점만 그린다. " +
-          "수염은 Tukey 1.5 × IQR — 원값을 주면 `boxPlotStats` 가 같은 규칙으로 계산한다. 색은 하나(범주는 계열이 아니다).",
+          "**백분위 상자 그림.** [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCategoryAxis]] 를 조합하고 상자 · 수염 · 점 · p50 숫자를 그린다. " +
+          "마크는 모두 백분위 — 선 p50 · 상자 p25–p75 · 수염 p5–p95 · 점 p99. 경보 · SLO 와 같은 숫자를 말한다. Y 는 p99 까지라 극단값이 상자를 누르지 않는다. " +
+          "원값을 주면 `boxPlotStats` 가 계산한다. 색은 하나(범주는 계열이 아니다).",
       },
     },
   },
@@ -42,7 +43,7 @@ const SERVICES: BoxPlotBox[] = [
 ];
 const box = { width: 520, height: 240, border: "1px solid var(--color-border-default)", borderRadius: 4 } as const;
 
-/** 기본 — 서비스별 응답시간(ms) 분포. 평균으로는 안 보이는 꼬리가 이상치 점으로. */
+/** 기본 — 서비스별 응답시간(ms) 분포. 범례가 마크의 뜻을 말하고, p50 숫자를 상자마다 적는다. */
 export const Default: Story = {
   args: { boxes: SERVICES, unit: "ms" },
   render: (args) => (
@@ -52,15 +53,15 @@ export const Default: Story = {
   ),
 };
 
-/** 통계를 직접 — 서버가 사분위를 계산해 보낼 때. */
+/** 백분위를 직접 — 서버(APM)가 p5 ~ p99 를 계산해 보낼 때. */
 export const PrecomputedStats: Story = {
   args: {
     unit: "ms",
     boxes: [
-      { label: "00-06시", stats: { q1: 80, median: 110, q3: 150, low: 40, high: 250, outliers: [420] } },
-      { label: "06-12시", stats: { q1: 140, median: 200, q3: 280, low: 60, high: 480, outliers: [720, 910] } },
-      { label: "12-18시", stats: { q1: 160, median: 230, q3: 320, low: 70, high: 560, outliers: [1100] } },
-      { label: "18-24시", stats: { q1: 100, median: 140, q3: 190, low: 50, high: 320, outliers: [] } },
+      { label: "00-06시", stats: { p5: 40, p25: 80, p50: 110, p75: 150, p95: 250, p99: 420 } },
+      { label: "06-12시", stats: { p5: 60, p25: 140, p50: 200, p75: 280, p95: 480, p99: 720 } },
+      { label: "12-18시", stats: { p5: 70, p25: 160, p50: 230, p75: 320, p95: 560, p99: 910 } },
+      { label: "18-24시", stats: { p5: 50, p25: 100, p50: 140, p75: 190, p95: 320, p99: 380 } },
     ],
   },
   render: (args) => (
@@ -70,11 +71,11 @@ export const PrecomputedStats: Story = {
   ),
 };
 
-/** 대시보드 칸 — `frame={false}` 로 [[WidgetFrame]] 에. */
+/** 대시보드 칸 — `frame={false}` + 범례 문장 `BOX_PLOT_LEGEND` 를 [[WidgetFrame]] `summary` 로. */
 export const InWidgetFrame: Story = {
   render: () => (
     <div style={{ width: 480, height: 240 }}>
-      <WidgetFrame title="서비스별 응답시간 분포" summary="최근 1시간 · ms">
+      <WidgetFrame title="서비스별 응답시간 분포 (ms)" summary={BOX_PLOT_LEGEND}>
         <BoxPlotChart boxes={SERVICES} unit="ms" frame={false} />
       </WidgetFrame>
     </div>
