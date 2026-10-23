@@ -584,6 +584,7 @@ Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
 | HexGrid | 카드 · 「GPU Map」 제목 줄 · 범례 | `title` · `legend={HEX_GRID_LEGEND}`(칸 수를 붙이면 `hexGridLegend(items)`) · 메뉴 |
 | ActiveTransactionArc | 바깥 여백(좌우 · 아래 8px) · 왼쪽 아래 Elapsed 범례 | `title` · `meta` · `legend={SPEED_LEGEND}` · 메뉴 |
 | ScatterHeatmap | 바깥 좌우 여백(8px) | `title` · `meta` · `legend={SPEED_LEGEND}` · 메뉴 |
+| StatusTimeline | 바깥 좌우 여백(8px) · 심각도 범례 줄 | `title` · `summary` · `legend={statusTimelineLegend()}` · 메뉴 |
 | ScatterChart | 바깥 좌우 여백(8px) · 계열 범례 줄 | `title` · `summary` · `legend={scatterLegend(series)}`(원 견본) · 메뉴 |
 | MiniBarChart | 바깥 좌우 여백(8px) | `title` · `meta` · `legend`(막대 색 그대로) · 메뉴 |
 | ApdexChart | 바깥 좌우 여백(8px) | `title`(「Apdex」) · `meta` · 메뉴 (구간 이름이 띠 안에 있어 범례 없음) |
@@ -625,6 +626,24 @@ Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
 - 단독(`frame`)이면 계열 둘 이상일 때 플롯 위 오른쪽에 원 견본 범례. 대시보드 칸은 `frame={false}` + WidgetFrame `legend={scatterLegend(series)}`.
 
 Figma 정본: 페이지 ScatterChart `572:6908` · 세트 `572:7311`(`frame` × `marks` dot · bubble). ChartSwatch `shape=dot` `572:39` · ChartLegendItem `shape=dot` `572:6745` · `572:6749` 추가.
+
+## StatusTimeline
+
+시간 위에 사건을 세로 마커로 — 높이 = 건수, 색 = 심각도. 경보 · 이벤트 · 배포 기록. **Composite** — 격자 [[ChartGrid]](시간 글자 사이마다 세로 점선) · 값축 [[ChartValueAxis]](단위 `건`) · 시간축 [[ChartTimeAxis]] 를 조합하고 마커만 그린다.
+
+| Prop | Type | Default |
+|---|---|---|
+| `events` | `{ at, count, severity: "critical" \| "warning" \| "info", label? }[]` | — |
+| `start` · `end` | `number` — X 양 끝(`at` 과 같은 단위) | — |
+| `xLabels` | `string[]` — 같은 간격 시간 글자 | — |
+| `max` | `number` — 건수 축 고정 | 데이터 최대 올림 |
+| `frame` | `boolean` | `true` |
+
+- 마커 폭 3px · 바닥에서 위로 · 최소 2px. 0 건은 그리지 않는다(빈 구간).
+- 색은 `--color-status-error` · `-warning` · `-info`. 계열 색과 섞지 않고, 이름(범례 · `title`)과 함께 말한다(§23).
+- 같은 칸 사건은 미리 묶어 건수를 더하고 가장 높은 심각도를 준다. 지표 차트 아래에 붙이면 시간 글자 · Y축 칸이 같아 세로로 맞는다.
+
+Figma 정본: 페이지 StatusTimeline `574:2` · 세트 `574:80`(`frame`).
 
 ## ApdexChart
 

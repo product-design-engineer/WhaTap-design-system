@@ -953,7 +953,7 @@ series 는 네 가지를 지킨다.
 | 세로 이퀄라이저 · 리소스 이퀄라이저 | 공백 | 없음 | 상태별 누적과 임계 2색이 같은 이름으로 섞여 있다. 임계 슬라이더 연동도 **공백**. 셀 한 칸의 뜻(고정 단위인가 비율인가)이 정의돼 있지 않다 — 만들 때 먼저 정한다 |
 | 허니컴 | 대응 | [[HexGrid]] · `hexGridLegend` | 0개 상태는 범례에 넣지 않는다(칠해진 색을 센다). 개수에 따른 배치는 [[HexGrid]] 가 정한다 — 칸 비율에 맞춰 `columns` ±2 안에서 칸이 가장 크게 나오는 열 수를 고른다(2026-10-21 코드 확인) |
 | 블록 (서버 인벤토리 맵) · 상태 요약 행 | 공백 | 없음 | 허니컴과 합칠지 용도를 나눌지 따로 결정한다 |
-| 상태 타임라인 (이벤트) | 공백 | 없음 | 마커 높이의 뜻 · 반전 시간 바가 이 위젯에만 있다. 마커가 빨강 하나라 상태가 갈리지 않고, 높이를 설명하는 범례가 없다 |
+| 상태 타임라인 (이벤트) | 대응 | [[StatusTimeline]] | **정해짐(2026-10-23, 추천안)** — 높이 = 건수(값축 단위 `건` 이 읽게 한다) · 색 = 심각도 셋(critical · warning · info, 상태 토큰 · 범례 이름과 함께, §23) · 반전 시간 바는 쓰지 않고 공통 [[ChartTimeAxis]](§26) |
 | Hitmap | 대응 | [[ScatterHeatmap]] | 4단계 색 중 한 단계는 위 표의 `hitmap-warning-1` 공백. 레거시에는 4단계 경계값 범례가 없다 — DS 는 `SPEED_LEGEND` 를 범례로 둔다(§15). 소형에서 버릴 것(눈금 · 집계 수치 · 컨트롤)은 §26 결정 필요. 레거시 «Hitmap»(응답 판정)과 «히트맵»(강도)이 이름만 비슷하고 색의 뜻이 다르다 — DS 는 [[ScatterHeatmap]] · [[Heatmap]] 으로 이름을 갈랐다 |
 | 일반 히트맵 · 시간 셀 Cube | 대응 | [[Heatmap]] · [[HeatmapLegend]] | 라이브 Cube 는 6열(10분 칸), 이 DS `day` 는 12열(5분 칸)이다. **미래 칸과 데이터 없음 칸이 같은 회색이다 — DS 도 구별하지 못한다**(칸 값이 0~1 또는 `null`=«데이터 없음» 뿐, 2026-10-21 코드 확인). §26 결정 필요 |
 | 추세 타일 | 공백 | 없음 | 캡처 없음 |
@@ -985,7 +985,7 @@ series 는 네 가지를 지킨다.
 | 13 | 호 게이지 / 속도계 | [[ActiveTransactionArc]] · [[ActiveTransactionSpeedWidget]] · ArcGauge | 일부 있음 · 호 게이지 신규 |
 | 14 | 이퀄라이저 | EqualizerChart | 신규 |
 | 15 | 블록 / 허니컴 / 그리드 | [[HexGrid]] · BlockGrid | 허니컴 있음 · 블록 신규 |
-| 16 | 상태 타임라인 | StatusTimeline | 신규 |
+| 16 | 상태 타임라인 | [[StatusTimeline]] = [[ChartGrid]](`vertical`) · [[ChartValueAxis]](건수) · [[ChartTimeAxis]] 조합 | 있음 (2026-10-23) |
 | 17 | Hitmap | [[ScatterHeatmap]] = [[ChartGrid]](`vertical`) · [[ChartValueAxis]] · [[ChartTimeAxis]] 조합 | 있음 (2026-10-22 Composite 로) |
 | 18 · 19 | 일반 히트맵 · 시간 셀 Cube | [[Heatmap]] | 있음 |
 | 20 | 추세 타일 | TrendTile | 신규 |

@@ -420,6 +420,9 @@
     "ScatterHeatmap": {
       "figma": "348:1379"
     },
+    "StatusTimeline": {
+      "figma": "574:80"
+    },
     "Select": {
       "figma": "76:183"
     },
