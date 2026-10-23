@@ -627,6 +627,26 @@ Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
 
 Figma 정본: 페이지 ScatterChart `572:6908` · 세트 `572:7311`(`frame` × `marks` dot · bubble). ChartSwatch `shape=dot` `572:39` · ChartLegendItem `shape=dot` `572:6745` · `572:6749` 추가.
 
+## RangeGauge
+
+범위(min ~ Max) 안의 지금 값 — 채움 · ▼ 말풍선 · 이름 붙은 양 끝 · 임계 띠. 할당 · 한계 · 쿼터 · 정원 대비 사용. **Composite** — 채움 [[UsageGauge]] · ▼ [[ChartPeakMarker]] 를 조합하고 임계 띠 · 범위 글자만 그린다.
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` · `max` | `number` | — |
+| `min` | `number` | `0` |
+| `unit` | `string` | `""` |
+| `label` | `string` — 스크린리더 이름 | — |
+| `minLabel` · `maxLabel` | `string` — 양 끝 이름(`Limit` · `Allocatable`) | `Min` · `Max` |
+| `thresholds` | `{ from, tone: "warning" \| "critical" }[]` | `[]` |
+| `caption` | `string` — 말줄임 없이 줄바꿈 | — |
+
+- 채움 · ▼ 색 = 지금 값이 든 임계 구간(neutral · warning · critical). 임계 기준값은 제품 규칙이라 호출부가 준다.
+- 숫자는 천 단위 쉼표(정확한 값) — 축처럼 K 로 줄이지 않는다. 범위 밖 값은 막대가 끝에 멈추고 글자만 실제 값.
+- 큰 숫자 칸(2.1) 아래 막대로 쓸 때 같은 값을 같은 표기로 말한다(스토리 `InWidgetFrame`).
+
+Figma 정본: 페이지 RangeGauge `576:19` · 세트 `576:68`(`tone` · min · max · caption · showCaption).
+
 ## StatusTimeline
 
 시간 위에 사건을 세로 마커로 — 높이 = 건수, 색 = 심각도. 경보 · 이벤트 · 배포 기록. **Composite** — 격자 [[ChartGrid]](시간 글자 사이마다 세로 점선) · 값축 [[ChartValueAxis]](단위 `건`) · 시간축 [[ChartTimeAxis]] 를 조합하고 마커만 그린다.
