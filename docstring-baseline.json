@@ -1,6 +1,10 @@
 {
   "frozen": [],
   "depth": {
+    "Composite/ActiveTransactionSpeedWidget": {
+      "whenToUse": 1,
+      "undocumentedProps": 8
+    },
     "Composite/AiProgress": {
       "whenToUse": 2,
       "undocumentedProps": 1
@@ -17,8 +21,44 @@
       "whenToUse": 3,
       "undocumentedProps": 4
     },
+    "Composite/Chart/ApdexChart": {
+      "whenToUse": 1,
+      "undocumentedProps": 0
+    },
+    "Composite/Chart/BarList": {
+      "whenToUse": 1,
+      "undocumentedProps": 1
+    },
+    "Composite/Chart/ForecastLineChart": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Composite/Chart/GpuStatusBar": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
     "Composite/Chart/Heatmap": {
       "whenToUse": 1,
+      "undocumentedProps": 2
+    },
+    "Composite/Chart/HexGrid": {
+      "whenToUse": 4,
+      "undocumentedProps": 1
+    },
+    "Composite/Chart/MiniDonutChart": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Composite/Chart/MiniLineChart": {
+      "whenToUse": 2,
+      "undocumentedProps": 5
+    },
+    "Composite/Chart/MiniMultiLineChart": {
+      "whenToUse": 2,
+      "undocumentedProps": 6
+    },
+    "Composite/Chart/UsageChart": {
+      "whenToUse": 2,
       "undocumentedProps": 2
     },
     "Composite/ClassificationTable": {
@@ -56,6 +96,10 @@
     "Composite/EventList": {
       "whenToUse": 2,
       "undocumentedProps": 2
+    },
+    "Composite/ExecutionResult": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
     },
     "Composite/InfoTip": {
       "whenToUse": 3,
@@ -109,6 +153,10 @@
       "whenToUse": 2,
       "undocumentedProps": 3
     },
+    "Composite/TargetMesh": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
     "Composite/ThemeToggle": {
       "whenToUse": 1,
       "undocumentedProps": 2
@@ -128,10 +176,6 @@
     "Composite/TopologyToolbar": {
       "whenToUse": 1,
       "undocumentedProps": 9
-    },
-    "Composite/ActiveTransactionSpeedWidget": {
-      "whenToUse": 1,
-      "undocumentedProps": 8
     },
     "Primitives/AiProgressStep": {
       "whenToUse": 1,
@@ -153,45 +197,9 @@
       "whenToUse": 3,
       "undocumentedProps": 1
     },
-    "Composite/Chart/ApdexChart": {
-      "whenToUse": 1,
-      "undocumentedProps": 0
-    },
-    "Composite/Chart/BarList": {
-      "whenToUse": 1,
-      "undocumentedProps": 1
-    },
-    "Composite/Chart/ForecastLineChart": {
-      "whenToUse": 2,
-      "undocumentedProps": 1
-    },
-    "Composite/Chart/GpuStatusBar": {
-      "whenToUse": 2,
-      "undocumentedProps": 1
-    },
     "Primitives/Chart/HeatmapLegend": {
       "whenToUse": 1,
       "undocumentedProps": 0
-    },
-    "Composite/Chart/HexGrid": {
-      "whenToUse": 4,
-      "undocumentedProps": 1
-    },
-    "Composite/Chart/MiniDonutChart": {
-      "whenToUse": 2,
-      "undocumentedProps": 2
-    },
-    "Composite/Chart/MiniLineChart": {
-      "whenToUse": 2,
-      "undocumentedProps": 5
-    },
-    "Composite/Chart/MiniMultiLineChart": {
-      "whenToUse": 2,
-      "undocumentedProps": 6
-    },
-    "Composite/Chart/UsageChart": {
-      "whenToUse": 2,
-      "undocumentedProps": 2
     },
     "Primitives/Chart/UsageGauge": {
       "whenToUse": 2,
@@ -240,10 +248,6 @@
     "Primitives/EventListItem": {
       "whenToUse": 1,
       "undocumentedProps": 0
-    },
-    "Composite/ExecutionResult": {
-      "whenToUse": 2,
-      "undocumentedProps": 1
     },
     "Primitives/HeaderPillButton": {
       "whenToUse": 2,
@@ -369,10 +373,6 @@
       "whenToUse": 1,
       "undocumentedProps": 0
     },
-    "Composite/TargetMesh": {
-      "whenToUse": 2,
-      "undocumentedProps": 1
-    },
     "Primitives/ThreadDivider": {
       "whenToUse": 2,
       "undocumentedProps": 1
@@ -406,7 +406,7 @@
       "undocumentedProps": 3
     },
     "Primitives/TopologyZoomControl": {
-      "whenToUse": 1,
+      "whenToUse": 2,
       "undocumentedProps": 1
     },
     "Primitives/Web · CountryFlag": {

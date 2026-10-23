@@ -40,3 +40,11 @@ export const AtMax: Story = {
     return <TopologyZoomControl scale={scale} onScaleChange={setScale} />;
   },
 };
+
+/** 다른 범위 — [[GeoMap]] 은 `limits` 로 100%~600% · 50% 단계. 하한(100%)이라 축소 버튼이 비활성. */
+export const MapLimits: Story = {
+  render: () => {
+    const [scale, setScale] = useState(1);
+    return <TopologyZoomControl scale={scale} onScaleChange={setScale} limits={{ min: 1, max: 6, step: 0.5 }} />;
+  },
+};

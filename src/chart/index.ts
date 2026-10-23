@@ -72,6 +72,8 @@ export { default as TrendTile } from "./TrendTile";
 export type { TrendTileProps } from "./TrendTile";
 export { default as Treemap } from "./Treemap";
 export type { TreemapProps, TreemapNode } from "./Treemap";
+export { default as GeoMap } from "./GeoMap";
+export type { GeoMapProps, GeoMapDatum } from "./GeoMap";
 export { default as MetricGrid } from "./MetricGrid";
 export type { MetricGridProps, MetricGridItem } from "./MetricGrid";
 export { default as PairedTimeChart } from "./PairedTimeChart";
