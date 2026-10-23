@@ -5,14 +5,15 @@
  * 서로 import 하면 계층이 하나 올라가므로(Primitive 조합 = Composite) 그리는 코드를 여기 하나에 두고 함께 쓴다
  * (`_axisScale.ts` 와 같은 자리). 모양 · 크기 규칙의 정본은 ChartSwatch docstring.
  */
-export type ChartSwatchShape = "square" | "line";
+export type ChartSwatchShape = "square" | "line" | "dot";
 
 export function SwatchMark({ color, shape = "square" }: { color: string; shape?: ChartSwatchShape }) {
   const line = shape === "line";
+  const radius = line ? "rounded-1px" : shape === "dot" ? "rounded-full" : "rounded-2px";
   return (
     <span
       aria-hidden
-      className={`inline-block shrink-0 ${line ? "rounded-1px" : "rounded-2px"}`}
+      className={`inline-block shrink-0 ${radius}`}
       style={{ width: 8, height: line ? 2 : 8, background: color }}
     />
   );

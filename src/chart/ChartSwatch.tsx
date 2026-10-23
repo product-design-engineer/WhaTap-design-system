@@ -16,18 +16,18 @@
  * - 색 범례 바(순차 · 강도 스케일) → [[HeatmapLegend]].
  *
  * ## Composition rules
- * - **모양은 마크를 따른다(§26 결정, 2026-10-21).** 선 계열 = `line`, 면 · 막대 · 조각 · 칸 = `square`(기본).
+ * - **모양은 마크를 따른다(§26 결정, 2026-10-21).** 선 계열 = `line`, 면 · 막대 · 조각 · 칸 = `square`(기본), 점 · 버블 = `dot`([[ScatterChart]], 2026-10-23).
  * - 크기는 하나(8px). 차트가 크기를 정하지 않는다 — 한 줄의 범례가 칸마다 달라진다.
  * - `color` 는 마크와 같은 토큰(`var(--color-chart-series-N)` · `--color-chart-speed-*` · 상태 토큰). hex 금지.
  * - 이름 글자와 사이 4px 는 [[ChartLegendItem]] 이 정한다. 견본은 색 · 모양만.
  *
  * ## Spec
- * | 항목 | `square` | `line` |
- * |---|---|---|
- * | 크기 | 8 × 8px | 8 × 2px |
- * | 반경 | 2px | 1px |
- * | 세로 정렬 | 이름 글자 가운데 | 이름 글자 가운데 |
- * | 접근성 | 장식(`aria-hidden`) — 이름은 범례 글자가 말한다 | 같음 |
+ * | 항목 | `square` | `line` | `dot` |
+ * |---|---|---|---|
+ * | 크기 | 8 × 8px | 8 × 2px | 8 × 8px |
+ * | 반경 | 2px | 1px | 원(50%) |
+ * | 세로 정렬 | 이름 글자 가운데 | 이름 글자 가운데 | 이름 글자 가운데 |
+ * | 접근성 | 장식(`aria-hidden`) — 이름은 범례 글자가 말한다 | 같음 | 같음 |
  *
  * @example
  * ```tsx
@@ -42,7 +42,7 @@ export type { ChartSwatchShape };
 export type ChartSwatchProps = {
   /** 마크와 같은 색 토큰. hex 금지. */
   color: string;
-  /** 마크 모양. 선 계열 `line`, 면 · 막대 · 조각 · 칸 `square`. 기본 `square`. */
+  /** 마크 모양. 선 계열 `line`, 면 · 막대 · 조각 · 칸 `square`, 점 · 버블 `dot`. 기본 `square`. */
   shape?: ChartSwatchShape;
 };
 
