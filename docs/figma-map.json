@@ -168,6 +168,12 @@
     "ClickCursor": {
       "figma": "26:26"
     },
+    "CompoundEye": {
+      "figma": "606:3"
+    },
+    "CompoundEyeCell": {
+      "figma": "605:42"
+    },
     "ConfirmDialog": {
       "figma": "370:187"
     },
