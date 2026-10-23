@@ -324,7 +324,7 @@ AI 위젯 영역의 모든 컴포넌트는 다음 primitive 를 **반드시 comp
 |---|---|
 | **코드** | `src/` 컴포넌트 · docstring 4섹션(Purpose · When to use · When NOT to use · Composition rules) · 차트면 `## Metrics`(맞는 지표 ✅ 필수 · 금지 지표 ❌) · 개발자가 그대로 구현할 값이 있으면 `## Spec`(치수 · 토큰 · 상태 · 데이터 계약. `components.json` `spec` → MCP `get_component` · 스토리는 `stories/_spec.ts` `withSpec` 로 Docs 탭에) · `index.ts` export · 필요한 CSS · 토큰 |
 | **Storybook** | 계층 title 의 스토리(변형 · 상태마다) · autodocs 설명 |
-| **Figma 정본** (`2LktjSjKZDnCuWo5CQ6828`) | 컴포넌트 페이지 · 세트(코드 prop 과 같은 기준의 variant · property · slot) · 색 · 여백 · 반경 · 글자는 WDS 변수 · 스타일 연결(미연결 0) · 설명(출처 · 코드 경로 · Figma 구현 노트) · 📄 문서 프레임 · 라이브러리 게시 |
+| **Figma 정본** (`2LktjSjKZDnCuWo5CQ6828`) | 컴포넌트 페이지 · 세트(코드 prop 과 같은 기준의 variant · property · slot) · 색 · 여백 · 반경 · 글자는 WDS 변수 · 스타일 연결(미연결 0) · 설명(출처 · 코드 경로 · Figma 구현 노트) · 📄 문서 프레임 · 라이브러리 게시 · **차트면 설명과 📄 문서 프레임 둘 다에 «📈 사용 지표 · 🚫 사용 제한 지표»**(docstring `## Metrics` 와 같은 문장, 2026-10-23 사용자 지시) |
 | **카탈로그** (AI 가 읽고 실행하는 자리) | `docs/*-components.md` 또는 `primitives.md` 등재 · 정책이 걸리면 `patterns.md` · 필요하면 `SKILL.md` · `GUIDE.md` · `static/public/llms.txt` · 생성물(`components.json` · `policies.json` · `DESIGN.md`)은 `pnpm build:design` 으로 확인 |
 
 - 세 정본은 **같은 PR 흐름**에서 맞춘다. 코드만 먼저 병합하고 Figma 를 나중에 두지 않는다 — AI 는 카탈로그를 읽고 그대로 실행하므로, 한쪽에만 있는 컴포넌트는 다른 쪽에서 «없는 것» 으로 다시 만들어진다.
