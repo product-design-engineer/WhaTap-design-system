@@ -705,6 +705,26 @@ Figma 정본: ChartArc 페이지 `585:2` · 세트 `585:153`(`level` × `bands`)
 
 Figma 정본: 페이지 Treemap `596:2` · 컴포넌트 `596:3`.
 
+## GeoMap
+
+국가별 값을 세계 지도 위에 — 단계 구분(국가 칸 색 4단계) 또는 버블(국가 자리 원 넓이). **Composite** — [[ChartLegendItem]](단계 범례) · [[ChartTooltip]] · [[TopologyZoomControl]](`limits` 100%~600%) 을 조합하고 국가 도형 · 격자 · 버블만 그린다. 도형은 Natural Earth 1:110m(퍼블릭 도메인) · Equal Earth 투영 · 남극 제외(내부 `_geoWorld`, 생성 `scripts/build-geo-world.mjs`).
+
+| Prop | Type | Default |
+|---|---|---|
+| `data` | `{ code: ISO alpha-2, value, name? }[]` | — |
+| `mode` | `"fill"`(비율 · 평균) · `"bubble"`(개수 · 합계) | `"fill"` |
+| `label` · `unit` | 값 이름 · 단위 | `"값"` · `""` |
+| `breaks` | 단계 경계 3개 | 0 ~ 최대 4등분 |
+| `emptyLabel` | 빈 상태 글 | `"데이터 없음"` |
+| `zoom` | 줌 컨트롤 | `true` |
+
+- 값 없는 국가(바탕 `--color-surface-200`) ≠ 낮은 값(`--color-chart-seq-1`). 데이터가 하나도 없으면 지도 위 «데이터 없음».
+- 개수 · 합계는 버블 — 단계 구분은 넓은 나라를 크게 보이게 한다. 음수(증감)는 쓰지 않는다.
+- 110m 도형에 없는 작은 나라(싱가포르 · 홍콩 …)의 값은 지도 아래 «지도 밖» 줄로.
+- 휠 줌 없음(대시보드 스크롤 보호) — 버튼으로 확대, 끌어서 이동.
+
+Figma 정본: 페이지 GeoMap `598:2` · 세트 `598:8161`(`mode` fill · bubble · empty) · 내부 도형 `_GeoWorld` `598:7530` / 줌 컨트롤 페이지 TopologyZoomControl `597:30` · 컴포넌트 `597:31`.
+
 ## MetricGrid
 
 같은 대상의 관련 집계 값 여럿을 세로 구분선으로 나눈 숫자 칸 줄. **Composite** — 칸마다 [[MetricStat]].

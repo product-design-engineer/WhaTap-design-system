@@ -264,6 +264,9 @@
     "ForecastLineChart": {
       "figma": "416:210"
     },
+    "GeoMap": {
+      "figma": "598:8161"
+    },
     "GpuStatusBar": {
       "figma": null
     },
@@ -577,7 +580,7 @@
       "figma": null
     },
     "TopologyZoomControl": {
-      "figma": null
+      "figma": "597:31"
     },
     "Treemap": {
       "figma": "596:3"

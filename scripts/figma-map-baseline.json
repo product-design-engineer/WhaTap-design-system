@@ -1,5 +1,5 @@
 {
-  "_comment": "Figma 에 아직 짝이 없는 카탈로그 컴포넌트 동결선(핵심 정책 Figma ↔ Storybook 1:1, 2026-10-22 최초 66). 줄일 수만 있다 — 짝을 만들면 docs/figma-map.json 에 노드 id 를 적고 `node scripts/check-figma-map.mjs --update`.",
+  "_comment": "Figma 에 아직 짝이 없는 카탈로그 컴포넌트 동결선(핵심 정책 Figma ↔ Storybook 1:1). 줄일 수만 있다 — 짝을 만들면 docs/figma-map.json 에 노드 id 를 적고 `node scripts/check-figma-map.mjs --update`.",
   "missing": [
     "ActionChip",
     "ActionMenu",
@@ -54,7 +54,6 @@
     "TopologyNode",
     "TopologyPort",
     "TopologyToolbar",
-    "TopologyZoomControl",
     "TriggerButton",
     "UnavailableNotice",
     "Web · CtaBanner",
