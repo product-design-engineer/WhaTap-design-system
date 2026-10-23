@@ -947,7 +947,7 @@ series 는 네 가지를 지킨다.
 | 큰 숫자 · KPI 카드 | 대응 | [[KpiCard]] · [[StatCard]] `trend` | 델타 수치(▲▼ + 값) · 비교 시점 캡션 · 비교 기준 고르기는 **공백**. 테두리 색만으로 상태를 말하는 카드는 §23(아이콘 + 라벨)과 맞춰서 옮긴다. 레거시 KPI 카드는 주값 · 퍼센트 · 보조 · 하위 분해 네 겹이 한 카드에 있어 읽는 순서가 없다 — 겹 수 상한은 결정 필요. 숫자 그리드는 셋째 열부터 잘리고 열 제목이 두 줄로 꺾인다 — 열 수 상한 · 축약 규칙 결정 필요 |
 | 오늘 · 어제 비교 추이 (GPU 전력 소비) | 대응 | [[MiniMultiLineChart]] — 어제는 `--color-chart-neutral`(대조군, §17) | 상단 숫자 세 칸(최근 1시간 · 오늘 누적 · 어제 동시각)은 숫자 칸으로 나눈다. 어제 값이 0 일 때 «0» 과 «수집 없음» 을 가르지 않으면 비교 계열이 빈 선으로 보인다(§15 빈 상태) |
 | 범위 바 (min · 현재 · Max, ▼ 마커) | 공백 | 없음 | [[UsageGauge]] 는 «한계 대비 쓴 양» 이라 근사하지 않는다. 리소스보드 KPI 와 인벤토리 표에 구현이 둘이다(▼ 마커 + 임계 분절 / 검은 막대 마커 + 단색). K8S Request CPU 는 채움 없는 트랙 옆에 라벨 없는 숫자 셋과 잘린 캡션(`R.. A..`)만 있어 해석되지 않는다 — 범위 숫자마다 이름을 붙이는 것이 함께 필요하다 |
-| 호 게이지 | 공백 | 없음 | 캡처 없음. [[ActiveTransactionArc]] 는 APM 액티브 트랜잭션 전용 |
+| 호 게이지 | 대응 | [[ArcGauge]] · [[ChartArc]] | 캡처 없음 — **[[RangeGauge]] 와 같은 계약으로 만들었다(2026-10-23, 추천안)**: 채움 색 = 값이 든 임계 구간 · 임계는 바깥 띠 · 숫자 쉼표 · 양 끝 이름 + 값. 240°(아래 열림). [[ActiveTransactionArc]] 는 APM 액티브 트랜잭션 전용 |
 | 스피드 차트 | 대응 | [[ActiveTransactionSpeedWidget]] | 없음 |
 | 컴파운드아이 | 공백 | 없음 | 셀 하나 안에서 두 스케일(부채꼴 · 외곽 링)을 쓰고 값 눈금이 없다. 보존과 치환을 따로 결정한다 |
 | 세로 이퀄라이저 · 리소스 이퀄라이저 | 대응 | [[EqualizerChart]] | **정해짐(2026-10-23, 추천안)** — 칸 하나 = 축 최대 ÷ `levels`(기본 10, [[ChartRadialBars]] 와 같은 계산 `_stripes`) · 색은 구간 누적(`segments`) 또는 임계 2색(`value` + `threshold`) 중 하나, 한 차트에 섞지 않는다 · 임계 슬라이더는 차트 계약에 넣지 않고 화면이 조합(`threshold` prop) |
@@ -982,7 +982,7 @@ series 는 네 가지를 지킨다.
 | 10 | 구역 분할 산점도 | ZoneScatterChart | 신규 |
 | 11 | 숫자 / 집계값 | [[KpiCard]] · [[StatCard]] | 있음 · 카탈로그 위치 정리 |
 | 12 | 막대 게이지 | [[RangeGauge]] = [[UsageGauge]](채움) + [[ChartPeakMarker]](▼) 조합 · min · 현재 · Max · 임계 띠 | 있음 (2026-10-23) |
-| 13 | 호 게이지 / 속도계 | [[ActiveTransactionArc]] · [[ActiveTransactionSpeedWidget]] · ArcGauge | 일부 있음 · 호 게이지 신규 |
+| 13 | 호 게이지 / 속도계 | 속도계 [[ActiveTransactionArc]] · [[ActiveTransactionSpeedWidget]] · 호 게이지 [[ArcGauge]] = [[ChartArc]] 조합([[RangeGauge]] 와 같은 계약) | 있음 (호 게이지 2026-10-23) |
 | 14 | 이퀄라이저 | [[EqualizerChart]] = [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCategoryAxis]] 조합 · 호 형태는 [[ChartRadialBars]](같은 칸 규칙) | 있음 (2026-10-23) |
 | 15 | 블록 / 허니컴 / 그리드 | [[HexGrid]](분포) · [[BlockGrid]] = [[BlockCell]] 격자(이름으로 찾기) — 상태 어휘 · 색 · 범례 공유(내부 `_statusTone`) | 있음 (블록 2026-10-23) |
 | 16 | 상태 타임라인 | [[StatusTimeline]] = [[ChartGrid]](`vertical`) · [[ChartValueAxis]](건수) · [[ChartTimeAxis]] 조합 | 있음 (2026-10-23) |
