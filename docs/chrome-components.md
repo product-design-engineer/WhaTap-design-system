@@ -759,6 +759,22 @@ Figma 정본: 페이지 FlameChart `600:2` · 컴포넌트 `600:3`.
 
 Figma 정본: 페이지 WaterfallChart `601:2` · 컴포넌트 `601:3`.
 
+## CompoundEye
+
+서버 여럿을 원 칸 격자로 — 칸마다 자원 사용률 셋(부채꼴) + 네트워크 둘(반 링). 라이브 서버 › 컴파운드아이를 보존했다(2026-10-22). **Composite** — [[CompoundEyeCell]](Primitives, 링은 [[ChartArc]] 두 개) · [[ChartLegendItem]] · [[ChartTooltip]] 조합.
+
+| Prop | Type | Default |
+|---|---|---|
+| `servers` | `{ name, cpu, memory, disk, rx, tx, status? }[]`(사용률 % · bps) | — |
+| `networkScale` | 링 끝 값(bps) | `100e6` |
+| `cellSize` | 칸 지름(px) | `96` |
+
+- 부채꼴 자리 = 지표(CPU 위 · 메모리 오른쪽 아래 · 디스크 왼쪽 아래) · 반지름 = 사용률 · 안쪽 기준 원 50% · 100%.
+- 링 = 수신(오른쪽) · 송신(왼쪽), 색 하나(`--color-chart-neutral`) — 스케일은 범례 «링 끝 = …». 상태는 칸 바탕만.
+- `CompoundEyeCell` props: `name` · `cpu` · `memory` · `disk` · `rxRatio` · `txRatio` · `status` · `size` · `dimmed` · `focus`. `formatBps` 를 함께 내보낸다. [[ChartArc]] 는 `fromEnd` 로 좌우 반 링을 12시에서 함께 채운다.
+
+Figma 정본: CompoundEyeCell 페이지 `605:2` · 세트 `605:42`(`status` · name) / CompoundEye 페이지 `606:2` · 컴포넌트 `606:3`.
+
 ## MetricGrid
 
 같은 대상의 관련 집계 값 여럿을 세로 구분선으로 나눈 숫자 칸 줄. **Composite** — 칸마다 [[MetricStat]].

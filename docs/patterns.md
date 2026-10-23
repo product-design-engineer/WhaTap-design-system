@@ -949,7 +949,7 @@ series 는 네 가지를 지킨다.
 | 범위 바 (min · 현재 · Max, ▼ 마커) | 공백 | 없음 | [[UsageGauge]] 는 «한계 대비 쓴 양» 이라 근사하지 않는다. 리소스보드 KPI 와 인벤토리 표에 구현이 둘이다(▼ 마커 + 임계 분절 / 검은 막대 마커 + 단색). K8S Request CPU 는 채움 없는 트랙 옆에 라벨 없는 숫자 셋과 잘린 캡션(`R.. A..`)만 있어 해석되지 않는다 — 범위 숫자마다 이름을 붙이는 것이 함께 필요하다 |
 | 호 게이지 | 대응 | [[ArcGauge]] · [[ChartArc]] | 캡처 없음 — **[[RangeGauge]] 와 같은 계약으로 만들었다(2026-10-23, 추천안)**: 채움 색 = 값이 든 임계 구간 · 임계는 바깥 띠 · 숫자 쉼표 · 양 끝 이름 + 값. 240°(아래 열림). [[ActiveTransactionArc]] 는 APM 액티브 트랜잭션 전용 |
 | 스피드 차트 | 대응 | [[ActiveTransactionSpeedWidget]] | 없음 |
-| 컴파운드아이 | 공백 | 없음 | 셀 하나 안에서 두 스케일(부채꼴 · 외곽 링)을 쓰고 값 눈금이 없다. 보존과 치환을 따로 결정한다 |
+| 컴파운드아이 | 대응(보존) | [[CompoundEye]] | 셀 하나 안에서 두 스케일(부채꼴 · 외곽 링)을 쓰고 값 눈금이 없었다 — 보존(2026-10-22)하고 고쳤다(2026-10-23, 추천안): 안쪽 기준 원 50% · 100% · 링은 틈으로 떼고 색 하나(수신 오른쪽 · 송신 왼쪽) · 링 스케일은 범례 «링 끝 = …» · 다섯 값은 툴팁 · 상태는 바탕만 |
 | 세로 이퀄라이저 · 리소스 이퀄라이저 | 대응 | [[EqualizerChart]] | **정해짐(2026-10-23, 추천안)** — 칸 하나 = 축 최대 ÷ `levels`(기본 10, [[ChartRadialBars]] 와 같은 계산 `_stripes`) · 색은 구간 누적(`segments`) 또는 임계 2색(`value` + `threshold`) 중 하나, 한 차트에 섞지 않는다 · 임계 슬라이더는 차트 계약에 넣지 않고 화면이 조합(`threshold` prop) |
 | 허니컴 | 대응 | [[HexGrid]] · `hexGridLegend` | 0개 상태는 범례에 넣지 않는다(칠해진 색을 센다). 개수에 따른 배치는 [[HexGrid]] 가 정한다 — 칸 비율에 맞춰 `columns` ±2 안에서 칸이 가장 크게 나오는 열 수를 고른다(2026-10-21 코드 확인) |
 | 블록 (서버 인벤토리 맵) · 상태 요약 행 | 대응(블록) · 공백(요약 행) | [[BlockGrid]] · [[BlockCell]] | **정해짐(2026-10-23, 추천안)** — 허니컴과 **용도로 나눈다**: 분포는 [[HexGrid]], 이름으로 찾기는 [[BlockGrid]]. 상태 어휘 · 색 · 범례(개수 · 0 도 남김)는 공유. 3D 블록은 평면 칸으로(장식이 이름 자리를 먹었다). 상태 요약 행(아이콘 + 큰 숫자 KPI)은 2.1 숫자와 함께 정한다 |
@@ -989,7 +989,7 @@ series 는 네 가지를 지킨다.
 | 17 | Hitmap | [[ScatterHeatmap]] = [[ChartGrid]](`vertical`) · [[ChartValueAxis]] · [[ChartTimeAxis]] 조합 | 있음 (2026-10-22 Composite 로) |
 | 18 · 19 | 일반 히트맵 · 시간 셀 Cube | [[Heatmap]] | 있음 |
 | 20 | 추세 타일 | [[TrendTile]] = [[MetricStat]] + [[Sparkline]] 조합 · 변화 줄 | 있음 (2026-10-23) |
-| 21 | 컴파운드아이 | CompoundEye | 신규 · 보존과 대체를 먼저 결정 |
+| 21 | 컴파운드아이 | [[CompoundEye]] = [[CompoundEyeCell]](부채꼴 + [[ChartArc]] 반 링 둘) · [[ChartLegendItem]] · [[ChartTooltip]] 조합 | 있음 (보존 2026-10-23) |
 | 22 | 트리맵 | [[Treemap]] = squarified 배치(내부 `_treemapLayout`) · [[ChartLegendItem]] · [[ChartTooltip]] 조합 | 있음 (2026-10-23) |
 | 23 | 지도 | [[GeoMap]] = Natural Earth 110m 국가 도형(내부 `_geoWorld`) · [[ChartLegendItem]] · [[ChartTooltip]] · [[TopologyZoomControl]] 조합 · 단계 구분 / 버블 | 있음 (2026-10-23) |
 | 24 | 토폴로지 | [[TopologyCanvas]] | 있음 |

@@ -18,6 +18,7 @@
  * - 각도는 12시 기준 시계 방향 도. 기본 −120° ~ +120°(240°) — 아래가 열려 가운데 값 · 양 끝 글자 자리가 생긴다.
  * - 트랙 `--color-surface-100`(직선 게이지와 같다) · 채움 `color` · 끝 둥글게.
  * - 임계 띠(`bands`)는 호 바깥 3px 간격 · 굵기 3. 색은 상태 토큰. 값과 따로 «어디서부터 위험인가» 를 보인다.
+ * - 채움은 시작 각도부터 시계 방향. `fromEnd` 면 끝 각도부터 거꾸로 — 좌우 반 링 한 쌍을 12시에서 함께 채울 때([[CompoundEyeCell]]).
  * - 크기는 `size`(정사각 px). 가운데는 비어 있다 — 글자는 담는 쪽이 얹는다(`children`).
  *
  * ## Spec
@@ -58,6 +59,8 @@ export type ChartArcProps = {
   start?: number;
   /** 끝 각도. 기본 120. */
   end?: number;
+  /** 채움을 끝 각도에서 시작해 거꾸로 — 좌우 대칭 링(왼쪽 반 링이 12시에서 반시계로 찬다). 기본 false. */
+  fromEnd?: boolean;
   /** 바깥 임계 띠. */
   bands?: ReadonlyArray<ChartArcBand>;
   /** 가운데에 얹는 내용(값 · 라벨). */
@@ -76,7 +79,7 @@ function arc(c: number, r: number, a0: number, a1: number) {
   return `M ${p(a0)} A ${r} ${r} 0 ${large} 1 ${p(a1)}`;
 }
 
-export default function ChartArc({ ratio, color, size = 140, thickness = 10, start = -120, end = 120, bands = [], children }: ChartArcProps) {
+export default function ChartArc({ ratio, color, size = 140, thickness = 10, start = -120, end = 120, fromEnd = false, bands = [], children }: ChartArcProps) {
   const c = size / 2;
   const r = c - BAND_GAP - BAND_W - thickness / 2;
   const rb = r + thickness / 2 + BAND_GAP + BAND_W / 2;
@@ -86,7 +89,7 @@ export default function ChartArc({ ratio, color, size = 140, thickness = 10, sta
     <span className="relative inline-flex items-center justify-center shrink-0" style={{ width: size, height: size }}>
       <svg aria-hidden className="absolute inset-0" width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
         <path d={arc(c, r, start, end)} fill="none" stroke="var(--color-surface-100)" strokeWidth={thickness} strokeLinecap="round" />
-        {fill > 0 && <path d={arc(c, r, start, at(fill))} fill="none" stroke={color} strokeWidth={thickness} strokeLinecap="round" />}
+        {fill > 0 && <path d={fromEnd ? arc(c, r, at(1 - fill), end) : arc(c, r, start, at(fill))} fill="none" stroke={color} strokeWidth={thickness} strokeLinecap="round" />}
         {bands.map((b, i) =>
           b.to > b.from ? <path key={i} d={arc(c, rb, at(b.from), at(b.to))} fill="none" stroke={b.color} strokeWidth={BAND_W} /> : null,
         )}
