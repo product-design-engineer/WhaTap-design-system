@@ -1,3 +1,4 @@
+import ChartCrosshair from "./ChartCrosshair";
 import ChartGrid from "./ChartGrid";
 import ChartTimeAxis from "./ChartTimeAxis";
 import ChartValueAxis from "./ChartValueAxis";
@@ -33,6 +34,7 @@ import { AXIS_GUTTER as GUTTER, formatAxisValue } from "./_axisScale";
  * - ❌ 천장 · 임계가 없는 지표(응답시간 · 건수) — 닿을 자리가 없다
  *
  * ## Composition rules
+ * - 플롯을 가리키면 [[ChartCrosshair]](`positions` = 관측 · 예측 점 x)가 그 시점의 관측 · 예측 값 툴팁을 보인다(제목 = `formatX`, patterns §26 «강조»).
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
  * - 껍데기(카드 · 제목 · 메뉴 · 범례)는 그리지 않는다. 대시보드 칸에서는 [[WidgetFrame]] 이 맡는다(patterns §15).
@@ -120,6 +122,8 @@ export type ForecastLineChartProps = {
   frame?: boolean;
   /** 스크린리더용 설명 — 필수. `role="img"` 는 이름이 없으면 보조기술에 빈 그림으로 남는다. */
   ariaLabel: string;
+  /** hover 툴팁 제목 — 도메인 x → 이름(「3시간 후」). 없으면 제목 없이. */
+  formatX?: (x: number) => string;
 };
 
 const THRESHOLD_TONE = {
@@ -138,6 +142,7 @@ export default function ForecastLineChart({
   highlightId = null,
   frame = true,
   ariaLabel,
+  formatX,
 }: ForecastLineChartProps) {
   const [x0, x1] = xDomain;
   const span = x1 - x0 || 1;
@@ -159,6 +164,13 @@ export default function ForecastLineChart({
   const ordered = highlightId ? [...series.filter((s) => s.id !== highlightId), ...series.filter((s) => s.id === highlightId)] : series;
   const opacityOf = (s: ForecastLineChartSeries) => (highlightId && s.id !== highlightId ? DIM_OPACITY : 1);
   const axisLabels = xLabels.filter((l) => !(showNow && l.x === 0) && l.x >= x0 && l.x <= x1);
+  /* 시점 고르기 — 관측 · 예측 점의 x 를 모은다. 관측과 예측은 툴팁에서 다른 줄(「CPU」 · 「CPU 예측」) */
+  const hoverXs = [...new Set(series.flatMap((s) => [...s.observed, ...(s.forecast ?? [])].map((p) => p.x)))].filter((x) => x >= x0 && x <= x1).sort((a, b) => a - b);
+  const at = (list: ForecastPoint[] | undefined, x: number) => list?.find((p) => p.x === x)?.y ?? null;
+  const hoverSeries = series.flatMap((s) => [
+    { label: s.label, color: s.color, values: hoverXs.map((x) => at(s.observed, x)) },
+    ...(s.forecast?.length ? [{ label: `${s.label} 예측`, color: s.color, values: hoverXs.map((x) => (x === 0 ? null : at(s.forecast, x))) }] : []),
+  ]);
 
   return (
     <div
@@ -300,6 +312,18 @@ export default function ForecastLineChart({
             right={PAD_RIGHT}
           />
         </div>
+        {/* 시점 고르기 — 관측 · 예측 값 툴팁(patterns §26 «강조») */}
+        <ChartCrosshair
+          count={hoverXs.length}
+          positions={hoverXs.map(rx)}
+          max={yMax}
+          series={hoverSeries}
+          labels={formatX ? hoverXs.map(formatX) : undefined}
+          unit={unit}
+          right={PAD_RIGHT}
+          padTop={PAD_TOP}
+          padBottom={PAD_BOTTOM}
+        />
       </div>
     </div>
   );

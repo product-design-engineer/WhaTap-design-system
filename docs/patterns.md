@@ -1262,6 +1262,7 @@ series 는 네 가지를 지킨다.
 | 값 라벨 | 선 끝 값 배지 | [[MiniMultiLineChart]] `endLabel` (§25) | 있음 |
 | 값 라벨 | 막대 값 · 최댓값 강조 | [[MiniBarChart]] `valueLabels` (§15) | 있음 |
 | 값 표시 | 마크 hover 값 상자(툴팁) | [[ChartTooltip]] (Primitives) — 상자 · 줄 모양만, 위치는 차트가(§5). 제목 · 값 줄(견본 · 이름 · 값 굵게) · 보조 줄(합계 · 기준). 브라우저 `title` 은 쓰지 않는다(늦게 뜨고 다크를 따르지 않는다). [[ScatterChart]] · [[ZoneScatterChart]] · [[BoxPlotChart]] · [[StatusTimeline]] · [[EqualizerChart]] · [[StackedAreaChart]](세로 안내선) · [[HexGrid]] 가 조합한다 | 있음 (2026-10-23 · HexGrid 자체 상자 → 이것) |
+| 상호작용 | 시간축 시점 고르기 | [[ChartCrosshair]] (Primitives · [[ChartTooltip]] 조합) — 포인터 x → 가장 가까운 시점 · 세로 안내선 · 계열마다 점 · 값 툴팁. `band`(막대 칸) · `positions`(고르지 않은 x) · `min`(50 부터인 축). [[MiniLineChart]] · [[MiniMultiLineChart]] · [[MiniBarChart]] · [[ForecastLineChart]] · [[ApdexChart]] 가 조합한다 | 있음 (2026-10-23) |
 | 상호작용 | 가리킨 마크 강조 | 내부 `_emphasis` + CSS `.wds-chart-mark` — **가리킨 마크는 불투명 + 카드색 2px 고리(선은 굵게 · 시간축 차트는 세로 안내선 + 층마다 점), 나머지는 0.32. 색은 바꾸지 않는다**(색은 계열 · 상태의 것, §17). 범례 항목([[ChartLegendItem]] `onHover` · `dimmed`)을 가리키면 그 계열만 남긴다. 전환 120ms · 동작 줄이기면 없음. [[HexGrid]] 의 흐림 값(0.32)을 모두가 쓴다 | 있음 (2026-10-23 사용자 결정 · 툴팁과 함께) |
 | 값 표시 | 큰 숫자 + 단위 | [[KpiCard]] · [[StatCard]] | 있음 |
 | 값 표시 | 델타(▲▼ + 변화값) · 비교 시점 캡션 | [[TrendTile]] — 색은 좋은 방향(`better`) | 있음 (2026-10-23) |

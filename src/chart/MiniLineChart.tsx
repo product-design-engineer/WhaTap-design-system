@@ -26,6 +26,7 @@
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
  * - 최고점은 [[ChartPeakMarker]] 가 그린다. 차트는 SVG 와 같은 식으로 최고점 좌표만 계산해 넘긴다(§5).
+ * - 플롯을 가리키면 [[ChartCrosshair]] 가 가장 가까운 시점의 안내선 · 점 · 값 툴팁을 보인다(제목 = `pointLabels`, patterns §26 «강조»).
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 안쪽 여백 · 제목 줄 · Top Stat · ⋮ · AI 트리거를 뺀다).
  *   [[WidgetFrame]] 안에 넣을 때 쓴다. 제목 · 범위 · 메뉴는 WidgetFrame 이 맡는다(patterns §15).
  * - **SVG font-size 단위 정책 (feedback-svg-text-units)**: SVG 내부에는 텍스트를
@@ -50,6 +51,7 @@
  * ```
  */
 import AiTriggerButton from "../widget/TriggerButton";
+import ChartCrosshair from "./ChartCrosshair";
 import ChartGrid from "./ChartGrid";
 import ChartPeakMarker from "./ChartPeakMarker";
 import ChartTimeAxis from "./ChartTimeAxis";
@@ -82,6 +84,7 @@ export default function MiniLineChart({
   /** AI 트리거 버튼 호버 설명(Tooltip). 페이지별 override 가능. 기본 "이 차트를 WhaTap AI로 분석". */
   aiTriggerTooltip = "이 차트를 WhaTap AI로 분석",
   frame = true,
+  pointLabels,
 }: {
   title: string;
   values: number[];
@@ -107,6 +110,8 @@ export default function MiniLineChart({
    * `false` 면 본문만 그린다. [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
    */
   frame?: boolean;
+  /** 시점마다 이름(「13:27:05」) — hover 툴팁 제목. 길이는 `values` 와 같게. 없으면 제목 없이. */
+  pointLabels?: string[];
 }) {
   // ★ 정책 (feedback-chart-peak-alignment):
   //   SVG viewBox는 plot 영역 자체와 정확히 동일한 비율을 가짐 → 라인의 peak
@@ -259,6 +264,17 @@ export default function MiniLineChart({
           {/* X축 시간 라벨 */}
           <ChartTimeAxis labels={xLabels} right={PAD_RIGHT} />
         </div>
+        {/* 시점 고르기 — 안내선 · 점 · 값 툴팁(patterns §26 «강조»). 덧그림 겹 위 */}
+        <ChartCrosshair
+          count={values.length}
+          max={yMaxNice}
+          series={[{ label: title, color, values }]}
+          labels={pointLabels}
+          unit={unit}
+          right={PAD_RIGHT}
+          padTop={PAD_TOP_PX}
+          padBottom={PAD_BOTTOM_PX}
+        />
       </div>
     </div>
   );

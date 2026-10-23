@@ -1,4 +1,7 @@
+import { useState } from "react";
+import ChartCrosshair from "./ChartCrosshair";
 import ChartGrid from "./ChartGrid";
+import { DIM_OPACITY, MARK_CLASS } from "./_emphasis";
 import ChartTimeAxis from "./ChartTimeAxis";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER as GUTTER, formatAxisValue, niceMax } from "./_axisScale";
@@ -38,6 +41,7 @@ import { AXIS_GUTTER as GUTTER, formatAxisValue, niceMax } from "./_axisScale";
  * - ❌ 연속 게이지의 흐름(사용률 추이) → [[MiniLineChart]]
  *
  * ## Composition rules
+ * - 플롯을 가리키면 [[ChartCrosshair]](`band`)가 그 칸의 계열 값 · 합계 툴팁을 보이고 나머지 막대를 흐린다(제목 = `pointLabels` 또는 `categories`, patterns §26 «강조»).
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
  * - 껍데기(카드 · 제목 · 메뉴 · 범례)는 그리지 않는다. 대시보드 칸에서는 [[WidgetFrame]] 이 맡는다(patterns §15).
@@ -119,6 +123,8 @@ export type MiniBarChartProps = {
    * `false` 면 여백 0 — [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
    */
   frame?: boolean;
+  /** 구간마다 이름(「13:27:05」) — hover 툴팁 제목(시간축). 범주축이면 `categories` 가 제목이다. */
+  pointLabels?: string[];
 };
 
 export default function MiniBarChart({
@@ -130,7 +136,10 @@ export default function MiniBarChart({
   peak = false,
   valueLabels = false,
   frame = true,
+  pointLabels,
 }: MiniBarChartProps) {
+  /* 가리킨 칸 — 나머지 막대를 흐린다(patterns §26 «강조») */
+  const [hover, setHover] = useState<number | null>(null);
   const isCategory = categories !== undefined && categories.length > 0;
   const n = Math.max(0, ...series.map((s) => s.values.length));
   const totals = Array.from({ length: n }, (_, i) => series.reduce((sum, s) => sum + (s.values[i] ?? 0), 0));
@@ -152,7 +161,11 @@ export default function MiniBarChart({
           style={{ left: GUTTER, right: PAD_RIGHT, top: padTop, bottom: padBottom, gap: 1, padding: "0 2px" }}
         >
           {Array.from({ length: n }, (_, i) => (
-            <div key={i} className="relative flex flex-1 min-w-0 h-full" style={{ flexDirection: "column-reverse" }}>
+            <div
+              key={i}
+              className={`${MARK_CLASS} relative flex flex-1 min-w-0 h-full`}
+              style={{ flexDirection: "column-reverse", opacity: hover != null && hover !== i ? DIM_OPACITY : 1 }}
+            >
               {series.map((s) => {
                 const v = s.values[i] ?? 0;
                 return (
@@ -204,6 +217,20 @@ export default function MiniBarChart({
         <div className="absolute inset-0 pointer-events-none">
           {!isCategory && <ChartTimeAxis labels={xLabels} right={PAD_RIGHT} />}
         </div>
+        {/* 칸 고르기 — 막대는 점 대신 나머지를 흐리고, 툴팁은 계열 값 · 합계 */}
+        <ChartCrosshair
+          band
+          count={n}
+          max={top}
+          series={series.map((s) => ({ label: s.label, color: s.color, values: s.values, shape: "square" as const, noDot: true }))}
+          labels={isCategory ? categories : pointLabels}
+          unit={unit}
+          footer={series.length > 1 ? (i) => `합계 ${totals[i].toLocaleString("en-US", { maximumFractionDigits: 2 })}${unit}` : undefined}
+          onIndex={setHover}
+          right={PAD_RIGHT}
+          padTop={padTop}
+          padBottom={padBottom}
+        />
       </div>
     </div>
   );

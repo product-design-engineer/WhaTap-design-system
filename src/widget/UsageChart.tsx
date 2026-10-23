@@ -21,6 +21,7 @@
  * - ❌ 24칸이 아닌 구간(분 · 일) → [[MiniBarChart]] · [[Heatmap]]
  *
  * ## Composition rules
+ * - 막대를 가리키면 [[ChartTooltip]] 이 시각 · 사용률을 보이고 나머지 막대를 흐린다(patterns §26 «강조»).
  * - 요소를 조합한다 — 캡션 [[AiCaption]] · 막대 [[ChartBar]](칸마다 하나). 차트 안에서 막대를 다시 그리지 않는다(patterns §26).
  *   그래서 Composite 계층이다.
  * - 자체 카드 chrome(흰 배경/보더/라운드/패딩)을 보유 — [[AiCard]] 로 감싸지 않음.
@@ -38,7 +39,10 @@
  * />
  * ```
  */
+import { useState } from "react";
 import ChartBar from "../chart/ChartBar";
+import ChartTooltip from "../chart/ChartTooltip";
+import { DIM_OPACITY, MARK_CLASS } from "../chart/_emphasis";
 import { AiCaption } from "./_primitives";
 
 export default function UsageChart({
@@ -55,6 +59,8 @@ export default function UsageChart({
   delay?: number;
 }) {
   const HEIGHT = 96;
+  /* 가리킨 시간 칸 — [[ChartTooltip]] 값 · 나머지 막대 흐림(patterns §26 «강조») */
+  const [hover, setHover] = useState<number | null>(null);
   return (
     <div
       className="ai-anim-in flex flex-col gap-8px w-full bg-card border border-color-var-color-border-default rounded-8px p-12px"
@@ -71,13 +77,29 @@ export default function UsageChart({
       </div>
       <div className="flex items-end gap-2px w-full" style={{ height: HEIGHT }}>
         {values.map((v, i) => (
-          <ChartBar
+          <div
             key={i}
-            ratio={v === null ? null : v / 100}
-            color={(v ?? 0) >= highlightThreshold ? "var(--color-chart-seq-4)" : "var(--color-chart-seq-2)"}
-            title={v === null ? `${i}시 · 데이터 없음` : `${i}시 · ${v.toFixed(1)}%`}
-            delay={delay + 100 + i * 35}
-          />
+            className={`${MARK_CLASS} relative flex flex-1 min-w-0 h-full items-end`}
+            style={{ opacity: hover != null && hover !== i ? DIM_OPACITY : 1 }}
+            onMouseEnter={() => setHover(i)}
+            onMouseLeave={() => setHover(null)}
+          >
+            <ChartBar
+              ratio={v === null ? null : v / 100}
+              color={(v ?? 0) >= highlightThreshold ? "var(--color-chart-seq-4)" : "var(--color-chart-seq-2)"}
+              delay={delay + 100 + i * 35}
+            />
+            {hover === i && (
+              <ChartTooltip
+                left="50%"
+                top={v === null ? "50%" : `${100 - Math.min(100, Math.max(0, v))}%`}
+                flipX={i >= values.length / 2}
+                title={`${i}시`}
+                rows={[{ label: "사용률", value: v === null ? "데이터 없음" : `${v.toFixed(1)}%`, color: (v ?? 0) >= highlightThreshold ? "var(--color-chart-seq-4)" : "var(--color-chart-seq-2)" }]}
+                footer={v !== null && v >= highlightThreshold ? `강조 기준 ${highlightThreshold}% 이상` : undefined}
+              />
+            )}
+          </div>
         ))}
       </div>
     </div>
