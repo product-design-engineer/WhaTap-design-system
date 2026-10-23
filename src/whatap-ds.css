@@ -1885,6 +1885,12 @@ html, body, #root {
 }
 
 /* 컨트롤의 focus 는 ring — border 로 표현하지 않는다(입력 필드만 focus-border). */
+/* BlockCell — 고를 수 있는 상태 칸(버튼). 칸 칠이 상태색이라 테두리가 아니라 바깥 링으로 포커스를 말한다. */
+.wds-block-cell:focus-visible {
+  outline: 2px solid var(--color-brand-blue);
+  outline-offset: 2px;
+}
+
 .wds-mesh-cluster-btn:focus-visible {
   outline: 2px solid var(--color-brand-blue);
   outline-offset: 2px;

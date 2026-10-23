@@ -629,6 +629,24 @@ Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
 
 Figma 정본: 페이지 ScatterChart `572:6908` · 세트 `572:7311`(`frame` × `marks` dot · bubble). ChartSwatch `shape=dot` `572:39` · ChartLegendItem `shape=dot` `572:6745` · `572:6749` 추가.
 
+## BlockGrid · BlockCell
+
+대상 하나 = 이름 있는 칸 하나를 격자로 깐 상태 맵 — 이름으로 대상을 찾는다. **BlockGrid(Composite)** = **BlockCell(Primitives — 상태 칠 · 이름 말줄임 · 높이 32)** 격자 + 단독 범례 [[ChartLegendItem]]. 이름 없는 분포는 [[HexGrid]] — 상태 어휘 · 색 · 범례는 둘이 같다(내부 `_statusTone`).
+
+| Prop (BlockGrid) | Type | Default |
+|---|---|---|
+| `items` | `{ id, label, tone: "active" \| "idle" \| "warning" \| "critical" }[]` | — |
+| `columns` | `number` | `4` |
+| `toneLabels` | 상태 이름 바꾸기(`{ active: "정상" }`) | — |
+| `onSelect` | `(item) => void` — 칸이 버튼이 된다 | — |
+| `frame` | `boolean` — 범례 줄 | `true` |
+
+- 범례는 개수를 붙이고 0 개인 상태도 남긴다(`blockGridLegend(items)` → WidgetFrame `legend`, `hexGridLegend` 와 같은 줄).
+- 칸 순서 = `items` 순서. 심각도순 · 이름순 정렬은 호출부.
+- 3D 블록은 그리지 않는다. 고를 수 있는 칸은 `.wds-block-cell:focus-visible` 바깥 링.
+
+Figma 정본: BlockCell 페이지 `582:2` · 세트 `582:11`(`tone` · label) / BlockGrid 페이지 `582:41` · 세트 `582:111`(`frame`).
+
 ## EqualizerChart
 
 대상마다 세로 막대를 칸으로 끊어 쌓는다 — 칸 하나 = 축 최대 ÷ `levels`. **Composite** — [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCategoryAxis]] 를 조합하고 칸만 그린다. 호 형태는 [[ChartRadialBars]](같은 칸 계산, 내부 `_stripes`).
