@@ -22,6 +22,7 @@
  * - 안내선 1px `--color-border-strong` · 점 6px 계열 색 + 카드색 2px 고리(강조 규칙 · 내부 `_emphasis`). 색은 계열 그대로.
  * - 툴팁 제목 = `labels[i]`(시점 이름), 값 줄 = 계열(견본 · 이름 · 값 + `unit`), 보조 줄 = `footer(i)`.
  * - 마크가 아닌 덧그림 겹이라 마크 **위**에, 축 글자와 같은 겹에 둔다. 포인터를 벗어나면 모두 사라진다.
+ * - 시간축을 공유하는 칸 여럿([[PairedTimeChart]])은 `index` · `onIndex` 로 한 시점을 함께 고르고, 툴팁은 한 칸에서만(`noTooltip`).
  *
  * ## Spec
  * | 항목 | 값 |
@@ -52,8 +53,10 @@ export type ChartCrosshairSeries = {
   values: ReadonlyArray<number | null | undefined>;
   /** 견본 모양 — 선 `line`, 막대 · 면 `square`. 기본 line. */
   shape?: ChartSwatchShape;
-  /** 점을 찍지 않는다(막대처럼 마크 자체가 강조될 때). */
+  /** 점을 찍지 않는다(막대처럼 마크 자체가 강조될 때 · 다른 칸 계열을 툴팁에만 보일 때). */
   noDot?: boolean;
+  /** 이 계열만의 단위 — 없으면 전체 `unit`. 칸 여럿의 값을 한 툴팁에 보일 때. */
+  unit?: string;
 };
 
 export type ChartCrosshairProps = {
@@ -77,6 +80,10 @@ export type ChartCrosshairProps = {
   positions?: ReadonlyArray<number>;
   /** 고른 시점이 바뀔 때 — 막대 차트가 나머지를 흐린다. */
   onIndex?: (i: number | null) => void;
+  /** 고른 시점을 밖에서 정한다(제어형) — 시간축을 공유하는 칸 여럿이 한 시점을 함께 보일 때. 주면 내부 상태 대신 이 값을 쓴다. */
+  index?: number | null;
+  /** 툴팁을 그리지 않는다(안내선 · 점만) — 칸 여럿 중 한 칸만 툴팁을 띄울 때. */
+  noTooltip?: boolean;
   /** 플롯 오른쪽 끝(px 또는 CSS 길이). [[ChartGrid]] 와 같게. 기본 8. */
   right?: number | string;
   /** 플롯 위 여백(px). 기본 4. */
@@ -98,11 +105,14 @@ export default function ChartCrosshair({
   band = false,
   positions,
   onIndex,
+  index,
+  noTooltip = false,
   right = 8,
   padTop = 4,
   padBottom = 14,
 }: ChartCrosshairProps) {
-  const [i, setI] = useState<number | null>(null);
+  const [own, setOwn] = useState<number | null>(null);
+  const i = index !== undefined ? index : own;
   if (count < 1) return null;
   const xr = (k: number) => (positions ? positions[k] ?? 0 : band ? (k + 0.5) / count : count > 1 ? k / (count - 1) : 0);
   const yr = (v: number) => (max > min ? 1 - Math.min(1, Math.max(0, (v - min) / (max - min))) : 1);
@@ -115,7 +125,7 @@ export default function ChartCrosshair({
     return band ? Math.min(count - 1, Math.floor(ratio * count)) : Math.round(ratio * (count - 1));
   };
   const set = (k: number | null) => {
-    setI(k);
+    setOwn(k);
     onIndex?.(k);
   };
   const vals = i == null ? [] : series.map((s) => s.values[i]).filter((v): v is number => v != null);
@@ -145,16 +155,16 @@ export default function ChartCrosshair({
               />
             );
           })}
-          <ChartTooltip
+          {!noTooltip && <ChartTooltip
             left={`${xr(i) * 100}%`}
             top={`${topY * 100}%`}
             flipX={xr(i) > 0.5}
             title={labels?.[i]}
             rows={series
               .filter((s) => s.values[i] != null)
-              .map((s) => ({ label: s.label, value: `${fmt(s.values[i] as number)}${unit}`, color: s.color, shape: s.shape ?? "line" }))}
+              .map((s) => ({ label: s.label, value: `${fmt(s.values[i] as number)}${s.unit ?? unit}`, color: s.color, shape: s.shape ?? "line" }))}
             footer={footer?.(i)}
-          />
+          />}
         </>
       )}
     </div>
