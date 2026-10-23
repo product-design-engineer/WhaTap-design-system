@@ -21,6 +21,7 @@
  * - ❌ 시간에 따른 변화 — 한 시점의 단면이다
  *
  * ## Composition rules
+ * - 단계 막대를 가리키면 나머지를 흐리고(0.32) [[ChartTooltip]] 이 몫 · 나머지 · 단계 안 몫의 비율을 보인다(patterns §26 «강조»).
  * - 요소를 조합한다 — 격자 [[ChartGrid]] · 값축 [[ChartValueAxis]](눈금은 단계 값, `ticks`) · 막대 [[ChartStackedColumn]] ·
  *   단계 이름 [[ChartCategoryAxis]]. 차트 안에서 축 · 막대 · 이름을 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
  * - 색: 몫 = 한 계열 색(`positive.color`, 기본 `--color-chart-series-1`). 단계는 같은 지표(GPU 수)의 단계라 색을 돌려 칠하지 않는다
@@ -39,7 +40,10 @@
  * ```
  */
 import ChartCategoryAxis from "./ChartCategoryAxis";
+import { useState } from "react";
 import ChartGrid from "./ChartGrid";
+import ChartTooltip from "./ChartTooltip";
+import { DIM_OPACITY, MARK_CLASS } from "./_emphasis";
 import ChartStackedColumn from "./ChartStackedColumn";
 import ChartValueAxis from "./ChartValueAxis";
 import { AXIS_GUTTER } from "./_axisScale";
@@ -104,6 +108,8 @@ export default function GpuStatusBar({ categories, max: maxProp, frame = true, t
   }
   const area = pts.length > 1 ? `${line} L${pts[pts.length - 1].x},100 L${pts[0].x},100 Z` : "";
   const plot = { left: AXIS_GUTTER, right: PAD_RIGHT, top: PAD_TOP, bottom: PAD_BOTTOM };
+  /* 가리킨 단계 — 나머지 막대를 흐리고 [[ChartTooltip]] 으로 몫 · 나머지 · 비율(patterns §26 «강조») */
+  const [hover, setHover] = useState<number | null>(null);
 
   return (
     <div
@@ -122,8 +128,14 @@ export default function GpuStatusBar({ categories, max: maxProp, frame = true, t
         )}
 
         <div className="absolute flex" style={{ ...plot, gap: GAP }}>
-          {categories.map((c) => (
-            <div key={c.label} className="flex-1 min-w-0 h-full">
+          {categories.map((c, i) => (
+            <div
+              key={c.label}
+              className={`${MARK_CLASS} relative flex-1 min-w-0 h-full`}
+              style={{ opacity: hover != null && hover !== i ? DIM_OPACITY : 1 }}
+              onMouseEnter={() => setHover(i)}
+              onMouseLeave={() => setHover(null)}
+            >
               <ChartStackedColumn
                 max={maxVal}
                 segments={[
@@ -133,6 +145,24 @@ export default function GpuStatusBar({ categories, max: maxProp, frame = true, t
                     : []),
                 ]}
               />
+              {hover === i && (
+                <ChartTooltip
+                  left="50%"
+                  top={`${maxVal > 0 ? (1 - Math.min(1, (c.positive.value + (c.negative?.value ?? 0)) / maxVal)) * 100 : 50}%`}
+                  flipX={i >= categories.length / 2}
+                  offset={16}
+                  title={c.label}
+                  rows={[
+                    { label: c.positive.label, value: c.positive.value.toLocaleString("en-US"), color: c.positive.color ?? POS_COLOR },
+                    ...(c.negative ? [{ label: c.negative.label, value: c.negative.value.toLocaleString("en-US"), color: c.negative.color ?? NEG_COLOR }] : []),
+                  ]}
+                  footer={
+                    c.negative && c.positive.value + c.negative.value > 0
+                      ? `${c.positive.label} ${((c.positive.value / (c.positive.value + c.negative.value)) * 100).toLocaleString("en-US", { maximumFractionDigits: 1 })}%`
+                      : undefined
+                  }
+                />
+              )}
             </div>
           ))}
         </div>

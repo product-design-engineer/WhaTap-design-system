@@ -20,6 +20,7 @@
  * - ❌ 시간 흐름 · 7개 이상 범주 → [[MiniLineChart]] · [[BarList]]
  *
  * ## Composition rules
+ * - 조각이나 범례 항목을 가리키면 그 조각만 남기고(나머지 0.32) [[ChartTooltip]] 이 조각 가운데에서 이름 · 값 · 전체 대비 비율을 보인다(patterns §26 «강조»).
  * - 범례는 [[ChartLegendItem]] 을 조합한다(`fill` — 값이 오른쪽 끝에 세로로 맞는다, patterns §26). 그래서 Composite 계층이다.
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 안쪽 여백 · 제목 줄을 뺀다). [[WidgetFrame]] 안에 넣을 때 쓴다.
  *   제목은 WidgetFrame `title`, 범위는 `meta`, 범례는 도넛 옆 열 그대로(항목 글이 길어 한 줄 범례로 올리지 않는다), 메뉴는 `onFullscreen` · `menu` 가 맡는다(patterns §15).
@@ -41,7 +42,10 @@
  * />
  * ```
  */
+import { useState } from "react";
 import ChartLegendItem from "./ChartLegendItem";
+import ChartTooltip from "./ChartTooltip";
+import { DIM_OPACITY, MARK_CLASS } from "./_emphasis";
 
 export type DonutSegment = {
   label: string;
@@ -97,6 +101,16 @@ export default function MiniDonutChart({
     return { ...seg, length, dashGap, offset, ratio };
   });
 
+  /* 가리킨 조각(조각 · 범례) — 그 조각만 남기고 [[ChartTooltip]] 으로 이름 · 값 · 비율(patterns §26 «강조») */
+  const [hover, setHover] = useState<string | null>(null);
+  const h = arcs.find((a) => a.label === hover);
+  /* 조각 가운데 각(12시 기준 시계 방향) → 링 위 좌표 */
+  const midOf = (a: (typeof arcs)[number]) => {
+    const deg = ((-a.offset + a.length / 2) / CIRCUMFERENCE) * 360;
+    const t = ((deg - 90) * Math.PI) / 180;
+    return { x: CENTER + RADIUS * Math.cos(t), y: CENTER + RADIUS * Math.sin(t) };
+  };
+
   const style = delay !== undefined
     ? { animationDelay: `${delay}ms` } as React.CSSProperties
     : undefined;
@@ -136,6 +150,10 @@ export default function MiniDonutChart({
             {arcs.map((arc) => (
               <circle
                 key={arc.label}
+                className={MARK_CLASS}
+                opacity={hover != null && hover !== arc.label ? DIM_OPACITY : 1}
+                onMouseEnter={() => setHover(arc.label)}
+                onMouseLeave={() => setHover(null)}
                 cx={CENTER}
                 cy={CENTER}
                 r={RADIUS}
@@ -168,12 +186,32 @@ export default function MiniDonutChart({
               )}
             </div>
           )}
+          {h && (
+            <ChartTooltip
+              left={midOf(h).x}
+              top={midOf(h).y}
+              /* 원형 — 조각 바깥쪽으로 편다(안쪽으로 펴면 링과 가운데 글자를 가린다) */
+              flipX={midOf(h).x < CENTER}
+              flipY={midOf(h).y < CENTER}
+              offset={6}
+              rows={[{ label: h.label, value: h.value.toLocaleString("en-US"), color: h.color }]}
+              footer={`전체의 ${(h.ratio * 100).toLocaleString("en-US", { maximumFractionDigits: 1 })}%`}
+            />
+          )}
         </div>
 
         {/* 범례 */}
         <div className="flex flex-col gap-4px min-w-0 flex-1">
           {arcs.map((arc) => (
-            <ChartLegendItem key={arc.label} color={arc.color} label={arc.label} value={arc.value} fill />
+            <ChartLegendItem
+              key={arc.label}
+              color={arc.color}
+              label={arc.label}
+              value={arc.value}
+              fill
+              onHover={(on) => setHover(on ? arc.label : null)}
+              dimmed={hover != null && hover !== arc.label}
+            />
           ))}
         </div>
       </div>

@@ -22,6 +22,7 @@
  * - ❌ 합 100% 구성의 몫만 말할 때 → [[MiniDonutChart]](BarList 는 크기 비교다)
  *
  * ## Composition rules
+ * - 줄을 가리키면 그 줄만 남기고 나머지를 흐리며(0.32), [[ChartTooltip]] 이 전체 이름 · 값을 보인다(patterns §26 «강조»).
  * - 줄은 [[BarListItem]] 이 그린다(목록 행은 컴포넌트로, patterns §26). 그래서 Composite 계층이다.
  * - 껍데기(카드 · 제목 · 메뉴)는 그리지 않는다. 대시보드 칸에서는 [[WidgetFrame]] 이 맡는다(patterns §15).
  * - `frame={false}` 면 바깥 여백(좌우 · 아래 8px)을 뺀다. WidgetFrame 안에서는 늘 `frame={false}`.
@@ -39,7 +40,9 @@
  * </WidgetFrame>
  * ```
  */
+import { useState } from "react";
 import BarListItem from "./BarListItem";
+import ChartTooltip from "./ChartTooltip";
 
 export type BarListRow = {
   label: string;
@@ -60,15 +63,35 @@ export type BarListProps = {
 };
 
 export default function BarList({ rows, frame = true }: BarListProps) {
+  /* 가리킨 줄 — 나머지를 흐리고 [[ChartTooltip]] 으로 전체 이름 · 값(이름은 줄에서 잘릴 수 있다) */
+  const [hover, setHover] = useState<number | null>(null);
+  const h = hover != null ? rows[hover] : null;
   return (
     <ul
       aria-label="목록"
-      className="flex flex-col h-full min-h-0 w-full"
+      className="relative flex flex-col h-full min-h-0 w-full"
       style={{ listStyle: "none", margin: 0, padding: frame ? "0 8px 8px" : 0 }}
     >
-      {rows.map((r) => (
-        <BarListItem key={r.label} label={r.label} value={r.value} ratio={r.ratio} color={r.color} />
+      {rows.map((r, i) => (
+        <BarListItem
+          key={r.label}
+          label={r.label}
+          value={r.value}
+          ratio={r.ratio}
+          color={r.color}
+          onHover={(on) => setHover(on ? i : null)}
+          dimmed={hover != null && hover !== i}
+        />
       ))}
+      {h && hover != null && (
+        <ChartTooltip
+          left={`calc(96px + (100% - 96px) * ${Math.max(0, Math.min(1, h.ratio))})`}
+          top={`${((hover + 0.5) / rows.length) * 100}%`}
+          flipX={h.ratio > 0.6}
+          flipY={(hover + 0.5) / rows.length > 0.5}
+          rows={[{ label: h.label, value: h.value.toLocaleString("en-US"), color: h.color }]}
+        />
+      )}
     </ul>
   );
 }

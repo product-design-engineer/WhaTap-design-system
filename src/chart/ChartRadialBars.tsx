@@ -17,6 +17,7 @@
  * - 대상 하나의 진행률 → [[UsageGauge]].
  *
  * ## Composition rules
+ * - 칸을 가리키면 나머지 칸을 흐리고(0.32) [[ChartTooltip]](리프 1개 — 계층 «리프 1개 예외»)이 칸 이름 · 구간 값 · 합계를 보인다(patterns §26 «강조»). SVG `<title>` 은 쓰지 않는다.
  * - 칸은 12시에서 시계 방향으로 `sectors` 순서대로 놓인다. 칸이 비면(합 0) 바탕만 남는다 — «대상은 있고 지금 양이 없다».
  * - 구간은 `segments` 순서대로 안쪽부터 쌓인다. 0 보다 큰 구간은 최소 한 줄 — 작은 값도 사라지지 않는다. 한 칸의 줄 수는 `levels` 를 넘지 않는다.
  * - 칸의 줄 수 = 합 ÷ `max` × `levels`(반올림), 구간에는 최대 나머지로 나눈다. `max` 기본값은 가장 큰 칸의 합 — 여러 차트를 나란히 비교하려면 같은 `max` 를 준다.
@@ -50,7 +51,9 @@
  * ```
  */
 import { stripeCounts } from "./_stripes";
-import { useId, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
+import ChartTooltip from "./ChartTooltip";
+import { DIM_OPACITY, MARK_CLASS } from "./_emphasis";
 
 export type ChartRadialSegment = {
   /** 양. 0 이면 그리지 않는다. */
@@ -122,6 +125,12 @@ export default function ChartRadialBars({
   const span = 360 / n;
   const pitch = (R_BAR_OUT - R_BAR_IN) / levels;
   const total = sums.reduce((a, b) => a + b, 0);
+  /* 가리킨 칸 — 나머지 칸을 흐리고 [[ChartTooltip]] 으로 이름 · 구간 값 · 합(patterns §26 «강조») */
+  const [hover, setHover] = useState<number | null>(null);
+  const tipAt = (i: number) => {
+    const t = rad((i + 0.5) * span);
+    return { x: ((C + R_BAR_OUT * Math.cos(t)) / 200) * 100, y: ((C + R_BAR_OUT * Math.sin(t)) / 200) * 100 };
+  };
 
   return (
     <div className="relative w-full h-full" style={{ containerType: "inline-size" }}>
@@ -153,10 +162,15 @@ export default function ChartRadialBars({
           const stripes = radialStripes(s.segments, top, levels);
           let level = 0;
           return (
-            <g key={`s${i}`}>
-              <title>
-                {[s.label, ...s.segments.map((g) => `${g.label ?? ""} ${g.value}`.trim())].filter(Boolean).join(" · ")}
-              </title>
+            <g
+              key={`s${i}`}
+              className={MARK_CLASS}
+              opacity={hover != null && hover !== i ? DIM_OPACITY : 1}
+              onMouseEnter={() => setHover(i)}
+              onMouseLeave={() => setHover(null)}
+            >
+              {/* 칸 전체가 hover 를 받게 — 줄무늬 사이 틈에서 깜빡이지 않도록 투명 칸 */}
+              <path d={ringPath(R_BAR_IN, R_BAR_OUT, a0, a1)} fill="transparent" />
               {s.segments.flatMap((g, k) =>
                 Array.from({ length: stripes[k] }, (_, j) => {
                   const r0 = R_BAR_IN + (level + j) * pitch;
@@ -171,7 +185,7 @@ export default function ChartRadialBars({
         <circle cx={C} cy={C} r={R_HOLE} style={{ fill: "var(--color-card)", stroke: "var(--color-chart-radial-divider)" }} strokeWidth={1} />
       </svg>
       {sweep && (
-        <svg viewBox="0 0 200 200" className="wds-chart-radial-sweep absolute inset-0 w-full h-full" aria-hidden style={{ overflow: "visible" }}>
+        <svg viewBox="0 0 200 200" className="wds-chart-radial-sweep absolute inset-0 w-full h-full pointer-events-none" aria-hidden style={{ overflow: "visible" }}>
           <defs>
             <linearGradient id={`sw${gid}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0" style={{ stopColor: sweepColor }} />
@@ -183,6 +197,18 @@ export default function ChartRadialBars({
       )}
       {children != null && (
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">{children}</div>
+      )}
+      {hover != null && sectors[hover] && (
+        <ChartTooltip
+          left={`${tipAt(hover).x}%`}
+          top={`${tipAt(hover).y}%`}
+          /* 원형 — 칸 바깥쪽으로 편다(안쪽으로 펴면 고리를 가린다) */
+          flipX={tipAt(hover).x < 50}
+          flipY={tipAt(hover).y < 50}
+          title={sectors[hover].label}
+          rows={[...sectors[hover].segments].reverse().map((g) => ({ label: g.label ?? "", value: g.value.toLocaleString("en-US"), color: g.color }))}
+          footer={sectors[hover].segments.length > 1 ? `합계 ${sums[hover].toLocaleString("en-US")}` : undefined}
+        />
       )}
     </div>
   );
