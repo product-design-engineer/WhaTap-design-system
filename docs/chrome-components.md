@@ -525,6 +525,8 @@ export type DataTableProps<T> = {
 - 가리킨 마크 강조(공통 규칙, patterns §26 «강조») — 가리킨 마크는 불투명 + 카드색 2px 고리, 나머지 0.32, 색은 그대로. 차트 안 범례는 [[ChartLegendItem]] `onHover` · `dimmed` 로 그 계열만 남긴다. 전환은 `.wds-chart-mark`(120ms · 동작 줄이기면 없음).
 - 시간축 차트의 hover 는 [[ChartCrosshair]](Primitives) — 플롯 위 포인터 x → 가장 가까운 시점 · 세로 안내선(`--color-border-strong`) · 계열마다 점(카드색 고리) · 값 툴팁. Props: `count` · `max` · `min` · `series({ label, color, values, shape?, noDot?, unit? })` · `labels`(시점 이름) · `unit` · `footer(i)` · `band`(막대) · `positions`(고르지 않은 x) · `onIndex`(막대 흐림) · `index`(제어형 — 칸 여럿이 한 시점) · `noTooltip` · 플롯 여백(`right` · `padTop` · `padBottom`, ChartGrid 와 같게). MiniLine · MiniMultiLine · MiniBar · Forecast · Apdex 가 쓰고, 각 차트는 시점 이름을 `pointLabels`(Forecast 는 `formatX`)로 받는다.
   Figma 정본: 페이지 ChartCrosshair `591:2` · 컴포넌트 `591:3`(가리켰을 때 모습 견본).
+- 경과 시간 차트(Flame · Waterfall)의 요소 — [[ChartSpanBar]](Primitives, 구간 막대: `start` · `end` 플롯 폭 비율 · `color` · `textColor` · `label` · `dimmed` · `active` · `top` · `height`. 이름은 차트가 막대 폭 40px 이상일 때만 준다) · [[ChartBrush]](Primitives, 시간축 줄을 끌어 구간 확대: `onSelect(from, to)` · 플롯 상자 `left` · `right` · `top` · `bottom` · `strip` · `minRatio`. 띠 `--color-brand-blue-wash`). [[ChartTimeAxis]] 는 `left` 로 Y축 칸이 없는 플롯에 맞춘다.
+  Figma 정본: ChartSpanBar 페이지 `599:2` · 세트 `599:9`(`state` default · dimmed · active · label · showLabel) / ChartBrush 페이지 `599:16` · 컴포넌트 `599:17`(끄는 중 견본).
 - 마크 hover 값 상자는 [[ChartTooltip]](Primitives) — 카드 표면 · 1px 테두리 · 반경 6 · 그림자 · 제목 + 값 줄(견본 · 이름 · 값 굵게) + 보조 줄. `left` · `top` 은 마크 자리(차트가 계산), `flipX` · `flipY` 로 반대쪽에 편다. 자유 내용은 `children`. 차트 마크에 브라우저 `title` 을 쓰지 않는다. ScatterChart · ZoneScatterChart · BoxPlotChart · StatusTimeline(`formatAt`) · EqualizerChart · StackedAreaChart(`pointLabels`, 세로 안내선) · HexGrid 가 쓴다.
   Figma 정본: 페이지 ChartTooltip `589:10` · 세트 `589:67`(`rows` × `footer` · title).
 - 차트 옆 수치(라벨 위 큰 숫자 · 단위 · 보조 줄)는 [[MetricStat]](Primitives, 옛 이름 SpeedStat) — [[ActiveTransactionSpeedWidget]] RPS · TPS, [[ActiveTransactionArc]] Max TX · Agent.
@@ -724,6 +726,38 @@ Figma 정본: 페이지 Treemap `596:2` · 컴포넌트 `596:3`.
 - 휠 줌 없음(대시보드 스크롤 보호) — 버튼으로 확대, 끌어서 이동.
 
 Figma 정본: 페이지 GeoMap `598:2` · 세트 `598:8161`(`mode` fill · bubble · empty) · 내부 도형 `_GeoWorld` `598:7530` / 줌 컨트롤 페이지 TopologyZoomControl `597:30` · 컴포넌트 `597:31`.
+
+## FlameChart
+
+호출 · 요청 구간을 시간 위에 깊이별 계단으로 — 색 = 상태. **Composite** — [[ChartSpanBar]] · [[ChartBrush]] · [[ChartTimeAxis]] · [[ChartLegendItem]] · [[ChartTooltip]] · [[Button]](전체 보기) 조합.
+
+| Prop | Type | Default |
+|---|---|---|
+| `spans` | `{ label, start, end, depth, status?: normal · slow · error · none, lane?, detail? }[]` | — |
+| `range` | 전체 시간 범위(ms) | 0 ~ 가장 늦은 끝 |
+| `statusLabels` | 상태 이름 바꾸기 | 정상 · 느림 · 에러 · 정보 없음 |
+
+- 색 = 상태(BlockGrid · HexGrid 와 같은 `_statusTone`). 계열 색을 섞지 않는다.
+- 시간축 줄을 끌어 확대 · «전체 보기». 폭 40px 미만 막대는 이름 없이(툴팁).
+- 에러 시각은 Flame 안 세로선이 아니라 위에 [[StatusTimeline]] 을 같은 시간 범위로.
+
+Figma 정본: 페이지 FlameChart `600:2` · 컴포넌트 `600:3`.
+
+## WaterfallChart
+
+리소스 · 요청 하나에 한 줄, 단계를 이어 붙인 가로 막대 — 색 = 단계. **Composite** — FlameChart 와 같은 요소 조합 + 이름 칸 · 표시선.
+
+| Prop | Type | Default |
+|---|---|---|
+| `phases` | 단계 이름(색 순서) | — |
+| `rows` | `{ label, meta?, start, segments: number[] }[]` | — |
+| `markers` | `{ at, label }[]`(DOMContentLoaded · load) | `[]` |
+| `range` · `labelWidth` | 시간 범위 · 이름 칸 | 자동 · `160` |
+
+- 색 = 단계(계열 슬롯 8개까지, 넘으면 «기타»). 리소스 타입은 색이 아니라 이름 아래 글자.
+- 여러 로드의 평균 단계는 [[SegmentBar]].
+
+Figma 정본: 페이지 WaterfallChart `601:2` · 컴포넌트 `601:3`.
 
 ## MetricGrid
 

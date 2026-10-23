@@ -108,6 +108,9 @@
     "ChartBar": {
       "figma": "562:9"
     },
+    "ChartBrush": {
+      "figma": "599:17"
+    },
     "ChartCategoryAxis": {
       "figma": "560:4"
     },
@@ -125,6 +128,9 @@
     },
     "ChartRadialBars": {
       "figma": "568:6918"
+    },
+    "ChartSpanBar": {
+      "figma": "599:9"
     },
     "ChartStackedColumn": {
       "figma": "561:10"
@@ -260,6 +266,9 @@
     },
     "FilterSelect": {
       "figma": "183:5207"
+    },
+    "FlameChart": {
+      "figma": "600:3"
     },
     "ForecastLineChart": {
       "figma": "416:210"
@@ -623,6 +632,9 @@
     },
     "WebBreadcrumb": {
       "figma": null
+    },
+    "WaterfallChart": {
+      "figma": "601:3"
     },
     "WebCtaButton": {
       "figma": null

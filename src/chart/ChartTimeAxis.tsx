@@ -45,10 +45,13 @@ export type ChartTimeAxisProps = {
   positions?: number[];
   /** 플롯 오른쪽 끝(px 또는 CSS 길이). [[ChartGrid]] · [[ChartValueAxis]] 와 같게. 기본 8. */
   right?: number | string;
+  /** 플롯 왼쪽 끝(CSS 길이). 기본 Y축 칸 `--wds-widget-axis-gutter` — Y축이 없는 차트(이름 칸 · 레인)는 그 폭을 준다. */
+  left?: number | string;
 };
 
-export default function ChartTimeAxis({ labels, positions, right = 8 }: ChartTimeAxisProps) {
+export default function ChartTimeAxis({ labels, positions, right = 8, left = AXIS_GUTTER }: ChartTimeAxisProps) {
   const rightLen = typeof right === "number" ? `${right}px` : right;
+  const leftLen = typeof left === "number" ? `${left}px` : left;
   return (
     <>
       {labels.map((label, i) => {
@@ -59,7 +62,7 @@ export default function ChartTimeAxis({ labels, positions, right = 8 }: ChartTim
             className="absolute text-chart text-tertiary leading-none whitespace-nowrap pointer-events-none"
             style={{
               fontFamily: "var(--font-family-numeric)",
-              left: `calc(${AXIS_GUTTER} + (100% - ${AXIS_GUTTER} - ${rightLen}) * ${ratio})`,
+              left: `calc(${leftLen} + (100% - ${leftLen} - ${rightLen}) * ${ratio})`,
               bottom: 2,
               transform: ratio <= 0 ? "translateX(0)" : ratio >= 1 ? "translateX(-100%)" : "translateX(-50%)",
             }}
