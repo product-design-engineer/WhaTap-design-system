@@ -423,6 +423,12 @@
     "ScatterHeatmap": {
       "figma": "348:1379"
     },
+    "Sparkline": {
+      "figma": "577:3"
+    },
+    "SparklineCell": {
+      "figma": "577:62"
+    },
     "StatusTimeline": {
       "figma": "574:80"
     },

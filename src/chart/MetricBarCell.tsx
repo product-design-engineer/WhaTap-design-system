@@ -19,6 +19,7 @@
  * - 막대 트랙은 `--color-status-info-soft`, 채움은 `segments[].color`(차트 팔레트 토큰 허용).
  * - `segments` 의 ratio 합이 1 을 넘으면 넘는 만큼 잘린다 — 정규화는 호출측 책임.
  * - 값이 없으면 `"-"` 만 두고 막대를 그리지 않는다. 빈 막대는 0 으로 읽히기 때문이다.
+ * - 0 보다 큰 구간은 최소 2px — 0.01% 대 값도 0 과 갈린다(patterns §21, 2026-10-23).
  *
  * @example
  * ```tsx
@@ -72,7 +73,8 @@ export default function MetricBarCell({
             <span
               key={i}
               style={{
-                width: `${Math.max(0, Math.min(1, s.ratio)) * 100}%`,
+                /* 0 이 아닌 값은 최소 2px — 0.01% 대 값이 1px 아래로 사라져 0 으로 읽히던 결함(§21, 2026-10-23). */
+                width: s.ratio > 0 ? `max(2px, ${Math.min(1, s.ratio) * 100}%)` : 0,
                 background: s.color,
               }}
             />
