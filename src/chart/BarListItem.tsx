@@ -15,6 +15,7 @@
  * - 한계 대비 소비량 막대 하나 → [[UsageGauge]].
  *
  * ## Composition rules
+ * - `onHover` · `dimmed` 는 목록([[BarList]])이 가리킨 줄 강조에 쓴다(patterns §26 «강조»).
  * - 부모가 높이를 정하는 세로 flex 안에 둔다. 줄은 `flex: 1` 로 부모 높이를 똑같이 나눠 쓰고, 막대 두께는 줄 높이의 60%(최소 4px).
  * - 값 칸 88px 고정(값 36px 오른쪽 정렬 + 이름) — 그래서 줄마다 막대 시작선이 같다.
  * - 막대 길이는 받은 `ratio`(0~1). 분모(전체 · 최댓값 · 한계)는 화면이 정한다. 0 이면 막대가 사라진다(§21 0 표현 결정 필요).
@@ -42,11 +43,22 @@ export type BarListItemProps = {
   ratio: number;
   /** 막대 색 토큰. hex 금지. */
   color: string;
+  /** 이 줄을 가리킬 때 · 벗어날 때 — 목록이 툴팁을 띄우고 나머지 줄을 흐린다(patterns §26 «강조»). */
+  onHover?: (on: boolean) => void;
+  /** 다른 줄을 가리키는 중이라 이 줄을 흐린다(불투명도 0.32). */
+  dimmed?: boolean;
 };
 
-export default function BarListItem({ label, value, ratio, color }: BarListItemProps) {
+import { DIM_OPACITY } from "./_emphasis";
+
+export default function BarListItem({ label, value, ratio, color, onHover, dimmed = false }: BarListItemProps) {
   return (
-    <li className="flex items-center flex-1 min-h-0 w-full" style={{ gap: 8 }}>
+    <li
+      className="wds-chart-mark flex items-center flex-1 min-h-0 w-full"
+      style={{ gap: 8, opacity: dimmed ? DIM_OPACITY : 1 }}
+      onMouseEnter={onHover ? () => onHover(true) : undefined}
+      onMouseLeave={onHover ? () => onHover(false) : undefined}
+    >
       <span className="flex items-baseline shrink-0" style={{ width: 88, gap: 6 }}>
         <span
           className="text-lg font-bold text-primary text-right shrink-0"
