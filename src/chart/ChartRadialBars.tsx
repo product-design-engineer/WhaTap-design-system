@@ -49,6 +49,7 @@
  * </ChartRadialBars>
  * ```
  */
+import { stripeCounts } from "./_stripes";
 import { useId, type ReactNode } from "react";
 
 export type ChartRadialSegment = {
@@ -101,30 +102,9 @@ function ringPath(r0: number, r1: number, a0: number, a1: number) {
   return `M ${pt(r1, a0)} A ${r1} ${r1} 0 ${large} 1 ${pt(r1, a1)} L ${pt(r0, a1)} A ${r0} ${r0} 0 ${large} 0 ${pt(r0, a0)} Z`;
 }
 
-/**
- * 칸 하나의 구간별 줄 수. 칸 전체 줄 수 = 합 ÷ max × levels(반올림, levels 이하)를 먼저 정하고 구간에 최대 나머지로 나눈다 —
- * 구간마다 따로 반올림하면 34 · 33 · 33(합 = max)이 9줄로 모자란다. 0 보다 큰 구간은 최소 1줄.
- */
-export function radialStripes(segments: ChartRadialSegment[], max: number, levels: number): number[] {
-  if (max <= 0) return segments.map(() => 0);
-  const exact = segments.map((s) => (s.value > 0 ? (s.value / max) * levels : 0));
-  const positive = exact.filter((e) => e > 0).length;
-  const sum = exact.reduce((a, b) => a + b, 0);
-  const target = Math.min(levels, Math.max(positive, Math.round(sum)));
-  const out = exact.map((e) => (e > 0 ? Math.max(1, Math.floor(e)) : 0));
-  let diff = target - out.reduce((a, b) => a + b, 0);
-  // 모자라면 나머지가 큰 구간부터 한 줄씩, 넘치면 줄이 가장 많은 구간부터 한 줄씩(1줄 아래로는 내리지 않는다).
-  const order = exact.map((e, i) => ({ i, rem: e - Math.floor(e) })).filter((o) => exact[o.i] > 0).sort((x, y) => y.rem - x.rem);
-  for (let k = 0; diff > 0 && order.length; k = (k + 1) % order.length, diff--) out[order[k].i] += 1;
-  while (diff < 0) {
-    let i = -1;
-    out.forEach((n, k) => { if (n > 1 && (i < 0 || n > out[i])) i = k; });
-    if (i < 0) break;
-    out[i] -= 1;
-    diff += 1;
-  }
-  return out;
-}
+/** 칸 하나의 구간별 줄 수 — 계산은 내부 `_stripes`(직선 이퀄라이저 [[EqualizerChart]] 와 공유). 이름은 호환을 위해 유지. */
+export const radialStripes = (segments: ChartRadialSegment[], max: number, levels: number): number[] =>
+  stripeCounts(segments.map((s) => s.value), max, levels);
 
 export default function ChartRadialBars({
   sectors,

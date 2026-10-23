@@ -56,6 +56,8 @@ export { default as BarListItem } from "./BarListItem";
 export type { BarListItemProps } from "./BarListItem";
 export { default as ActiveTransactionArc, SPEED_LEGEND } from "./ActiveTransactionArc";
 export type { ActiveTransactionArcProps, ActiveTransactionAgentLoad } from "./ActiveTransactionArc";
+export { default as EqualizerChart } from "./EqualizerChart";
+export type { EqualizerChartProps, EqualizerBar, EqualizerSegment } from "./EqualizerChart";
 export { default as StackedAreaChart, stackedAreaLegend } from "./StackedAreaChart";
 export type { StackedAreaChartProps, StackedAreaSeries } from "./StackedAreaChart";
 export { default as Sparkline } from "./Sparkline";
