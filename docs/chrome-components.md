@@ -627,6 +627,26 @@ Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
 
 Figma 정본: 페이지 ScatterChart `572:6908` · 세트 `572:7311`(`frame` × `marks` dot · bubble). ChartSwatch `shape=dot` `572:39` · ChartLegendItem `shape=dot` `572:6745` · `572:6749` 추가.
 
+## SparklineCell · Sparkline
+
+표 셀 하나에 행 색 인덱스 · 지금 값 · 최근 추이. **SparklineCell(Composite)** 은 **Sparkline(Primitives — 축 없는 선 1.5px · 끝점 4px · 바닥선, 높이 20)** 을 조합하고 인덱스 바 · 값 글자 · 자리 맞춤만 그린다. 비율 막대만이면 [[MetricBarCell]].
+
+| Prop (SparklineCell) | Type | Default |
+|---|---|---|
+| `value` | `number \| string \| null` — null 이면 `-` + 빈 자리 | — |
+| `unit` | `string` | — |
+| `values` | `number[]` — 최근 추이(시간순) | `[]` |
+| `max` | `number` — 같은 열 행끼리 공유(비율이면 100) | 이 줄 최대 |
+| `color` | 계열 색 토큰 | series-1 |
+| `indexColor` | 짝 차트 계열 색 토큰 — 없으면 바 없음 | — |
+| `valueWidth` · `sparkWidth` | `number` | `48` · `64` |
+
+- 인덱스 바는 같은 칸 짝 차트가 있을 때만 — 표와 차트를 잇는 장치(§21). 스토리 `LinkedToChart`.
+- 바닥선이 있어 0 에 붙은 평평함과 중간의 평평함이 갈린다. 부호 있는 지표는 쓰지 않는다.
+- [[MetricBarCell]] 은 0 보다 큰 구간을 최소 2px 로 그린다(2026-10-23).
+
+Figma 정본: Sparkline 페이지 `577:2` · 컴포넌트 `577:3` / SparklineCell 페이지 `577:35` · 세트 `577:62`(`index` × `state` · value · unit).
+
 ## RangeGauge
 
 범위(min ~ Max) 안의 지금 값 — 채움 · ▼ 말풍선 · 이름 붙은 양 끝 · 임계 띠. 할당 · 한계 · 쿼터 · 정원 대비 사용. **Composite** — 채움 [[UsageGauge]] · ▼ [[ChartPeakMarker]] 를 조합하고 임계 띠 · 범위 글자만 그린다.
