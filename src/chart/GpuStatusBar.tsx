@@ -15,6 +15,11 @@
  * - 단일 비율 → [[UsageGauge]]
  * - 단계가 아니라 대상끼리 비교 → [[BarList]]
  *
+ * ## Metrics
+ * - ✅ 단계마다 앞 단계의 일부가 되는 깔때기 몫 — GPU Total → Allocated → Active → Effective · 할당 → 사용 → 유효 사용
+ * - ❌ 포함 관계가 아닌 지표 나열(서로 다른 자원 사용률) → [[BarList]]
+ * - ❌ 시간에 따른 변화 — 한 시점의 단면이다
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 격자 [[ChartGrid]] · 값축 [[ChartValueAxis]](눈금은 단계 값, `ticks`) · 막대 [[ChartStackedColumn]] ·
  *   단계 이름 [[ChartCategoryAxis]]. 차트 안에서 축 · 막대 · 이름을 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.

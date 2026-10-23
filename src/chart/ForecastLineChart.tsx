@@ -27,6 +27,11 @@ import { AXIS_GUTTER as GUTTER, formatAxisValue } from "./_axisScale";
  * - 경계가 표준으로 정해진 점수(Apdex) → [[ApdexChart]].
  * - 한계 대비 지금 소비량 하나 → [[UsageGauge]].
  *
+ * ## Metrics
+ * - ✅ 기울기를 연장하면 도달 시점이 나오는 용량 지표 — 디스크 · inode 사용률 · 쿼터 · 스토리지 소진 · 라이선스 · 인증서 소비
+ * - ❌ 주기 · 변동이 큰 지표(TPS · CPU 사용률) — 직선 외삽이 맞지 않아 예측이 거짓이 된다
+ * - ❌ 천장 · 임계가 없는 지표(응답시간 · 건수) — 닿을 자리가 없다
+ *
  * ## Composition rules
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.

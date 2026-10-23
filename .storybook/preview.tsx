@@ -4,6 +4,7 @@ import { withThemeByClassName } from '@storybook/addon-themes';
 // Tailwind 런타임 의존 0%. 소비자도 이 파일을 import.
 import '../src/whatap-ds.css';
 import { enableDsPolicyGuard } from '../src/devPolicyGuard';
+import DocsPage from './DocsPage';
 
 /**
  * DS 정책 위반 런타임 가드 — 카탈로그를 보는 동안 위반이 빨간 outline + 배지로 드러난다.
@@ -42,6 +43,8 @@ const preview: Preview = {
         { name: 'dark', value: '#1a1a1a' },
       ],
     },
+    // autodocs 틀 — 기본 순서에 「어떤 지표에 쓰나」(docstring `## Metrics`)를 더한다. 지표가 없는 컴포넌트는 기본과 같다.
+    docs: { page: DocsPage },
     controls: {
       expanded: true, // argTypes description 을 기본 노출 — AI / 사용자 모두 prop 의미 즉시 확인 가능
       matchers: {

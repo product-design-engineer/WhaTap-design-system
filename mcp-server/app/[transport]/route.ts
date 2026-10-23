@@ -50,6 +50,8 @@ type ComponentDoc = {
   compositionRules: string[];
   /** 개발 스펙(docstring `## Spec` 절 원문 markdown) — 치수 · 토큰 · 상태 · 데이터 계약. 없으면 null. */
   spec?: string | null;
+  /** 차트가 맞는 지표(fit) · 쓰면 안 되는 지표(avoid) — docstring `## Metrics`. 차트가 아니면 null. */
+  metrics?: { fit: string[]; avoid: string[] } | null;
   do: string[];
   dont: string[];
   example: string | null;
@@ -112,6 +114,9 @@ const list = (items: string[]) => items.map((s) => `- ${s}`).join("\n");
 function rulesBlock(c: ComponentDoc): string[] {
   const out: string[] = [];
   if (c.purpose) out.push(``, `## Purpose`, c.purpose);
+  /* 차트는 «어떤 지표에 쓰나» 가 고르는 첫 기준이라 Do 보다 먼저 둔다. */
+  if (c.metrics?.fit.length) out.push(``, `## 📈 맞는 지표`, list(c.metrics.fit));
+  if (c.metrics?.avoid.length) out.push(``, `## 🚫 쓰면 안 되는 지표`, list(c.metrics.avoid));
   if (c.do.length) out.push(``, `## ✅ Do`, list(c.do));
   if (c.dont.length) out.push(``, `## ❌ Don't`, list(c.dont));
   if (c.compositionRules.length) out.push(``, `## Composition rules`, list(c.compositionRules));
@@ -381,9 +386,11 @@ const handler = createMcpHandler(
         const FIELDS: { key: string; w: number; of: (c: ComponentDoc) => string[] }[] = [
           { key: "name", w: 6, of: (c) => [c.name, c.title] },
           { key: "whenToUse", w: 5, of: (c) => c.whenToUse },
+          /* «응답시간 차트» 처럼 지표 이름으로 찾아오는 질의 — 맞는 지표를 의도와 같은 무게로. */
+          { key: "metrics", w: 5, of: (c) => c.metrics?.fit ?? [] },
           { key: "purpose", w: 4, of: (c) => [c.summary ?? "", c.purpose ?? ""] },
           { key: "do", w: 4, of: (c) => c.do },
-          { key: "whenNotToUse", w: 3, of: (c) => [...c.whenNotToUse, ...c.dont] },
+          { key: "whenNotToUse", w: 3, of: (c) => [...c.whenNotToUse, ...c.dont, ...(c.metrics?.avoid ?? [])] },
           { key: "rules", w: 2, of: (c) => c.compositionRules },
           { key: "props", w: 2, of: (c) => c.props.map((p) => `${p.name} ${p.description ?? ""}`) },
           { key: "story", w: 1, of: (c) => c.stories.map((s) => `${s.name} ${s.note ?? ""}`) },

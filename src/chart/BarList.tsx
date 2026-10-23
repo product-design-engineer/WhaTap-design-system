@@ -15,6 +15,12 @@
  * - 사람별 사용량(막대 색 고정 brand-blue) → [[MemberUsageBar]].
  * - 한계 대비 소비량 하나 → [[UsageGauge]].
  *
+ * ## Metrics
+ * - ✅ 대상 종류별 지금 값 비교 — 액티브 스테이터스(Method · SQL · HTTPC · DBC · SOCKET) · CPU TOP-N 서버 · 에러 유형별 건수
+ * - ✅ 대상이 6개 이상이거나 이름이 길어 세로 막대에서 잘릴 때
+ * - ❌ 시간에 따른 변화 → [[MiniLineChart]] · [[MiniBarChart]]
+ * - ❌ 합 100% 구성의 몫만 말할 때 → [[MiniDonutChart]](BarList 는 크기 비교다)
+ *
  * ## Composition rules
  * - 줄은 [[BarListItem]] 이 그린다(목록 행은 컴포넌트로, patterns §26). 그래서 Composite 계층이다.
  * - 껍데기(카드 · 제목 · 메뉴)는 그리지 않는다. 대시보드 칸에서는 [[WidgetFrame]] 이 맡는다(patterns §15).

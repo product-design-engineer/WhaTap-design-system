@@ -16,6 +16,9 @@
  *      섹션은 Storybook 에서만 보이고 MCP 로는 **배달되지 않는다**. 실측(2026-10-19) 13파일 18섹션 중
  *      15섹션이 그랬다 — Pagination 「페이지가 하나여도 컨트롤을 세운다」 정책을 AI 는 몰랐다.
  *      동결 없이 0 이다(그때 전부 표준 섹션으로 옮겼다).
+ *   ⑧ **차트의 지표** — `Composite/Chart/*` 는 `## Metrics` 에 맞는 지표(`- ✅ …`) 1개 이상 필수,
+ *      쓰면 안 되는 지표(`- ❌ …`)는 가능하면(없으면 정보로만 센다). 2026-10-23 사용자 지시 —
+ *      «각 Composite 차트에 어떤 지표 유형에 사용하면 좋을지 카탈로그 정보에 필수 기입». 동결 없이 0.
  *
  * ## 깊이 — 있는 것과 충분한 것은 다르다 (래칫)
  * 4섹션이 «있는지» 만 보면 불릿 하나짜리 When to use(→ Do 한 줄)와 설명 없는 prop(→ MCP 에 타입만)이
@@ -52,6 +55,9 @@ if (!existsSync(JSON_PATH)) {
 }
 const { components } = JSON.parse(readFileSync(JSON_PATH, "utf8"));
 
+/** 지표 섹션이 필수인 차트 — 계층 Composite 의 Chart 하위 그룹. */
+const isChart = (c) => c.title.startsWith("Composite/Chart/");
+
 /** Tokens 는 컴포넌트가 아니라 메타 카탈로그 — 검사 대상 아님. */
 const targets = components.filter((c) => c.layer !== "Tokens");
 
@@ -76,7 +82,8 @@ for (const c of targets) {
     if (!c.example) missing.push("@example");
     if (!c.dont.length) missing.push("Do/Don't 유도 불가(금지형 문장 0)");
   }
-  if (missing.length) violations.push({ title: c.title, file: c.sourceFile ?? c.storyFile, missing });
+  if (isChart(c) && !c.metrics?.fit?.length) missing.push("## Metrics ✅ 맞는 지표(차트 필수)");
+  if (missing.length) violations.push({ title: c.title, file: c.sourceFile ?? c.storyFile, missing, noFreeze: missing.some((m) => m.startsWith("## Metrics")) });
 }
 
 /* ── 깊이(래칫) ───────────────────────────────────────────────────────────── */
@@ -148,7 +155,7 @@ if (fresh.length) {
   console.error(`✗ docstring 표준 위반 ${fresh.length}건 (신규):\n`);
   for (const v of fresh) console.error(`  ${v.title}\n    ${v.file}\n    누락: ${v.missing.join(" · ")}`);
   console.error(
-    `\n표준: Purpose / When to use / When NOT to use / Composition rules (+ 선택 Spec · Do · Don't) + @example (소스) + 스토리 description.` +
+    `\n표준: Purpose / When to use / When NOT to use / Composition rules (+ 차트는 Metrics 필수 · 선택 Spec · Do · Don't) + @example (소스) + 스토리 description.` +
       `\n그 밖의 \`## …\` 섹션은 배달되지 않습니다 — 내용을 위 섹션으로 옮기세요. docs/SKILL.md 「Do / Don't 단일 표기」 참고.`,
   );
 }
@@ -166,6 +173,9 @@ if (fixed.length || depthBetter.length) {
   process.exit(1);
 }
 
+const charts = targets.filter(isChart);
+const noAvoid = charts.filter((c) => !c.metrics?.avoid?.length).map((c) => c.name);
+console.log(`  차트 지표: ${charts.length}종 ✅ 전부 · ❌ 적용 금지 지표 ${charts.length - noAvoid.length}/${charts.length}${noAvoid.length ? ` (없음: ${noAvoid.join(" · ")})` : ""}`);
 console.log(
   `✓ docstring 표준 OK — 컴포넌트 ${targets.length} (완전 ${targets.length - violations.length} · 동결 ${violations.length}) · 깊이 동결 ${Object.keys(depthNow).length}`,
 );

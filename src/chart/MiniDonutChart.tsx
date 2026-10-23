@@ -14,6 +14,11 @@
  * - 정밀한 비교가 필요한 다중 시리즈 → [[MiniMultiLineChart]]
  * - 2개 이하 범주의 단순 진행률 → [[UsageGauge]]
  *
+ * ## Metrics
+ * - ✅ 합이 100% 인 3~6 범주 구성 — GPU 모델별 대수 · OS 분포 · 상태별 서버 수 · 할당 비율
+ * - ❌ 합이 100% 가 아닌 값(여러 자원의 사용률) · 겹치는 범주 — 조각 합이 링을 꽉 채워 거짓 몫을 말한다
+ * - ❌ 시간 흐름 · 7개 이상 범주 → [[MiniLineChart]] · [[BarList]]
+ *
  * ## Composition rules
  * - 범례는 [[ChartLegendItem]] 을 조합한다(`fill` — 값이 오른쪽 끝에 세로로 맞는다, patterns §26). 그래서 Composite 계층이다.
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 안쪽 여백 · 제목 줄을 뺀다). [[WidgetFrame]] 안에 넣을 때 쓴다.

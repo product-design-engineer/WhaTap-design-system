@@ -14,6 +14,11 @@
  * - 스피드 차트 (bullet flow) → [[ActiveTransactionSpeedWidget]].
  * - 범용 도넛 → [[MiniDonutChart]].
  *
+ * ## Metrics
+ * - ✅ 에이전트별 액티브 트랜잭션 수를 응답 속도 등급(normal · slow · very slow)으로
+ * - ❌ 등급이 없는 일반 지표 — 고리 줄무늬가 등급을 말한다
+ * - ❌ 에이전트가 16개를 넘을 때 → [[BarList]]
+ *
  * ## Composition rules
  * - 고리는 [[ChartRadialBars]], 수치는 [[MetricStat]](Max TX = 단위 「초」 + 보조 줄 트랜잭션 이름 · Agent 활성 · 비활성), 범례는 [[ChartLegendItem]] 을 조합한다. 그래서 Composite 계층이다.
  * - 위젯 chrome(CardChrome, FlexBoardWidget 등)은 소비자가 감싼다.

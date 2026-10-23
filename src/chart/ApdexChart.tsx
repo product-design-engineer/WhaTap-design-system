@@ -19,6 +19,11 @@ import ChartTimeAxis from "./ChartTimeAxis";
  * - 경계 없는 일반 비율 · 사용률 → [[MiniMultiLineChart]] · [[UsageGauge]].
  * - 경계가 다른 점수(SLO 달성률 등) → 이 컴포넌트의 경계는 Apdex 표준으로 고정이다. 다른 점수를 Apdex 띠에 얹지 않는다.
  *
+ * ## Metrics
+ * - ✅ Apdex 점수 — 판정 구간 경계(0.94 · 0.85 · 0.70)가 정해진 사용자 만족도 점수
+ * - ❌ 경계가 없는 일반 지표(CPU · 응답시간) — 띠가 없는 판정을 말한다
+ * - ❌ 다른 점수(SLO 달성률 · 품질 점수)에 Apdex 띠 재사용 — 경계값이 다르다
+ *
  * ## Composition rules
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 껍데기(카드 · 제목 · 메뉴)는 그리지 않는다. 대시보드 칸에서는 [[WidgetFrame]] 이 맡는다(patterns §15). 제목은 「Apdex」.

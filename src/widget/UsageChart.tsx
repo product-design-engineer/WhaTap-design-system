@@ -15,6 +15,11 @@
  * - 비용 비교/분해 → [[CostTable]] · [[CostBreakdown]].
  * - 24슬롯이 아닌 임의 시계열/다계열 차트 → 전용 차트 컴포넌트 검토.
  *
+ * ## Metrics
+ * - ✅ 하루 24시간 시간대별 사용률(%) — 상한 100 이 정해진 비율 · 임계 강조(GPU · CPU · 라이선스 사용률)
+ * - ❌ 상한이 없는 값(TPS · 건수) — 임계 강조와 높이의 뜻이 사라진다 → [[MiniBarChart]]
+ * - ❌ 24칸이 아닌 구간(분 · 일) → [[MiniBarChart]] · [[Heatmap]]
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 캡션 [[AiCaption]] · 막대 [[ChartBar]](칸마다 하나). 차트 안에서 막대를 다시 그리지 않는다(patterns §26).
  *   그래서 Composite 계층이다.

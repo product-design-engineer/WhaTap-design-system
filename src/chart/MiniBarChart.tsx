@@ -30,6 +30,13 @@ import { AXIS_GUTTER as GUTTER, formatAxisValue, niceMax } from "./_axisScale";
  * - 한계 대비 소비량 하나 → [[UsageGauge]].
  * - AI 응답 안의 사용률 막대 → [[UsageChart]](AI 카테고리).
  *
+ * ## Metrics
+ * - ✅ 구간마다 독립인 양 — 구간 TPS · 처리 건수 · 에러 건수 · 구간 평균 응답시간
+ * - ✅ 합이 의미 있는 구성의 누적 — CPU sys + usr · 상태별 건수
+ * - ✅ TOP-N 범주 5개 안팎 — Disk IOPS · inode · 메모리 상위 서버(`categories`)
+ * - ❌ 합이 의미 없는 값의 누적(p50 + p95, 평균끼리) — 쌓은 높이가 거짓 합을 말한다
+ * - ❌ 연속 게이지의 흐름(사용률 추이) → [[MiniLineChart]]
+ *
  * ## Composition rules
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
