@@ -631,18 +631,19 @@ Figma 정본: 페이지 ScatterChart `572:6908` · 세트 `572:7311`(`frame` × 
 
 ## BoxPlotChart
 
-대상(범주)마다 값 분포 — 상자(1~3사분위) · 중앙값 선 · 수염(Tukey 1.5 × IQR) · 이상치 점. **Composite** — [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCategoryAxis]] 를 조합하고 상자 · 수염 · 점만 그린다.
+대상(범주)마다 값 분포를 **백분위**로 — 선 p50 · 상자 p25–p75 · 수염 p5–p95 · 점 p99. 경보 · SLO 와 같은 숫자를 말한다. **Composite** — [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCategoryAxis]] 를 조합하고 상자 · 수염 · 점 · p50 숫자를 그린다.
 
 | Prop | Type | Default |
 |---|---|---|
-| `boxes` | `{ label, values?: number[], stats?: { q1, median, q3, low, high, outliers } }[]` | — |
-| `max` · `unit` | Y 최대 · 단위 | 최대 올림 · `""` |
+| `boxes` | `{ label, values?: number[], stats?: { p5, p25, p50, p75, p95, p99 } }[]` | — |
+| `max` · `unit` | Y 최대 · 단위 | p95 최대 × 1.1 올림 · `""` |
 | `color` | 계열 토큰 하나 | series-1 |
-| `frame` | `boolean` | `true` |
+| `frame` | `boolean` — 범례 줄 | `true` |
 
-- 원값을 주면 `boxPlotStats(values)` 가 계산한다(선형 보간 사분위 · Tukey 수염). 서버 통계는 `stats` 로 — 다른 수염 규칙을 섞지 않는다.
-- 상자는 카드색 채움 + 1.5px 테두리 · 중앙값 2px · 이상치 속 빈 원 4px.
-- 표본 5개 미만이면 쓰지 않는다 — 점 그대로 [[ScatterChart]].
+- 원값을 주면 `boxPlotStats(values)` 가 선형 보간 백분위를 계산한다. APM 서버 백분위는 `stats` 로.
+- Y 는 p95 기준 — 축을 넘는 p99 는 위 끝 ▲ + 값. p50 숫자는 가운데 선 오른쪽.
+- 범례 문장 `BOX_PLOT_LEGEND` 를 늘 보인다(WidgetFrame 안이면 `summary`). 표본 20개 미만이면 쓰지 않는다.
+- 사분위 · Tukey 수염 · 개별 이상치는 쓰지 않는다(2026-10-23 결정 — 운영자의 언어가 아니고 축이 늘어 상자가 눌렸다).
 
 Figma 정본: 페이지 BoxPlotChart `586:2` · 세트 `586:93`(`frame`).
 
