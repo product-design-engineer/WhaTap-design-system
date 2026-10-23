@@ -934,7 +934,7 @@ series 는 네 가지를 지킨다.
 |---|---|---|---|
 | 선 (단일 · 다중) | 대응 | [[MiniLineChart]] · [[MiniMultiLineChart]] | 지금 값(숫자 오버레이 · 선 끝 값 배지 · 카드 분리)은 §25 가 자리를 정한다. 계열 색 순환은 §17 위반, Top-N 순위 범례 · «1위 강조 · 나머지 흐림» 은 §22 강조 + 회색 다발로 옮긴다(색은 순위가 아니라 개체) |
 | 면 | 대응 | [[MiniLineChart]] · [[MiniMultiLineChart]] `showArea` | 없음 |
-| 누적면 (GPU Power 8계열) | 공백 | 없음 | 얇은 하위 계열은 추적되지 않는다. 9계열 이상이 될 수 있으면 §22 |
+| 누적면 (GPU Power 8계열) | 대응 | [[StackedAreaChart]] | **정해짐(2026-10-23, 추천안)** — 범례는 별도 패널이 아니라 다른 차트와 같은 자리(플롯 위 오른쪽 · WidgetFrame `legend`) · 면은 불투명 + 층 사이 카드색 1px · 크고 안정적인 계열을 바닥에(얇은 층은 위로) · 합계 최고점 ▼. 9계열 이상이면 §22 |
 | 차트 타입 전환 토글 (선 · 스무딩 · 막대) | 이관 대상 | §15 헤더 메뉴 | 헤더 오른쪽은 ⛶ + ⋮ 고정이다. 옮길 때 ⋮ 안으로 넣는다. 헤더에 상시로 둬야 한다면 §15 개정을 따로 결정한다 |
 | 세로 막대 · 범주(TOP-N) 막대 | 대응 | [[MiniBarChart]] `categories` · `valueLabels` · 누적 | 스트라이프 텍스처 · 막대 안 값 라벨은 받지 않는다(§15 값 글자는 막대 위 · 막대 안 라벨은 막대가 짧아지면 넘친다). 지표 고르기(칩 · 드롭다운 · 토글 셋이 섞여 있다)는 **공백**. 값 없는 계열까지 범례에 싣는 문제는 §26 |
 | 가로 막대 (액티브 스테이터스 · CPU TOP-N) | 대응 | [[BarList]] | METHOD · SQL · HTTPC · DBC · SOCKET 색은 위 표의 엔티티 슬롯(흡수). **0 값 줄은 막대가 사라지고 값 · 이름만 남는다** — DS 도 같다(`ratio` 0 → 폭 0, 2026-10-21 코드 확인). 0 표현 규칙은 결정 필요. 값이 평탄한 TOP-N(84% 하나 · 83% 일곱)은 막대 길이로 순위가 읽히지 않는다 — 분모를 화면이 정하므로(`ratio`) 평탄할 때의 표현은 결정 필요 |
@@ -971,7 +971,7 @@ series 는 네 가지를 지킨다.
 | # | 유형 | Composite 차트 | 상태 |
 |---|---|---|---|
 | 1 | 선 | [[MiniLineChart]] · [[MiniMultiLineChart]] | 있음 |
-| 2 | 면 / 누적면 | 면 = `showArea` · 누적면 = StackedAreaChart | 면 있음 · 누적면 신규 |
+| 2 | 면 / 누적면 | 면 = `showArea` · 누적면 = [[StackedAreaChart]]([[ChartGrid]] · [[ChartValueAxis]] · [[ChartTimeAxis]] · [[ChartPeakMarker]] 조합) | 있음 (누적면 2026-10-23) |
 | 3 | 세로 막대 | [[MiniBarChart]] | 있음 |
 | 4 | 가로 막대 | [[BarList]] = [[BarListItem]] 줄 조합 | 있음 (2026-10-22 Composite 로) |
 | 5 | 누적 막대 / 단일 누적 바 | [[MiniBarChart]] 누적 · 단계별 누적 막대 = [[GpuStatusBar]]([[ChartStackedColumn]] 조합) · 단일 누적 바(페이지 로드 타임라인 · 심각도 분포) = SegmentBar | 누적 · 단계 막대 있음(2026-10-22 GpuStatusBar Composite) · 단일 누적 바 신규 |
