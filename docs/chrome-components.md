@@ -629,6 +629,25 @@ Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
 
 Figma 정본: 페이지 ScatterChart `572:6908` · 세트 `572:7311`(`frame` × `marks` dot · bubble). ChartSwatch `shape=dot` `572:39` · ChartLegendItem `shape=dot` `572:6745` · `572:6749` 추가.
 
+## ZoneScatterChart
+
+판정 구역(행 × 열 칸) 위에 대상 점 — 점이 어느 구역에 몇 개인지가 판정. **Composite** — [[ChartValueAxis]](`ticks` = 0 · Y 경계 · 최대) · [[ChartTimeAxis]](`positions` = 0 · X 경계 · 최대) 를 조합하고 구역 · 점 · 임계 띠를 그린다.
+
+| Prop | Type | Default |
+|---|---|---|
+| `points` | `{ x, y, label? }[]` | — |
+| `xBreaks` · `yBreaks` | 구역 경계(오름차순) | — |
+| `zones` | `string[][]` — `[행(위부터)][열]` 이름 | — |
+| `columnLabels` | 열 머리(개수 자동) | — |
+| `critical` | `{ from, label }` — Y 임계 띠 | — |
+| `xMax` · `yMax` · `xUnit` · `yUnit` | 축 | `100` · `100` · `""` |
+| `color` · `frame` | 점 색 · 여백 | series-1 · `true` |
+
+- 축은 선형 — 0~1% 같은 구역은 실제대로 좁다. 좁은 열의 이름 · 개수는 플롯 아래 한 줄로 옮긴다.
+- 구역 = 무채색 면, 점 = 계열색 — 같은 색 계열로 칠하지 않는다(§17). 액션은 [[WidgetFrame]] `menu`.
+
+Figma 정본: 페이지 ZoneScatterChart `587:2` · 세트 `587:117`(`frame`).
+
 ## BoxPlotChart
 
 대상(범주)마다 값 분포 — 상자(1~3사분위) · 중앙값 선 · 수염(Tukey 1.5 × IQR) · 이상치 점. **Composite** — [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCategoryAxis]] 를 조합하고 상자 · 수염 · 점만 그린다.

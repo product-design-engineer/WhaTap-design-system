@@ -56,6 +56,8 @@ export { default as BarListItem } from "./BarListItem";
 export type { BarListItemProps } from "./BarListItem";
 export { default as ActiveTransactionArc, SPEED_LEGEND } from "./ActiveTransactionArc";
 export type { ActiveTransactionArcProps, ActiveTransactionAgentLoad } from "./ActiveTransactionArc";
+export { default as ZoneScatterChart } from "./ZoneScatterChart";
+export type { ZoneScatterChartProps, ZoneScatterPoint } from "./ZoneScatterChart";
 export { default as BoxPlotChart, boxPlotStats } from "./BoxPlotChart";
 export type { BoxPlotChartProps, BoxPlotBox, BoxPlotStats } from "./BoxPlotChart";
 export { default as ChartArc } from "./ChartArc";
