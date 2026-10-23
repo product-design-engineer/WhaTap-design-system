@@ -15,28 +15,44 @@ import { TONE_BG, TONE_DOT, TONE_TEXT, TONE_LABEL, type Tone } from "./_tokens";
  *  AiCard
  * ─────────────────────────────────────────────────────────────────── */
 
+/** 안내 카드 톤 — 표면 색. 응답 메시지는 톤을 주지 않는다. */
+export type AiCardTone = "info" | "warning" | "critical";
+
 /**
  * AiCard — AI 위젯 메시지의 표준 컨테이너.
  *
  * ## Purpose
- * AI 가 사용자에게 보내는 메시지의 단위 카드. 흰 배경 + `var(--color-border-default)` 보더 + 8px 라운드 + 기본 12px 패딩 +
- * `ai-anim-in` 진입 애니메이션. WhaTap AI 위젯 전체에서 일관된 메시지 표현을 보장합니다.
+ * AI 위젯 안의 카드 한 장. `--color-card` 배경 + `var(--color-border-default)` 보더 + 8px 라운드 + 기본 12px 패딩 +
+ * `ai-anim-in` 진입 애니메이션. WhaTap AI 위젯 전체에서 일관된 카드 표현을 보장합니다.
+ * 카드는 **두 역할** 을 진다 — `tone` 유무가 역할을 가른다.
+ * - **메시지** (`tone` 없음) — AI 가 사용자에게 보내는 응답 한 단위. `--color-card` 표면.
+ * - **안내** (`tone` 있음) — AI 를 쓰기 전에 사람이 알아야 할 사정과 다음 행동(예: 「플랜에 프로젝트가 없습니다」 + 「범위에 추가」).
+ *   표면이 톤 색(`--color-tone-surface-*`)으로 칠해져 응답과 섞여 읽히지 않는다. 문장 안에서 이동할 곳이 읽히는 낱말은
+ *   [[TextLink]] 로 걸어 읽은 자리에서 바로 이동하게 한다.
  *
  * ## When to use
  * - AI 응답 메시지 단위 (1 메시지 = 1 AiCard).
  * - 메시지 본문이 헤딩 + 표 + 차트 + step list 등 복수 요소를 담을 때.
  * - 카드 진입 stagger 애니메이션이 필요한 모든 경우 (`delay` prop 으로 순차 지연).
+ * - (`tone`) 위젯 안에서 AI 사용을 막는 사정 · 범위 밖 안내를 제목 + 설명 + 행동 하나로 알릴 때.
  *
  * ## When NOT to use
  * - 사용자 발화 버블 → [[UserBubble]] (우측 정렬, 회색 배경).
  * - 도구 호출 진행 표시 → [[ToolCallStep]] (자체 chrome 보유).
  * - 카드 chrome 없는 콘텐츠 (예: 로딩 진행 표시 자체) → 일반 div.
+ * - 위젯 전체가 막혀 본문 가운데를 채우는 상태 → [[UnavailableNotice]]. 안내 카드는 대화 흐름 안의 한 장이다.
+ * - 제품 화면(위젯 밖)의 상태 알림 → [[Notice]].
+ * - AI 분석 결과의 심각도 표시에 `tone` — 응답 메시지는 표면을 칠하지 않고 [[AiSectionHeading]] `tone` 도트로 말한다.
  *
  * ## Composition rules
  * - 헤더는 [[AiSectionHeading]] 또는 [[AiCaption]] 으로 — 인라인 텍스트 헤더 금지.
  * - 인라인 색상 리터럴 (`#xxx`) 금지 — 색이 필요하면 `tokens.color.*` 참조.
  * - `delay` 는 부모 메시지 시퀀스에서 계산 — 일반적으로 `i * 360` (ms).
  * - 너비는 부모(`flex-col w-full`)에 맞춤 — 카드 내부에서 override 하지 말 것.
+ * - 안내 카드 구성은 고정 — [[AiSectionHeading]] `icon="info"` 제목 한 줄 → 설명 문단(`text-base text-secondary`) →
+ *   [[Button]] `contained` 행동 하나. 행동이 둘 이상이면 안내가 아니라 선택지다.
+ * - 안내 문장에서 도착지를 부르는 낱말(플랜 이름 · 「플랜 관리자」)은 [[TextLink]]. 버튼과 같은 곳으로 보내는 낱말엔 걸지 않는다.
+ * - `tone` 은 `info` · `warning` · `critical` 셋. 막혀 있지만 사람이 풀 수 있으면 `warning`, 풀 수 없으면 `critical`.
  *
  * @example
  * ```tsx
@@ -44,10 +60,19 @@ import { TONE_BG, TONE_DOT, TONE_TEXT, TONE_LABEL, type Tone } from "./_tokens";
  *   <AiSectionHeading tone="critical">🔴 핵심 이상 징후</AiSectionHeading>
  *   <AiBulletList items={["httpc 응답시간 4,294ms", "압도적 dominant"]} />
  * </AiCard>
+ *
+ * <AiCard tone="warning" padding={16}>
+ *   <AiSectionHeading tone="warning" icon="info">「mysql-v2-test 외 1」 플랜에 「Test」 프로젝트가 없습니다.</AiSectionHeading>
+ *   <p className="text-base text-secondary">
+ *     내가 만든 플랜이 없으면 <TextLink href="/account/plans">플랜 관리자</TextLink>에게 범위 추가를 요청해 주세요.
+ *   </p>
+ *   <div><Button variant="contained">범위에 추가</Button></div>
+ * </AiCard>
  * ```
  */
 export function AiCard({
   children,
+  tone,
   delay = 0,
   padding = 12,
   gap = 8,
@@ -55,6 +80,8 @@ export function AiCard({
 }: {
   /** 카드 본문 — 다른 primitive 들의 조합 권장. */
   children: ReactNode;
+  /** 안내 카드의 톤. 주면 표면을 `--color-tone-surface-*` 로 칠한다(안내 역할). 없으면 메시지 카드. */
+  tone?: AiCardTone;
   /** `ai-anim-in` 진입 애니메이션 지연 (ms). stagger 효과에 사용. 기본 0. */
   delay?: number;
   /** 안쪽 패딩 (px). 0 으로 무패딩 가능. 기본 12. */
@@ -67,7 +94,7 @@ export function AiCard({
   return (
     <div
       className={`ai-anim-in flex flex-col w-full bg-card border border-color-var-color-border-default rounded-8px ${className}`}
-      style={{ animationDelay: `${delay}ms`, padding, gap }}
+      style={{ animationDelay: `${delay}ms`, padding, gap, ...(tone ? { background: TONE_BG[tone] } : {}) }}
     >
       {children}
     </div>
@@ -128,6 +155,7 @@ export function AiCaption({ children }: { children: ReactNode }) {
  * ## When to use
  * - 모든 위젯 카드의 첫 줄 (대부분의 AiCard 안에 1개).
  * - 분류 톤이 있는 메시지 — critical/warning/info 의 색 신호 동시에 전달.
+ * - 안내 카드([[AiCard]] `tone`)의 제목 — `icon="info"` 로 ⓘ 를 달고, 「무엇이 없다 · 막혔다」 사실 한 문장(길어도 된다).
  *
  * ## When NOT to use
  * - 카드 sub-section 라벨 → [[AiCaption]] (더 작음).
@@ -148,8 +176,11 @@ export function AiCaption({ children }: { children: ReactNode }) {
 export function AiSectionHeading({
   tone,
   emoji,
+  icon,
   children,
 }: {
+  /** `"info"` — 도트 대신 ⓘ 원 아이콘(안내 카드 제목). 색은 `tone` 의 라벨 색, 없으면 info. `emoji` 보다 뒤. */
+  icon?: "info";
   /** 좌측 도트의 톤. `emoji` 우선이라 둘 다 주면 도트 생략. */
   tone?: Tone;
   /** 도트 대신 표시할 이모지 (예: `"📊"`, `"📌"`). `tone` 보다 우선. */
@@ -161,6 +192,12 @@ export function AiSectionHeading({
     <div className="flex items-center gap-6px">
       {emoji ? (
         <span className="text-lg">{emoji}</span>
+      ) : icon === "info" ? (
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="shrink-0" style={{ color: TONE_TEXT[tone ?? "info"] }}>
+          <circle cx="8" cy="8" r="6.75" stroke="currentColor" strokeWidth="1.5" />
+          <path d="M8 7.25v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          <circle cx="8" cy="4.9" r="0.9" fill="currentColor" />
+        </svg>
       ) : tone ? (
         <span className="size-10px rounded-full" style={{ background: TONE_DOT[tone] }} />
       ) : null}

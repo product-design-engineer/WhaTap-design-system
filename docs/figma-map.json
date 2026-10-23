@@ -531,6 +531,9 @@
     "TextField": {
       "figma": "76:98"
     },
+    "TextLink": {
+      "figma": null
+    },
     "ThemeToggle": {
       "figma": null
     },

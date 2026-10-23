@@ -105,6 +105,7 @@ export { default as UserBubble } from "./UserBubble";
 // Deprecated Ai-prefixed aliases — 소비자 코드 호환. 새 코드는 위 이름을 쓰세요.
 // ═══════════════════════════════════════════════════════════════════════════
 export { AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList } from "./_primitives";
+export type { AiCardTone } from "./_primitives";
 /** @deprecated Use AssistantButton */ export { default as AiAssistantButton } from "./AssistantButton";
 /** @deprecated Use SendButton */ export { default as AiSendButton } from "./SendButton";
 /** @deprecated Use PromptInput */ export { default as AiPromptInput } from "./PromptInput";

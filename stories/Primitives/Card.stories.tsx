@@ -6,6 +6,7 @@ import {
   AiBulletList,
   AiToneBadge,
 } from "@whatap/design-system/widget";
+import { Button, TextLink } from "@whatap/design-system";
 
 /**
  * Storybook stories for [[AiCard]] — AI 위젯 메시지 표준 컨테이너.
@@ -22,9 +23,16 @@ const meta: Meta<typeof AiCard> = {
     docs: {
       description: {
         component:
-          "**AI 위젯 메시지의 표준 컨테이너.** `--color-card` 배경 + `--color-border-default` 보더 + 8px 라운드 + 12px 패딩 + " +
-          "ai-anim-in 진입 애니메이션. 모든 AI 응답 메시지는 이 카드 안에 들어가며 stagger 효과는 " +
-          "`delay` prop 으로 제어합니다. 자세한 사용·금지 규칙은 컴포넌트의 JSDoc 참고.",
+          "**AI 위젯 안의 카드 한 장.** `--color-card` 배경 + `--color-border-default` 보더 + 8px 라운드 + 12px 패딩 + " +
+          "ai-anim-in 진입 애니메이션. stagger 효과는 `delay` prop 으로 제어합니다.\n\n" +
+          "### 카드의 역할\n\n" +
+          "`tone` 유무가 역할을 가른다.\n\n" +
+          "| 역할 | `tone` | 표면 | 담는 것 |\n" +
+          "|---|---|---|---|\n" +
+          "| **메시지** | 없음 | `--color-card` | AI 응답 한 단위 — 헤딩 + 본문 · 표 · 차트 |\n" +
+          "| **안내** | `info` · `warning` · `critical` | `--color-tone-surface-*` | AI 를 쓰기 전에 알아야 할 사정 — ⓘ 제목 한 줄 → 설명 → 행동 버튼 하나 |\n\n" +
+          "안내 문장에서 **이동할 곳이 읽히는 낱말**(플랜 이름 · 「플랜 관리자」)은 `TextLink` 로 걸어, 읽은 자리에서 바로 이동하게 한다. " +
+          "버튼과 같은 곳으로 보내는 낱말에는 걸지 않는다. 자세한 사용·금지 규칙은 컴포넌트의 JSDoc 참고.",
       },
     },
     backgrounds: { default: "surface-muted" }, // 카드 외곽이 잘 보이도록 회색 배경
@@ -33,6 +41,11 @@ const meta: Meta<typeof AiCard> = {
     children: {
       description: "카드 본문 — 다른 primitive 들의 조합 권장.",
       control: false, // ReactNode 라 control 제공 어려움 — render 에서 제공
+    },
+    tone: {
+      description: "안내 카드 톤 — 주면 표면을 톤 색으로 칠한다(안내 역할). 없으면 메시지 카드.",
+      control: "select",
+      options: [undefined, "info", "warning", "critical"],
     },
     delay: {
       description: "`ai-anim-in` 진입 애니메이션 지연 (ms). stagger 효과에 사용. 기본 0.",
@@ -174,5 +187,62 @@ export const ZeroPadding: Story = {
         <span style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>BODY 자체 패딩 — 카드 padding=0/gap=0</span>
       </div>
     </AiCard>
+  ),
+};
+
+/* ─── 스토리: 안내 카드 (tone) ─────────────────────────────── */
+
+/**
+ * 안내 카드 — `tone="warning"`. AI 를 쓰기 전에 사람이 알아야 할 사정과 다음 행동.
+ *
+ * 문장 안에서 이동할 곳이 읽히는 낱말(플랜 이름 · 「플랜 관리자」)은 [[TextLink]] — 읽은 자리에서 바로 이동한다.
+ * 「범위에 추가」 버튼과 같은 곳으로 보내는 낱말에는 링크를 걸지 않는다.
+ */
+export const Guidance: Story = {
+  name: "안내 카드",
+  args: { tone: "warning", padding: 16, gap: 8 },
+  render: (args) => (
+    <AiCard {...args}>
+      <AiSectionHeading tone={args.tone} icon="info">
+        「<TextLink href="#plan">mysql-v2-test 외 1</TextLink>」 플랜에 「Test」 프로젝트가 없습니다.
+      </AiSectionHeading>
+      <p className="text-base text-secondary">
+        이 프로젝트가 플랜에 포함되면 WhaTap AI를 사용할 수 있습니다. 내가 만든 플랜이 없으면{" "}
+        <TextLink href="#plan-admin">플랜 관리자</TextLink>에게 범위 추가를 요청해 주세요.
+      </p>
+      <div>
+        <Button variant="contained">범위에 추가</Button>
+      </div>
+    </AiCard>
+  ),
+};
+
+/**
+ * 안내 카드 톤 3종 — 막혀 있지만 사람이 풀 수 있으면 `warning`, 풀 수 없으면 `critical`, 알리기만 하면 `info`.
+ */
+export const GuidanceTones: Story = {
+  name: "안내 카드 — 톤",
+  args: {},
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <AiCard tone="info" padding={16}>
+        <AiSectionHeading tone="info" icon="info">이 프로젝트는 데이터 수집을 준비 중입니다.</AiSectionHeading>
+        <p className="text-base text-secondary">
+          수집이 끝나면 분석을 시작할 수 있습니다. 진행 상황은 <TextLink href="#agents">에이전트 설치</TextLink>에서 확인하세요.
+        </p>
+      </AiCard>
+      <AiCard tone="warning" padding={16}>
+        <AiSectionHeading tone="warning" icon="info">이번 달 AI 사용량의 90%를 사용했습니다.</AiSectionHeading>
+        <p className="text-base text-secondary">
+          한도를 넘으면 다음 달까지 분석이 멈춥니다. <TextLink href="#usage">사용량</TextLink>을 확인하세요.
+        </p>
+      </AiCard>
+      <AiCard tone="critical" padding={16}>
+        <AiSectionHeading tone="critical" icon="info">이 프로젝트에 접근할 권한이 없습니다.</AiSectionHeading>
+        <p className="text-base text-secondary">
+          <TextLink href="#members">프로젝트 관리자</TextLink>에게 권한을 요청해 주세요.
+        </p>
+      </AiCard>
+    </div>
   ),
 };

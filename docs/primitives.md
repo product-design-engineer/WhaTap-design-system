@@ -86,6 +86,25 @@ hover/focus 시 짧은 설명 표시. 트리거 1개를 wrap (cloneElement) 해�
 </Tooltip>
 ```
 
+## TextLink
+
+문장 안에서 다음 동선을 바로 여는 링크. 안내 문장이 이미 «어디로 가야 하는지» 를 말할 때(「플랜 관리자에게 요청」), 그 도착지 낱말을 링크로 만든다. `href` → `<a>`, `onClick` 만 → `<button type="button">`(모양 동일).
+
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `children` | `ReactNode` | — | 도착지를 부르는 명사구 |
+| `href` | `string` | — | 주소. 주면 `<a>` |
+| `onClick` | `MouseEventHandler` | — | 라우터 이동 등 |
+| `external` | `boolean` | `false` | 제품 밖 문서 — 새 창 + `rel="noopener noreferrer"` |
+
+- 명사구에만 건다. 「여기」「자세히」 같은 빈 낱말 · 문장 전체 금지. 한 문장 2개까지.
+- 실행은 `Button`, 설명 열기는 `InfoTip`. 링크는 이동만.
+- 색 `--color-text-link`(톤 표면 위에서도 4.5:1) · 크기·굵기는 둘러싼 문장 · 밑줄은 hover/focus 에만.
+
+```tsx
+<p>내가 만든 플랜이 없으면 <TextLink href="/account/plans">플랜 관리자</TextLink>에게 범위 추가를 요청해 주세요.</p>
+```
+
 ## Chip
 
 라벨/태그/메타데이터 표시 — 작은 컬러 칩. 인라인 `<span>` 으로 직접 색 칠하지 말 것.
@@ -370,11 +389,21 @@ dialog — backdrop · panel · footer · 3 채널 닫기 (× / ESC / backdrop).
 
 ## AiCard
 
-흰 배경 + `#eaeaea` 보더 + 8px 라운드 + 기본 패딩 카드 + 진입 애니메이션(`.ai-anim-in` + `animationDelay`).
+`--color-card` 배경 + `--color-border-default` 보더 + 8px 라운드 + 기본 패딩 카드 + 진입 애니메이션(`.ai-anim-in` + `animationDelay`).
+
+**역할 두 가지 — `tone` 유무가 가른다.**
+
+| 역할 | `tone` | 표면 | 담는 것 |
+|---|---|---|---|
+| 메시지 | 없음 | `--color-card` | AI 응답 한 단위 — 헤딩 + 본문 · 표 · 차트 |
+| 안내 | `info` · `warning` · `critical` | `--color-tone-surface-*` | AI 를 쓰기 전에 알아야 할 사정 — `AiSectionHeading icon="info"` 제목 → 설명 → `Button` 하나 |
+
+안내 문장에서 이동할 곳이 읽히는 낱말(플랜 이름 · 「플랜 관리자」)은 [[TextLink]] 로 건다. 버튼과 같은 곳으로 보내는 낱말에는 걸지 않는다. 위젯 전체가 막히면 `UnavailableNotice`, 위젯 밖 제품 화면이면 [[Notice]].
 
 | Prop | Type | Default | 설명 |
 |---|---|---|---|
 | `children` | `ReactNode` | — | 카드 본문 |
+| `tone` | `"info" \| "warning" \| "critical"` | — | 안내 카드 표면 톤. 없으면 메시지 카드 |
 | `delay` | `number` | `0` | 진입 애니메이션 지연 (ms). 메시지 stagger |
 | `padding` | `number` | `12` | 안쪽 패딩 (px) |
 | `gap` | `number` | `8` | 자식 간 세로 갭 (px). `0` 이면 미적용 |
@@ -384,6 +413,14 @@ dialog — backdrop · panel · footer · 3 채널 닫기 (× / ESC / backdrop).
 <AiCard delay={120}>
   <AiSectionHeading tone="high">즉시 조치 권장</AiSectionHeading>
   <AiBulletList items={["고활용 GPU 2대 식별", "비용 절감 가능 ₩320,000/월"]} />
+</AiCard>
+
+<AiCard tone="warning" padding={16}>
+  <AiSectionHeading tone="warning" icon="info">「mysql-v2-test 외 1」 플랜에 「Test」 프로젝트가 없습니다.</AiSectionHeading>
+  <p className="text-base text-secondary">
+    내가 만든 플랜이 없으면 <TextLink href="/account/plans">플랜 관리자</TextLink>에게 범위 추가를 요청해 주세요.
+  </p>
+  <div><Button variant="contained">범위에 추가</Button></div>
 </AiCard>
 ```
 
@@ -409,6 +446,7 @@ dialog — backdrop · panel · footer · 3 채널 닫기 (× / ESC / backdrop).
 |---|---|---|---|
 | `tone` | `Tone` | — | 좌측 도트 톤 (생략 시 도트 없음) |
 | `emoji` | `string` | — | 도트 대신 이모지. `tone` 보다 우선 |
+| `icon` | `"info"` | — | 도트 대신 ⓘ 원 아이콘(안내 카드 제목). 색은 `tone` 라벨 색 |
 | `children` | `ReactNode` | — | 헤딩 텍스트 |
 
 ```tsx

@@ -194,7 +194,7 @@
       "undocumentedProps": 1
     },
     "Primitives/Caption": {
-      "whenToUse": 3,
+      "whenToUse": 4,
       "undocumentedProps": 1
     },
     "Primitives/Chart/HeatmapLegend": {
