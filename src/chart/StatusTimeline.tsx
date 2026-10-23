@@ -39,7 +39,7 @@
  * | 격자 | 가로 눈금 3 + 세로 점선 = 시간 글자 사이마다(`xLabels.length − 1`) |
  * | 플롯 여백 | 위 4 · 아래 14 · 오른쪽 8px · 왼쪽 `--wds-widget-axis-gutter`(28px) |
  * | 단독 범례 | Critical · Warning · Info 사각 견본, 플롯 위 오른쪽 · 간격 12px |
- * | hover | 마커 둘레 12px 칸 · 가리킨 마커 5px, 나머지 0.32 · [[ChartTooltip]](이름 · 시각 `formatAt` · 심각도 · 건수) |
+ * | hover | 마커 둘레 12px 세로 칸(플롯 높이 전체) · 가리킨 마커 5px, 나머지 0.32 · [[ChartTooltip]](이름 · 시각 `formatAt` · 심각도 · 건수) |
  * | 접근성 | 플롯 `role="img"` + 사건 수 요약 |
  *
  * @example
@@ -140,13 +140,14 @@ export default function StatusTimeline({ events, start, end, xLabels, max, frame
         {/* 마커 — 이 차트의 마크. 좌표는 플롯 상자 안 %, 바닥에서 위로 */}
         <div className="absolute" style={plot}>
           {shown.map((e, i) => (
-            /* 맞히기 쉽게 — 마커(3px) 둘레 12px 칸이 hover 를 받는다. 칸은 마커 높이만큼 */
+            /* 맞히기 쉽게 — 마커(3px) 둘레 12px 세로 칸(플롯 높이 전체)이 hover 를 받는다.
+               칸 높이를 마커 높이에 맞추면 안쪽 마커 % 가 그 칸 기준이 되어 높이가 비율의 제곱으로 줄어든다 */
             <span
               key={i}
               className="absolute flex justify-center"
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(null)}
-              style={{ left: `${xr(e.at) * 100}%`, bottom: 0, width: 12, height: `max(8px, ${hr(e.count) * 100}%)`, transform: "translateX(-50%)" }}
+              style={{ left: `${xr(e.at) * 100}%`, bottom: 0, width: 12, height: "100%", transform: "translateX(-50%)" }}
             >
               <span
                 className={`${MARK_CLASS} absolute rounded-1px`}
