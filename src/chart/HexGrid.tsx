@@ -1,4 +1,5 @@
 import React, { type ReactNode } from "react";
+import { STATUS_TONE_FILL, STATUS_TONE_TEXT, type StatusTone } from "./_statusTone";
 import ChartLegendItem from "./ChartLegendItem";
 
 /**
@@ -64,7 +65,7 @@ import ChartLegendItem from "./ChartLegendItem";
  * ```
  */
 
-export type HexTone = "active" | "idle" | "warning" | "critical";
+export type HexTone = StatusTone;
 
 export type HexItem = {
   id: string;
@@ -103,12 +104,8 @@ export type HexGridProps = {
   renderTooltip?: (item: HexItem) => ReactNode;
 };
 
-const TONE_FILL: Record<HexTone, string> = {
-  active: "var(--color-chart-series-1)",
-  idle: "var(--color-surface-200)",
-  warning: "var(--color-status-warning)",
-  critical: "var(--color-status-error)",
-};
+/* 상태 색 · 글자 · 범례는 BlockGrid 와 공유한다(내부 `_statusTone`). */
+const TONE_FILL = STATUS_TONE_FILL;
 
 /** 껍데기를 끈 HexGrid 의 범례 — [[WidgetFrame]] `legend` 로 넘긴다. 색은 헥사곤과 같은 토큰. */
 export const HEX_GRID_LEGEND = [
@@ -141,12 +138,7 @@ export function hexGridLegend(
 const HOVER_DIM_OPACITY = 0.32;
 const HIGHLIGHT_DIM_OPACITY = 0.18;
 
-const TONE_TEXT: Record<HexTone, string> = {
-  active: "var(--color-text-inverse)",
-  idle: "var(--color-text-tertiary)",
-  warning: "var(--color-text-inverse)",
-  critical: "var(--color-text-inverse)",
-};
+const TONE_TEXT = STATUS_TONE_TEXT;
 
 /** flat-top 헥사곤 꼭짓점 */
 function hexPoints(cx: number, cy: number, r: number): string {

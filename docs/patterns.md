@@ -952,7 +952,7 @@ series 는 네 가지를 지킨다.
 | 컴파운드아이 | 공백 | 없음 | 셀 하나 안에서 두 스케일(부채꼴 · 외곽 링)을 쓰고 값 눈금이 없다. 보존과 치환을 따로 결정한다 |
 | 세로 이퀄라이저 · 리소스 이퀄라이저 | 대응 | [[EqualizerChart]] | **정해짐(2026-10-23, 추천안)** — 칸 하나 = 축 최대 ÷ `levels`(기본 10, [[ChartRadialBars]] 와 같은 계산 `_stripes`) · 색은 구간 누적(`segments`) 또는 임계 2색(`value` + `threshold`) 중 하나, 한 차트에 섞지 않는다 · 임계 슬라이더는 차트 계약에 넣지 않고 화면이 조합(`threshold` prop) |
 | 허니컴 | 대응 | [[HexGrid]] · `hexGridLegend` | 0개 상태는 범례에 넣지 않는다(칠해진 색을 센다). 개수에 따른 배치는 [[HexGrid]] 가 정한다 — 칸 비율에 맞춰 `columns` ±2 안에서 칸이 가장 크게 나오는 열 수를 고른다(2026-10-21 코드 확인) |
-| 블록 (서버 인벤토리 맵) · 상태 요약 행 | 공백 | 없음 | 허니컴과 합칠지 용도를 나눌지 따로 결정한다 |
+| 블록 (서버 인벤토리 맵) · 상태 요약 행 | 대응(블록) · 공백(요약 행) | [[BlockGrid]] · [[BlockCell]] | **정해짐(2026-10-23, 추천안)** — 허니컴과 **용도로 나눈다**: 분포는 [[HexGrid]], 이름으로 찾기는 [[BlockGrid]]. 상태 어휘 · 색 · 범례(개수 · 0 도 남김)는 공유. 3D 블록은 평면 칸으로(장식이 이름 자리를 먹었다). 상태 요약 행(아이콘 + 큰 숫자 KPI)은 2.1 숫자와 함께 정한다 |
 | 상태 타임라인 (이벤트) | 대응 | [[StatusTimeline]] | **정해짐(2026-10-23, 추천안)** — 높이 = 건수(값축 단위 `건` 이 읽게 한다) · 색 = 심각도 셋(critical · warning · info, 상태 토큰 · 범례 이름과 함께, §23) · 반전 시간 바는 쓰지 않고 공통 [[ChartTimeAxis]](§26) |
 | Hitmap | 대응 | [[ScatterHeatmap]] | 4단계 색 중 한 단계는 위 표의 `hitmap-warning-1` 공백. 레거시에는 4단계 경계값 범례가 없다 — DS 는 `SPEED_LEGEND` 를 범례로 둔다(§15). 소형에서 버릴 것(눈금 · 집계 수치 · 컨트롤)은 §26 결정 필요. 레거시 «Hitmap»(응답 판정)과 «히트맵»(강도)이 이름만 비슷하고 색의 뜻이 다르다 — DS 는 [[ScatterHeatmap]] · [[Heatmap]] 으로 이름을 갈랐다 |
 | 일반 히트맵 · 시간 셀 Cube | 대응 | [[Heatmap]] · [[HeatmapLegend]] | 라이브 Cube 는 6열(10분 칸), 이 DS `day` 는 12열(5분 칸)이다. **미래 칸과 데이터 없음 칸이 같은 회색이다 — DS 도 구별하지 못한다**(칸 값이 0~1 또는 `null`=«데이터 없음» 뿐, 2026-10-21 코드 확인). §26 결정 필요 |
@@ -984,7 +984,7 @@ series 는 네 가지를 지킨다.
 | 12 | 막대 게이지 | [[RangeGauge]] = [[UsageGauge]](채움) + [[ChartPeakMarker]](▼) 조합 · min · 현재 · Max · 임계 띠 | 있음 (2026-10-23) |
 | 13 | 호 게이지 / 속도계 | [[ActiveTransactionArc]] · [[ActiveTransactionSpeedWidget]] · ArcGauge | 일부 있음 · 호 게이지 신규 |
 | 14 | 이퀄라이저 | [[EqualizerChart]] = [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCategoryAxis]] 조합 · 호 형태는 [[ChartRadialBars]](같은 칸 규칙) | 있음 (2026-10-23) |
-| 15 | 블록 / 허니컴 / 그리드 | [[HexGrid]] · BlockGrid | 허니컴 있음 · 블록 신규 |
+| 15 | 블록 / 허니컴 / 그리드 | [[HexGrid]](분포) · [[BlockGrid]] = [[BlockCell]] 격자(이름으로 찾기) — 상태 어휘 · 색 · 범례 공유(내부 `_statusTone`) | 있음 (블록 2026-10-23) |
 | 16 | 상태 타임라인 | [[StatusTimeline]] = [[ChartGrid]](`vertical`) · [[ChartValueAxis]](건수) · [[ChartTimeAxis]] 조합 | 있음 (2026-10-23) |
 | 17 | Hitmap | [[ScatterHeatmap]] = [[ChartGrid]](`vertical`) · [[ChartValueAxis]] · [[ChartTimeAxis]] 조합 | 있음 (2026-10-22 Composite 로) |
 | 18 · 19 | 일반 히트맵 · 시간 셀 Cube | [[Heatmap]] | 있음 |

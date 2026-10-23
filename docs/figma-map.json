@@ -75,6 +75,12 @@
     "BarListItem": {
       "figma": "552:22"
     },
+    "BlockCell": {
+      "figma": "582:11"
+    },
+    "BlockGrid": {
+      "figma": "582:111"
+    },
     "BottomRailItem": {
       "figma": "162:1426"
     },
