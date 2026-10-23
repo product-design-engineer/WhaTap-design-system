@@ -29,13 +29,17 @@ export const Square: Story = { args: { color: "var(--color-chart-series-1)" } };
 /** 선 — 선 계열. */
 export const Line: Story = { args: { color: "var(--color-chart-series-1)", shape: "line" } };
 
-/** 범례 줄에서 — 선 차트 칸과 막대 차트 칸의 견본이 마크대로 갈린다. */
+/** 원 — 점 · 버블([[ScatterChart]]). */
+export const Dot: Story = { args: { color: "var(--color-chart-series-1)", shape: "dot" } };
+
+/** 범례 줄에서 — 선 · 막대 · 산점도 칸의 견본이 마크대로 갈린다. */
 export const InLegend: Story = {
   render: () => (
     <div className="flex flex-col gap-12px">
       {[
         { title: "선 차트 칸", shape: "line" as const },
         { title: "막대 차트 칸", shape: "square" as const },
+        { title: "산점도 칸", shape: "dot" as const },
       ].map((row) => (
         <div key={row.title} className="flex items-center gap-12px">
           <span className="text-sm text-tertiary" style={{ width: 80 }}>{row.title}</span>

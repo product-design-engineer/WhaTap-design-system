@@ -29,6 +29,9 @@ export const Basic: Story = { args: { color: "var(--color-chart-series-1)", labe
 /** 선 계열 — 선 견본. */
 export const Line: Story = { args: { color: "var(--color-chart-series-2)", shape: "line", label: "p95" } };
 
+/** 점 · 버블 — 원 견본([[ScatterChart]]). */
+export const Dot: Story = { args: { color: "var(--color-chart-series-1)", shape: "dot", label: "api-gw" } };
+
 /** 값 — 계열 넷 이하면 지금 값을 이름 뒤에(patterns §25). */
 export const WithValue: Story = { args: { color: "var(--color-chart-series-1)", label: "CPU", value: "42%" } };
 

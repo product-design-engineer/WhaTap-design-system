@@ -939,7 +939,7 @@ series 는 네 가지를 지킨다.
 | 세로 막대 · 범주(TOP-N) 막대 | 대응 | [[MiniBarChart]] `categories` · `valueLabels` · 누적 | 스트라이프 텍스처 · 막대 안 값 라벨은 받지 않는다(§15 값 글자는 막대 위 · 막대 안 라벨은 막대가 짧아지면 넘친다). 지표 고르기(칩 · 드롭다운 · 토글 셋이 섞여 있다)는 **공백**. 값 없는 계열까지 범례에 싣는 문제는 §26 |
 | 가로 막대 (액티브 스테이터스 · CPU TOP-N) | 대응 | [[BarList]] | METHOD · SQL · HTTPC · DBC · SOCKET 색은 위 표의 엔티티 슬롯(흡수). **0 값 줄은 막대가 사라지고 값 · 이름만 남는다** — DS 도 같다(`ratio` 0 → 폭 0, 2026-10-21 코드 확인). 0 표현 규칙은 결정 필요. 값이 평탄한 TOP-N(84% 하나 · 83% 일곱)은 막대 길이로 순위가 읽히지 않는다 — 분모를 화면이 정하므로(`ratio`) 평탄할 때의 표현은 결정 필요 |
 | 단일 누적 바 (페이지 로드 타임라인 · 심각도 분포 · 활용 현황) | 대응 | [[GpuStatusBar]] · [[MetricBarCell]] `segments` | 세그먼트 사이 빈 구간(범례에 없는 시간)과 범례 배치(1행 · 2×2)는 **공백** |
-| 산점도 · 버블 (SQL Elapse Map) | 공백 | 없음 | [[ScatterHeatmap]] 은 응답시간 판정 전용이라 근사하지 않는다. 만들 때 §18(3계열 상한). 밀집 구간에서 마커가 겹쳐 뭉개진다 — 밀도 표현(투명도 · 칸 집계 · 흩뿌림) 규칙이 함께 필요하다 |
+| 산점도 · 버블 (SQL Elapse Map) | 대응 | [[ScatterChart]] | [[ScatterHeatmap]] 은 응답시간 판정 전용이라 근사하지 않는다. §18 — 계열 3개까지(타입이 막는다), 넘으면 facet. **밀도는 반투명(0.6)으로 정해짐(2026-10-23 사용자 결정)** — 겹친 곳이 짙어진다. 칸 집계는 판정 분포와 섞이고 흩뿌림은 값을 바꿔 쓰지 않는다. 마커는 원 6px(레거시 십자 · 사각 대신), 버블은 면적 비례 반지름 3~12px |
 | 구역 분할 산점도 (GPU Resource Map) | 공백 | 없음 | 구역 배경과 점이 같은 색 계열이라 점이 묻힌다. 만들 때 둘을 다른 역할(§17)로. 불균등 눈금(0 · 1 · 50 · 100)이라 점 위치가 비율을 말하지 않고, 구역 이름과 개수가 칸의 대각선 양 끝에 떨어져 짝이 읽히지 않는다 |
 | 박스플롯 | 공백 | 없음 | 캡처 없음 |
 | 파이 · 도넛 | 대응 | [[MiniDonutChart]] `centerLabel` | «기타» 묶음(§17 9번째부터)은 **공백**. **DS 도 표시된 조각 합을 100% 로 그린다**(2026-10-21 코드 확인) — 전체 3.2% 인 값이 링을 꽉 채운다. 100% 의 기준을 표기할지 결정 필요. 조각이 하나면 원형 진행 막대처럼 보인다 — 숫자 칸으로 대체할지 결정 필요 |
@@ -975,7 +975,7 @@ series 는 네 가지를 지킨다.
 | 3 | 세로 막대 | [[MiniBarChart]] | 있음 |
 | 4 | 가로 막대 | [[BarList]] = [[BarListItem]] 줄 조합 | 있음 (2026-10-22 Composite 로) |
 | 5 | 누적 막대 / 단일 누적 바 | [[MiniBarChart]] 누적 · 단계별 누적 막대 = [[GpuStatusBar]]([[ChartStackedColumn]] 조합) · 단일 누적 바(페이지 로드 타임라인 · 심각도 분포) = SegmentBar | 누적 · 단계 막대 있음(2026-10-22 GpuStatusBar Composite) · 단일 누적 바 신규 |
-| 6 | 산점도 / 버블 | ScatterChart | 신규 |
+| 6 | 산점도 / 버블 | [[ScatterChart]] = [[ChartGrid]] · [[ChartValueAxis]] · [[ChartTimeAxis]] 조합 · 버블은 `size` | 있음 (2026-10-23) |
 | 7 | 박스플롯 | BoxPlotChart | 신규 |
 | 8 | 파이 / 도넛 | [[MiniDonutChart]] | 있음 |
 | 9 | 복합 / 이중 축 | 이중 축은 금지(§19) — 시간축을 맞춘 두 칸으로 표현 | 대체 표현 |
@@ -1254,7 +1254,7 @@ series 는 네 가지를 지킨다.
 | 막대 | 칸 막대 하나(값 · 0 · 모름) | [[ChartBar]] (Primitives) — [[UsageChart]] 가 조합. 0 은 바닥 2px, 모름은 칸 전체 `surface-100` | 있음 (2026-10-22) |
 | 축 | 범주축 이름(칸 등분 · 가운데 · 말줄임) | [[ChartCategoryAxis]] (Primitives) — [[GpuStatusBar]]. [[MiniBarChart]] `categories` 는 아직 자기 글자 | 있음 · MiniBar 는 차트마다 따로 |
 | 범례 | 스와치 + 이름 + 지금 값 | [[WidgetFrame]] `legend` · `SPEED_LEGEND` · `hexGridLegend` | 있음 |
-| 범례 | 스와치 모양 · 항목 | 견본 [[ChartSwatch]] · 항목 [[ChartLegendItem]] (둘 다 Primitives, 같은 견본 그림 = 내부 `_swatch`) — 견본은 마크 모양을 따른다: 선 = `line`(8×2), 면 · 막대 · 조각 · 칸 = `square`(8×8). 항목은 견본 · 이름 · 값 사이 4px, 이름 secondary · 값 semibold primary, 세로 목록은 `fill`. [[WidgetFrame]] `legend` · [[MiniMultiLineChart]] · [[MiniDonutChart]] · [[ActiveTransactionArc]] · [[HexGrid]] 가 조합한다 | 있음 (2026-10-22 견본 네 모양 → 하나 · 항목 다섯 벌 → 하나) |
+| 범례 | 스와치 모양 · 항목 | 견본 [[ChartSwatch]] · 항목 [[ChartLegendItem]] (둘 다 Primitives, 같은 견본 그림 = 내부 `_swatch`) — 견본은 마크 모양을 따른다: 선 = `line`(8×2), 면 · 막대 · 조각 · 칸 = `square`(8×8), 점 · 버블 = `dot`(8px 원, 2026-10-23 [[ScatterChart]]). 항목은 견본 · 이름 · 값 사이 4px, 이름 secondary · 값 semibold primary, 세로 목록은 `fill`. [[WidgetFrame]] `legend` · [[MiniMultiLineChart]] · [[MiniDonutChart]] · [[ActiveTransactionArc]] · [[HexGrid]] 가 조합한다 | 있음 (2026-10-22 견본 네 모양 → 하나 · 항목 다섯 벌 → 하나) |
 | 범례 | 색 범례 바 (순차 · 강도) | [[HeatmapLegend]] | 있음 |
 | 범례 | 오른쪽 세로 목록 · 플롯 위 오버레이 · 분리 패널 | 본문 오른쪽 위 한 줄 (§15) | 이관 |
 | 범례 | 순위 번호(①②③) | — 색은 순위가 아니라 개체 (§22) | 공백 |

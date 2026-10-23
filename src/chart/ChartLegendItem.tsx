@@ -16,7 +16,7 @@
  * - 상태 낱말 표지 → [[Chip]]. 범례 항목은 차트 마크의 짝이다.
  *
  * ## Composition rules
- * - 견본은 [[ChartSwatch]] 와 같은 그림(내부 `_swatch`) — 모양은 마크를 따른다(선 = `line`, 그 밖 = `square`).
+ * - 견본은 [[ChartSwatch]] 와 같은 그림(내부 `_swatch`) — 모양은 마크를 따른다(선 = `line`, 점 · 버블 = `dot`, 그 밖 = `square`).
  * - 견본 · 이름 · 값 사이 4px. 이름 `text-sm` · secondary, 값 `text-sm` · 굵게(semibold) · primary · 숫자 서체 — 값이 이름보다 먼저 읽힌다(patterns §25).
  * - 가로 줄에서는 줄바꿈 없이(`nowrap`) 서고, 줄 간격(12px)은 범례 줄이 정한다.
  * - `fill` 이면 폭을 채우고 이름이 말줄임되며 값은 오른쪽 끝에 붙는다 — 세로 목록에서 값의 자릿수가 세로로 맞는다.
@@ -25,7 +25,7 @@
  * ## Spec
  * | 항목 | 값 |
  * |---|---|
- * | 견본 | [[ChartSwatch]] 와 같음(8×8 사각 · 8×2 선) |
+ * | 견본 | [[ChartSwatch]] 와 같음(8×8 사각 · 8×2 선 · 8px 원) |
  * | 간격 | 견본 ↔ 이름 ↔ 값 4px |
  * | 이름 | `text-sm` · `text-secondary` · regular |
  * | 값 | `text-sm` · `text-primary` · semibold · 숫자 서체 |
@@ -43,7 +43,7 @@ import { SwatchMark, type ChartSwatchShape } from "./_swatch";
 export type ChartLegendItemProps = {
   /** 마크와 같은 색 토큰. hex 금지. */
   color: string;
-  /** 마크 모양. 선 계열 `line`, 그 밖 `square`. 기본 `square`. */
+  /** 마크 모양. 선 계열 `line`, 점 · 버블 `dot`, 그 밖 `square`. 기본 `square`. */
   shape?: ChartSwatchShape;
   /** 계열 이름. */
   label: string;

@@ -518,7 +518,7 @@ export type DataTableProps<T> = {
 </div>
 ```
 
-- 범례 항목은 [[ChartLegendItem]](Primitives) — 견본 + 이름 + (선택) 값, 사이 4px. 세로 목록은 `fill`(이름 말줄임 · 값 오른쪽 끝). 견본만 필요하면 [[ChartSwatch]] — 둘은 같은 견본을 그린다(내부 `_swatch`). 견본은 마크 모양을 따른다: 선 = `shape="line"`(8×2), 면 · 막대 · 조각 · 칸 = 기본 사각(8×8). [[WidgetFrame]] 범례 항목은 `{ label, color, shape, value }` — 선 차트 칸이면 `shape: "line"`.
+- 범례 항목은 [[ChartLegendItem]](Primitives) — 견본 + 이름 + (선택) 값, 사이 4px. 세로 목록은 `fill`(이름 말줄임 · 값 오른쪽 끝). 견본만 필요하면 [[ChartSwatch]] — 둘은 같은 견본을 그린다(내부 `_swatch`). 견본은 마크 모양을 따른다: 선 = `shape="line"`(8×2), 면 · 막대 · 조각 · 칸 = 기본 사각(8×8), 점 · 버블 = `shape="dot"`(8px 원). [[WidgetFrame]] 범례 항목은 `{ label, color, shape, value }` — 선 차트 칸이면 `shape: "line"`.
   Figma 정본: ChartSwatch 페이지 `549:2` · 세트 `549:5` / ChartLegendItem 페이지 `567:47` · 세트 `567:64`(`shape` × `fill` · label · value · showValue, 견본 칠은 인스턴스에서 마크 색 변수로).
 - 고리형 막대는 [[ChartRadialBars]](Primitives) — 칸 하나 = 대상 하나, 구간은 안쪽부터 쌓인 줄무늬(`levels` 단계, 0 보다 큰 구간은 최소 한 줄). 바탕 `--color-chart-radial-track` · 구분선 `--color-chart-radial-divider`. 가운데는 `children`, 회전 장식은 `sweep`(동작 줄이기에서 멈춤). [[ActiveTransactionArc]] 는 `agents`(에이전트별 `{ normal, slow, verySlow }`)로 이것을 그린다 — 종전 정적 이미지는 삭제.
   Figma 정본: ChartRadialBars 페이지 `568:6848` · 세트 `568:6918`(`sweep` · center · showCenter) · 변수 `color/chart/radial-track` `568:2` · `radial-divider` `568:3`. ActiveTransactionArc 세트 `347:267` 은 이 세트 · MetricStat · ChartLegendItem 인스턴스로 다시 짰다.
@@ -584,6 +584,7 @@ Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
 | HexGrid | 카드 · 「GPU Map」 제목 줄 · 범례 | `title` · `legend={HEX_GRID_LEGEND}`(칸 수를 붙이면 `hexGridLegend(items)`) · 메뉴 |
 | ActiveTransactionArc | 바깥 여백(좌우 · 아래 8px) · 왼쪽 아래 Elapsed 범례 | `title` · `meta` · `legend={SPEED_LEGEND}` · 메뉴 |
 | ScatterHeatmap | 바깥 좌우 여백(8px) | `title` · `meta` · `legend={SPEED_LEGEND}` · 메뉴 |
+| ScatterChart | 바깥 좌우 여백(8px) · 계열 범례 줄 | `title` · `summary` · `legend={scatterLegend(series)}`(원 견본) · 메뉴 |
 | MiniBarChart | 바깥 좌우 여백(8px) | `title` · `meta` · `legend`(막대 색 그대로) · 메뉴 |
 | ApdexChart | 바깥 좌우 여백(8px) | `title`(「Apdex」) · `meta` · 메뉴 (구간 이름이 띠 안에 있어 범례 없음) |
 | ForecastLineChart | 바깥 좌우 여백(8px) | `title` · `summary`(추세 구간 · 지평) · `legend`(선 색 그대로) · 메뉴 |
@@ -607,6 +608,23 @@ Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
 | `peak` | `boolean` | `false` |
 | `valueLabels` | `boolean` | `false` |
 | `frame` | `boolean` | `true` |
+
+## ScatterChart
+
+두 수치(X · Y)의 관계를 점으로 — 상관 · 군집 · 이상점. `size` 를 주면 면적이 그 값인 버블. **Composite** — 격자 [[ChartGrid]](가로 눈금 + 세로 절반) · Y [[ChartValueAxis]] · X 글자 [[ChartTimeAxis]](`positions` 0 · 0.5 · 1) 를 조합하고 점만 그린다. X 가 시간이고 응답 판정 색이면 [[ScatterHeatmap]] — 근사하지 않는다(§21).
+
+| Prop | Type | Default |
+|---|---|---|
+| `series` | 1~3개 `{ label, points: { x, y, size?, label? }[], slot?: 1 \| 2 \| 3 }` | — |
+| `xMax` · `yMax` | `number` — 없으면 데이터 최대를 1 · 2 · 4 · 5 · 10 × 10ⁿ 로 올림 | — |
+| `xUnit` · `yUnit` | `string` — 축 제목 대신 단위 | `""` |
+| `frame` | `boolean` | `true` |
+
+- 색 = `--color-chart-series-{slot}`(기본 계열 순서). 필터로 계열이 빠져도 색을 지키려면 `slot` 고정(§17). 계열 4개 이상은 타입이 막는다 — facet(§18).
+- 점 원 6px · 불투명도 0.6 — 겹친 곳이 짙어져 밀도가 읽힌다(§21 결정). 버블 반지름 3~12px(면적 비례), 큰 것을 먼저 그린다.
+- 단독(`frame`)이면 계열 둘 이상일 때 플롯 위 오른쪽에 원 견본 범례. 대시보드 칸은 `frame={false}` + WidgetFrame `legend={scatterLegend(series)}`.
+
+Figma 정본: 페이지 ScatterChart `572:6908` · 세트 `572:7311`(`frame` × `marks` dot · bubble). ChartSwatch `shape=dot` `572:39` · ChartLegendItem `shape=dot` `572:6745` · `572:6749` 추가.
 
 ## ApdexChart
 
