@@ -14,10 +14,12 @@
 // `import type { X } from "./Parent"` 는 컴파일 후 사라져 **런타임 의존 그래프를 만들지 않는다.**
 // 둘을 같은 무게로 세면 실제 구조 문제(값 의존)가 타입 잡음에 묻힌다. 그래서 분리해 센다.
 //
-// ## 왜 어떤 건 error 이고 어떤 건 warning 인가
-// 게이트가 **미결정 정책을 대신 강제하면 안 된다.** CLAUDE.md 가 "결정 필요"로 남겨 둔
-// 추출 Parts 의 계층(Primitives 가 리프 프리미티브를 합성하는 경우)은 warning 으로 둔다 —
-// error 로 만들면 사람이 내려야 할 결정을 도구가 내려버린다.
+// ## Primitives 의 리프 1개 예외 (2026-10-23 사용자 결정)
+// Primitive 는 **리프 Primitive 를 최대 1개** 값 import 할 수 있다(SidebarMenuItem → Tooltip ·
+// ReceiverChannelItem → Switch 형태). "리프" = 스스로는 DS 컴포넌트를 하나도 값 import 하지 않는
+// Primitive. 규칙대로 Composite 로 올리면 소비 부모가 *Composite 끼리 import 금지* 에 걸려 Shell
+// 까지 연쇄 승격되기 때문에 둔 예외다. 말로 남긴 예외가 아니라 여기서 검산한다 —
+// 대상이 리프가 아니거나(2단 합성) 2개 이상을 합성하면 error. 그때는 Composite 로 올린다.
 //
 // 사용:
 //   node scripts/check-layer-deps.mjs            # 검사 (신규 위반 시 exit 1)
@@ -77,11 +79,25 @@ function classify(from, to, typeOnly) {
   return null; // Shell↔Shell 은 규칙에 없음
 }
 
+/* ── 2.5) Primitives → Primitives — 리프 1개 예외 판정 ─────────────────── */
+// 값 import 로 DS 컴포넌트를 쓰는 Primitive 는 리프가 아니다.
+const pp = findings.filter((v) => v.kind === "primitives-primitives");
+const srcOf = (v) => v.key.split(" -> ")[0];
+const dstOf = (v) => v.key.split(" -> ")[1];
+const nonLeaf = new Set(pp.map(srcOf));
+const ppCount = new Map();
+for (const v of pp) ppCount.set(srcOf(v), (ppCount.get(srcOf(v)) ?? 0) + 1);
+for (const v of pp) if (ppCount.get(srcOf(v)) === 1 && !nonLeaf.has(dstOf(v))) v.kind = "primitives-leaf";
+
 /* ── 3) 분류별 집계 · 베이스라인 비교 ───────────────────────────────────── */
 const SEVERITY = {
   "reverse-value": { level: "error", label: "역방향 값 import (하위 → 상위)" },
   "composite-composite": { level: "error", label: "Composite → Composite" },
-  "primitives-primitives": { level: "warn", label: "Primitives → Primitives (⚠️ 계층 규칙 결정 대기)" },
+  "primitives-primitives": {
+    level: "error",
+    label: "Primitives → Primitives (리프 1개 예외 밖 — 2개 이상 또는 리프 아님)",
+  },
+  "primitives-leaf": { level: "warn", label: "Primitives → 리프 Primitive 1개 (허용 예외)" },
   "reverse-type": { level: "warn", label: "역방향 타입 전용 (런타임 의존 아님)" },
 };
 
@@ -136,7 +152,7 @@ for (const kind of Object.keys(SEVERITY)) {
   const { level, label } = SEVERITY[kind];
   const mark = level === "error" ? (fresh.length ? "❌" : "✓") : "⚠️ ";
   console.log(`\n${mark} ${label} — ${list.length}건${frozen.size ? ` (동결 ${frozen.size})` : ""}`);
-  for (const k of list) console.log(`     ${frozen.has(k) ? "·" : "＋"} ${k}`);
+  for (const k of list) console.log(`     ${level === "error" && !frozen.has(k) ? "＋" : "·"} ${k}`);
   if (level === "error" && fresh.length) newErrors += fresh.length;
 }
 
@@ -146,10 +162,11 @@ if (newErrors) {
   console.error("  고치는 법:");
   console.error("   · Composite 가 Composite 를 쓰면 → Shell 로 승격하거나 구조 분리");
   console.error("   · 하위가 상위를 쓰면 → 공유 타입/상수를 하위(또는 별도 모듈)로 내린다");
+  console.error("   · Primitive 가 리프 아닌 Primitive 나 2개 이상을 쓰면 → Composite 로 승격");
   console.error("   · 의도된 구조 변경이면 → --update 로 동결선 갱신(줄이는 방향만 허용)\n");
   process.exit(1);
 }
-console.log("PASS — 신규 위반 0건 (⚠️ 는 정보성, 차단하지 않음)\n");
+console.log("PASS — 신규 위반 0건 (⚠️ 는 허용 · 정보성, 차단하지 않음)\n");
 
 /* ── helpers ────────────────────────────────────────────────────────────── */
 function sh(cmd) {
