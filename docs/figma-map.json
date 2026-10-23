@@ -60,6 +60,9 @@
     "ApdexChart": {
       "figma": "351:264"
     },
+    "ArcGauge": {
+      "figma": "585:226"
+    },
     "AssistantButton": {
       "figma": "18:16"
     },
@@ -95,6 +98,9 @@
     },
     "CardHead": {
       "figma": "336:3"
+    },
+    "ChartArc": {
+      "figma": "585:153"
     },
     "ChartBar": {
       "figma": "562:9"

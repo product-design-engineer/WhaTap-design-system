@@ -629,6 +629,24 @@ Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
 
 Figma 정본: 페이지 ScatterChart `572:6908` · 세트 `572:7311`(`frame` × `marks` dot · bubble). ChartSwatch `shape=dot` `572:39` · ChartLegendItem `shape=dot` `572:6745` · `572:6749` 추가.
 
+## ArcGauge · ChartArc
+
+범위 안 지금 값 하나 — 호 길이 + 가운데 큰 숫자. **ArcGauge(Composite)** = **ChartArc(Primitives — 240° 호 트랙 · 채움 · 바깥 임계 띠)** + 가운데 값 · 양 끝 글자. [[RangeGauge]] 와 같은 계약의 둥근 판 — 정사각 칸은 호, 좁고 긴 칸은 막대.
+
+| Prop (ArcGauge) | Type | Default |
+|---|---|---|
+| `value` · `max` | `number` | — |
+| `min` | `number` | `0` |
+| `unit` · `label` | 단위 · 지표 이름(가운데 · 접근성) | — |
+| `minLabel` · `maxLabel` | 양 끝 이름 | `Min` · `Max` |
+| `thresholds` | `{ from, tone: "warning" \| "critical" }[]` | `[]` |
+| `size` | 호 크기(px) | `140` |
+
+- 호 여러 개로 대상을 비교하지 않는다 — 각도는 길이보다 비교가 어렵다([[EqualizerChart]] · [[BarList]]).
+- `role="meter"` · 값 · 범위를 읽는다.
+
+Figma 정본: ChartArc 페이지 `585:2` · 세트 `585:153`(`level` × `bands`) / ArcGauge 페이지 `585:183` · 세트 `585:226`(`tone` · unit · label · min · max).
+
 ## TrendTile
 
 지표 하나의 지금 값 · 비교 시점 대비 변화 · 최근 추이. **Composite** — [[MetricStat]](지표명 · 값 · 단위) + [[Sparkline]](추이, 데이터 최소 ~ 최대) + 변화 줄.
