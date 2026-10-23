@@ -81,7 +81,7 @@ export default function MetricGrid({ items, maxColumns = 4, compact = false }: M
             title={it.label}
             style={{ paddingLeft: first ? 0 : 12, borderLeft: first ? undefined : "1px solid var(--color-border-soft)" }}
           >
-            <MetricStat label={it.label} value={it.value} unit={it.unit} caption={it.caption} compact={compact} width="auto" />
+            <MetricStat label={it.label} value={it.value} unit={it.unit} caption={it.caption} compact={compact} width="auto" truncateLabel />
           </div>
         );
       })}
