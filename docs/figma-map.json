@@ -333,6 +333,9 @@
     "MetricBarCell": {
       "figma": null
     },
+    "MetricGrid": {
+      "figma": "595:61"
+    },
     "MetricStat": {
       "figma": "564:15"
     },

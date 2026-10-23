@@ -689,6 +689,22 @@ Figma 정본: 페이지 BoxPlotChart `586:2` · 세트 `586:93`(`frame`).
 
 Figma 정본: ChartArc 페이지 `585:2` · 세트 `585:153`(`level` × `bands`) / ArcGauge 페이지 `585:183` · 세트 `585:226`(`tone` · unit · label · min · max).
 
+## MetricGrid
+
+같은 대상의 관련 집계 값 여럿을 세로 구분선으로 나눈 숫자 칸 줄. **Composite** — 칸마다 [[MetricStat]].
+
+| Prop | Type | Default |
+|---|---|---|
+| `items` | `{ label, value, unit?, caption? }[]` | — |
+| `maxColumns` | 한 줄 최대 칸 | `4` |
+| `compact` | 작은 숫자 | `false` |
+
+- 한 줄 4칸까지 · 넘으면 줄바꿈(가로 스크롤 금지) · 칸 이름 한 줄 말줄임(MetricStat 라벨, 2026-10-23).
+- 칸은 세 겹까지(이름 · 값 + 단위 · 보조). 하위 분해는 SegmentBar · BarList, 범위는 RangeGauge 를 줄 아래에(화면 조합).
+- 값 색은 primary 하나 — 칸 하나만 색 강조하지 않는다.
+
+Figma 정본: 페이지 MetricGrid `595:2` · 세트 `595:61`(`columns`).
+
 ## PairedTimeChart
 
 단위가 다른 두 지표를 시간축을 공유하는 위 · 아래 두 칸으로 — 이중 Y축 대신(§19). **Composite** — 칸마다 [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCrosshair]](`index` 공유), 막대 칸은 [[ChartBar]], 아래 칸만 [[ChartTimeAxis]].

@@ -16,6 +16,7 @@
  * - 카드 머리의 속성 한 칸(값이 낱말일 수 있는 자리) → [[KpiField]].
  *
  * ## Composition rules
+ * - 라벨은 한 줄 말줄임(전체는 `title`) — 좁은 칸에서 두 줄로 꺾여 숫자 줄 높이가 칸마다 달라지지 않게([[MetricGrid]], 2026-10-23).
  * - 라벨 `text-sm` · `text-tertiary`, 숫자 `text-2xl`(compact `text-lg`) · `text-primary` · 중간 굵기 · 숫자 서체.
  * - 단위(`unit`)는 숫자 바로 뒤 `text-sm` · tertiary — 숫자보다 크면 숫자가 묻힌다.
  * - 보조 줄(`caption`)은 숫자 아래 `text-sm` · secondary · 말줄임(전체는 `title`). 값이 «누구의» 값인지 말한다.
@@ -65,7 +66,7 @@ export default function MetricStat({ label, value, unit, caption, align = "start
       className={`flex flex-col justify-center min-w-0 ${w == null ? "" : "shrink-0"} ${align === "end" ? "items-end" : "items-start"}`}
       style={{ width: w }}
     >
-      <span className="text-sm text-tertiary" style={{ ...NUM, fontWeight: "var(--font-weight-regular)" }}>
+      <span className="text-sm text-tertiary truncate" title={label} style={{ ...NUM, fontWeight: "var(--font-weight-regular)", maxWidth: "100%" }}>
         {label}
       </span>
       <span className="flex items-baseline mt-2px" style={{ gap: 2 }}>
