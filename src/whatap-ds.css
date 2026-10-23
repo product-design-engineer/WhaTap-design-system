@@ -203,6 +203,8 @@
     --color-brand-blue: #296CF2;
     /* @role 브랜드색의 어두운 단계 | @use hover/press 상태 */
     --color-brand-blue-deep: #1B5CD9;
+    /* @role 문장 안 링크 글자 — 누르면 다른 화면으로 이동한다는 표식 | @use TextLink | @avoid 버튼 라벨 · 강조 글자(링크가 아닌 것을 파랗게 칠하지 않는다) */
+    --color-text-link: var(--color-brand-blue-deep);
     /* @role 브랜드색의 연한 단계 | @use 차트 라인 · 보조 강조 */
     --color-brand-blue-soft: #3DA9FF;
     /* @role 브랜드 배경면 | @use 진입 배너 · 안내 블록 */
@@ -1966,6 +1968,28 @@ html, body, #root {
 .wds-info-tip:focus-visible {
   outline: 2px solid var(--color-brand-blue);
   outline-offset: 1px;
+}
+/* ── TextLink — 문장 안에서 다음 동선을 여는 링크 ──────────────────────────────
+   글자색은 --color-text-link(brand-blue-deep). brand-blue 원색은 톤 표면(warning soft) 위에서
+   4.5:1 에 못 미쳐 한 단계 깊은 값을 쓴다. 밑줄은 hover · focus 에만 — 상시 밑줄은 문단이 지저분해진다.
+   button 으로 렌더될 때도 같은 모양이어야 하므로 기본 버튼 꾸밈을 지운다. */
+.wds-text-link {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: var(--color-text-link);
+  text-decoration: none;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.wds-text-link:hover,
+.wds-text-link:focus-visible { text-decoration-line: underline; }
+.wds-text-link:focus-visible {
+  outline: 2px solid var(--color-brand-blue);
+  outline-offset: 1px;
+  border-radius: 2px;
 }
 /* ── Slider — 한 축 위에서 크기를 고르는 막대 ─────────────────────────────────
    네이티브 range 의 껍데기를 지우고 트랙 · 손잡이를 토큰으로 그린다. 채운 구간의 끝은 컴포넌트가

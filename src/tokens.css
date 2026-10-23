@@ -16,6 +16,7 @@
   /* Brand primary */
   --color-brand-blue: #296CF2;
   --color-brand-blue-deep: #1B5CD9;
+  --color-text-link: var(--color-brand-blue-deep); /* 문장 안 링크 글자 */
   /* Marketing web — 마케팅 사이트 CTA·링크 전용. 제품 UI 브랜드 블루와 별개 */
   --color-brand-blue-web: #296CF2;
   --color-brand-blue-web-deep: #1B5CD9;
