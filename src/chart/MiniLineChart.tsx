@@ -15,6 +15,13 @@
  * - 진행 단계 표시 → [[DashboardBuildingProgress]]
  * - 정밀한 인터랙션(zoom·tooltip·다중 시리즈)이 필요한 본격 차트 → 전용 차트 라이브러리
  *
+ * ## Metrics
+ * - ✅ 연속 게이지 지표 하나의 추이 — CPU · 메모리 사용률(%) · 응답시간(ms) · TPS · 힙 사용량(MiB) · 네트워크(bps)
+ * - ✅ 최고점이 언제였는지가 중요한 지표(peak ▼) — 응답시간 · 액티브 트랜잭션 수 · 대기 세션 수
+ * - ❌ 누적 카운터 원값(총 요청 수 · 누적 에러 수) — 늘기만 해서 기울기만 보인다. 구간 증가량(rate)으로 바꿔 그린다
+ * - ❌ 점 사건(경보 · 배포 · 재시작) → [[StatusTimeline]]. 이산 상태(Up · Down) → [[HexGrid]]
+ * - ❌ 합이 100% 인 구성 비율 → [[MiniDonutChart]]
+ *
  * ## Composition rules
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.

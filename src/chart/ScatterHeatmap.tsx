@@ -14,6 +14,11 @@
  * - 캘린더형 히트맵 (월/일 격자) → [[Heatmap]] + [[HeatmapCell]].
  * - 단순 바 차트 → inline 구현.
  *
+ * ## Metrics
+ * - ✅ 개별 트랜잭션의 응답시간 분포(시간 × 응답시간) — APM 히트맵, 판정 색 normal · slow · very slow
+ * - ❌ 집계값(평균 응답시간 추이) → [[MiniLineChart]]
+ * - ❌ 응답시간이 아닌 두 수치의 관계 → [[ScatterChart]]
+ *
  * ## Composition rules
  * - 위젯 chrome 은 소비자가 감싼다.
  * - `dots` prop 으로 데이터를 외부에서 주입한다.

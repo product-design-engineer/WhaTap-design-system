@@ -21,6 +21,11 @@ import ChartLegendItem from "./ChartLegendItem";
  * - 장치 수백 개를 군집 단위로 요약 → [[AiTargetMesh]]
  * - 아이콘 · 텍스트에 붙는 설명 말풍선 → [[Tooltip]] (HexGrid 툴팁은 맵 안 헥사곤 전용)
  *
+ * ## Metrics
+ * - ✅ 장치 · 서버마다의 이산 상태 — active · idle · warning · critical · 에이전트 연결 상태
+ * - ❌ 연속 값(CPU 사용률 %) 그 자체 — 상태로 판정한 뒤 칠하고 값은 툴팁에
+ * - ❌ 대상 수가 적은 정량 비교 → [[BarList]]
+ *
  * ## Composition rules
  * - 범례는 [[ChartLegendItem]] 을 조합한다(견본은 마크 모양을 따른다, patterns §26). 그래서 Composite 계층이다.
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 여백 · 「GPU Map」 제목 줄 · 범례를 뺀다). [[WidgetFrame]] 안에 넣을 때 쓴다.

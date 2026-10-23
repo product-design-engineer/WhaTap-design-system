@@ -13,6 +13,12 @@
  * - 단일 시리즈 + peak ▼ 마커가 필요한 요약 뷰 → [[MiniLineChart]]
  * - 격자형 빈도 → [[EventWeekTimeMatrix]]
  *
+ * ## Metrics
+ * - ✅ 단위 · 범위가 같은 2~3 계열 — 응답시간 p50 · p95 · p99 · 입력 · 출력 토큰 · 송신 · 수신(bps) · 2xx · 4xx · 5xx 건수
+ * - ✅ 같은 지표의 대상 비교(서버 2~3대 CPU)
+ * - ❌ 단위나 범위가 다른 두 지표(TPS 와 응답시간) — 이중 축 금지(§19), 칸을 나눈다
+ * - ❌ 대상이 많아 선이 엉키는 비교(서버 10대) → [[BarList]] TOP-N 또는 칸 나누기
+ *
  * ## Composition rules
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.

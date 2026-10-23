@@ -79,7 +79,15 @@ function section(doc, name) {
 /** 템플릿이 아는 섹션. 이 밖의 `## …` 는 생성기가 읽지 않으므로 **AI 에게 배달되지 않는다**
  *  (Storybook autodocs 에서만 보인다). 게이트(check-docstrings)가 이 목록으로 차단한다 —
  *  실측(2026-10-19): 13파일 18섹션 중 15섹션이 components.json 에 없었다(Pagination 「표와 한 세트」 정책 등). */
-const KNOWN_SECTIONS = [/^Purpose$/i, /^When to use$/i, /^When NOT to use$/i, /^Composition rules$/i, /^Spec\b/i, /^Do$/i, /^Don't$/i];
+const KNOWN_SECTIONS = [/^Purpose$/i, /^When to use$/i, /^When NOT to use$/i, /^Composition rules$/i, /^Metrics$/i, /^Spec\b/i, /^Do$/i, /^Don't$/i];
+
+/** `## Metrics` — 차트가 맞는 지표(✅)와 쓰면 안 되는 지표(❌). Composite/Chart 는 ✅ 필수(check-docstrings). 2026-10-23 사용자 지시. */
+function metricsOf(doc) {
+  const items = bullets(section(doc, "Metrics"));
+  if (!items.length) return null;
+  const strip = (s) => s.replace(/^(✅|❌)\s*/, "").trim();
+  return { fit: items.filter((b) => b.startsWith("✅")).map(strip), avoid: items.filter((b) => b.startsWith("❌")).map(strip) };
+}
 function extraSectionsOf(doc) {
   if (!doc) return [];
   return [...doc.matchAll(/^##\s+(.+?)\s*$/gm)].map((m) => m[1]).filter((h) => !KNOWN_SECTIONS.some((re) => re.test(h)));
@@ -425,8 +433,10 @@ for (const sf of storyFiles) {
   const explicitDont = bullets(section(docText, "Don't"));
   const fromStory = harvestMarkers(s.description);
 
+  const metrics = metricsOf(docText);
   const derivedDont = [
     ...bullets(whenNotToUse).map((b) => `사용하지 말 것 — ${b}`),
+    ...(metrics?.avoid ?? []).map((b) => `이 지표에 쓰지 말 것 — ${b}`),
     ...bullets(compositionRules).filter((b) => PROHIBITIVE.test(b)),
   ];
 
@@ -450,6 +460,8 @@ for (const sf of storyFiles) {
     whenNotToUse: bullets(whenNotToUse),
     compositionRules: bullets(compositionRules),
     spec: specOf(docText),
+    /* 차트가 맞는 지표 · 쓰면 안 되는 지표(`## Metrics` ✅ / ❌). 차트 아니면 null. */
+    metrics,
     /* 템플릿 밖 섹션 이름 — 배달되지 않는 문서. 게이트가 0 을 요구한다. */
     extraSections: extraSectionsOf(docText),
     // 스토리 블록과 docstring 유도가 같은 말을 하는 경우가 있어 중복 제거.

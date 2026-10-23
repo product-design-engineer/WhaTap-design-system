@@ -14,6 +14,10 @@
  * - 시간에 따른 처리량 추이 → [[MiniLineChart]] · [[MiniMultiLineChart]] — 이 위젯은 흐름 연출이지 시계열이 아니다.
  * - 실데이터 없이 장식으로 흘리기 — 숫자가 움직이면 사용자는 실측으로 읽는다. 데모·캡처에서는 `paused` 로 멈춘다.
  *
+ * ## Metrics
+ * - ✅ 실시간 유입 · 처리 속도(RPS · TPS)와 응답 속도 등급별 개수
+ * - ❌ 지난 구간 추이(어제 TPS) → [[MiniLineChart]] — 이 위젯은 지금 흐름만 말한다
+ *
  * ## Composition rules
  * - 외부 아이콘 의존: `/icons/speed-bullet-{tone}.svg`, `/icons/speed-bar-{tone}.svg`
  *   (소비 앱의 public 폴더에 배치)
