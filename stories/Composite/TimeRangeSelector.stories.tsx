@@ -247,7 +247,7 @@ function SearchFlowDemo() {
           onPrev={() => shift(-1)}
           onNext={() => shift(1)}
         />
-        <Button variant="contained" tone="primary" size="md" loading={loading} onClick={() => run(null)}>
+        <Button variant="contained" tone="primary" size="lg" loading={loading} onClick={() => run(null)}>
           검색
         </Button>
       </div>
