@@ -237,9 +237,7 @@ function SearchFlowDemo() {
   return (
     <div className="flex flex-col gap-12px" style={{ maxWidth: 720 }}>
       <div className="flex items-end gap-8px flex-wrap">
-        {/* DateTimeBlock 은 defaultValue(비제어)라 구간이 바뀌면 key 로 다시 그린다 */}
         <TimeRangeSelector
-          key={`${range.from}-${range.to}`}
           start={parts(range.from)}
           end={parts(range.to)}
           durationLabel={custom ? presetLabel(Math.round((range.to - range.from) / 60_000)) : `최근 ${presetLabel(minutes)}`}
