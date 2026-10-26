@@ -19,6 +19,8 @@ import type { TopologyView } from "./TopologyCanvas";
  * - **뷰포트 사각형은 `view` 에서 역산한다** — 캔버스와 같은 상태를 읽으므로 따로 계산하거나
  *   저장하지 않는다. 두 곳에서 계산하면 반드시 어긋난다.
  * - 노드는 색·라벨 없이 형태만 — 미니맵은 위치 감각을 주는 것이지 내용을 읽는 곳이 아니다.
+ * - 칸 색은 `--color-topology-minimap-node`(카드 판 대비 3:1 이상), 펼친 그룹은 `--color-topology-group-surface`.
+ *   노드 면(`node-surface`)을 그대로 쓰면 카드와 거의 같은 색이라 칸이 보이지 않는다(2026-10-26).
  * - 색은 유틸 클래스. 인라인에는 축척으로 계산한 좌표·크기만 남는다.
  *
  * @example
@@ -71,7 +73,8 @@ export default function TopologyMinimap({
             width={n.width * k}
             height={n.height * k}
             rx={2}
-            className={n.isGroup && !n.collapsed ? "fill-topology-port" : "fill-topology-node"}
+            /* 펼친 그룹은 연한 그룹 면, 리프 · 접힌 그룹은 진한 미니맵 칸 — 노드 면(node-surface)은 흰 판 위에서 안 보였다 */
+            className={n.isGroup && !n.collapsed ? "fill-topology-group" : "fill-topology-minimap-node"}
           />
         ))}
         <rect

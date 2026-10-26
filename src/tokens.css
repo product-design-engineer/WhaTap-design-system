@@ -554,6 +554,7 @@
   --color-topology-port: #8B9BE1;        /* 연결 포트 도트 기본 */
   --color-topology-port-alert: #FC679E;  /* 경보 포트 */
   --color-topology-port-ok: #5BD388;     /* 정상 포트 */
+  --color-topology-minimap-node: #7D8BA6; /* 미니맵 노드 칸 — 카드 판 위 축소 노드(카드 대비 3:1+) */
 
   /* ──────────────────────────────────────────────────────────────────────
    *  Spacing / Sizing Scale — 4px 그리드. `--text-*` 와 동일한 "px 값 스케일 토큰" 방식.
@@ -954,4 +955,5 @@ html, body, #root {
   --color-topology-port: #8E9CDE;
   --color-topology-port-alert: #FF77A8;
   --color-topology-port-ok: #56C98A;
+  --color-topology-minimap-node: #6B7894;
 }
