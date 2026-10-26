@@ -8,6 +8,14 @@ const meta: Meta<typeof MetricBarCell> = {
   title: "Primitives/Chart/MetricBarCell",
   component: MetricBarCell,
   tags: ["autodocs"],
+  /* 표 셀 폭 — 수치는 오른쪽 정렬이라 폭이 없으면 화면 끝까지 밀린다. */
+  decorators: [
+    (Story) => (
+      <div style={{ width: 160 }}>
+        <Story />
+      </div>
+    ),
+  ],
   parameters: {
     layout: "padded",
     docs: {

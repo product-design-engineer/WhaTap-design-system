@@ -8,6 +8,14 @@ const meta: Meta<typeof HeatmapCell> = {
   title: "Primitives/Chart/HeatmapCell",
   component: HeatmapCell,
   tags: ["autodocs"],
+  /* 폭은 격자 칸이 준다(셀은 100% 로 채운다) — 래퍼가 없으면 테두리 4px 막대로 쪼그라든다. 48 = 월간 히트맵 한 칸. */
+  decorators: [
+    (Story) => (
+      <div style={{ width: 48 }}>
+        <Story />
+      </div>
+    ),
+  ],
   parameters: {
     layout: "centered",
     docs: {

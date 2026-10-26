@@ -283,19 +283,19 @@
       "figma": "598:8161"
     },
     "GpuStatusBar": {
-      "figma": null
+      "figma": "624:9968"
     },
     "HeaderPillButton": {
       "figma": "60:23"
     },
     "Heatmap": {
-      "figma": null
+      "figma": "624:905"
     },
     "HeatmapCell": {
-      "figma": null
+      "figma": "624:47"
     },
     "HeatmapLegend": {
-      "figma": null
+      "figma": "624:75"
     },
     "HexGrid": {
       "figma": "341:162"
@@ -349,7 +349,7 @@
       "figma": "28:104"
     },
     "MetricBarCell": {
-      "figma": null
+      "figma": "624:88"
     },
     "MetricGrid": {
       "figma": "595:61"
@@ -520,7 +520,7 @@
       "figma": "57:8"
     },
     "StatCard": {
-      "figma": null
+      "figma": "624:1131"
     },
     "StepsTimeline": {
       "figma": "34:65"
@@ -577,25 +577,25 @@
       "figma": "75:10"
     },
     "TopologyCanvas": {
-      "figma": null
+      "figma": "624:10372"
     },
     "TopologyCollapseToggle": {
-      "figma": null
+      "figma": "624:9617"
     },
     "TopologyEdge": {
-      "figma": null
+      "figma": "624:9805"
     },
     "TopologyMinimap": {
-      "figma": null
+      "figma": "624:9883"
     },
     "TopologyNode": {
-      "figma": null
+      "figma": "624:9747"
     },
     "TopologyPort": {
-      "figma": null
+      "figma": "624:959"
     },
     "TopologyToolbar": {
-      "figma": null
+      "figma": "624:10060"
     },
     "TopologyZoomControl": {
       "figma": "597:31"
