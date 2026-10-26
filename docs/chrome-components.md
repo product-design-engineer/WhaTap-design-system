@@ -524,7 +524,7 @@ export type DataTableProps<T> = {
 - 고리형 막대는 [[ChartRadialBars]](Primitives) — 칸 하나 = 대상 하나, 구간은 안쪽부터 쌓인 줄무늬(`levels` 단계, 0 보다 큰 구간은 최소 한 줄). 바탕 `--color-chart-radial-track` · 구분선 `--color-chart-radial-divider`. 가운데는 `children`, 회전 장식은 `sweep`(동작 줄이기에서 멈춤). [[ActiveTransactionArc]] 는 `agents`(에이전트별 `{ normal, slow, verySlow }`)로 이것을 그린다 — 종전 정적 이미지는 삭제.
   Figma 정본: ChartRadialBars 페이지 `568:6848` · 세트 `568:6918`(`sweep` · center · showCenter) · 변수 `color/chart/radial-track` `568:2` · `radial-divider` `568:3`. ActiveTransactionArc 세트 `347:267` 은 이 세트 · MetricStat · ChartLegendItem 인스턴스로 다시 짰다.
 - 가리킨 마크 강조(공통 규칙, patterns §26 «강조») — 가리킨 마크는 불투명 + 카드색 2px 고리, 나머지 0.32, 색은 그대로. 차트 안 범례는 [[ChartLegendItem]] `onHover` · `dimmed` 로 그 계열만 남긴다. 전환은 `.wds-chart-mark`(120ms · 동작 줄이기면 없음).
-- 시간축 차트의 hover 는 [[ChartCrosshair]](Primitives) — 플롯 위 포인터 x → 가장 가까운 시점 · 세로 안내선(`--color-border-strong`) · 계열마다 점(카드색 고리) · 값 툴팁. Props: `count` · `max` · `min` · `series({ label, color, values, shape?, noDot?, unit? })` · `labels`(시점 이름) · `unit` · `footer(i)` · `band`(막대) · `positions`(고르지 않은 x) · `onIndex`(막대 흐림) · `index`(제어형 — 칸 여럿이 한 시점) · `noTooltip` · 플롯 여백(`right` · `padTop` · `padBottom`, ChartGrid 와 같게). MiniLine · MiniMultiLine · MiniBar · Forecast · Apdex 가 쓰고, 각 차트는 시점 이름을 `pointLabels`(Forecast 는 `formatX`)로 받는다.
+- 시간축 차트의 hover 는 [[ChartCrosshair]](Primitives) — 플롯 위 포인터 x → 가장 가까운 시점 · 세로 안내선(`--color-border-strong`) · 계열마다 점(카드색 고리) · 값 툴팁. Props: `count` · `max` · `min` · `series({ label, color, values, shape?, noDot?, unit?, showMissing? })`(`showMissing` = `null` 시점 툴팁 줄에 «데이터 없음») · `labels`(시점 이름) · `unit` · `footer(i)` · `band`(막대) · `positions`(고르지 않은 x) · `onIndex`(막대 흐림) · `index`(제어형 — 칸 여럿이 한 시점) · `noTooltip` · 플롯 여백(`right` · `padTop` · `padBottom`, ChartGrid 와 같게). MiniLine · MiniMultiLine · MiniBar · Forecast · Apdex 가 쓰고, 각 차트는 시점 이름을 `pointLabels`(Forecast 는 `formatX`)로 받는다.
   Figma 정본: 페이지 ChartCrosshair `591:2` · 컴포넌트 `591:3`(가리켰을 때 모습 견본).
 - 경과 시간 차트(Flame · Waterfall)의 요소 — [[ChartSpanBar]](Primitives, 구간 막대: `start` · `end` 플롯 폭 비율 · `color` · `textColor` · `label` · `dimmed` · `active` · `top` · `height`. 이름은 차트가 막대 폭 40px 이상일 때만 준다) · [[ChartBrush]](Primitives, 시간축 줄을 끌어 구간 확대: `onSelect(from, to)` · 플롯 상자 `left` · `right` · `top` · `bottom` · `strip` · `minRatio`. 띠 `--color-brand-blue-wash`). [[ChartTimeAxis]] 는 `left` 로 Y축 칸이 없는 플롯에 맞춘다.
   Figma 정본: ChartSpanBar 페이지 `599:2` · 세트 `599:9`(`state` default · dimmed · active · label · showLabel) / ChartBrush 페이지 `599:16` · 컴포넌트 `599:17`(끄는 중 견본).
@@ -808,7 +808,7 @@ Figma 정본: 페이지 MetricGrid `595:2` · 세트 `595:61`(`columns`).
 | `frame` | `boolean` | `true` |
 
 - 축 제목 대신 칸 이름(왼쪽 위), 단위는 눈금 접미사. 오른쪽 Y축 없음.
-- 미래 = 빈칸 · 수집 없음(`null`) = 막대 «모름» 칸 · 선 끊김.
+- 미래 = 빈칸 · 수집 없음(`null`) = 막대 «모름» 칸 · 선 끊김. 그 시점을 가리키면 툴팁 그 지표 줄에 «데이터 없음»(미래 빈칸은 줄 없음).
 - 한 칸을 가리키면 두 칸이 같은 시점 — 위 칸 툴팁에 두 지표(계열별 단위).
 
 Figma 정본: 페이지 PairedTimeChart `594:2` · 컴포넌트 `594:3`.

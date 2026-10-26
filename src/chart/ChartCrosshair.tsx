@@ -18,7 +18,8 @@
  * - 툴팁은 [[ChartTooltip]](리프 Primitive 1개 — 계층 «리프 1개 예외»). 안내선 · 점은 이것이 그린다.
  * - 플롯 상자 규칙은 [[ChartGrid]] 와 같다 — 왼쪽 `--wds-widget-axis-gutter`, `right` · `padTop` · `padBottom` 을 차트와 같게 준다.
  * - 시점 x: 기본은 양 끝이 플롯 끝(선 · 면). 막대처럼 칸 가운데면 `band`, 간격이 고르지 않으면(도메인 좌표 · 예측) `positions`.
- * - 그 시점에 값이 없는 계열(`null`)은 점도 툴팁 줄도 없다.
+ * - 그 시점에 값이 없는 계열(`null`)은 점도 툴팁 줄도 없다. 단 `showMissing` 계열은 줄을 남기고 값 자리에 «데이터 없음»(tertiary)을 쓴다 —
+ *   수집 공백을 «모름» 칸 · 선 끊김으로 그리는 차트([[PairedTimeChart]])가 그 칸을 가리켰을 때 뜻을 말하게. 미래(`undefined`)는 여전히 줄 없음.
  * - 안내선 1px `--color-border-strong` · 점 6px 계열 색 + 카드색 2px 고리(강조 규칙 · 내부 `_emphasis`). 색은 계열 그대로.
  * - 툴팁 제목 = `labels[i]`(시점 이름), 값 줄 = 계열(견본 · 이름 · 값 + `unit`), 보조 줄 = `footer(i)`.
  * - 마크가 아닌 덧그림 겹이라 마크 **위**에, 축 글자와 같은 겹에 둔다. 포인터를 벗어나면 모두 사라진다.
@@ -30,7 +31,7 @@
  * | 고르기 | 플롯 상자 위 포인터 x → 가장 가까운 시점(`band` 면 칸 · `positions` 면 가장 가까운 x) |
  * | 안내선 | 1px `--color-border-strong` · 플롯 위 ~ 아래 |
  * | 점 | 지름 6 · 계열 색 · `0 0 0 2px var(--color-card)` 고리 · `null` 값은 점 없음 |
- * | 툴팁 | [[ChartTooltip]] — x = 시점, y = 가장 높은 점, 오른쪽 절반이면 왼쪽으로 |
+ * | 툴팁 | [[ChartTooltip]] — x = 시점, y = 가장 높은 점, 오른쪽 절반이면 왼쪽으로 · `showMissing` 계열의 `null` = «데이터 없음» 줄 |
  * | 접근성 | 장식 겹(`aria-hidden` 안내선 · 점). 값은 차트 요약 `aria-label` 과 툴팁(`role="tooltip"`) |
  *
  * @example
@@ -57,6 +58,8 @@ export type ChartCrosshairSeries = {
   noDot?: boolean;
   /** 이 계열만의 단위 — 없으면 전체 `unit`. 칸 여럿의 값을 한 툴팁에 보일 때. */
   unit?: string;
+  /** `null` 시점에도 툴팁 줄을 남기고 값 자리에 «데이터 없음» — 수집 공백을 그리는 차트용. `undefined`(미래)는 줄 없음. */
+  showMissing?: boolean;
 };
 
 export type ChartCrosshairProps = {
@@ -93,6 +96,11 @@ export type ChartCrosshairProps = {
 };
 
 const fmt = (v: number) => v.toLocaleString("en-US", { maximumFractionDigits: 2 });
+const MISSING = (
+  <span className="text-tertiary" style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-medium)" }}>
+    데이터 없음
+  </span>
+);
 
 export default function ChartCrosshair({
   count,
@@ -161,8 +169,11 @@ export default function ChartCrosshair({
             flipX={xr(i) > 0.5}
             title={labels?.[i]}
             rows={series
-              .filter((s) => s.values[i] != null)
-              .map((s) => ({ label: s.label, value: `${fmt(s.values[i] as number)}${s.unit ?? unit}`, color: s.color, shape: s.shape ?? "line" }))}
+              .filter((s) => s.values[i] != null || (s.showMissing && s.values[i] === null))
+              .map((s) => {
+                const v = s.values[i];
+                return { label: s.label, value: v == null ? MISSING : `${fmt(v)}${s.unit ?? unit}`, color: s.color, shape: s.shape ?? "line" };
+              })}
             footer={footer?.(i)}
           />}
         </>
