@@ -340,6 +340,7 @@ AI 위젯 영역의 모든 컴포넌트는 다음 primitive 를 **반드시 comp
 - **링크 주소:** `https://whatap-design-system-storybook.vercel.app` + `components.json` 의 `docsUrl`.
 - **언제 갱신하나:** 컴포넌트 신설 · 이름 변경 · 계층 이동(스토리 id 변경) 때 같은 흐름에서 원장과 Figma 링크를 고친다. 스토리 id 가 바뀌는 PR 은 **병합 · 배포 뒤** 링크를 다시 건다 — 배포 전 주소를 걸면 링크가 깨진다.
 - 아이콘 · 에셋 · `_` 접두 내부 컴포넌트 · deprecated 페이지 · 시안 주석 장치(FlowNote)는 짝 대상이 아니다.
+- **Figma 페이지 목록 = Storybook 좌측 트리**(2026-10-26 사용자 결정 — 학습 비용 0). 구분선 `——— TOKENS / PRIMITIVES / COMPOSITE / SHELL ———` 아래에 Storybook 과 같은 순서(메뉴명 알파벳순)로, 페이지 이름은 **Storybook 메뉴명**(`Card` — 컴포넌트 이름 `AiCard` 은 그대로). 하위 폴더(`Chart/`)는 `▾ Chart` 페이지 아래 들여쓴 페이지들. 컴포넌트 하나 = 페이지 하나 — 부품(행 · 항목)도 부모 페이지에 함께 두지 않는다. Storybook 밖 페이지(Code Connect · 예시 · 템플릿 · 아이콘 · deprecated · FlowNote)는 맨 끝 `——— 참고 · Storybook 밖 ———`. 새 컴포넌트 페이지는 만들 때 그 자리에 끼운다.
 
 ### 🔒 불변 정책 — 소비자(엔지니어)의 역방향 수정 금지
 
