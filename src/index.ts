@@ -183,6 +183,7 @@ export { default as Stage } from "./Stage";
 export { default as SubHeaderBar } from "./SubHeaderBar";
 export type { SubHeaderBarProps } from "./SubHeaderBar";
 export { default as TimeRangeSelector } from "./TimeRangeSelector";
+export type { TimeRangeMode } from "./TimeRangeSelector";
 export { default as Toast } from "./Toast";
 export type { ToastVariant } from "./Toast";
 
