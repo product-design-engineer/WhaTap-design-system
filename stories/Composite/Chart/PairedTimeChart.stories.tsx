@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PairedTimeChart, WidgetFrame } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, names, wave } from "../../_extremes";
 
 /**
  * Stories for [[PairedTimeChart]] — 단위가 다른 두 지표를 시간축을 공유하는 두 칸으로(이중 축 대신, §19).
@@ -61,6 +62,39 @@ export const InWidgetFrame: Story = {
           frame={false}
         />
       </WidgetFrame>
+    </div>
+  ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────── */
+
+/* 두 칸이 고정이라 «개체 100개» 는 없다 — 에이전트 100대의 합계를 한 칸으로 보인다. */
+const EX_SUM = Array.from({ length: N }, (_, t) => Math.round(names().reduce((a, _n, i) => a + (wave(i, N, 6, 3)[t] ?? 0), 0)));
+
+/** 극단 · 100개 — 칸은 둘로 고정, 에이전트 100대의 합계. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 이 차트는 위 · 아래 두 칸 고정이라 개체 100개를 계열로 펼치지 않는다 — 100대의 합계 · 평균을 칸 하나로 보인다. 개체별 비교는 Heatmap 으로.` } } },
+  render: () => (
+    <div style={{ width: 640, height: 300, border: "1px solid var(--color-border-default)", borderRadius: 4, padding: "8px 0" }}>
+      <PairedTimeChart
+        count={N}
+        xLabels={LABELS}
+        pointLabels={POINTS}
+        top={{ label: `Active Transaction 합계 (${EXTREME_N}대)`, kind: "bar", values: EX_SUM, unit: "건" }}
+        bottom={{ label: `TPS 평균 (${EXTREME_N}대)`, kind: "line", values: EX_SUM.map((v) => Math.round(v / EXTREME_N * 10) / 10) }}
+      />
+    </div>
+  ),
+};
+
+/** 극단 · 데이터 없음 — 두 칸 모두 값 0개. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 두 칸 값이 모두 비면 시간 범위(\`count\`) 전체가 빈 미래 칸으로 그려진다.` } } },
+  render: () => (
+    <div style={{ width: 640, height: 300, border: "1px solid var(--color-border-default)", borderRadius: 4, padding: "8px 0" }}>
+      <PairedTimeChart count={N} xLabels={LABELS} pointLabels={POINTS} top={{ label: "Active Transaction", kind: "bar", values: [], unit: "건" }} bottom={{ label: "TPS", kind: "line", values: [] }} />
     </div>
   ),
 };

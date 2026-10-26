@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { GeoMap, WidgetFrame } from "@whatap/design-system";
 import type { GeoMapDatum } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, scalar } from "../../_extremes";
 
 /**
  * Stories for [[GeoMap]] — 국가별 값을 세계 지도 위에. 단계 구분(비율 · 평균) · 버블(개수 · 합계).
@@ -94,6 +95,41 @@ export const InWidgetFrame: Story = {
       <WidgetFrame title="국가별 오류율" summary="최근 1시간">
         <GeoMap data={ERROR_RATE} label="오류율" unit="%" />
       </WidgetFrame>
+    </div>
+  ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────────── */
+
+/** 지도에 그려지는 큰 나라 100곳(ISO 3166-1 alpha-2). */
+const COUNTRIES_100 = [
+  "KR", "JP", "CN", "TW", "HK", "VN", "TH", "MY", "SG", "ID", "PH", "IN", "PK", "BD", "LK", "NP", "MM", "KH", "LA", "MN",
+  "KZ", "UZ", "IR", "IQ", "SA", "AE", "QA", "KW", "OM", "YE", "JO", "IL", "TR", "SY", "AF", "RU", "UA", "BY", "PL", "DE",
+  "FR", "GB", "IE", "ES", "PT", "IT", "CH", "AT", "NL", "BE", "DK", "NO", "SE", "FI", "EE", "LV", "LT", "CZ", "SK", "HU",
+  "RO", "BG", "GR", "RS", "HR", "BA", "AL", "IS", "US", "CA", "MX", "GT", "CU", "CO", "VE", "PE", "EC", "BO", "BR", "PY",
+  "UY", "AR", "CL", "EG", "LY", "DZ", "MA", "TN", "SD", "ET", "KE", "TZ", "NG", "GH", "CI", "CM", "AO", "ZA", "MG", "AU",
+] as const;
+
+/** 극단 · 100개 — 나라 100곳에 값. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 지도는 계열이 아니라 순차 4단계 색이라 회색 다발 규칙이 걸리지 않는다 — ${EXTREME_N}곳 중 98곳이 4단계로 칠해지고, 지도에 없는 2곳(홍콩 · 싱가포르)은 아래 «지도 밖» 줄로 빠진다.` } } },
+  args: { data: COUNTRIES_100.map((code, i) => ({ code, value: scalar(i, 4) })), label: "오류율", unit: "%" },
+  render: (args) => (
+    <div style={{ width: 720, height: 380 }}>
+      <GeoMap {...args} />
+    </div>
+  ),
+};
+
+/** 극단 · 데이터 없음 — 값 0개. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 이 차트는 스스로 «데이터 없음» 을 그리는 유일한 차트다.` } } },
+  args: { data: [], label: "오류율", unit: "%" },
+  render: (args) => (
+    <div style={{ width: 720, height: 380 }}>
+      <GeoMap {...args} />
     </div>
   ),
 };

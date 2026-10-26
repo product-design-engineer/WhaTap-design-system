@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TrendTile } from "@whatap/design-system";
+import { EXTREME_NOTE } from "../../_extremes";
 
 /**
  * Stories for [[TrendTile]] — 지금 값 · 비교 시점 대비 변화 · 최근 추이. 변화 색은 지표의 좋은 방향이 정한다.
@@ -56,4 +57,28 @@ export const Row: Story = {
       <TrendTile label="활성 사용자" value="3,920" delta={-2.1} deltaUnit="%" compareLabel="지난주 같은 요일 대비" values={series(4, 4000, 120, -4)} />
     </div>
   ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────── */
+const ExtremeLabel = ({ children }: { children: string }) => <span className="text-sm text-tertiary">{children}</span>;
+
+/** 0 과 큰 변화(+1000%). */
+export const ExtremeBounds: Story = {
+  name: "극단 · 0 과 상한 초과",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.bounds}\n\n관찰: TrendTile 은 상한이 없어 «상한 초과» 대신 폭증(+1,000%) 을 넣었다.` } } },
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <ExtremeLabel>값 0</ExtremeLabel>
+      <TrendTile label="TPS" value={0} delta={0} deltaUnit="%" better="up" values={Array.from({ length: 24 }, () => 0)} />
+      <ExtremeLabel>폭증 — +1,000%</ExtremeLabel>
+      <TrendTile label="TPS" value="12,840" delta={1000} deltaUnit="%" better="up" values={Array.from({ length: 24 }, (_, i) => (i < 23 ? 1000 : 12840))} />
+    </div>
+  ),
+};
+
+/** 데이터 없음 — 추이 빈 배열 · delta NaN. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty}\n\n⚠️ 결함: \`delta\` 가 NaN 이면 «▼ NaN» 이 나오고 악화로 판정된다.` } } },
+  args: { label: "TPS", value: "—", delta: Number.NaN, deltaUnit: "%", better: "up", values: [] },
 };
