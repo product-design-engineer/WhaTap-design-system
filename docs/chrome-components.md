@@ -709,23 +709,27 @@ Figma 정본: 페이지 Treemap `596:2` · 컴포넌트 `596:3`.
 
 ## GeoMap
 
-국가별 값을 세계 지도 위에 — 단계 구분(국가 칸 색 4단계) 또는 버블(국가 자리 원 넓이). **Composite** — [[ChartLegendItem]](단계 범례) · [[ChartTooltip]] · [[TopologyZoomControl]](`limits` 100%~600%) 을 조합하고 국가 도형 · 격자 · 버블만 그린다. 도형은 Natural Earth 1:110m(퍼블릭 도메인) · Equal Earth 투영 · 남극 제외(내부 `_geoWorld`, 생성 `scripts/build-geo-world.mjs`).
+국가별 값을 세계 지도 위에 — 단계 구분(국가 칸 색 4단계) 또는 버블(국가 자리 원 넓이). 한국 · 일본은 눌러서 시·도로 들어간다. **Composite** — [[ChartLegendItem]](단계 범례) · [[ChartTooltip]] · [[TopologyZoomControl]](`limits` 100%~600%) 을 조합하고 국가 도형 · 격자 · 버블만 그린다. 도형은 Natural Earth 1:110m(퍼블릭 도메인) · Equal Earth 투영 · 남극 제외(내부 `_geoWorld`, 생성 `scripts/build-geo-world.mjs`). 시·도는 Natural Earth 1:10m Admin 1 v5.1.2 에서 한국 17 · 일본 47(내부 `_geoRegions`, 생성 `scripts/build-geo-regions.mjs` — 원천 40MB 는 고정 주소 · SHA-256 으로 받는다).
 
 | Prop | Type | Default |
 |---|---|---|
-| `data` | `{ code: ISO alpha-2, value, name? }[]` | — |
+| `data` | `{ code: ISO alpha-2 · 시·도는 ISO 3166-2(`KR-11`), value, name? }[]` | — |
 | `mode` | `"fill"`(비율 · 평균) · `"bubble"`(개수 · 합계) | `"fill"` |
 | `label` · `unit` | 값 이름 · 단위 | `"값"` · `""` |
 | `breaks` | 단계 경계 3개 | 0 ~ 최대 4등분 |
 | `emptyLabel` | 빈 상태 글 | `"데이터 없음"` |
 | `zoom` | 줌 컨트롤 | `true` |
+| `drill` · `defaultDrill` | 들어가 있는 나라(제어 · 비제어), `null` = 세계 | `null` |
+| `onDrillChange` | 나라를 누르거나 «세계» 로 돌아올 때 — 여기서 시·도 값을 불러 `data` 에 더한다 | — |
 
 - 값 없는 국가(바탕 `--color-surface-200`) ≠ 낮은 값(`--color-chart-seq-1`). 데이터가 하나도 없으면 지도 위 «데이터 없음».
 - 개수 · 합계는 버블 — 단계 구분은 넓은 나라를 크게 보이게 한다. 음수(증감)는 쓰지 않는다.
 - 110m 도형에 없는 작은 나라(싱가포르 · 홍콩 …)의 값은 지도 아래 «지도 밖» 줄로.
 - 휠 줌 없음(대시보드 스크롤 보호) — 버튼으로 확대, 끌어서 이동.
+- **시·도는 줌이 아니라 눌러서 들어간다**(2026-10-26) — 줌 배율로 단위를 바꾸면 여러 나라가 걸린 화면에서 나눌 나라가 정해지지 않고 범례 단계가 몰래 바뀐다. 툴팁 «눌러서 시·도 보기» · 왼쪽 위 경로 «세계 › 대한민국 값» 으로 돌아온다. 단계 · 버블 크기는 그 나라 시·도 값으로 다시 잡는다.
+- 국가 값을 시·도 합으로 만들지 않는다(비율 · 평균은 더할 수 없다). 받기 전 · 값이 없으면 시·도 지도도 «데이터 없음».
 
-Figma 정본: 페이지 GeoMap `598:2` · 세트 `598:8161`(`mode` fill · bubble · empty) · 내부 도형 `_GeoWorld` `598:7530` / 줌 컨트롤 페이지 TopologyZoomControl `597:30` · 컴포넌트 `597:31`.
+Figma 정본: 페이지 GeoMap `598:2` · 세트 `598:8161`(`mode` fill · bubble · empty · drilled `619:8444`) · 내부 도형 `_GeoWorld` `598:7530` · `_GeoRegionKR` `619:8442` · `_GeoRegionJP` `619:8443` / 줌 컨트롤 페이지 TopologyZoomControl `597:30` · 컴포넌트 `597:31`.
 
 ## FlameChart
 
