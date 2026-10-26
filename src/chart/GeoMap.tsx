@@ -23,6 +23,12 @@
  * - ❌ 음수가 섞인 변화량(증감) — 순차 4단계는 0 에서 시작한다
  * - ❌ 국가 하나 · 둘 → 숫자 [[MetricGrid]] · [[BarList]]
  *
+ * ## Color
+ * - 역할: 순차(단계 구분) — `--color-chart-seq-1` · `--color-chart-seq-2` · `--color-chart-seq-3` · `--color-chart-seq-4`(낮음 → 높음) / 버블은 `--color-chart-series-1` 한 색
+ * - 상한: 단계 4
+ * - 고정: 값 없음 `--color-surface-200` · 국가 경계 `--color-card`
+ * - 금지: 상태색으로 국가를 칠하지 않는다(§17 · §23) · 버블 색으로 값을 말하지 않는다(넓이가 값)
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 단계 범례 [[ChartLegendItem]] · 값 상자 [[ChartTooltip]] · 줌 [[TopologyZoomControl]](토폴로지와 같은 컨트롤 · `limits` 100%~600%).
  *   국가 도형 · 격자 · 버블만 그린다. 그래서 Composite 계층이다.

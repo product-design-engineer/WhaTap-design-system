@@ -21,6 +21,12 @@
  * - ❌ 부채꼴 넷 이상 · 다른 지표로 바꾸기 — 자리가 지표를 말한다(CPU 위 · 메모리 오른쪽 · 디스크 왼쪽)
  * - ❌ 서버 1~3대 → [[MetricGrid]] · [[RangeGauge]]
  *
+ * ## Color
+ * - 역할: 자리 고정 — CPU `--color-chart-series-1` · 메모리 `--color-chart-series-2` · 디스크 `--color-chart-series-3` · 링(수신 · 송신) `--color-chart-neutral`
+ * - 상한: 계열 3슬롯(§18) — 부채꼴 셋 고정
+ * - 고정: 칸 바탕 = 상태 — 정상 `--color-surface-50` · 경고 `--color-status-warning-soft` · 위험 `--color-status-error-soft`
+ * - 금지: 상태에 따라 부채꼴 색을 바꾸지 않는다(상태는 바탕만, §23) · 링에 계열 색을 쓰지 않는다
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 칸 [[CompoundEyeCell]] · 범례 [[ChartLegendItem]] · 값 상자 [[ChartTooltip]]. 격자 배치만 한다. 그래서 Composite 계층이다.
  * - **링 스케일은 하나 · 범례가 말한다(2026-10-23 추천안)** — `networkScale`(기본 100Mbps)이 링 끝. 넘으면 링이 꽉 차고 툴팁이 실제 값을 말한다.

@@ -21,6 +21,11 @@
  * - ❌ 시간에 따른 변화 → [[MiniLineChart]] · [[MiniBarChart]]
  * - ❌ 합 100% 구성의 몫만 말할 때 → [[MiniDonutChart]](BarList 는 크기 비교다)
  *
+ * ## Color
+ * - 역할: 계열(엔티티) — 줄마다 `--color-chart-series-N`(엔티티 슬롯 §21) 또는 한 색. 색이 이름표면 범례를 따로 두지 않는다
+ * - 상한: 계열 슬롯 8(§22) — 줄이 더 많으면 한 색으로 칠하고 이름 글자가 말한다
+ * - 금지: 상태색(Severity)을 계열로 쓰지 않는다(§23)
+ *
  * ## Composition rules
  * - 줄을 가리키면 그 줄만 남기고 나머지를 흐리며(0.32), [[ChartTooltip]] 이 전체 이름 · 값을 보인다(patterns §26 «강조»).
  * - 줄은 [[BarListItem]] 이 그린다(목록 행은 컴포넌트로, patterns §26). 그래서 Composite 계층이다.

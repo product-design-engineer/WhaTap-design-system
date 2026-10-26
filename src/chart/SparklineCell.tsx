@@ -21,6 +21,11 @@
  * - ❌ 행마다 단위 · 범위가 다른 지표를 한 열에(CPU % 와 Mbps) — 줄마다 높이 기준이 달라 견줄 수 없다
  * - ❌ 부호가 있는 지표(증감률 ±) — 0 아래를 자른다
  *
+ * ## Color
+ * - 역할: 짝 차트의 계열 — 인덱스 바 · 선 `--color-chart-series-N`(기본 `--color-chart-series-1`)
+ * - 상한: 1색
+ * - 금지: 짝 차트와 다른 색을 쓰지 않는다 — 인덱스 바가 차트 계열을 잇는 표식이다
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 추이 [[Sparkline]]. 셀은 인덱스 바 · 값 글자 · 자리 맞춤만 그린다. 그래서 Composite 계층이다.
  * - 값은 `numeric.compact` — `text-base` · 숫자 서체 · tabular-nums · 오른쪽 정렬, 단위는 작게(`text-sm` tertiary).

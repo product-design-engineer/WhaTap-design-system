@@ -19,6 +19,12 @@
  * - ❌ 부호가 있는 지표(증감률 ±) — 순차 색은 0 기준을 말하지 못한다
  * - ❌ 정확한 값 비교 → 막대 · 표. 색 단계는 대략의 크기만 말한다
  *
+ * ## Color
+ * - 역할: 순차 — 칸 = `--color-heatmap-0 … 100` 보간([[HeatmapCell]]), 범례 막대 `--gradient-heatmap-scale`
+ * - 상한: 스케일 하나
+ * - 고정: 값 없음 `--color-surface-200` · 선택 테두리 `--color-status-warning`
+ * - 금지: 범주(계열) 색으로 칸을 칠하지 않는다
+ *
  * ## Composition rules
  * - `cells` 는 **정규화된 0~1 또는 null** 의 평평한 배열. 원 단위 → 0~1 변환은 호출측 몫.
  * - `month` 는 첫 칸 앞에 `offset` 만큼 빈 자리를 두어 요일을 맞춘다. 라벨은 일~토.

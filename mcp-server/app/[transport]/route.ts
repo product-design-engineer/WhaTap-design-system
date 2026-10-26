@@ -52,6 +52,8 @@ type ComponentDoc = {
   spec?: string | null;
   /** 차트가 맞는 지표(fit) · 쓰면 안 되는 지표(avoid) — docstring `## Metrics`. 차트가 아니면 null. */
   metrics?: { fit: string[]; avoid: string[] } | null;
+  /** 차트 색 규칙 — docstring `## Color`(역할 · 상한 · 고정 · 금지 + 적힌 토큰). 차트가 아니면 null. */
+  color?: { role: string[]; limit: string[]; fixed: string[]; avoid: string[]; tokens: string[] } | null;
   do: string[];
   dont: string[];
   example: string | null;
@@ -117,6 +119,10 @@ function rulesBlock(c: ComponentDoc): string[] {
   /* 차트는 «어떤 지표에 쓰나» 가 고르는 첫 기준이라 Do 보다 먼저 둔다. */
   if (c.metrics?.fit.length) out.push(``, `## 📈 맞는 지표`, list(c.metrics.fit));
   if (c.metrics?.avoid.length) out.push(``, `## 🚫 쓰면 안 되는 지표`, list(c.metrics.avoid));
+  /* 차트 색은 «어떤 토큰을 몇 개까지 어떤 순서로» 가 정해져 있다 — 지표 다음, Do 보다 먼저. */
+  if (c.color?.role.length) {
+    out.push(``, `## 🎨 색`, list([...c.color.role.map((s) => `역할: ${s}`), ...c.color.limit.map((s) => `상한: ${s}`), ...c.color.fixed.map((s) => `고정: ${s}`), ...c.color.avoid.map((s) => `금지: ${s}`)]));
+  }
   if (c.do.length) out.push(``, `## ✅ Do`, list(c.do));
   if (c.dont.length) out.push(``, `## ❌ Don't`, list(c.dont));
   if (c.compositionRules.length) out.push(``, `## Composition rules`, list(c.compositionRules));

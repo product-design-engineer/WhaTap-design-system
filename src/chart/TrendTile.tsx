@@ -21,6 +21,11 @@
  * - ❌ 좋은 방향이 없는 지표(온도 · 파드 수처럼 오르내림이 판정이 아닌 값) — 개선 · 악화 색이 거짓 판정을 말한다. `better="none"` 으로 색을 끈다
  * - ❌ 누적 카운터 원값(총 요청 수) — 늘 오르므로 변화가 늘 «개선» 으로 보인다. 구간 값(rate)으로
  *
+ * ## Color
+ * - 역할: 판정 — 변화 개선 `--color-status-success` · 악화 `--color-status-error` · 변화 없음 `--color-text-tertiary` / 스파크라인 `--color-chart-series-1`(`color`)
+ * - 상한: 변화 3톤
+ * - 금지: 스파크라인을 변화 색으로 칠하지 않는다(추이는 판정이 아니다) · 색만으로 말하지 않는다(▲ ▼ · 부호)
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 지표명 · 값 · 단위 [[MetricStat]] · 최근 추이 [[Sparkline]]. 타일은 변화 줄과 껍데기만 그린다. 그래서 Composite 계층이다.
  * - **변화 색 = 좋은 방향(`better`) 대비 개선 · 악화(2026-10-23 결정).** 개선 `--color-status-success` · 악화 `--color-status-error` ·
