@@ -28,6 +28,10 @@
  * - 색은 토큰 (`text-primary` 입력값 · `text-tertiary` separator) — 인라인 hex 금지.
  * - input 은 `border-none bg-transparent` — 부모 컨테이너의 보더/배경에 의존.
  * - `side` prop 으로 aria-label 접두어(시작/종료) 자동 결정.
+ * - **`parts` 가 바뀌면 표시도 바뀐다.** 칸은 사용자가 고쳐 쓸 수 있는 비제어 입력(`defaultValue`)이라
+ *   그대로 두면 처음 받은 값에 멈춘다(이전 · 다음 이동이나 «최근 N분» 재검색 뒤에도 옛 시각이 남던 결함).
+ *   그래서 칸마다 값으로 `key` 를 걸어 값이 바뀐 칸만 다시 그린다. 같은 값으로 다시 그려질 때는
+ *   사용자가 고쳐 쓰던 글자를 지우지 않는다.
  *
  * @example
  * ```tsx
@@ -68,6 +72,7 @@ export default function DateTimeBlock({
       <input
         className={inputCls}
         style={{ ...numericFont, width: "var(--wds-datetime-year-w)" }}
+        key={pad4(parts.year)}
         defaultValue={pad4(parts.year)}
         tabIndex={tabBase}
         aria-label={`${label} 년도`}
@@ -76,6 +81,7 @@ export default function DateTimeBlock({
       <input
         className={inputCls}
         style={{ ...numericFont, width: "var(--wds-datetime-field-w)" }}
+        key={pad2(parts.month)}
         defaultValue={pad2(parts.month)}
         tabIndex={tabBase - 1}
         aria-label={`${label} 월`}
@@ -84,6 +90,7 @@ export default function DateTimeBlock({
       <input
         className={inputCls}
         style={{ ...numericFont, width: "var(--wds-datetime-field-w)" }}
+        key={pad2(parts.day)}
         defaultValue={pad2(parts.day)}
         tabIndex={tabBase - 2}
         aria-label={`${label} 일`}
@@ -92,6 +99,7 @@ export default function DateTimeBlock({
       <input
         className={inputCls}
         style={{ ...numericFont, width: "var(--wds-datetime-field-w)" }}
+        key={pad2(parts.hour)}
         defaultValue={pad2(parts.hour)}
         tabIndex={tabBase - 3}
         aria-label={`${label} 시`}
@@ -100,6 +108,7 @@ export default function DateTimeBlock({
       <input
         className={inputCls}
         style={{ ...numericFont, width: "var(--wds-datetime-field-w)" }}
+        key={pad2(parts.minute)}
         defaultValue={pad2(parts.minute)}
         tabIndex={tabBase - 4}
         aria-label={`${label} 분`}
