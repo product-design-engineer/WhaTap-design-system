@@ -1011,6 +1011,7 @@ Figma 정본: BarListItem 페이지 `552:15` · 컴포넌트 `552:22`(TEXT `valu
 | `xLabels` · `unit` | `string[]` · `string` | 샘플 · `""` |
 | `stat` · `statUnit` · `statSub` | `string` · `string` · `ReactNode` | — |
 | `footer` | `ReactNode` | — |
+| `threshold` | `{ value, label?, tone? }` — 임계 점선 + 그 위 옅은 띠. `tone` critical(기본) · warning. 값축 상한은 임계까지 포함 | — |
 | `frame` | `boolean` | `true` |
 
 ## MiniDonutChart

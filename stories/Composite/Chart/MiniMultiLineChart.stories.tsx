@@ -174,3 +174,61 @@ export const EndBadges: Story = {
     </div>
   ),
 };
+
+/* LCP p75(초) — 페이지 둘. 하나는 경계 위, 하나는 아래. */
+const LCP_CHECKOUT = [4.2, 4.5, 4.4, 4.8, 4.7, 4.6, 4.9, 4.8, 4.7, 4.8];
+const LCP_HOME = [2.0, 2.1, 1.9, 2.2, 2.0, 2.1, 2.3, 2.1, 2.0, 2.1];
+
+/**
+ * 임계 띠: 표준 경계(LCP 2.5s)를 점선으로 긋고 그 위를 옅게 칠한다. 모양은 [[ForecastLineChart]] `threshold` 와 같다.
+ * 배너 · 판정 칩의 숫자를 그림에서 바로 대조하게 한다. 값축 상한은 임계까지 포함해 잡는다.
+ */
+export const Threshold: Story = {
+  render: () => (
+    <div style={{ width: 420, height: 240 }}>
+      <WidgetFrame
+        title="최대 콘텐츠풀 페인트 Top N"
+        onFullscreen={() => {}}
+        menu={[{ key: "detail", label: "상세로 이동" }]}
+        legend={[
+          { label: "/checkout", color: "var(--color-chart-series-1)", shape: "line", value: "4.8s" },
+          { label: "/", color: "var(--color-chart-series-2)", shape: "line", value: "2.1s" },
+        ]}
+      >
+        <MiniMultiLineChart
+          title="최대 콘텐츠풀 페인트 Top N"
+          frame={false}
+          unit="s"
+          xLabels={X}
+          threshold={{ value: 2.5, label: "> 2.5s" }}
+          series={[
+            { label: "/checkout", values: LCP_CHECKOUT, color: "var(--color-chart-series-1)" },
+            { label: "/", values: LCP_HOME, color: "var(--color-chart-series-2)" },
+          ]}
+        />
+      </WidgetFrame>
+    </div>
+  ),
+};
+
+/** 임계 띠 · 계열이 모두 경계 아래 · warning: 상한이 임계를 포함하므로 경계가 그림 안에 선다. */
+export const ThresholdBelow: Story = {
+  render: () => (
+    <div style={{ width: 420, height: 240 }}>
+      <WidgetFrame
+        title="누적 레이아웃 이동 Top N"
+        onFullscreen={() => {}}
+        menu={[{ key: "detail", label: "상세로 이동" }]}
+        legend={[{ label: "전체", color: "var(--color-chart-series-1)", shape: "line", value: "0.08" }]}
+      >
+        <MiniMultiLineChart
+          title="누적 레이아웃 이동 Top N"
+          frame={false}
+          xLabels={X}
+          threshold={{ value: 0.25, label: "> 0.25", tone: "warning" }}
+          series={[{ label: "전체", values: [0.07, 0.08, 0.06, 0.09, 0.08, 0.07, 0.08, 0.09, 0.08, 0.08], color: "var(--color-chart-series-1)" }]}
+        />
+      </WidgetFrame>
+    </div>
+  ),
+};
