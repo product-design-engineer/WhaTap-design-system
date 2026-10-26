@@ -1406,6 +1406,8 @@
 .text-brand-blue { color: var(--color-brand-blue); }
 .text-center { text-align: center; }
 .text-chart { font-size: var(--text-chart); }
+/* 화면에서 감추고 스크린리더에만 남기는 글자 — 자리가 없어 그리지 못한 값 라벨 등 */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .text-color-var-color-brand-blue { color: var(--color-brand-blue); }
 .text-color-var-color-status-error { color: var(--color-status-error); }
 .text-color-var-color-text-disabled { color: var(--color-text-disabled); }

@@ -176,7 +176,7 @@ for (const [cc, box] of Object.entries(COUNTRIES)) {
 
 const src = `/* 생성물 — scripts/build-geo-regions.mjs. 직접 편집 금지.
  * 원천: Natural Earth 1:10m Admin 1 시·도 경계(퍼블릭 도메인) v5.1.2. 투영 Equal Earth(중앙 경선 = 국가 가운데) · Douglas–Peucker ${TOL}px.
- * code = ISO 3166-2(\`KR-11\`). cx · cy = 가장 큰 고리의 무게중심(버블 자리). 국가마다 좌표계(w × h)가 따로다. */
+ * code = ISO 3166-2(\`KR-11\`). cx · cy = 가장 큰 고리 안에서 경계와 가장 먼 점(버블 자리 — 무게중심은 경기처럼 구멍 있는 지역에서 구멍 안으로 떨어진다). 국가마다 좌표계(w × h)가 따로다. */
 import type { GeoCountryShape } from "./_geoWorld";
 
 export type GeoRegionSet = { w: number; h: number; shapes: ReadonlyArray<GeoCountryShape> };

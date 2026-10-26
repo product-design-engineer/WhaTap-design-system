@@ -17,7 +17,8 @@
 | 레이아웃 | DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · SubHeaderBar |
 | 옵션바 (시간/인스턴스/프리셋) | OptionbarPage · OptionbarInstanceSelector · LiveTimerCompact · TimeRangeSelector · PresetSelect |
 | 데이터 표시 | WidgetFrame · CardHead · DataTable · FilterBar · EventWeekTimeMatrix |
-| 대시보드 차트 (`frame={false}` 로 WidgetFrame 안에) | MiniLineChart · MiniMultiLineChart · MiniBarChart · ApdexChart · ForecastLineChart · BarList · MiniDonutChart · KpiCard · HexGrid |
+| 대시보드 차트 (`frame={false}` 로 WidgetFrame 안에) | MiniLineChart · MiniMultiLineChart · MiniBarChart · ApdexChart · ForecastLineChart · BarList · MiniDonutChart · KpiCard · HexGrid · Heatmap · GpuStatusBar · StatCard · MetricBarCell |
+| 토폴로지 | TopologyCanvas · TopologyToolbar · TopologyNode · TopologyEdge · TopologyPort · TopologyCollapseToggle · TopologyMinimap |
 | 액션·진입 | Button · AiSymbol |
 | 알림·상태 | Toast · ConfirmDialog · InfoTip · Stage · DashboardBuildingProgress |
 | 위젯 컨텍스트 | WhaTapAiContext (Provider) |
@@ -729,7 +730,7 @@ Figma 정본: 페이지 Treemap `596:2` · 컴포넌트 `596:3`.
 - **시·도는 줌이 아니라 눌러서 들어간다**(2026-10-26) — 줌 배율로 단위를 바꾸면 여러 나라가 걸린 화면에서 나눌 나라가 정해지지 않고 범례 단계가 몰래 바뀐다. 툴팁 «눌러서 시·도 보기» · 왼쪽 위 경로 «세계 › 대한민국 값» 으로 돌아온다. 단계 · 버블 크기는 그 나라 시·도 값으로 다시 잡는다.
 - 국가 값을 시·도 합으로 만들지 않는다(비율 · 평균은 더할 수 없다). 받기 전 · 값이 없으면 시·도 지도도 «데이터 없음».
 
-Figma 정본: 페이지 GeoMap `598:2` · 세트 `598:8161`(`mode` fill · bubble · empty · drilled `619:8444`) · 내부 도형 `_GeoWorld` `598:7530` · `_GeoRegionKR` `619:8442` · `_GeoRegionJP` `619:8443` / 줌 컨트롤 페이지 TopologyZoomControl `597:30` · 컴포넌트 `597:31`.
+Figma 정본: 페이지 GeoMap `598:2` · 세트 `598:8161`(`mode` fill · bubble · empty × `drill` none · KR — 들어간 모습 fill `619:8444` · bubble `622:625` · empty(받기 전) `622:684`) · 내부 도형 `_GeoWorld` `598:7530` · `_GeoRegionKR` `619:8442` · `_GeoRegionJP` `619:8443` / 줌 컨트롤 페이지 TopologyZoomControl `597:30` · 컴포넌트 `597:31`.
 
 ## FlameChart
 
@@ -1063,6 +1064,116 @@ export type HexItem = { id: string; label?: string; tone: HexTone; ariaLabel?: s
 - 칸 수 범례: `legend={hexGridLegend(items, { active: "Normal", idle: "Inactive" })}` → `Normal 0 · Inactive 0 · Warning 11 · Critical 3`. 칠해진 톤을 세고 0 개 톤도 줄은 남긴다.
 
 ---
+
+## Heatmap · HeatmapCell · HeatmapLegend
+
+시간 격자 위 지표 강도. **Heatmap(Composite)** 은 축 라벨 + **HeatmapCell(Primitives — 값 하나 = 색 한 칸)** 격자를 그리고, 범례는 폭을 맞춘 **HeatmapLegend(Primitives — 가로 그라디언트 + 눈금 + hover 표식)** 를 바로 아래 둔다. 응답 판정(Hitmap)은 [[ScatterHeatmap]] — 이름만 비슷하고 색의 뜻이 다르다.
+
+| Prop (Heatmap) | Type | Default |
+|---|---|---|
+| `mode` | `"month"` (7열 요일 × 주, 칸 = 하루) \| `"day"` (12열 5분 × 24행, 칸 = 5분) | — |
+| `cells` | `(number \| null)[]` — 정규화 0~1, `null` = 데이터 없음 | — |
+| `offset` | `number` — month 첫 칸 앞 빈 자리(요일 맞춤) | `0` |
+| `labels` | `string[]` — 칸 안 마이크로 라벨(일자) | — |
+| `selectedIndex` · `onSelect` | 한 칸 선택(다중 없음) | — |
+| `cellTitle` | `(index, value) => string` — 툴팁 · 이름 | 축 라벨로 생성 |
+| `onHoverChange` | `(value \| null) => void` — HeatmapLegend `marker` 에 잇는다 | — |
+| `ariaLabel` | `string` | «월간/일간 히트맵» |
+| `monthCellHeight` · `dayCellHeight` | `number` | `49` · `13` |
+
+| Prop (HeatmapCell) | Type | Default |
+|---|---|---|
+| `value` | `number \| null` — 0~1 | — |
+| `label` · `selected` · `height` | `string` · `boolean` · `number` | — · `false` · `13` |
+| `onClick` · `title` · `ariaLabel` · `onHoverChange` | 없으면 읽기 전용 `<div aria-hidden>` | — |
+
+| Prop (HeatmapLegend) | Type | Default |
+|---|---|---|
+| `label` | `string` — 색이 무엇인지(지표명 + 집계) | — |
+| `marker` · `markerFractionDigits` | `number \| null` (0~1) · `number` | `null` · `2` |
+| `ticks` · `unit` · `height` | `number[]` · `string` · `number` | `[0,25,50,75,100]` · `"%"` · `24` |
+
+- 색 = `--color-heatmap-0 … 100` stop 사이 `color-mix` 보간(`heatmapScaleColor`). 값 없음 = `--color-surface-200` — «0» 과 «모른다» 를 가른다.
+- 선택은 배경이 아니라 테두리 2px `--color-status-warning`. 라벨은 진한 칸에서 `--color-text-inverse` 로 뒤집는다.
+- `day` 라벨은 10분 · 2시간 간격만. 범례 표식은 hover 중에만.
+- 📈 칸(하루 · 5분)마다의 강도 — 일별 에러 수 · 시간대별 TPS · 5분 칸 평균 응답시간. 🚫 부호 있는 지표(±) · 정확한 값 비교.
+
+Figma 정본: HeatmapCell 페이지 `624:10` · 세트 `624:47`(`value` 스케일 단계 8 + empty × `selected`) / HeatmapLegend 페이지 `624:48` · 세트 `624:75`(`marker`) / Heatmap 페이지 `624:89` · 세트 `624:905`(`mode` month · day × `state` default · no-data). Figma 칸 색은 가장 가까운 단계 — 코드는 단계 사이를 섞는다.
+
+## GpuStatusBar
+
+GPU 단계별(Total → Allocated → Active → Effective) 몫과 나머지를 세로 막대로 쌓는 깔때기 차트. **Composite** — [[ChartGrid]] · [[ChartValueAxis]](`ticks` = 단계 값) · [[ChartStackedColumn]] · [[ChartCategoryAxis]] 조합 + 몫을 잇는 흐름 면.
+
+| Prop | Type | Default |
+|---|---|---|
+| `categories` | `{ label, positive: { value, label, color? }, negative?: { value, label, color? } }[]` | — |
+| `max` | `number` — Y축 최대 | 단계마다 몫 + 나머지 중 최대 |
+| `frame` · `title` | `boolean` · `string` | `true` · «GPU 상태별 활용 현황» |
+
+- 몫 = 한 계열 색(기본 `--color-chart-series-1`, 단계마다 돌려 칠하지 않는다 §17) · 나머지 = `--color-surface-200`(상태색 아님 §23). 흐름 면 = 계열 색 7% · 선 25%.
+- 가리키면 나머지 0.32 · [[ChartTooltip]] 에 몫 · 나머지 · 비율(§26 강조). 대시보드 칸에서는 `frame={false}` + [[WidgetFrame]].
+- 📈 포함 관계 깔때기 몫(할당 → 사용 → 유효). 🚫 포함 관계 없는 나열 → [[BarList]] · 시간 변화.
+
+Figma 정본: 페이지 GpuStatusBar `624:9884` · 세트 `624:9968`(`frame` · title).
+
+## MetricBarCell
+
+표 셀 하나에 수치 + 비율 막대(구간 누적 가능). **Primitives.** 추이까지면 [[SparklineCell]].
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `string \| number \| null` — null 이면 `-` 만(막대 없음) | — |
+| `segments` | `{ ratio: 0~1, color: 토큰 }[]` — 비면 막대 없음 | `[]` |
+| `barWidth` | `number` | `56` |
+
+- 수치 `text-base font-numeric tabular-nums` 오른쪽 정렬 · 막대 높이 10 · 트랙 `--color-status-info-soft` · 둥근 끝.
+- 0 보다 큰 구간은 최소 2px(§21, 2026-10-23). ratio 합이 1 을 넘으면 잘린다 — 정규화는 호출측.
+
+Figma 정본: 페이지 MetricBarCell `624:76` · 세트 `624:88`(`segments` single · stacked · empty · value).
+
+## StatCard
+
+요약 지표 칸 — 큰 숫자 + 라벨 + 선택적 트렌드 기호. **Primitives**(DS import 0). 변화를 좋은 방향으로 판정해야 하면 [[TrendTile]], 숫자 줄은 [[MetricGrid]].
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` · `value` · `unit` | `string` | — |
+| `tone` | `"neutral" \| "success" \| "warning" \| "critical" \| "info"` — 왼쪽 인디케이터 색 | `"neutral"` |
+| `trend` | `"up" \| "down" \| "stable"` — ▲ success · ▼ error · ─ tertiary | — |
+| `delay` | `number` — 등장 애니메이션 지연 | — |
+
+- 색은 status · text 토큰만 — 차트 계열 색을 쓰지 않는다(차트가 아니다).
+- `trend` 는 방향만 받는다 — 오름이 늘 success 색이라 «낮을수록 좋은» 지표엔 [[TrendTile]] `better`.
+
+Figma 정본: 페이지 StatCard `624:960` · 세트 `624:1131`(`tone` × `trend` · label · value · unit).
+
+## 토폴로지 — TopologyCanvas · TopologyToolbar · TopologyNode · TopologyEdge · TopologyPort · TopologyCollapseToggle · TopologyMinimap
+
+대상 간 호출 · 연결 관계. 좌→우 계층 배치 · 카드 노드 전용(힘 기반 배치는 범위 밖). 좌표는 레이아웃 엔진 `layoutTopology` 가 소유한다 — 컴포넌트가 위치를 보정하지 않는다.
+
+| 컴포넌트 | 계층 | 역할 |
+|---|---|---|
+| **TopologyCanvas** | Composite | `graph` 를 배치 · 라우팅해 엣지(SVG)와 노드(HTML)를 같은 원점 · 같은 transform 으로 겹쳐 그린다 · pan/zoom. `view` + `onViewChange`(controlled) · `onToggle(id)` |
+| **TopologyToolbar** | Composite | 조회 조건 한 줄 — 빠른 검색(TextField) · 편집(Switch, 즉시 반영) · 지표(Select) · 방향 In/Out · 초기화(Button). 전 값 controlled |
+| **TopologyNode** | Primitives | 리프 카드(뱃지 + 이름 + 지표 + ↗↘) 또는 펼친 그룹 컨테이너(헤더만). 접힌 그룹 = 리프 카드 모양 |
+| **TopologyEdge** | Primitives | 직교 경로 1.5px + 가장 긴 구간 가운데 값 라벨(11px, 세로 구간은 -90°). `tone` default · alert |
+| **TopologyPort** | Primitives | 엣지가 노드에 물리는 점(r 5). `tone` default · ok · alert. SVG 안에서만 |
+| **TopologyCollapseToggle** | Primitives | 노드 왼쪽 40px 색 뱃지 겸 `+`/`−` 토글. 좌상단 · 우하단만 둥근 잎 모양. 리프는 `interactive={false}` 장식 |
+| **TopologyMinimap** | Primitives | 노드를 사각형으로 축소 + 지금 보이는 영역 사각형(`view` 에서 역산). 폭 168, 높이 = 그래프 종횡비(56~140) |
+
+```ts
+type TopologyGraph = {
+  nodes: { id; label; metric?; trend?: "up" | "down"; tone?: "default" | "ok" | "alert"; children?; collapsed? }[];
+  edges: { from; to; label?; tone?: "default" | "alert" }[];
+};
+```
+
+- 색은 유틸 클래스만 — `--color-topology-*`(캔버스 그라디언트 · 도트 격자 · 노드 · 그룹 · 엣지 · 포트) · 뱃지 default = `--color-brand-blue`. 노드 표면을 `--color-card` 로 대체하지 않는다(캔버스 자체 바닥 위 층).
+- 도트 격자는 transform 안쪽 — 확대하면 격자도 커진다. 엣지 SVG 는 `pointer-events: none`.
+- 줌 컨트롤은 [[TopologyZoomControl]](`TOPOLOGY_ZOOM` 25%~200%). 페이지 조립 예는 Shell `PageTopology`.
+- 📈 서비스 호출 · 네트워크 흐름 · 노드 상태. 🚫 관계 없는 대상 수치 비교 → [[BarList]].
+
+Figma 정본: TopologyCanvas 페이지 `624:951` · 세트 `624:10372`(`state` default · collapsed · alert-path) / TopologyToolbar `624:952` · `624:10060` / TopologyNode `624:949` · `624:9747` / TopologyEdge `624:947` · `624:9805` / TopologyPort `624:950` · `624:959` / TopologyCollapseToggle `624:946` · `624:9617` / TopologyMinimap `624:948` · `624:9883` / TopologyZoomControl `597:30` · `597:31`.
 
 ## Toast
 
