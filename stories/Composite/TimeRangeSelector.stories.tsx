@@ -257,7 +257,7 @@ function SearchFlowDemo() {
         {PRESETS.map((m) => (
           <Button
             key={m}
-            size="sm"
+            size="lg"
             variant={!custom && m === minutes ? "outline" : "basic"}
             tone="primary"
             disabled={loading}
