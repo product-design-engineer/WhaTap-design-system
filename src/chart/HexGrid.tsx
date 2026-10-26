@@ -35,6 +35,16 @@ import { DIM_OPACITY } from "./_emphasis";
  * - 고정: 칸 글자 `--color-text-inverse`(Idle 은 `--color-text-tertiary`)
  * - 금지: 칸 하나만 계열 색으로 강조하지 않는다 · 상태 이름 · 색을 차트마다 바꾸지 않는다
  *
+ * ## States
+ * - 빈: `items=[]` 면 빈 판 + (frame 이면) 제목 · 범례 — 빈 상태 글은 그리지 않는다 — [[WidgetFrame]] `state`(no-data) 를 쓴다
+ * - 빠짐: 값이 없는 장치는 `tone="idle"` 로 · `label` 이 비면 글자 없음
+ * - 0: 범례는 0개인 상태도 남긴다
+ *
+ * ## Limits
+ * - 개수: 강제 없음 · 열은 `columns`(기본 6)±2 중 가장 큰 칸을 고른다
+ * - 크기: 반지름 10~48(측정 전 24) · 간격 6
+ * - 라벨: 11px 고정 · 말줄임 없음
+ *
  * ## Composition rules
  * - 범례는 [[ChartLegendItem]] 을 조합한다(견본은 마크 모양을 따른다, patterns §26). 그래서 Composite 계층이다.
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 여백 · 「GPU Map」 제목 줄 · 범례를 뺀다). [[WidgetFrame]] 안에 넣을 때 쓴다.

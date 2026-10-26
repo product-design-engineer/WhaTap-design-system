@@ -100,11 +100,15 @@ DS는 **Tailwind를 쓰지 않습니다.** `style.css`(= `whatap-ds.css`)는 외
 | ✅ **Do** | `## Do` 가 있으면 그대로 · 없으면 `When to use` 불릿 |
 | ❌ **Don't** | `## Don't` 가 있으면 그대로 · 없으면 `When NOT to use` + `Composition rules` 의 **금지형 문장**(금지·말 것·안 된다…) |
 
-**템플릿 섹션은 9개뿐이다** — 필수 4 + 차트 필수 `## Metrics` · `## Color` + 선택 `## Spec`(치수 · 토큰 · 상태 · ARIA · 구성도 등 구현값) · `## Do` · `## Don't`. 생성기는 이 밖의 `## …` 를 읽지 않으므로 `## ARIA` · `## Why this exists` 같은 섹션은 **Storybook 에만 보이고 AI 에게는 배달되지 않는다**(2026-10-19 실측 15섹션 — Pagination 「페이지가 하나여도 컨트롤을 세운다」 정책이 그중 하나였다). 배경은 Purpose 에, 규칙은 Composition rules 에, 구현값은 Spec 에 둔다. `lint:docstrings` 가 템플릿 밖 섹션을 차단한다.
+**템플릿 섹션은 11개뿐이다** — 필수 4 + 차트 필수 `## Metrics` · `## Color` · `## States` · `## Limits` + 선택 `## Spec`(치수 · 토큰 · 상태 · ARIA · 구성도 등 구현값) · `## Do` · `## Don't`. 생성기는 이 밖의 `## …` 를 읽지 않으므로 `## ARIA` · `## Why this exists` 같은 섹션은 **Storybook 에만 보이고 AI 에게는 배달되지 않는다**(2026-10-19 실측 15섹션 — Pagination 「페이지가 하나여도 컨트롤을 세운다」 정책이 그중 하나였다). 배경은 Purpose 에, 규칙은 Composition rules 에, 구현값은 Spec 에 둔다. `lint:docstrings` 가 템플릿 밖 섹션을 차단한다.
 
 **차트는 지표를 적는다 — `## Metrics`(2026-10-23 사용자 지시).** `Composite/Chart/*` 는 «어떤 지표에 쓰면 좋은가» 를 `- ✅ …` 로 **1개 이상 필수**, «쓰면 안 되는 지표» 를 `- ❌ …` 로 가능하면 함께 적는다. 지표 이름만이 아니라 **성질**(상한이 있는 비율 · 구간마다 독립인 양 · 누적 카운터 · 합 100% 구성 · 점 사건 · 이산 상태)로 가른다 — 같은 TPS 도 추이는 선, 구간 양은 막대다. 생성기가 `components.json` `metrics: { fit, avoid }` 로 싣고, ❌ 는 Don't 에도 «이 지표에 쓰지 말 것» 으로 들어간다. MCP `get_component` 는 맞는 지표를 Do 보다 먼저 보이고, `search_components` 는 맞는 지표를 «언제 쓰나» 와 같은 무게로 찾는다(«응답시간 차트»). `lint:docstrings` 가 ✅ 0 인 차트를 차단한다(동결 없음).
 
 **차트는 색 규칙을 적는다 — `## Color`(2026-10-26 사용자 지시).** `Composite/Chart/*` 는 Metrics 다음에 불릿 머리말 네 가지로 적는다 — `역할:`(계열 슬롯 · 순차 · 상태 · 자리 고정 중 무엇이고 어떤 토큰인지, **필수**) · `상한:`(몇 개까지 · 넘으면) · `고정:`(값 없음 · 나머지 · 트랙처럼 뜻이 정해진 색) · `금지:`. 생성기가 `components.json` `color: { role, limit, fixed, avoid, tokens }` 로 싣고 금지는 Don't 에도 «색 — …» 으로 들어간다. MCP `get_component` 는 지표 다음 «🎨 색», Storybook Docs 는 「어떤 색을 쓰나」 블록, Figma 는 설명과 📄 문서 프레임의 🎨 줄. `lint:docstrings` 가 역할 없는 차트를 막고, **소스(+ 내부 `_*.ts` · 같은 폴더 색 상수)가 칠하는 `--color-chart-*` · `--color-status-*` 가 Color 본문에 모두 적혔는지** 대조한다 — 문서와 코드가 따로 놀지 않게.
+
+**차트는 데이터가 비거나 이상할 때와 한계를 적는다 — `## States` · `## Limits`(2026-10-26 사용자 지시).** Color 다음에 같은 방식(불릿 머리말)으로.
+`## States` — `빈:`(데이터 전체가 없을 때 무엇을 그리나, **필수**) · `빠짐:`(일부 값 `null` · 수집 공백) · `0:` · `넘침:`(최대 초과 · 음수 · 범위 밖). `## Limits` — `개수:`(계열 · 항목 · 칸 몇 개까지, 넘으면, **필수**) · `크기:`(최소 · 고정 치수, 좁을 때) · `라벨:`(라벨이 숨거나 줄어드는 기준).
+**코드가 실제로 하는 일만 적는다** — 차트가 빈 상태를 그리지 않으면 «그리지 않는다 — [[WidgetFrame]] `state` 를 쓴다» 처럼 그대로. 생성기가 `components.json` `states: { empty, missing, zero, overflow }` · `limits: { count, size, label }` 로 싣고, MCP `get_component` · Storybook Docs(「데이터가 비거나 이상할 때」 · 「한계」) · Figma(설명 · 📄 문서 프레임)가 같은 문장을 보인다. `lint:docstrings` 가 `빈:` · `개수:` 없는 차트를 막는다.
 
 ```
  * ## Metrics

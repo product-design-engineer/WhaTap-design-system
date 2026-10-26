@@ -27,6 +27,17 @@
  * - 고정: 칸 바탕 = 상태 — 정상 `--color-surface-50` · 경고 `--color-status-warning-soft` · 위험 `--color-status-error-soft`
  * - 금지: 상태에 따라 부채꼴 색을 바꾸지 않는다(상태는 바탕만, §23) · 링에 계열 색을 쓰지 않는다
  *
+ * ## States
+ * - 빈: `servers=[]` 면 범례만 — 빈 상태 글은 그리지 않는다 — [[WidgetFrame]] `state`(no-data) 를 쓴다
+ * - 빠짐: `null` 자원은 부채꼴 없음 · `null` 네트워크는 트랙만 · 툴팁 «수집 없음»
+ * - 0: 부채꼴 없음 · 링 트랙만
+ * - 넘침: 부채꼴은 100% · 링은 링 끝에서 멈추고 툴팁에 «링 끝 넘음» · 음수는 0
+ *
+ * ## Limits
+ * - 개수: 서버 10~200대(강제 안 함) · 부채꼴 3개 고정 — 1~3대면 [[MetricGrid]] · [[RangeGauge]]
+ * - 크기: 칸 `cellSize` 고정(기본 96) · 사이 16 · 줄 사이 12
+ * - 라벨: 서버 이름은 칸 폭 말줄임 · 전체는 `title`
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 칸 [[CompoundEyeCell]] · 범례 [[ChartLegendItem]] · 값 상자 [[ChartTooltip]]. 격자 배치만 한다. 그래서 Composite 계층이다.
  * - **링 스케일은 하나 · 범례가 말한다(2026-10-23 추천안)** — `networkScale`(기본 100Mbps)이 링 끝. 넘으면 링이 꽉 차고 툴팁이 실제 값을 말한다.

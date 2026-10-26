@@ -26,6 +26,17 @@
  * - 고정: 막대 이름 `--color-text-inverse`(정보 없음은 `--color-text-tertiary`)
  * - 금지: 호출 종류별 계열 색을 섞지 않는다(§23)
  *
+ * ## States
+ * - 빈: `spans=[]` 면 범례(개수 0) · 시간축만 — 빈 상태 글은 그리지 않는다 — [[WidgetFrame]] `state`(no-data) 를 쓴다
+ * - 빠짐: `status` 없으면 normal · `lane` 없으면 이름 없는 한 레인
+ * - 0: 시작 = 끝 인 구간도 최소 1px 막대
+ * - 넘침: 보기 밖 구간은 빼고 걸친 구간은 잘라 그린다 · 끝 < 시작 이면 그리지 않는다
+ *
+ * ## Limits
+ * - 개수: 강제 없음 · 넘치면 세로 스크롤 · 상태 범례 4개
+ * - 크기: 줄 18 · 사이 2 · 레인 이름 20 · 플롯 최소 높이 80
+ * - 라벨: 막대 폭 40px 이상일 때만 이름(한 줄 말줄임) · 시간 눈금 6개 안팎 · 1% 미만 끌기는 무시
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 막대 [[ChartSpanBar]] · 확대 [[ChartBrush]] · 시간 [[ChartTimeAxis]] · 상태 범례 [[ChartLegendItem]] · 값 상자 [[ChartTooltip]] · 전체 보기 [[Button]].
  *   레인 이름 · 세로 눈금선만 그린다. 그래서 Composite 계층이다.

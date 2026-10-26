@@ -12,9 +12,12 @@ import componentsData from '../docs/components.json';
  *
  * 같은 길로 **「어떤 색을 쓰나」** 블록 — docstring `## Color`(역할 · 상한 · 고정 · 금지) → `components.json` `color`
  * (2026-10-26 사용자 «스토리북에도 Figma에도 적용»). 차트가 아니면 그리지 않는다.
+ * 이어서 **「데이터가 비거나 이상할 때」**(`## States`) · **「한계」**(`## Limits`) 블록(2026-10-26 사용자 지시).
  */
 type Color = { role: string[]; limit: string[]; fixed: string[]; avoid: string[]; tokens: string[] };
-type Entry = { title: string; metrics?: { fit: string[]; avoid: string[] } | null; color?: Color | null };
+type States = { empty: string[]; missing: string[]; zero: string[]; overflow: string[] };
+type Limits = { count: string[]; size: string[]; label: string[] };
+type Entry = { title: string; metrics?: { fit: string[]; avoid: string[] } | null; color?: Color | null; states?: States | null; limits?: Limits | null };
 const entries = ((componentsData as { components?: Entry[] }).components ?? []) as Entry[];
 
 /** `[[Name]]` 위키 링크는 Docs 에서 이름 글자로만 둔다. */
@@ -49,6 +52,33 @@ function ColorBlock() {
   return <Markdown>{md}</Markdown>;
 }
 
+/** 머리말별 불릿 묶음 → markdown. 빈 묶음은 건너뛴다. */
+function headed(title: string, rows: [string, string[]][]) {
+  return ['### ' + title, '', ...rows.filter(([, v]) => v.length).flatMap(([k, v]) => [`**${k}**`, '', ...v.map((m) => `- ${plain(m)}`), ''])].join('\n');
+}
+
+function StatesLimitsBlock() {
+  const { csfFile } = useOf('meta', ['meta']);
+  const e = entries.find((x) => x.title === csfFile.meta.title);
+  const md: string[] = [];
+  if (e?.states?.empty.length) {
+    md.push(headed('데이터가 비거나 이상할 때', [
+      ['빈 데이터', e.states.empty],
+      ['빠진 값', e.states.missing],
+      ['0', e.states.zero],
+      ['범위 밖', e.states.overflow],
+    ]));
+  }
+  if (e?.limits?.count.length) {
+    md.push(headed('한계', [
+      ['개수', e.limits.count],
+      ['크기', e.limits.size],
+      ['라벨', e.limits.label],
+    ]));
+  }
+  return md.length ? <Markdown>{md.join('\n\n')}</Markdown> : null;
+}
+
 export default function DocsPage() {
   return (
     <>
@@ -57,6 +87,7 @@ export default function DocsPage() {
       <Description />
       <MetricsBlock />
       <ColorBlock />
+      <StatesLimitsBlock />
       <Primary />
       <Controls />
       <Stories />

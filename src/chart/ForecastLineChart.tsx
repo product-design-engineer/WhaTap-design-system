@@ -39,6 +39,17 @@ import { AXIS_GUTTER as GUTTER, formatAxisValue } from "./_axisScale";
  * - 고정: 임계 띠 `--color-status-error-soft` · `--color-status-warning-soft` · 판정 밖 계열(평탄 · 지평 밖 · 대조군) `--color-chart-neutral`
  * - 금지: 한 차트 안에서 계열색과 상태색을 섞지 않는다
  *
+ * ## States
+ * - 빈: `series=[]` 면 격자 · 축 · 임계선 · «지금» 선만 — 빈 상태 글은 그리지 않는다 — [[WidgetFrame]] `state`(no-data) 를 쓴다 · 관측 점 하나면 «지금» 점만
+ * - 빠짐: `null` 을 받지 않는다(타입이 숫자) — 수집 공백은 호출부가 거르거나 `state` 로
+ * - 0: 바닥선
+ * - 넘침: y 는 0 ~ `yMax` 로 자른다(표시 없음) · 도메인 밖 x 는 잘린다 · 임계값 ≥ `yMax` 면 띠 없이 선만
+ *
+ * ## Limits
+ * - 개수: 계열 제한 없음 · 임계 띠 1개
+ * - 크기: 부모를 채운다 · 플롯 여백 위 14 · 아래 14 · 오른쪽 8
+ * - 라벨: 지평 · 임계 · 축 글자 말줄임 없음 · x=0 글자는 `nowLabel`
+ *
  * ## Composition rules
  * - 플롯을 가리키면 [[ChartCrosshair]](`positions` = 관측 · 예측 점 x)가 그 시점의 관측 · 예측 값 툴팁을 보인다(제목 = `formatX`, patterns §26 «강조»).
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).

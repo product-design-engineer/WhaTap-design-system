@@ -45,6 +45,17 @@ import { AXIS_GUTTER as GUTTER, formatAxisValue, niceMax } from "./_axisScale";
  * - 상한: 계열 슬롯 8(§22)
  * - 금지: 상태색을 섞지 않는다
  *
+ * ## States
+ * - 빈: 막대 없이 바닥선 · 시간 글자만 — 빈 상태 글은 그리지 않는다 — [[WidgetFrame]] `state`(no-data) 를 쓴다
+ * - 빠짐: 없는 값은 0 으로 그린다(툴팁에서는 빠진다) — 수집 공백을 0 과 가르려면 [[ChartBar]] 를 쓰는 [[UsageChart]] · [[PairedTimeChart]] 막대
+ * - 0: 높이 0 — 막대가 보이지 않는다(최소 높이 없음)
+ * - 넘침: `yMax` 를 값보다 작게 주지 않는다 — 막대가 플롯 위로 넘친다 · 음수는 그리지 않는다
+ *
+ * ## Limits
+ * - 개수: 계열 슬롯 8 · TOP-N 범주 5개 안팎 — 6개 이상이면 [[BarList]]
+ * - 크기: 막대 사이 1px · 범주 막대 = 칸의 60% · 플롯 여백 위 4(값 글자면 14) · 아래 14(범주면 18)
+ * - 라벨: 범주 이름 칸 폭 말줄임 · 값 · 피크 글자 말줄임 없음
+ *
  * ## Composition rules
  * - 플롯을 가리키면 [[ChartCrosshair]](`band`)가 그 칸의 계열 값 · 합계 툴팁을 보이고 나머지 막대를 흐린다(제목 = `pointLabels` 또는 `categories`, patterns §26 «강조»).
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).

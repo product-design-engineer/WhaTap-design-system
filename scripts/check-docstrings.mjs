@@ -104,12 +104,14 @@ for (const c of targets) {
   }
   if (isChart(c) && !c.metrics?.fit?.length) missing.push("## Metrics ✅ 맞는 지표(차트 필수)");
   if (isChart(c) && !c.color?.role?.length) missing.push("## Color 역할(차트 필수)");
+  if (isChart(c) && !c.states?.empty?.length) missing.push("## States 빈(차트 필수)");
+  if (isChart(c) && !c.limits?.count?.length) missing.push("## Limits 개수(차트 필수)");
   if (isChart(c) && c.color?.role?.length) {
     const used = chartColorTokens(c.sourceFile);
     const gap = used.filter((t) => !c.color.tokens.includes(t));
     if (gap.length) missing.push(`## Color 에 없는 색 토큰(소스가 씀): ${gap.join(" · ")}`);
   }
-  if (missing.length) violations.push({ title: c.title, file: c.sourceFile ?? c.storyFile, missing, noFreeze: missing.some((m) => m.startsWith("## Metrics") || m.startsWith("## Color")) });
+  if (missing.length) violations.push({ title: c.title, file: c.sourceFile ?? c.storyFile, missing, noFreeze: missing.some((m) => m.startsWith("## Metrics") || m.startsWith("## Color") || m.startsWith("## States") || m.startsWith("## Limits")) });
 }
 
 /* ── 깊이(래칫) ───────────────────────────────────────────────────────────── */

@@ -24,6 +24,16 @@
  * - 상한: 등급 3개
  * - 금지: 계열 슬롯 · 상태색(Severity)으로 등급을 바꿔 칠하지 않는다
  *
+ * ## States
+ * - 빈: `agents` 를 안 주면 데모 값을 그린다 — 실제 화면은 늘 넘긴다. `[]` 면 원판과 가운데 «0» 만, 빈 상태 글은 그리지 않는다 — [[WidgetFrame]] `state`(no-data) 를 쓴다
+ * - 빠짐: `null` 을 받지 않는다(타입이 숫자) — 수집 공백은 호출부가 거르거나 `state` 로
+ * - 0: 단계가 모두 0 인 에이전트는 칸 바탕만 남는다 · 0 보다 큰 단계는 최소 1칸
+ * - 넘침: 음수는 0 · 칸은 `levels`(10)에서 멈춘다 — 표시 없음
+ *
+ * ## Limits
+ * - 개수: 에이전트 16개까지(강제 안 함) — 넘으면 [[BarList]]
+ * - 크기: 고리 = 칸의 짧은 변 · 왼쪽 열 72 · 오른쪽 열 56
+ *
  * ## Composition rules
  * - 고리는 [[ChartRadialBars]], 수치는 [[MetricStat]](Max TX = 단위 「초」 + 보조 줄 트랜잭션 이름 · Agent 활성 · 비활성), 범례는 [[ChartLegendItem]] 을 조합한다. 그래서 Composite 계층이다.
  * - 위젯 chrome(CardChrome, FlexBoardWidget 등)은 소비자가 감싼다.

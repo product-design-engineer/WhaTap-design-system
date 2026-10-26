@@ -54,6 +54,10 @@ type ComponentDoc = {
   metrics?: { fit: string[]; avoid: string[] } | null;
   /** 차트 색 규칙 — docstring `## Color`(역할 · 상한 · 고정 · 금지 + 적힌 토큰). 차트가 아니면 null. */
   color?: { role: string[]; limit: string[]; fixed: string[]; avoid: string[]; tokens: string[] } | null;
+  /** 데이터가 비거나 이상할 때 — docstring `## States`. 차트가 아니면 null. */
+  states?: { empty: string[]; missing: string[]; zero: string[]; overflow: string[] } | null;
+  /** 개수 · 크기 · 라벨 한계 — docstring `## Limits`. 차트가 아니면 null. */
+  limits?: { count: string[]; size: string[]; label: string[] } | null;
   do: string[];
   dont: string[];
   example: string | null;
@@ -122,6 +126,13 @@ function rulesBlock(c: ComponentDoc): string[] {
   /* 차트 색은 «어떤 토큰을 몇 개까지 어떤 순서로» 가 정해져 있다 — 지표 다음, Do 보다 먼저. */
   if (c.color?.role.length) {
     out.push(``, `## 🎨 색`, list([...c.color.role.map((s) => `역할: ${s}`), ...c.color.limit.map((s) => `상한: ${s}`), ...c.color.fixed.map((s) => `고정: ${s}`), ...c.color.avoid.map((s) => `금지: ${s}`)]));
+  }
+  /* 빈 데이터 · 빠진 값 · 0 · 범위 밖을 차트가 어떻게 그리는지 — 화면이 따로 빈 상태를 만들지 않게. */
+  if (c.states?.empty.length) {
+    out.push(``, `## 🫙 데이터가 비거나 이상할 때`, list([...c.states.empty.map((s) => `빈: ${s}`), ...c.states.missing.map((s) => `빠짐: ${s}`), ...c.states.zero.map((s) => `0: ${s}`), ...c.states.overflow.map((s) => `넘침: ${s}`)]));
+  }
+  if (c.limits?.count.length) {
+    out.push(``, `## 📏 한계`, list([...c.limits.count.map((s) => `개수: ${s}`), ...c.limits.size.map((s) => `크기: ${s}`), ...c.limits.label.map((s) => `라벨: ${s}`)]));
   }
   if (c.do.length) out.push(``, `## ✅ Do`, list(c.do));
   if (c.dont.length) out.push(``, `## ❌ Don't`, list(c.dont));

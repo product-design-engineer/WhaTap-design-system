@@ -26,6 +26,16 @@
  * - 고정: 칸 글자 `--color-text-inverse`(Idle 은 `--color-text-tertiary`)
  * - 금지: 칸 하나만 계열 색으로 강조하지 않는다 · 상태 이름 · 색을 차트마다 바꾸지 않는다
  *
+ * ## States
+ * - 빈: `items=[]` 면 빈 격자 + (frame 이면) 개수 0 범례 — 빈 상태 글은 그리지 않는다 — [[WidgetFrame]] `state`(no-data) 를 쓴다
+ * - 빠짐: 값이 없는 대상은 `tone="idle"` 로 — 상태 어휘 밖 값은 받지 않는다
+ * - 0: 범례는 0개인 상태도 남긴다(자리가 흔들리지 않게)
+ *
+ * ## Limits
+ * - 개수: 대상 4~60개(강제 안 함) — 수백 대면 [[HexGrid]] · [[Heatmap]]
+ * - 크기: 칸 높이 32 · 열 `columns`(기본 4) · 좁으면 칸이 계속 좁아진다
+ * - 라벨: 이름 한 줄 말줄임 · 전체는 `title`
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 칸 [[BlockCell]] · 단독 범례 [[ChartLegendItem]]. 차트는 격자 배치만 정한다. 그래서 Composite 계층이다.
  * - 격자 `columns`(기본 4) · 칸 사이 4px. 칸 순서 = `items` 순서 — 정렬(상태 심각도순 · 이름순)은 호출부가 정한다.

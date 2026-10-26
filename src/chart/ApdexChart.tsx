@@ -30,6 +30,17 @@ import ChartTimeAxis from "./ChartTimeAxis";
  * - 상한: 선 1개 · 구간 4개
  * - 금지: 상태색(Severity)으로 구간을 칠하지 않는다 · 선에 구간 색을 쓰지 않는다
  *
+ * ## States
+ * - 빈: `values` 가 비거나 하나면 선 없이 구간 띠 · 축 · 큰 값만 — 빈 상태 글은 그리지 않는다 — [[WidgetFrame]] `state`(no-data) 를 쓴다
+ * - 빠짐: `null` 을 받지 않는다(타입이 숫자) — 수집 공백은 호출부가 거르거나 `state` 로
+ * - 0: 50 아래는 바닥(50)에 붙는다
+ * - 넘침: 선은 50~100 으로 자른다 · 큰 값 글자는 받은 그대로
+ *
+ * ## Limits
+ * - 개수: 선 1개 · 구간 4개 고정
+ * - 크기: 부모를 채운다 · 플롯 여백 위 4 · 아래 14 · 오른쪽 8
+ * - 라벨: 구간 이름 · 시간 글자는 말줄임 없음
+ *
  * ## Composition rules
  * - 플롯을 가리키면 [[ChartCrosshair]](축 50 ~ 100)가 그 시점의 값과 판정 구간 이름(Excellent · Good · Poor · Unacceptable)을 보인다(제목 = `pointLabels`).
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
