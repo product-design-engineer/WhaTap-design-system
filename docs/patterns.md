@@ -513,8 +513,8 @@ row height ≈ 33-36px (default density) 기준:
 |---|---|---|
 | `text-lg+` (14px+) | `font-bold` | 페이지 타이틀 · 섹션 헤더 |
 | `text-md` (13px) | `font-bold` 또는 medium (강조 시) | 카드 헤더 · 테이블 row 강조 |
-| `text-base` (12px) | `font-medium` | 라벨 · 메타 · dropdown 항목 |
-| `text-sm` (11px) | `font-medium` 또는 regular | 보조 메타 · 캡션 |
+| `text-base` (12px) | `font-medium` | 항목 라벨 · 메타 · dropdown 항목 |
+| `text-sm` (11px) | `font-medium` 또는 regular | 폼 필드 라벨(medium, §27) · 보조 메타 · 캡션 |
 | `text-xs` (10px) | regular | 마이크로 캡션 · 인디케이터 |
 | running text | regular | 본문 |
 
@@ -523,7 +523,7 @@ row height ≈ 33-36px (default density) 기준:
 **How.** 토큰 utility 클래스 (`text-md font-bold`, whatap-ds.css 제공) 만 사용. 직접 `style={{ fontSize: 13, fontWeight: 700 }}` 금지 — 토큰 외 값은 차후 토큰 변경 시 누락됨.
 
 ✅ **사이즈 + weight 를 함께** 조합해 위계를 만든다
-✅ 크기를 직접 고르지 말고 **역할**로 고른다 — `heading.section` · `body.label` · `numeric.metric` 등 Role Catalog
+✅ 크기를 직접 고르지 말고 **역할**로 고른다 — `heading.section` · `body.label` · `field.label`(폼 라벨, §27) · `numeric.metric` 등 Role Catalog
 ✅ 유틸 클래스만 쓴다 (`text-md font-bold`)
 
 ❌ 같은 사이즈에서 weight 만 바꿔 위계를 만들기 — 한국어는 가독성이 weight 보다 size 에 더 의존한다
@@ -1320,6 +1320,42 @@ DS 도 예외가 아니다. 값축 계산은 4벌, 점선 격자는 5벌이고 �
 
 ---
 
+## 27. 폼 라벨 — 한 폼의 라벨은 한 벌이다
+<!-- @policy id=form-field-label | @severity must | @applies type -->
+
+**When to use.** 폼에서 «이 입력이 무엇인지» 를 붙이는 모든 자리. 입력칸 · 셀렉트 · 날짜 · 슬라이더 · 세그먼트 토글 같은 컨트롤 하나의 이름도, 라디오 · 체크박스 **묶음의 이름**도 여기에 들어간다.
+
+**When NOT to use.**
+- 라디오 · 체크박스 **선택지 옆 글자** → 라벨이 아니라 값이다(아래 표 «선택지»).
+- 가로 라벨(라벨 왼쪽 · 컨트롤 오른쪽)이 한 줄로 이어지는 필터 → [[FilterBar]].
+- 읽기 전용 값 앞의 이름(KPI · 상세 정보 표) → [[KpiField]] · 표 머리. 고칠 수 없는 값의 이름은 폼 라벨이 아니다.
+- 폼을 나누는 구획 제목 → `heading.section`(§10). 묶음 이름과 구획 제목을 섞지 않는다.
+
+**규칙.** 폼 라벨은 **컨트롤 종류 · 크기와 상관없이 한 벌**이다 — `text-sm font-medium text-primary`(11px). 라디오 묶음 이름만 크게 · 굵게 · 밝게 하거나, 입력칸 라벨만 회색으로 낮추지 않는다. 라벨과 그 아래 글자는 크기와 무게로 갈린다.
+
+| 자리 | 조합 | 주인 |
+|---|---|---|
+| **필드 라벨** — 컨트롤 하나의 이름 | `text-sm font-medium text-primary` · 비활성 `text-tertiary` | [[TextField]] · [[Select]] `label` · 라벨 슬롯이 없는 컨트롤은 [[LabeledField]] |
+| **묶음 라벨** — 라디오 · 체크박스 여럿의 이름 | 필드 라벨과 **같다** | [[LabeledField]] `id` → [[RadioGroup]] `aria-labelledby` |
+| **선택지** — 라디오 · 체크박스 옆 글자 | `text-base` regular `text-primary` | [[RadioGroup]] · [[Checkbox]] |
+| **풀이 · 도움말** — 라벨이나 선택지 아래 한 줄 | `text-tertiary` · 오류면 `--color-status-error` | [[TextField]] `helperText` · [[RadioGroup]] `description` |
+| **필수 표시** `*` | `.text-required` | — |
+
+선택지(12px regular)가 라벨(11px medium)보다 크다. 값이 주인공이고 라벨은 그 이름표이기 때문이다. 묶음과 선택지 사이의 위계는 라벨을 키워서 만들지 않는다 — 라벨과 첫 선택지 사이 간격(`gap-1_5`)과, 선택지 쪽이 regular 라는 무게 차이로 만든다.
+
+✅ 한 폼의 모든 라벨 — 입력칸 · 셀렉트 · 라디오 묶음 · 체크박스 묶음 — 을 `text-sm font-medium text-primary` 하나로 쓴다
+✅ 라디오 묶음 이름을 화면에 보이려면 [[LabeledField]] 로 감싸고, 그 `id` 를 [[RadioGroup]] `aria-labelledby` 로 잇는다
+✅ 라벨을 흐리게 하는 것은 비활성(`text-tertiary`)일 때뿐이다
+
+❌ 라디오 · 체크박스 묶음 이름만 크게 · 굵게(예: 16px semibold) — 같은 폼 안에서 그 항목이 더 중요해 보인다. 묶음이라는 구조는 굵기가 아니라 간격이 보여 준다
+❌ 입력칸 라벨을 `text-secondary` · `text-tertiary` 로 낮추기 — 비활성처럼 읽히고, 옆 묶음 라벨과 위계가 갈라진다
+❌ 컨트롤 크기에 맞춰 라벨을 키우기(32px 입력칸 → 13px 라벨) — 라벨이 값과 같은 무게가 되어 값을 이긴다
+❌ 라벨 슬롯이 없는 컨트롤 위에 `<span className="text-base font-bold">` 를 직접 쓰기 — [[LabeledField]] 가 이미 같은 규칙을 그린다
+
+**왜.** 입력칸은 테두리 상자가 묶음을 보여 주지만, 라디오 목록에는 상자가 없다. 그래서 라디오 묶음 이름만 굵게 키우는 일이 자주 생긴다. 그러면 사용자는 같은 폼의 항목들을 서로 다른 위계로 읽는다 — 굵은 «Region» 은 제목처럼, 회색 «Workspace name» 은 보조 정보처럼 읽힌다. 두 글자는 같은 일(«이 입력이 무엇인가»)을 하므로 같은 모양이어야 한다(타이포 Role Catalog «같은 역할은 같은 조합», 2026-10-27 사용자 지시). 11px 고정 근거는 [[LabeledField]] docstring 에 있다 — 라벨 크기를 컨트롤 높이에 묶으면 라벨이 값을 이긴다.
+
+---
+
 ## 부록 — 빠른 결정 표
 
 | 상황 | 무엇을 할까 |
@@ -1335,6 +1371,7 @@ DS 도 예외가 아니다. 값축 계산은 4벌, 점선 격자는 5벌이고 �
 | 계열 차트 옆에 상태 · 경보 | 계열 색과 Severity 색을 한 위젯에 섞지 않는다 · Severity 는 아이콘 + 라벨 (#23) |
 | 대시보드 위젯 한 칸 | `WidgetFrame`(헤더 · 본문 · 푸터) + 본문 컴포넌트 · 빈 상태는 `state` (#15) |
 | 차트에 축 · 격자 · 범례 · 값 라벨 · 빈 상태를 그리기 | 요소마다 주인을 표에서 찾는다 · 차트 안에서 또 그리지 않는다 · 공백은 근사하지 않는다 (#26) |
+| 폼 라벨 (입력칸 · 셀렉트 · 라디오 묶음 · 체크박스 묶음) | 모두 `text-sm font-medium text-primary` 한 벌 · 묶음 이름은 `LabeledField` + `aria-labelledby` · 선택지는 `text-base` regular (#27) |
 | 글자에 보조 설명 | 밑줄 금지 · 글자 뒤에 `InfoTip` (#16) |
 | AI 응답이 10초를 넘길 수 있다 | `AiProgress` 하나(단계 칸 · 처리 수 · 중간 발견 · 10초/30초 하단 줄) · 작성 단계에서만 `AnswerSkeleton still` · 송신 버튼은 `onStop` (#24) |
 | 테이블이 필요 | `DataTable` (chrome) / `AiClassificationTable` `AiCostTable` (widget) |
