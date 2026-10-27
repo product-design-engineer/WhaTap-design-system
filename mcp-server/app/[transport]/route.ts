@@ -52,6 +52,8 @@ type ComponentDoc = {
   spec?: string | null;
   /** 차트가 맞는 지표(fit) · 쓰면 안 되는 지표(avoid) — docstring `## Metrics`. 차트가 아니면 null. */
   metrics?: { fit: string[]; avoid: string[] } | null;
+  /** 차트가 무엇을 어떤 색 역할로 칠하나 — docstring `## Colors`(patterns §17 역할 · 설명 · 토큰). 차트가 아니면 null. */
+  colors?: { role: string | null; text: string; tokens: string[] }[] | null;
   do: string[];
   dont: string[];
   example: string | null;
@@ -117,6 +119,8 @@ function rulesBlock(c: ComponentDoc): string[] {
   /* 차트는 «어떤 지표에 쓰나» 가 고르는 첫 기준이라 Do 보다 먼저 둔다. */
   if (c.metrics?.fit.length) out.push(``, `## 📈 맞는 지표`, list(c.metrics.fit));
   if (c.metrics?.avoid.length) out.push(``, `## 🚫 쓰면 안 되는 지표`, list(c.metrics.avoid));
+  /* 색은 지표 다음 — 고른 차트에 무엇을 어떤 역할의 토큰으로 칠하나(patterns §17). */
+  if (c.colors?.length) out.push(``, `## 🎨 색 역할 (patterns §17)`, list(c.colors.map((x) => (x.role ? `**${x.role}** — ${x.text}` : x.text))));
   if (c.do.length) out.push(``, `## ✅ Do`, list(c.do));
   if (c.dont.length) out.push(``, `## ❌ Don't`, list(c.dont));
   if (c.compositionRules.length) out.push(``, `## Composition rules`, list(c.compositionRules));
@@ -392,6 +396,8 @@ const handler = createMcpHandler(
           { key: "do", w: 4, of: (c) => c.do },
           { key: "whenNotToUse", w: 3, of: (c) => [...c.whenNotToUse, ...c.dont, ...(c.metrics?.avoid ?? [])] },
           { key: "rules", w: 2, of: (c) => c.compositionRules },
+          /* «판정 등급 색 차트» · «speed 토큰» 처럼 색으로 찾아오는 질의. */
+          { key: "colors", w: 2, of: (c) => (c.colors ?? []).map((x) => `${x.role ?? ""} ${x.text}`) },
           { key: "props", w: 2, of: (c) => c.props.map((p) => `${p.name} ${p.description ?? ""}`) },
           { key: "story", w: 1, of: (c) => c.stories.map((s) => `${s.name} ${s.note ?? ""}`) },
         ];

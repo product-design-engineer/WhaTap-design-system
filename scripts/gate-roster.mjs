@@ -216,7 +216,7 @@ export const GATE_ROSTER = [
     script: "scripts/check-docstrings.mjs",
     pipeline: null,
     invariant:
-      "컴포넌트 docstring = Purpose / When to use / When NOT to use / Composition rules + `@example`. **Do/Don't 는 여기서 유도되므로**(`## Don't` 명시가 없으면 When NOT to use + Composition rules 의 금지형 문장) 금지형 문장이 하나도 없으면 실패한다 — 유도 결과가 빈 컴포넌트는 «하지 말 것»이 없는 컴포넌트로 배달된다. 스토리 안에서 정의되는 합성 템플릿(`Shell/Page/*`)은 docstring 이 있을 수 없으므로 스토리 description 을 대신 요구한다. 검사 대상은 파싱을 두 번 구현하지 않고 **AI 에게 실제로 배달되는 산출물**(`docs/components.json`)이다. 템플릿 밖 `##` 섹션은 생성기가 읽지 않아 배달되지 않으므로 0 을 요구하고(동결 없음), 깊이(When to use 2개 이상 · 설명 없는 prop 0)는 도입 시점 수치를 래칫으로 동결한다. `Composite/Chart/*` 는 `## Metrics` 에 맞는 지표(✅) 1개 이상을 요구한다(2026-10-23, 동결 없음) — 금지 지표(❌)는 개수만 보고한다.",
+      "컴포넌트 docstring = Purpose / When to use / When NOT to use / Composition rules + `@example`. **Do/Don't 는 여기서 유도되므로**(`## Don't` 명시가 없으면 When NOT to use + Composition rules 의 금지형 문장) 금지형 문장이 하나도 없으면 실패한다 — 유도 결과가 빈 컴포넌트는 «하지 말 것»이 없는 컴포넌트로 배달된다. 스토리 안에서 정의되는 합성 템플릿(`Shell/Page/*`)은 docstring 이 있을 수 없으므로 스토리 description 을 대신 요구한다. 검사 대상은 파싱을 두 번 구현하지 않고 **AI 에게 실제로 배달되는 산출물**(`docs/components.json`)이다. 템플릿 밖 `##` 섹션은 생성기가 읽지 않아 배달되지 않으므로 0 을 요구하고(동결 없음), 깊이(When to use 2개 이상 · 설명 없는 prop 0)는 도입 시점 수치를 래칫으로 동결한다. `Composite/Chart/*` 는 `## Metrics` 에 맞는 지표(✅) 1개 이상을 요구한다(2026-10-23, 동결 없음) — 금지 지표(❌)는 개수만 보고한다. 차트는 `## Colors` 색 역할도 요구한다(2026-10-27, 동결 없음) — 역할은 patterns §17 낱말 + 바탕, 소스(+ 내부 `./_*` 모듈)가 칠하는 차트 색 묶음은 전부 Colors 에 이름이 있어야 한다.",
     prevents:
       "컴포넌트 오선택 · 사용 가이드 부재 · **규칙이 소스에만 있고 소비 AI 에는 도달하지 않는 상태** — 실측: 108종 중 26종이 스토리 설명 없이 들어와 있었고, policy(사람 검토) 상태로 오래 방치돼 있었다 · 2026-10-19 템플릿 밖 섹션 15개(ARIA · 정책 · variant 표)가 MCP 에 배달되지 않고 있었다",
   },
