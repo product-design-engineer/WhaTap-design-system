@@ -20,6 +20,10 @@
  * - ❌ 연속 값(CPU 사용률 %) 그 자체 — 상태로 판정한 뒤 칠하고 값은 툴팁 · 상세에 → 값 비교는 [[BarList]]
  * - ❌ 대상 수백 대 — 이름 칸이 화면을 넘는다 → [[HexGrid]] · [[Heatmap]](§22)
  *
+ * ## Colors
+ * - 상태 — 칸 칠 · Active `--color-chart-series-1` · Warning `--color-status-warning` · Critical `--color-status-error`([[HexGrid]] 와 같은 `_statusTone`)
+ * - 바탕 — Idle 칸 · `--color-surface-200`
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 칸 [[BlockCell]] · 단독 범례 [[ChartLegendItem]]. 차트는 격자 배치만 정한다. 그래서 Composite 계층이다.
  * - 격자 `columns`(기본 4) · 칸 사이 4px. 칸 순서 = `items` 순서 — 정렬(상태 심각도순 · 이름순)은 호출부가 정한다.

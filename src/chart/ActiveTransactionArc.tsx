@@ -19,6 +19,9 @@
  * - ❌ 등급이 없는 일반 지표 — 고리 줄무늬가 등급을 말한다
  * - ❌ 에이전트가 16개를 넘을 때 → [[BarList]]
  *
+ * ## Colors
+ * - 판정 등급 — 고리 · 범례의 응답 속도 등급 셋 · `--color-chart-speed-normal` · `--color-chart-speed-slow` · `--color-chart-speed-very-slow`
+ *
  * ## Composition rules
  * - 고리는 [[ChartRadialBars]], 수치는 [[MetricStat]](Max TX = 단위 「초」 + 보조 줄 트랜잭션 이름 · Agent 활성 · 비활성), 범례는 [[ChartLegendItem]] 을 조합한다. 그래서 Composite 계층이다.
  * - 위젯 chrome(CardChrome, FlexBoardWidget 등)은 소비자가 감싼다.

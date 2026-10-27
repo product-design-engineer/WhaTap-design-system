@@ -21,6 +21,10 @@
  * - ❌ 상한이 없는 지표(TPS · 응답시간) — 호의 끝이 아무 값이 되어 채움이 거짓 비율을 말한다
  * - ❌ 여러 대상의 값 비교 — 호 각도는 막대 길이보다 비교가 어렵다 → [[EqualizerChart]] · [[BarList]]
  *
+ * ## Colors
+ * - 상태 — 호 채움 · 임계 띠를 지금 값이 든 구간으로 · 임계 밖 `--color-brand-blue` · `--color-status-warning` · `--color-status-error`
+ * - 바탕 — 호 트랙 · `--color-surface-100`
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 호 [[ChartArc]](트랙 · 채움 · 바깥 임계 띠). 게이지는 가운데 값 · 양 끝 글자만 그린다. 그래서 Composite 계층이다.
  * - **[[RangeGauge]] 와 같은 계약** — 채움 색 = 값이 든 임계 구간(neutral `--color-brand-blue` · warning · critical), 임계 기준값은 호출부,
