@@ -17,7 +17,8 @@
 | 레이아웃 | DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · SubHeaderBar |
 | 옵션바 (시간/인스턴스/프리셋) | OptionbarPage · OptionbarInstanceSelector · LiveTimerCompact · TimeRangeSelector · PresetSelect |
 | 데이터 표시 | WidgetFrame · CardHead · DataTable · FilterBar · EventWeekTimeMatrix |
-| 대시보드 차트 (`frame={false}` 로 WidgetFrame 안에) | MiniLineChart · MiniMultiLineChart · MiniBarChart · ApdexChart · ForecastLineChart · BarList · MiniDonutChart · KpiCard · HexGrid |
+| 대시보드 차트 (`frame={false}` 로 WidgetFrame 안에) | MiniLineChart · MiniMultiLineChart · MiniBarChart · ApdexChart · ForecastLineChart · BarList · MiniDonutChart · KpiCard · HexGrid · Heatmap · GpuStatusBar · StatCard · MetricBarCell |
+| 토폴로지 | TopologyCanvas · TopologyToolbar · TopologyNode · TopologyEdge · TopologyPort · TopologyCollapseToggle · TopologyMinimap |
 | 액션·진입 | Button · AiSymbol |
 | 알림·상태 | Toast · ConfirmDialog · InfoTip · Stage · DashboardBuildingProgress |
 | 위젯 컨텍스트 | WhaTapAiContext (Provider) |
@@ -238,7 +239,7 @@ export type InstanceStatus = "ok" | "warn" | "error" | "idle";
 시간 범위 입력기. dual datetime + live 토글 + 이전/다음 + 달력.
 
 ```ts
-type DateParts = { year: string; month: string; day: string; hour: string; minute: string };
+type DateParts = { year: string; month: string; day: string; hour: string; minute: string; second?: string };
 ```
 
 | Prop | Type | Default |
@@ -251,8 +252,97 @@ type DateParts = { year: string; month: string; day: string; hour: string; minut
 | `onPrev` | `() => void` | — |
 | `onNext` | `() => void` | — |
 | `onPickDate` | `() => void` | — |
+| `rangeMode` | `"rolling" \| "fixed"` | — _(시안)_ |
+| `onRangeModeChange` | `(mode) => void` | — _(시안)_ |
+| `rangeControl` | `"segmented" \| "pin"` | `"segmented"` — `pin` 은 버튼 하나(글자 = 지금 상태) _(정본)_ |
+| `live` | `boolean` | — _(넘기면 ▶ 시작 / ■ 중지 토글, 정본)_ |
+| `onPickStart` · `onPickEnd` | `() => void` | — _(시각마다 달력 버튼, 정본)_ |
+| `onStartChange` · `onEndChange` | `(next: DateParts) => void` | — _(직접 입력을 알림 → 고정, 정본)_ |
+| `durations` | `number[]` (분) | — _(넘기면 초록 알약이 구간 길이 드롭다운, 정본)_ |
+| `duration` | `number \| null` (분) | — _(목록 밖이면 «직접 지정»)_ |
+| `onDurationChange` | `(minutes) => void` | — |
 
 `OptionbarPage`가 `LiveTimerCompact`를 쓰고 있으니, 별도 시간 입력 UI가 필요한 페이지에서만 `TimeRangeSelector`를 직접 씁니다.
+
+### ✅ 동작 정본 (2026-10-28, 기획 «[타임 셀렉터] 동작 제안»)
+
+아래 «시안» 을 바탕으로 기획이 정한 동작입니다. 새 조각은 모두 선택 prop 이라, 넘기지 않으면 예전 모양 그대로입니다.
+
+**용어.** **구간** = 연·월·일·시·분·초로 정한 두 시각 사이의 범위 · **시작 시각 / 종료 시각** · **구간 길이**(5분 · 10분 …) · **갱신**(검색할 때마다 «지금» 기준으로 다시 계산) / **고정**(정한 구간 그대로) · **라이브**(누르지 않아도 계속 최신). «기간 · 마지막 시각 · Preset 시간 · Pin On/Off» 는 쓰지 않습니다.
+
+| 규칙 | 화면 | prop |
+|---|---|---|
+| 시각은 초까지 | `HH:MM:SS` | `start.second` · `end.second` |
+| 달력은 시작 · 종료 시각마다 하나 | 각 시각 뒤 📅 | `onPickStart` · `onPickEnd` |
+| 달력 패널은 시작 > 종료 · 최대 조회 기간 초과 날짜를 미리 흐리게 막는다. 직접 입력으로 넘기면 검색 버튼 옆에 이유 한 줄 + 검색 막기 | (호출측) | — |
+| 구간 길이는 언제나 **종료 시각에서 거꾸로** | 갱신 · 라이브 «최근 10분» / 고정 «10분» / 목록 밖 «직접 지정» | `durations` · `duration` · `onDurationChange` |
+| 길이를 고르는 것만으로는 갱신 / 고정이 바뀌지 않는다. 라이브 중이면 라이브가 이어지고 길이만 바뀐다 | — | — |
+| 갱신 / 고정은 버튼 하나 — 글자가 지금 상태를 말한다. 누르면 바뀐다 | 📌 고정 / ↻ 갱신 | `rangeControl="pin"` + `onRangeModeChange` |
+| 직접 입력 · 달력 · ‹ › → 고정, 라이브 중이면 라이브 중지 | 📌 눌림 | `onStartChange` · `onEndChange` · `onPickStart` · `onPickEnd` · `onPrev` · `onNext` 에서 호출측이 |
+| 라이브는 ▶ 시작 / ■ 중지 토글. 중지하면 멈춘 순간의 구간으로 고정 | ▶ / ■ | `live` + `onLive` |
+
+**들어올 때.** 링크에 담긴 구간 → 고정해 둔 구간(사람마다 · 메뉴마다) → «최근 5분»(메뉴마다 다를 수 있음) 순서. 새로고침 · 뒤로 가기는 보던 화면 그대로. 고정해 둔 구간으로 열면 셀렉터 아래 `Notice` 한 줄 — «어제 13:50~14:00 으로 고정된 구간을 보여 드리고 있어요 · [최근 5분 보기]». 보관 기간이 지난 저장 구간은 쓰지 않고 «최근 5분». 링크 복사는 항상 정확한 시각으로.
+
+```tsx
+<TimeRangeSelector
+  start={{ ...from, second: "12" }} end={{ ...to, second: "12" }}
+  live={live} onLive={toggleLive}
+  durations={[5, 10, 30, 60, 180, 360, 720, 1440]} duration={minutes} onDurationChange={pickLength}
+  rangeMode={mode} rangeControl="pin" onRangeModeChange={setMode}
+  onPickStart={openStartCalendar} onPickEnd={openEndCalendar}
+  onStartChange={pinIt} onEndChange={pinIt} onPrev={prevAndPin} onNext={nextAndPin}
+/>
+```
+
+Storybook: `Composite/TimeRangeSelector` → «정본 · 상태 한눈에» · «정본 · 동선 (직접 눌러 보세요)».
+
+### 🧪 시안 — «최근 N분» 의 갱신 · 고정 (2026-10-26, 정책 확정 전)
+
+> 회의용 시안입니다. 기본 동작 · 공유 링크 · 저장값 처리는 아직 정해지지 않았습니다. `rangeMode` 를 넘기지 않으면 기존 화면과 똑같습니다.
+
+**쉽게 말하면.** «최근 5분» 을 골라 검색하고 몇 분 뒤 다시 검색 버튼을 누를 때, 두 가지 동작이 있을 수 있습니다.
+
+| 동작 | 10:00 에 검색 | 10:03 에 다시 검색 | 이럴 때 |
+|---|---|---|---|
+| **갱신** (`rolling`) | 09:55 ~ 10:00 | **09:58 ~ 10:03** — 끝점이 지금으로 옮겨짐 | 방금 들어온 데이터를 계속 확인 |
+| **고정** (`fixed`) | 09:55 ~ 10:00 | **09:55 ~ 10:00** — 그대로 | 특정 시점을 붙잡고 분석 · 동료와 같은 화면 공유 |
+
+두 동작은 시간 표시만으로는 구별되지 않습니다. 그래서:
+
+- **셀렉터 오른쪽 끝에 지금의 동작을 글자로** 보여 줍니다 — «↻ 갱신» / «📌 고정». 마우스를 올리면 뜻이 설명됩니다.
+- 사용자가 직접 바꿀 수 있게 하려면 `onRangeModeChange` 를 넘깁니다 → `[갱신 | 고정]` 두 칸 토글. *(전환 허용 여부는 [검토 필요])*
+- **캘린더 · 직접 입력 · ‹ › 이동으로 선택한 구간은 항상 고정**입니다. 이때는 토글 없이 «고정» 글자만 보입니다.
+- **실제로 조회된 구간은 결과 위에 `TimeChip` 으로** 적습니다 — «조회 구간 09:58:12 ~ 10:03:12» · «조회 시각 10:03:12». 초까지 적어야 1분 안에 두 번 검색해도 다시 조회됐는지 보입니다.
+- 갱신 모드는 **저절로 다시 조회하지 않습니다.** 검색을 누를 때만 다시 계산합니다. 저절로 흐르는 것은 LIVE 입니다.
+- 셀렉터 옆 **검색 버튼과 «바로 조회» 프리셋 버튼은 `Button size="lg"`(32px)** 로 셀렉터 상자 높이(32px)와 맞춥니다. 같은 줄에서 높이가 다르면 바닥선이 어긋나 보입니다.
+
+```tsx
+// 갱신 — 사용자가 고정으로 바꿀 수 있음
+<TimeRangeSelector durationLabel="최근 5분" rangeMode={mode} onRangeModeChange={setMode} />
+
+// 캘린더로 선택한 구간 — 항상 고정, 토글 없음
+<TimeRangeSelector start={from} end={to} durationLabel="1시간" rangeMode="fixed" />
+
+// 결과 위 — 실제로 조회된 구간과 조회 시각
+<TimeChip label="조회 구간" value="09:58:12 ~ 10:03:12" />
+<TimeChip label="조회 시각" value="10:03:12" />
+```
+
+**함께 정할 것 (시안의 제안).**
+
+| 항목 | 제안 |
+|---|---|
+| 초 단위 계산 | 끝점을 초까지 잡는다. 지금은 분 단위로 잘라 1분 안의 재검색이 같은 구간이 된다. 마지막 1분의 덜 찬 집계 처리는 엔지니어링이 정한다 |
+| 공유 링크 | 동작을 링크에 함께 싣는다 — 갱신 `?preset=5m&mode=rolling&from=…&to=…` · 고정 `?from=…&to=…&mode=fixed`. 받은 사람은 보낸 사람이 본 구간을 먼저 보고, 원하면 «최근으로 갱신». 시각은 타임존 포함 |
+| 저장된 대시보드 · 북마크 | 일괄 변환하지 않는다. 동작 값이 없는 저장값은 예전 동작 그대로 해석하고, 새로 저장할 때부터 동작을 함께 기록한다 |
+| 두 단계 → 한 단계 | «5분 · 10분 · 30분 · 1시간» 프리셋은 누르는 즉시 조회. 캘린더 · 직접 입력은 지금처럼 확인을 거친다 |
+| 과도한 재요청 | 조회 중엔 검색 버튼을 막고(`Button loading`), 새 조회가 나가면 이전 조회는 취소. 긴 구간(예: 로그 7일 초과)은 `Notice tone="warning"` 으로 알리고 «그래도 조회» 를 누를 때만 보낸다 |
+| 기본 동작이 바뀌면 | 처음 한 번 `Notice tone="primary"` 로 안내하고 «고정으로 쓰기» 길을 준다 |
+| 기본 동작 · 전환 허용 · 온프레미스 설정 | ❓ 미정. 전환을 허용하면 온프레미스용 설정의 필요가 줄어든다 — 전환 여부부터 정하면 따라서 정해진다 |
+
+시안 스토리는 동작 정본으로 대체되어 Storybook 에서 지웠습니다(2026-10-28). 눌러 볼 화면은 «정본 · 동선» 입니다.
+
+**되돌리기.** 기존 prop 은 바뀌지 않았고 선택 prop 두 개만 더했습니다. 채택하지 않으면 시안 커밋을 되돌리면 끝납니다.
 
 ---
 
@@ -523,7 +613,7 @@ export type DataTableProps<T> = {
 - 고리형 막대는 [[ChartRadialBars]](Primitives) — 칸 하나 = 대상 하나, 구간은 안쪽부터 쌓인 줄무늬(`levels` 단계, 0 보다 큰 구간은 최소 한 줄). 바탕 `--color-chart-radial-track` · 구분선 `--color-chart-radial-divider`. 가운데는 `children`, 회전 장식은 `sweep`(동작 줄이기에서 멈춤). [[ActiveTransactionArc]] 는 `agents`(에이전트별 `{ normal, slow, verySlow }`)로 이것을 그린다 — 종전 정적 이미지는 삭제.
   Figma 정본: ChartRadialBars 페이지 `568:6848` · 세트 `568:6918`(`sweep` · center · showCenter) · 변수 `color/chart/radial-track` `568:2` · `radial-divider` `568:3`. ActiveTransactionArc 세트 `347:267` 은 이 세트 · MetricStat · ChartLegendItem 인스턴스로 다시 짰다.
 - 가리킨 마크 강조(공통 규칙, patterns §26 «강조») — 가리킨 마크는 불투명 + 카드색 2px 고리, 나머지 0.32, 색은 그대로. 차트 안 범례는 [[ChartLegendItem]] `onHover` · `dimmed` 로 그 계열만 남긴다. 전환은 `.wds-chart-mark`(120ms · 동작 줄이기면 없음).
-- 시간축 차트의 hover 는 [[ChartCrosshair]](Primitives) — 플롯 위 포인터 x → 가장 가까운 시점 · 세로 안내선(`--color-border-strong`) · 계열마다 점(카드색 고리) · 값 툴팁. Props: `count` · `max` · `min` · `series({ label, color, values, shape?, noDot?, unit? })` · `labels`(시점 이름) · `unit` · `footer(i)` · `band`(막대) · `positions`(고르지 않은 x) · `onIndex`(막대 흐림) · `index`(제어형 — 칸 여럿이 한 시점) · `noTooltip` · 플롯 여백(`right` · `padTop` · `padBottom`, ChartGrid 와 같게). MiniLine · MiniMultiLine · MiniBar · Forecast · Apdex 가 쓰고, 각 차트는 시점 이름을 `pointLabels`(Forecast 는 `formatX`)로 받는다.
+- 시간축 차트의 hover 는 [[ChartCrosshair]](Primitives) — 플롯 위 포인터 x → 가장 가까운 시점 · 세로 안내선(`--color-border-strong`) · 계열마다 점(카드색 고리) · 값 툴팁. Props: `count` · `max` · `min` · `series({ label, color, values, shape?, noDot?, unit?, showMissing? })`(`showMissing` = `null` 시점 툴팁 줄에 «데이터 없음») · `labels`(시점 이름) · `unit` · `footer(i)` · `band`(막대) · `positions`(고르지 않은 x) · `onIndex`(막대 흐림) · `index`(제어형 — 칸 여럿이 한 시점) · `noTooltip` · 플롯 여백(`right` · `padTop` · `padBottom`, ChartGrid 와 같게). MiniLine · MiniMultiLine · MiniBar · Forecast · Apdex 가 쓰고, 각 차트는 시점 이름을 `pointLabels`(Forecast 는 `formatX`)로 받는다.
   Figma 정본: 페이지 ChartCrosshair `591:2` · 컴포넌트 `591:3`(가리켰을 때 모습 견본).
 - 경과 시간 차트(Flame · Waterfall)의 요소 — [[ChartSpanBar]](Primitives, 구간 막대: `start` · `end` 플롯 폭 비율 · `color` · `textColor` · `label` · `dimmed` · `active` · `top` · `height`. 이름은 차트가 막대 폭 40px 이상일 때만 준다) · [[ChartBrush]](Primitives, 시간축 줄을 끌어 구간 확대: `onSelect(from, to)` · 플롯 상자 `left` · `right` · `top` · `bottom` · `strip` · `minRatio`. 띠 `--color-brand-blue-wash`). [[ChartTimeAxis]] 는 `left` 로 Y축 칸이 없는 플롯에 맞춘다.
   Figma 정본: ChartSpanBar 페이지 `599:2` · 세트 `599:9`(`state` default · dimmed · active · label · showLabel) / ChartBrush 페이지 `599:16` · 컴포넌트 `599:17`(끄는 중 견본).
@@ -709,23 +799,27 @@ Figma 정본: 페이지 Treemap `596:2` · 컴포넌트 `596:3`.
 
 ## GeoMap
 
-국가별 값을 세계 지도 위에 — 단계 구분(국가 칸 색 4단계) 또는 버블(국가 자리 원 넓이). **Composite** — [[ChartLegendItem]](단계 범례) · [[ChartTooltip]] · [[TopologyZoomControl]](`limits` 100%~600%) 을 조합하고 국가 도형 · 격자 · 버블만 그린다. 도형은 Natural Earth 1:110m(퍼블릭 도메인) · Equal Earth 투영 · 남극 제외(내부 `_geoWorld`, 생성 `scripts/build-geo-world.mjs`).
+국가별 값을 세계 지도 위에 — 단계 구분(국가 칸 색 4단계) 또는 버블(국가 자리 원 넓이). 한국 · 일본은 눌러서 시·도로 들어간다. **Composite** — [[ChartLegendItem]](단계 범례) · [[ChartTooltip]] · [[TopologyZoomControl]](`limits` 100%~600%) 을 조합하고 국가 도형 · 격자 · 버블만 그린다. 도형은 Natural Earth 1:110m(퍼블릭 도메인) · Equal Earth 투영 · 남극 제외(내부 `_geoWorld`, 생성 `scripts/build-geo-world.mjs`). 시·도는 Natural Earth 1:10m Admin 1 v5.1.2 에서 한국 17 · 일본 47(내부 `_geoRegions`, 생성 `scripts/build-geo-regions.mjs` — 원천 40MB 는 고정 주소 · SHA-256 으로 받는다).
 
 | Prop | Type | Default |
 |---|---|---|
-| `data` | `{ code: ISO alpha-2, value, name? }[]` | — |
+| `data` | `{ code: ISO alpha-2 · 시·도는 ISO 3166-2(`KR-11`), value, name? }[]` | — |
 | `mode` | `"fill"`(비율 · 평균) · `"bubble"`(개수 · 합계) | `"fill"` |
 | `label` · `unit` | 값 이름 · 단위 | `"값"` · `""` |
 | `breaks` | 단계 경계 3개 | 0 ~ 최대 4등분 |
 | `emptyLabel` | 빈 상태 글 | `"데이터 없음"` |
 | `zoom` | 줌 컨트롤 | `true` |
+| `drill` · `defaultDrill` | 들어가 있는 나라(제어 · 비제어), `null` = 세계 | `null` |
+| `onDrillChange` | 나라를 누르거나 «세계» 로 돌아올 때 — 여기서 시·도 값을 불러 `data` 에 더한다 | — |
 
 - 값 없는 국가(바탕 `--color-surface-200`) ≠ 낮은 값(`--color-chart-seq-1`). 데이터가 하나도 없으면 지도 위 «데이터 없음».
 - 개수 · 합계는 버블 — 단계 구분은 넓은 나라를 크게 보이게 한다. 음수(증감)는 쓰지 않는다.
 - 110m 도형에 없는 작은 나라(싱가포르 · 홍콩 …)의 값은 지도 아래 «지도 밖» 줄로.
 - 휠 줌 없음(대시보드 스크롤 보호) — 버튼으로 확대, 끌어서 이동.
+- **시·도는 줌이 아니라 눌러서 들어간다**(2026-10-26) — 줌 배율로 단위를 바꾸면 여러 나라가 걸린 화면에서 나눌 나라가 정해지지 않고 범례 단계가 몰래 바뀐다. 툴팁 «눌러서 시·도 보기» · 왼쪽 위 경로 «세계 › 대한민국 값» 으로 돌아온다. 단계 · 버블 크기는 그 나라 시·도 값으로 다시 잡는다.
+- 국가 값을 시·도 합으로 만들지 않는다(비율 · 평균은 더할 수 없다). 받기 전 · 값이 없으면 시·도 지도도 «데이터 없음».
 
-Figma 정본: 페이지 GeoMap `598:2` · 세트 `598:8161`(`mode` fill · bubble · empty) · 내부 도형 `_GeoWorld` `598:7530` / 줌 컨트롤 페이지 TopologyZoomControl `597:30` · 컴포넌트 `597:31`.
+Figma 정본: 페이지 GeoMap `598:2` · 세트 `598:8161`(`mode` fill · bubble · empty × `drill` none · KR — 들어간 모습 fill `619:8444` · bubble `622:625` · empty(받기 전) `622:684`) · 내부 도형 `_GeoWorld` `598:7530` · `_GeoRegionKR` `619:8442` · `_GeoRegionJP` `619:8443` / 줌 컨트롤 페이지 TopologyZoomControl `597:30` · 컴포넌트 `597:31`.
 
 ## FlameChart
 
@@ -803,7 +897,7 @@ Figma 정본: 페이지 MetricGrid `595:2` · 세트 `595:61`(`columns`).
 | `frame` | `boolean` | `true` |
 
 - 축 제목 대신 칸 이름(왼쪽 위), 단위는 눈금 접미사. 오른쪽 Y축 없음.
-- 미래 = 빈칸 · 수집 없음(`null`) = 막대 «모름» 칸 · 선 끊김.
+- 미래 = 빈칸 · 수집 없음(`null`) = 막대 «모름» 칸 · 선 끊김. 그 시점을 가리키면 툴팁 그 지표 줄에 «데이터 없음»(미래 빈칸은 줄 없음).
 - 한 칸을 가리키면 두 칸이 같은 시점 — 위 칸 툴팁에 두 지표(계열별 단위).
 
 Figma 정본: 페이지 PairedTimeChart `594:2` · 컴포넌트 `594:3`.
@@ -1059,6 +1153,116 @@ export type HexItem = { id: string; label?: string; tone: HexTone; ariaLabel?: s
 - 칸 수 범례: `legend={hexGridLegend(items, { active: "Normal", idle: "Inactive" })}` → `Normal 0 · Inactive 0 · Warning 11 · Critical 3`. 칠해진 톤을 세고 0 개 톤도 줄은 남긴다.
 
 ---
+
+## Heatmap · HeatmapCell · HeatmapLegend
+
+시간 격자 위 지표 강도. **Heatmap(Composite)** 은 축 라벨 + **HeatmapCell(Primitives — 값 하나 = 색 한 칸)** 격자를 그리고, 범례는 폭을 맞춘 **HeatmapLegend(Primitives — 가로 그라디언트 + 눈금 + hover 표식)** 를 바로 아래 둔다. 응답 판정(Hitmap)은 [[ScatterHeatmap]] — 이름만 비슷하고 색의 뜻이 다르다.
+
+| Prop (Heatmap) | Type | Default |
+|---|---|---|
+| `mode` | `"month"` (7열 요일 × 주, 칸 = 하루) \| `"day"` (12열 5분 × 24행, 칸 = 5분) | — |
+| `cells` | `(number \| null)[]` — 정규화 0~1, `null` = 데이터 없음 | — |
+| `offset` | `number` — month 첫 칸 앞 빈 자리(요일 맞춤) | `0` |
+| `labels` | `string[]` — 칸 안 마이크로 라벨(일자) | — |
+| `selectedIndex` · `onSelect` | 한 칸 선택(다중 없음) | — |
+| `cellTitle` | `(index, value) => string` — 툴팁 · 이름 | 축 라벨로 생성 |
+| `onHoverChange` | `(value \| null) => void` — HeatmapLegend `marker` 에 잇는다 | — |
+| `ariaLabel` | `string` | «월간/일간 히트맵» |
+| `monthCellHeight` · `dayCellHeight` | `number` | `49` · `13` |
+
+| Prop (HeatmapCell) | Type | Default |
+|---|---|---|
+| `value` | `number \| null` — 0~1 | — |
+| `label` · `selected` · `height` | `string` · `boolean` · `number` | — · `false` · `13` |
+| `onClick` · `title` · `ariaLabel` · `onHoverChange` | 없으면 읽기 전용 `<div aria-hidden>` | — |
+
+| Prop (HeatmapLegend) | Type | Default |
+|---|---|---|
+| `label` | `string` — 색이 무엇인지(지표명 + 집계) | — |
+| `marker` · `markerFractionDigits` | `number \| null` (0~1) · `number` | `null` · `2` |
+| `ticks` · `unit` · `height` | `number[]` · `string` · `number` | `[0,25,50,75,100]` · `"%"` · `24` |
+
+- 색 = `--color-heatmap-0 … 100` stop 사이 `color-mix` 보간(`heatmapScaleColor`). 값 없음 = `--color-surface-200` — «0» 과 «모른다» 를 가른다.
+- 선택은 배경이 아니라 테두리 2px `--color-status-warning`. 라벨은 진한 칸에서 `--color-text-inverse` 로 뒤집는다.
+- `day` 라벨은 10분 · 2시간 간격만. 범례 표식은 hover 중에만.
+- 📈 칸(하루 · 5분)마다의 강도 — 일별 에러 수 · 시간대별 TPS · 5분 칸 평균 응답시간. 🚫 부호 있는 지표(±) · 정확한 값 비교.
+
+Figma 정본: HeatmapCell 페이지 `624:10` · 세트 `624:47`(`value` 스케일 단계 8 + empty × `selected`) / HeatmapLegend 페이지 `624:48` · 세트 `624:75`(`marker`) / Heatmap 페이지 `624:89` · 세트 `624:905`(`mode` month · day × `state` default · no-data). Figma 칸 색은 가장 가까운 단계 — 코드는 단계 사이를 섞는다.
+
+## GpuStatusBar
+
+GPU 단계별(Total → Allocated → Active → Effective) 몫과 나머지를 세로 막대로 쌓는 깔때기 차트. **Composite** — [[ChartGrid]] · [[ChartValueAxis]](`ticks` = 단계 값) · [[ChartStackedColumn]] · [[ChartCategoryAxis]] 조합 + 몫을 잇는 흐름 면.
+
+| Prop | Type | Default |
+|---|---|---|
+| `categories` | `{ label, positive: { value, label, color? }, negative?: { value, label, color? } }[]` | — |
+| `max` | `number` — Y축 최대 | 단계마다 몫 + 나머지 중 최대 |
+| `frame` · `title` | `boolean` · `string` | `true` · «GPU 상태별 활용 현황» |
+
+- 몫 = 한 계열 색(기본 `--color-chart-series-1`, 단계마다 돌려 칠하지 않는다 §17) · 나머지 = `--color-surface-200`(상태색 아님 §23). 흐름 면 = 계열 색 7% · 선 25%.
+- 가리키면 나머지 0.32 · [[ChartTooltip]] 에 몫 · 나머지 · 비율(§26 강조). 대시보드 칸에서는 `frame={false}` + [[WidgetFrame]].
+- 📈 포함 관계 깔때기 몫(할당 → 사용 → 유효). 🚫 포함 관계 없는 나열 → [[BarList]] · 시간 변화.
+
+Figma 정본: 페이지 GpuStatusBar `624:9884` · 세트 `624:9968`(`frame` · title).
+
+## MetricBarCell
+
+표 셀 하나에 수치 + 비율 막대(구간 누적 가능). **Primitives.** 추이까지면 [[SparklineCell]].
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `string \| number \| null` — null 이면 `-` 만(막대 없음) | — |
+| `segments` | `{ ratio: 0~1, color: 토큰 }[]` — 비면 막대 없음 | `[]` |
+| `barWidth` | `number` | `56` |
+
+- 수치 `text-base font-numeric tabular-nums` 오른쪽 정렬 · 막대 높이 10 · 트랙 `--color-status-info-soft` · 둥근 끝.
+- 0 보다 큰 구간은 최소 2px(§21, 2026-10-23). ratio 합이 1 을 넘으면 잘린다 — 정규화는 호출측.
+
+Figma 정본: 페이지 MetricBarCell `624:76` · 세트 `624:88`(`segments` single · stacked · empty · value).
+
+## StatCard
+
+요약 지표 칸 — 큰 숫자 + 라벨 + 선택적 트렌드 기호. **Primitives**(DS import 0). 변화를 좋은 방향으로 판정해야 하면 [[TrendTile]], 숫자 줄은 [[MetricGrid]].
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` · `value` · `unit` | `string` | — |
+| `tone` | `"neutral" \| "success" \| "warning" \| "critical" \| "info"` — 왼쪽 인디케이터 색 | `"neutral"` |
+| `trend` | `"up" \| "down" \| "stable"` — ▲ success · ▼ error · ─ tertiary | — |
+| `delay` | `number` — 등장 애니메이션 지연 | — |
+
+- 색은 status · text 토큰만 — 차트 계열 색을 쓰지 않는다(차트가 아니다).
+- `trend` 는 방향만 받는다 — 오름이 늘 success 색이라 «낮을수록 좋은» 지표엔 [[TrendTile]] `better`.
+
+Figma 정본: 페이지 StatCard `624:960` · 세트 `624:1131`(`tone` × `trend` · label · value · unit).
+
+## 토폴로지 — TopologyCanvas · TopologyToolbar · TopologyNode · TopologyEdge · TopologyPort · TopologyCollapseToggle · TopologyMinimap
+
+대상 간 호출 · 연결 관계. 좌→우 계층 배치 · 카드 노드 전용(힘 기반 배치는 범위 밖). 좌표는 레이아웃 엔진 `layoutTopology` 가 소유한다 — 컴포넌트가 위치를 보정하지 않는다.
+
+| 컴포넌트 | 계층 | 역할 |
+|---|---|---|
+| **TopologyCanvas** | Composite | `graph` 를 배치 · 라우팅해 엣지(SVG)와 노드(HTML)를 같은 원점 · 같은 transform 으로 겹쳐 그린다 · pan/zoom. `view` + `onViewChange`(controlled) · `onToggle(id)` |
+| **TopologyToolbar** | Composite | 조회 조건 한 줄 — 빠른 검색(TextField) · 편집(Switch, 즉시 반영) · 지표(Select) · 방향 In/Out · 초기화(Button). 전 값 controlled |
+| **TopologyNode** | Primitives | 리프 카드(뱃지 + 이름 + 지표 + ↗↘) 또는 펼친 그룹 컨테이너(헤더만). 접힌 그룹 = 리프 카드 모양 |
+| **TopologyEdge** | Primitives | 직교 경로 1.5px + 가장 긴 구간 가운데 값 라벨(11px, 세로 구간은 -90°). `tone` default · alert |
+| **TopologyPort** | Primitives | 엣지가 노드에 물리는 점(r 5). `tone` default · ok · alert. SVG 안에서만 |
+| **TopologyCollapseToggle** | Primitives | 노드 왼쪽 40px 색 뱃지 겸 `+`/`−` 토글. 좌상단 · 우하단만 둥근 잎 모양. 리프는 `interactive={false}` 장식 |
+| **TopologyMinimap** | Primitives | 노드를 사각형으로 축소 + 지금 보이는 영역 사각형(`view` 에서 역산). 폭 168, 높이 = 그래프 종횡비(56~140) |
+
+```ts
+type TopologyGraph = {
+  nodes: { id; label; metric?; trend?: "up" | "down"; tone?: "default" | "ok" | "alert"; children?; collapsed? }[];
+  edges: { from; to; label?; tone?: "default" | "alert" }[];
+};
+```
+
+- 색은 유틸 클래스만 — `--color-topology-*`(캔버스 그라디언트 · 도트 격자 · 노드 · 그룹 · 엣지 · 포트) · 뱃지 default = `--color-brand-blue`. 노드 표면을 `--color-card` 로 대체하지 않는다(캔버스 자체 바닥 위 층).
+- 도트 격자는 transform 안쪽 — 확대하면 격자도 커진다. 엣지 SVG 는 `pointer-events: none`.
+- 줌 컨트롤은 [[TopologyZoomControl]](`TOPOLOGY_ZOOM` 25%~200%). 페이지 조립 예는 Shell `PageTopology`.
+- 📈 서비스 호출 · 네트워크 흐름 · 노드 상태. 🚫 관계 없는 대상 수치 비교 → [[BarList]].
+
+Figma 정본: TopologyCanvas 페이지 `624:951` · 세트 `624:10372`(`state` default · collapsed · alert-path) / TopologyToolbar `624:952` · `624:10060` / TopologyNode `624:949` · `624:9747` / TopologyEdge `624:947` · `624:9805` / TopologyPort `624:950` · `624:959` / TopologyCollapseToggle `624:946` · `624:9617` / TopologyMinimap `624:948` · `624:9883` / TopologyZoomControl `597:30` · `597:31`.
 
 ## Toast
 

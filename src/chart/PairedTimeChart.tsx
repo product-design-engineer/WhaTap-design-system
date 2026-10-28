@@ -33,6 +33,7 @@
  * - **미래 구간은 비워 둔다(2026-10-23 결정)** — `count` 로 전체 시점 수를 고정하면 값이 아직 없는 뒤쪽은 빈칸. 수집이 안 된 시점(`null`)은
  *   [[ChartBar]] «모름» 칸(막대) · 선 끊김(선)으로 따로 보인다. 두 칸의 시간 범위가 같아야 비교가 된다.
  * - 두 칸 모두 x = 칸 가운데(`band`) — 선 점이 막대와 세로로 맞는다. 시점 고르기는 공유(`index`), 툴팁은 위 칸에 두 지표를 함께(단위는 계열마다).
+ *   «모름» 칸 · 선 끊김을 가리키면 그 지표 줄에 «데이터 없음»(`showMissing`) — 회색 면이 구분선 · 고른 시점으로 오해되지 않게. 미래 빈칸은 줄 없음.
  * - 색: 위 · 아래 계열 슬롯 1 · 2 기본(`color` 로 바꿈). 막대 칸 hover 는 고른 시점 밖 막대를 흐린다(patterns §26 «강조»).
  *
  * ## Spec
@@ -42,7 +43,7 @@
  * | 플롯 | 위 칸: 위 16(이름) · 아래 4 / 아래 칸: 위 16 · 아래 14(시간 글자) · 오른쪽 8 · 왼쪽 `--wds-widget-axis-gutter` |
  * | 막대 | [[ChartBar]] · 칸 사이 1px · `null` = 모름 칸 · 미래 = 빈칸 |
  * | 선 | 1.5px · 칸 가운데 점을 잇는다 · `null` 에서 끊는다 |
- * | 시점 고르기 | 두 칸 [[ChartCrosshair]] `band` · `index` 공유 · 툴팁은 위 칸(두 지표 · 계열별 단위) |
+ * | 시점 고르기 | 두 칸 [[ChartCrosshair]] `band` · `index` 공유 · 툴팁은 위 칸(두 지표 · 계열별 단위) · `null` 시점은 그 지표 줄에 «데이터 없음» |
  * | 접근성 | 칸마다 `role="img"` + 이름 · 최대 |
  *
  * @example
@@ -163,10 +164,10 @@ export default function PairedTimeChart({ top, bottom, count, xLabels, pointLabe
               series={
                 k === 0
                   ? [
-                      { label: top.label, color: colorOf(top, 0), values: top.values, unit: top.unit, shape: top.kind === "bar" ? "square" : "line", noDot: top.kind === "bar" },
-                      { label: bottom.label, color: colorOf(bottom, 1), values: bottom.values, unit: bottom.unit, shape: bottom.kind === "bar" ? "square" : "line", noDot: true },
+                      { label: top.label, color: colorOf(top, 0), values: top.values, unit: top.unit, shape: top.kind === "bar" ? "square" : "line", noDot: top.kind === "bar", showMissing: true },
+                      { label: bottom.label, color: colorOf(bottom, 1), values: bottom.values, unit: bottom.unit, shape: bottom.kind === "bar" ? "square" : "line", noDot: true, showMissing: true },
                     ]
-                  : [{ label: p.label, color, values: p.values, unit: p.unit, noDot: p.kind === "bar" }]
+                  : [{ label: p.label, color, values: p.values, unit: p.unit, noDot: p.kind === "bar", showMissing: true }]
               }
               right={PAD_RIGHT}
               padTop={padTop}

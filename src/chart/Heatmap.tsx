@@ -163,7 +163,8 @@ export default function Heatmap({
             className="grid items-center"
             style={{ gridTemplateColumns: `28px repeat(${cols}, 1fr)`, gap: 4 }}
           >
-            <span className="text-sm text-tertiary tabular-nums">
+            {/* 라벨 칸 높이 = 칸 높이. 글자 줄 높이(15.7)가 칸(13)보다 커서 라벨 있는 짝수 행만 늘어나 행 간격이 들쭉날쭉했다. */}
+            <span className="flex items-center text-sm text-tertiary tabular-nums" style={{ height }}>
               {row % 2 === 0 ? `${row}시` : ""}
             </span>
             {Array.from({ length: cols }, (_, c) => {
