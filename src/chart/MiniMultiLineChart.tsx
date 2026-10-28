@@ -16,6 +16,7 @@
  * ## Metrics
  * - ✅ 단위 · 범위가 같은 2~3 계열 — 응답시간 p50 · p95 · p99 · 입력 · 출력 토큰 · 송신 · 수신(bps) · 2xx · 4xx · 5xx 건수
  * - ✅ 같은 지표의 대상 비교(서버 2~3대 CPU)
+ * - ✅ 표준 경계가 있는 지표의 대상별 추이(`threshold`) — LCP(2.5s) · INP(200ms) · CLS(0.25) 의 페이지 · 브라우저별 p75
  * - ❌ 단위나 범위가 다른 두 지표(TPS 와 응답시간) — 이중 축 금지(§19), 칸을 나눈다
  * - ❌ 대상이 많아 선이 엉키는 비교(서버 10대) → [[BarList]] TOP-N 또는 칸 나누기
  *
@@ -45,6 +46,14 @@
  * - 글자는 카드 바탕 위 `text-primary`, 계열 색은 테두리와 선 끝 점만 맡는다(§17: 글자에 계열 색을 쓰지 않는다).
  * - 배지끼리 겹치면 위아래로 밀어 띄운다. 선 끝 점은 제자리에 남는다.
  *
+ * 임계 띠 (`threshold`):
+ * - 판정 경계가 표준으로 정해진 지표(Core Web Vitals LCP 2.5s · INP 200ms · CLS 0.25)에서 경계를 그림 위에 긋는다.
+ *   배너 · 판정 칩의 숫자를 사용자가 그림에서 바로 대조하게 한다. 모양은 [[ForecastLineChart]] `threshold` 와 같다.
+ * - 임계선은 점선, 그 위(임계 ~ 천장)는 옅은 띠, 이름은 선 위 오른쪽 끝. 색은 `tone`(critical · warning)이 정한다.
+ *   선은 `--color-status-*`, 띠는 `--color-status-*-soft`, 이름 글자는 text 토큰.
+ * - 값축 상한은 임계 값까지 포함해 잡는다. 계열이 모두 임계 아래여도 경계가 그림 밖으로 나가지 않는다.
+ * - 임계는 하나. 경계가 둘인 점수(Good · Needs improvement · Poor 를 모두 긋기)는 [[ApdexChart]] 처럼 전용 차트로.
+ *
  * @example
  * ```tsx
  * <MiniMultiLineChart
@@ -64,7 +73,7 @@ import ChartCrosshair from "./ChartCrosshair";
 import ChartTimeAxis from "./ChartTimeAxis";
 import { DIM_OPACITY, MARK_CLASS } from "./_emphasis";
 import ChartValueAxis from "./ChartValueAxis";
-import { AXIS_GUTTER as GUTTER, niceMax } from "./_axisScale";
+import { AXIS_GUTTER as GUTTER, formatAxisValue, niceMax } from "./_axisScale";
 import AiTriggerButton from "../widget/TriggerButton";
 
 const PAD_RIGHT = 8;
@@ -76,6 +85,11 @@ const BADGE_STEP = 14;
 const MAX_BADGES = 5;
 const PAD_BOTTOM = 14;
 const PAD_TOP = 4;
+/** 임계 띠 색 — [[ForecastLineChart]] 와 같은 짝. 선은 상태색, 띠는 그 soft. */
+const THRESHOLD_TONE = {
+  critical: { line: "var(--color-status-error)", band: "var(--color-status-error-soft)" },
+  warning: { line: "var(--color-status-warning)", band: "var(--color-status-warning-soft)" },
+} as const;
 
 export type MiniMultiLineChartSeries = {
   /** legend 라벨. 빈 문자열이면 legend 에서 숨김. */
@@ -122,6 +136,11 @@ export type MiniMultiLineChartProps = {
   frame?: boolean;
   /** 시점마다 이름(「13:27:05」) — hover 툴팁 제목. 없으면 제목 없이. */
   pointLabels?: string[];
+  /**
+   * 임계선 · 그 위 옅은 띠. `value` 는 계열과 같은 단위. `label` 이 없으면 값 + `unit`.
+   * `tone` 기본 critical. 값축 상한은 이 값까지 포함해 잡는다.
+   */
+  threshold?: { value: number; label?: string; tone?: "critical" | "warning" };
 };
 
 export default function MiniMultiLineChart({
@@ -139,6 +158,7 @@ export default function MiniMultiLineChart({
   aiTriggerTooltip = "이 차트를 WhaTap AI로 분석",
   frame = true,
   pointLabels,
+  threshold,
 }: MiniMultiLineChartProps) {
   /* 범례를 가리킨 계열 — 그 선만 남기고 나머지를 흐린다(patterns §26 «강조») */
   const [focus, setFocus] = useState<string | null>(null);
@@ -147,8 +167,13 @@ export default function MiniMultiLineChart({
 
   /* ── 통합 스케일 ──────────────────────────────────────────────────── */
   const allValues = series.flatMap((s) => s.values);
-  const max = Math.max(0, ...allValues);
+  /* 임계가 있으면 상한에 넣는다 — 계열이 모두 아래여도 경계가 그림 안에 선다 */
+  const max = Math.max(0, ...allValues, threshold?.value ?? 0);
   const yMaxNice = niceMax(max);
+  const tone = THRESHOLD_TONE[threshold?.tone ?? "critical"];
+  /** 임계의 plot 세로 비율(0 = 천장, 1 = 바닥). */
+  const thresholdRatio = threshold && yMaxNice > 0 ? 1 - Math.min(threshold.value, yMaxNice) / yMaxNice : null;
+  const plotH = `(100% - ${PAD_TOP + PAD_BOTTOM}px)`;
 
   /* ── 시리즈별 polyline 데이터 ─────────────────────────────────────── */
   const plotSeries = series
@@ -272,7 +297,23 @@ export default function MiniMultiLineChart({
 
       {/* ── Chart area (flex-1) ────────────────────────────────────────── */}
       <div ref={areaRef} className="flex-1 min-h-0 relative">
+        {/* 임계 띠: 임계부터 천장까지. 판정 경계가 화면에 있어야 대조가 된다 */}
+        {thresholdRatio != null && thresholdRatio > 0 && (
+          <div
+            className="absolute"
+            style={{ left: GUTTER, right, top: PAD_TOP, height: `calc(${plotH} * ${thresholdRatio})`, background: tone.band }}
+          />
+        )}
+
         <ChartGrid max={yMaxNice} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={right} />
+
+        {/* 임계선 */}
+        {thresholdRatio != null && (
+          <div
+            className="absolute"
+            style={{ left: GUTTER, right, top: `calc(${PAD_TOP}px + ${plotH} * ${thresholdRatio})`, height: 0, borderTop: `1px dashed ${tone.line}` }}
+          />
+        )}
 
         {/* SVG — plot 영역에만 absolute 배치 */}
         <svg
@@ -312,6 +353,21 @@ export default function MiniMultiLineChart({
         {/* HTML overlay — px 고정 텍스트 */}
         <div className="absolute inset-0 pointer-events-none">
           <ChartValueAxis max={yMaxNice} unit={unit} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={right} />
+
+          {/* 임계 이름: 선 위 오른쪽 끝 */}
+          {threshold && thresholdRatio != null && (
+            <span
+              className="absolute text-chart text-secondary leading-none whitespace-nowrap"
+              style={{
+                fontFamily: "var(--font-family-numeric)",
+                right: `calc(${right} + 2px)`,
+                top: `calc(${PAD_TOP}px + ${plotH} * ${thresholdRatio} - 2px)`,
+                transform: "translateY(-100%)",
+              }}
+            >
+              {threshold.label ?? formatAxisValue(threshold.value) + unit}
+            </span>
+          )}
 
           {/* X축 시간 라벨 */}
           <ChartTimeAxis labels={xLabels} right={right} />
