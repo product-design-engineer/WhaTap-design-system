@@ -37,7 +37,7 @@
  * - duration 태그는 #00B543 알약. 아이콘은 라이브 SVG·토큰 색 그대로.
  * - 갱신/고정 표시는 박스 오른쪽 끝, 1px divider 뒤에 선다. 아이콘만 두지 말고 «갱신»·«고정» 글자를 함께 쓴다 — 아이콘만으로는 두 동작을 구별하지 못한다.
  * - 갱신은 `--color-brand-blue`, 고정은 `--color-text-secondary`. 갱신을 경고색으로 칠하지 않는다 — 잘못된 상태가 아니라 동작의 종류다.
- * - 캘린더나 직접 입력으로 고른 구간은 항상 고정이다. 이때는 `onRangeModeChange` 를 넘기지 말 것 — 토글이 사라지고 «고정» 글자만 남는다.
+ * - 캘린더나 직접 입력으로 선택한 구간은 항상 고정이다. 이때는 `onRangeModeChange` 를 넘기지 말 것 — 토글이 사라지고 «고정» 글자만 남는다.
  * - 갱신 모드는 저절로 다시 조회하지 않는다. 사용자가 검색을 누를 때만 다시 계산한다 — 저절로 흐르는 것은 LIVE 의 몫이다.
  * - **구간 길이는 언제나 종료 시각에서 거꾸로 계산한다**(호출측 몫). 갱신이면 종료 시각이 곧 «지금»이라 «최근 10분»,
  *   고정이면 고정된 종료 시각에서 10분이다. 그래서 드롭다운 글자는 갱신 · 라이브일 때 «최근 10분», 고정일 때 «10분» —
@@ -102,13 +102,13 @@ import DateTimeBlock from "./DateTimeBlock";
 import type { DateParts } from "./DateTimeBlock";
 import Tooltip from "./Tooltip";
 
-/** «최근 N분» 의 검색 동작 — rolling(갱신: 검색마다 다시 계산) · fixed(고정: 고른 구간 유지). */
+/** «최근 N분» 의 검색 동작 — rolling(갱신: 검색마다 다시 계산) · fixed(고정: 선택한 구간 유지). */
 export type TimeRangeMode = "rolling" | "fixed";
 
 const MODE_LABEL: Record<TimeRangeMode, string> = { rolling: "갱신", fixed: "고정" };
 const MODE_HINT: Record<TimeRangeMode, string> = {
   rolling: "검색할 때마다 그 시각을 끝점으로 구간을 다시 계산합니다",
-  fixed: "처음 고른 구간을 그대로 다시 조회합니다",
+  fixed: "처음 선택한 구간을 그대로 다시 조회합니다",
 };
 const MODE_COLOR: Record<TimeRangeMode, string> = {
   rolling: "var(--color-brand-blue)",
@@ -153,7 +153,7 @@ export default function TimeRangeSelector({
   onPrev?: () => void;
   /** 다음 구간으로 이동. */
   onNext?: () => void;
-  /** 달력 버튼 — 호출측이 캘린더를 띄운다. 거기서 고른 구간은 고정이다. */
+  /** 달력 버튼 — 호출측이 캘린더를 띄운다. 거기서 선택한 구간은 고정이다. */
   onPickDate?: () => void;
   /**
    * «최근 N분» 의 검색 동작 표시 — `rolling`(갱신) · `fixed`(고정).
