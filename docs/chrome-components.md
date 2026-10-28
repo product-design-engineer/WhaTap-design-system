@@ -239,7 +239,7 @@ export type InstanceStatus = "ok" | "warn" | "error" | "idle";
 시간 범위 입력기. dual datetime + live 토글 + 이전/다음 + 달력.
 
 ```ts
-type DateParts = { year: string; month: string; day: string; hour: string; minute: string };
+type DateParts = { year: string; month: string; day: string; hour: string; minute: string; second?: string };
 ```
 
 | Prop | Type | Default |
@@ -254,8 +254,47 @@ type DateParts = { year: string; month: string; day: string; hour: string; minut
 | `onPickDate` | `() => void` | — |
 | `rangeMode` | `"rolling" \| "fixed"` | — _(시안)_ |
 | `onRangeModeChange` | `(mode) => void` | — _(시안)_ |
+| `rangeControl` | `"segmented" \| "pin"` | `"segmented"` — `pin` 은 📌 고정 버튼 하나 _(정본)_ |
+| `live` | `boolean` | — _(넘기면 ▶ 시작 / ■ 중지 토글, 정본)_ |
+| `onPickStart` · `onPickEnd` | `() => void` | — _(시각마다 달력 버튼, 정본)_ |
+| `onStartChange` · `onEndChange` | `(next: DateParts) => void` | — _(직접 입력을 알림 → 고정, 정본)_ |
+| `durations` | `number[]` (분) | — _(넘기면 초록 알약이 구간 길이 드롭다운, 정본)_ |
+| `duration` | `number \| null` (분) | — _(목록 밖이면 «직접 지정»)_ |
+| `onDurationChange` | `(minutes) => void` | — |
 
 `OptionbarPage`가 `LiveTimerCompact`를 쓰고 있으니, 별도 시간 입력 UI가 필요한 페이지에서만 `TimeRangeSelector`를 직접 씁니다.
+
+### ✅ 동작 정본 (2026-10-28, 기획 «[타임 셀렉터] 동작 제안»)
+
+아래 «시안» 을 바탕으로 기획이 정한 동작입니다. 새 조각은 모두 선택 prop 이라, 넘기지 않으면 예전 모양 그대로입니다.
+
+**용어.** **구간** = 연·월·일·시·분·초로 정한 두 시각 사이의 범위 · **시작 시각 / 종료 시각** · **구간 길이**(5분 · 10분 …) · **갱신**(검색할 때마다 «지금» 기준으로 다시 계산) / **고정**(정한 구간 그대로) · **라이브**(누르지 않아도 계속 최신). «기간 · 마지막 시각 · Preset 시간 · Pin On/Off» 는 쓰지 않습니다.
+
+| 규칙 | 화면 | prop |
+|---|---|---|
+| 시각은 초까지 | `HH:MM:SS` | `start.second` · `end.second` |
+| 달력은 시작 · 종료 시각마다 하나 | 각 시각 뒤 📅 | `onPickStart` · `onPickEnd` |
+| 달력 패널은 시작 > 종료 · 최대 조회 기간 초과 날짜를 미리 흐리게 막는다. 직접 입력으로 넘기면 검색 버튼 옆에 이유 한 줄 + 검색 막기 | (호출측) | — |
+| 구간 길이는 언제나 **종료 시각에서 거꾸로** | 갱신 · 라이브 «최근 10분» / 고정 «10분» / 목록 밖 «직접 지정» | `durations` · `duration` · `onDurationChange` |
+| 길이를 고르는 것만으로는 갱신 / 고정이 바뀌지 않는다. 라이브 중이면 라이브가 이어지고 길이만 바뀐다 | — | — |
+| 갱신 / 고정은 📌 버튼 하나 — 눌리면 고정, 떼면 갱신 | 📌 고정 | `rangeControl="pin"` + `onRangeModeChange` |
+| 직접 입력 · 달력 · ‹ › → 고정, 라이브 중이면 라이브 중지 | 📌 눌림 | `onStartChange` · `onEndChange` · `onPickStart` · `onPickEnd` · `onPrev` · `onNext` 에서 호출측이 |
+| 라이브는 ▶ 시작 / ■ 중지 토글. 중지하면 멈춘 순간의 구간으로 고정 | ▶ / ■ | `live` + `onLive` |
+
+**들어올 때.** 링크에 담긴 구간 → 고정해 둔 구간(사람마다 · 메뉴마다) → «최근 5분»(메뉴마다 다를 수 있음) 순서. 새로고침 · 뒤로 가기는 보던 화면 그대로. 고정해 둔 구간으로 열면 셀렉터 아래 `Notice` 한 줄 — «어제 13:50~14:00 으로 고정된 구간을 보여 드리고 있어요 · [최근 5분 보기]». 보관 기간이 지난 저장 구간은 쓰지 않고 «최근 5분». 링크 복사는 항상 정확한 시각으로.
+
+```tsx
+<TimeRangeSelector
+  start={{ ...from, second: "12" }} end={{ ...to, second: "12" }}
+  live={live} onLive={toggleLive}
+  durations={[5, 10, 30, 60, 180, 360, 720, 1440]} duration={minutes} onDurationChange={pickLength}
+  rangeMode={mode} rangeControl="pin" onRangeModeChange={setMode}
+  onPickStart={openStartCalendar} onPickEnd={openEndCalendar}
+  onStartChange={pinIt} onEndChange={pinIt} onPrev={prevAndPin} onNext={nextAndPin}
+/>
+```
+
+Storybook: `Composite/TimeRangeSelector` → «정본 · 상태 한눈에» · «정본 · 동선 (직접 눌러 보세요)».
 
 ### 🧪 시안 — «최근 N분» 의 갱신 · 고정 (2026-10-26, 정책 확정 전)
 
