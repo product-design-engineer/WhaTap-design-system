@@ -35,6 +35,9 @@
  * - 고쳐 쓴 값을 알아야 하는 호출부는 `onChange` 를 넘긴다 — 칸을 고치고 **벗어날 때(blur)** 전체 `DateParts` 를 받는다.
  *   칠 때마다 알리지 않는 이유: 부모가 값을 다시 내려보내면 칸이 새로 그려져 치는 도중 포커스가 끊긴다.
  *   [[TimeRangeSelector]] 는 이것으로 «직접 입력하면 자동 고정» 을 건다.
+ * - **강조(emphasis).** 칸을 고치는 중(포커스가 안에 있음)이거나 `emphasis` 를 주면 블록 전체가 `--color-brand-blue-bg` 바탕 +
+ *   안쪽 `--color-brand-blue` 1px 테두리로 바뀐다(`.wds-datetime-block`). 시작 · 종료 중 **지금 바꾸는 쪽**이 어디인지 보이게 한다.
+ *   [[TimeRangeSelector]] 는 그 시각의 달력이 열려 있는 동안 `emphasis` 를 건다. 좌우 4px 여백은 평소에도 있어 강조가 켜져도 폭이 그대로다.
  * - **`parts` 가 바뀌면 표시도 바뀐다.** 칸은 사용자가 고쳐 쓸 수 있는 비제어 입력(`defaultValue`)이라
  *   그대로 두면 처음 받은 값에 멈춘다(이전 · 다음 이동이나 «최근 N분» 재검색 뒤에도 옛 시각이 남던 결함).
  *   그래서 칸마다 값으로 `key` 를 걸어 값이 바뀐 칸만 다시 그린다. 같은 값으로 다시 그려질 때는
@@ -69,9 +72,12 @@ export default function DateTimeBlock({
   parts,
   side,
   onChange,
+  emphasis,
 }: {
   parts: DateParts;
   side: "start" | "end";
+  /** 강조 — 이 시각을 지금 바꾸는 중(달력이 열림)일 때. 칸에 포커스가 있을 때는 주지 않아도 강조된다. */
+  emphasis?: boolean;
   /** 칸을 고치고 벗어날 때 전체 값을 받는다. 생략하면 비제어 입력 그대로. */
   onChange?: (next: DateParts) => void;
 }) {
@@ -94,7 +100,7 @@ export default function DateTimeBlock({
       : undefined;
 
   return (
-    <div className="flex items-center w-fit" style={{ height: "100%" }}>
+    <div className="wds-datetime-block flex items-center w-fit" data-emphasis={emphasis || undefined} style={{ height: "100%" }}>
       <input
         className={inputCls}
         style={{ ...numericFont, width: "var(--wds-datetime-year-w)" }}

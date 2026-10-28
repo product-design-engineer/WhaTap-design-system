@@ -274,6 +274,8 @@ type DateParts = { year: string; month: string; day: string; hour: string; minut
 |---|---|---|
 | 시각은 초까지 | `HH:MM:SS` | `start.second` · `end.second` |
 | 달력은 시작 · 종료 시각마다 하나 | 각 시각 뒤 📅 | `onPickStart` · `onPickEnd` |
+| 달력 판은 연 · 월 · 일 + 시 · 분 · 초, «적용» 을 눌러야 바뀐다 | 판 아래 시각 칸 · 고른 값 · 취소/적용 | `onStartChange` · `onEndChange` |
+| 바꾸는 쪽 시각을 강조 — 그 시각의 달력이 열린 동안 · 칸을 고치는 동안 | brand 옅은 바탕 + 1px 테두리 | (자동) |
 | 달력 패널은 시작 > 종료 · 최대 조회 기간 초과 날짜를 미리 흐리게 막는다. 직접 입력으로 넘기면 검색 버튼 옆에 이유 한 줄 + 검색 막기 | (호출측) | — |
 | 구간 길이는 언제나 **종료 시각에서 거꾸로** | 갱신 · 라이브 «최근 10분» / 고정 «10분» / 목록 밖 «직접 지정» | `durations` · `duration` · `onDurationChange` |
 | 길이를 고르는 것만으로는 갱신 / 고정이 바뀌지 않는다. 라이브 중이면 라이브가 이어지고 길이만 바뀐다 | — | — |
