@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ActiveTransactionArc, SPEED_LEGEND, WidgetFrame } from "@whatap/design-system";
+import { EXTREME_NOTE, names, wave } from "../../_extremes";
 
 /**
  * Stories for [[ActiveTransactionArc]] — APM 액티브 트랜잭션 Arc Equalizer.
@@ -87,6 +88,38 @@ export const InWidgetFrame: Story = {
       <WidgetFrame title="액티브 트랜잭션" legend={SPEED_LEGEND} onFullscreen={() => {}} menu={[{ key: "detail", label: "상세로 이동" }]}>
         <ActiveTransactionArc maxTx={{ name: "/api/order/checkout", value: 14 }} agent={{ active: 12, inactive: 0 }} agents={load(12, 0, 30, 0.12, 0.05)} frame={false} />
       </WidgetFrame>
+    </div>
+  ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────────── */
+
+/** 극단 · 100개 — 에이전트 100개. 고리 색은 속도 구간 3색이라 colorOf 를 쓰지 않는다. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 이 차트의 색은 속도 구간(normal · slow · very slow)이라 개체 색이 없다 — 에이전트 100칸이 3.6° 씩 얇아진다.` } } },
+  args: {
+    agent: { active: 100, inactive: 0 },
+    agents: names().map((name, i) => {
+      const n = Math.round(wave(i, 1, 20, 8)[0]);
+      return { name, normal: n, slow: Math.round(n * 0.2), verySlow: Math.round(n * 0.05) };
+    }),
+  },
+  render: (args) => (
+    <div style={{ width: 400, height: 240, border: "1px solid var(--color-border-default)", borderRadius: 4 }}>
+      <ActiveTransactionArc {...args} />
+    </div>
+  ),
+};
+
+/** 극단 · 데이터 없음 — 에이전트 0개. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 고리 바탕과 Total 0 만 남는다. maxTx 를 주지 않으면 데모 값(30초 · TC-1-57-8094)이 그대로 남는다 — 빈 상태를 말할 방법이 없다(결함 후보).` } } },
+  args: { agent: { active: 0, inactive: 0 }, agents: [], total: 0 },
+  render: (args) => (
+    <div style={{ width: 400, height: 240, border: "1px solid var(--color-border-default)", borderRadius: 4 }}>
+      <ActiveTransactionArc {...args} />
     </div>
   ),
 };

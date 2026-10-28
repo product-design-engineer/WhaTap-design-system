@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BOX_PLOT_LEGEND, BoxPlotChart, WidgetFrame } from "@whatap/design-system";
 import type { BoxPlotBox } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, names, scalar } from "../../_extremes";
 
 /**
  * Stories for [[BoxPlotChart]] — 대상별 값 분포를 백분위로. 선 p50 · 상자 p25–p75 · 수염 p5–p95 · 점 p99.
@@ -78,6 +79,34 @@ export const InWidgetFrame: Story = {
       <WidgetFrame title="서비스별 응답시간 분포 (ms)" summary={BOX_PLOT_LEGEND}>
         <BoxPlotChart boxes={SERVICES} unit="ms" frame={false} />
       </WidgetFrame>
+    </div>
+  ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────── */
+
+const EX_BOXES: BoxPlotBox[] = names(EXTREME_N, "svc").map((n, i) => ({ label: n, values: latency(i + 31, 60 + scalar(i, 240), 600, 40) }));
+
+/** 극단 · 100개 — 상자 100개. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 범주는 계열이 아니라 색은 하나다. 상자 100개가 한 줄에 서서 상자는 선 한 줄로 줄고, p50 숫자가 서로 겹치며, 이름 글자는 사라진다.` } } },
+  args: { boxes: EX_BOXES, unit: "ms" },
+  render: (args) => (
+    <div style={{ ...box, width: 720 }}>
+      <BoxPlotChart {...args} />
+    </div>
+  ),
+};
+
+/** 극단 · 데이터 없음 — 상자 0개 · 원값 0개. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 원값이 빈 상자는 백분위를 낼 수 없어(\`boxPlotStats\` → null) 이름 칸만 남는다.` } } },
+  args: { boxes: [{ label: "api-gw", values: [] }, { label: "order", values: [] }], unit: "ms" },
+  render: (args) => (
+    <div style={box}>
+      <BoxPlotChart {...args} />
     </div>
   ),
 };

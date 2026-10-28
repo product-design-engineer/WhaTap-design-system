@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { WidgetFrame, ZoneScatterChart } from "@whatap/design-system";
 import type { ZoneScatterPoint } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, names, scalar } from "../../_extremes";
 
 /**
  * Stories for [[ZoneScatterChart]] — 판정 구역 위 대상 점. 구역 = 무채색 면, 점 = 계열색, 축은 선형.
@@ -71,6 +72,34 @@ export const InWidgetFrame: Story = {
       <WidgetFrame title="GPU Resource Map" menu={[{ key: "rebalance", label: "재배치 분석" }]} onFullscreen={() => {}}>
         <ZoneScatterChart points={GPUS} xBreaks={[1, 50]} yBreaks={[30, 70]} zones={ZONES} columnLabels={["Idle GPU", "Active GPU", "Effective GPU"]} critical={{ from: 95, label: "Memory Critical" }} xUnit="%" yUnit="%" frame={false} />
       </WidgetFrame>
+    </div>
+  ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────────── */
+
+const EXTREME_POINTS: ZoneScatterPoint[] = names(EXTREME_N, "gpu").map((label, i) => ({ x: scalar(i), y: scalar(i + 13), label }));
+
+/** 극단 · 100개 — GPU 100대. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 점 100개가 구역 위에 겹쳐 찍힌다 — 한 색(계열 하나)이라 색 슬롯은 쓰지 않는다.` } } },
+  args: { points: EXTREME_POINTS, xBreaks: [1, 50], yBreaks: [30, 70], zones: ZONES, columnLabels: ["Idle GPU", "Active GPU", "Effective GPU"], critical: { from: 95, label: "Memory Critical" }, xUnit: "%", yUnit: "%" },
+  render: (args) => (
+    <div style={box}>
+      <ZoneScatterChart {...args} />
+    </div>
+  ),
+};
+
+/** 극단 · 데이터 없음 — `points={[]}`. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 구역과 축만 남는다.` } } },
+  args: { points: [], xBreaks: [1, 50], yBreaks: [30, 70], zones: ZONES, columnLabels: ["Idle GPU", "Active GPU", "Effective GPU"], critical: { from: 95, label: "Memory Critical" }, xUnit: "%", yUnit: "%" },
+  render: (args) => (
+    <div style={box}>
+      <ZoneScatterChart {...args} />
     </div>
   ),
 };

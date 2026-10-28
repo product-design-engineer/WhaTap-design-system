@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ArcGauge, RangeGauge, WidgetFrame } from "@whatap/design-system";
+import { EXTREME_NOTE } from "../../_extremes";
 
 /**
  * Stories for [[ArcGauge]] — 범위 안 지금 값 하나. RangeGauge 와 같은 계약의 둥근 판.
@@ -65,4 +66,28 @@ export const SameContractAsRangeGauge: Story = {
       </div>
     </div>
   ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────── */
+const ExtremeLabel = ({ children }: { children: string }) => <span className="text-sm text-tertiary">{children}</span>;
+
+/** 0 과 상한(100) 초과. */
+export const ExtremeBounds: Story = {
+  name: "극단 · 0 과 상한 초과",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.bounds}\n\n관찰: 150 / 100 은 호가 끝에서 멈추고 숫자만 150 을 말한다.` } } },
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <ExtremeLabel>값 0</ExtremeLabel>
+      <ArcGauge label="CPU" value={0} max={100} unit="%" thresholds={TH} />
+      <ExtremeLabel>상한 초과 — 150 / 100</ExtremeLabel>
+      <ArcGauge label="CPU" value={150} max={100} unit="%" thresholds={TH} />
+    </div>
+  ),
+};
+
+/** 데이터 없음 — NaN. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty}\n\n⚠️ 결함: \`value\` 가 필수 숫자라 없음을 NaN 으로 넣게 되고, 가운데 숫자에 «NaN» 이 그대로 나온다.` } } },
+  args: { label: "CPU", value: Number.NaN, max: 100, unit: "%", thresholds: TH },
 };

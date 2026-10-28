@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MiniLineChart, StatusTimeline, WidgetFrame, statusTimelineLegend } from "@whatap/design-system";
 import type { StatusTimelineEvent } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, names, scalar } from "../../_extremes";
 
 /**
  * Stories for [[StatusTimeline]] — 시간 위 사건 마커. 높이 = 건수, 색 = 심각도.
@@ -115,4 +116,39 @@ export const UnderMetric: Story = {
       </div>
     );
   },
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────────── */
+
+const SEVERITIES = ["info", "warning", "critical"] as const;
+/** 사건 100건 — 28분 구간에 고르게, 건수 · 심각도는 정해진 식. */
+const EXTREME_EVENTS: StatusTimelineEvent[] = Array.from({ length: EXTREME_N }, (_, i) => ({
+  at: Math.round(((i * END) / EXTREME_N) * 10) / 10,
+  count: 1 + Math.round(scalar(i, 19)),
+  severity: SEVERITIES[Math.floor(scalar(i + 5, 2.99))],
+}));
+
+/** 극단 · 100개 — 사건 100건. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 막대 100개가 28분 폭에 빽빽이 선다. 범례는 심각도 3종이라 개체 수와 무관하다.` } } },
+  args: { events: EXTREME_EVENTS, start: START, end: END, xLabels: LABELS, formatAt },
+  render: (args) => (
+    <div style={box}>
+      <StatusTimeline {...args} />
+    </div>
+  ),
+};
+
+/** 극단 · 데이터 없음 — `events={[]}`, 대시보드 칸 안. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 축만 남는다(단독 «Empty» 와 같은 그림을 WidgetFrame 안에서).` } } },
+  render: () => (
+    <div style={{ width: 560, height: 200 }}>
+      <WidgetFrame title="이벤트 타임라인" summary="최근 30분" legend={statusTimelineLegend()}>
+        <StatusTimeline events={[]} start={START} end={END} xLabels={LABELS} frame={false} />
+      </WidgetFrame>
+    </div>
+  ),
 };

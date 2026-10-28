@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MiniLineChart, WidgetFrame } from "@whatap/design-system";
+import { EXTREME_NOTE, timeLabels, wave } from "../../_extremes";
 
 /**
  * Stories for [[MiniLineChart]] — DB/APM/GPU 모니터링 카드용 line chart.
@@ -101,4 +102,28 @@ export const InWidgetFrame: Story = {
       </WidgetFrame>
     </div>
   ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────── */
+const ExtremeLabel = ({ children }: { children: string }) => <span className="text-sm text-tertiary">{children}</span>;
+
+/** 0 과 긴 시계열(100점) 위 스파이크. */
+export const ExtremeBounds: Story = {
+  name: "극단 · 0 과 상한 초과",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.bounds}\n\n관찰: 100점 + 스파이크(평소의 10배+). 값축이 스파이크에 맞춰 늘어나 나머지 선이 바닥에 눌린다. ⚠️ 결함: \`xLabels\` 100개를 솎지 않고 모두 찍어 X축 글자가 겹쳐 한 덩어리가 된다.` } } },
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <ExtremeLabel>값 0 — 100점 모두 0</ExtremeLabel>
+      <MiniLineChart title="CPU Usage" unit="%" values={Array.from({ length: 100 }, () => 0)} xLabels={timeLabels(100)} />
+      <ExtremeLabel>100점 + 스파이크</ExtremeLabel>
+      <MiniLineChart title="CPU Usage" unit="%" values={wave(0, 100).map((v, i) => (i === 80 ? 600 : v))} xLabels={timeLabels(100)} showTopStat />
+    </div>
+  ),
+};
+
+/** 데이터 없음 — 빈 배열. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty}\n\n관찰: \`values\` 가 number[] 라 수집 공백(null)을 표현할 수 없다. 빈 배열이어도 기본 \`xLabels\`(13:27 …)와 0% 축 · 점선 표지가 그려져, 데이터가 있는 빈 구간처럼 보인다.` } } },
+  args: { title: "CPU Usage", unit: "%", values: [] },
 };
