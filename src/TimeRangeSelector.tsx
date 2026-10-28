@@ -50,7 +50,11 @@
  *   날짜를 **미리 흐리게 막는다**. 직접 입력으로 넘기면 검색 버튼 옆에 이유를 한 줄 적고 검색을 막는다.
  * - 고정된 구간으로 화면을 열 때(저장된 구간)는 셀렉터 아래에 안내 한 줄 —
  *   «어제 13:50~14:00 으로 고정된 구간을 보여 드리고 있어요 · [최근 5분 보기]» ([[Notice]]).
- * - 📌 버튼은 아이콘 + «고정» 글자. 눌림은 `bg-surface-100` + `--color-brand-blue`, 안 눌림은 `text-tertiary`.
+ * - 📌 버튼은 아이콘 + «고정» 글자. 눌림(고정)은 `--color-brand-blue-bg` 바탕 + `--color-brand-blue` 1px 테두리 · 글자 — 고정은
+ *   «구간이 움직이지 않는다» 는 걸 놓치면 안 되는 상태라 한눈에 띄운다. 안 눌림(갱신)은 `text-tertiary`.
+ * - 시각마다 달력 버튼을 누르면 [[Calendar]] 판이 그 버튼 아래에 뜬다(`onStartChange` · `onEndChange` 가 있을 때). 고른 날짜는
+ *   시각(시 · 분 · 초)을 그대로 두고 날짜만 바꾼다. 시작 달력은 종료일 뒤를, 종료 달력은 시작일 앞을 막고, `minDate` · `maxDate` ·
+ *   `maxRangeDays` 밖도 막는다. 바깥을 누르거나 Esc 면 닫힌다. 판은 상자 밖에 띄운다 — 상자는 `overflow-hidden` 이라 안에 두면 잘린다.
  * - 옆에 붙이는 검색 [[Button]] 과 «바로 조회» 프리셋 버튼은 `size="lg"`(32px) — 박스 높이 32px 와 맞춘다. 한 줄에서 높이가 다르면 바닥선이 어긋난다.
  *
  * ## Spec
@@ -60,7 +64,10 @@
  * - 눌린 칸: `bg-surface-100` + 모드 색 글자. 안 눌린 칸: `text-tertiary`, hover `bg-surface-100`.
  * - `rangeControl="pin"` + `onRangeModeChange` → 📌 «고정» 버튼 하나, `aria-pressed = (rangeMode === "fixed")`. 누르면 반대 값으로.
  * - `live` 지정 → 라이브 버튼 `aria-pressed={live}` · `aria-label` «라이브 시작» / «라이브 중지», 아이콘 ▶ / ■(`--color-status-success`).
- * - `onPickStart` 또는 `onPickEnd` → 각 시각 바로 뒤에 달력 버튼(«시작 시각 달력» · «종료 시각 달력»), 오른쪽 단일 달력 버튼은 없앤다.
+ *   라이브 중(■)에는 링이 1.6초마다 퍼지는 펄스(`.wds-live-pulse`, 1 → 1.3배 · 투명해짐) — 계속 갱신 중인 화면을 멈춘 화면과 구별한다.
+ *   `prefers-reduced-motion` 이면 펄스를 멈춘다.
+ * - `onPickStart` · `onPickEnd` · `onStartChange` · `onEndChange` 중 하나라도 → 각 시각 바로 뒤에 달력 버튼(«시작 시각 달력» · «종료 시각 달력»,
+ *   `aria-expanded`), 오른쪽 단일 달력 버튼은 없앤다. 판은 버튼 왼쪽 −12px · 상자 아래 4px · `z-index 50`.
  * - `durations` → 초록 알약에 ▾ 가 붙고 위에 투명한 네이티브 `<select aria-label="구간 길이">` 를 겹친다(키보드 · 스크린리더는 브라우저 목록).
  *   길이 표기: 나누어떨어지는 가장 큰 단위 — 5분 · 1시간 · 1일.
  * - `start.second` · `end.second` → `HH:MM:SS`. 칸 순서 연 → 월 → 일 → 시 → 분 → 초.
@@ -89,6 +96,8 @@
  * />
  * ```
  */
+import { useEffect, useRef, useState, type MouseEvent } from "react";
+import Calendar from "./Calendar";
 import DateTimeBlock from "./DateTimeBlock";
 import type { DateParts } from "./DateTimeBlock";
 import Tooltip from "./Tooltip";
@@ -126,6 +135,9 @@ export default function TimeRangeSelector({
   durations,
   duration,
   onDurationChange,
+  minDate,
+  maxDate,
+  maxRangeDays,
 }: {
   /** 상단 제목. 빈 문자열이면 제목 줄을 그리지 않는다. */
   title?: string;
@@ -164,9 +176,9 @@ export default function TimeRangeSelector({
   onPickStart?: () => void;
   /** 종료 시각 옆 달력 버튼. */
   onPickEnd?: () => void;
-  /** 시작 시각 칸을 고쳐 쓸 때마다 — 호출측은 여기서 고정으로 바꾼다(직접 입력 = 고정). */
+  /** 시작 시각 칸을 고치고 벗어날 때 · 달력에서 날짜를 고를 때 — 호출측은 여기서 고정으로 바꾼다(직접 입력 = 고정). */
   onStartChange?: (next: DateParts) => void;
-  /** 종료 시각 칸을 고쳐 쓸 때마다. */
+  /** 종료 시각 칸을 고치고 벗어날 때 · 달력에서 날짜를 고를 때. */
   onEndChange?: (next: DateParts) => void;
   /** 구간 길이 목록(분). 넘기면 초록 알약이 드롭다운이 된다 — 예: `[5, 10, 30, 60, 180, 360, 720, 1440]`. */
   durations?: number[];
@@ -174,15 +186,60 @@ export default function TimeRangeSelector({
   duration?: number | null;
   /** 구간 길이를 고를 때. 종료 시각에서 거꾸로 계산하는 것은 호출측 몫이다. */
   onDurationChange?: (minutes: number) => void;
+  /** 달력에서 고를 수 있는 가장 이른 날 `YYYY-MM-DD` — 데이터 보관 기간의 시작. */
+  minDate?: string;
+  /** 달력에서 고를 수 있는 가장 늦은 날 `YYYY-MM-DD` — 보통 오늘. */
+  maxDate?: string;
+  /** 메뉴의 최대 조회 기간(일). 반대쪽 시각에서 이 일수를 넘는 날은 달력에서 막는다. */
+  maxRangeDays?: number;
 }) {
-  const perSideCalendar = Boolean(onPickStart || onPickEnd);
+  const perSideCalendar = Boolean(onPickStart || onPickEnd || onStartChange || onEndChange);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [cal, setCal] = useState<{ side: "start" | "end"; left: number } | null>(null);
+
+  /* 바깥을 누르면 달력을 닫는다. */
+  useEffect(() => {
+    if (!cal) return;
+    const onDown = (e: globalThis.MouseEvent) => {
+      if (!rootRef.current?.contains(e.target as Node)) setCal(null);
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [cal]);
+
+  const openCal = (side: "start" | "end") => (e: MouseEvent<HTMLButtonElement>) => {
+    (side === "start" ? onPickStart : onPickEnd)?.();
+    if (!(side === "start" ? onStartChange : onEndChange)) return; // 날짜를 받을 곳이 없으면 판을 띄우지 않는다
+    const root = rootRef.current?.getBoundingClientRect();
+    const btn = e.currentTarget.getBoundingClientRect();
+    setCal((c) => (c?.side === side ? null : { side, left: root ? btn.left - root.left : 0 }));
+  };
+
+  const startDay = dayOf(start);
+  const endDay = dayOf(end);
+  const limits =
+    cal?.side === "start"
+      ? {
+          min: latest(minDate, maxRangeDays !== undefined ? shiftDay(endDay, -maxRangeDays) : undefined),
+          max: earliest(maxDate, endDay),
+        }
+      : {
+          min: latest(minDate, startDay),
+          max: earliest(maxDate, maxRangeDays !== undefined ? shiftDay(startDay, maxRangeDays) : undefined),
+        };
+  const pickDay = (date: string) => {
+    const [year, month, day] = date.split("-");
+    if (cal?.side === "start") onStartChange?.({ ...start, year, month, day });
+    else onEndChange?.({ ...end, year, month, day });
+    setCal(null);
+  };
   const pillLabel = durations
     ? duration != null && durations.includes(duration)
       ? `${!live && rangeMode === "fixed" ? "" : "최근 "}${formatMinutes(duration)}`
       : "직접 지정"
     : durationLabel;
   return (
-    <div className="flex flex-col gap-6px">
+    <div ref={rootRef} className="relative flex flex-col gap-6px">
       {title && (
         <div
           className="text-base font-bold text-primary tracking-default"
@@ -229,10 +286,10 @@ export default function TimeRangeSelector({
           </button>
 
           <DateTimeBlock parts={start} side="start" onChange={onStartChange} />
-          {perSideCalendar && <CalendarButton label="시작 시각 달력" onClick={onPickStart} />}
+          {perSideCalendar && <CalendarButton label="시작 시각 달력" expanded={cal?.side === "start"} onClick={openCal("start")} />}
           <span className="text-base text-tertiary">~</span>
           <DateTimeBlock parts={end} side="end" onChange={onEndChange} />
-          {perSideCalendar && <CalendarButton label="종료 시각 달력" onClick={onPickEnd} />}
+          {perSideCalendar && <CalendarButton label="종료 시각 달력" expanded={cal?.side === "end"} onClick={openCal("end")} />}
 
           <span
             data-ds-policy-ok="success 알약 위 전경 — 컬러 배경 위 고정 흰색"
@@ -292,9 +349,33 @@ export default function TimeRangeSelector({
           </>
         )}
       </div>
+
+      {cal && (
+        <div className="absolute" style={{ top: "100%", left: Math.max(0, cal.left - 12), marginTop: 4, zIndex: 50 }}>
+          <Calendar
+            aria-label={cal.side === "start" ? "시작 날짜 선택" : "종료 날짜 선택"}
+            value={cal.side === "start" ? startDay : endDay}
+            min={limits.min}
+            max={limits.max}
+            today={maxDate}
+            onSelect={pickDay}
+            onClose={() => setCal(null)}
+          />
+        </div>
+      )}
     </div>
   );
 }
+
+const pad2 = (v: string) => v.padStart(2, "0");
+const dayOf = (p: DateParts) => `${p.year.padStart(4, "0")}-${pad2(p.month)}-${pad2(p.day)}`;
+const shiftDay = (s: string, n: number) => {
+  const [y, m, d] = s.split("-").map(Number);
+  const t = new Date(y, m - 1, d + n);
+  return `${t.getFullYear()}-${pad2(String(t.getMonth() + 1))}-${pad2(String(t.getDate()))}`;
+};
+const latest = (...xs: (string | undefined)[]) => xs.filter(Boolean).sort().pop();
+const earliest = (...xs: (string | undefined)[]) => xs.filter(Boolean).sort()[0];
 
 /** 분 → «5분» · «1시간» · «1일». 나누어떨어지는 가장 큰 단위로. */
 function formatMinutes(m: number) {
@@ -303,12 +384,22 @@ function formatMinutes(m: number) {
   return `${m}분`;
 }
 
-function CalendarButton({ label, onClick }: { label: string; onClick?: () => void }) {
+function CalendarButton({
+  label,
+  onClick,
+  expanded,
+}: {
+  label: string;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  expanded?: boolean;
+}) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-label={label}
+      aria-haspopup={expanded === undefined ? undefined : "dialog"}
+      aria-expanded={expanded}
       className="flex items-center justify-center cursor-pointer hover-opacity-70"
     >
       <IcStartDate />
@@ -330,9 +421,12 @@ function PinToggle({ mode, onChange }: { mode: TimeRangeMode; onChange: (mode: T
           aria-pressed={pinned}
           onClick={() => onChange(pinned ? "rolling" : "fixed")}
           className={`flex items-center gap-4px px-6px h-20px rounded-2px text-base font-medium cursor-pointer ${
-            pinned ? "bg-surface-100" : "text-tertiary hover-bg-surface-100"
+            pinned ? "" : "text-tertiary hover-bg-surface-100"
           }`}
           style={{
+            /* 눌림 = 고정. 회색 바탕은 눌린 줄 몰라서 brand 옅은 바탕 + 1px brand 테두리로 한눈에 띄운다. */
+            background: pinned ? "var(--color-brand-blue-bg)" : undefined,
+            boxShadow: pinned ? "inset 0 0 0 1px var(--color-brand-blue)" : undefined,
             color: pinned ? "var(--color-brand-blue)" : undefined,
             fontFamily: "var(--font-family-korean)",
           }}
@@ -427,7 +521,8 @@ function IcLivePlay() {
 }
 function IcLiveStop() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" style={{ overflow: "visible" }}>
+      <circle className="wds-live-pulse" cx="12" cy="12" r="9" stroke="var(--color-status-success)" strokeWidth="2" />
       <circle cx="12" cy="12" r="9" stroke="var(--color-status-success)" strokeWidth="2" />
       <rect x="9" y="9" width="6" height="6" rx="1" fill="var(--color-status-success)" />
     </svg>

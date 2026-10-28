@@ -30,7 +30,10 @@
  * - `side` prop 으로 aria-label 접두어(시작/종료) 자동 결정.
  * - **초 칸은 `parts.second` 가 있을 때만** 그린다 — 없으면 예전과 같은 `HH:MM` DOM. 시각을 초까지 다루는 화면은
  *   `second` 를 넘긴다(Tab 순서 연 → 월 → 일 → 시 → 분 → 초).
- * - 고쳐 쓴 값을 알아야 하는 호출부는 `onChange` 를 넘긴다 — 칸 하나를 고칠 때마다 전체 `DateParts` 를 받는다.
+ * - **숫자만 받는다.** 숫자가 아닌 글자는 치는 즉시 지운다(붙여넣기 포함). 칸마다 자릿수를 넘겨 칠 수 없다 — 연 4자리,
+ *   나머지 2자리(`maxLength`). 숫자 키패드(`inputMode="numeric"`).
+ * - 고쳐 쓴 값을 알아야 하는 호출부는 `onChange` 를 넘긴다 — 칸을 고치고 **벗어날 때(blur)** 전체 `DateParts` 를 받는다.
+ *   칠 때마다 알리지 않는 이유: 부모가 값을 다시 내려보내면 칸이 새로 그려져 치는 도중 포커스가 끊긴다.
  *   [[TimeRangeSelector]] 는 이것으로 «직접 입력하면 자동 고정» 을 건다.
  * - **`parts` 가 바뀌면 표시도 바뀐다.** 칸은 사용자가 고쳐 쓸 수 있는 비제어 입력(`defaultValue`)이라
  *   그대로 두면 처음 받은 값에 멈춘다(이전 · 다음 이동이나 «최근 N분» 재검색 뒤에도 옛 시각이 남던 결함).
@@ -54,6 +57,12 @@ export type DateParts = {
 };
 
 const pad2 = (v: string) => v.padStart(2, "0");
+/** 숫자만 남긴다 — 붙여넣기 · 한글 입력도 같은 길로. */
+const digitsOnly = (e: { currentTarget: HTMLInputElement }) => {
+  const el = e.currentTarget;
+  const clean = el.value.replace(/\D/g, "");
+  if (clean !== el.value) el.value = clean;
+};
 const pad4 = (v: string) => v.padStart(4, "0");
 
 export default function DateTimeBlock({
@@ -63,7 +72,7 @@ export default function DateTimeBlock({
 }: {
   parts: DateParts;
   side: "start" | "end";
-  /** 칸 하나를 고칠 때마다 전체 값을 받는다. 생략하면 비제어 입력 그대로. */
+  /** 칸을 고치고 벗어날 때 전체 값을 받는다. 생략하면 비제어 입력 그대로. */
   onChange?: (next: DateParts) => void;
 }) {
   const inputCls =
@@ -75,8 +84,14 @@ export default function DateTimeBlock({
   const sepCls = "text-base text-tertiary";
   const tabBase = side === "start" ? -100000000 : -200000000;
   const label = side === "start" ? "시작" : "종료";
-  const edit = (key: keyof DateParts) =>
-    onChange ? (e: { currentTarget: HTMLInputElement }) => onChange({ ...parts, [key]: e.currentTarget.value }) : undefined;
+  /* 칸을 벗어날 때 한 번만 알린다 — 칠 때마다 알리면 부모가 다시 그리며 칸이 바뀌어 포커스가 끊긴다. */
+  const commit = (key: keyof DateParts) =>
+    onChange
+      ? (e: { currentTarget: HTMLInputElement }) => {
+          const v = e.currentTarget.value;
+          if (v !== "" && v !== parts[key]) onChange({ ...parts, [key]: v });
+        }
+      : undefined;
 
   return (
     <div className="flex items-center w-fit" style={{ height: "100%" }}>
@@ -85,7 +100,10 @@ export default function DateTimeBlock({
         style={{ ...numericFont, width: "var(--wds-datetime-year-w)" }}
         key={`year-${pad4(parts.year)}`}
         defaultValue={pad4(parts.year)}
-        onChange={edit("year")}
+        onInput={digitsOnly}
+        onBlur={commit("year")}
+        maxLength={4}
+        inputMode="numeric"
         tabIndex={tabBase}
         aria-label={`${label} 년도`}
       />
@@ -95,7 +113,10 @@ export default function DateTimeBlock({
         style={{ ...numericFont, width: "var(--wds-datetime-field-w)" }}
         key={`month-${pad2(parts.month)}`}
         defaultValue={pad2(parts.month)}
-        onChange={edit("month")}
+        onInput={digitsOnly}
+        onBlur={commit("month")}
+        maxLength={2}
+        inputMode="numeric"
         tabIndex={tabBase - 1}
         aria-label={`${label} 월`}
       />
@@ -105,7 +126,10 @@ export default function DateTimeBlock({
         style={{ ...numericFont, width: "var(--wds-datetime-field-w)" }}
         key={`day-${pad2(parts.day)}`}
         defaultValue={pad2(parts.day)}
-        onChange={edit("day")}
+        onInput={digitsOnly}
+        onBlur={commit("day")}
+        maxLength={2}
+        inputMode="numeric"
         tabIndex={tabBase - 2}
         aria-label={`${label} 일`}
       />
@@ -115,7 +139,10 @@ export default function DateTimeBlock({
         style={{ ...numericFont, width: "var(--wds-datetime-field-w)" }}
         key={`hour-${pad2(parts.hour)}`}
         defaultValue={pad2(parts.hour)}
-        onChange={edit("hour")}
+        onInput={digitsOnly}
+        onBlur={commit("hour")}
+        maxLength={2}
+        inputMode="numeric"
         tabIndex={tabBase - 3}
         aria-label={`${label} 시`}
       />
@@ -125,7 +152,10 @@ export default function DateTimeBlock({
         style={{ ...numericFont, width: "var(--wds-datetime-field-w)" }}
         key={`minute-${pad2(parts.minute)}`}
         defaultValue={pad2(parts.minute)}
-        onChange={edit("minute")}
+        onInput={digitsOnly}
+        onBlur={commit("minute")}
+        maxLength={2}
+        inputMode="numeric"
         tabIndex={tabBase - 4}
         aria-label={`${label} 분`}
       />
@@ -137,7 +167,10 @@ export default function DateTimeBlock({
             style={{ ...numericFont, width: "var(--wds-datetime-field-w)" }}
             key={`second-${pad2(parts.second)}`}
             defaultValue={pad2(parts.second)}
-            onChange={edit("second")}
+            onInput={digitsOnly}
+            onBlur={commit("second")}
+            maxLength={2}
+            inputMode="numeric"
             tabIndex={tabBase - 5}
             aria-label={`${label} 초`}
           />

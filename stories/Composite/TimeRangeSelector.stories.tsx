@@ -381,6 +381,9 @@ export const Proposal_LongRangeWarning: Story = {
 const LENGTHS = [5, 10, 30, 60, 180, 360, 720, 1440];
 const partsS = (t: number) => ({ ...parts(t), second: p2(new Date(t).getSeconds()) });
 const noop = () => {};
+/** DateParts → 시각(ms). 고쳐 쓰는 도중의 덜 찬 값이면 NaN. */
+const timeOf = (p: { year: string; month: string; day: string; hour: string; minute: string; second?: string }) =>
+  new Date(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute, +(p.second ?? 0)).getTime();
 
 function StateRow({ caption, children }: { caption: string; children: React.ReactNode }) {
   return (
@@ -532,7 +535,6 @@ function CanonFlowDemo() {
   };
 
   const span = range.to - range.from;
-  const HOUR = 3600_000;
 
   return (
     <div className="flex flex-col gap-12px" style={{ maxWidth: 820 }}>
@@ -561,10 +563,17 @@ function CanonFlowDemo() {
           rangeMode={mode}
           rangeControl="pin"
           onRangeModeChange={toggleMode}
-          onPickStart={() => pin({ from: range.from - HOUR, to: range.to })}
-          onPickEnd={() => pin({ from: range.from, to: Math.max(range.from + 60_000, range.to - HOUR / 2) })}
-          onStartChange={() => pin(range)}
-          onEndChange={() => pin(range)}
+          minDate="2026-09-27"
+          maxDate="2026-10-26"
+          maxRangeDays={7}
+          onStartChange={(p) => {
+            const t = timeOf(p);
+            pin(Number.isFinite(t) && t < range.to ? { from: t, to: range.to } : range);
+          }}
+          onEndChange={(p) => {
+            const t = timeOf(p);
+            pin(Number.isFinite(t) && t > range.from ? { from: range.from, to: t } : range);
+          }}
           onPrev={() => pin({ from: range.from - span, to: range.to - span })}
           onNext={() => pin({ from: range.from + span, to: range.to + span })}
         />
@@ -605,7 +614,8 @@ function CanonFlowDemo() {
  * - **들어오기** — 분석 메뉴 처음: 최근 5분 · 갱신 / 고정해 둔 구간 있음: 어제 구간 · 고정 + 안내 한 줄 / 실시간 메뉴: 라이브.
  * - **검색** — 갱신이면 종료 시각이 지금으로 옮겨지고, 고정이면 같은 구간을 다시 조회합니다(조회 시각만 바뀜).
  * - **초록 알약(구간 길이)** — 언제나 종료 시각에서 거꾸로. 갱신 · 라이브는 «최근 N분», 고정은 «N분». 고르는 것만으로 갱신/고정은 바뀌지 않습니다.
- * - **달력 · 직접 입력 · ‹ ›** — 고정으로 바뀌고, 라이브 중이었다면 라이브가 멈춥니다. (달력 패널은 호출측 몫 — 여기서는 시작 −1시간 / 종료 −30분을 고른 것으로 가정)
+ * - **📅 달력** — 시작 · 종료 시각 뒤의 📅 를 누르면 달력이 뜹니다. 시작 달력은 종료일 뒤를, 종료 달력은 시작일 앞을 막고, 보관 기간(9/27 이전) · 오늘(10/26) 이후 · 최대 조회 기간 7일 밖도 흐리게 막습니다. 고르면 시각은 그대로 두고 날짜만 바뀝니다.
+ * - **달력 · 직접 입력 · ‹ ›** — 고정으로 바뀌고, 라이브 중이었다면 라이브가 멈춥니다. 칸마다 자릿수를 넘겨 칠 수 없습니다(연 4 · 나머지 2).
  * - **📌** — 누르면 고정, 떼면 갱신(지금 기준으로 다시 계산).
  * - **▶ / ■** — 라이브 시작 / 중지. 중지하면 멈춘 순간의 구간으로 고정됩니다.
  */
