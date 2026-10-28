@@ -32,7 +32,7 @@ import { AXIS_GUTTER, formatAxisValue, plotY, tickStops } from "./_axisScale";
  * | 축선 | 1px `--color-border-divider` — X 는 플롯 바닥 안쪽 마지막 1px, Y 는 눈금 칸 오른쪽 끝 |
  * | 눈금 글자 | `text-chart` 9px · `--font-family-numeric` · `text-tertiary` · 오른쪽 정렬 · 오른쪽 안쪽 여백 4px · 세로 가운데 = 눈금 |
  * | 눈금 칸 | `--wds-widget-axis-gutter`(28px) |
- * | 숫자 | 1000 이상 `1.2K`, 그 아래 정수 반올림 + `unit` |
+ * | 숫자 | 1000 이상 `1.2K`, 10 이상 정수 반올림, 10 미만 소수(1 이상 첫째 · 1 미만 둘째 자리, 끝 0 뗌) + `unit` |
  * | 접근성 | 축선은 장식(`aria-hidden`). 눈금 글자는 읽힌다 |
  *
  * @example

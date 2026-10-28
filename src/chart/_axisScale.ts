@@ -17,12 +17,17 @@ export function niceMax(v: number): number {
   return nice * mag;
 }
 
-/** 눈금 · 값 라벨 숫자. 1000 이상은 `1.2K`, 그 아래는 정수로 반올림. */
+/**
+ * 눈금 · 값 라벨 숫자. 1000 이상은 `1.2K`, 10 이상은 정수로 반올림, 10 미만은 소수(1 이상 첫째 자리 · 1 미만 둘째 자리, 끝 0 은 뗀다).
+ * 10 미만을 정수로 반올림하면 상한 5 의 가운데 눈금 2.5 가 「3」, 상한 0.4 의 눈금이 모두 「0」 이 된다(CLS · 초 단위 축).
+ */
 export function formatAxisValue(v: number): string {
   if (v >= 1000) return Math.round(v / 100) / 10 + "K";
   if (v >= 100) return Math.round(v).toString();
   if (v === 0) return "0";
-  return Number.isInteger(v) ? String(v) : v.toFixed(0);
+  if (Number.isInteger(v)) return String(v);
+  if (v >= 10) return v.toFixed(0);
+  return String(Number(v.toFixed(v >= 1 ? 1 : 2)));
 }
 
 /** 최고점 값 글자. 눈금보다 정밀하게 — 1000 이상은 소수 둘째 자리 K, 100 미만은 소수 첫째 자리. */
