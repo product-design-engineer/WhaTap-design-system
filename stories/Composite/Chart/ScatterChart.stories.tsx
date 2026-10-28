@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ScatterChart, WidgetFrame, scatterLegend } from "@whatap/design-system";
 import type { ScatterChartSeries, ScatterChartSeriesList } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, names, scalar } from "../../_extremes";
 
 /**
  * Stories for [[ScatterChart]] — 두 수치(X · Y)의 관계를 점으로. `size` 를 주면 버블.
@@ -146,4 +147,34 @@ export const Facet: Story = {
       </div>
     );
   },
+};
+
+/* ─── 극단 사례 ─────────────────────────────────── */
+
+/* 타입은 1~3계열 튜플이다 — 100개는 런타임에서 어떻게 되는지 보이려고 일부러 넓혀 넘긴다. */
+const EX_SERIES = names(EXTREME_N, "svc").map((n, i) => ({ label: n, points: cloud(200 + i, 6, 100 + scalar(i, 700), 100 + scalar(i * 3, 700), 60) })) as unknown as ScatterChartSeriesList;
+
+/** 극단 · 100개 — 100계열(타입 상한 3을 넘겨 넘김). */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 이 차트는 색을 슬롯 1~3 으로만 받고 계열을 3개에서 자른다(§18) — 100개를 넘기면 앞 3개만 그려지고 97개는 말없이 빠진다. 많으면 facet.` } } },
+  render: () => (
+    <div style={{ width: 420, height: 260 }}>
+      <WidgetFrame title={`서비스별 수행 분포 (${EXTREME_N})`} legend={scatterLegend(EX_SERIES)} onFullscreen={() => {}}>
+        <ScatterChart series={EX_SERIES} xUnit="회" yUnit="ms" frame={false} />
+      </WidgetFrame>
+    </div>
+  ),
+};
+
+/** 극단 · 데이터 없음 — 점 0개. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 점이 없으면 축만 남는다. (알려진 결함: x · y 가 null 인 점에 마우스를 올리면 멈춘다 — 여기서는 넣지 않았다.)` } } },
+  args: { series: [{ label: "SQL", points: [] }] },
+  render: (args) => (
+    <div style={box}>
+      <ScatterChart {...args} />
+    </div>
+  ),
 };

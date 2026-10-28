@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { WaterfallChart, WidgetFrame } from "@whatap/design-system";
 import type { WaterfallRow } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, names, scalar } from "../../_extremes";
 
 /**
  * Stories for [[WaterfallChart]] — 리소스 하나에 한 줄, 로딩 단계를 이어 붙인 막대. 색 = 단계, 리소스 타입은 글자.
@@ -57,6 +58,40 @@ export const InWidgetFrame: Story = {
       <WidgetFrame title="리소스 로딩" summary="/checkout · 1.7s">
         <WaterfallChart phases={PHASES} rows={ROWS} labelWidth={140} markers={[{ at: 690, label: "DOMContentLoaded" }, { at: 1720, label: "load" }]} />
       </WidgetFrame>
+    </div>
+  ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────────── */
+
+/** 리소스 100개 — 시작은 15ms 간격, 구간 길이는 정해진 식. */
+const EXTREME_ROWS: WaterfallRow[] = names(EXTREME_N, "chunk").map((n, i) => ({
+  label: `${n}.js`,
+  meta: "script",
+  start: i * 15,
+  segments: [Math.round(scalar(i, 10)), 0, 0, Math.round(20 + scalar(i + 3, 120)), Math.round(10 + scalar(i + 9, 200))],
+}));
+
+/** 극단 · 100개 — 리소스 100개. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 행 100개는 본문이 세로 스크롤된다(480px 상자에 13행 보임) — 단계 범례 · 시간축은 고정.` } } },
+  args: { phases: PHASES, rows: EXTREME_ROWS },
+  render: (args) => (
+    <div style={{ width: 760, height: 480 }}>
+      <WaterfallChart {...args} />
+    </div>
+  ),
+};
+
+/** 극단 · 데이터 없음 — `rows={[]}`. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 단계 범례와 빈 플롯이 남는데, 범위가 0~1ms 로 잡혀 시간축 글자가 «0ms 0ms 0ms 1ms 1ms 1ms» 로 겹친다(결함).` } } },
+  args: { phases: PHASES, rows: [] },
+  render: (args) => (
+    <div style={{ width: 760, height: 240 }}>
+      <WaterfallChart {...args} />
     </div>
   ),
 };

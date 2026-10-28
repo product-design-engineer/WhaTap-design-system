@@ -70,6 +70,7 @@ const DESCRIPTIONS: Record<string, string> = {
   "--color-text-tertiary": "라벨 · 메타 · placeholder",
   "--color-text-disabled": "비활성 상태 텍스트",
   "--color-text-inverse": "반전 전경 — text-strong 을 배경으로 깐 표면 위",
+  "--color-text-link": "문장 안 링크 글자(TextLink) — brand-blue-deep 별칭, 톤 표면 위에서도 4.5:1",
   "--color-text-strong": "legacy alias",
   "--color-text-body": "legacy alias",
   "--color-text-muted": "legacy alias",

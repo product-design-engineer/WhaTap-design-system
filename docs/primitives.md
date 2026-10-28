@@ -126,6 +126,27 @@ hover/focus 시 짧은 설명 표시. 트리거 1개를 wrap (cloneElement) 해�
 
 > **interactive 필터 칩 (클릭 토글)** 은 `FilterChip` — `Chip` 은 정적 라벨 전용.
 
+## Calendar
+
+한 달 날짜 판(Primitives). 달력 버튼을 눌렀을 때 뜨고, **고를 수 없는 날은 미리 흐리게 막는다** — 고른 뒤에 오류를 띄우지 않는다.
+띄우는 자리(팝오버 위치 · 바깥 누르면 닫기)는 부르는 쪽이 정한다. [[TimeRangeSelector]] 는 시작 · 종료 시각의 📅 아래에 띄운다.
+
+| Prop | Type | Default | 설명 |
+|---|---|---|---|
+| `value` | `string` (YYYY-MM-DD) | — | 고른 날 — brand 바탕 + 흰 글자 |
+| `onSelect` | `(date) => void` | — | 고를 수 없는 날은 부르지 않는다 |
+| `min` · `max` | `string` | — | 고를 수 있는 범위(포함). 밖은 `--color-text-disabled` · `aria-disabled` |
+| `month` | `string` (YYYY-MM) | `value` 의 달 | 처음 보여 줄 달 |
+| `today` | `string` | 실제 오늘 | brand 1px 테두리. 스토리 · 스냅샷 고정용 |
+| `onClose` | `() => void` | — | Esc |
+
+- 이번 달이 아닌 칸은 비운다(지난달 숫자를 흐리게 채우면 막힌 날과 구별되지 않는다).
+- 키보드: ← → 하루 · ↑ ↓ 일주일 · Enter 고르기 · Esc 닫기. 판 안에서 Tab 은 한 칸에만 선다.
+
+```tsx
+<Calendar value="2026-10-26" min="2026-09-26" max="2026-10-26" onSelect={setDay} onClose={close} />
+```
+
 ## TimeChip
 
 `Chip` md/soft/neutral 위에 **자형 규칙만** 얹은 조합 — 화면에 나가는 **시간값의 단일 표기**(Composite).

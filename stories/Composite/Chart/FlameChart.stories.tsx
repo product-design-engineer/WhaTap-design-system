@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FlameChart, WidgetFrame } from "@whatap/design-system";
 import type { FlameSpan } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, names, scalar } from "../../_extremes";
 
 /**
  * Stories for [[FlameChart]] — 호출 · 요청 구간을 시간 위에 깊이별 계단으로. 색 = 상태. 시간축을 끌어 확대.
@@ -90,6 +91,39 @@ export const InWidgetFrame: Story = {
       <WidgetFrame title="화면 전환 분석" summary="방문 6 · 30초">
         <FlameChart spans={SESSION} />
       </WidgetFrame>
+    </div>
+  ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────────── */
+
+const FLAME_STATUS = ["normal", "normal", "normal", "slow", "error"] as const;
+/** 구간 100개 — 한 레인, 깊이 0~3 을 돌며 이어 붙인다. */
+const EXTREME_SPANS: FlameSpan[] = names(EXTREME_N, "call").map((label, i) => {
+  const start = i * 120;
+  return { depth: i % 4, label, start, end: start + 80 + Math.round(scalar(i, 300)), status: FLAME_STATUS[i % FLAME_STATUS.length] };
+});
+
+/** 극단 · 100개 — 구간 100개. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 구간 100개가 12초 폭에 붙는다 — 짧은 구간은 라벨이 숨고 축을 끌어 확대해 읽는다.` } } },
+  args: { spans: EXTREME_SPANS },
+  render: (args) => (
+    <div style={{ width: 760, height: 260 }}>
+      <FlameChart {...args} />
+    </div>
+  ),
+};
+
+/** 극단 · 데이터 없음 — `spans={[]}`. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 상태 범례(모두 0)와 빈 플롯이 남는데, 범위가 0~1ms 로 잡혀 시간축 글자가 «0ms 0ms 0ms 1ms 1ms 1ms» 로 겹친다(결함).` } } },
+  args: { spans: [] },
+  render: (args) => (
+    <div style={{ width: 640, height: 180 }}>
+      <FlameChart {...args} />
     </div>
   ),
 };

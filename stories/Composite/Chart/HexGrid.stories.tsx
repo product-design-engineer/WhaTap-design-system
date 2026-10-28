@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { HEX_GRID_LEGEND, HexGrid, WidgetFrame, hexGridLegend } from "@whatap/design-system";
 import type { HexItem, HexTone } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, names, scalar } from "../../_extremes";
 
 /**
  * Stories for [[HexGrid]] — 디바이스를 헥사곤으로 배치하는 리소스 맵.
@@ -161,4 +162,36 @@ export const InWidgetFrameServerMap: Story = {
       </div>
     );
   },
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────────── */
+
+/** 값으로 상태를 정한다 — 90 초과 critical · 75 초과 warning · 20 미만 idle · 나머지 active. */
+const toneOf = (v: number): "critical" | "warning" | "idle" | "active" => (v > 90 ? "critical" : v > 75 ? "warning" : v < 20 ? "idle" : "active");
+const EXTREME_HEX: HexItem[] = names(EXTREME_N, "gpu").map((id, i) => ({ id, label: String(i), tone: toneOf(scalar(i)) }));
+
+/** 극단 · 100개 — GPU 100대. 범례는 개체가 아니라 상태별 개수라 100개여도 네 줄이다. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 헥사곤 100칸이 칸 크기를 줄여 한 격자에 들어간다. 범례는 상태별 개수(네 항목)라 개체 수와 무관하다.` } } },
+  render: () => (
+    <div style={{ width: 420, height: 360 }}>
+      <WidgetFrame title="GPU Map" legend={hexGridLegend(EXTREME_HEX)}>
+        <HexGrid items={EXTREME_HEX} columns={12} frame={false} />
+      </WidgetFrame>
+    </div>
+  ),
+};
+
+/** 극단 · 데이터 없음 — `items={[]}`. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 격자는 비고, 범례는 상태별 0 을 그대로 남긴다.` } } },
+  render: () => (
+    <div style={{ width: 420, height: 260 }}>
+      <WidgetFrame title="GPU Map" legend={hexGridLegend([])}>
+        <HexGrid items={[]} columns={6} frame={false} />
+      </WidgetFrame>
+    </div>
+  ),
 };

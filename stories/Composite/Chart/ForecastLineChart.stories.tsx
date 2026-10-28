@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ForecastLineChart, WidgetFrame } from "@whatap/design-system";
 import type { ForecastLineChartSeries } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, colorOf, names, scalar } from "../../_extremes";
 
 /**
  * Stories for [[ForecastLineChart]]: 관측은 실선, 예측은 점선. 「지금」 세로선 · 임계 띠 · 도달 마커.
@@ -109,4 +110,32 @@ export const InWidgetFrame: Story = {
       />
     </WidgetFrame>
   ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────── */
+
+const EX_SERIES: ForecastLineChartSeries[] = names(EXTREME_N, "mount").map((n, i) => mount(`m${i}`, n, colorOf(i), 20 + scalar(i, 70), ((i * 7) % 11) / 2.5));
+
+/** 극단 · 100개 — 마운트 100개의 관측 + 예측. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 관측 실선 · 예측 점선 · 도달 마커가 100벌 겹쳐 그려지고, 도달 시각 글자(「약 N시간 후」)가 천장 위 한 줄에서 서로 겹친다. 범례는 한 줄이라 7개 남짓에서 잘린다.` } } },
+  decorators: [(Story) => (<div style={{ width: 640, height: 260 }}><Story /></div>)],
+  render: () => (
+    <WidgetFrame
+      title={`디스크 고갈 추세 (${EXTREME_N})`}
+      summary={`추세 ${WINDOW}시간 · 지평 ${HORIZON}시간`}
+      legend={EX_SERIES.map((s) => ({ label: s.label, color: s.color, shape: "line" as const }))}
+      onFullscreen={() => {}}
+    >
+      <ForecastLineChart frame={false} series={EX_SERIES} xDomain={X_DOMAIN} xLabels={X_LABELS} unit="%" threshold={{ value: 90, label: "임계 90%" }} ariaLabel="마운트 100개 사용률 추세" />
+    </WidgetFrame>
+  ),
+};
+
+/** 극단 · 데이터 없음 — 계열 0개. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 계열이 없으면 격자 · 「지금」 선 · 임계선만 남는다.` } } },
+  args: { series: [], xDomain: X_DOMAIN, xLabels: X_LABELS, unit: "%", threshold: { value: 90, label: "임계 90%" }, ariaLabel: "데이터 없음" },
 };

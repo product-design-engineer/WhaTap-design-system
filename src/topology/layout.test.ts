@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { METRICS, layoutTopology, roundedPolyline, type TopologyGraph } from "./layout";
+import { METRICS, layoutTopology, roundedPolyline, type TopologyGraph, type TopologyLayout } from "./layout";
 
 const at = (l: ReturnType<typeof layoutTopology>, id: string) => {
   const n = l.nodes.find((n) => n.id === id);
@@ -108,17 +108,29 @@ describe("layoutTopology — 그룹", () => {
     expect(l.edges[0].to).toBe("g");
   });
 
-  it("여러 자식 연결이 한 쌍으로 합쳐지고, 합쳐진 엣지는 라벨을 버린다", () => {
+  it("여러 자식 연결이 한 쌍으로 합쳐지면 «연결 N개» 라벨을 단다 — 한쪽 값을 보이지도, 라벨을 버리지도 않는다", () => {
+    // 회귀 방지(2026-10-26): 라벨을 버리면 접는 순간 값이 모두 사라지고 두 연결이 하나로 보였다.
     const l = layoutTopology({
       nodes: [{ ...group.nodes[0], collapsed: true }, { id: "x", label: "x" }],
       edges: [
         { from: "x", to: "z1", label: "23 kbps" },
-        { from: "x", to: "z2", label: "5 kbps" },
+        { from: "x", to: "z2", label: "5 kbps", tone: "alert" },
       ],
     });
     expect(l.edges).toHaveLength(1);
-    // 두 흐름이 합쳐졌는데 한쪽 값을 보여주면 거짓이므로 라벨이 없어야 한다.
-    expect(l.edges[0].label).toBeUndefined();
+    expect(l.edges[0].merged).toBe(2);
+    expect(l.edges[0].label).toBe("연결 2개");
+    // 경보가 하나라도 섞이면 합친 선도 경보 — 접어서 경보 경로가 사라지면 안 된다.
+    expect(l.edges[0].tone).toBe("alert");
+  });
+
+  it("하나만 승격된 연결은 값 라벨을 그대로 둔다", () => {
+    const l = layoutTopology({
+      nodes: [{ ...group.nodes[0], collapsed: true }, { id: "x", label: "x" }],
+      edges: [{ from: "x", to: "z1", label: "23 kbps" }],
+    });
+    expect(l.edges[0].merged).toBe(1);
+    expect(l.edges[0].label).toBe("23 kbps");
   });
 
   it("접힌 그룹 안에서 끝나는 연결은 자기 자신 루프가 되므로 그리지 않는다", () => {
@@ -286,6 +298,73 @@ describe("layoutTopology — 라벨 충돌 해소", () => {
 
   it("결정론 유지 — 충돌 해소 후에도 같은 입력이면 같은 출력", () => {
     expect(layoutTopology(parallel)).toEqual(layoutTopology(parallel));
+  });
+});
+
+describe("layoutTopology — 라벨은 다른 선을 밟지 않는다", () => {
+  /** Composite/TopologyCanvas 기본 스토리 그래프 — «23 kbps» 를 다른 엣지 세로선이 가로지르던 배치(2026-10-26). */
+  const story: TopologyGraph = {
+    nodes: [
+      { id: "redis-a", label: "Redis-Master", children: [{ id: "az-a1", label: "US-east-1b" }, { id: "az-a2", label: "US-east-1b" }] },
+      { id: "sdk", label: "sdkclient.eng", tone: "ok" },
+      { id: "ssm", label: "aws-ssm.com" },
+      { id: "redis-b", label: "Redis-Master", children: [{ id: "az-b1", label: "US-east-1b" }, { id: "az-b2", label: "US-east-1b" }] },
+    ],
+    edges: [
+      { from: "az-a1", to: "sdk", label: "23 kbps" },
+      { from: "az-a2", to: "ssm", label: "23 kbps" },
+      { from: "sdk", to: "az-b1", label: "23 kbps" },
+      { from: "ssm", to: "az-b2", label: "23 kbps", tone: "alert" },
+      { from: "sdk", to: "az-b2", label: "5 kbps" },
+    ],
+  };
+
+  /** 렌더와 같은 글자 상자(TopologyEdge: 수평은 위로 labelOffset, 수직은 왼쪽으로 · 폭은 0.56em/자). */
+  const boxOf = (e: TopologyLayout["edges"][number]) => {
+    const w = [...(e.label ?? "")].length * METRICS.labelFontSize * 0.56;
+    const h = METRICS.labelFontSize + 3;
+    const { x, y, angle, side } = e.labelAt;
+    const o = METRICS.labelOffset * side;
+    return angle === 0
+      ? { x0: x - w / 2, y0: y - o - h / 2, x1: x + w / 2, y1: y - o + h / 2 }
+      : { x0: x - o - h / 2, y0: y - w / 2, x1: x - o + h / 2, y1: y + w / 2 };
+  };
+  const pointsOf = (d: string) => [...d.matchAll(/(-?[\d.]+) (-?[\d.]+)/g)].map((m) => ({ x: Number(m[1]), y: Number(m[2]) }));
+  /** 다른 엣지 경로(꺾인 점을 이은 직교 선분)가 상자를 지나는가 — Q 제어점도 코너라 선분 근사로 충분하다. */
+  const hits = (l: TopologyLayout, i: number) => {
+    const b = boxOf(l.edges[i]);
+    return l.edges.some((o, j) => {
+      if (j === i) return false;
+      const pts = pointsOf(o.d);
+      return pts.slice(1).some((q, k) => {
+        const p = pts[k];
+        if (Math.abs(p.x - q.x) > 0.5 && Math.abs(p.y - q.y) > 0.5) return false; // 코너 곡선 조각은 짧다
+        return Math.min(p.x, q.x) <= b.x1 && Math.max(p.x, q.x) >= b.x0 && Math.min(p.y, q.y) <= b.y1 && Math.max(p.y, q.y) >= b.y0;
+      });
+    });
+  };
+
+  it("기본 배치 — 어떤 라벨 상자도 다른 엣지 선을 지나지 않는다", () => {
+    const l = layoutTopology(story);
+    l.edges.forEach((e, i) => {
+      if (e.label) expect(hits(l, i), `${e.from}→${e.to} ${e.label}`).toBe(false);
+    });
+  });
+
+  it("라벨 상자끼리 겹치지 않는다", () => {
+    const l = layoutTopology(story);
+    const boxes = l.edges.filter((e) => e.label).map(boxOf);
+    for (let i = 0; i < boxes.length; i++)
+      for (let j = i + 1; j < boxes.length; j++) {
+        const [p, q] = [boxes[i], boxes[j]];
+        expect(p.x0 < q.x1 && q.x0 < p.x1 && p.y0 < q.y1 && q.y0 < p.y1).toBe(false);
+      }
+  });
+
+  it("그룹을 접어도 라벨이 남고 다른 선을 밟지 않는다", () => {
+    const l = layoutTopology({ ...story, nodes: story.nodes.map((n) => (n.children ? { ...n, collapsed: true } : n)) });
+    expect(l.edges.filter((e) => e.label).length).toBe(l.edges.length);
+    l.edges.forEach((e, i) => expect(hits(l, i), `${e.from}→${e.to} ${e.label}`).toBe(false));
   });
 });
 

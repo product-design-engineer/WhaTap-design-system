@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MiniMultiLineChart, WidgetFrame } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, colorOf, names, timeLabels, wave } from "../../_extremes";
 
 /**
  * Stories for [[MiniMultiLineChart]] — 여러 계열을 겹쳐 그리는 작은 line chart 카드.
@@ -228,6 +229,42 @@ export const ThresholdBelow: Story = {
           threshold={{ value: 0.25, label: "> 0.25", tone: "warning" }}
           series={[{ label: "전체", values: [0.07, 0.08, 0.06, 0.09, 0.08, 0.07, 0.08, 0.09, 0.08, 0.08], color: "var(--color-chart-series-1)" }]}
         />
+      </WidgetFrame>
+    </div>
+  ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────── */
+
+const EX_X = timeLabels(20);
+const EX_NAMES = names();
+const EX_SERIES = EX_NAMES.map((n, i) => ({ label: n, values: wave(i, 20), color: colorOf(i) }));
+
+/** 극단 · 100개 — 선 100개 + WidgetFrame 범례 100항목. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 선은 100개가 모두 그려져 회색 다발이 한 덩어리가 되고, WidgetFrame 범례는 한 줄이라 앞 6~7개만 보이고 나머지는 잘린다. 시각 글자 20개는 솎지 않아 양 끝에서 겹친다.` } } },
+  render: () => (
+    <div style={{ width: 560, height: 280 }}>
+      <WidgetFrame
+        title={`에이전트별 응답시간 (${EXTREME_N})`}
+        onFullscreen={() => {}}
+        legend={EX_SERIES.map((s) => ({ label: s.label, color: s.color, shape: "line" as const }))}
+      >
+        <MiniMultiLineChart title="에이전트별 응답시간" frame={false} unit="ms" xLabels={EX_X} series={EX_SERIES} />
+      </WidgetFrame>
+    </div>
+  ),
+};
+
+/** 극단 · 데이터 없음 — 계열 0개. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 계열 배열이 비면 축과 0ms 하나만 남고, 시각 글자 20개가 서로 겹쳐 읽히지 않는다.` } } },
+  render: () => (
+    <div style={{ width: 420, height: 240 }}>
+      <WidgetFrame title="에이전트별 응답시간" onFullscreen={() => {}} legend={[]}>
+        <MiniMultiLineChart title="에이전트별 응답시간" frame={false} unit="ms" xLabels={EX_X} series={[]} />
       </WidgetFrame>
     </div>
   ),

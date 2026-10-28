@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RangeGauge, WidgetFrame } from "@whatap/design-system";
+import { EXTREME_NOTE } from "../../_extremes";
 
 /**
  * Stories for [[RangeGauge]] — 범위(min ~ Max) 안의 지금 값. 채움 · ▼ · 이름 붙은 양 끝 · 임계 띠.
@@ -87,4 +88,28 @@ export const InWidgetFrame: Story = {
       </div>
     </WidgetFrame>
   ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────── */
+const ExtremeLabel = ({ children }: { children: string }) => <span className="text-sm text-tertiary">{children}</span>;
+
+/** 0 과 상한 초과. */
+export const ExtremeBounds: Story = {
+  name: "극단 · 0 과 상한 초과",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.bounds}\n\n관찰: 상한을 넘으면 막대는 끝에서 멈추고 값 글자가 넘침을 말한다.` } } },
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <ExtremeLabel>값 0</ExtremeLabel>
+      <RangeGauge label="CPU Request" value={0} max={2200} unit="mi" maxLabel="Allocatable" thresholds={TH} />
+      <ExtremeLabel>상한 초과 — 3300 / 2200</ExtremeLabel>
+      <RangeGauge label="CPU Request" value={3300} max={2200} unit="mi" maxLabel="Allocatable" thresholds={TH} />
+    </div>
+  ),
+};
+
+/** 데이터 없음 — NaN. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty}\n\n⚠️ 결함: \`value\` 에 undefined 가 오면 \`toLocaleString\` 에서 그리기가 멈춘다(여기서는 넣지 않음). NaN 은 «NaN» 글자로 나온다.` } } },
+  args: { label: "CPU Request", value: Number.NaN, max: 2200, unit: "mi", maxLabel: "Allocatable", thresholds: TH },
 };

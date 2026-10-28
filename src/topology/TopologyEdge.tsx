@@ -1,5 +1,5 @@
 import { TOPOLOGY_EDGE_STROKE } from "./_tokens";
-import type { LaidOutEdge } from "./layout";
+import { METRICS, type LaidOutEdge } from "./layout";
 
 /**
  * TopologyEdge — Primitives. 노드 두 개를 잇는 직교 연결선과 그 위의 값 라벨.
@@ -21,7 +21,9 @@ import type { LaidOutEdge } from "./layout";
  *   캔버스가 `<svg>` 와 노드 레이어를 같은 크기·같은 위치로 겹쳐 놓는 것이 전제다.
  * - **`fontSize` 에 단위를 반드시 붙인다**(`11px`). 단위를 빼면 user-space 단위가 되어
  *   viewBox 스케일에 딸려 커진다 — DS 정책.
- * - 라벨 뒤에 배경판을 깔지 않는다(레퍼런스와 동일). 대신 선에서 `labelOffset` 만큼 띄운다.
+ * - 라벨 뒤에 배경판을 깔지 않는다(레퍼런스와 동일). 대신 선에서 `labelOffset`(기본 `METRICS.labelOffset`) 만큼 띄운다.
+ *   위(수직이면 왼쪽)가 다른 선 · 라벨 · 카드에 막히면 [[layoutTopology]] 가 `labelAt.side = -1` 로 아래(오른쪽)에 둔다 —
+ *   자리는 레이아웃이 정하고 이 컴포넌트는 따르기만 한다(글자 상자 계산이 둘로 갈리면 겹침 검사가 거짓이 된다).
  * - 색은 `TOPOLOGY_EDGE_STROKE` 의 **유틸 클래스** — `stroke`/`fill` 을 presentation
  *   attribute 로 박지 않는다. 라벨 색도 `.fill-text-tertiary`.
  *
@@ -34,7 +36,7 @@ import type { LaidOutEdge } from "./layout";
  */
 export default function TopologyEdge({
   edge,
-  labelOffset = 10,
+  labelOffset = METRICS.labelOffset,
 }: {
   /** [[layoutTopology]] 가 라우팅한 엣지. */
   edge: LaidOutEdge;
@@ -42,10 +44,10 @@ export default function TopologyEdge({
   labelOffset?: number;
 }) {
   const strokeClass = TOPOLOGY_EDGE_STROKE[edge.tone];
-  const { x, y, angle } = edge.labelAt;
-  // 수평 구간이면 선 위로, 세로 구간이면 선 왼쪽으로 띄운다.
-  const lx = angle === 0 ? x : x - labelOffset;
-  const ly = angle === 0 ? y - labelOffset : y;
+  const { x, y, angle, side } = edge.labelAt;
+  // side 1: 수평 구간이면 선 위, 세로 구간이면 선 왼쪽 · side -1: 아래 / 오른쪽.
+  const lx = angle === 0 ? x : x - labelOffset * side;
+  const ly = angle === 0 ? y - labelOffset * side : y;
 
   return (
     <g>
@@ -61,7 +63,7 @@ export default function TopologyEdge({
         <text
           x={lx}
           y={ly}
-          fontSize="11px"
+          fontSize={`${METRICS.labelFontSize}px`}
           textAnchor="middle"
           dominantBaseline="middle"
           className="fill-text-tertiary"
