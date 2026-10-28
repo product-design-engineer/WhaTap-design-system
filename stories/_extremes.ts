@@ -44,8 +44,19 @@ export function timeLabels(len = 20, startMin = 13 * 60): string[] {
 }
 
 /** 개체 `i` 의 색 — 앞 `HIGHLIGHT` 개는 series 슬롯, 나머지는 회색 다발(§22). */
+const SERIES = [
+  "var(--color-chart-series-1)",
+  "var(--color-chart-series-2)",
+  "var(--color-chart-series-3)",
+  "var(--color-chart-series-4)",
+  "var(--color-chart-series-5)",
+  "var(--color-chart-series-6)",
+  "var(--color-chart-series-7)",
+  "var(--color-chart-series-8)",
+] as const;
+
 export function colorOf(i: number, highlight = HIGHLIGHT): string {
-  return i < highlight ? `var(--color-chart-series-${i + 1})` : "var(--color-chart-neutral)";
+  return i < Math.min(highlight, SERIES.length) ? SERIES[i] : "var(--color-chart-neutral)";
 }
 
 /** 스토리 설명 머리말 — 모든 극단 스토리가 같은 말로 시작한다. */
