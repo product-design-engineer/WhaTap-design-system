@@ -744,6 +744,9 @@
     --color-topology-port-alert: #FC679E;
     /* @role 포트 도트 정상 */
     --color-topology-port-ok: #5BD388;
+    /* @role 미니맵 노드 칸 — 카드 판(color-card) 위 축소 노드. 노드 면(node-surface)은 카드와 거의 같은 색이라
+       미니맵에서 안 보였다(2026-10-26). 카드 대비 3:1 이상(라이트 3.4 · 다크 3.9) */
+    --color-topology-minimap-node: #7D8BA6;
 
     /* ── Component tokens: 아이콘 크기 스케일 · 툴바 컨트롤 높이 ──
        tokens.css 에만 있고 **런타임 CSS 에는 없어서 미정의**였다. `ToolbarIconButton` 이
@@ -1406,6 +1409,8 @@
 .text-brand-blue { color: var(--color-brand-blue); }
 .text-center { text-align: center; }
 .text-chart { font-size: var(--text-chart); }
+/* 화면에서 감추고 스크린리더에만 남기는 글자 — 자리가 없어 그리지 못한 값 라벨 등 */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .text-color-var-color-brand-blue { color: var(--color-brand-blue); }
 .text-color-var-color-status-error { color: var(--color-status-error); }
 .text-color-var-color-text-disabled { color: var(--color-text-disabled); }
@@ -1552,8 +1557,9 @@
 .stroke-topology-edge { stroke: var(--color-topology-edge); }
 .stroke-topology-edge-alert { stroke: var(--color-topology-edge-alert); }
 .fill-text-tertiary { fill: var(--color-text-tertiary); }
-/* 미니맵 — 노드는 형태만, 현재 보이는 영역은 브랜드색 테두리로. */
-.fill-topology-node { fill: var(--color-topology-node-surface); }
+/* 미니맵 — 노드는 형태만(카드 판 위라 진한 칸 · 펼친 그룹은 그룹 면), 현재 보이는 영역은 브랜드색 테두리로. */
+.fill-topology-minimap-node { fill: var(--color-topology-minimap-node); }
+.fill-topology-group { fill: var(--color-topology-group-surface); }
 .fill-none { fill: none; }
 .stroke-topology-viewport { stroke: var(--color-brand-blue); }
 
@@ -1854,6 +1860,16 @@ html, body, #root {
 
 /* ChartRadialBars sweep — 왼쪽 반원 호가 12초에 한 바퀴 도는 «실시간» 장식(데이터 아님).
    SVG 상자 전체를 돌리므로 원점은 상자 가운데. 동작 줄이기에서는 멈춘 호만 남는다. */
+/* 라이브 중(■) 아이콘의 펄스 링 — «계속 갱신 중» 을 멈춘 화면과 구별한다. 색은 링 자신의 stroke(토큰)를 쓰고
+   크기 · 투명도만 움직인다. 움직임 줄이기 설정이면 멈춘다. */
+@keyframes wdsLivePulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  70%, 100% { transform: scale(1.3); opacity: 0; }
+}
+.wds-live-pulse { transform-box: fill-box; transform-origin: center; animation: wdsLivePulse 1.6s ease-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .wds-live-pulse { animation: none; opacity: 0; }
+}
 @keyframes wdsChartRadialSpin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
@@ -2370,6 +2386,7 @@ html, body, #root {
   --color-topology-port: #8E9CDE;
   --color-topology-port-alert: #FF77A8;
   --color-topology-port-ok: #56C98A;
+  --color-topology-minimap-node: #6B7894;
 }
 
 /* ── LandingHeader ────────────────────────────────────────────────────────────

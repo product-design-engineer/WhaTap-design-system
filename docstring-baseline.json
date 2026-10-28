@@ -165,10 +165,6 @@
       "whenToUse": 2,
       "undocumentedProps": 1
     },
-    "Composite/TimeRangeSelector": {
-      "whenToUse": 2,
-      "undocumentedProps": 8
-    },
     "Composite/TopologyCanvas": {
       "whenToUse": 1,
       "undocumentedProps": 3

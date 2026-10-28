@@ -61,6 +61,8 @@ export { default as InstanceSelectPanel } from "./InstanceSelectPanel";
 export type { InstanceSelectPanelProps, InstanceSelectItem, InstanceSelectScope } from "./InstanceSelectPanel";
 export { default as LabeledField } from "./LabeledField";
 export type { LabeledFieldProps } from "./LabeledField";
+export { default as Calendar } from "./Calendar";
+export type { CalendarProps } from "./Calendar";
 export { default as DatePicker } from "./DatePicker";
 export type { DatePickerProps, DatePickerSize } from "./DatePicker";
 export { default as OptionbarNewVersionButton } from "./OptionbarNewVersionButton";
@@ -183,6 +185,7 @@ export { default as Stage } from "./Stage";
 export { default as SubHeaderBar } from "./SubHeaderBar";
 export type { SubHeaderBarProps } from "./SubHeaderBar";
 export { default as TimeRangeSelector } from "./TimeRangeSelector";
+export type { TimeRangeMode } from "./TimeRangeSelector";
 export { default as Toast } from "./Toast";
 export type { ToastVariant } from "./Toast";
 
