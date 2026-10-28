@@ -21,6 +21,12 @@
  * - ❌ 합이 의미 없는 지표(p50 + p95 · 평균끼리 · 각자 100% 인 사용률) — 위 경계가 존재하지 않는 합계를 말한다
  * - ❌ 계열끼리 크기를 견줘야 하는 지표 → [[MiniMultiLineChart]]
  *
+ * ## Color
+ * - 역할: 계열 순서 슬롯 `--color-chart-series-1` · `--color-chart-series-2` · `--color-chart-series-3` · `--color-chart-series-4` · `--color-chart-series-5` · `--color-chart-series-6` · `--color-chart-series-7` · `--color-chart-series-8`(`series` 순서 · `slot` 고정, §17)
+ * - 상한: 8 — 넘는 계열은 그리지 않는다(§22)
+ * - 고정: 층 사이 1px `--color-card` · 면은 불투명
+ * - 금지: 투명하게 칠하지 않는다(범례 견본과 달라 보인다) · 상태색을 섞지 않는다
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 격자 [[ChartGrid]] · 값축 [[ChartValueAxis]] · 시간축 [[ChartTimeAxis]] · 합계 최고점 [[ChartPeakMarker]] · 단독 범례 [[ChartLegendItem]].
  *   차트는 면만 그린다(patterns §26). 그래서 Composite 계층이다.

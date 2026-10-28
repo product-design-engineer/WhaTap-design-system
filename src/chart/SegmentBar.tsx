@@ -21,6 +21,12 @@
  * - ❌ 합이 의미 없는 값(사용률 여럿 · 백분위) — 막대 길이가 존재하지 않는 전체를 말한다
  * - ❌ 시간 흐름 → [[StackedAreaChart]]
  *
+ * ## Color
+ * - 역할: 호출부 — 구간마다 계열 `--color-chart-series-*` 또는 상태(심각도) 중 한 의미로
+ * - 상한: 구간 8 — 9개 이상이면 [[BarList]]
+ * - 고정: 남는 몫 `--color-surface-200` · 구간 틈 `--color-card`
+ * - 금지: 한 바에 계열과 상태 두 의미를 섞지 않는다(§23)
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 범례 [[ChartLegendItem]] · 값 상자 [[ChartTooltip]]. 바(구간)만 그린다. 그래서 Composite 계층이다.
  * - **남는 몫은 이름 붙은 구간(2026-10-23 결정)** — `total` 이 구간 합보다 크면 `restLabel`(기본 「나머지」) 구간을 `--color-surface-200` 으로 끝에 붙이고

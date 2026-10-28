@@ -23,6 +23,11 @@
  * - ❌ X 가 시간인 지표 → [[MiniLineChart]] · 응답시간 분포는 [[ScatterHeatmap]]
  * - ❌ 범주 값(상태 · 이름)을 축에 — 위치가 없는 거리를 말한다
  *
+ * ## Color
+ * - 역할: 계열 순서 슬롯 `--color-chart-series-1` · `--color-chart-series-2` · `--color-chart-series-3`(`slot` 고정 — 필터로 빠져도 색이 옮겨 가지 않게)
+ * - 상한: 3계열(all-pairs §18) — 넘으면 facet
+ * - 금지: 넷째 계열에 색을 더하지 않는다 · 상태색을 계열로 쓰지 않는다
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 격자 [[ChartGrid]](가로 눈금 + 세로 절반 `vertical`) · Y 값축 [[ChartValueAxis]] · X 글자 [[ChartTimeAxis]]
  *   (`positions` 로 0 · 절반 · 최대 눈금 자리에). 차트는 점(마크)만 그린다(patterns §26). 그래서 Composite 계층이다.

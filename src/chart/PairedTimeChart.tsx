@@ -20,6 +20,11 @@
  * - ❌ 단위 · 범위가 같은 두 지표 — 한 판에 두 계열로(§17). 칸을 나누면 높이 비교가 사라진다
  * - ❌ 시간이 아닌 X(범주 · 대상) — 시점 공유가 이 차트의 뜻이다 → [[BarList]] 두 개
  *
+ * ## Color
+ * - 역할: 계열 — 위 칸 `--color-chart-series-1` · 아래 칸 `--color-chart-series-2`(`color` 로 바꿈)
+ * - 상한: 칸 2개 · 칸마다 1색
+ * - 금지: 두 칸에 같은 색을 주지 않는다 — 한 지표로 읽힌다 · 상태색을 계열로 쓰지 않는다
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 칸마다 [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCrosshair]], 막대 칸은 [[ChartBar]], 아래 칸에만 [[ChartTimeAxis]].
  *   선 칸의 선만 직접 그린다. 그래서 Composite 계층이다.

@@ -29,6 +29,12 @@ import { DIM_OPACITY } from "./_emphasis";
  * - ❌ 연속 값(CPU 사용률 %) 그 자체 — 상태로 판정한 뒤 칠하고 값은 툴팁에
  * - ❌ 대상 수가 적은 정량 비교 → [[BarList]]
  *
+ * ## Color
+ * - 역할: 상태 — Active `--color-chart-series-1` · Idle `--color-surface-200` · Warning `--color-status-warning` · Critical `--color-status-error`(내부 `_statusTone` — HexGrid · BlockGrid · FlameChart 공통)
+ * - 상한: 상태 4개 고정
+ * - 고정: 칸 글자 `--color-text-inverse`(Idle 은 `--color-text-tertiary`)
+ * - 금지: 칸 하나만 계열 색으로 강조하지 않는다 · 상태 이름 · 색을 차트마다 바꾸지 않는다
+ *
  * ## Composition rules
  * - 범례는 [[ChartLegendItem]] 을 조합한다(견본은 마크 모양을 따른다, patterns §26). 그래서 Composite 계층이다.
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 여백 · 「GPU Map」 제목 줄 · 범례를 뺀다). [[WidgetFrame]] 안에 넣을 때 쓴다.

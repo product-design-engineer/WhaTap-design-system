@@ -19,6 +19,11 @@
  * - ❌ 등급이 없는 일반 지표 — 고리 줄무늬가 등급을 말한다
  * - ❌ 에이전트가 16개를 넘을 때 → [[BarList]]
  *
+ * ## Color
+ * - 역할: 속도 등급 고정 — Normal `--color-chart-speed-normal` · Slow `--color-chart-speed-slow` · Very Slow `--color-chart-speed-very-slow`(`SPEED_LEGEND`)
+ * - 상한: 등급 3개
+ * - 금지: 계열 슬롯 · 상태색(Severity)으로 등급을 바꿔 칠하지 않는다
+ *
  * ## Composition rules
  * - 고리는 [[ChartRadialBars]], 수치는 [[MetricStat]](Max TX = 단위 「초」 + 보조 줄 트랜잭션 이름 · Agent 활성 · 비활성), 범례는 [[ChartLegendItem]] 을 조합한다. 그래서 Composite 계층이다.
  * - 위젯 chrome(CardChrome, FlexBoardWidget 등)은 소비자가 감싼다.

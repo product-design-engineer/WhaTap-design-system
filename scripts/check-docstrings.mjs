@@ -57,6 +57,26 @@ const { components } = JSON.parse(readFileSync(JSON_PATH, "utf8"));
 
 /** 지표 섹션이 필수인 차트 — 계층 Composite 의 Chart 하위 그룹. */
 const isChart = (c) => c.title.startsWith("Composite/Chart/");
+/**
+ * 차트가 실제로 칠하는 색 토큰 — 소스 파일 + 그 파일이 import 하는 차트 내부 모듈(`./_*.ts`) · 같은 폴더 Primitive(칠 색을 내보내는 것)의
+ * `--color-chart-*` · `--color-status-*`. `## Color` 가 이 토큰을 모두 적어야 한다(문서와 코드가 따로 놀지 않게).
+ * 축 · 격자 · 글자 색(`--color-border-*` · `--color-text-*`)은 공통 틀이라 보지 않는다.
+ */
+function chartColorTokens(file) {
+  if (!file) return [];
+  const seen = new Set();
+  const out = new Set();
+  const walk = (f, depth) => {
+    if (seen.has(f) || !existsSync(f)) return;
+    seen.add(f);
+    const src = readFileSync(f, "utf8").replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+    for (const m of src.matchAll(/--color-(?:chart|status)-[a-z0-9-]+/g)) out.add(m[0]);
+    if (depth > 0) for (const m of src.matchAll(/from\s+"(\.\/_[\w]+)"/g)) walk(join(dirname(f), m[1] + ".ts"), depth - 1);
+    if (depth > 0) for (const m of src.matchAll(/import\s+\w+,\s*\{[^}]*_COLOR[^}]*\}\s+from\s+"(\.\/\w+)"/g)) walk(join(dirname(f), m[1] + ".tsx"), depth - 1);
+  };
+  walk(join(root, file), 1);
+  return [...out].sort();
+}
 
 /** Tokens 는 컴포넌트가 아니라 메타 카탈로그 — 검사 대상 아님. */
 const targets = components.filter((c) => c.layer !== "Tokens");
@@ -83,7 +103,13 @@ for (const c of targets) {
     if (!c.dont.length) missing.push("Do/Don't 유도 불가(금지형 문장 0)");
   }
   if (isChart(c) && !c.metrics?.fit?.length) missing.push("## Metrics ✅ 맞는 지표(차트 필수)");
-  if (missing.length) violations.push({ title: c.title, file: c.sourceFile ?? c.storyFile, missing, noFreeze: missing.some((m) => m.startsWith("## Metrics")) });
+  if (isChart(c) && !c.color?.role?.length) missing.push("## Color 역할(차트 필수)");
+  if (isChart(c) && c.color?.role?.length) {
+    const used = chartColorTokens(c.sourceFile);
+    const gap = used.filter((t) => !c.color.tokens.includes(t));
+    if (gap.length) missing.push(`## Color 에 없는 색 토큰(소스가 씀): ${gap.join(" · ")}`);
+  }
+  if (missing.length) violations.push({ title: c.title, file: c.sourceFile ?? c.storyFile, missing, noFreeze: missing.some((m) => m.startsWith("## Metrics") || m.startsWith("## Color")) });
 }
 
 /* ── 깊이(래칫) ───────────────────────────────────────────────────────────── */
