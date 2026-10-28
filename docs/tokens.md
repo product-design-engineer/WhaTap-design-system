@@ -381,7 +381,7 @@ hover 시 표면이 뒤집히는 아이콘 버튼(첨부 `+` 버튼 등)은 `bla
 | 이중 축 금지 | §19 `chart-no-dual-axis` |
 | 팔레트를 바꿀 때 검증기 | §20 `chart-palette-validate` |
 | 레거시(D-032 `--wds-chart-*`) 흡수 · 엔티티 슬롯 | §21 `chart-legacy-absorb` |
-| 계열이 9개 이상일 때 | §22 `chart-many-series` |
+| 계열이 9개 이상일 때 · 100개 넘는 극단(묶어서 단순화) | §22 `chart-many-series` |
 | 계열 색 ↔ Severity 색 변별 | §23 `chart-series-vs-severity` |
 
 **seq** 는 한 색조의 단조 lightness 램프다. 라이트는 옅음→진함, **다크는 anchor 가 뒤집혀** 어두움→밝음이다(자동 반전이 아니라 고른 값).
