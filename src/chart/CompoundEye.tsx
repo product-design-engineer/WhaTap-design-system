@@ -21,10 +21,6 @@
  * - ❌ 부채꼴 넷 이상 · 다른 지표로 바꾸기 — 자리가 지표를 말한다(CPU 위 · 메모리 오른쪽 · 디스크 왼쪽)
  * - ❌ 서버 1~3대 → [[MetricGrid]] · [[RangeGauge]]
  *
- * ## Colors
- * - 정체성 — CPU · 메모리 · 디스크 = 계열 슬롯 `--color-chart-series-1` · `-2` · `-3`
- * - 판정 밖 — 수신 · 송신 링 · `--color-chart-neutral`
- *
  * ## Composition rules
  * - 요소를 조합한다 — 칸 [[CompoundEyeCell]] · 범례 [[ChartLegendItem]] · 값 상자 [[ChartTooltip]]. 격자 배치만 한다. 그래서 Composite 계층이다.
  * - **링 스케일은 하나 · 범례가 말한다(2026-10-23 추천안)** — `networkScale`(기본 100Mbps)이 링 끝. 넘으면 링이 꽉 차고 툴팁이 실제 값을 말한다.

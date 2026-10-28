@@ -23,11 +23,6 @@
  * - ❌ 시간 흐름(TPS 추이) → [[MiniLineChart]]
  * - ❌ 칸 단위보다 정밀한 비교가 필요한 지표(응답시간 ms 차이) — 칸이 10% 단위로 뭉갠다 → [[BarList]]
  *
- * ## Colors
- * - 판정 등급 — `segments` 구간 누적(속도 등급이면 `--color-chart-speed-*`) · 구간 색은 호출부 토큰
- * - 상태 — `threshold` 임계 2색 · 미만 `--color-brand-blue` · 이상 `--color-status-warning` · 한 차트에 두 방식을 섞지 않는다
- * - 바탕 — 빈 칸 · `--color-surface-100`
- *
  * ## Composition rules
  * - 요소를 조합한다 — 격자 [[ChartGrid]] · 값축 [[ChartValueAxis]] · 대상 이름 [[ChartCategoryAxis]](칸 폭 말줄임 · 전체 이름은 title). 차트는 칸만 그린다.
  *   그래서 Composite 계층이다.

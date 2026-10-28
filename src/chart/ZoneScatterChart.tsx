@@ -22,11 +22,6 @@
  * - ❌ 상한 · 경계가 없는 지표 — 구역 경계가 아무 값이 되어 분류가 거짓을 말한다 → [[ScatterChart]]
  * - ❌ 시간 흐름 · 한 지표의 추이 → [[MiniLineChart]]
  *
- * ## Colors
- * - 정체성 — 점 · `--color-chart-series-1`(`color`)
- * - 상태 — 임계 띠 · 라벨 · `--color-status-error-soft`(띠) · `--color-status-error`(라벨)
- * - 바탕 — 구역 면 · `--color-surface-50`
- *
  * ## Composition rules
  * - 요소를 조합한다 — 값축 [[ChartValueAxis]](`ticks` = 0 · Y 경계 · 최대) · X 글자 [[ChartTimeAxis]](`positions` = 0 · X 경계 · 최대).
  *   격자 대신 구역이 플롯을 나눈다. 차트는 구역 · 점 · 임계 띠만 그린다. 그래서 Composite 계층이다.

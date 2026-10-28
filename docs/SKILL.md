@@ -100,7 +100,7 @@ DS는 **Tailwind를 쓰지 않습니다.** `style.css`(= `whatap-ds.css`)는 외
 | ✅ **Do** | `## Do` 가 있으면 그대로 · 없으면 `When to use` 불릿 |
 | ❌ **Don't** | `## Don't` 가 있으면 그대로 · 없으면 `When NOT to use` + `Composition rules` 의 **금지형 문장**(금지·말 것·안 된다…) |
 
-**템플릿 섹션은 9개뿐이다** — 필수 4 + 차트 필수 `## Metrics` · `## Colors` + 선택 `## Spec`(치수 · 토큰 · 상태 · ARIA · 구성도 등 구현값) · `## Do` · `## Don't`. 생성기는 이 밖의 `## …` 를 읽지 않으므로 `## ARIA` · `## Why this exists` 같은 섹션은 **Storybook 에만 보이고 AI 에게는 배달되지 않는다**(2026-10-19 실측 15섹션 — Pagination 「페이지가 하나여도 컨트롤을 세운다」 정책이 그중 하나였다). 배경은 Purpose 에, 규칙은 Composition rules 에, 구현값은 Spec 에 둔다. `lint:docstrings` 가 템플릿 밖 섹션을 차단한다.
+**템플릿 섹션은 8개뿐이다** — 필수 4 + 차트 필수 `## Metrics` + 선택 `## Spec`(치수 · 토큰 · 상태 · ARIA · 구성도 등 구현값) · `## Do` · `## Don't`. 생성기는 이 밖의 `## …` 를 읽지 않으므로 `## ARIA` · `## Why this exists` 같은 섹션은 **Storybook 에만 보이고 AI 에게는 배달되지 않는다**(2026-10-19 실측 15섹션 — Pagination 「페이지가 하나여도 컨트롤을 세운다」 정책이 그중 하나였다). 배경은 Purpose 에, 규칙은 Composition rules 에, 구현값은 Spec 에 둔다. `lint:docstrings` 가 템플릿 밖 섹션을 차단한다.
 
 **차트는 지표를 적는다 — `## Metrics`(2026-10-23 사용자 지시).** `Composite/Chart/*` 는 «어떤 지표에 쓰면 좋은가» 를 `- ✅ …` 로 **1개 이상 필수**, «쓰면 안 되는 지표» 를 `- ❌ …` 로 가능하면 함께 적는다. 지표 이름만이 아니라 **성질**(상한이 있는 비율 · 구간마다 독립인 양 · 누적 카운터 · 합 100% 구성 · 점 사건 · 이산 상태)로 가른다 — 같은 TPS 도 추이는 선, 구간 양은 막대다. 생성기가 `components.json` `metrics: { fit, avoid }` 로 싣고, ❌ 는 Don't 에도 «이 지표에 쓰지 말 것» 으로 들어간다. MCP `get_component` 는 맞는 지표를 Do 보다 먼저 보이고, `search_components` 는 맞는 지표를 «언제 쓰나» 와 같은 무게로 찾는다(«응답시간 차트»). `lint:docstrings` 가 ✅ 0 인 차트를 차단한다(동결 없음).
 
@@ -108,14 +108,6 @@ DS는 **Tailwind를 쓰지 않습니다.** `style.css`(= `whatap-ds.css`)는 외
  * ## Metrics
  * - ✅ 구간마다 독립인 양 — 구간 TPS · 처리 건수 · 에러 건수
  * - ❌ 합이 의미 없는 값의 누적(p50 + p95) — 쌓은 높이가 거짓 합을 말한다
-```
-
-**차트는 색 역할도 적는다 — `## Colors`(2026-10-27 사용자 지시).** `Composite/Chart/*` 는 «무엇을 어떤 색으로 칠하나» 를 `- 역할 — 무엇에 · 토큰` 불릿으로 **1개 이상 필수**. 역할은 [patterns §17](./patterns.md) 표의 낱말(정체성 · 크기 · 강도 · 판정 등급 · 판정 밖 · 상태)과 **바탕**(트랙 · 값 없음 · 남은 몫처럼 데이터 색이 아닌 자리)만 쓴다. 생성기가 `components.json` `colors: [{ role, text, tokens }]` 로 싣고, MCP `get_component` 는 지표 다음에 «🎨 색 역할» 로 보이고, Storybook Docs 는 지표 블록 아래 «무엇을 어떤 색으로» 로 보인다. `lint:docstrings` 가 Colors 없는 차트 · 목록 밖 역할 · **소스(+ 내부 `./_*` 모듈)가 칠하는데 Colors 에 이름이 없는 색 묶음**(series · seq · heatmap · apdex · speed · neutral · apm · status · indicator)을 차단한다(동결 없음) — 코드의 색이 바뀌면 카탈로그도 함께 바뀐다.
-
-```
- * ## Colors
- * - 정체성 — 계열마다 막대 · `--color-chart-series-N`
- * - 바탕 — 남은 몫 · `--color-surface-200`
 ```
 
 **깊이도 본다(래칫).** `## When to use` 불릿 2개 이상(= ✅ Do 두 줄 이상) · 설명 없는 prop 0. prop 설명은 타입 블록 또는 구조 분해 인자 위의 `/** … */` 어느 쪽이든 읽힌다. 도입 시점 미달(109종)은 `docstring-baseline.json` `depth` 에 수치로 동결돼 있고, 나빠지면 실패 · 나아지면 `--update` 로 선을 줄이게 한다.

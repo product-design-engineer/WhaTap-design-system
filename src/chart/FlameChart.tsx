@@ -20,10 +20,6 @@
  * - ❌ 여러 실행을 합친 집계(평균 · 합) — 구간의 시작 · 끝이 없다 → 선 · 막대 차트
  * - ❌ 깊이 없는 리소스 목록의 로딩 단계 → [[WaterfallChart]]
  *
- * ## Colors
- * - 상태 — 막대 색 = 구간 상태 · 정상 `--color-chart-series-1` · 느림 `--color-status-warning` · 에러 `--color-status-error`(`_statusTone`)
- * - 바탕 — 정보 없음 막대 · `--color-surface-200`
- *
  * ## Composition rules
  * - 요소를 조합한다 — 막대 [[ChartSpanBar]] · 확대 [[ChartBrush]] · 시간 [[ChartTimeAxis]] · 상태 범례 [[ChartLegendItem]] · 값 상자 [[ChartTooltip]] · 전체 보기 [[Button]].
  *   레인 이름 · 세로 눈금선만 그린다. 그래서 Composite 계층이다.

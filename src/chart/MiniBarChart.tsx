@@ -40,9 +40,6 @@ import { AXIS_GUTTER as GUTTER, formatAxisValue, niceMax } from "./_axisScale";
  * - ❌ 합이 의미 없는 값의 누적(p50 + p95, 평균끼리) — 쌓은 높이가 거짓 합을 말한다
  * - ❌ 연속 게이지의 흐름(사용률 추이) → [[MiniLineChart]]
  *
- * ## Colors
- * - 정체성 — 계열마다 막대 · `--color-chart-series-N`(APM 화면 재현은 `--color-chart-apm-*`) · 상태색을 섞지 않는다
- *
  * ## Composition rules
  * - 플롯을 가리키면 [[ChartCrosshair]](`band`)가 그 칸의 계열 값 · 합계 툴팁을 보이고 나머지 막대를 흐린다(제목 = `pointLabels` 또는 `categories`, patterns §26 «강조»).
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).

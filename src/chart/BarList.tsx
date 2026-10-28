@@ -21,9 +21,6 @@
  * - ❌ 시간에 따른 변화 → [[MiniLineChart]] · [[MiniBarChart]]
  * - ❌ 합 100% 구성의 몫만 말할 때 → [[MiniDonutChart]](BarList 는 크기 비교다)
  *
- * ## Colors
- * - 정체성 — 줄마다 막대 색 · `--color-chart-series-N`(APM 화면 재현은 `--color-chart-apm-*`) · 색이 이름표라 범례를 따로 두지 않는다
- *
  * ## Composition rules
  * - 줄을 가리키면 그 줄만 남기고 나머지를 흐리며(0.32), [[ChartTooltip]] 이 전체 이름 · 값을 보인다(patterns §26 «강조»).
  * - 줄은 [[BarListItem]] 이 그린다(목록 행은 컴포넌트로, patterns §26). 그래서 Composite 계층이다.

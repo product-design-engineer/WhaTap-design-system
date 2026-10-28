@@ -29,10 +29,6 @@ import { DIM_OPACITY } from "./_emphasis";
  * - ❌ 연속 값(CPU 사용률 %) 그 자체 — 상태로 판정한 뒤 칠하고 값은 툴팁에
  * - ❌ 대상 수가 적은 정량 비교 → [[BarList]]
  *
- * ## Colors
- * - 상태 — 헥사곤 칠 · Active `--color-chart-series-1`(그라데이션) · Warning `--color-status-warning` · Critical `--color-status-error`([[BlockGrid]] 와 같은 `_statusTone`)
- * - 바탕 — Idle 헥사곤 · `--color-surface-200`
- *
  * ## Composition rules
  * - 범례는 [[ChartLegendItem]] 을 조합한다(견본은 마크 모양을 따른다, patterns §26). 그래서 Composite 계층이다.
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 여백 · 「GPU Map」 제목 줄 · 범례를 뺀다). [[WidgetFrame]] 안에 넣을 때 쓴다.

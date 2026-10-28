@@ -33,11 +33,6 @@ import { AXIS_GUTTER as GUTTER, formatAxisValue } from "./_axisScale";
  * - ❌ 주기 · 변동이 큰 지표(TPS · CPU 사용률) — 직선 외삽이 맞지 않아 예측이 거짓이 된다
  * - ❌ 천장 · 임계가 없는 지표(응답시간 · 건수) — 닿을 자리가 없다
  *
- * ## Colors
- * - 정체성 — 관측 · 예측 선 · `--color-chart-series-N`(기본)
- * - 상태 — 위젯이 상태를 말할 때의 선 · `--color-status-error` · `--color-status-warning` · 임계선은 같은 토큰, 임계 띠는 `--color-status-*-soft`
- * - 판정 밖 — 평탄 · 지평 밖 · 대조군 선 · `--color-chart-neutral`
- *
  * ## Composition rules
  * - 플롯을 가리키면 [[ChartCrosshair]](`positions` = 관측 · 예측 점 x)가 그 시점의 관측 · 예측 값 툴팁을 보인다(제목 = `formatX`, patterns §26 «강조»).
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).

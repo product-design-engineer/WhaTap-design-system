@@ -19,11 +19,6 @@
  *   ⑧ **차트의 지표** — `Composite/Chart/*` 는 `## Metrics` 에 맞는 지표(`- ✅ …`) 1개 이상 필수,
  *      쓰면 안 되는 지표(`- ❌ …`)는 가능하면(없으면 정보로만 센다). 2026-10-23 사용자 지시 —
  *      «각 Composite 차트에 어떤 지표 유형에 사용하면 좋을지 카탈로그 정보에 필수 기입». 동결 없이 0.
- *   ⑨ **차트의 색** — `Composite/Chart/*` 는 `## Colors` 불릿(`- 역할 — 무엇에 · 토큰`) 1개 이상 필수.
- *      역할은 patterns §17 낱말(정체성 · 크기 · 강도 · 판정 등급 · 판정 밖 · 상태) + 바탕만 쓴다. 소스(+ 내부
- *      `./_*` 모듈)가 칠하는 차트 색 토큰 묶음(series · seq · heatmap · apdex · speed · neutral · apm · status ·
- *      indicator)은 전부 Colors 에 이름이 있어야 한다 — 코드가 바뀌었는데 카탈로그가 옛 색을 말하면 실패.
- *      2026-10-27 사용자 지시 «차트 composite 에 컬러 적용 규칙도 카탈로그 정보에». 동결 없이 0.
  *
  * ## 깊이 — 있는 것과 충분한 것은 다르다 (래칫)
  * 4섹션이 «있는지» 만 보면 불릿 하나짜리 When to use(→ Do 한 줄)와 설명 없는 prop(→ MCP 에 타입만)이
@@ -63,18 +58,6 @@ const { components } = JSON.parse(readFileSync(JSON_PATH, "utf8"));
 /** 지표 섹션이 필수인 차트 — 계층 Composite 의 Chart 하위 그룹. */
 const isChart = (c) => c.title.startsWith("Composite/Chart/");
 
-/* ⑨ 색 역할 — patterns §17 표의 낱말 + 바탕(데이터 색이 아닌 트랙 · 값 없음 · 남은 몫). */
-const COLOR_ROLES = ["정체성", "크기", "강도", "판정 등급", "판정 밖", "상태", "바탕"];
-/** 토큰 이름 → 묶음. 차트 마크 색 묶음만 센다(surface · text · border 는 역할 검사 밖). */
-const colorFamily = (t) => t.match(/^--(?:color|gradient)-(?:chart-(series|seq|apdex|speed|neutral|apm)|(heatmap)|(status)|(indicator))/)?.slice(1).find(Boolean) ?? null;
-/** 소스와 그 소스가 import 하는 내부 `./_*` 모듈이 실제로 쓰는 묶음. */
-function familiesInSource(file) {
-  const src = readFileSync(join(root, file), "utf8");
-  const helpers = [...src.matchAll(/from\s+"\.\/(_[\w]+)"/g)].map((m) => join(dirname(join(root, file)), m[1]));
-  const texts = [src, ...helpers.flatMap((h) => [".ts", ".tsx"].map((x) => h + x).filter(existsSync).map((p) => readFileSync(p, "utf8")))];
-  return new Set(texts.flatMap((t) => [...t.matchAll(/--(?:color|gradient)-[\w-]+/g)].map((m) => colorFamily(m[0]))).filter(Boolean));
-}
-
 /** Tokens 는 컴포넌트가 아니라 메타 카탈로그 — 검사 대상 아님. */
 const targets = components.filter((c) => c.layer !== "Tokens");
 
@@ -100,17 +83,7 @@ for (const c of targets) {
     if (!c.dont.length) missing.push("Do/Don't 유도 불가(금지형 문장 0)");
   }
   if (isChart(c) && !c.metrics?.fit?.length) missing.push("## Metrics ✅ 맞는 지표(차트 필수)");
-  if (isChart(c)) {
-    if (!c.colors?.length) missing.push("## Colors 색 역할(차트 필수)");
-    for (const col of c.colors ?? [])
-      if (!COLOR_ROLES.includes(col.role)) missing.push(`## Colors 역할 «${col.role ?? col.text}» — ${COLOR_ROLES.join(" · ")} 중 하나`);
-    if (c.sourceFile && c.colors?.length) {
-      const named = new Set(c.colors.flatMap((col) => col.tokens.map(colorFamily)).filter(Boolean));
-      const unnamed = [...familiesInSource(c.sourceFile)].filter((f) => !named.has(f));
-      if (unnamed.length) missing.push(`## Colors 에 없는 색 묶음(소스가 칠한다): ${unnamed.join(" · ")}`);
-    }
-  }
-  if (missing.length) violations.push({ title: c.title, file: c.sourceFile ?? c.storyFile, missing, noFreeze: missing.some((m) => m.startsWith("## Metrics") || m.startsWith("## Colors")) });
+  if (missing.length) violations.push({ title: c.title, file: c.sourceFile ?? c.storyFile, missing, noFreeze: missing.some((m) => m.startsWith("## Metrics")) });
 }
 
 /* ── 깊이(래칫) ───────────────────────────────────────────────────────────── */
@@ -182,7 +155,7 @@ if (fresh.length) {
   console.error(`✗ docstring 표준 위반 ${fresh.length}건 (신규):\n`);
   for (const v of fresh) console.error(`  ${v.title}\n    ${v.file}\n    누락: ${v.missing.join(" · ")}`);
   console.error(
-    `\n표준: Purpose / When to use / When NOT to use / Composition rules (+ 차트는 Metrics · Colors 필수 · 선택 Spec · Do · Don't) + @example (소스) + 스토리 description.` +
+    `\n표준: Purpose / When to use / When NOT to use / Composition rules (+ 차트는 Metrics 필수 · 선택 Spec · Do · Don't) + @example (소스) + 스토리 description.` +
       `\n그 밖의 \`## …\` 섹션은 배달되지 않습니다 — 내용을 위 섹션으로 옮기세요. docs/SKILL.md 「Do / Don't 단일 표기」 참고.`,
   );
 }
@@ -203,7 +176,6 @@ if (fixed.length || depthBetter.length) {
 const charts = targets.filter(isChart);
 const noAvoid = charts.filter((c) => !c.metrics?.avoid?.length).map((c) => c.name);
 console.log(`  차트 지표: ${charts.length}종 ✅ 전부 · ❌ 적용 금지 지표 ${charts.length - noAvoid.length}/${charts.length}${noAvoid.length ? ` (없음: ${noAvoid.join(" · ")})` : ""}`);
-console.log(`  차트 색: ${charts.length}종 Colors 전부 · 소스 색 묶음과 일치`);
 console.log(
   `✓ docstring 표준 OK — 컴포넌트 ${targets.length} (완전 ${targets.length - violations.length} · 동결 ${violations.length}) · 깊이 동결 ${Object.keys(depthNow).length}`,
 );
