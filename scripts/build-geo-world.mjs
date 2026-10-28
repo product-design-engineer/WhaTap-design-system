@@ -78,6 +78,8 @@ const rows = items.map((f) => {
         seg += `${dx},${dy} `.replace(/,-/, "-");
         px = +(px + dx).toFixed(1); py = +(py + dy).toFixed(1);
       }
+      /* 반올림하면 한 점으로 줄어드는 고리는 «M x,y l z» 가 된다 — 브라우저가 path 를 그 자리에서 끊으므로 뺀다 */
+      if (seg.endsWith("l")) continue;
       d += seg.trimEnd().replace(/ -/g, "-") + "z";
       if (ri || sh) continue;
       /* 가장 큰 바깥 고리의 무게중심 — 버블 자리 */

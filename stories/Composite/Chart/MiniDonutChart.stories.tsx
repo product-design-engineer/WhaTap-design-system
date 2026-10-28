@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MiniDonutChart, WidgetFrame } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, colorOf, names, scalar } from "../../_extremes";
 
 /**
  * Stories for [[MiniDonutChart]] — 범주 비율을 보여 주는 작은 도넛 카드.
@@ -68,4 +69,25 @@ export const InWidgetFrame: Story = {
       </WidgetFrame>
     </div>
   ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────────── */
+
+/** 극단 · 100개 — 세그먼트 100개. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 도넛 조각은 1° 남짓으로 얇아지고, 옆 범례 목록 100줄은 잘리지 않고 카드 아래로 넘쳐 나온다.` } } },
+  args: {
+    title: "에이전트별 처리량",
+    segments: names().map((label, i) => ({ label, value: scalar(i, 100) + 1, color: colorOf(i) })),
+    centerLabel: String(EXTREME_N),
+    centerSub: "Agents",
+  },
+};
+
+/** 극단 · 데이터 없음 — 세그먼트 0개. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 합계 0 이라 고리 바탕만 남는다.` } } },
+  args: { title: "에이전트별 처리량", segments: [], centerLabel: "0", centerSub: "Agents" },
 };

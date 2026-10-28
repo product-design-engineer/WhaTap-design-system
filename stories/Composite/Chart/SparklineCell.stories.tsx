@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DataTable, MiniMultiLineChart, SparklineCell, WidgetFrame } from "@whatap/design-system";
+import { EXTREME_NOTE } from "../../_extremes";
 
 /**
  * Stories for [[SparklineCell]] — 표 셀 하나에 행 색 인덱스 · 지금 값 · 최근 추이.
@@ -81,4 +82,28 @@ export const LinkedToChart: Story = {
       </WidgetFrame>
     </div>
   ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────── */
+const ExtremeLabel = ({ children }: { children: string }) => <span className="text-sm text-tertiary">{children}</span>;
+
+/** 0 과 상한 초과. */
+export const ExtremeBounds: Story = {
+  name: "극단 · 0 과 상한 초과",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.bounds}` } } },
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <ExtremeLabel>값 0</ExtremeLabel>
+      <SparklineCell value={0} unit="%" values={Array.from({ length: 30 }, () => 0)} max={100} />
+      <ExtremeLabel>상한 초과 — 180 / 100</ExtremeLabel>
+      <SparklineCell value={180} unit="%" values={[...wave(2, 80, 10).slice(0, -1), 180]} max={100} />
+    </div>
+  ),
+};
+
+/** 데이터 없음 — null · 빈 추이. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty}` } } },
+  args: { value: null, unit: "%", values: [], max: 100 },
 };

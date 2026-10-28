@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BarList, WidgetFrame } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, colorOf, names, scalar } from "../../_extremes";
 
 /**
  * Stories for [[BarList]] — 값 · 이름 · 가로 막대 한 줄을 여러 줄.
@@ -34,4 +35,25 @@ export const InWidgetFrame: Story = {
       <BarList frame={false} rows={ROWS} />
     </WidgetFrame>
   ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────────── */
+
+/** 극단 · 100개 — 줄 100개. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 줄 100개가 칸 높이(200px)에 눌려 겹친다 — 글자를 읽을 수 없다. 스크롤이나 상위 N 자르기는 차트가 하지 않는다.` } } },
+  args: {
+    rows: names().map((label, i) => {
+      const value = scalar(i, 500);
+      return { label, value, ratio: value / 500, color: colorOf(i) };
+    }),
+  },
+};
+
+/** 극단 · 데이터 없음 — 줄 0개. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 아무것도 그리지 않는다.` } } },
+  args: { rows: [] },
 };

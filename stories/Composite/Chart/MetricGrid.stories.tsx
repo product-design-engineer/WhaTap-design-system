@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MetricGrid, RangeGauge, WidgetFrame } from "@whatap/design-system";
+import { EXTREME_NOTE, names, scalar } from "../../_extremes";
 
 /**
  * Stories for [[MetricGrid]] — 같은 대상의 관련 집계 값 줄. 한 줄 4칸까지 · 넘으면 줄바꿈 · 칸은 세 겹까지.
@@ -72,6 +73,32 @@ export const WithRangeGauge: Story = {
           <RangeGauge label="Available / Desired" value={6} max={6} maxLabel="Desired" />
         </div>
       </WidgetFrame>
+    </div>
+  ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────────── */
+
+/** 극단 · 100개 — 칸 100개. 숫자 칸이라 색이 없다. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 숫자 칸은 색이 없다 — 한 줄 4칸씩 25줄로 줄바꿈된다.` } } },
+  args: { items: names().map((label, i) => ({ label, value: scalar(i, 100), unit: "%" })) },
+  render: (args) => (
+    <div style={{ width: 420 }}>
+      <MetricGrid {...args} />
+    </div>
+  ),
+};
+
+/** 극단 · 데이터 없음 — 칸 0개. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 아무것도 그리지 않는다.` } } },
+  args: { items: [] },
+  render: (args) => (
+    <div style={{ width: 420 }}>
+      <MetricGrid {...args} />
     </div>
   ),
 };
