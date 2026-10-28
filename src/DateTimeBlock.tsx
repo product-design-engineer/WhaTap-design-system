@@ -83,7 +83,7 @@ export default function DateTimeBlock({
       <input
         className={inputCls}
         style={{ ...numericFont, width: "var(--wds-datetime-year-w)" }}
-        key={pad4(parts.year)}
+        key={`year-${pad4(parts.year)}`}
         defaultValue={pad4(parts.year)}
         onChange={edit("year")}
         tabIndex={tabBase}
@@ -93,7 +93,7 @@ export default function DateTimeBlock({
       <input
         className={inputCls}
         style={{ ...numericFont, width: "var(--wds-datetime-field-w)" }}
-        key={pad2(parts.month)}
+        key={`month-${pad2(parts.month)}`}
         defaultValue={pad2(parts.month)}
         onChange={edit("month")}
         tabIndex={tabBase - 1}
@@ -103,7 +103,7 @@ export default function DateTimeBlock({
       <input
         className={inputCls}
         style={{ ...numericFont, width: "var(--wds-datetime-field-w)" }}
-        key={pad2(parts.day)}
+        key={`day-${pad2(parts.day)}`}
         defaultValue={pad2(parts.day)}
         onChange={edit("day")}
         tabIndex={tabBase - 2}
@@ -113,7 +113,7 @@ export default function DateTimeBlock({
       <input
         className={inputCls}
         style={{ ...numericFont, width: "var(--wds-datetime-field-w)" }}
-        key={pad2(parts.hour)}
+        key={`hour-${pad2(parts.hour)}`}
         defaultValue={pad2(parts.hour)}
         onChange={edit("hour")}
         tabIndex={tabBase - 3}
@@ -123,7 +123,7 @@ export default function DateTimeBlock({
       <input
         className={inputCls}
         style={{ ...numericFont, width: "var(--wds-datetime-field-w)" }}
-        key={pad2(parts.minute)}
+        key={`minute-${pad2(parts.minute)}`}
         defaultValue={pad2(parts.minute)}
         onChange={edit("minute")}
         tabIndex={tabBase - 4}
@@ -135,7 +135,7 @@ export default function DateTimeBlock({
           <input
             className={inputCls}
             style={{ ...numericFont, width: "var(--wds-datetime-field-w)" }}
-            key={pad2(parts.second)}
+            key={`second-${pad2(parts.second)}`}
             defaultValue={pad2(parts.second)}
             onChange={edit("second")}
             tabIndex={tabBase - 5}
