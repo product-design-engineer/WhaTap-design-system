@@ -207,8 +207,8 @@ style={{ background: tokens.color.surface.critical.value }}     // ❌ 라이트
 |---|---|---|
 | `text-lg+` (14px+) | `font-bold` | 페이지 타이틀·섹션 헤더 |
 | `text-md` (13px) | `font-bold` / 강조 시 medium | 카드 헤더·테이블 row 강조 |
-| `text-base` (12px) | `font-medium` | 라벨·메타·dropdown 항목 |
-| `text-sm` (11px) | `font-medium` 또는 regular | 보조 메타·캡션 |
+| `text-base` (12px) | `font-medium` | 항목 라벨·메타·dropdown 항목 |
+| `text-sm` (11px) | `font-medium` 또는 regular | 폼 필드 라벨(medium)·보조 메타·캡션 |
 | `text-xs` (10px) | regular | 마이크로 캡션·인디케이터 |
 
 본문 (running text) 만 regular. 같은 사이즈에서 weight 만 평탄화하면 위계 손실 — 사이즈 + weight 둘 다 조합.
@@ -223,7 +223,8 @@ style={{ background: tokens.color.surface.critical.value }}     // ❌ 라이트
 | `heading.section` | 섹션/카드 헤더 | `text-lg font-bold` |
 | `heading.subsection` | 강조 부제·테이블 row 강조 | `text-md font-bold` |
 | `body` | 본문 running text | `text-base` (regular) |
-| `body.label` | 폼/항목 라벨 | `text-base font-medium` |
+| `body.label` | 목록·dropdown 항목 라벨 | `text-base font-medium` |
+| `field.label` | 폼 라벨 — 입력칸·셀렉트·라디오/체크박스 **묶음** 모두 한 벌 (patterns §27) | `text-sm font-medium text-primary` (비활성 `text-tertiary`) |
 | `meta.primary` | 보조 정보·캡션 | `text-sm` |
 | `meta.secondary` | 마이크로 정보·인디케이터 | `text-xs` |
 | `numeric.metric` | 지표·카운트 강조 | `text-md font-numeric tabular-nums` |
