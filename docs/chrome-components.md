@@ -254,7 +254,7 @@ type DateParts = { year: string; month: string; day: string; hour: string; minut
 | `onPickDate` | `() => void` | — |
 | `rangeMode` | `"rolling" \| "fixed"` | — _(시안)_ |
 | `onRangeModeChange` | `(mode) => void` | — _(시안)_ |
-| `rangeControl` | `"segmented" \| "pin"` | `"segmented"` — `pin` 은 📌 고정 버튼 하나 _(정본)_ |
+| `rangeControl` | `"segmented" \| "pin"` | `"segmented"` — `pin` 은 버튼 하나(글자 = 지금 상태) _(정본)_ |
 | `live` | `boolean` | — _(넘기면 ▶ 시작 / ■ 중지 토글, 정본)_ |
 | `onPickStart` · `onPickEnd` | `() => void` | — _(시각마다 달력 버튼, 정본)_ |
 | `onStartChange` · `onEndChange` | `(next: DateParts) => void` | — _(직접 입력을 알림 → 고정, 정본)_ |
@@ -277,7 +277,7 @@ type DateParts = { year: string; month: string; day: string; hour: string; minut
 | 달력 패널은 시작 > 종료 · 최대 조회 기간 초과 날짜를 미리 흐리게 막는다. 직접 입력으로 넘기면 검색 버튼 옆에 이유 한 줄 + 검색 막기 | (호출측) | — |
 | 구간 길이는 언제나 **종료 시각에서 거꾸로** | 갱신 · 라이브 «최근 10분» / 고정 «10분» / 목록 밖 «직접 지정» | `durations` · `duration` · `onDurationChange` |
 | 길이를 고르는 것만으로는 갱신 / 고정이 바뀌지 않는다. 라이브 중이면 라이브가 이어지고 길이만 바뀐다 | — | — |
-| 갱신 / 고정은 📌 버튼 하나 — 눌리면 고정, 떼면 갱신 | 📌 고정 | `rangeControl="pin"` + `onRangeModeChange` |
+| 갱신 / 고정은 버튼 하나 — 글자가 지금 상태를 말한다. 누르면 바뀐다 | 📌 고정 / ↻ 갱신 | `rangeControl="pin"` + `onRangeModeChange` |
 | 직접 입력 · 달력 · ‹ › → 고정, 라이브 중이면 라이브 중지 | 📌 눌림 | `onStartChange` · `onEndChange` · `onPickStart` · `onPickEnd` · `onPrev` · `onNext` 에서 호출측이 |
 | 라이브는 ▶ 시작 / ■ 중지 토글. 중지하면 멈춘 순간의 구간으로 고정 | ▶ / ■ | `live` + `onLive` |
 

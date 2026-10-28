@@ -22,7 +22,7 @@ const meta: Meta<typeof TimeRangeSelector> = {
           "| 시각 | 연·월·일·시·분·초, 숫자만 · 자릿수 제한 | `start` · `end` (`second`) · `onStartChange` · `onEndChange` |\n" +
           "| 달력 | 시작 · 종료 시각마다 하나. 시작 > 종료 · 최대 조회 기간 · 보관 기간 밖은 미리 막는다 | `minDate` · `maxDate` · `maxRangeDays` |\n" +
           "| 구간 길이 | 언제나 종료 시각에서 거꾸로. 갱신 · 라이브 «최근 10분», 고정 «10분», 목록 밖 «직접 지정» | `durations` · `duration` · `onDurationChange` |\n" +
-          "| 📌 고정 | 눌리면 고정(구간 그대로), 떼면 갱신(검색할 때마다 지금 기준) | `rangeMode` · `rangeControl=\"pin\"` · `onRangeModeChange` |\n" +
+          "| 갱신 ↔ 고정 | 버튼 하나, 글자가 지금 상태(📌 고정 / ↻ 갱신). 누르면 바뀐다 | `rangeMode` · `rangeControl=\"pin\"` · `onRangeModeChange` |\n" +
           "| 라이브 | ▶ 시작 / ■ 중지(펄스). 중지하면 멈춘 순간의 구간으로 고정 | `live` · `onLive` |\n\n" +
           "직접 입력 · 달력 · 이전/다음은 고정이 되고, 라이브 중이면 라이브가 멈춘다. 길이를 고르는 것만으로는 갱신/고정이 바뀌지 않는다. " +
           "들어올 때는 링크에 담긴 구간 → 고정해 둔 구간 → «최근 5분» 순서이고, 고정해 둔 구간으로 열면 셀렉터 아래 Notice 한 줄로 알린다.",
@@ -33,7 +33,7 @@ const meta: Meta<typeof TimeRangeSelector> = {
     title: { description: "상단 제목. 기본 «시간». 빈 문자열이면 제목 줄 없음.", control: "text" },
     durationLabel: { description: "초록 알약 글자(`durations` 를 안 줄 때).", control: "text" },
     rangeMode: { description: "rolling(갱신) · fixed(고정).", control: "inline-radio", options: [undefined, "rolling", "fixed"] },
-    rangeControl: { description: "갱신/고정 토글 모양 — pin(📌 하나) · segmented([갱신 | 고정] 두 칸).", control: "inline-radio", options: ["segmented", "pin"] },
+    rangeControl: { description: "갱신/고정 토글 모양 — pin(버튼 하나, 글자가 지금 상태) · segmented([갱신 | 고정] 두 칸).", control: "inline-radio", options: ["segmented", "pin"] },
     live: { description: "라이브 상태. 넘기면 ▶ 시작 / ■ 중지 토글.", control: "boolean" },
     durations: { description: "구간 길이 목록(분). 넘기면 알약이 드롭다운.", control: "object" },
     duration: { description: "지금 구간 길이(분). 목록 밖이면 «직접 지정».", control: "number" },
@@ -93,14 +93,14 @@ function StateRow({ caption, children }: { caption: string; children: ReactNode 
 
 /**
  * **정본 · 상태 한눈에.** 기획 «[타임 셀렉터] 동작 제안» 이 정한 조각을 모두 켠 모양입니다 —
- * 시각은 초까지, 달력은 시작 · 종료 시각마다, 구간 길이는 초록 알약 드롭다운, 갱신/고정은 📌 버튼 하나, 라이브는 ▶ / ■ 토글.
+ * 시각은 초까지, 달력은 시작 · 종료 시각마다, 구간 길이는 초록 알약 드롭다운, 갱신/고정은 버튼 하나(글자가 지금 상태), 라이브는 ▶ / ■ 토글.
  *
- * | 상태 | 알약 | 📌 | 라이브 버튼 |
+ * | 상태 | 알약 | 갱신/고정 버튼 | 라이브 버튼 |
  * |---|---|---|---|
- * | 갱신 | 최근 10분 | 안 눌림 | ▶ |
- * | 고정 | 10분 | 눌림(파랑) | ▶ |
- * | 라이브 중 | 최근 10분 | 안 눌림 | ■ |
- * | 직접 지정(목록 밖 길이) | 직접 지정 | 눌림 | ▶ |
+ * | 갱신 | 최근 10분 | ↻ 갱신(회색) | ▶ |
+ * | 고정 | 10분 | 📌 고정(파랑) | ▶ |
+ * | 라이브 중 | 최근 10분 | ↻ 갱신 | ■ (펄스) |
+ * | 직접 지정(목록 밖 길이) | 직접 지정 | 📌 고정 | ▶ |
  */
 export const Canon_States: Story = {
   name: "정본 · 상태 한눈에",
@@ -313,7 +313,7 @@ function CanonFlowDemo() {
  * - **초록 알약(구간 길이)** — 언제나 종료 시각에서 거꾸로. 갱신 · 라이브는 «최근 N분», 고정은 «N분». 고르는 것만으로 갱신/고정은 바뀌지 않습니다.
  * - **📅 달력** — 시작 · 종료 시각 뒤의 📅 를 누르면 달력이 뜹니다. 시작 달력은 종료일 뒤를, 종료 달력은 시작일 앞을 막고, 보관 기간(9/27 이전) · 오늘(10/26) 이후 · 최대 조회 기간 7일 밖도 흐리게 막습니다. 고르면 시각은 그대로 두고 날짜만 바뀝니다.
  * - **달력 · 직접 입력 · ‹ ›** — 고정으로 바뀌고, 라이브 중이었다면 라이브가 멈춥니다. 칸마다 자릿수를 넘겨 칠 수 없습니다(연 4 · 나머지 2).
- * - **📌** — 누르면 고정, 떼면 갱신(지금 기준으로 다시 계산).
+ * - **갱신 ↔ 고정 버튼** — 글자가 지금 상태(↻ 갱신 / 📌 고정). 누르면 바뀌고, 갱신으로 바꾸면 지금 기준으로 다시 계산합니다.
  * - **▶ / ■** — 라이브 시작 / 중지. 중지하면 멈춘 순간의 구간으로 고정됩니다.
  */
 export const Canon_Flow: Story = {

@@ -50,8 +50,8 @@
  *   날짜를 **미리 흐리게 막는다**. 직접 입력으로 넘기면 검색 버튼 옆에 이유를 한 줄 적고 검색을 막는다.
  * - 고정된 구간으로 화면을 열 때(저장된 구간)는 셀렉터 아래에 안내 한 줄 —
  *   «어제 13:50~14:00 으로 고정된 구간을 보여 드리고 있어요 · [최근 5분 보기]» ([[Notice]]).
- * - 📌 버튼은 아이콘 + «고정» 글자. 눌림(고정)은 `--color-brand-blue-bg` 바탕 + `--color-brand-blue` 1px 테두리 · 글자 — 고정은
- *   «구간이 움직이지 않는다» 는 걸 놓치면 안 되는 상태라 한눈에 띄운다. 안 눌림(갱신)은 `text-tertiary`.
+ * - 갱신 ↔ 고정 버튼은 **글자가 지금 상태를 말한다** — 고정이면 «📌 고정», 갱신이면 «↻ 갱신». 꺼진 핀을 «갱신» 으로 읽게 하지 않는다.
+ *   고정은 `--color-brand-blue-bg` 바탕 + `--color-brand-blue` 1px 테두리 · 글자(놓치면 안 되는 상태라 한눈에 띄운다), 갱신은 `text-secondary`.
  * - 시각마다 달력 버튼을 누르면 [[Calendar]] 판이 그 버튼 아래에 뜬다(`onStartChange` · `onEndChange` 가 있을 때). 고른 날짜는
  *   시각(시 · 분 · 초)을 그대로 두고 날짜만 바꾼다. 시작 달력은 종료일 뒤를, 종료 달력은 시작일 앞을 막고, `minDate` · `maxDate` ·
  *   `maxRangeDays` 밖도 막는다. 바깥을 누르거나 Esc 면 닫힌다. 판은 상자 밖에 띄운다 — 상자는 `overflow-hidden` 이라 안에 두면 잘린다.
@@ -62,7 +62,8 @@
  * - `rangeMode` 만 → 읽기 전용 표시(아이콘 + 글자, 12px medium). Tooltip 으로 동작 설명.
  * - `rangeMode` + `onRangeModeChange` → 두 칸 토글 `[갱신 | 고정]`, 각 칸 `aria-pressed`, 그룹 `role="group" aria-label="최근 구간 동작"`.
  * - 눌린 칸: `bg-surface-100` + 모드 색 글자. 안 눌린 칸: `text-tertiary`, hover `bg-surface-100`.
- * - `rangeControl="pin"` + `onRangeModeChange` → 📌 «고정» 버튼 하나, `aria-pressed = (rangeMode === "fixed")`. 누르면 반대 값으로.
+ * - `rangeControl="pin"` + `onRangeModeChange` → 버튼 하나. 글자 · 아이콘이 지금 상태(📌 고정 / ↻ 갱신), 누르면 반대 값으로.
+ *   글자가 바뀌므로 `aria-pressed` 는 쓰지 않고 `aria-label` 이 «구간 동작: 갱신 — 누르면 고정» 처럼 지금 상태와 다음 상태를 함께 읽는다.
  * - `live` 지정 → 라이브 버튼 `aria-pressed={live}` · `aria-label` «라이브 시작» / «라이브 중지», 아이콘 ▶ / ■(`--color-status-success`).
  *   라이브 중(■)에는 링이 1.6초마다 퍼지는 펄스(`.wds-live-pulse`, 1 → 1.3배 · 투명해짐) — 계속 갱신 중인 화면을 멈춘 화면과 구별한다.
  *   `prefers-reduced-motion` 이면 펄스를 멈춘다.
@@ -163,7 +164,7 @@ export default function TimeRangeSelector({
   /** 넘기면 표시가 토글이 되어 사용자가 동작을 바꿀 수 있다. 모양은 `rangeControl`. */
   onRangeModeChange?: (mode: TimeRangeMode) => void;
   /**
-   * 갱신/고정 토글 모양 — `segmented`(기본, [갱신 | 고정] 두 칸) · `pin`(📌 고정 버튼 하나 — 눌리면 고정, 떼면 갱신).
+   * 갱신/고정 토글 모양 — `segmented`(기본, [갱신 | 고정] 두 칸) · `pin`(버튼 하나 — 글자가 지금 상태 «📌 고정» / «↻ 갱신», 누르면 바뀜).
    * `onRangeModeChange` 가 있을 때만 의미가 있다.
    */
   rangeControl?: "segmented" | "pin";
@@ -407,9 +408,10 @@ function CalendarButton({
   );
 }
 
-/* ─── 📌 고정 버튼 하나 — 눌리면 고정, 떼면 갱신 ─── */
+/* ─── 갱신 ↔ 고정 버튼 하나 — 글자가 지금 상태를 말한다(📌 고정 / ↻ 갱신) ─── */
 function PinToggle({ mode, onChange }: { mode: TimeRangeMode; onChange: (mode: TimeRangeMode) => void }) {
   const pinned = mode === "fixed";
+  const next: TimeRangeMode = pinned ? "rolling" : "fixed";
   return (
     <div className="flex items-center px-4px">
       <Tooltip
@@ -418,21 +420,22 @@ function PinToggle({ mode, onChange }: { mode: TimeRangeMode; onChange: (mode: T
       >
         <button
           type="button"
-          aria-pressed={pinned}
-          onClick={() => onChange(pinned ? "rolling" : "fixed")}
+          aria-label={`구간 동작: ${MODE_LABEL[mode]} — 누르면 ${MODE_LABEL[next]}`}
+          onClick={() => onChange(next)}
           className={`flex items-center gap-4px px-6px h-20px rounded-2px text-base font-medium cursor-pointer ${
-            pinned ? "" : "text-tertiary hover-bg-surface-100"
+            pinned ? "" : "text-secondary hover-bg-surface-100"
           }`}
           style={{
-            /* 눌림 = 고정. 회색 바탕은 눌린 줄 몰라서 brand 옅은 바탕 + 1px brand 테두리로 한눈에 띄운다. */
+            /* 고정은 «구간이 움직이지 않는다» 를 놓치면 안 되는 상태 — brand 옅은 바탕 + 1px brand 테두리로 띄운다.
+               갱신은 기본 동작이라 회색 글자로 차분하게. */
             background: pinned ? "var(--color-brand-blue-bg)" : undefined,
             boxShadow: pinned ? "inset 0 0 0 1px var(--color-brand-blue)" : undefined,
             color: pinned ? "var(--color-brand-blue)" : undefined,
             fontFamily: "var(--font-family-korean)",
           }}
         >
-          <ModeIcon mode="fixed" />
-          고정
+          <ModeIcon mode={mode} />
+          {MODE_LABEL[mode]}
         </button>
       </Tooltip>
     </div>
