@@ -21,9 +21,6 @@
  * - ❌ 합이 의미 없는 지표(p50 + p95 · 평균끼리 · 각자 100% 인 사용률) — 위 경계가 존재하지 않는 합계를 말한다
  * - ❌ 계열끼리 크기를 견줘야 하는 지표 → [[MiniMultiLineChart]]
  *
- * ## Colors
- * - 정체성 — 층마다 불투명 면 · `--color-chart-series-1..8`(`slot`) · 층 경계 `--color-card`
- *
  * ## Composition rules
  * - 요소를 조합한다 — 격자 [[ChartGrid]] · 값축 [[ChartValueAxis]] · 시간축 [[ChartTimeAxis]] · 합계 최고점 [[ChartPeakMarker]] · 단독 범례 [[ChartLegendItem]].
  *   차트는 면만 그린다(patterns §26). 그래서 Composite 계층이다.

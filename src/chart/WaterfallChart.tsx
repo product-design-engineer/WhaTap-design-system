@@ -20,10 +20,6 @@
  * - ❌ 여러 로드를 합친 평균 단계 시간 — 시작 시각이 없어 폭포가 아니다 → [[SegmentBar]]
  * - ❌ 리소스 타입을 색으로(11종) — 색이 8개를 넘고 서로 구별되지 않는다. 타입은 이름 칸 글자로
  *
- * ## Colors
- * - 정체성 — 막대 색 = 단계 · `--color-chart-series-1..8`(`phases` 순서)
- * - 판정 밖 — 9번째 단계부터 「기타」 · `--color-chart-neutral`
- *
  * ## Composition rules
  * - 요소를 조합한다 — 단계 막대 [[ChartSpanBar]] · 확대 [[ChartBrush]] · 시간 [[ChartTimeAxis]] · 단계 범례 [[ChartLegendItem]] · 값 상자 [[ChartTooltip]] · 전체 보기 [[Button]].
  *   이름 칸 · 세로 눈금선 · 표시선만 그린다. 그래서 Composite 계층이다.

@@ -19,9 +19,6 @@
  * - ❌ 단위나 범위가 다른 두 지표(TPS 와 응답시간) — 이중 축 금지(§19), 칸을 나눈다
  * - ❌ 대상이 많아 선이 엉키는 비교(서버 10대) → [[BarList]] TOP-N 또는 칸 나누기
  *
- * ## Colors
- * - 정체성 — 계열마다 선 · 선 끝 배지 테두리 · `--color-chart-series-N` · 배지 글자는 text 토큰
- *
  * ## Composition rules
  * - 플롯을 가리키면 [[ChartCrosshair]] 가 시점 안내선 · 계열마다 점 · 값 툴팁을 보인다(제목 = `pointLabels`). 헤더 범례 항목을 가리키면 그 선만 굵게(2px) 남기고 나머지를 흐린다(patterns §26 «강조»).
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).

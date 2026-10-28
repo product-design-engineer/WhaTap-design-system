@@ -20,10 +20,6 @@
  * - ❌ 상한이 없는 값(TPS · 건수) — 임계 강조와 높이의 뜻이 사라진다 → [[MiniBarChart]]
  * - ❌ 24칸이 아닌 구간(분 · 일) → [[MiniBarChart]] · [[Heatmap]]
  *
- * ## Colors
- * - 크기 — 막대 · 임계 미만 `--color-chart-seq-2` · 이상 `--color-chart-seq-4`
- * - 바탕 — 데이터 없음 칸 · `--color-surface-100`
- *
  * ## Composition rules
  * - 막대를 가리키면 [[ChartTooltip]] 이 시각 · 사용률을 보이고 나머지 막대를 흐린다(patterns §26 «강조»).
  * - 요소를 조합한다 — 캡션 [[AiCaption]] · 막대 [[ChartBar]](칸마다 하나). 차트 안에서 막대를 다시 그리지 않는다(patterns §26).

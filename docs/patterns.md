@@ -793,10 +793,6 @@ Product-SaaS 안에서 어떤 구현을 선택할지 갈릴 때, 다음 순서�
 | **판정 밖** — 대조군 · 평탄 계열 | `--color-chart-neutral` | [[ForecastLineChart]] |
 | **상태** — 정상 · 경고 · 위험 | `--color-status-*` · `--color-indicator-critical` | 상태를 말하는 위젯에만 (§15) |
 
-트랙 · 값 없음 · 남은 몫처럼 데이터 색이 아닌 자리는 **바탕** 이다. `--color-surface-*` 로 깔고 위 여섯 역할의 토큰을 쓰지 않는다.
-
-차트마다 무엇을 어느 역할로 칠하는지는 그 차트 docstring 의 `## Colors` 가 정본이다(`- 역할 — 무엇에 · 토큰`, 역할 낱말은 이 표 + 바탕). MCP `get_component` 와 Storybook Docs 가 같은 값을 보이고, `lint:docstrings` 가 소스가 칠하는 색 묶음과 어긋나면 막는다. 위 표의 «지금 쓰는 곳» 은 예시다.
-
 series 는 네 가지를 지킨다.
 - **1번부터 순서대로** 배정하고 **순환하지 않는다.** 순서 자체가 색각 이상(CVD) 안전 장치다.
 - 9번째 계열은 새 색을 만들지 않고 «기타» 로 접거나 small multiples 로 나눈다.

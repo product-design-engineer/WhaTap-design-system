@@ -25,10 +25,6 @@ import ChartTimeAxis from "./ChartTimeAxis";
  * - ❌ 경계가 없는 일반 지표(CPU · 응답시간) — 띠가 없는 판정을 말한다
  * - ❌ 다른 점수(SLO 달성률 · 품질 점수)에 Apdex 띠 재사용 — 경계값이 다르다
  *
- * ## Colors
- * - 판정 등급 — Apdex 구간 띠 · 구간 이름 · `--color-chart-apdex-*-bg`(띠) · `--color-chart-apdex-*`(이름)
- * - 정체성 — Apdex 선 하나 · `--color-chart-series-1`
- *
  * ## Composition rules
  * - 플롯을 가리키면 [[ChartCrosshair]](축 50 ~ 100)가 그 시점의 값과 판정 구간 이름(Excellent · Good · Poor · Unacceptable)을 보인다(제목 = `pointLabels`).
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
