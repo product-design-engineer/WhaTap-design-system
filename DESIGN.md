@@ -70,6 +70,7 @@ colors:
   surface-50:                "#F5F5F5"    # Color
   surface-100:               "#F1F2F4"    # Color
   surface-200:               "#EAEAEA"    # Color
+  skeleton-glow:             "#DCE7FD"    # Color — 스켈레톤 글로우 빛 띠 정점 (다크 #2F3F5E)
 
   # Neutral Solid — 중립(무채색) 강조면. tone="tertiary" 버튼의 채움/hover.
   #  위 전경은 고정 흰색(라이트 8.4:1 · 다크 10.3:1). 다크에서도 어두운 단계를 유지한다.
@@ -210,6 +211,10 @@ colors:
   chart-speed-normal:        "#3DA9FF"    # Color — 정상
   chart-speed-slow:          "#FFA012"    # Color — 느림
   chart-speed-very-slow:     "#F34747"    # Color — 매우 느림
+
+  # Chart — Radial · 고리형 막대 바탕(원판 · 칸 구분선). 다크 재매핑 있음.
+  chart-radial-track:        "#DCEFFF"    # Color — 원판 바탕
+  chart-radial-divider:      "#B7DBFF"    # Color — 칸 구분선 · 원판 테두리
 
   # Shadow flood — SVG feDropShadow 의 그림자 색(불투명도는 floodOpacity). 테마 무관.
   shadow-flood:              "#000000"    # Color

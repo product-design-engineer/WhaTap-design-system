@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect } from "storybook/test";
+import { Button } from "@whatap/design-system";
 import { tokens, type SemanticIntent } from "@whatap/design-system/widget";
 import { useTokens, tokenLabel, type TokenEntry } from "../_useTokens";
 
@@ -68,6 +70,7 @@ const DESCRIPTIONS: Record<string, string> = {
   "--color-text-tertiary": "라벨 · 메타 · placeholder",
   "--color-text-disabled": "비활성 상태 텍스트",
   "--color-text-inverse": "반전 전경 — text-strong 을 배경으로 깐 표면 위",
+  "--color-text-link": "문장 안 링크 글자(TextLink) — brand-blue-deep 별칭, 톤 표면 위에서도 4.5:1",
   "--color-text-strong": "legacy alias",
   "--color-text-body": "legacy alias",
   "--color-text-muted": "legacy alias",
@@ -129,7 +132,7 @@ function Swatch({ entry }: { entry: TokenEntry }) {
         />
       </div>
       <div className="flex flex-col justify-center gap-0_5 min-w-0">
-        <div className="text-base font-bold text-primary tracking-default leading-none">
+        <div className="text-base font-bold text-primary tracking-default">
           {tokenLabel(entry.name)}
         </div>
         <div
@@ -139,10 +142,10 @@ function Swatch({ entry }: { entry: TokenEntry }) {
           {entry.value}
         </div>
         {described ? (
-          <div className="text-sm text-secondary leading-snug">{described}</div>
+          <div className="text-sm text-secondary">{described}</div>
         ) : (
           // 설명은 CSS 에서 읽을 수 없다 — 새 토큰이면 여기 표시되어 문서화 누락이 드러난다.
-          <div className="text-sm text-disabled leading-snug">설명 미기술 — DESCRIPTIONS 에 추가</div>
+          <div className="text-sm text-disabled">설명 미기술 — DESCRIPTIONS 에 추가</div>
         )}
       </div>
     </div>
@@ -294,7 +297,7 @@ export const TonePairing: StoryObj = {
           >
             <div className="flex items-center gap-1_5 px-2 py-1 rounded-xl bg-card">
               <div className="rounded-full" style={{ width: 6, height: 6, background: indicator.cssVar }} />
-              <span className="text-xs leading-none" style={{ color: toneText.cssVar, fontWeight: 500 }}>
+              <span className="text-xs" style={{ color: toneText.cssVar, fontWeight: 500 }}>
                 {label.value || `(${intent})`}
               </span>
             </div>
@@ -462,5 +465,32 @@ export const ChartSequential: StoryObj = {
         </div>
       </div>
     );
+  },
+};
+
+/**
+ * CSS 로드 검증 — 스토리가 whatap-ds.css 를 실제로 받았는지 계산된 스타일로 확인한다.
+ * `toBeVisible` 은 스타일 없는 버튼에서도 통과하므로 이것만이 증거다. 기대값은 리터럴이
+ * 아니라 같은 토큰을 칠한 기준 요소에서 읽는다(색 리터럴 0). 사이드바·문서에서는 숨기고 테스트만 돈다.
+ */
+export const CssCheck: StoryObj = {
+  tags: ["!dev", "!autodocs"],
+  render: () => (
+    <div className="flex items-center gap-2">
+      <Button variant="contained" tone="primary" size="lg">확인</Button>
+      <div data-testid="probe" style={{ width: 16, height: 16, background: "var(--color-brand-blue)" }} />
+      <div data-testid="bare" style={{ width: 16, height: 16 }} />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const button = canvas.getByRole("button", { name: "확인" });
+    const brand = getComputedStyle(canvas.getByTestId("probe")).backgroundColor;
+    const none = getComputedStyle(canvas.getByTestId("bare")).backgroundColor;
+    // 토큰(:root)이 없으면 기준 요소가 투명이다.
+    await expect(brand).not.toBe(none);
+    // `.wds-btn` 규칙이 없으면 버튼이 브라우저 기본 회색이다.
+    await expect(getComputedStyle(button).backgroundColor).toBe(brand);
+    // 유틸 클래스(h-32px)가 없으면 높이가 글자 크기를 따라간다.
+    await expect(getComputedStyle(button).height).toBe("32px");
   },
 };

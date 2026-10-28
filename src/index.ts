@@ -10,6 +10,8 @@
  */
 
 // Primitives — 재사용 building block (페이지·위젯·다른 컴포넌트가 조립용으로 호출)
+export { default as MetricStat } from "./MetricStat";
+export type { MetricStatProps } from "./MetricStat";
 export { default as ActiveTransactionSpeedWidget } from "./ActiveTransactionSpeedWidget";
 export type {
   ActiveTransactionSpeedWidgetProps,
@@ -59,6 +61,8 @@ export { default as InstanceSelectPanel } from "./InstanceSelectPanel";
 export type { InstanceSelectPanelProps, InstanceSelectItem, InstanceSelectScope } from "./InstanceSelectPanel";
 export { default as LabeledField } from "./LabeledField";
 export type { LabeledFieldProps } from "./LabeledField";
+export { default as Calendar } from "./Calendar";
+export type { CalendarProps } from "./Calendar";
 export { default as DatePicker } from "./DatePicker";
 export type { DatePickerProps, DatePickerSize } from "./DatePicker";
 export { default as OptionbarNewVersionButton } from "./OptionbarNewVersionButton";
@@ -90,6 +94,8 @@ export { default as ConfirmDialog } from "./ConfirmDialog";
 export type { ConfirmDialogProps, ConfirmDialogTone, ConfirmDialogOutcome } from "./ConfirmDialog";
 export { default as InfoTip } from "./InfoTip";
 export type { InfoTipProps } from "./InfoTip";
+export { default as TextLink } from "./TextLink";
+export type { TextLinkProps } from "./TextLink";
 export { default as Select } from "./Select";
 export type { SelectProps, SelectSize, SelectOption } from "./Select";
 export { default as Tabs } from "./Tabs";
@@ -127,6 +133,8 @@ export { default as WebSearchField } from "./WebSearchField";
 export type { WebSearchFieldProps, WebSearchFieldSize } from "./WebSearchField";
 export { default as FilterBar } from "./FilterBar";
 export type { FilterBarProps, FilterBarDropdownConfig, FilterBarSize } from "./FilterBar";
+export { default as BuildingProgressStep } from "./BuildingProgressStep";
+export type { BuildingProgressStepProps, BuildingProgressStepState } from "./BuildingProgressStep";
 export { default as DashboardBuildingProgress } from "./DashboardBuildingProgress";
 export type { DashboardBuildingProgressProps } from "./DashboardBuildingProgress";
 export { default as DashboardLayout } from "./DashboardLayout";
@@ -134,6 +142,8 @@ export { default as DataTable } from "./DataTable";
 export type { DataTableColumn, DataTableProps, DataTableSort } from "./DataTable";
 export { default as Pagination } from "./Pagination";
 export type { PaginationProps } from "./Pagination";
+export { default as EventTimeCell } from "./EventTimeCell";
+export type { EventTimeCellProps } from "./EventTimeCell";
 export { default as EventWeekTimeMatrix } from "./EventWeekTimeMatrix";
 export type { EventWeekTimeMatrixProps } from "./EventWeekTimeMatrix";
 export { default as LiveTimerCompact } from "./LiveTimerCompact";
@@ -175,6 +185,7 @@ export { default as Stage } from "./Stage";
 export { default as SubHeaderBar } from "./SubHeaderBar";
 export type { SubHeaderBarProps } from "./SubHeaderBar";
 export { default as TimeRangeSelector } from "./TimeRangeSelector";
+export type { TimeRangeMode } from "./TimeRangeSelector";
 export { default as Toast } from "./Toast";
 export type { ToastVariant } from "./Toast";
 
@@ -208,7 +219,8 @@ export { default as QuickActionChip } from "./widget/QuickActionChip";
 export { default as CostBreakdownRow } from "./widget/CostBreakdownRow";
 export { default as ClassificationTableRow } from "./widget/ClassificationTableRow";
 export { default as CostTableRow } from "./widget/CostTableRow";
-export { default as MigPlanRow } from "./widget/MigPlanRow";
+export { default as PlanProposalRow } from "./widget/PlanProposalRow";
+/** @deprecated Use PlanProposalRow */ export { default as MigPlanRow } from "./widget/PlanProposalRow";
 export { default as EventListItem } from "./widget/EventListItem";
 export { default as ReasoningStep } from "./widget/ReasoningStep";
 export { default as TimelineStepItem } from "./widget/TimelineStepItem";

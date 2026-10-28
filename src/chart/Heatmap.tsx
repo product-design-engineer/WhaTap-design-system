@@ -14,6 +14,11 @@
  * - 값 하나의 추이 → [[MiniLineChart]].
  * - 대상별(인스턴스별) 강도 비교 → 히트맵이 아니라 정렬 가능한 표.
  *
+ * ## Metrics
+ * - ✅ 칸(하루 · 5분)마다의 강도 — 일별 에러 수 · 시간대별 TPS · 5분 칸 평균 응답시간 · 사용량
+ * - ❌ 부호가 있는 지표(증감률 ±) — 순차 색은 0 기준을 말하지 못한다
+ * - ❌ 정확한 값 비교 → 막대 · 표. 색 단계는 대략의 크기만 말한다
+ *
  * ## Composition rules
  * - `cells` 는 **정규화된 0~1 또는 null** 의 평평한 배열. 원 단위 → 0~1 변환은 호출측 몫.
  * - `month` 는 첫 칸 앞에 `offset` 만큼 빈 자리를 두어 요일을 맞춘다. 라벨은 일~토.
@@ -112,7 +117,7 @@ export default function Heatmap({
       >
         {mode === "day" && <span />}
         {Array.from({ length: cols }, (_, c) => (
-          <span key={c} className="text-sm text-tertiary text-center leading-none whitespace-nowrap">
+          <span key={c} className="text-sm text-tertiary text-center whitespace-nowrap">
             {mode === "month"
               ? WEEKDAY_LABELS[c]
               : c % 2 === 0
@@ -152,7 +157,8 @@ export default function Heatmap({
             className="grid items-center"
             style={{ gridTemplateColumns: `28px repeat(${cols}, 1fr)`, gap: 4 }}
           >
-            <span className="text-sm text-tertiary leading-none tabular-nums">
+            {/* 라벨 칸 높이 = 칸 높이. 글자 줄 높이(15.7)가 칸(13)보다 커서 라벨 있는 짝수 행만 늘어나 행 간격이 들쭉날쭉했다. */}
+            <span className="flex items-center text-sm text-tertiary tabular-nums" style={{ height }}>
               {row % 2 === 0 ? `${row}시` : ""}
             </span>
             {Array.from({ length: cols }, (_, c) => {

@@ -1,0 +1,429 @@
+{
+  "frozen": [],
+  "depth": {
+    "Composite/ActiveTransactionSpeedWidget": {
+      "whenToUse": 1,
+      "undocumentedProps": 8
+    },
+    "Composite/AiProgress": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Composite/AiProgressCompact": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Composite/AlertRulePreview": {
+      "whenToUse": 2,
+      "undocumentedProps": 5
+    },
+    "Composite/Autocomplete": {
+      "whenToUse": 3,
+      "undocumentedProps": 4
+    },
+    "Composite/Chart/ApdexChart": {
+      "whenToUse": 1,
+      "undocumentedProps": 0
+    },
+    "Composite/Chart/BarList": {
+      "whenToUse": 1,
+      "undocumentedProps": 1
+    },
+    "Composite/Chart/ForecastLineChart": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Composite/Chart/GpuStatusBar": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Composite/Chart/Heatmap": {
+      "whenToUse": 1,
+      "undocumentedProps": 2
+    },
+    "Composite/Chart/HexGrid": {
+      "whenToUse": 4,
+      "undocumentedProps": 1
+    },
+    "Composite/Chart/MiniDonutChart": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Composite/Chart/MiniLineChart": {
+      "whenToUse": 2,
+      "undocumentedProps": 5
+    },
+    "Composite/Chart/MiniMultiLineChart": {
+      "whenToUse": 2,
+      "undocumentedProps": 6
+    },
+    "Composite/Chart/UsageChart": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Composite/ClassificationTable": {
+      "whenToUse": 2,
+      "undocumentedProps": 5
+    },
+    "Composite/ConfirmDialog": {
+      "whenToUse": 2,
+      "undocumentedProps": 3
+    },
+    "Composite/CostBreakdown": {
+      "whenToUse": 2,
+      "undocumentedProps": 3
+    },
+    "Composite/CostTable": {
+      "whenToUse": 2,
+      "undocumentedProps": 3
+    },
+    "Composite/CriteriaOptionButton": {
+      "whenToUse": 1,
+      "undocumentedProps": 2
+    },
+    "Composite/CriteriaSelection": {
+      "whenToUse": 3,
+      "undocumentedProps": 7
+    },
+    "Composite/DashboardProposal": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Composite/DataTable": {
+      "whenToUse": 2,
+      "undocumentedProps": 3
+    },
+    "Composite/EventList": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Composite/ExecutionResult": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Composite/InfoTip": {
+      "whenToUse": 3,
+      "undocumentedProps": 1
+    },
+    "Composite/InstanceSelectPanel": {
+      "whenToUse": 1,
+      "undocumentedProps": 6
+    },
+    "Composite/LandingHeader": {
+      "whenToUse": 2,
+      "undocumentedProps": 3
+    },
+    "Composite/MailTemplate": {
+      "whenToUse": 3,
+      "undocumentedProps": 1
+    },
+    "Composite/OptionbarPage": {
+      "whenToUse": 2,
+      "undocumentedProps": 4
+    },
+    "Composite/PageHeader": {
+      "whenToUse": 2,
+      "undocumentedProps": 3
+    },
+    "Composite/Pagination": {
+      "whenToUse": 1,
+      "undocumentedProps": 2
+    },
+    "Composite/ProposalSection": {
+      "whenToUse": 1,
+      "undocumentedProps": 0
+    },
+    "Composite/Reasoning": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Composite/ReceiverChannels": {
+      "whenToUse": 2,
+      "undocumentedProps": 3
+    },
+    "Composite/SelectPopover": {
+      "whenToUse": 3,
+      "undocumentedProps": 5
+    },
+    "Composite/Sidebar": {
+      "whenToUse": 2,
+      "undocumentedProps": 3
+    },
+    "Composite/StepsTimeline": {
+      "whenToUse": 2,
+      "undocumentedProps": 3
+    },
+    "Composite/TargetMesh": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Composite/ThemeToggle": {
+      "whenToUse": 1,
+      "undocumentedProps": 2
+    },
+    "Composite/TimeChip": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Composite/TopologyCanvas": {
+      "whenToUse": 1,
+      "undocumentedProps": 3
+    },
+    "Composite/TopologyToolbar": {
+      "whenToUse": 1,
+      "undocumentedProps": 9
+    },
+    "Primitives/AiProgressStep": {
+      "whenToUse": 1,
+      "undocumentedProps": 1
+    },
+    "Primitives/AnswerSkeleton": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/Breadcrumb": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/Button": {
+      "whenToUse": 3,
+      "undocumentedProps": 1
+    },
+    "Primitives/Caption": {
+      "whenToUse": 4,
+      "undocumentedProps": 1
+    },
+    "Primitives/Chart/HeatmapLegend": {
+      "whenToUse": 1,
+      "undocumentedProps": 0
+    },
+    "Primitives/Chart/UsageGauge": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/ChoiceButtons": {
+      "whenToUse": 2,
+      "undocumentedProps": 3
+    },
+    "Primitives/ClassificationTableRow": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/CostBreakdownRow": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/CostTableRow": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/CriteriaGroup": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Primitives/DataTableRow": {
+      "whenToUse": 2,
+      "undocumentedProps": 3
+    },
+    "Primitives/DatePicker": {
+      "whenToUse": 1,
+      "undocumentedProps": 2
+    },
+    "Primitives/DateTimeBlock": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Primitives/Disclosure": {
+      "whenToUse": 3,
+      "undocumentedProps": 2
+    },
+    "Primitives/EmptyState": {
+      "whenToUse": 3,
+      "undocumentedProps": 1
+    },
+    "Primitives/EventListItem": {
+      "whenToUse": 1,
+      "undocumentedProps": 0
+    },
+    "Primitives/HeaderPillButton": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Primitives/InsightSection": {
+      "whenToUse": 2,
+      "undocumentedProps": 3
+    },
+    "Primitives/InstanceListItem": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/KpiCard": {
+      "whenToUse": 2,
+      "undocumentedProps": 3
+    },
+    "Primitives/KpiField": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/LiveTimerCompact": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Primitives/LoadingMessage": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/MemberUsageBar": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/MessageActions": {
+      "whenToUse": 2,
+      "undocumentedProps": 3
+    },
+    "Primitives/Multiline": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/OptionbarInstanceSelector": {
+      "whenToUse": 2,
+      "undocumentedProps": 4
+    },
+    "Primitives/OptionbarItem": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Primitives/OptionbarNewVersionButton": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Primitives/OptionbarValueDisplay": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/PageHeaderNotificationItem": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Primitives/PageHeaderProfileMenuItem": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Primitives/PresetSelect": {
+      "whenToUse": 2,
+      "undocumentedProps": 3
+    },
+    "Primitives/QuickActionChip": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Primitives/RadioGroup": {
+      "whenToUse": 3,
+      "undocumentedProps": 1
+    },
+    "Primitives/ReasoningStep": {
+      "whenToUse": 1,
+      "undocumentedProps": 1
+    },
+    "Primitives/ReceiverChannelItem": {
+      "whenToUse": 1,
+      "undocumentedProps": 2
+    },
+    "Primitives/SidebarCopyright": {
+      "whenToUse": 3,
+      "undocumentedProps": 1
+    },
+    "Primitives/SidebarMenuItem": {
+      "whenToUse": 3,
+      "undocumentedProps": 1
+    },
+    "Primitives/SidebarOrgSwitcher": {
+      "whenToUse": 3,
+      "undocumentedProps": 2
+    },
+    "Primitives/SidebarProjectSwitcher": {
+      "whenToUse": 3,
+      "undocumentedProps": 1
+    },
+    "Primitives/Slider": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Primitives/Stage": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Primitives/StatCard": {
+      "whenToUse": 2,
+      "undocumentedProps": 5
+    },
+    "Primitives/Switch": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/Symbol": {
+      "whenToUse": 2,
+      "undocumentedProps": 2
+    },
+    "Primitives/TabButton": {
+      "whenToUse": 1,
+      "undocumentedProps": 0
+    },
+    "Primitives/ThreadDivider": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/TimelineStepItem": {
+      "whenToUse": 1,
+      "undocumentedProps": 0
+    },
+    "Primitives/Toast": {
+      "whenToUse": 2,
+      "undocumentedProps": 6
+    },
+    "Primitives/ToolCallStep": {
+      "whenToUse": 2,
+      "undocumentedProps": 6
+    },
+    "Primitives/TopologyCollapseToggle": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/TopologyEdge": {
+      "whenToUse": 1,
+      "undocumentedProps": 0
+    },
+    "Primitives/TopologyMinimap": {
+      "whenToUse": 1,
+      "undocumentedProps": 3
+    },
+    "Primitives/TopologyPort": {
+      "whenToUse": 1,
+      "undocumentedProps": 3
+    },
+    "Primitives/TopologyZoomControl": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/Web · CountryFlag": {
+      "whenToUse": 2,
+      "undocumentedProps": 1
+    },
+    "Primitives/Web · WebCtaButton": {
+      "whenToUse": 3,
+      "undocumentedProps": 1
+    },
+    "Shell/DashboardLayout": {
+      "whenToUse": 2,
+      "undocumentedProps": 5
+    },
+    "Shell/Widget": {
+      "whenToUse": 2,
+      "undocumentedProps": 10
+    },
+    "Shell/WidgetFrame": {
+      "whenToUse": 3,
+      "undocumentedProps": 2
+    }
+  }
+}

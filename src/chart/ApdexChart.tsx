@@ -1,7 +1,9 @@
 import type { CSSProperties } from "react";
+import ChartCrosshair from "./ChartCrosshair";
+import ChartTimeAxis from "./ChartTimeAxis";
 
 /**
- * ApdexChart — Apdex(× 100) 를 만족 구간 띠 위에 선과 값으로. Primitives layer.
+ * ApdexChart — Apdex(× 100) 를 만족 구간 띠 위에 선과 값으로. Composite layer.
  *
  * ## Purpose
  * Apdex 는 숫자 하나로는 «좋은가» 가 읽히지 않는다. 71.2 가 괜찮은지는 구간 경계(94 · 85 · 70)를 알아야 판단된다.
@@ -18,7 +20,14 @@ import type { CSSProperties } from "react";
  * - 경계 없는 일반 비율 · 사용률 → [[MiniMultiLineChart]] · [[UsageGauge]].
  * - 경계가 다른 점수(SLO 달성률 등) → 이 컴포넌트의 경계는 Apdex 표준으로 고정이다. 다른 점수를 Apdex 띠에 얹지 않는다.
  *
+ * ## Metrics
+ * - ✅ Apdex 점수 — 판정 구간 경계(0.94 · 0.85 · 0.70)가 정해진 사용자 만족도 점수
+ * - ❌ 경계가 없는 일반 지표(CPU · 응답시간) — 띠가 없는 판정을 말한다
+ * - ❌ 다른 점수(SLO 달성률 · 품질 점수)에 Apdex 띠 재사용 — 경계값이 다르다
+ *
  * ## Composition rules
+ * - 플롯을 가리키면 [[ChartCrosshair]](축 50 ~ 100)가 그 시점의 값과 판정 구간 이름(Excellent · Good · Poor · Unacceptable)을 보인다(제목 = `pointLabels`).
+ * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 껍데기(카드 · 제목 · 메뉴)는 그리지 않는다. 대시보드 칸에서는 [[WidgetFrame]] 이 맡는다(patterns §15). 제목은 「Apdex」.
  * - `frame={false}` 면 바깥 좌우 여백(8px)을 뺀다. WidgetFrame 안에서는 늘 `frame={false}`.
  * - 띠 · 구간 이름 색은 Apdex 토큰(`--color-chart-apdex-*-bg` · `--color-chart-apdex-*`), 선은 `--color-chart-series-1`.
@@ -61,11 +70,15 @@ export type ApdexChartProps = {
    * `false` 면 여백 0 — [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
    */
   frame?: boolean;
+  /** 시점마다 이름 — hover 툴팁 제목. 없으면 제목 없이. */
+  pointLabels?: string[];
 };
 
 const ratioOf = (v: number) => (Math.min(MAX, Math.max(MIN, v)) - MIN) / (MAX - MIN);
 
-export default function ApdexChart({ value, values = [], xLabels = [], frame = true }: ApdexChartProps) {
+export default function ApdexChart({ value, values = [], xLabels = [], frame = true, pointLabels }: ApdexChartProps) {
+  /** 값이 든 구간 이름 — 툴팁 보조 줄. 점수는 판정 구간과 함께 읽어야 뜻이 있다 */
+  const zoneOf = (v: number) => ZONES.find((z) => v >= z.from)?.name ?? ZONES[ZONES.length - 1].name;
   const plotH = `(100% - ${PAD_TOP + PAD_BOTTOM}px)`;
   const VBW = 1000;
   const VBH = 1000;
@@ -82,7 +95,7 @@ export default function ApdexChart({ value, values = [], xLabels = [], frame = t
               className="flex items-end w-full min-h-0"
               style={{ background: z.bg, flex: `${z.to - z.from} 0 0`, padding: "0 4px" }}
             >
-              <span className="text-xs leading-normal whitespace-nowrap" style={{ fontFamily: "var(--font-family-numeric)", color: z.fg }}>
+              <span className="text-xs whitespace-nowrap" style={{ fontFamily: "var(--font-family-numeric)", color: z.fg }}>
                 {z.name}
               </span>
             </div>
@@ -140,24 +153,22 @@ export default function ApdexChart({ value, values = [], xLabels = [], frame = t
               {t}
             </span>
           ))}
-          {xLabels.map((label, i) => {
-            const ratio = xLabels.length > 1 ? i / (xLabels.length - 1) : 0;
-            return (
-              <span
-                key={i}
-                className="absolute text-chart text-tertiary leading-none whitespace-nowrap"
-                style={{
-                  fontFamily: "var(--font-family-numeric)",
-                  left: `calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${ratio})`,
-                  bottom: 2,
-                  transform: i === 0 ? "translateX(0)" : i === xLabels.length - 1 ? "translateX(-100%)" : "translateX(-50%)",
-                }}
-              >
-                {label}
-              </span>
-            );
-          })}
+          <ChartTimeAxis labels={xLabels} right={PAD_RIGHT} />
         </div>
+        {/* 시점 고르기 — 값 · 판정 구간 툴팁(patterns §26 «강조») */}
+        {values.length > 1 && (
+          <ChartCrosshair
+            count={values.length}
+            min={MIN}
+            max={MAX}
+            series={[{ label: "Apdex", color: "var(--color-chart-series-1)", values }]}
+            labels={pointLabels}
+            footer={(i) => zoneOf(values[i])}
+            right={PAD_RIGHT}
+            padTop={PAD_TOP}
+            padBottom={PAD_BOTTOM}
+          />
+        )}
       </div>
     </div>
   );

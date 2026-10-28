@@ -105,7 +105,7 @@ export default function HeatmapLegend({
         {ticks.map((t) => (
           <span
             key={t}
-            className="absolute text-xs text-tertiary leading-none tabular-nums"
+            className="absolute text-xs text-tertiary tabular-nums"
             style={{
               left: `${t}%`,
               transform:

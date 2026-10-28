@@ -46,7 +46,7 @@ export default function SidebarCopyright({
   return (
     <div className="flex h-24px items-center p-8px shrink-0 w-full bg-card border-r border-t border-color-var-color-border-default">
       <p
-        className="text-sm text-tertiary whitespace-nowrap leading-none"
+        className="text-sm text-tertiary whitespace-nowrap"
         style={{ fontFamily: ROBOTO, fontWeight: "var(--font-weight-regular)" }}
       >
         {text ?? `Copyright ${year} WhaTap`}

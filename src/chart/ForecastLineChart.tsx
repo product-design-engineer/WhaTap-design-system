@@ -1,7 +1,11 @@
-import type { CSSProperties } from "react";
+import ChartCrosshair from "./ChartCrosshair";
+import ChartGrid from "./ChartGrid";
+import ChartTimeAxis from "./ChartTimeAxis";
+import ChartValueAxis from "./ChartValueAxis";
+import { AXIS_GUTTER as GUTTER, formatAxisValue } from "./_axisScale";
 
 /**
- * ForecastLineChart: 관측은 실선, 예측은 점선. 「지금」 세로선 · 임계 띠 · 도달 마커를 한 판에. Primitives layer.
+ * ForecastLineChart: 관측은 실선, 예측은 점선. 「지금」 세로선 · 임계 띠 · 도달 마커를 한 판에. Composite layer.
  *
  * ## Purpose
  * «이대로 가면 언제 닿는가» 를 화면에서 확인하게 한다. 디스크 고갈 · 용량 소진처럼 판정이 **기울기의 연장**에서 나오는
@@ -24,7 +28,15 @@ import type { CSSProperties } from "react";
  * - 경계가 표준으로 정해진 점수(Apdex) → [[ApdexChart]].
  * - 한계 대비 지금 소비량 하나 → [[UsageGauge]].
  *
+ * ## Metrics
+ * - ✅ 기울기를 연장하면 도달 시점이 나오는 용량 지표 — 디스크 · inode 사용률 · 쿼터 · 스토리지 소진 · 라이선스 · 인증서 소비
+ * - ❌ 주기 · 변동이 큰 지표(TPS · CPU 사용률) — 직선 외삽이 맞지 않아 예측이 거짓이 된다
+ * - ❌ 천장 · 임계가 없는 지표(응답시간 · 건수) — 닿을 자리가 없다
+ *
  * ## Composition rules
+ * - 플롯을 가리키면 [[ChartCrosshair]](`positions` = 관측 · 예측 점 x)가 그 시점의 관측 · 예측 값 툴팁을 보인다(제목 = `formatX`, patterns §26 «강조»).
+ * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
+ * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
  * - 껍데기(카드 · 제목 · 메뉴 · 범례)는 그리지 않는다. 대시보드 칸에서는 [[WidgetFrame]] 이 맡는다(patterns §15).
  *   범례는 같은 색 토큰을 WidgetFrame `legend` 로 넘기고, 칸에 꼭 필요한 값(추세 구간 · 지평)은 `summary` 에 둔다.
  * - `frame={false}` 면 바깥 좌우 여백(8px)을 뺀다. WidgetFrame 안에서는 늘 `frame={false}`.
@@ -44,8 +56,8 @@ import type { CSSProperties } from "react";
  *   title="디스크 고갈 추세"
  *   summary="추세 6시간 · 지평 24시간"
  *   legend={[
- *     { label: "ip-10-21-13-171 /data", color: "var(--color-status-error)" },
- *     { label: "dev-yard /backup", color: "var(--color-chart-neutral)" },
+ *     { label: "ip-10-21-13-171 /data", color: "var(--color-status-error)", shape: "line" },
+ *     { label: "dev-yard /backup", color: "var(--color-chart-neutral)", shape: "line" },
  *   ]}
  * >
  *   <ForecastLineChart
@@ -61,8 +73,6 @@ import type { CSSProperties } from "react";
  * ```
  */
 
-/** Y축 눈금 칸 폭: 모든 그래프가 같은 토큰을 쓴다. */
-const GUTTER = "var(--wds-widget-axis-gutter)";
 const PAD_RIGHT = 8;
 const PAD_BOTTOM = 14;
 /** 천장 위 도달 글자가 잘리지 않을 만큼. */
@@ -112,17 +122,14 @@ export type ForecastLineChartProps = {
   frame?: boolean;
   /** 스크린리더용 설명 — 필수. `role="img"` 는 이름이 없으면 보조기술에 빈 그림으로 남는다. */
   ariaLabel: string;
+  /** hover 툴팁 제목 — 도메인 x → 이름(「3시간 후」). 없으면 제목 없이. */
+  formatX?: (x: number) => string;
 };
 
 const THRESHOLD_TONE = {
   critical: { line: "var(--color-status-error)", band: "var(--color-status-error-soft)" },
   warning: { line: "var(--color-status-warning)", band: "var(--color-status-warning-soft)" },
 } as const;
-
-function formatY(v: number): string {
-  if (v >= 1000) return Math.round(v / 100) / 10 + "K";
-  return Number.isInteger(v) ? String(v) : v.toFixed(0);
-}
 
 export default function ForecastLineChart({
   series,
@@ -135,6 +142,7 @@ export default function ForecastLineChart({
   highlightId = null,
   frame = true,
   ariaLabel,
+  formatX,
 }: ForecastLineChartProps) {
   const [x0, x1] = xDomain;
   const span = x1 - x0 || 1;
@@ -152,11 +160,17 @@ export default function ForecastLineChart({
 
   const showNow = x0 <= 0 && 0 <= x1;
   const tone = THRESHOLD_TONE[threshold?.tone ?? "critical"];
-  const yTicks = [1, 0.5, 0];
   /* 강조 계열을 맨 뒤에 그려 위로 올린다. */
   const ordered = highlightId ? [...series.filter((s) => s.id !== highlightId), ...series.filter((s) => s.id === highlightId)] : series;
   const opacityOf = (s: ForecastLineChartSeries) => (highlightId && s.id !== highlightId ? DIM_OPACITY : 1);
   const axisLabels = xLabels.filter((l) => !(showNow && l.x === 0) && l.x >= x0 && l.x <= x1);
+  /* 시점 고르기 — 관측 · 예측 점의 x 를 모은다. 관측과 예측은 툴팁에서 다른 줄(「CPU」 · 「CPU 예측」) */
+  const hoverXs = [...new Set(series.flatMap((s) => [...s.observed, ...(s.forecast ?? [])].map((p) => p.x)))].filter((x) => x >= x0 && x <= x1).sort((a, b) => a - b);
+  const at = (list: ForecastPoint[] | undefined, x: number) => list?.find((p) => p.x === x)?.y ?? null;
+  const hoverSeries = series.flatMap((s) => [
+    { label: s.label, color: s.color, values: hoverXs.map((x) => at(s.observed, x)) },
+    ...(s.forecast?.length ? [{ label: `${s.label} 예측`, color: s.color, values: hoverXs.map((x) => (x === 0 ? null : at(s.forecast, x))) }] : []),
+  ]);
 
   return (
     <div
@@ -175,13 +189,7 @@ export default function ForecastLineChart({
         )}
 
         {/* 격자: 눈금마다 점선 (천장 포함) */}
-        {yTicks.map((ratio) => (
-          <div
-            key={`grid-${ratio}`}
-            className="absolute"
-            style={{ left: GUTTER, right: PAD_RIGHT, top: top(1 - ratio), height: 0, borderTop: "1px dashed var(--color-border-default)" }}
-          />
-        ))}
+        <ChartGrid max={yMax} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={PAD_RIGHT} />
 
         {/* 임계선 */}
         {threshold && (
@@ -236,8 +244,7 @@ export default function ForecastLineChart({
         </svg>
 
         {/* 축: 선 위에 그려 바닥선이 묻히지 않게 */}
-        <div className="absolute bg-color-var-color-border-divider" style={{ left: GUTTER, right: PAD_RIGHT, bottom: PAD_BOTTOM, height: 1 }} />
-        <div className="absolute bg-color-var-color-border-divider" style={{ left: GUTTER, top: PAD_TOP, bottom: PAD_BOTTOM, width: 1 }} />
+        <ChartValueAxis max={yMax} unit={unit} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={PAD_RIGHT} />
 
         {/* 마커: 지금 값 점 · 도달 원. 선과 같은 plot 좌표 */}
         {ordered.map((s) => {
@@ -296,59 +303,27 @@ export default function ForecastLineChart({
                 transform: "translateY(-100%)",
               }}
             >
-              {threshold.label ?? formatY(threshold.value) + unit}
+              {threshold.label ?? formatAxisValue(threshold.value) + unit}
             </span>
           )}
-          {yTicks.map((ratio) => (
-            <span
-              key={ratio}
-              className="absolute text-chart text-tertiary leading-none"
-              style={
-                {
-                  fontFamily: "var(--font-family-numeric)",
-                  top: top(1 - ratio),
-                  transform: "translateY(-50%)",
-                  left: 0,
-                  textAlign: "right",
-                  paddingRight: 4,
-                  width: GUTTER,
-                } as CSSProperties
-              }
-            >
-              {formatY(yMax * ratio) + unit}
-            </span>
-          ))}
-          {axisLabels.map((l) => {
-            const ratio = rx(l.x);
-            return (
-              <span
-                key={`x-${l.x}`}
-                className="absolute text-chart text-tertiary leading-none whitespace-nowrap"
-                style={{
-                  fontFamily: "var(--font-family-numeric)",
-                  left: left(ratio),
-                  bottom: 2,
-                  transform: ratio <= 0 ? "translateX(0)" : ratio >= 1 ? "translateX(-100%)" : "translateX(-50%)",
-                }}
-              >
-                {l.label}
-              </span>
-            );
-          })}
-          {showNow && nowLabel && (
-            <span
-              className="absolute text-chart text-tertiary leading-none whitespace-nowrap"
-              style={{
-                fontFamily: "var(--font-family-numeric)",
-                left: left(rx(0)),
-                bottom: 2,
-                transform: rx(0) <= 0 ? "translateX(0)" : rx(0) >= 1 ? "translateX(-100%)" : "translateX(-50%)",
-              }}
-            >
-              {nowLabel}
-            </span>
-          )}
+          <ChartTimeAxis
+            labels={[...axisLabels.map((l) => l.label), ...(showNow && nowLabel ? [nowLabel] : [])]}
+            positions={[...axisLabels.map((l) => rx(l.x)), ...(showNow && nowLabel ? [rx(0)] : [])]}
+            right={PAD_RIGHT}
+          />
         </div>
+        {/* 시점 고르기 — 관측 · 예측 값 툴팁(patterns §26 «강조») */}
+        <ChartCrosshair
+          count={hoverXs.length}
+          positions={hoverXs.map(rx)}
+          max={yMax}
+          series={hoverSeries}
+          labels={formatX ? hoverXs.map(formatX) : undefined}
+          unit={unit}
+          right={PAD_RIGHT}
+          padTop={PAD_TOP}
+          padBottom={PAD_BOTTOM}
+        />
       </div>
     </div>
   );

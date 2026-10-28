@@ -13,7 +13,9 @@
  * `docs/components.json` — `staticDirs` 로 `/design-system/components.json` 에 서빙되어
  * MCP 서버가 런타임에 fetch 한다(재빌드 없이 최신). 컴포넌트당:
  *   name · layer · title · storyId · file · purpose · whenToUse · whenNotToUse
- *   · compositionRules · do[] · dont[] · props[] · stories[] · example
+ *   · compositionRules · do[] · dont[] · props[] · stories[] · example · spec
+ *   (`spec` = docstring `## Spec` 절 원문. 치수 · 토큰 · 상태 · 데이터 계약처럼 개발자가 그대로 구현하는 값.
+ *   목록으로 쪼개지 않고 markdown 그대로 싣는다 — 표가 섞여 있다.)
  *
  * ## Do / Don't 의 출처 — 표기를 하나로
  * 정본은 **docstring 4섹션**이다. `## Do` · `## Don't` 를 명시하면 그대로 쓰고, 없으면 유도한다:
@@ -56,6 +58,13 @@ function docBlockOf(src) {
     .trim();
 }
 
+/** `## Spec …` 절 원문(제목 뒤 꼬리말 허용 — `## Spec (실 위젯 마크업 1:1)`). 줄 앞 공백만 정리하고 표 · 목록은 그대로 둔다. */
+function specOf(doc) {
+  const m = doc.match(/^##\s+Spec\b[^\n]*$([\s\S]*?)(?=^##\s+|^@|$(?![\s\S]))/m);
+  const body = m ? m[1].replace(/^\n+|\s+$/g, "") : "";
+  return body || null;
+}
+
 /** `## <name>` 섹션 본문. 없으면 "".
  *  ⚠️ 종결부는 `$(?![\s\S])`(문서 끝) 로 쓴다. JS 정규식에 **`\Z` 는 없다** — 리터럴 `Z` 로
  *  해석되므로 `\Z` 를 쓰면 «마지막 섹션»이 통째로 유실된다. docstring 은 관례상 뒤에
@@ -65,6 +74,23 @@ function section(doc, name) {
   const re = new RegExp(`^##\\s+${name}\\s*$([\\s\\S]*?)(?=^##\\s+|^@|$(?![\\s\\S]))`, "im");
   const m = doc.match(re);
   return (m?.[1] ?? "").trim();
+}
+
+/** 템플릿이 아는 섹션. 이 밖의 `## …` 는 생성기가 읽지 않으므로 **AI 에게 배달되지 않는다**
+ *  (Storybook autodocs 에서만 보인다). 게이트(check-docstrings)가 이 목록으로 차단한다 —
+ *  실측(2026-10-19): 13파일 18섹션 중 15섹션이 components.json 에 없었다(Pagination 「표와 한 세트」 정책 등). */
+const KNOWN_SECTIONS = [/^Purpose$/i, /^When to use$/i, /^When NOT to use$/i, /^Composition rules$/i, /^Metrics$/i, /^Spec\b/i, /^Do$/i, /^Don't$/i];
+
+/** `## Metrics` — 차트가 맞는 지표(✅)와 쓰면 안 되는 지표(❌). Composite/Chart 는 ✅ 필수(check-docstrings). 2026-10-23 사용자 지시. */
+function metricsOf(doc) {
+  const items = bullets(section(doc, "Metrics"));
+  if (!items.length) return null;
+  const strip = (s) => s.replace(/^(✅|❌)\s*/, "").trim();
+  return { fit: items.filter((b) => b.startsWith("✅")).map(strip), avoid: items.filter((b) => b.startsWith("❌")).map(strip) };
+}
+function extraSectionsOf(doc) {
+  if (!doc) return [];
+  return [...doc.matchAll(/^##\s+(.+?)\s*$/gm)].map((m) => m[1]).filter((h) => !KNOWN_SECTIONS.some((re) => re.test(h)));
 }
 
 /** 섹션 본문 → 불릿 배열. 불릿이 없으면 문단 전체를 1건으로. */
@@ -108,7 +134,36 @@ function exampleOf(doc) {
  *   ① `export type XProps = { ... }`  ② default export 함수 시그니처의 인라인 객체 타입
  * 타입 추론기가 아니므로 **틀리면 비우는 쪽**으로 동작한다(거짓 props 표보다 빈칸이 낫다).
  */
+/**
+ * 구조 분해 인자에 붙은 prop 주석 — `({ /** 설명 *\/ liveTime, size = "sm" }: {...})`.
+ * 타입 블록 대신 여기에 설명을 다는 관례가 넓게 쓰인다(OptionbarPage · AnswerSkeleton 등). 이걸
+ * 안 읽던 동안 그 설명들은 소스에만 있고 MCP 에는 «설명 없음» 으로 나갔다.
+ */
+function destructuredDocsOf(src, name) {
+  const docs = new Map();
+  const m = src.match(new RegExp(`export\\s+(?:default\\s+)?function\\s+${name}\\s*(?:<[^>]*>)?\\s*\\(\\s*\\{`));
+  if (!m) return docs;
+  const start = m.index + m[0].length - 1;
+  let depth = 0, end = -1;
+  for (let i = start; i < src.length; i++) {
+    if (src[i] === "{") depth++;
+    else if (src[i] === "}") { depth--; if (depth === 0) { end = i; break; } }
+  }
+  if (end < 0) return docs;
+  const body = src.slice(start + 1, end);
+  for (const d of body.matchAll(/\/\*\*([\s\S]*?)\*\/\s*([A-Za-z_$][\w$]*)/g)) {
+    const text = d[1].split("\n").map((l) => l.replace(/^\s*\*?\s?/, "").trim()).filter(Boolean).join(" ");
+    if (text) docs.set(d[2], text);
+  }
+  return docs;
+}
+
 function propsOf(src, name) {
+  const fromDestructure = destructuredDocsOf(src, name);
+  return propsOfType(src, name).map((p) => (p.description ? p : { ...p, description: fromDestructure.get(p.name) ?? null }));
+}
+
+function propsOfType(src, name) {
   // 컴포넌트 시그니처(`export [default] function X(...)`)에서 props 타입 주석을 먼저 본다.
   const sig = src.match(
     new RegExp(`export\\s+(?:default\\s+)?function\\s+${name}\\s*(?:<[^>]*>)?\\s*\\(\\s*\\{[\\s\\S]*?\\}\\s*:\\s*([A-Za-z_$][\\w$]*|\\{)`),
@@ -378,8 +433,10 @@ for (const sf of storyFiles) {
   const explicitDont = bullets(section(docText, "Don't"));
   const fromStory = harvestMarkers(s.description);
 
+  const metrics = metricsOf(docText);
   const derivedDont = [
     ...bullets(whenNotToUse).map((b) => `사용하지 말 것 — ${b}`),
+    ...(metrics?.avoid ?? []).map((b) => `이 지표에 쓰지 말 것 — ${b}`),
     ...bullets(compositionRules).filter((b) => PROHIBITIVE.test(b)),
   ];
 
@@ -402,6 +459,11 @@ for (const sf of storyFiles) {
     whenToUse: bullets(whenToUse),
     whenNotToUse: bullets(whenNotToUse),
     compositionRules: bullets(compositionRules),
+    spec: specOf(docText),
+    /* 차트가 맞는 지표 · 쓰면 안 되는 지표(`## Metrics` ✅ / ❌). 차트 아니면 null. */
+    metrics,
+    /* 템플릿 밖 섹션 이름 — 배달되지 않는 문서. 게이트가 0 을 요구한다. */
+    extraSections: extraSectionsOf(docText),
     // 스토리 블록과 docstring 유도가 같은 말을 하는 경우가 있어 중복 제거.
     do: dedupe(explicitDo.length ? explicitDo : [...fromStory.do, ...bullets(whenToUse)]),
     dont: dedupe(explicitDont.length ? explicitDont : [...fromStory.dont, ...derivedDont]),

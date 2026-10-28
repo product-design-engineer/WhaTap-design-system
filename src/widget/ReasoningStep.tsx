@@ -58,7 +58,7 @@ export default function ReasoningStep({
         </svg>
       )}
       <span
-        className="text-base text-secondary tracking-default leading-normal"
+        className="text-base text-secondary tracking-default"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
       >
         {label}

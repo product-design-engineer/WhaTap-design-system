@@ -14,6 +14,7 @@
  * - 접기/펼치기되는 step 진행 타임라인 → [[StepsTimeline]].
  * - 실제 tool/function 호출 단위 표시 → [[ToolCallStep]].
  * - 단순 로딩 표시 → [[LoadingMessage]].
+ * - 10초를 넘길 수 있는 진행 중 대기 → [[AiProgress]] (단계 칸 · 처리 수 · 중간 발견 · 중단).
  *
  * ## Composition rules
  * - 자체 흰 카드(border-default 1px·8px 라운드)로 렌더되는 독립 블록 — 추가 래퍼 카드로 감싸지 말 것.
@@ -52,7 +53,7 @@ export default function Reasoning({
       style={{ animationDelay: `${delay}ms` }}
     >
       <div
-        className="text-sm font-bold text-tertiary tracking-caps uppercase leading-none"
+        className="text-sm font-bold text-tertiary tracking-caps uppercase"
         style={{ fontFamily: "var(--font-family-korean)" }}
       >
         Reasoning

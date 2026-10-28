@@ -30,6 +30,9 @@ export const Inactive: Story = { args: { active: false } };
 /** 활성 — 입력 텍스트 있을 때 (파랑 채움). */
 export const Active: Story = { args: { active: true } };
 
+/** 중단 — AI 가 답을 만드는 중. 같은 자리가 중단 버튼이 된다(늘 누를 수 있다). [[AiProgress]] 와 함께. */
+export const Stop: Story = { args: { mode: "stop" } };
+
 /** 시연용 — 자동 클릭 ripple 표시. */
 export const WithCursor: Story = { args: { active: true, showCursor: true } };
 

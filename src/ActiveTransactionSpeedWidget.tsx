@@ -1,5 +1,5 @@
 /**
- * ActiveTransactionSpeedWidget — 액티브 트랜잭션 스피드 패널.
+ * ActiveTransactionSpeedWidget — 액티브 트랜잭션 스피드 패널. Composite layer.
  *
  * ## Purpose
  * APM · LLM 등 Application 모니터링 대시보드의 실시간 트래픽 시각화.
@@ -14,10 +14,16 @@
  * - 시간에 따른 처리량 추이 → [[MiniLineChart]] · [[MiniMultiLineChart]] — 이 위젯은 흐름 연출이지 시계열이 아니다.
  * - 실데이터 없이 장식으로 흘리기 — 숫자가 움직이면 사용자는 실측으로 읽는다. 데모·캡처에서는 `paused` 로 멈춘다.
  *
+ * ## Metrics
+ * - ✅ 실시간 유입 · 처리 속도(RPS · TPS)와 응답 속도 등급별 개수
+ * - ❌ 지난 구간 추이(어제 TPS) → [[MiniLineChart]] — 이 위젯은 지금 흐름만 말한다
+ *
  * ## Composition rules
  * - 외부 아이콘 의존: `/icons/speed-bullet-{tone}.svg`, `/icons/speed-bar-{tone}.svg`
  *   (소비 앱의 public 폴더에 배치)
- * - 색은 DS 토큰 — hex 금지
+ * - 색은 DS 토큰 — hex 금지. 등급별 개수(정상 · 느림 · 매우 느림)는 판정 등급 토큰 `--color-chart-speed-*`(§17) —
+ *   같은 등급을 쓰는 [[ActiveTransactionArc]] · [[ScatterHeatmap]] 의 `SPEED_LEGEND` 와 같은 색.
+ * - 좌우 RPS · TPS 는 [[MetricStat]] 이 그린다 — 같은 모양이라 좌우 대칭으로 읽힌다. 그래서 Composite 계층이다.
  * - `compact` 모드로 좁은 카드(Flex 보드 등) 대응
  *
  * @example
@@ -27,6 +33,7 @@
  * ```
  */
 import { useEffect, useMemo, useRef, useState } from "react";
+import MetricStat from "./MetricStat";
 
 export type SpeedTone = "normal" | "warning" | "critical";
 
@@ -107,8 +114,6 @@ export default function ActiveTransactionSpeedWidget({
   onOpenDetail,
   compact = false,
 }: ActiveTransactionSpeedWidgetProps) {
-  const sideW = compact ? 56 : 72;
-  const numCls = compact ? "text-lg" : "text-2xl";
   const sumCls = compact ? "text-2xl" : "text-3xl";
   const totCls = compact ? "text-sm" : "text-base";
   const [bullets, setBullets] = useState<Bullet[]>([]);
@@ -219,7 +224,7 @@ export default function ActiveTransactionSpeedWidget({
       <div className="flex items-center justify-between shrink-0 w-full">
         <div className="flex gap-4px items-center">
           <span
-            className="text-base font-bold text-primary tracking-default leading-none whitespace-nowrap"
+            className="text-base font-bold text-primary tracking-default whitespace-nowrap"
             style={{ fontFamily: "var(--font-family-korean)" }}
           >
             {title}
@@ -252,29 +257,7 @@ export default function ActiveTransactionSpeedWidget({
       {/* Body */}
       <div className="flex flex-1 min-h-0 w-full items-stretch">
         {/* RPS */}
-        <div
-          className="flex flex-col items-start justify-center shrink-0"
-          style={{ width: sideW }}
-        >
-          <span
-            className="text-sm text-tertiary leading-none"
-            style={{
-              fontFamily: "var(--font-family-numeric)",
-              fontWeight: "var(--font-weight-regular)",
-            }}
-          >
-            RPS
-          </span>
-          <span
-            className={`${numCls} text-primary leading-none mt-2px`}
-            style={{
-              fontFamily: "var(--font-family-numeric)",
-              fontWeight: "var(--font-weight-medium)",
-            }}
-          >
-            {rps}
-          </span>
-        </div>
+        <MetricStat label="RPS" value={rps} compact={compact} />
 
         {/* Plot area */}
         <div className="flex-1 min-w-0 relative">
@@ -287,7 +270,7 @@ export default function ActiveTransactionSpeedWidget({
               className={`${totCls} font-medium`}
               style={{
                 fontFamily: "var(--font-family-numeric)",
-                color: "var(--color-chart-series-1)",
+                color: "var(--color-chart-speed-normal)",
               }}
             >
               {dynamicTotals.normal}
@@ -296,7 +279,7 @@ export default function ActiveTransactionSpeedWidget({
               className={`${totCls} font-medium`}
               style={{
                 fontFamily: "var(--font-family-numeric)",
-                color: "var(--color-chart-series-2)",
+                color: "var(--color-chart-speed-slow)",
               }}
             >
               {dynamicTotals.warning}
@@ -305,7 +288,7 @@ export default function ActiveTransactionSpeedWidget({
               className={`${totCls} font-medium`}
               style={{
                 fontFamily: "var(--font-family-numeric)",
-                color: "var(--color-chart-series-8)",
+                color: "var(--color-chart-speed-very-slow)",
               }}
             >
               {dynamicTotals.critical}
@@ -391,29 +374,7 @@ export default function ActiveTransactionSpeedWidget({
         </div>
 
         {/* TPS */}
-        <div
-          className="flex flex-col items-end justify-center shrink-0"
-          style={{ width: sideW }}
-        >
-          <span
-            className="text-sm text-tertiary leading-none"
-            style={{
-              fontFamily: "var(--font-family-numeric)",
-              fontWeight: "var(--font-weight-regular)",
-            }}
-          >
-            TPS
-          </span>
-          <span
-            className={`${numCls} text-primary leading-none mt-2px`}
-            style={{
-              fontFamily: "var(--font-family-numeric)",
-              fontWeight: "var(--font-weight-medium)",
-            }}
-          >
-            {tps}
-          </span>
-        </div>
+        <MetricStat label="TPS" value={tps} align="end" compact={compact} />
       </div>
     </div>
   );

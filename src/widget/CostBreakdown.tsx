@@ -89,7 +89,7 @@ export default function CostBreakdown({
       </div>
       {context && (
         <p
-          className="text-base text-secondary tracking-default leading-relaxed"
+          className="text-base text-secondary tracking-default"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
         >
           {context}
@@ -103,7 +103,7 @@ export default function CostBreakdown({
           {["GPU", "Pod", "평균 사용률", "유휴 비율", "일일 낭비"].map((h) => (
             <span
               key={h}
-              className="text-sm font-bold text-secondary tracking-default leading-none"
+              className="text-sm font-bold text-secondary tracking-default"
               style={{ fontFamily: "var(--font-family-korean)" }}
             >
               {h}
@@ -119,7 +119,7 @@ export default function CostBreakdown({
             style={{ gridTemplateColumns: "0.7fr 1.4fr 0.8fr 0.9fr 1fr" }}
           >
             <span
-              className="text-base font-bold text-primary tracking-default leading-none col-span-4"
+              className="text-base font-bold text-primary tracking-default col-span-4"
               style={{ fontFamily: "var(--font-family-korean)", gridColumn: "1 / span 4" }}
             >
               소계
@@ -135,7 +135,7 @@ export default function CostBreakdown({
       </div>
       {monthly && (
         <p
-          className="text-base text-primary tracking-default leading-relaxed"
+          className="text-base text-primary tracking-default"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
         >
           <span className="font-bold">월 환산</span> — {monthly}

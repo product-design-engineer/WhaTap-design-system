@@ -129,7 +129,7 @@ export default function HeatmapCell({
   } as const;
   const caption = label && (
     <span
-      className="absolute text-xs leading-none tabular-nums"
+      className="absolute text-xs tabular-nums"
       data-ds-policy-ok="컬러 위 고정 흰색 전경"
       style={{
         left: 3,

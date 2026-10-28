@@ -1,9 +1,10 @@
 /**
- * GpuStatusBar — GPU 상태별 활용 현황 스택 바 차트.
+ * GpuStatusBar — GPU 단계별(Total → Allocated → Active → Effective) 몫과 나머지를 세로 막대로 쌓는 단계 막대 차트. Composite layer.
  *
  * ## Purpose
- * GPU 리소스 보드에서 Total → Allocated → Active → Effective 단계별
- * 할당·활용 현황을 시각화. 각 카테고리는 양(positive)·음(negative) 세그먼트로 구성.
+ * GPU 리소스 보드에서 «전체 중 얼마가 할당되고, 그중 얼마가 쓰이고, 그중 얼마가 효과적인가» 를 단계마다 한 막대로 보인다.
+ * 막대 아래 구간이 그 단계의 몫(6 Allocated), 위 구간이 앞 단계 대비 나머지(2 Not Allocated)다. 단계의 몫을 잇는 옅은 면이
+ * 줄어드는 흐름을 함께 그린다.
  *
  * ## When to use
  * - GPU 대시보드 상단에서 전체 자원 흐름을 한눈에 보여줄 때
@@ -12,27 +13,45 @@
  * ## When NOT to use
  * - 시계열 추이 → [[MiniLineChart]] / [[MiniMultiLineChart]]
  * - 단일 비율 → [[UsageGauge]]
+ * - 단계가 아니라 대상끼리 비교 → [[BarList]]
+ *
+ * ## Metrics
+ * - ✅ 단계마다 앞 단계의 일부가 되는 깔때기 몫 — GPU Total → Allocated → Active → Effective · 할당 → 사용 → 유효 사용
+ * - ❌ 포함 관계가 아닌 지표 나열(서로 다른 자원 사용률) → [[BarList]]
+ * - ❌ 시간에 따른 변화 — 한 시점의 단면이다
  *
  * ## Composition rules
- * - Primitives 레이어 (자체 렌더링, DS 컴포넌트 import 0)
- * - 색은 차트 토큰만 사용
- * - SVG 내부 텍스트 없음 — 라벨은 HTML overlay
+ * - 단계 막대를 가리키면 나머지를 흐리고(0.32) [[ChartTooltip]] 이 몫 · 나머지 · 단계 안 몫의 비율을 보인다(patterns §26 «강조»).
+ * - 요소를 조합한다 — 격자 [[ChartGrid]] · 값축 [[ChartValueAxis]](눈금은 단계 값, `ticks`) · 막대 [[ChartStackedColumn]] ·
+ *   단계 이름 [[ChartCategoryAxis]]. 차트 안에서 축 · 막대 · 이름을 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
+ * - 색: 몫 = 한 계열 색(`positive.color`, 기본 `--color-chart-series-1`). 단계는 같은 지표(GPU 수)의 단계라 색을 돌려 칠하지 않는다
+ *   (§17 순환 금지). 나머지 = `--color-surface-200` — 오류가 아니라 «남은 몫» 이라 상태색을 쓰지 않는다(§17 · §23).
+ * - `frame={false}` 면 카드 · 제목을 뺀다. 대시보드 칸에서는 [[WidgetFrame]] 이 껍데기와 제목을 맡는다(patterns §15).
+ * - 흐름 면(몫을 잇는 곡선)은 이 차트의 마크라 차트가 그린다 — 계열 색 7% · 선 25%.
  *
  * @example
  * ```tsx
- * <GpuStatusBar
- *   categories={[
- *     { label: "Total", positive: { value: 8, label: "8 Total", color: "var(--color-chart-series-1)" } },
+ * <WidgetFrame title="GPU 상태별 활용 현황">
+ *   <GpuStatusBar frame={false} max={8} categories={[
+ *     { label: "Total", positive: { value: 8, label: "8 Total" } },
  *     { label: "Allocated", positive: { value: 6, label: "6 Allocated" }, negative: { value: 2, label: "2 Not Allocated" } },
- *   ]}
- *   max={8}
- * />
+ *   ]} />
+ * </WidgetFrame>
  * ```
  */
+import ChartCategoryAxis from "./ChartCategoryAxis";
+import { useState } from "react";
+import ChartGrid from "./ChartGrid";
+import ChartTooltip from "./ChartTooltip";
+import { DIM_OPACITY, MARK_CLASS } from "./_emphasis";
+import ChartStackedColumn from "./ChartStackedColumn";
+import ChartValueAxis from "./ChartValueAxis";
+import { AXIS_GUTTER } from "./_axisScale";
 
 export type GpuStatusSegment = {
   value: number;
   label: string;
+  /** 구간 색 토큰. 몫의 기본은 `--color-chart-series-1`, 나머지는 `--color-surface-200`. hex 금지. */
   color?: string;
 };
 
@@ -46,181 +65,110 @@ export type GpuStatusBarProps = {
   categories: GpuStatusCategory[];
   /** Y축 최대값 (기본: positive+negative 중 최대) */
   max?: number;
+  /**
+   * 카드 표면 · 테두리 · 제목을 그릴지. 기본 `true`.
+   * `false` 면 본문만 — [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
+   */
+  frame?: boolean;
+  /** `frame` 일 때 제목. 기본 「GPU 상태별 활용 현황」. */
+  title?: string;
 };
 
-const POS_COLORS = [
-  "var(--color-chart-series-1)",  // blue
-  "var(--color-chart-series-3)",  // teal
-  "var(--color-chart-series-6)",  // green
-  "var(--color-chart-series-6)",  // green
-];
-const NEG_COLOR = "var(--color-status-error-bg, #ffe8e8)";
+const POS_COLOR = "var(--color-chart-series-1)";
+const NEG_COLOR = "var(--color-surface-200)";
+const PAD_TOP = 6;
+const PAD_BOTTOM = 18;
+const PAD_RIGHT = 8;
+const GAP = 4;
 
-export default function GpuStatusBar({ categories, max: maxProp }: GpuStatusBarProps) {
-  const maxVal = maxProp ?? Math.max(...categories.map((c) => c.positive.value + (c.negative?.value ?? 0)));
+export default function GpuStatusBar({ categories, max: maxProp, frame = true, title = "GPU 상태별 활용 현황" }: GpuStatusBarProps) {
+  const maxVal = maxProp ?? Math.max(0, ...categories.map((c) => c.positive.value + (c.negative?.value ?? 0)));
 
-  /* Y축 눈금 — 유의미한 값(positive, negative 경계)에서 자동 생성 */
-  const yTicks = Array.from(
+  /* 눈금은 단계 값(몫 · 몫+나머지) — 깔때기의 경계가 곧 읽을 값이다. */
+  const ticks = Array.from(
     new Set([0, ...categories.flatMap((c) => [c.positive.value, c.positive.value + (c.negative?.value ?? 0)])]),
   ).sort((a, b) => a - b);
 
-  /* 배경 area chart — 각 카테고리의 전체(positive+negative) 높이를 부드러운 곡선으로 잇는다 */
-  const colCount = categories.length;
-  const colW = 100 / colCount;
-  const barW = colW * 0.55;
-  const barHalf = barW / 2;
-
-  const edgePoints: { x: number; y: number }[] = [];
-  categories.forEach((c, i) => {
+  /* 흐름 면 — 단계의 몫 높이를 막대 폭 구간은 평평하게, 사이는 곡선으로 잇는다(플롯 0~100 좌표). */
+  const colW = categories.length ? 100 / categories.length : 100;
+  const barHalf = (colW * 0.55) / 2;
+  const pts = categories.flatMap((c, i) => {
     const cx = (i + 0.5) * colW;
     const y = maxVal > 0 ? (1 - c.positive.value / maxVal) * 100 : 100;
-    edgePoints.push({ x: cx - barHalf, y });
-    edgePoints.push({ x: cx + barHalf, y });
+    return [{ x: cx - barHalf, y }, { x: cx + barHalf, y }];
   });
-
-  function buildCurvePath(pts: { x: number; y: number }[]): string {
-    if (pts.length < 2) return "";
-    let d = `M${pts[0].x},${pts[0].y}`;
-    for (let i = 1; i < pts.length; i++) {
-      const prev = pts[i - 1];
-      const curr = pts[i];
-      const isFlat = i % 2 === 1;
-      if (isFlat) {
-        d += ` L${curr.x},${curr.y}`;
-      } else {
-        const dx = curr.x - prev.x;
-        const cp1x = prev.x + dx * 0.45;
-        const cp2x = curr.x - dx * 0.45;
-        d += ` C${cp1x},${prev.y} ${cp2x},${curr.y} ${curr.x},${curr.y}`;
-      }
+  let line = pts.length ? `M${pts[0].x},${pts[0].y}` : "";
+  for (let i = 1; i < pts.length; i++) {
+    const a = pts[i - 1], b = pts[i];
+    if (i % 2 === 1) line += ` L${b.x},${b.y}`;
+    else {
+      const dx = b.x - a.x;
+      line += ` C${a.x + dx * 0.45},${a.y} ${b.x - dx * 0.45},${b.y} ${b.x},${b.y}`;
     }
-    return d;
   }
-
-  const linePath = buildCurvePath(edgePoints);
-  const last = edgePoints[edgePoints.length - 1];
-  const first = edgePoints[0];
-  const areaPath = edgePoints.length > 1
-    ? `${linePath} L${last.x},100 L${first.x},100 Z`
-    : "";
+  const area = pts.length > 1 ? `${line} L${pts[pts.length - 1].x},100 L${pts[0].x},100 Z` : "";
+  const plot = { left: AXIS_GUTTER, right: PAD_RIGHT, top: PAD_TOP, bottom: PAD_BOTTOM };
+  /* 가리킨 단계 — 나머지 막대를 흐리고 [[ChartTooltip]] 으로 몫 · 나머지 · 비율(patterns §26 «강조») */
+  const [hover, setHover] = useState<number | null>(null);
 
   return (
-    <div className="flex flex-col bg-card border border-color-var-color-border-default rounded-4px px-12px py-8px h-full">
-      <span className="text-md font-medium text-secondary mb-8px shrink-0">GPU 상태별 활용 현황</span>
+    <div
+      className={frame ? "flex flex-col bg-card border border-color-var-color-border-default rounded-4px px-12px py-8px h-full" : "flex flex-col h-full min-w-0"}
+    >
+      {frame && <span className="text-md font-medium text-secondary mb-8px shrink-0">{title}</span>}
 
-      <div className="flex flex-1 min-h-0">
-        {/* Y축 스케일 */}
-        <div className="shrink-0 flex flex-col justify-between pr-8px" style={{ marginBottom: 20 }}>
-          {[...yTicks].reverse().map((v) => (
-            <span
-              key={v}
-              className="text-sm text-tertiary leading-none"
-              style={{ fontFamily: "var(--font-family-numeric)" }}
+      <div className="relative flex-1 min-h-0">
+        <ChartGrid max={maxVal} ticks={ticks} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={PAD_RIGHT} />
+
+        {area && (
+          <svg className="absolute pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none" style={{ ...plot, width: `calc(100% - ${AXIS_GUTTER} - ${PAD_RIGHT}px)`, height: `calc(100% - ${PAD_TOP + PAD_BOTTOM}px)`, overflow: "visible" }} aria-hidden>
+            <path d={area} fill={POS_COLOR} opacity="0.07" />
+            <path d={line} fill="none" stroke={POS_COLOR} strokeWidth="0.5" opacity="0.25" vectorEffect="non-scaling-stroke" />
+          </svg>
+        )}
+
+        <div className="absolute flex" style={{ ...plot, gap: GAP }}>
+          {categories.map((c, i) => (
+            <div
+              key={c.label}
+              className={`${MARK_CLASS} relative flex-1 min-w-0 h-full`}
+              style={{ opacity: hover != null && hover !== i ? DIM_OPACITY : 1 }}
+              onMouseEnter={() => setHover(i)}
+              onMouseLeave={() => setHover(null)}
             >
-              {v}
-            </span>
+              <ChartStackedColumn
+                max={maxVal}
+                segments={[
+                  { value: c.positive.value, label: c.positive.label, color: c.positive.color ?? POS_COLOR, labelPlacement: "inside" },
+                  ...(c.negative
+                    ? [{ value: c.negative.value, label: c.negative.label, color: c.negative.color ?? NEG_COLOR, labelPlacement: "side" as const }]
+                    : []),
+                ]}
+              />
+              {hover === i && (
+                <ChartTooltip
+                  left="50%"
+                  top={`${maxVal > 0 ? (1 - Math.min(1, (c.positive.value + (c.negative?.value ?? 0)) / maxVal)) * 100 : 50}%`}
+                  flipX={i >= categories.length / 2}
+                  offset={16}
+                  title={c.label}
+                  rows={[
+                    { label: c.positive.label, value: c.positive.value.toLocaleString("en-US"), color: c.positive.color ?? POS_COLOR },
+                    ...(c.negative ? [{ label: c.negative.label, value: c.negative.value.toLocaleString("en-US"), color: c.negative.color ?? NEG_COLOR }] : []),
+                  ]}
+                  footer={
+                    c.negative && c.positive.value + c.negative.value > 0
+                      ? `${c.positive.label} ${((c.positive.value / (c.positive.value + c.negative.value)) * 100).toLocaleString("en-US", { maximumFractionDigits: 1 })}%`
+                      : undefined
+                  }
+                />
+              )}
+            </div>
           ))}
         </div>
 
-        {/* 차트 영역 */}
-        <div className="flex-1 min-w-0 flex flex-col">
-          {/* 바 + 곡선 영역 — flex-1로 남은 세로 공간을 전부 채운다 */}
-          <div className="relative flex items-end gap-4px flex-1 min-h-0">
-            {/* 배경 area chart (SVG overlay) */}
-            {areaPath && (
-              <svg
-                className="absolute inset-0 pointer-events-none"
-                viewBox="0 0 100 100"
-                preserveAspectRatio="none"
-                style={{ width: "100%", height: "100%", overflow: "visible" }}
-              >
-                {/* Y축 수평 그리드 라인 */}
-                {yTicks.map((v) => {
-                  const ly = maxVal > 0 ? (1 - v / maxVal) * 100 : 100;
-                  return (
-                    <line
-                      key={v}
-                      x1="0" x2="100"
-                      y1={ly} y2={ly}
-                      stroke="var(--color-border-default)"
-                      strokeWidth="0.3"
-                      strokeDasharray="2,2"
-                    />
-                  );
-                })}
-                <path d={areaPath} fill="var(--color-chart-series-1)" opacity="0.07" />
-                <path d={linePath} fill="none" stroke="var(--color-chart-series-1)" strokeWidth="0.5" opacity="0.25" />
-              </svg>
-            )}
-            {/* 수평 기준선 */}
-            <div
-              className="absolute left-0 right-0 border-b border-color-var-color-border-default"
-              style={{ bottom: 0 }}
-            />
-
-            {categories.map((cat, ci) => {
-              const posPct = maxVal > 0 ? `${(cat.positive.value / maxVal) * 100}%` : "0%";
-              const negPct = cat.negative && maxVal > 0 ? `${(cat.negative.value / maxVal) * 100}%` : "0%";
-              const posColor = cat.positive.color ?? POS_COLORS[ci % POS_COLORS.length];
-
-              return (
-                <div key={cat.label} className="flex-1 min-w-0 flex flex-col items-center h-full">
-                  {/* 바 영역 — 부모 높이 100% */}
-                  <div className="relative w-full flex flex-col items-center justify-end h-full">
-                    {/* Negative 세그먼트 (위) */}
-                    {cat.negative && cat.negative.value > 0 && (
-                      <div className="relative w-55pct flex items-center justify-end" style={{ height: negPct }}>
-                        <div
-                          className="w-full h-full rounded-2px"
-                          style={{ background: NEG_COLOR }}
-                        />
-                        <span
-                          className="absolute text-sm text-secondary whitespace-nowrap"
-                          style={{
-                            right: -4,
-                            transform: "translateX(100%)",
-                            fontFamily: "var(--font-family-numeric)",
-                          }}
-                        >
-                          {cat.negative.label}
-                        </span>
-                      </div>
-                    )}
-                    {/* Positive 세그먼트 (아래) */}
-                    <div className="relative w-55pct flex items-center justify-end" style={{ height: posPct }}>
-                      <div
-                        className="w-full h-full rounded-2px"
-                        style={{ background: posColor }}
-                      />
-                      <span
-                        data-ds-policy-ok="차트 계열 색 막대 안 라벨 — 컬러 위 고정 흰색"
-                        // raw-color-ok: 차트 계열 색으로 채운 막대 안 라벨 — 컬러 위 고정 흰색 전경.
-                        className="absolute text-sm text-white whitespace-nowrap"
-                        style={{
-                          left: "50%",
-                          top: "50%",
-                          transform: "translate(-50%, -50%)",
-                          fontFamily: "var(--font-family-numeric)",
-                        }}
-                      >
-                        {cat.positive.label}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* X축 라벨 */}
-          <div className="flex gap-4px mt-4px shrink-0">
-            {categories.map((cat) => (
-              <span key={cat.label} className="flex-1 min-w-0 text-center text-sm text-tertiary truncate">
-                {cat.label}
-              </span>
-            ))}
-          </div>
-        </div>
+        <ChartValueAxis max={maxVal} ticks={ticks} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={PAD_RIGHT} />
+        <ChartCategoryAxis labels={categories.map((c) => c.label)} padBottom={PAD_BOTTOM} right={PAD_RIGHT} gap={GAP} />
       </div>
     </div>
   );

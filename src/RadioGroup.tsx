@@ -31,6 +31,9 @@ import { useId, useState, type ReactNode } from "react";
  * - 가로(`direction="horizontal"`)는 선택지가 2–3개이고 `description` 이 없을 때만. 풀이가 붙으면 세로로 둔다
  * - 색은 토큰만 — 테두리 `--color-border-strong` · 고름 `--color-brand-blue` · 바탕 `--color-card`
  * - 묶음 라벨이 화면에 따로 있으면 `aria-labelledby`, 없으면 `label`(= aria-label) 필수
+ * - 묶음 이름을 화면에 보이려면 [[LabeledField]] 로 감싸고 그 `id` 를 `aria-labelledby` 로 잇는다. 묶음 이름은
+ *   [[TextField]] · [[Select]] 라벨과 **같은 한 벌**(`text-sm font-medium text-primary`, patterns §27) — 상자가 없다고
+ *   묶음 이름만 크게 · 굵게 키우지 않는다. 묶음과 선택지의 위계는 간격과 선택지의 regular 무게가 만든다
  *
  * @example
  * ```tsx

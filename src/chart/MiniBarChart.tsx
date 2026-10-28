@@ -1,7 +1,13 @@
-import type { CSSProperties } from "react";
+import { useState } from "react";
+import ChartCrosshair from "./ChartCrosshair";
+import ChartGrid from "./ChartGrid";
+import { DIM_OPACITY, MARK_CLASS } from "./_emphasis";
+import ChartTimeAxis from "./ChartTimeAxis";
+import ChartValueAxis from "./ChartValueAxis";
+import { AXIS_GUTTER as GUTTER, formatAxisValue, niceMax } from "./_axisScale";
 
 /**
- * MiniBarChart — 시간 구간마다 막대 하나. 계열이 둘 이상이면 누적 막대. 범주(서버 TOP-N)마다 막대 하나도 된다. Primitives layer.
+ * MiniBarChart — 시간 구간마다 막대 하나. 계열이 둘 이상이면 누적 막대. 범주(서버 TOP-N)마다 막대 하나도 된다. Composite layer.
  *
  * ## Purpose
  * 짧은 구간(5초 · 1분)마다 «얼마나 처리했나 · 얼마나 걸렸나» 를 막대로 세운다. 선은 흐름을 말하고 막대는
@@ -27,7 +33,17 @@ import type { CSSProperties } from "react";
  * - 한계 대비 소비량 하나 → [[UsageGauge]].
  * - AI 응답 안의 사용률 막대 → [[UsageChart]](AI 카테고리).
  *
+ * ## Metrics
+ * - ✅ 구간마다 독립인 양 — 구간 TPS · 처리 건수 · 에러 건수 · 구간 평균 응답시간
+ * - ✅ 합이 의미 있는 구성의 누적 — CPU sys + usr · 상태별 건수
+ * - ✅ TOP-N 범주 5개 안팎 — Disk IOPS · inode · 메모리 상위 서버(`categories`)
+ * - ❌ 합이 의미 없는 값의 누적(p50 + p95, 평균끼리) — 쌓은 높이가 거짓 합을 말한다
+ * - ❌ 연속 게이지의 흐름(사용률 추이) → [[MiniLineChart]]
+ *
  * ## Composition rules
+ * - 플롯을 가리키면 [[ChartCrosshair]](`band`)가 그 칸의 계열 값 · 합계 툴팁을 보이고 나머지 막대를 흐린다(제목 = `pointLabels` 또는 `categories`, patterns §26 «강조»).
+ * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
+ * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
  * - 껍데기(카드 · 제목 · 메뉴 · 범례)는 그리지 않는다. 대시보드 칸에서는 [[WidgetFrame]] 이 맡는다(patterns §15).
  *   범례는 같은 색 토큰을 WidgetFrame `legend` 로 넘긴다.
  * - `frame={false}` 면 바깥 좌우 여백(8px)을 뺀다. WidgetFrame 안에서는 늘 `frame={false}` — 다른 칸 차트와 같은 규칙.
@@ -61,8 +77,6 @@ import type { CSSProperties } from "react";
  * ```
  */
 
-/** Y축 눈금 칸 폭 — 모든 그래프가 같은 토큰을 쓴다. */
-const GUTTER = "var(--wds-widget-axis-gutter)";
 const PAD_RIGHT = 8;
 const PAD_BOTTOM = 14;
 const PAD_TOP = 4;
@@ -109,22 +123,9 @@ export type MiniBarChartProps = {
    * `false` 면 여백 0 — [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
    */
   frame?: boolean;
+  /** 구간마다 이름(「13:27:05」) — hover 툴팁 제목(시간축). 범주축이면 `categories` 가 제목이다. */
+  pointLabels?: string[];
 };
-
-function niceMax(v: number): number {
-  if (v <= 0) return 0;
-  const mag = Math.pow(10, Math.floor(Math.log10(v)));
-  const norm = v / mag;
-  const nice = norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 4 ? 4 : norm <= 5 ? 5 : 10;
-  return nice * mag;
-}
-
-function formatY(v: number): string {
-  if (v >= 1000) return Math.round(v / 100) / 10 + "K";
-  if (v >= 100) return Math.round(v).toString();
-  if (v === 0) return "0";
-  return Number.isInteger(v) ? String(v) : v.toFixed(0);
-}
 
 export default function MiniBarChart({
   series,
@@ -135,12 +136,14 @@ export default function MiniBarChart({
   peak = false,
   valueLabels = false,
   frame = true,
+  pointLabels,
 }: MiniBarChartProps) {
+  /* 가리킨 칸 — 나머지 막대를 흐린다(patterns §26 «강조») */
+  const [hover, setHover] = useState<number | null>(null);
   const isCategory = categories !== undefined && categories.length > 0;
   const n = Math.max(0, ...series.map((s) => s.values.length));
   const totals = Array.from({ length: n }, (_, i) => series.reduce((sum, s) => sum + (s.values[i] ?? 0), 0));
   const top = yMax ?? niceMax(Math.max(0, ...totals));
-  const yTicks = top > 0 ? [1, 0.5, 0] : [0];
   const maxIdx = n > 0 ? totals.indexOf(Math.max(...totals)) : -1;
   const peakIdx = peak ? maxIdx : -1;
   const padTop = valueLabels ? PAD_TOP_VALUES : PAD_TOP;
@@ -150,21 +153,7 @@ export default function MiniBarChart({
   return (
     <div className="flex flex-col h-full min-h-0 w-full" style={{ padding: frame ? "0 8px" : 0 }}>
       <div className="flex-1 min-h-0 relative">
-        {/* 격자 — 눈금마다 점선 */}
-        {yTicks.map((ratio) => (
-          <div
-            key={`grid-${ratio}`}
-            className="absolute"
-            style={{
-              left: GUTTER,
-              right: PAD_RIGHT,
-              top: `calc(${padTop}px + ${plotH} * ${1 - ratio})`,
-              height: 0,
-              borderTop: "1px dashed var(--color-border-default)",
-              opacity: 0.5,
-            }}
-          />
-        ))}
+        <ChartGrid max={top} padTop={padTop} padBottom={padBottom} right={PAD_RIGHT} />
 
         {/* 막대 — 그래프 영역에만. 구간마다 한 칸, 칸 사이 1px */}
         <div
@@ -172,7 +161,11 @@ export default function MiniBarChart({
           style={{ left: GUTTER, right: PAD_RIGHT, top: padTop, bottom: padBottom, gap: 1, padding: "0 2px" }}
         >
           {Array.from({ length: n }, (_, i) => (
-            <div key={i} className="relative flex flex-1 min-w-0 h-full" style={{ flexDirection: "column-reverse" }}>
+            <div
+              key={i}
+              className={`${MARK_CLASS} relative flex flex-1 min-w-0 h-full`}
+              style={{ flexDirection: "column-reverse", opacity: hover != null && hover !== i ? DIM_OPACITY : 1 }}
+            >
               {series.map((s) => {
                 const v = s.values[i] ?? 0;
                 return (
@@ -201,7 +194,7 @@ export default function MiniBarChart({
                     padding: "1px 2px",
                   }}
                 >
-                  {formatY(totals[i]) + unit}
+                  {formatAxisValue(totals[i]) + unit}
                 </span>
               )}
               {isCategory && categories[i] !== undefined && (
@@ -218,48 +211,26 @@ export default function MiniBarChart({
         </div>
 
         {/* 축 — 막대 위에 그려 바닥선이 막대에 묻히지 않게 */}
-        <div className="absolute bg-color-var-color-border-divider" style={{ left: GUTTER, right: PAD_RIGHT, bottom: padBottom, height: 1 }} />
-        <div className="absolute bg-color-var-color-border-divider" style={{ left: GUTTER, top: padTop, bottom: padBottom, width: 1 }} />
+        <ChartValueAxis max={top} unit={unit} padTop={padTop} padBottom={padBottom} right={PAD_RIGHT} />
 
         {/* 글자 — px 고정 */}
         <div className="absolute inset-0 pointer-events-none">
-          {yTicks.map((ratio) => (
-            <span
-              key={ratio}
-              className="absolute text-chart text-tertiary leading-none"
-              style={
-                {
-                  fontFamily: "var(--font-family-numeric)",
-                  top: `calc(${padTop}px + ${plotH} * ${1 - ratio})`,
-                  transform: "translateY(-50%)",
-                  left: 0,
-                  textAlign: "right",
-                  paddingRight: 4,
-                  width: GUTTER,
-                } as CSSProperties
-              }
-            >
-              {formatY(top * ratio) + unit}
-            </span>
-          ))}
-          {!isCategory && xLabels.map((label, i) => {
-            const ratio = xLabels.length > 1 ? i / (xLabels.length - 1) : 0;
-            return (
-              <span
-                key={i}
-                className="absolute text-chart text-tertiary leading-none whitespace-nowrap"
-                style={{
-                  fontFamily: "var(--font-family-numeric)",
-                  left: `calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${ratio})`,
-                  bottom: 2,
-                  transform: i === 0 ? "translateX(0)" : i === xLabels.length - 1 ? "translateX(-100%)" : "translateX(-50%)",
-                }}
-              >
-                {label}
-              </span>
-            );
-          })}
+          {!isCategory && <ChartTimeAxis labels={xLabels} right={PAD_RIGHT} />}
         </div>
+        {/* 칸 고르기 — 막대는 점 대신 나머지를 흐리고, 툴팁은 계열 값 · 합계 */}
+        <ChartCrosshair
+          band
+          count={n}
+          max={top}
+          series={series.map((s) => ({ label: s.label, color: s.color, values: s.values, shape: "square" as const, noDot: true }))}
+          labels={isCategory ? categories : pointLabels}
+          unit={unit}
+          footer={series.length > 1 ? (i) => `합계 ${totals[i].toLocaleString("en-US", { maximumFractionDigits: 2 })}${unit}` : undefined}
+          onIndex={setHover}
+          right={PAD_RIGHT}
+          padTop={padTop}
+          padBottom={padBottom}
+        />
       </div>
     </div>
   );

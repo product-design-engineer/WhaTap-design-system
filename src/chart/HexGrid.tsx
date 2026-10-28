@@ -1,4 +1,8 @@
 import React, { type ReactNode } from "react";
+import { STATUS_TONE_FILL, STATUS_TONE_TEXT, type StatusTone } from "./_statusTone";
+import ChartLegendItem from "./ChartLegendItem";
+import ChartTooltip from "./ChartTooltip";
+import { DIM_OPACITY } from "./_emphasis";
 
 /**
  * HexGrid — 리소스 맵 (헥사곤 그리드). GPU 디바이스 · 서버처럼 개별 장치를 한 칸씩 깐다.
@@ -20,12 +24,18 @@ import React, { type ReactNode } from "react";
  * - 장치 수백 개를 군집 단위로 요약 → [[AiTargetMesh]]
  * - 아이콘 · 텍스트에 붙는 설명 말풍선 → [[Tooltip]] (HexGrid 툴팁은 맵 안 헥사곤 전용)
  *
+ * ## Metrics
+ * - ✅ 장치 · 서버마다의 이산 상태 — active · idle · warning · critical · 에이전트 연결 상태
+ * - ❌ 연속 값(CPU 사용률 %) 그 자체 — 상태로 판정한 뒤 칠하고 값은 툴팁에
+ * - ❌ 대상 수가 적은 정량 비교 → [[BarList]]
+ *
  * ## Composition rules
+ * - 범례는 [[ChartLegendItem]] 을 조합한다(견본은 마크 모양을 따른다, patterns §26). 그래서 Composite 계층이다.
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 여백 · 「GPU Map」 제목 줄 · 범례를 뺀다). [[WidgetFrame]] 안에 넣을 때 쓴다.
  *   범례는 `HEX_GRID_LEGEND` 를 WidgetFrame `legend` 로 넘긴다(같은 색 토큰). 제목 · 메뉴도 WidgetFrame 이 맡는다(patterns §15).
  * - 개수를 범례에 붙일 때는 `hexGridLegend(items)` 를 WidgetFrame `legend` 로 넘긴다 → `Critical 3` 처럼
  *   라벨 뒤에 칸 수가 붙는다. 칠해진 색을 센다(톤이 0 개여도 줄은 남는다). 라벨은 `labels` 로 바꾼다.
- * - Primitives 레이어 (자체 렌더링, DS 컴포넌트 import 0). 툴팁 상자도 [[Tooltip]] 을 쓰지 않고 직접 그린다.
+ * - 툴팁 상자는 차트 공통 [[ChartTooltip]](내용은 `renderTooltip`) — 다른 차트 툴팁과 같은 모양이다. 위치는 HexGrid 가 계산한다.
  * - 색은 chart/status 토큰만 사용. 툴팁 상자는 `bg-card` · `--color-border-default` · `--shadow-md` · 텍스트 토큰.
  * - SVG 기반. 헥사곤은 polygon. 툴팁은 SVG 와 **같은 좌표계**(viewBox → 픽셀 환산)로 hover 헥사곤에 붙는
  *   HTML overlay 다(patterns §5). `pointer-events: none` 이라 툴팁 안에 버튼을 넣지 않는다. 행동은 헥사곤 클릭으로.
@@ -57,7 +67,7 @@ import React, { type ReactNode } from "react";
  * ```
  */
 
-export type HexTone = "active" | "idle" | "warning" | "critical";
+export type HexTone = StatusTone;
 
 export type HexItem = {
   id: string;
@@ -96,12 +106,8 @@ export type HexGridProps = {
   renderTooltip?: (item: HexItem) => ReactNode;
 };
 
-const TONE_FILL: Record<HexTone, string> = {
-  active: "var(--color-chart-series-1)",
-  idle: "var(--color-surface-200)",
-  warning: "var(--color-status-warning)",
-  critical: "var(--color-status-error)",
-};
+/* 상태 색 · 글자 · 범례는 BlockGrid 와 공유한다(내부 `_statusTone`). */
+const TONE_FILL = STATUS_TONE_FILL;
 
 /** 껍데기를 끈 HexGrid 의 범례 — [[WidgetFrame]] `legend` 로 넘긴다. 색은 헥사곤과 같은 토큰. */
 export const HEX_GRID_LEGEND = [
@@ -131,15 +137,11 @@ export function hexGridLegend(
 }
 
 /** hover 중 나머지 칸 · 하이라이트 밖 칸의 불투명도. */
-const HOVER_DIM_OPACITY = 0.32;
+/* hover 흐림은 차트 공통 값(내부 `_emphasis`) */
+const HOVER_DIM_OPACITY = DIM_OPACITY;
 const HIGHLIGHT_DIM_OPACITY = 0.18;
 
-const TONE_TEXT: Record<HexTone, string> = {
-  active: "var(--color-text-inverse)",
-  idle: "var(--color-text-tertiary)",
-  warning: "var(--color-text-inverse)",
-  critical: "var(--color-text-inverse)",
-};
+const TONE_TEXT = STATUS_TONE_TEXT;
 
 /** flat-top 헥사곤 꼭짓점 */
 function hexPoints(cx: number, cy: number, r: number): string {
@@ -242,10 +244,7 @@ export default function HexGrid({
         {/* 범례는 헥사곤이 쓰는 네 톤을 다 말한다. 종전엔 Active · Idle 둘뿐이라 주황 · 빨강이 범례에 없었다. */}
         <div className="flex items-center gap-8px">
           {HEX_GRID_LEGEND.map((l) => (
-            <div key={l.label} className="flex items-center gap-4px">
-              <div className="rounded-2px" style={{ width: 8, height: 8, background: l.color }} />
-              <span className="text-sm text-tertiary">{l.label}</span>
-            </div>
+            <ChartLegendItem key={l.label} color={l.color} label={l.label} />
           ))}
         </div>
       </div>
@@ -394,18 +393,9 @@ export default function HexGrid({
           const flipX = px > size.w / 2;
           const flipY = py > size.h / 2;
           return (
-            <div
-              role="tooltip"
-              className="absolute z-10 pointer-events-none bg-card border border-color-var-color-border-default rounded-6px px-12px py-8px shadow-md text-sm text-primary whitespace-nowrap"
-              style={{
-                left: flipX ? px - off : px + off,
-                top: flipY ? py - off : py + off,
-                transform: `translate(${flipX ? "-100%" : "0"}, ${flipY ? "-100%" : "0"})`,
-                fontFamily: "var(--font-family-korean)",
-              }}
-            >
+            <ChartTooltip left={px} top={py} flipX={flipX} flipY={flipY} offset={off}>
               {renderTooltip(item)}
-            </div>
+            </ChartTooltip>
           );
         })()}
       </div>

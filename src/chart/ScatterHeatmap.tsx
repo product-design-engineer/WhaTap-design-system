@@ -14,14 +14,18 @@
  * - 캘린더형 히트맵 (월/일 격자) → [[Heatmap]] + [[HeatmapCell]].
  * - 단순 바 차트 → inline 구현.
  *
+ * ## Metrics
+ * - ✅ 개별 트랜잭션의 응답시간 분포(시간 × 응답시간) — APM 히트맵, 판정 색 normal · slow · very slow
+ * - ❌ 집계값(평균 응답시간 추이) → [[MiniLineChart]]
+ * - ❌ 응답시간이 아닌 두 수치의 관계 → [[ScatterChart]]
+ *
  * ## Composition rules
  * - 위젯 chrome 은 소비자가 감싼다.
  * - `dots` prop 으로 데이터를 외부에서 주입한다.
- * - Y축 라벨(0~100) · X축 시각 라벨 · 격자선을 내장한다.
+ * - 요소를 조합한다 — 격자 [[ChartGrid]](가로 10 간격 + 세로 22칸 `vertical`) · 값축 [[ChartValueAxis]](`ticks` = Y 글자) ·
+ *   시간축 [[ChartTimeAxis]]. 차트는 점(마크)만 그린다(patterns §26). 그래서 Composite 계층이다.
  * - `h-full` 부모 안에서 채워진다.
- * - 축 글자는 모든 그래프와 같은 `text-chart`(9px) · 숫자 서체 · tertiary. Y축 눈금 칸 폭은 `--wds-widget-axis-gutter`
- *   라서 한 줄에 놓인 선 그래프와 Y축 선이 같은 x 에 선다. X축 글자 줄 높이 14 는 선 그래프의 아래 여백(PAD_BOTTOM 14)과 같아
- *   X축 선도 같은 높이에 선다.
+ * - 축 · 격자가 다른 그래프와 같은 부품이라 한 줄에 놓인 선 · 막대 그래프와 Y축 선 · X축 선 · 글자가 같은 자리에 선다.
  * - `frame={false}` 면 바깥 좌우 여백(8px)을 뺀다. [[WidgetFrame]] 안에 넣을 때 쓴다 — 여백은 WidgetFrame 이 갖는다(patterns §15).
  *
  * @example
@@ -30,6 +34,10 @@
  * <ScatterHeatmap dots={SCATTER_HEATMAP_DEMO_DOTS} xLabels={["13:38","13:40","13:42","13:44","13:46","13:48","13:50"]} />
  * ```
  */
+import ChartGrid from "./ChartGrid";
+import ChartTimeAxis from "./ChartTimeAxis";
+import ChartValueAxis from "./ChartValueAxis";
+import { AXIS_GUTTER } from "./_axisScale";
 
 /** 각 dot: [left%, top%, tone]. tone 0=normal(blue), 1=warning(orange), 2=critical(red). */
 export type ScatterDot = readonly [number, number, 0 | 1 | 2];
@@ -49,6 +57,9 @@ export type ScatterHeatmapProps = {
 };
 
 const DEFAULT_Y = [100, 80, 60, 40, 20, 0];
+const PAD_TOP = 4;
+const PAD_BOTTOM = 14;
+const PAD_RIGHT = 8;
 const DEFAULT_X = ["13:38", "13:40", "13:42", "13:44", "13:46", "13:48", "13:50"];
 const TONE_COLOR = [
   "var(--color-chart-speed-normal)",
@@ -62,52 +73,27 @@ export default function ScatterHeatmap({
   yLabels = DEFAULT_Y,
   frame = true,
 }: ScatterHeatmapProps) {
+  const max = Math.max(0, ...yLabels);
+  /* 가로 격자는 Y 글자 간격의 절반(10)마다 — 분포를 읽는 눈금이 글자보다 촘촘해야 한다. */
+  const step = yLabels.length > 1 ? Math.abs(yLabels[0] - yLabels[1]) / 2 : max / 10;
+  const gridTicks = step > 0 ? Array.from({ length: Math.round(max / step) + 1 }, (_, i) => i * step) : [0];
+  const plot = { left: AXIS_GUTTER, right: PAD_RIGHT, top: PAD_TOP, bottom: PAD_BOTTOM };
   return (
-    <div className="flex h-full min-h-0 w-full" style={{ padding: frame ? "0 8px" : 0, gap: 4 }}>
-      {/* 눈금 칸 + 간격 4 = 축 칸 토큰. 그래야 Y축 선이 선 그래프와 같은 x 에 선다. */}
-      <div className="flex flex-col justify-between shrink-0" style={{ width: "calc(var(--wds-widget-axis-gutter) - 4px)", paddingBottom: 14 }}>
-        {yLabels.map((v) => (
-          <span key={v} className="text-chart text-tertiary leading-none text-right block" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}>{v}</span>
-        ))}
-      </div>
-      <div className="flex flex-1 flex-col min-w-0 min-h-0">
-        <div className="flex-1 min-h-0 relative w-full">
-          {/* horizontal gridlines */}
-          <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
-            {Array.from({ length: 11 }).map((_, i) => (
-              <div key={i} className="h-px w-full" style={i < 10 ? { borderBottom: "1px dashed var(--color-border-soft)" } : { background: "var(--color-text-tertiary)" }} />
-            ))}
-          </div>
-          {/* vertical gridlines */}
-          <div className="absolute inset-0 flex justify-between pointer-events-none">
-            <div className="w-px h-full" style={{ background: "var(--color-text-tertiary)" }} />
-            {Array.from({ length: 22 }).map((_, i) => (
-              <div key={i} className="w-px h-full" style={{ borderRight: "1px dashed var(--color-border-soft)" }} />
-            ))}
-          </div>
-          {/* dots */}
+    <div className="flex h-full min-h-0 w-full" style={{ padding: frame ? "0 8px" : 0 }}>
+      <div className="relative flex-1 min-w-0 min-h-0">
+        <ChartGrid max={max} ticks={gridTicks} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={PAD_RIGHT} vertical={22} />
+        {/* 점 — 이 차트의 마크. 좌표는 플롯 상자 안 % */}
+        <div className="absolute pointer-events-none" style={plot}>
           {dots.map(([left, top, tone], i) => (
             <div
               key={i}
               className="absolute"
-              style={{
-                left: `${left}%`,
-                top: `${top}%`,
-                width: 5,
-                height: 5,
-                backgroundColor: TONE_COLOR[tone],
-              }}
+              style={{ left: `${left}%`, top: `${top}%`, width: 5, height: 5, backgroundColor: TONE_COLOR[tone] }}
             />
           ))}
         </div>
-        <div className="flex items-start justify-between shrink-0 w-full" style={{ height: 14, padding: "0 16px" }}>
-          {xLabels.map((label, i) => (
-            <div key={i} className="flex flex-col items-center">
-              <div className="w-px" style={{ height: 3, background: "var(--color-text-tertiary)" }} />
-              <span className="text-chart text-tertiary text-center leading-none whitespace-nowrap" style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}>{label}</span>
-            </div>
-          ))}
-        </div>
+        <ChartValueAxis max={max} ticks={yLabels} padTop={PAD_TOP} padBottom={PAD_BOTTOM} right={PAD_RIGHT} />
+        <ChartTimeAxis labels={xLabels} right={PAD_RIGHT} />
       </div>
     </div>
   );

@@ -15,7 +15,18 @@
  * - 진행 단계 표시 → [[DashboardBuildingProgress]]
  * - 정밀한 인터랙션(zoom·tooltip·다중 시리즈)이 필요한 본격 차트 → 전용 차트 라이브러리
  *
+ * ## Metrics
+ * - ✅ 연속 게이지 지표 하나의 추이 — CPU · 메모리 사용률(%) · 응답시간(ms) · TPS · 힙 사용량(MiB) · 네트워크(bps)
+ * - ✅ 최고점이 언제였는지가 중요한 지표(peak ▼) — 응답시간 · 액티브 트랜잭션 수 · 대기 세션 수
+ * - ❌ 누적 카운터 원값(총 요청 수 · 누적 에러 수) — 늘기만 해서 기울기만 보인다. 구간 증가량(rate)으로 바꿔 그린다
+ * - ❌ 점 사건(경보 · 배포 · 재시작) → [[StatusTimeline]]. 이산 상태(Up · Down) → [[HexGrid]]
+ * - ❌ 합이 100% 인 구성 비율 → [[MiniDonutChart]]
+ *
  * ## Composition rules
+ * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
+ * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
+ * - 최고점은 [[ChartPeakMarker]] 가 그린다. 차트는 SVG 와 같은 식으로 최고점 좌표만 계산해 넘긴다(§5).
+ * - 플롯을 가리키면 [[ChartCrosshair]] 가 가장 가까운 시점의 안내선 · 점 · 값 툴팁을 보인다(제목 = `pointLabels`, patterns §26 «강조»).
  * - `frame={false}` 면 **본문만** 그린다(카드 표면 · 테두리 · 안쪽 여백 · 제목 줄 · Top Stat · ⋮ · AI 트리거를 뺀다).
  *   [[WidgetFrame]] 안에 넣을 때 쓴다. 제목 · 범위 · 메뉴는 WidgetFrame 이 맡는다(patterns §15).
  * - **SVG font-size 단위 정책 (feedback-svg-text-units)**: SVG 내부에는 텍스트를
@@ -39,12 +50,15 @@
  * />
  * ```
  */
-import type { CSSProperties } from "react";
 import AiTriggerButton from "../widget/TriggerButton";
+import ChartCrosshair from "./ChartCrosshair";
+import ChartGrid from "./ChartGrid";
+import ChartPeakMarker from "./ChartPeakMarker";
+import ChartTimeAxis from "./ChartTimeAxis";
+import ChartValueAxis from "./ChartValueAxis";
+import { AXIS_GUTTER as GUTTER, formatPeakValue, niceMax } from "./_axisScale";
 
 const CHART_HEIGHT = 96;
-/** Y축 눈금 칸 폭 — 토큰 하나(`--wds-widget-axis-gutter`)로 모든 그래프의 Y축 선을 같은 x 에 세운다. */
-const GUTTER = "var(--wds-widget-axis-gutter)";
 const PAD_RIGHT = 8;
 const PAD_TOP_PX = 14;
 const PAD_BOTTOM_PX = 16;
@@ -70,6 +84,7 @@ export default function MiniLineChart({
   /** AI 트리거 버튼 호버 설명(Tooltip). 페이지별 override 가능. 기본 "이 차트를 WhaTap AI로 분석". */
   aiTriggerTooltip = "이 차트를 WhaTap AI로 분석",
   frame = true,
+  pointLabels,
 }: {
   title: string;
   values: number[];
@@ -95,6 +110,8 @@ export default function MiniLineChart({
    * `false` 면 본문만 그린다. [[WidgetFrame]] 안에 넣을 때 쓴다(patterns §15).
    */
   frame?: boolean;
+  /** 시점마다 이름(「13:27:05」) — hover 툴팁 제목. 길이는 `values` 와 같게. 없으면 제목 없이. */
+  pointLabels?: string[];
 }) {
   // ★ 정책 (feedback-chart-peak-alignment):
   //   SVG viewBox는 plot 영역 자체와 정확히 동일한 비율을 가짐 → 라인의 peak
@@ -126,7 +143,6 @@ export default function MiniLineChart({
   const peakXRatio = peakIdx >= 0 && values.length > 1 ? peakIdx / (values.length - 1) : 0;
   const peakYRatio = peakIdx >= 0 && yMaxNice > 0 ? 1 - values[peakIdx] / yMaxNice : 0;
 
-  const yTicks = yMaxNice > 0 ? [1, 0.5, 0] : [0];
 
   return (
     <div
@@ -138,7 +154,7 @@ export default function MiniLineChart({
       <div className="flex items-center justify-between gap-6px">
         <div className="flex items-center gap-3px min-w-0">
           <span
-            className="text-base font-bold text-primary tracking-default leading-none truncate"
+            className="text-base font-bold text-primary tracking-default truncate"
             style={{ fontFamily: "var(--font-family-korean)" }}
             title={title}
           >
@@ -183,31 +199,7 @@ export default function MiniLineChart({
 
       {/* 차트 영역 (SVG는 정확히 plot 사각형에만 absolute 배치) */}
       <div className="relative w-full" style={{ height: CHART_HEIGHT }}>
-        {/* X-axis (plot 하단) */}
-        <div
-          className="absolute h-1px bg-color-var-color-border-divider"
-          style={{ left: GUTTER, right: PAD_RIGHT, top: PAD_TOP_PX + PLOT_H_PX }}
-        />
-        {/* Y-axis (plot 좌측) */}
-        <div
-          className="absolute w-1px bg-color-var-color-border-divider"
-          style={{ left: GUTTER, top: PAD_TOP_PX, height: PLOT_H_PX }}
-        />
-        {/* Y축 수평 그리드 라인 — 모든 tick 위치에 점선 */}
-        {yTicks.map((ratio) => (
-          <div
-            key={`grid-${ratio}`}
-            className="absolute"
-            style={{
-              left: GUTTER,
-              right: PAD_RIGHT,
-              top: PAD_TOP_PX + PLOT_H_PX * (1 - ratio),
-              height: 0,
-              borderTop: "1px dashed var(--color-border-default)",
-              opacity: 0.5,
-            }}
-          />
-        ))}
+        <ChartGrid max={yMaxNice} padTop={PAD_TOP_PX} padBottom={PAD_BOTTOM_PX} right={PAD_RIGHT} />
         {/* 좌측 검정 점선 reference */}
         <div
           className="absolute"
@@ -255,111 +247,39 @@ export default function MiniLineChart({
         {/* HTML overlay — px 고정 텍스트 */}
         <div className="absolute inset-0 pointer-events-none">
           {/* Y축 라벨 */}
-          {yTicks.map((ratio) => (
-            <span
-              key={ratio}
-              className="absolute text-chart text-tertiary leading-none"
-              style={
-                {
-                  fontFamily: "var(--font-family-numeric)",
-                  top: `${PAD_TOP_PX + PLOT_H_PX * (1 - ratio)}px`,
-                  transform: "translateY(-50%)",
-                  left: 0,
-                  textAlign: "right",
-                  paddingRight: 4,
-                  width: GUTTER,
-                } as CSSProperties
-              }
-            >
-              {formatY(yMaxNice * ratio) + unit}
-            </span>
-          ))}
+          <ChartValueAxis max={yMaxNice} unit={unit} padTop={PAD_TOP_PX} padBottom={PAD_BOTTOM_PX} right={PAD_RIGHT} />
 
           {/* peak ▼ + 값 라벨 — SVG polyline의 peak 점과 동일 좌표계 사용
               (GUTTER + plotWidth × peakXRatio, PAD_TOP_PX + PLOT_H_PX × peakYRatio).
               ▼ tip(svg path 끝점)이 peak 점에 정확히 닿도록 transform 보정. */}
           {peakIdx >= 0 && (
-            <div
-              className="absolute flex flex-col items-center"
-              style={{
-                left: `calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${peakXRatio})`,
-                top: `${PAD_TOP_PX + PLOT_H_PX * peakYRatio}px`,
-                transform: "translate(-50%, -100%)",
-              }}
-            >
-              {/* peak 라벨에 배경을 깐다 — 최고점이 plot 좌상단에 가까우면 라벨이 Y축 눈금 위로
-                  올라앉아 「10082%」처럼 두 수치가 한 덩어리로 읽힌다. 배경 없이 색만 바꾸면
-                  겹친 자리에서 어느 글자가 어느 수치인지 여전히 구분되지 않는다. */}
-              <span
-                className="text-xs font-bold text-primary leading-none whitespace-nowrap bg-card rounded-2px"
-                style={{
-                  fontFamily: "var(--font-family-numeric)",
-                  padding: "1px 3px",
-                }}
-              >
-                {formatPeak(max) + unit}
-              </span>
-              <svg width="8" height="5" viewBox="0 0 8 5" className="mt-1px block">
-                <path d="M0 0h8L4 5z" fill={color} />
-              </svg>
-            </div>
+            <ChartPeakMarker
+              label={formatPeakValue(max) + unit}
+              color={color}
+              left={`calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${peakXRatio})`}
+              top={PAD_TOP_PX + PLOT_H_PX * peakYRatio}
+            />
           )}
 
           {/* X축 시간 라벨 */}
-          {xLabels.map((label, i) => {
-            const ratio = i / (xLabels.length - 1);
-            return (
-              <span
-                key={i}
-                className="absolute text-chart text-tertiary leading-none whitespace-nowrap"
-                style={{
-                  fontFamily: "var(--font-family-numeric)",
-                  left: `calc(${GUTTER} + (100% - ${GUTTER} - ${PAD_RIGHT}px) * ${ratio})`,
-                  bottom: 2,
-                  transform:
-                    i === 0
-                      ? "translateX(0)"
-                      : i === xLabels.length - 1
-                        ? "translateX(-100%)"
-                        : "translateX(-50%)",
-                }}
-              >
-                {label}
-              </span>
-            );
-          })}
+          <ChartTimeAxis labels={xLabels} right={PAD_RIGHT} />
         </div>
+        {/* 시점 고르기 — 안내선 · 점 · 값 툴팁(patterns §26 «강조»). 덧그림 겹 위 */}
+        <ChartCrosshair
+          count={values.length}
+          max={yMaxNice}
+          series={[{ label: title, color, values }]}
+          labels={pointLabels}
+          unit={unit}
+          right={PAD_RIGHT}
+          padTop={PAD_TOP_PX}
+          padBottom={PAD_BOTTOM_PX}
+        />
       </div>
     </div>
   );
 }
 
-function niceMax(v: number): number {
-  if (v <= 0) return 0;
-  const mag = Math.pow(10, Math.floor(Math.log10(v)));
-  const norm = v / mag;
-  let nice: number;
-  if (norm <= 1) nice = 1;
-  else if (norm <= 2) nice = 2;
-  else if (norm <= 4) nice = 4;
-  else if (norm <= 5) nice = 5;
-  else nice = 10;
-  return nice * mag;
-}
-function formatY(v: number): string {
-  if (v >= 1000) return Math.round(v / 100) / 10 + "K";
-  if (v >= 100) return Math.round(v).toString();
-  if (v === 0) return "0";
-  return Number.isInteger(v) ? String(v) : v.toFixed(0);
-}
-function formatPeak(v: number): string {
-  if (v >= 1_000_000) return (v / 1_000_000).toFixed(1) + "M";
-  if (v >= 10_000) return (v / 1000).toFixed(2) + "K";
-  if (v >= 1000) return (v / 1000).toFixed(2) + "K";
-  if (v >= 100) return Math.round(v).toString();
-  if (v === 0) return "0";
-  return Number.isInteger(v) ? String(v) : v.toFixed(1);
-}
 function InfoIcon() {
   return (
     <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">

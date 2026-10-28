@@ -11,7 +11,7 @@
   - `primitives.md` / `chrome-components.md` / `widget-components.md` — 컴포넌트 카탈로그 (텍스트 형태)
   - `tokens.md` — 토큰 정의 (CSS 변수 ↔ 디자인 의미)
   - `patterns.md` — **Part 1 인터랙션 패턴**(`P1`… 컴포넌트 횡단 시퀀스 — 파괴적 액션 확인 · 완료 통보 · 즉시반영 vs 폼제출 · 기본/선택 항목 그룹) + **Part 2 구현 정책**(`1`… 기존 번호 유지). MCP `search_components` 가 이 파일을 함께 검색한다.
-  - `components.json` — **기계 판독 규칙 카탈로그(자동 생성 · 직접 편집 금지).** 컴포넌트별 Purpose · ✅Do · ❌Don't · Composition rules · props · 스토리 id. `scripts/build-components-json.mjs` 가 **소스 docstring + 스토리**에서 유도하고 MCP `get_component`·`get_do_dont` 가 이걸 읽는다 — Do/Don't 를 따로 손으로 쓰지 않는다(표기 단일화 규칙은 `docs/SKILL.md`). 강제: `pnpm lint:docstrings`.
+  - `components.json` — **기계 판독 규칙 카탈로그(자동 생성 · 직접 편집 금지).** 컴포넌트별 Purpose · ✅Do · ❌Don't · Composition rules · props · 스토리 id. `scripts/build-components-json.mjs` 가 **소스 docstring + 스토리**에서 유도하고 MCP `get_component`·`get_do_dont` 가 이걸 읽는다 — Do/Don't 를 따로 손으로 쓰지 않는다(표기 단일화 규칙은 `docs/SKILL.md`). **템플릿 섹션(Purpose · When to use · When NOT to use · Composition rules · 차트 필수 Metrics · 선택 Spec · Do · Don't) 밖의 `## …` 는 배달되지 않는다** — 쓰지 않는다. **`Composite/Chart/*` 는 `## Metrics` 에 맞는 지표(`- ✅`) 필수 · 쓰면 안 되는 지표(`- ❌`) 가능하면**(2026-10-23 사용자 지시, `metrics` 필드 → MCP). 강제: `pnpm lint:docstrings`(템플릿 밖 섹션 0 · 차트 Metrics ✅ 0 차단 · 깊이 래칫 `docstring-baseline.json`).
   - `tokens.json` — **기계 판독 토큰 카탈로그(자동 생성 · 직접 편집 금지).** 토큰별 tier·값·다크값·`@role`/`@use`/`@avoid`·유틸 클래스·사용 컴포넌트 · `@distinct <집합>` 을 선언한 토큰은 그 집합과의 **측정된 변별**(`distinctFrom`, 차트 계열 ↔ Severity). `scripts/build-tokens-json.mjs` 가 **`whatap-ds.css` 의 선언 + 그 위 주석**에서 유도하고 MCP `get_tokens`·`search_tokens` 가 이걸 읽는다 — 의미를 다른 파일에 두지 않는다. 강제: `pnpm lint:token-docs`(전 토큰 `@role` 필수, 동결선 0).
   - `STORIES_ROADMAP.md` — Storybook 카탈로그 추가 작업 목록
 
@@ -25,7 +25,7 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 기준**으로 �
 | **Primitives/Ai/** | AI 위젯 리프 프리미티브 | `src/widget/` | AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList, AiSymbol, AiUserBubble, ReasoningStep … |
 | **Composite/** | 프리미티브를 1단계 조합 | `src/` 루트 | PageHeader, PageHeaderAiInline, Sidebar, FilterBar, DataTable, FilterDropdown, Tabs, ThemeToggle … |
 | **Composite/Ai/** | AI 진입·응답 합성 위젯 | `src/widget/` | AiChatExchange, AiReasoning, AiDashboardProposal, AiCostTable, InlinePrompt, PromptInput, SendButton … |
-| **`Chart ·` 접두** (Primitives · Composite 안) | 데이터 시각화(차트 · 게이지 · 히트맵). 계층 안 메뉴명 접두 — `Web ·` 와 같은 방식 | `src/chart/`(`./chart` 진입점) · `src/widget/UsageChart` | Chart · MiniLineChart, Chart · BarList, Chart · UsageGauge, Chart · Heatmap … |
+| **`Chart/` 하위 그룹** (Primitives · Composite 안) | 데이터 시각화(차트 · 게이지 · 히트맵). 계층 안 하위 폴더 — `Ai/` 와 같은 방식. Primitives/Chart = 차트를 이루는 요소, Composite/Chart = 요소를 조합한 차트(26유형 모두 여기, patterns §21 계획표) | `src/chart/`(`./chart` 진입점) · `src/widget/UsageChart` | Primitives/Chart/ChartGrid · ChartValueAxis · ChartBar …, Composite/Chart/MiniLineChart · Heatmap · ScatterHeatmap … |
 | **Shell/** | 최종 조립 진입점 | `src/` · `src/widget/` | DashboardLayout, Ai/Widget(WhaTapAiWidget), Page/(A~D 페이지 합성 템플릿) |
 | **Tokens** (메타) | `:root` 컬러·폰트·spacing 변수 (참조용; 런타임은 whatap-ds.css) | `src/tokens.css` | Color, Type Scale, Tones … |
 
@@ -61,7 +61,7 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 기준**으로 �
    - 마케팅 컴포넌트가 SaaS 전용 레이아웃 토큰(`--wds-page-px` 등)을 참조 → 위반
    - SaaS 컴포넌트가 `--color-web-*` 를 참조 → 위반
    - 일반 UI 에서 `--color-chart-series-*` 를 끌어다 씀 → 위반
-5. **Storybook 카탈로그 그룹.** 마케팅 컴포넌트는 `Shell/Web · *` 또는 `Primitives/Web · *` 로, 차트(데이터 시각화)는 `Primitives/Chart · *` 또는 `Composite/Chart · *` 로 묶는다(2026-10-14 개정 — 이전에는 «이름에 `Chart` 가 드러나면 충분» 이었으나 `Heatmap` · `BarList` · `UsageGauge` 처럼 이름만으로 차트인지 드러나지 않는 것이 많았다). 계층은 그대로이고 접두는 메뉴명에만 붙는다 — 폴더(`check-catalog-folders`)와 `component:` 이름은 바뀌지 않는다. 스토리 id 에는 가운뎃점이 남는다(`primitives-chart-·-minilinechart`).
+5. **Storybook 카탈로그 그룹.** 마케팅 컴포넌트는 `Shell/Web · *` 또는 `Primitives/Web · *` 로, 차트(데이터 시각화)는 **하위 그룹 `Primitives/Chart/*` · `Composite/Chart/*`** 로 묶는다 — 요소는 Primitives/Chart, 요소를 조합한 차트는 Composite/Chart(2026-10-22 개정, 사용자 결정. 이전 `Chart ·` 메뉴명 접두는 `Ai/` 하위 그룹과 규칙이 둘이었고 폴더로 접히지 않았다). 계층은 첫 세그먼트 그대로이고, 스토리 파일은 `stories/<계층>/Chart/` 에 둔다(`check-catalog-folders`). `component:` 이름은 바뀌지 않는다. 스토리 id 는 `primitives-chart-chartgrid` · `composite-chart-minilinechart`. 일반(공통) 컴포넌트는 계층 바로 아래 — `Common` 같은 별도 그룹을 두지 않는다.
 
 **현재 이름 → 정책 정렬 대상 (마이그레이션):**
 
@@ -97,23 +97,20 @@ Storybook 좌측 트리는 **컴포넌트 3계층과 동일한 기준**으로 �
 
 | Layer | 역할 | 조합 규칙 | 수량(카탈로그) |
 |---|---|---|---|
-| **Primitives** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 | — | 75 (Ai/ 포함) |
+| **Primitives** | 단독 렌더. 다른 DS 컴포넌트를 import 하지 않음 — 단 **리프 Primitive 1개** 합성은 허용(아래 예외) | — | 75 (Ai/ 포함) |
 | **Composite** | Primitives 를 1단계 조합 | Primitives 만 import. **Composite 끼리 import 금지** | 34 (Ai/ 포함) |
 | **Shell** | Composite + Primitives 를 최종 조립하는 진입점 | 모든 계층 import 가능 | 6 (DashboardLayout · Ai/Widget · Page A·B·D · TopologyOverview) |
 
-**Primitives** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, Switch, DataTable, MiniLineChart, LiveTimerCompact, AiCard, AiCaption … + **인라인 추출 Parts**(SidebarMenuItem · PageHeaderNotificationItem · PageHeaderProfileMenuItem · ProductRailItem · BottomRailItem · TabButton · CostBreakdownRow · ClassificationTableRow · CostTableRow · MigPlanRow · EventListItem · ReasoningStep · TimelineStepItem · CriteriaGroup · ReceiverChannelItem · AiActionChip · AiAttachmentChip · AiQuickActionChip)
+**Primitives** — Checkbox, Chip, TextField, Select, Tabs, Modal, Tooltip, Toast, Button, Switch, DataTable, ChartGrid, ChartValueAxis, LiveTimerCompact, AiCard, AiCaption … + **인라인 추출 Parts**(SidebarMenuItem · PageHeaderNotificationItem · PageHeaderProfileMenuItem · ProductRailItem · BottomRailItem · TabButton · CostBreakdownRow · ClassificationTableRow · CostTableRow · PlanProposalRow · EventListItem · ReasoningStep · TimelineStepItem · CriteriaGroup · ReceiverChannelItem · DataTableRow · AiActionChip · AiAttachmentChip · AiQuickActionChip)
 
-**Composite** — FilterBar · PageHeader · PageHeaderAiInline · OptionbarPage · Sidebar(=SidebarMenuItem) · ThemeToggle · AiChatExchange · AiReasoning · InlinePrompt … + **추출 Parts**(DataTableRow · FilterDropdownOptionItem · FilterChipItem · CriteriaOptionButton · ProposalSection · AiAlertRulePreview)
+**Composite** — FilterBar · PageHeader · PageHeaderAiInline · OptionbarPage · Sidebar(=SidebarMenuItem) · ThemeToggle · AiChatExchange · AiReasoning · InlinePrompt · 값축 차트 4종(MiniLineChart · MiniMultiLineChart · MiniBarChart · ForecastLineChart = ChartGrid + ChartValueAxis) … + **추출 Parts**(FilterDropdownOptionItem · FilterChipItem · CriteriaOptionButton · ProposalSection · AiAlertRulePreview)
 
 **Shell** — DashboardLayout(=Sidebar) · WhaTapAiWidget(`Shell/Ai/Widget`) · Page 합성 템플릿(A 기본 대시보드 · B AI 전용 · D 상세)
 
-> ⚠️ **미해결 — 추출 Parts 의 계층 판정.** 인라인에서 추출한 행/항목 Parts 중 일부는
-> 리프 프리미티브를 **런타임 합성**한다: `SidebarMenuItem`·`ProductRailItem`·`BottomRailItem`·
-> `AiTriggerButton` → [[Tooltip]], `ReceiverChannelItem` → [[Switch]]. 규칙대로 Composite 로
-> 승격하면 이들을 소비하는 부모(`Sidebar`·`AiReceiverChannels` 등 Composite)가
-> *Composite 끼리 import 금지* 에 걸려 Shell 까지 연쇄 승격된다 — 위젯 카드가 Shell 이 되는 것은
-> 의미상 틀리다. 현재는 **관행상 Primitives 에 두고 있다.** 규칙에 "Parts 는 리프 프리미티브
-> 1개 합성 허용" 예외를 명문화할지는 **결정 필요**(이 문서를 임의로 고치지 말 것).
+**리프 1개 예외 (2026-10-23 사용자 결정).** Primitive 는 **리프 Primitive 를 최대 1개** 런타임 import 할 수 있다. "리프" = 스스로는 DS 컴포넌트를 하나도 값 import 하지 않는 Primitive(Tooltip · Switch · Chip 등). 예: `SidebarMenuItem`·`ProductRailItem`·`BottomRailItem`·`DataTableRow`·`AiTriggerButton` → [[Tooltip]], `ReceiverChannelItem` → [[Switch]].
+- **왜:** 규칙대로 Composite 로 올리면 소비 부모(`Sidebar`·`AiReceiverChannels` 등 Composite)가 *Composite 끼리 import 금지* 에 걸려 Shell 까지 연쇄 승격된다 — 위젯 카드가 Shell 이 되는 것은 의미상 틀리다. 부모가 컨트롤을 슬롯으로 주입하는 대안은 상태를 두 경로가 서술하고 `ReactNode` 슬롯이 가짜 컨트롤도 받아 기각했다.
+- **넘으면 Composite:** 리프가 아닌 Primitive 를 쓰거나(2단 합성) 2개 이상을 쓰면 예외 밖이다. `import type` 은 세지 않는다.
+- **강제:** `pnpm lint:layers`(`check-layer-deps`, `pnpm test` 포함) — 예외 안은 정보, 밖은 error.
 
 **신규 컴포넌트 추가 시 반드시 계층을 명시.** Composite 가 다른 Composite 를 import 하면 Shell 로 승격하거나 구조 분리. AI 전용이면 카탈로그 title 을 `<Layer>/Ai/<Name>` 으로 둔다.
 
@@ -210,8 +207,8 @@ style={{ background: tokens.color.surface.critical.value }}     // ❌ 라이트
 |---|---|---|
 | `text-lg+` (14px+) | `font-bold` | 페이지 타이틀·섹션 헤더 |
 | `text-md` (13px) | `font-bold` / 강조 시 medium | 카드 헤더·테이블 row 강조 |
-| `text-base` (12px) | `font-medium` | 라벨·메타·dropdown 항목 |
-| `text-sm` (11px) | `font-medium` 또는 regular | 보조 메타·캡션 |
+| `text-base` (12px) | `font-medium` | 항목 라벨·메타·dropdown 항목 |
+| `text-sm` (11px) | `font-medium` 또는 regular | 폼 필드 라벨(medium)·보조 메타·캡션 |
 | `text-xs` (10px) | regular | 마이크로 캡션·인디케이터 |
 
 본문 (running text) 만 regular. 같은 사이즈에서 weight 만 평탄화하면 위계 손실 — 사이즈 + weight 둘 다 조합.
@@ -226,7 +223,8 @@ style={{ background: tokens.color.surface.critical.value }}     // ❌ 라이트
 | `heading.section` | 섹션/카드 헤더 | `text-lg font-bold` |
 | `heading.subsection` | 강조 부제·테이블 row 강조 | `text-md font-bold` |
 | `body` | 본문 running text | `text-base` (regular) |
-| `body.label` | 폼/항목 라벨 | `text-base font-medium` |
+| `body.label` | 목록·dropdown 항목 라벨 | `text-base font-medium` |
+| `field.label` | 폼 라벨 — 입력칸·셀렉트·라디오/체크박스 **묶음** 모두 한 벌 (patterns §27) | `text-sm font-medium text-primary` (비활성 `text-tertiary`) |
 | `meta.primary` | 보조 정보·캡션 | `text-sm` |
 | `meta.secondary` | 마이크로 정보·인디케이터 | `text-xs` |
 | `numeric.metric` | 지표·카운트 강조 | `text-md font-numeric tabular-nums` |
@@ -322,15 +320,39 @@ AI 위젯 영역의 모든 컴포넌트는 다음 primitive 를 **반드시 comp
 
 | 정본 | 들어가야 하는 것 |
 |---|---|
-| **코드** | `src/` 컴포넌트 · docstring 4섹션(Purpose · When to use · When NOT to use · Composition rules) · `index.ts` export · 필요한 CSS · 토큰 |
+| **코드** | `src/` 컴포넌트 · docstring 4섹션(Purpose · When to use · When NOT to use · Composition rules) · 차트면 `## Metrics`(맞는 지표 ✅ 필수 · 금지 지표 ❌) · 개발자가 그대로 구현할 값이 있으면 `## Spec`(치수 · 토큰 · 상태 · 데이터 계약. `components.json` `spec` → MCP `get_component` · 스토리는 `stories/_spec.ts` `withSpec` 로 Docs 탭에) · `index.ts` export · 필요한 CSS · 토큰 |
 | **Storybook** | 계층 title 의 스토리(변형 · 상태마다) · autodocs 설명 |
-| **Figma 정본** (`2LktjSjKZDnCuWo5CQ6828`) | 컴포넌트 페이지 · 세트(코드 prop 과 같은 기준의 variant · property · slot) · 색 · 여백 · 반경 · 글자는 WDS 변수 · 스타일 연결(미연결 0) · 설명(출처 · 코드 경로 · Figma 구현 노트) · 📄 문서 프레임 · 라이브러리 게시 |
+| **Figma 정본** (`2LktjSjKZDnCuWo5CQ6828`) | 컴포넌트 페이지 · 세트(코드 prop 과 같은 기준의 variant · property · slot) · 색 · 여백 · 반경 · 글자는 WDS 변수 · 스타일 연결(미연결 0) · 설명(출처 · 코드 경로 · Figma 구현 노트) · 📄 문서 프레임 · 라이브러리 게시 · **차트면 설명과 📄 문서 프레임 둘 다에 «📈 사용 지표 · 🚫 사용 제한 지표»**(docstring `## Metrics` 와 같은 문장, 2026-10-23 사용자 지시) |
 | **카탈로그** (AI 가 읽고 실행하는 자리) | `docs/*-components.md` 또는 `primitives.md` 등재 · 정책이 걸리면 `patterns.md` · 필요하면 `SKILL.md` · `GUIDE.md` · `static/public/llms.txt` · 생성물(`components.json` · `policies.json` · `DESIGN.md`)은 `pnpm build:design` 으로 확인 |
 
 - 세 정본은 **같은 PR 흐름**에서 맞춘다. 코드만 먼저 병합하고 Figma 를 나중에 두지 않는다 — AI 는 카탈로그를 읽고 그대로 실행하므로, 한쪽에만 있는 컴포넌트는 다른 쪽에서 «없는 것» 으로 다시 만들어진다.
 - 한쪽 정본에 **없는 의존**(Figma 에 없는 하위 컴포넌트 · 텍스트 스타일 · 아이콘)을 만나면 근사하지 말고 그 의존부터 세 정본에 넣는다.
 - 의존을 넣다가 **다른 정책과 부딪히면**(예: 타이포 위계 §10) 의존을 그대로 옮기지 말고 어느 쪽을 고칠지 먼저 정한다.
 - Figma 게시는 플러그인 API 로 할 수 없다. 사람이 게시해야 하므로 PR 본문에 「게시 필요」 를 적는다.
+
+### 🔒 핵심 정책 — Figma ↔ Storybook 1:1 매핑과 링크를 항상 유지
+
+> **이 정책은 불변(immutable)입니다.** (2026-10-22 사용자 지시 — «항상 유지 · 핵심 정책»)
+
+정본 Figma 의 컴포넌트와 Storybook 문서 페이지는 **1:1** 로 짝지어지고, Figma 컴포넌트의 **문서 링크(`documentationLinks`)에 그 Storybook 주소**가 들어 있다. 한쪽에만 있는 컴포넌트 · 이름이 다른 짝 · 링크 없는 컴포넌트는 결함이다.
+
+- **원장:** `docs/figma-map.json` — 카탈로그 컴포넌트마다 Figma 노드 id(아직 없으면 `null`). Figma 에만 있는 하위 부품(셀 · 옵션 행 등)은 `figmaParts` 에 부모 문서와 함께.
+- **게이트:** `pnpm lint:figma-map`(`pnpm test` 포함) — 카탈로그 전부가 원장에 있는지 · 원장에만 있는 키가 없는지 · `null` 이 동결선(`scripts/figma-map-baseline.json`)보다 늘지 않는지. CI 에는 Figma 접근이 없으므로 노드 존재와 링크 값은 Figma 플러그인으로 대조한다.
+- **링크 주소:** `https://whatap-design-system-storybook.vercel.app` + `components.json` 의 `docsUrl`.
+- **언제 갱신하나:** 컴포넌트 신설 · 이름 변경 · 계층 이동(스토리 id 변경) 때 같은 흐름에서 원장과 Figma 링크를 고친다. 스토리 id 가 바뀌는 PR 은 **병합 · 배포 뒤** 링크를 다시 건다 — 배포 전 주소를 걸면 링크가 깨진다.
+- 아이콘 · 에셋 · `_` 접두 내부 컴포넌트 · deprecated 페이지 · 시안 주석 장치(FlowNote)는 짝 대상이 아니다.
+- **Figma 페이지 목록 = Storybook 좌측 트리**(2026-10-26 사용자 결정 — 학습 비용 0). 구분선 `——— TOKENS / PRIMITIVES / COMPOSITE / SHELL ———` 아래에 Storybook 과 같은 순서(메뉴명 알파벳순)로, 페이지 이름은 **Storybook 메뉴명**(`Card` — 컴포넌트 이름 `AiCard` 은 그대로). 하위 폴더(`Chart/`)는 `▾ Chart` 페이지 아래 들여쓴 페이지들. 컴포넌트 하나 = 페이지 하나 — 부품(행 · 항목)도 부모 페이지에 함께 두지 않는다. Storybook 밖 페이지(Code Connect · 예시 · 템플릿 · 아이콘 · deprecated · FlowNote)는 맨 끝 `——— 참고 · Storybook 밖 ———`. 새 컴포넌트 페이지는 만들 때 그 자리에 끼운다.
+
+### 🔒 정책 — «§» 절 참조: 저장소는 유지 · Figma 는 쓰지 않는다
+
+> (2026-10-26 사용자 결정 — «저장소(코드 · 문서)에는 유지 정책»)
+
+| 자리 | «§N» 참조 | 이유 |
+|---|---|---|
+| **저장소** — docstring · `docs/*.md` · `static/public/llms.txt` · 스토리 · 검사 출력 | **유지한다.** 지우는 정리를 하지 않는다 | 규칙 → `patterns.md` 근거 절로 가는 링크다. docstring 은 MCP(`get_component` · `search_components`)로 AI 에 그대로 배달되고, 번호는 «기존 번호 유지» 고정 식별자라 깨지지 않는다 |
+| **Figma** — 컴포넌트 설명 · 📄 문서 프레임 · 레이어 이름 | **쓰지 않는다**(2026-10-26 일괄 삭제, 0개) | 디자이너는 `patterns.md` 를 열지 않는다 — Figma 에서 «(§21)» 은 뜻 없는 기호다 |
+
+- docstring 문장을 Figma 설명으로 옮길 때는 «§» 를 빼고 **규칙 문장만** 옮긴다. 빼서 문장이 깨지면 절 이름을 낱말로 쓴다(«patterns §10 과 어긋난다» → «타이포 위계와 어긋난다»).
 
 ### 🔒 불변 정책 — 소비자(엔지니어)의 역방향 수정 금지
 

@@ -1,5 +1,5 @@
 /**
- * BarList — 값 · 이름 · 가로 막대 한 줄을 여러 줄. Primitives layer.
+ * BarList — 값 · 이름 · 가로 막대 한 줄을 여러 줄. Composite layer.
  *
  * ## Purpose
  * 서로 다른 대상(Method · SQL · HTTPS …)의 «지금 얼마나» 를 한눈에 비교한다. 숫자만 늘어놓으면 크기를 암산해야 하고,
@@ -15,7 +15,15 @@
  * - 사람별 사용량(막대 색 고정 brand-blue) → [[MemberUsageBar]].
  * - 한계 대비 소비량 하나 → [[UsageGauge]].
  *
+ * ## Metrics
+ * - ✅ 대상 종류별 지금 값 비교 — 액티브 스테이터스(Method · SQL · HTTPC · DBC · SOCKET) · CPU TOP-N 서버 · 에러 유형별 건수
+ * - ✅ 대상이 6개 이상이거나 이름이 길어 세로 막대에서 잘릴 때
+ * - ❌ 시간에 따른 변화 → [[MiniLineChart]] · [[MiniBarChart]]
+ * - ❌ 합 100% 구성의 몫만 말할 때 → [[MiniDonutChart]](BarList 는 크기 비교다)
+ *
  * ## Composition rules
+ * - 줄을 가리키면 그 줄만 남기고 나머지를 흐리며(0.32), [[ChartTooltip]] 이 전체 이름 · 값을 보인다(patterns §26 «강조»).
+ * - 줄은 [[BarListItem]] 이 그린다(목록 행은 컴포넌트로, patterns §26). 그래서 Composite 계층이다.
  * - 껍데기(카드 · 제목 · 메뉴)는 그리지 않는다. 대시보드 칸에서는 [[WidgetFrame]] 이 맡는다(patterns §15).
  * - `frame={false}` 면 바깥 여백(좌우 · 아래 8px)을 뺀다. WidgetFrame 안에서는 늘 `frame={false}`.
  * - 줄은 칸 높이를 똑같이 나눠 쓴다. 막대 두께는 줄 높이의 60%.
@@ -32,6 +40,9 @@
  * </WidgetFrame>
  * ```
  */
+import { useState } from "react";
+import BarListItem from "./BarListItem";
+import ChartTooltip from "./ChartTooltip";
 
 export type BarListRow = {
   label: string;
@@ -52,34 +63,35 @@ export type BarListProps = {
 };
 
 export default function BarList({ rows, frame = true }: BarListProps) {
+  /* 가리킨 줄 — 나머지를 흐리고 [[ChartTooltip]] 으로 전체 이름 · 값(이름은 줄에서 잘릴 수 있다) */
+  const [hover, setHover] = useState<number | null>(null);
+  const h = hover != null ? rows[hover] : null;
   return (
     <ul
       aria-label="목록"
-      className="flex flex-col h-full min-h-0 w-full"
+      className="relative flex flex-col h-full min-h-0 w-full"
       style={{ listStyle: "none", margin: 0, padding: frame ? "0 8px 8px" : 0 }}
     >
-      {rows.map((r) => (
-        <li key={r.label} className="flex items-center flex-1 min-h-0 w-full" style={{ gap: 8 }}>
-          <span className="flex items-baseline shrink-0" style={{ width: 88, gap: 6 }}>
-            <span
-              className="text-lg font-bold text-primary text-right shrink-0 leading-none"
-              style={{ width: 36, fontFamily: "var(--font-family-numeric)" }}
-            >
-              {r.value}
-            </span>
-            <span className="text-sm text-secondary leading-none whitespace-nowrap truncate" style={{ fontFamily: "var(--font-family-numeric)" }}>
-              {r.label}
-            </span>
-          </span>
-          <span className="flex-1 min-w-0 flex items-center h-full" style={{ padding: "4px 0" }}>
-            <span
-              aria-hidden
-              className="block rounded-2px"
-              style={{ width: `${Math.max(0, Math.min(1, r.ratio)) * 100}%`, height: "60%", minHeight: 4, background: r.color }}
-            />
-          </span>
-        </li>
+      {rows.map((r, i) => (
+        <BarListItem
+          key={r.label}
+          label={r.label}
+          value={r.value}
+          ratio={r.ratio}
+          color={r.color}
+          onHover={(on) => setHover(on ? i : null)}
+          dimmed={hover != null && hover !== i}
+        />
       ))}
+      {h && hover != null && (
+        <ChartTooltip
+          left={`calc(96px + (100% - 96px) * ${Math.max(0, Math.min(1, h.ratio))})`}
+          top={`${((hover + 0.5) / rows.length) * 100}%`}
+          flipX={h.ratio > 0.6}
+          flipY={(hover + 0.5) / rows.length > 0.5}
+          rows={[{ label: h.label, value: h.value.toLocaleString("en-US"), color: h.color }]}
+        />
+      )}
     </ul>
   );
 }

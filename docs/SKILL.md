@@ -100,6 +100,18 @@ DS는 **Tailwind를 쓰지 않습니다.** `style.css`(= `whatap-ds.css`)는 외
 | ✅ **Do** | `## Do` 가 있으면 그대로 · 없으면 `When to use` 불릿 |
 | ❌ **Don't** | `## Don't` 가 있으면 그대로 · 없으면 `When NOT to use` + `Composition rules` 의 **금지형 문장**(금지·말 것·안 된다…) |
 
+**템플릿 섹션은 8개뿐이다** — 필수 4 + 차트 필수 `## Metrics` + 선택 `## Spec`(치수 · 토큰 · 상태 · ARIA · 구성도 등 구현값) · `## Do` · `## Don't`. 생성기는 이 밖의 `## …` 를 읽지 않으므로 `## ARIA` · `## Why this exists` 같은 섹션은 **Storybook 에만 보이고 AI 에게는 배달되지 않는다**(2026-10-19 실측 15섹션 — Pagination 「페이지가 하나여도 컨트롤을 세운다」 정책이 그중 하나였다). 배경은 Purpose 에, 규칙은 Composition rules 에, 구현값은 Spec 에 둔다. `lint:docstrings` 가 템플릿 밖 섹션을 차단한다.
+
+**차트는 지표를 적는다 — `## Metrics`(2026-10-23 사용자 지시).** `Composite/Chart/*` 는 «어떤 지표에 쓰면 좋은가» 를 `- ✅ …` 로 **1개 이상 필수**, «쓰면 안 되는 지표» 를 `- ❌ …` 로 가능하면 함께 적는다. 지표 이름만이 아니라 **성질**(상한이 있는 비율 · 구간마다 독립인 양 · 누적 카운터 · 합 100% 구성 · 점 사건 · 이산 상태)로 가른다 — 같은 TPS 도 추이는 선, 구간 양은 막대다. 생성기가 `components.json` `metrics: { fit, avoid }` 로 싣고, ❌ 는 Don't 에도 «이 지표에 쓰지 말 것» 으로 들어간다. MCP `get_component` 는 맞는 지표를 Do 보다 먼저 보이고, `search_components` 는 맞는 지표를 «언제 쓰나» 와 같은 무게로 찾는다(«응답시간 차트»). `lint:docstrings` 가 ✅ 0 인 차트를 차단한다(동결 없음).
+
+```
+ * ## Metrics
+ * - ✅ 구간마다 독립인 양 — 구간 TPS · 처리 건수 · 에러 건수
+ * - ❌ 합이 의미 없는 값의 누적(p50 + p95) — 쌓은 높이가 거짓 합을 말한다
+```
+
+**깊이도 본다(래칫).** `## When to use` 불릿 2개 이상(= ✅ Do 두 줄 이상) · 설명 없는 prop 0. prop 설명은 타입 블록 또는 구조 분해 인자 위의 `/** … */` 어느 쪽이든 읽힌다. 도입 시점 미달(109종)은 `docstring-baseline.json` `depth` 에 수치로 동결돼 있고, 나빠지면 실패 · 나아지면 `--update` 로 선을 줄이게 한다.
+
 특별히 강조할 컴포넌트만 docstring 에 `## Do` / `## Don't` 를 명시해 승격한다(그 컴포넌트에서 실제로 사고가 났던 것들). 스토리 설명의 `✅ Do — … / ❌ Don't — …` 블록도 같은 표기이며 함께 수집된다.
 
 **기계 판독 출력:** [`components.json`](./components.json) — `scripts/build-components-json.mjs` 가 위 규칙대로 생성하고 `/design-system/components.json` 으로 서빙한다. MCP `get_component` 와 `get_do_dont` 가 이 파일을 읽는다. **직접 편집 금지** — docstring 을 고치고 재생성(`pnpm build:design`).
@@ -119,12 +131,14 @@ WhaTap Design System (@whatap/design-system)
 │   │                    Switch / Checkbox / Chip / FilterChip / DataTableRow /
 │   │                    SidebarMenuItem / MiniLineChart / WhaTap Symbol …
 │   └─ Ai/              ─ AiCard / AiCaption / AiSectionHeading / AiToneBadge /
-│                          AiBulletList / AiSymbol / AiUserBubble / ReasoningStep …
+│                          AiBulletList / AiSymbol / AiUserBubble / ReasoningStep /
+│                          AiProgressStep / AiStageMotion …
 ├─ Composite (29)      ─ 프리미티브 1단계 조합 (Composite 끼리 import 금지)
 │   │                    PageHeader / PageHeaderAiInline / Sidebar / FilterBar /
 │   │                    DataTable / FilterDropdown / OptionbarPage / ThemeToggle …
 │   └─ Ai/              ─ AiChatExchange / AiReasoning / AiDashboardProposal /
-│                          AiCostTable / InlinePrompt / PromptInput / SendButton …
+│                          AiCostTable / InlinePrompt / PromptInput / SendButton /
+│                          AiProgress / AiProgressCompact …
 └─ Shell (5)           ─ 최종 조립 진입점 (전 계층 import 가능)
                          DashboardLayout / Ai/Widget(WhaTapAiWidget) /
                          Page(A 기본 · B AI 전용 · D 상세)

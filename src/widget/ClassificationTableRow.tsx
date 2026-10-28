@@ -58,37 +58,37 @@ export default function ClassificationTableRow({
       style={{ gridTemplateColumns: "28px 1.4fr 0.7fr 0.6fr 0.6fr 1.3fr 0.8fr" }}
     >
       <span
-        className="text-base font-bold text-primary tracking-default leading-none"
+        className="text-base font-bold text-primary tracking-default"
         style={{ fontFamily: "var(--font-family-numeric)" }}
       >
         {r.gpu}
       </span>
       <span
-        className="text-sm text-secondary tracking-default leading-snug truncate"
+        className="text-sm text-secondary tracking-default truncate"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
       >
         {r.model}
       </span>
       <span
-        className="text-base font-bold text-primary tracking-default leading-none"
+        className="text-base font-bold text-primary tracking-default"
         style={{ fontFamily: "var(--font-family-numeric)" }}
       >
         {r.avg}
       </span>
       <span
-        className="text-base text-secondary tracking-default leading-none"
+        className="text-base text-secondary tracking-default"
         style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}
       >
         {r.max}
       </span>
       <span
-        className="text-base text-secondary tracking-default leading-none"
+        className="text-base text-secondary tracking-default"
         style={{ fontFamily: "var(--font-family-numeric)", fontWeight: "var(--font-weight-regular)" }}
       >
         {r.min}
       </span>
       <span
-        className="text-sm text-secondary tracking-default leading-snug truncate"
+        className="text-sm text-secondary tracking-default truncate"
         style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
         title={r.pod}
       >
@@ -103,7 +103,7 @@ export default function ClassificationTableRow({
           style={{ background: badgeDot }}
         />
         <span
-          className="text-xs tracking-default leading-none"
+          className="text-xs tracking-default"
           style={{
             fontFamily: "var(--font-family-korean)",
             fontWeight: "var(--font-weight-medium)",

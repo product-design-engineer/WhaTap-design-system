@@ -1,6 +1,6 @@
 {
   "name": "@whatap/design-system",
-  "version": "0.1.11",
+  "version": "0.1.15",
   "private": false,
   "type": "module",
   "description": "WhaTap AI Assistant design system — chrome + widget cards + tokens. Consumed as a Vercel-hosted tarball; the `source` export condition serves the DS's own Storybook/Vitest from src.",
@@ -42,7 +42,7 @@
     "build:components-json": "node scripts/build-components-json.mjs",
     "lint:docstrings": "node scripts/check-docstrings.mjs",
     "lint:design": "node scripts/design-lint.js",
-    "test": "node scripts/check-catalog-folders.mjs && node scripts/check-ai-boundary.mjs && node scripts/check-docstrings.mjs && node scripts/check-wikilinks.mjs && node scripts/check-token-docs.mjs && node scripts/check-policy-docs.mjs && node scripts/check-catalog-coverage.mjs && node scripts/design-lint.js && node scripts/check-no-raw-colors.mjs && node scripts/check-layer-deps.mjs && node scripts/check-token-sync.mjs && node scripts/check-chart-palette.mjs && node scripts/check-no-tailwind.mjs && node scripts/check-css-structure.mjs && node scripts/check-guardrails-meta.mjs && pnpm lint:cycles && vitest run",
+    "test": "node scripts/check-catalog-folders.mjs && node scripts/check-ai-boundary.mjs && node scripts/check-docstrings.mjs && node scripts/check-wikilinks.mjs && node scripts/check-token-docs.mjs && node scripts/check-policy-docs.mjs && node scripts/check-catalog-coverage.mjs && node scripts/check-figma-map.mjs && node scripts/design-lint.js && node scripts/check-no-raw-colors.mjs && node scripts/check-layer-deps.mjs && node scripts/check-token-sync.mjs && node scripts/check-chart-palette.mjs && node scripts/check-no-tailwind.mjs && node scripts/check-css-structure.mjs && node scripts/check-dead-leading.mjs && node scripts/check-guardrails-meta.mjs && pnpm lint:cycles && vitest run",
     "test:visual": "node scripts/visual-snap.mjs",
     "test:visual:update": "node scripts/visual-snap.mjs --update",
     "lint:tokens": "node scripts/check-no-raw-colors.mjs",
@@ -54,6 +54,7 @@
     "lint:chart-palette": "node scripts/check-chart-palette.mjs",
     "lint:no-tailwind": "node scripts/check-no-tailwind.mjs",
     "lint:css-structure": "node scripts/check-css-structure.mjs",
+    "lint:dead-leading": "node scripts/check-dead-leading.mjs",
     "lint:guardrails": "node scripts/check-guardrails-meta.mjs",
     "prepare": "git config core.hooksPath .githooks || true",
     "lint:cycles": "eslint src",
@@ -63,7 +64,8 @@
     "lint:coverage": "node scripts/check-catalog-coverage.mjs",
     "lint:ai-boundary": "node scripts/check-ai-boundary.mjs",
     "build:policies-json": "node scripts/build-policies-json.mjs",
-    "lint:policy-docs": "node scripts/check-policy-docs.mjs"
+    "lint:policy-docs": "node scripts/check-policy-docs.mjs",
+    "lint:figma-map": "node scripts/check-figma-map.mjs"
   },
   "peerDependencies": {
     "react": "^19.0.0",
@@ -85,6 +87,7 @@
     "eslint": "^9.39.5",
     "eslint-plugin-import-x": "^4.17.1",
     "eslint-plugin-react-hooks": "^5.2.0",
+    "i18n-iso-countries": "^7.14.0",
     "pixelmatch": "^7.2.0",
     "playwright": "^1.60.0",
     "pngjs": "^7.0.0",
@@ -92,10 +95,12 @@
     "react-dom": "^19.0.0",
     "remark-gfm": "^4.0.1",
     "storybook": "^10.4.1",
+    "topojson-client": "3.1.0",
     "tsup": "^8.5.1",
     "typescript": "^5.6.0",
     "typescript-eslint": "^8.67.0",
     "vite": "^6.0.0",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.7",
+    "world-atlas": "2.0.2"
   }
 }

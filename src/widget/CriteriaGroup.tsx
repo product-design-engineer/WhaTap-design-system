@@ -56,13 +56,13 @@ export default function CriteriaGroup({
       />
       <div className="flex flex-col gap-2px min-w-0">
         <span
-          className="text-base font-bold text-primary tracking-default leading-normal"
+          className="text-base font-bold text-primary tracking-default"
           style={{ fontFamily: "var(--font-family-korean)" }}
         >
           {title}
         </span>
         <span
-          className="text-base text-secondary tracking-default leading-normal"
+          className="text-base text-secondary tracking-default"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
         >
           {detail}

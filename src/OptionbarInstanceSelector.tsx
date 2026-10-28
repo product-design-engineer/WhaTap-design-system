@@ -86,7 +86,7 @@ export default function OptionbarInstanceSelector({
     <div className={`flex flex-col gap-6px${fullWidth ? " w-full" : ""}`}>
       {title && (
         <div
-          className="text-base font-bold text-primary tracking-default leading-none"
+          className="text-base font-bold text-primary tracking-default"
           style={{ fontFamily: "var(--font-family-korean)" }}
         >
           {title}

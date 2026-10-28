@@ -49,20 +49,20 @@ export default function CostTableRow({
     >
       <div className="flex flex-col min-w-0">
         <span
-          className="text-sm text-tertiary tracking-default leading-none"
+          className="text-sm text-tertiary tracking-default"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
         >
           {row.label}
         </span>
         <span
-          className="text-base text-primary tracking-default leading-normal mt-3px"
+          className="text-base text-primary tracking-default mt-3px"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
         >
           {row.detail}
         </span>
       </div>
       <span
-        className="text-lg text-primary font-bold tracking-default leading-none"
+        className="text-lg text-primary font-bold tracking-default"
         style={{
           fontFamily: "var(--font-family-numeric)",
           color: row.highlight ? "var(--color-brand-blue)" : "var(--color-text-primary)",

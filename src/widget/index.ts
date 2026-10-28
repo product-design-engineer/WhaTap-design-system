@@ -50,6 +50,16 @@ export type {
   AiPromptSuggestion,
 } from "./InlinePrompt";
 
+// 진행 표시 — 10초 넘는 AI 연산(대기 표현 V2)
+export { default as AiProgress } from "./AiProgress";
+export type { AiProgressProps, AiProgressItem, AiProgressPhase } from "./AiProgress";
+export { default as AiProgressStep } from "./AiProgressStep";
+export type { AiProgressStepProps, AiProgressStepStatus, AiProgressCount } from "./AiProgressStep";
+export { default as AiProgressCompact } from "./AiProgressCompact";
+export type { AiProgressCompactProps, AiProgressCompactItem, AiProgressCompactPhase } from "./AiProgressCompact";
+export { default as AiStageMotion } from "./AiStageMotion";
+export type { AiStageMotionProps, AiStage } from "./AiStageMotion";
+
 // Message cards
 export { default as AlertRulePreview } from "./AlertRulePreview";
 export { default as ChatExchange } from "./ChatExchange";
@@ -69,7 +79,8 @@ export { default as AnswerSkeleton } from "./AnswerSkeleton";
 export { default as UnavailableNotice, AI_UNAVAILABLE_PRESETS } from "./UnavailableNotice";
 export type { AiUnavailableNoticeProps, AiUnavailableReason } from "./UnavailableNotice";
 export { default as MessageActions } from "./MessageActions";
-export { default as MigPlan } from "./MigPlan";
+export { default as PlanProposal } from "./PlanProposal";
+export type { PlanProposalItem, PlanProposalStep } from "./PlanProposal";
 export { default as Reasoning } from "./Reasoning";
 export { default as ReceiverChannels } from "./ReceiverChannels";
 export type { ChannelKey, ChannelState } from "./ReceiverChannels";
@@ -82,6 +93,8 @@ export {
   MESH_CLUSTER_K,
 } from "./TargetMesh";
 export type { TargetMeshItem, MeshDot, MeshTone } from "./TargetMesh";
+export { default as TargetMeshCluster } from "./TargetMeshCluster";
+export type { TargetMeshClusterProps } from "./TargetMeshCluster";
 export { default as ThreadDivider } from "./ThreadDivider";
 export type { ThreadDividerProps } from "./ThreadDivider";
 export { default as ToolCallStep } from "./ToolCallStep";
@@ -92,6 +105,7 @@ export { default as UserBubble } from "./UserBubble";
 // Deprecated Ai-prefixed aliases — 소비자 코드 호환. 새 코드는 위 이름을 쓰세요.
 // ═══════════════════════════════════════════════════════════════════════════
 export { AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList } from "./_primitives";
+export type { AiCardTone } from "./_primitives";
 /** @deprecated Use AssistantButton */ export { default as AiAssistantButton } from "./AssistantButton";
 /** @deprecated Use SendButton */ export { default as AiSendButton } from "./SendButton";
 /** @deprecated Use PromptInput */ export { default as AiPromptInput } from "./PromptInput";
@@ -112,7 +126,8 @@ export { AiCard, AiCaption, AiSectionHeading, AiToneBadge, AiBulletList } from "
 /** @deprecated Use AnswerSkeleton */ export { default as AiAnswerSkeleton } from "./AnswerSkeleton";
 /** @deprecated Use UnavailableNotice */ export { default as AiUnavailableNotice } from "./UnavailableNotice";
 /** @deprecated Use MessageActions */ export { default as AiMessageActions } from "./MessageActions";
-/** @deprecated Use MigPlan */ export { default as AiMigPlan } from "./MigPlan";
+/** @deprecated Use PlanProposal */ export { default as MigPlan } from "./PlanProposal";
+/** @deprecated Use PlanProposal */ export { default as AiMigPlan } from "./PlanProposal";
 /** @deprecated Use Reasoning */ export { default as AiReasoning } from "./Reasoning";
 /** @deprecated Use ReceiverChannels */ export { default as AiReceiverChannels } from "./ReceiverChannels";
 /** @deprecated Use StepsTimeline */ export { default as AiStepsTimeline } from "./StepsTimeline";

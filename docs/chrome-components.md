@@ -17,7 +17,8 @@
 | 레이아웃 | DashboardLayout · Sidebar · PageHeader · PageHeaderAiInline · SubHeaderBar |
 | 옵션바 (시간/인스턴스/프리셋) | OptionbarPage · OptionbarInstanceSelector · LiveTimerCompact · TimeRangeSelector · PresetSelect |
 | 데이터 표시 | WidgetFrame · CardHead · DataTable · FilterBar · EventWeekTimeMatrix |
-| 대시보드 차트 (`frame={false}` 로 WidgetFrame 안에) | MiniLineChart · MiniMultiLineChart · MiniBarChart · ApdexChart · ForecastLineChart · BarList · MiniDonutChart · KpiCard · HexGrid |
+| 대시보드 차트 (`frame={false}` 로 WidgetFrame 안에) | MiniLineChart · MiniMultiLineChart · MiniBarChart · ApdexChart · ForecastLineChart · BarList · MiniDonutChart · KpiCard · HexGrid · Heatmap · GpuStatusBar · StatCard · MetricBarCell |
+| 토폴로지 | TopologyCanvas · TopologyToolbar · TopologyNode · TopologyEdge · TopologyPort · TopologyCollapseToggle · TopologyMinimap |
 | 액션·진입 | Button · AiSymbol |
 | 알림·상태 | Toast · ConfirmDialog · InfoTip · Stage · DashboardBuildingProgress |
 | 위젯 컨텍스트 | WhaTapAiContext (Provider) |
@@ -238,7 +239,7 @@ export type InstanceStatus = "ok" | "warn" | "error" | "idle";
 시간 범위 입력기. dual datetime + live 토글 + 이전/다음 + 달력.
 
 ```ts
-type DateParts = { year: string; month: string; day: string; hour: string; minute: string };
+type DateParts = { year: string; month: string; day: string; hour: string; minute: string; second?: string };
 ```
 
 | Prop | Type | Default |
@@ -251,8 +252,97 @@ type DateParts = { year: string; month: string; day: string; hour: string; minut
 | `onPrev` | `() => void` | — |
 | `onNext` | `() => void` | — |
 | `onPickDate` | `() => void` | — |
+| `rangeMode` | `"rolling" \| "fixed"` | — _(시안)_ |
+| `onRangeModeChange` | `(mode) => void` | — _(시안)_ |
+| `rangeControl` | `"segmented" \| "pin"` | `"segmented"` — `pin` 은 버튼 하나(글자 = 지금 상태) _(정본)_ |
+| `live` | `boolean` | — _(넘기면 ▶ 시작 / ■ 중지 토글, 정본)_ |
+| `onPickStart` · `onPickEnd` | `() => void` | — _(시각마다 달력 버튼, 정본)_ |
+| `onStartChange` · `onEndChange` | `(next: DateParts) => void` | — _(직접 입력을 알림 → 고정, 정본)_ |
+| `durations` | `number[]` (분) | — _(넘기면 초록 알약이 구간 길이 드롭다운, 정본)_ |
+| `duration` | `number \| null` (분) | — _(목록 밖이면 «직접 지정»)_ |
+| `onDurationChange` | `(minutes) => void` | — |
 
 `OptionbarPage`가 `LiveTimerCompact`를 쓰고 있으니, 별도 시간 입력 UI가 필요한 페이지에서만 `TimeRangeSelector`를 직접 씁니다.
+
+### ✅ 동작 정본 (2026-10-28, 기획 «[타임 셀렉터] 동작 제안»)
+
+아래 «시안» 을 바탕으로 기획이 정한 동작입니다. 새 조각은 모두 선택 prop 이라, 넘기지 않으면 예전 모양 그대로입니다.
+
+**용어.** **구간** = 연·월·일·시·분·초로 정한 두 시각 사이의 범위 · **시작 시각 / 종료 시각** · **구간 길이**(5분 · 10분 …) · **갱신**(검색할 때마다 «지금» 기준으로 다시 계산) / **고정**(정한 구간 그대로) · **라이브**(누르지 않아도 계속 최신). «기간 · 마지막 시각 · Preset 시간 · Pin On/Off» 는 쓰지 않습니다.
+
+| 규칙 | 화면 | prop |
+|---|---|---|
+| 시각은 초까지 | `HH:MM:SS` | `start.second` · `end.second` |
+| 달력은 시작 · 종료 시각마다 하나 | 각 시각 뒤 📅 | `onPickStart` · `onPickEnd` |
+| 달력 패널은 시작 > 종료 · 최대 조회 기간 초과 날짜를 미리 흐리게 막는다. 직접 입력으로 넘기면 검색 버튼 옆에 이유 한 줄 + 검색 막기 | (호출측) | — |
+| 구간 길이는 언제나 **종료 시각에서 거꾸로** | 갱신 · 라이브 «최근 10분» / 고정 «10분» / 목록 밖 «직접 지정» | `durations` · `duration` · `onDurationChange` |
+| 길이를 고르는 것만으로는 갱신 / 고정이 바뀌지 않는다. 라이브 중이면 라이브가 이어지고 길이만 바뀐다 | — | — |
+| 갱신 / 고정은 버튼 하나 — 글자가 지금 상태를 말한다. 누르면 바뀐다 | 📌 고정 / ↻ 갱신 | `rangeControl="pin"` + `onRangeModeChange` |
+| 직접 입력 · 달력 · ‹ › → 고정, 라이브 중이면 라이브 중지 | 📌 눌림 | `onStartChange` · `onEndChange` · `onPickStart` · `onPickEnd` · `onPrev` · `onNext` 에서 호출측이 |
+| 라이브는 ▶ 시작 / ■ 중지 토글. 중지하면 멈춘 순간의 구간으로 고정 | ▶ / ■ | `live` + `onLive` |
+
+**들어올 때.** 링크에 담긴 구간 → 고정해 둔 구간(사람마다 · 메뉴마다) → «최근 5분»(메뉴마다 다를 수 있음) 순서. 새로고침 · 뒤로 가기는 보던 화면 그대로. 고정해 둔 구간으로 열면 셀렉터 아래 `Notice` 한 줄 — «어제 13:50~14:00 으로 고정된 구간을 보여 드리고 있어요 · [최근 5분 보기]». 보관 기간이 지난 저장 구간은 쓰지 않고 «최근 5분». 링크 복사는 항상 정확한 시각으로.
+
+```tsx
+<TimeRangeSelector
+  start={{ ...from, second: "12" }} end={{ ...to, second: "12" }}
+  live={live} onLive={toggleLive}
+  durations={[5, 10, 30, 60, 180, 360, 720, 1440]} duration={minutes} onDurationChange={pickLength}
+  rangeMode={mode} rangeControl="pin" onRangeModeChange={setMode}
+  onPickStart={openStartCalendar} onPickEnd={openEndCalendar}
+  onStartChange={pinIt} onEndChange={pinIt} onPrev={prevAndPin} onNext={nextAndPin}
+/>
+```
+
+Storybook: `Composite/TimeRangeSelector` → «정본 · 상태 한눈에» · «정본 · 동선 (직접 눌러 보세요)».
+
+### 🧪 시안 — «최근 N분» 의 갱신 · 고정 (2026-10-26, 정책 확정 전)
+
+> 회의용 시안입니다. 기본 동작 · 공유 링크 · 저장값 처리는 아직 정해지지 않았습니다. `rangeMode` 를 넘기지 않으면 기존 화면과 똑같습니다.
+
+**쉽게 말하면.** «최근 5분» 을 골라 검색하고 몇 분 뒤 다시 검색 버튼을 누를 때, 두 가지 동작이 있을 수 있습니다.
+
+| 동작 | 10:00 에 검색 | 10:03 에 다시 검색 | 이럴 때 |
+|---|---|---|---|
+| **갱신** (`rolling`) | 09:55 ~ 10:00 | **09:58 ~ 10:03** — 끝점이 지금으로 옮겨짐 | 방금 들어온 데이터를 계속 확인 |
+| **고정** (`fixed`) | 09:55 ~ 10:00 | **09:55 ~ 10:00** — 그대로 | 특정 시점을 붙잡고 분석 · 동료와 같은 화면 공유 |
+
+두 동작은 시간 표시만으로는 구별되지 않습니다. 그래서:
+
+- **셀렉터 오른쪽 끝에 지금의 동작을 글자로** 보여 줍니다 — «↻ 갱신» / «📌 고정». 마우스를 올리면 뜻이 설명됩니다.
+- 사용자가 직접 바꿀 수 있게 하려면 `onRangeModeChange` 를 넘깁니다 → `[갱신 | 고정]` 두 칸 토글. *(전환 허용 여부는 [검토 필요])*
+- **캘린더 · 직접 입력 · ‹ › 이동으로 선택한 구간은 항상 고정**입니다. 이때는 토글 없이 «고정» 글자만 보입니다.
+- **실제로 조회된 구간은 결과 위에 `TimeChip` 으로** 적습니다 — «조회 구간 09:58:12 ~ 10:03:12» · «조회 시각 10:03:12». 초까지 적어야 1분 안에 두 번 검색해도 다시 조회됐는지 보입니다.
+- 갱신 모드는 **저절로 다시 조회하지 않습니다.** 검색을 누를 때만 다시 계산합니다. 저절로 흐르는 것은 LIVE 입니다.
+- 셀렉터 옆 **검색 버튼과 «바로 조회» 프리셋 버튼은 `Button size="lg"`(32px)** 로 셀렉터 상자 높이(32px)와 맞춥니다. 같은 줄에서 높이가 다르면 바닥선이 어긋나 보입니다.
+
+```tsx
+// 갱신 — 사용자가 고정으로 바꿀 수 있음
+<TimeRangeSelector durationLabel="최근 5분" rangeMode={mode} onRangeModeChange={setMode} />
+
+// 캘린더로 선택한 구간 — 항상 고정, 토글 없음
+<TimeRangeSelector start={from} end={to} durationLabel="1시간" rangeMode="fixed" />
+
+// 결과 위 — 실제로 조회된 구간과 조회 시각
+<TimeChip label="조회 구간" value="09:58:12 ~ 10:03:12" />
+<TimeChip label="조회 시각" value="10:03:12" />
+```
+
+**함께 정할 것 (시안의 제안).**
+
+| 항목 | 제안 |
+|---|---|
+| 초 단위 계산 | 끝점을 초까지 잡는다. 지금은 분 단위로 잘라 1분 안의 재검색이 같은 구간이 된다. 마지막 1분의 덜 찬 집계 처리는 엔지니어링이 정한다 |
+| 공유 링크 | 동작을 링크에 함께 싣는다 — 갱신 `?preset=5m&mode=rolling&from=…&to=…` · 고정 `?from=…&to=…&mode=fixed`. 받은 사람은 보낸 사람이 본 구간을 먼저 보고, 원하면 «최근으로 갱신». 시각은 타임존 포함 |
+| 저장된 대시보드 · 북마크 | 일괄 변환하지 않는다. 동작 값이 없는 저장값은 예전 동작 그대로 해석하고, 새로 저장할 때부터 동작을 함께 기록한다 |
+| 두 단계 → 한 단계 | «5분 · 10분 · 30분 · 1시간» 프리셋은 누르는 즉시 조회. 캘린더 · 직접 입력은 지금처럼 확인을 거친다 |
+| 과도한 재요청 | 조회 중엔 검색 버튼을 막고(`Button loading`), 새 조회가 나가면 이전 조회는 취소. 긴 구간(예: 로그 7일 초과)은 `Notice tone="warning"` 으로 알리고 «그래도 조회» 를 누를 때만 보낸다 |
+| 기본 동작이 바뀌면 | 처음 한 번 `Notice tone="primary"` 로 안내하고 «고정으로 쓰기» 길을 준다 |
+| 기본 동작 · 전환 허용 · 온프레미스 설정 | ❓ 미정. 전환을 허용하면 온프레미스용 설정의 필요가 줄어든다 — 전환 여부부터 정하면 따라서 정해진다 |
+
+시안 스토리는 동작 정본으로 대체되어 Storybook 에서 지웠습니다(2026-10-28). 눌러 볼 화면은 «정본 · 동선» 입니다.
+
+**되돌리기.** 기존 prop 은 바뀌지 않았고 선택 prop 두 개만 더했습니다. 채택하지 않으면 시안 커밋을 되돌리면 끝납니다.
 
 ---
 
@@ -380,7 +470,7 @@ export type DataTableProps<T> = {
 
 ## EventWeekTimeMatrix
 
-요일(7) × 시간(24) 알림 수신 매트릭스. 셀 ON = Tone "low" 배경(#e8f4ff), OFF = 회색 격자.
+요일(7) × 시간(24) 알림 수신 매트릭스. **Composite** — 칸과 범례 견본은 [[EventTimeCell]](Primitives)이 그린다: 켜짐 = 칠 `--color-brand-blue` · 테두리 `--color-brand-blue-deep`, 꺼짐 = 칠 `--color-surface-100` · 테두리 `--color-border-strong`. 칸은 `aria-pressed` + «월 09시 수신» 이름. Figma 정본 EventTimeCell `59:4`.
 
 | Prop | Type | Default | 설명 |
 |---|---|---|---|
@@ -443,7 +533,7 @@ export type DataTableProps<T> = {
 | `menu` | `ActionMenuAction[]` | — | 헤더 메뉴 둘째 칸 ⋮ 더보기 안의 줄(설정 · 복사 · 상세로 이동). 주면 선다 |
 | `onAsk` | `() => void` | — | AI 진입점. ⋮ 첫 줄 「AI 에게 묻기」 + 헤더 맨 앞 호버 지름길(같은 동작). AI 위젯을 여는 화면에서만 |
 | `draggable` | `boolean` | `false` | 헤더를 끌기 손잡이로(`.wds-widget-frame-handle`, 메뉴 `.wds-widget-frame-actions` 제외). 배치하는 보드에서만 |
-| `legend` | `{ label, color }[]` | — | 본문 오른쪽 위 한 줄 범례. 모든 차트 칸에(계열 하나여도). 이름표가 본문 안에 있는 BarList · 도넛 · Apdex · 숫자 칸만 제외. 속도 구분 `SPEED_LEGEND` |
+| `legend` | `{ label, color, value? }[]` | — | 본문 오른쪽 위 한 줄 범례. 모든 차트 칸에(계열 하나여도). 이름표가 본문 안에 있는 BarList · 도넛 · Apdex · 숫자 칸만 제외. 속도 구분 `SPEED_LEGEND`. `value` 는 지금 값(이름 뒤에 굵게) · 계열 넷 이하일 때만(§25) |
 | `bleed` | `boolean` | `false` | 본문 안쪽 여백 없앰. 표 · 히트맵 · 아크처럼 본문이 가장자리를 가질 때만 |
 | `state` | `"ready" \| "no-data" \| "collect-gap"` | `"ready"` | `ready` 가 아니면 본문 대신 [[EmptyState]] |
 | `stateTitle` / `stateDescription` | `ReactNode` | 상태별 기본 문장 / — | 빈 상태 두 줄 |
@@ -454,6 +544,8 @@ export type DataTableProps<T> = {
 - **헤더 오른쪽 아이콘 메뉴는 ⛶ 전체 화면 + ⋮ 더보기 둘로 고정**(순서 고정). 나머지 행동은 전부 더보기 안으로. AI 위젯을 여는 화면이면 `onAsk` 로 맨 앞에 호버 지름길(AI)이 더해져 [AI][⛶][⋮] — ⋮ 첫 줄 「AI 에게 묻기」도 함께 선다
 - **헤더는 제목 · 메뉴만.** 값 · 건수 · 단위 · 시간 범위를 헤더에 두지 않는다. 값은 본문 첫 줄 `summary`, 시간은 옵션바
 - **범례는 본문 오른쪽 위 한 줄.** 헤더 오른쪽은 메뉴 자리다. 계열이 셋을 넘거나 글이 길면 본문 안 차트 옆 열로
+- **지금 값은 계열 수로 자리를 고른다**(§25). 하나는 `summary`, 둘 ~ 넷은 `legend[].value`, 강조 계열이 여럿이면 MiniMultiLineChart 선 끝 배지(`series[].endLabel`). 한 칸에 한 방식
+- **Figma 정본**: MiniMultiLineChart 세트 342:69 에 `endBadges` 축(4 variant · 배지 변형 507:30 등) · 변수 `wds/widget-end-gutter`(VariableID:507:29, 44 · `WDS · Size`). WidgetFrame 범례 값 예시 507:235(같은 페이지). 게시는 사람이 한다
 - 세 칸 사이에 구분선을 긋지 않는다. 같은 표면 안이라 여백이 경계다
 - 껍데기를 가진 차트(MiniLineChart · MiniMultiLineChart · MiniDonutChart · KpiCard · HexGrid)는 `frame={false}` 로 끄고 넣는다. 켠 채 넣으면 카드가 두 겹이 된다
 - AI 진입점은 껍데기에 두지 않는다(§15)
@@ -461,7 +553,7 @@ export type DataTableProps<T> = {
 ```tsx
 <div className="grid grid-cols-4 gap-12px" style={{ height: 232 }}>
   <WidgetFrame title="액티브 트랜잭션" legend={SPEED_LEGEND} onFullscreen={open} menu={WIDGET_MENU}>
-    <ActiveTransactionArc frame={false} total={total} maxTx={maxTx} agent={agent} />
+    <ActiveTransactionArc frame={false} agents={agents} maxTx={maxTx} agent={agent} />
   </WidgetFrame>
   <WidgetFrame title="서버 CPU" state="collect-gap" stateDescription="서버 12대 · 32분째 끊김" />
 </div>
@@ -485,9 +577,76 @@ export type DataTableProps<T> = {
 
 ---
 
+## 차트 공통 요소 — ChartGrid · ChartValueAxis · ChartPeakMarker (Primitives)
+
+값축이 있는 차트가 함께 쓰는 플롯 부품(patterns §26). 차트는 이 둘을 **조합**하고 격자 · 눈금을 다시 그리지 않는다 — 그래서 MiniLineChart · MiniMultiLineChart · MiniBarChart · ForecastLineChart 는 Composite 계층이다. `@whatap/design-system/chart` 에서 가져온다.
+
+| 부품 | 그리는 것 | 놓는 순서 |
+|---|---|---|
+| [[ChartGrid]] | 눈금(최대 · 절반 · 0)마다 가로 점선 · `--color-border-soft` | 마크 **아래** |
+| [[ChartValueAxis]] | X 바닥선 · Y 세로선(`--color-border-divider`) + 눈금 글자(`text-chart` · 숫자 서체 · tertiary, 단위 접미사) | 마크 **위** |
+| [[ChartPeakMarker]] | 최고점 값 말풍선(카드 바탕 · `text-xs` 굵게) + ▼(계열 색). `label` · `color` · `left` · `top` — ▼ 끝이 (`left`, `top`) 에 닿는다(§5) | 덧그림 겹, 맨 위 |
+| [[ChartCategoryAxis]] | 범주 막대 아래 이름 — 칸 등분 · 가운데 · 말줄임(title 에 전체). `labels` · `padBottom`(18) · `right` · `gap`(4) | 덧그림 |
+| [[ChartStackedColumn]] | 세로 막대 하나 — 구간을 아래에서 위로(`segments[0]` 바닥), 몫은 계열 색 + 안 글자(흰색), 나머지는 `surface-200` + 바깥 글자. `max` 는 값축과 같게 | 막대 칸 |
+| [[ChartBar]] | 칸 바닥에서 자라는 막대 하나 — `ratio`(0~1, 최소 2px) · `null` = 모름(칸 전체 `surface-100`) · `delay` 진입 애니메이션 | 가로 flex 줄 |
+
+| Prop (둘 공통) | Type | Default |
+|---|---|---|
+| `max` | `number` — 이미 보기 좋은 값으로 올린 최대. 0 이면 바닥 눈금 하나 | — |
+| `ticks` | `number[]` — 눈금 값(데이터에서 오는 눈금: 단계 값 · 판정 경계). 없으면 최대 · 절반 · 0 | — |
+| `vertical` (ChartGrid) | `number` — 세로 점선 칸 수. 분포 차트에만(ScatterHeatmap 22) | — |
+| `padTop` | `number` (px) | `4` |
+| `padBottom` | `number` (px) — X축 글자 자리 | `14` |
+| `right` | `number \| string` — 선 끝 배지 칸이 있으면 `var(--wds-widget-end-gutter)` | `8` |
+| `unit` (ChartValueAxis) | `string` — 축 제목 대신 단위 | `""` |
+
+```tsx
+<div className="relative" style={{ height: 120 }}>
+  <ChartGrid max={100} />
+  {/* 선 · 막대 */}
+  <ChartValueAxis max={100} unit="%" />
+</div>
+```
+
+- 범례 항목은 [[ChartLegendItem]](Primitives) — 견본 + 이름 + (선택) 값, 사이 4px. 세로 목록은 `fill`(이름 말줄임 · 값 오른쪽 끝). 견본만 필요하면 [[ChartSwatch]] — 둘은 같은 견본을 그린다(내부 `_swatch`). 견본은 마크 모양을 따른다: 선 = `shape="line"`(8×2), 면 · 막대 · 조각 · 칸 = 기본 사각(8×8), 점 · 버블 = `shape="dot"`(8px 원). [[WidgetFrame]] 범례 항목은 `{ label, color, shape, value }` — 선 차트 칸이면 `shape: "line"`.
+  Figma 정본: ChartSwatch 페이지 `549:2` · 세트 `549:5` / ChartLegendItem 페이지 `567:47` · 세트 `567:64`(`shape` × `fill` · label · value · showValue, 견본 칠은 인스턴스에서 마크 색 변수로).
+- 고리형 막대는 [[ChartRadialBars]](Primitives) — 칸 하나 = 대상 하나, 구간은 안쪽부터 쌓인 줄무늬(`levels` 단계, 0 보다 큰 구간은 최소 한 줄). 바탕 `--color-chart-radial-track` · 구분선 `--color-chart-radial-divider`. 가운데는 `children`, 회전 장식은 `sweep`(동작 줄이기에서 멈춤). [[ActiveTransactionArc]] 는 `agents`(에이전트별 `{ normal, slow, verySlow }`)로 이것을 그린다 — 종전 정적 이미지는 삭제.
+  Figma 정본: ChartRadialBars 페이지 `568:6848` · 세트 `568:6918`(`sweep` · center · showCenter) · 변수 `color/chart/radial-track` `568:2` · `radial-divider` `568:3`. ActiveTransactionArc 세트 `347:267` 은 이 세트 · MetricStat · ChartLegendItem 인스턴스로 다시 짰다.
+- 가리킨 마크 강조(공통 규칙, patterns §26 «강조») — 가리킨 마크는 불투명 + 카드색 2px 고리, 나머지 0.32, 색은 그대로. 차트 안 범례는 [[ChartLegendItem]] `onHover` · `dimmed` 로 그 계열만 남긴다. 전환은 `.wds-chart-mark`(120ms · 동작 줄이기면 없음).
+- 시간축 차트의 hover 는 [[ChartCrosshair]](Primitives) — 플롯 위 포인터 x → 가장 가까운 시점 · 세로 안내선(`--color-border-strong`) · 계열마다 점(카드색 고리) · 값 툴팁. Props: `count` · `max` · `min` · `series({ label, color, values, shape?, noDot?, unit?, showMissing? })`(`showMissing` = `null` 시점 툴팁 줄에 «데이터 없음») · `labels`(시점 이름) · `unit` · `footer(i)` · `band`(막대) · `positions`(고르지 않은 x) · `onIndex`(막대 흐림) · `index`(제어형 — 칸 여럿이 한 시점) · `noTooltip` · 플롯 여백(`right` · `padTop` · `padBottom`, ChartGrid 와 같게). MiniLine · MiniMultiLine · MiniBar · Forecast · Apdex 가 쓰고, 각 차트는 시점 이름을 `pointLabels`(Forecast 는 `formatX`)로 받는다.
+  Figma 정본: 페이지 ChartCrosshair `591:2` · 컴포넌트 `591:3`(가리켰을 때 모습 견본).
+- 경과 시간 차트(Flame · Waterfall)의 요소 — [[ChartSpanBar]](Primitives, 구간 막대: `start` · `end` 플롯 폭 비율 · `color` · `textColor` · `label` · `dimmed` · `active` · `top` · `height`. 이름은 차트가 막대 폭 40px 이상일 때만 준다) · [[ChartBrush]](Primitives, 시간축 줄을 끌어 구간 확대: `onSelect(from, to)` · 플롯 상자 `left` · `right` · `top` · `bottom` · `strip` · `minRatio`. 띠 `--color-brand-blue-wash`). [[ChartTimeAxis]] 는 `left` 로 Y축 칸이 없는 플롯에 맞춘다.
+  Figma 정본: ChartSpanBar 페이지 `599:2` · 세트 `599:9`(`state` default · dimmed · active · label · showLabel) / ChartBrush 페이지 `599:16` · 컴포넌트 `599:17`(끄는 중 견본).
+- 마크 hover 값 상자는 [[ChartTooltip]](Primitives) — 카드 표면 · 1px 테두리 · 반경 6 · 그림자 · 제목 + 값 줄(견본 · 이름 · 값 굵게) + 보조 줄. `left` · `top` 은 마크 자리(차트가 계산), `flipX` · `flipY` 로 반대쪽에 편다. 자유 내용은 `children`. 차트 마크에 브라우저 `title` 을 쓰지 않는다. ScatterChart · ZoneScatterChart · BoxPlotChart · StatusTimeline(`formatAt`) · EqualizerChart · StackedAreaChart(`pointLabels`, 세로 안내선) · HexGrid 가 쓴다.
+  Figma 정본: 페이지 ChartTooltip `589:10` · 세트 `589:67`(`rows` × `footer` · title).
+- 차트 옆 수치(라벨 위 큰 숫자 · 단위 · 보조 줄)는 [[MetricStat]](Primitives, 옛 이름 SpeedStat) — [[ActiveTransactionSpeedWidget]] RPS · TPS, [[ActiveTransactionArc]] Max TX · Agent.
+- 높이가 정해진 `position: relative` 플롯 상자 안에 둔다. 두 부품에 **같은 `max` · 여백**을 줘야 글자와 점선이 같은 높이에 선다.
+- 축 제목은 그리지 않는다(§26 결정). 오른쪽 두 번째 Y축은 금지(§19).
+- X축 시간 · 범주 글자는 차트마다 놓는 규칙이 달라 차트가 그린다.
+  → (2026-10-22) **시간 글자는 [[ChartTimeAxis]](Primitives)** 가 놓는다 — `labels` · `positions`(0 ~ 1, 없으면 같은 간격) · `right`. 범주 글자는 여전히 [[MiniBarChart]] `categories`.
+  Figma 정본: 페이지 ChartTimeAxis `551:2` · 세트 `551:13`(`right` 2 variant, TEXT `first` · `second` · `third` · `last`). 예시 프레임은 요소 다섯으로 조립한 선 차트.
+- **Figma 정본**: 페이지 ChartGrid `545:2` · 세트 `545:16`, 페이지 ChartValueAxis `545:3` · 세트 `546:22`(`ticks` × `right` 4 variant, ChartValueAxis 는 TEXT `max` · `mid` · `zero`). 페이지 ChartPeakMarker `547:2` · 컴포넌트 `548:2`(TEXT `label`, ▼ 칠은 `color/chart/series-1` — 다른 계열이면 인스턴스에서 바꾼다). 두 부품을 겹친 예시 프레임이 페이지마다 있다. 기존 Figma 차트 세트(MiniLineChart 등)는 아직 자기 격자 · 축을 그린다(`border/default`) — 인스턴스로 바꾸는 것은 후속.
+
+---
+
+## ActiveTransactionSpeedWidget
+
+실시간 트래픽 흐름 위젯 — 등급별 점이 왼쪽에서 오른쪽으로 흐르고 RPS · TPS · 등급별 개수 · 속도 막대가 함께 움직인다. **Composite** — 좌우 RPS · TPS 는 [[MetricStat]](Primitives: 라벨 위 큰 숫자, 폭 72 · compact 56 고정 · 옛 이름 SpeedStat). 흐르는 점 · 속도 막대는 이 위젯의 마크라 위젯이 그린다. 등급별 개수 색은 판정 등급 토큰 `--color-chart-speed-*`(patterns §17) — Arc · Hitmap 의 `SPEED_LEGEND` 와 같다. 실데이터 없는 데모 · 캡처는 `paused`.
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `string` | 「액티브 트랜잭션 스피드」 |
+| `baseRps` · `baseTps` | `number` | 113 · 116 |
+| `baseTotals` | `{ normal, warning, critical, sum }` | — |
+| `paused` | `boolean` | `false` |
+| `compact` | `boolean` | `false` |
+| `onOpenDetail` | `() => void` | — |
+
+Figma 정본: ActiveTransactionSpeedWidget `374:5` · MetricStat `564:15`.
+
 ## MiniLineChart
 
-96px 소형 라인 차트. 모니터링 카드용. **SVG plot + HTML overlay**가 같은 좌표계로 정렬되어 peak 라벨이 line max 픽셀과 1:1 매칭됩니다 ([patterns.md](./patterns.md#5-chart-peak-alignment)).
+96px 소형 라인 차트. 모니터링 카드용. **SVG plot + HTML overlay**가 같은 좌표계로 정렬되어 peak 라벨이 line max 픽셀과 1:1 매칭됩니다 ([patterns.md](./patterns.md#5-chart-peak-alignment)). Composite — 값축 · 격자는 [[ChartGrid]] · [[ChartValueAxis]].
 
 | Prop | Type | Default |
 |---|---|---|
@@ -511,7 +670,7 @@ export type DataTableProps<T> = {
 
 아래 차트들은 단독으로 세우면 **스스로 껍데기나 바깥 여백**을 그린다. 대시보드 격자에서는 늘 `frame={false}` 로 끄고 [[WidgetFrame]] 에 담는다. 그러면 제목 · 범위 · 메뉴(⛶ + ⋮) · 범례 · 본문 여백이 모든 칸에서 같은 자리 · 같은 모양이 된다(patterns §15).
 
-**본문 간격 토큰** — `--wds-widget-body-px`(12) · `--wds-widget-body-pb`(12) · `--wds-widget-row-gap`(4) · `--wds-widget-axis-gutter`(28). WidgetFrame 이 앞의 셋을, 그래프가 축 칸을 쓴다. **축 글자**는 모든 그래프가 `text-chart`(9px) · 숫자 서체 · tertiary.
+**본문 간격 토큰** — `--wds-widget-body-px`(12) · `--wds-widget-body-pb`(12) · `--wds-widget-row-gap`(4) · `--wds-widget-axis-gutter`(28) · `--wds-widget-end-gutter`(44). WidgetFrame 이 앞의 셋을, 그래프가 축 칸을 쓴다. 배지 칸은 MiniMultiLineChart 에 선 끝 값 배지(`endLabel`)가 있을 때만 플롯 오른쪽에 비운다(§25). **축 글자**는 모든 그래프가 `text-chart`(9px) · 숫자 서체 · tertiary.
 
 | 차트 | `frame={false}` 에서 빠지는 것 | WidgetFrame 쪽에서 채우는 것 |
 |---|---|---|
@@ -522,6 +681,10 @@ export type DataTableProps<T> = {
 | HexGrid | 카드 · 「GPU Map」 제목 줄 · 범례 | `title` · `legend={HEX_GRID_LEGEND}`(칸 수를 붙이면 `hexGridLegend(items)`) · 메뉴 |
 | ActiveTransactionArc | 바깥 여백(좌우 · 아래 8px) · 왼쪽 아래 Elapsed 범례 | `title` · `meta` · `legend={SPEED_LEGEND}` · 메뉴 |
 | ScatterHeatmap | 바깥 좌우 여백(8px) | `title` · `meta` · `legend={SPEED_LEGEND}` · 메뉴 |
+| EqualizerChart | 바깥 좌우 여백(8px) | `title` · `legend`(구간 누적이면 `SPEED_LEGEND` 등) · 메뉴 |
+| StackedAreaChart | 바깥 좌우 여백(8px) · 계열 범례 줄 | `title` · `summary` · `legend={stackedAreaLegend(series)}` · 메뉴 |
+| StatusTimeline | 바깥 좌우 여백(8px) · 심각도 범례 줄 | `title` · `summary` · `legend={statusTimelineLegend()}` · 메뉴 |
+| ScatterChart | 바깥 좌우 여백(8px) · 계열 범례 줄 | `title` · `summary` · `legend={scatterLegend(series)}`(원 견본) · 메뉴 |
 | MiniBarChart | 바깥 좌우 여백(8px) | `title` · `meta` · `legend`(막대 색 그대로) · 메뉴 |
 | ApdexChart | 바깥 좌우 여백(8px) | `title`(「Apdex」) · `meta` · 메뉴 (구간 이름이 띠 안에 있어 범례 없음) |
 | ForecastLineChart | 바깥 좌우 여백(8px) | `title` · `summary`(추세 구간 · 지평) · `legend`(선 색 그대로) · 메뉴 |
@@ -545,6 +708,352 @@ export type DataTableProps<T> = {
 | `peak` | `boolean` | `false` |
 | `valueLabels` | `boolean` | `false` |
 | `frame` | `boolean` | `true` |
+
+## ScatterChart
+
+두 수치(X · Y)의 관계를 점으로 — 상관 · 군집 · 이상점. `size` 를 주면 면적이 그 값인 버블. **Composite** — 격자 [[ChartGrid]](가로 눈금 + 세로 절반) · Y [[ChartValueAxis]] · X 글자 [[ChartTimeAxis]](`positions` 0 · 0.5 · 1) 를 조합하고 점만 그린다. X 가 시간이고 응답 판정 색이면 [[ScatterHeatmap]] — 근사하지 않는다(§21).
+
+| Prop | Type | Default |
+|---|---|---|
+| `series` | 1~3개 `{ label, points: { x, y, size?, label? }[], slot?: 1 \| 2 \| 3 }` | — |
+| `xMax` · `yMax` | `number` — 없으면 데이터 최대를 1 · 2 · 4 · 5 · 10 × 10ⁿ 로 올림 | — |
+| `xUnit` · `yUnit` | `string` — 축 제목 대신 단위 | `""` |
+| `frame` | `boolean` | `true` |
+
+- 색 = `--color-chart-series-{slot}`(기본 계열 순서). 필터로 계열이 빠져도 색을 지키려면 `slot` 고정(§17). 계열 4개 이상은 타입이 막는다 — facet(§18).
+- 점 원 6px · 불투명도 0.6 — 겹친 곳이 짙어져 밀도가 읽힌다(§21 결정). 버블 반지름 3~12px(면적 비례), 큰 것을 먼저 그린다.
+- 단독(`frame`)이면 계열 둘 이상일 때 플롯 위 오른쪽에 원 견본 범례. 대시보드 칸은 `frame={false}` + WidgetFrame `legend={scatterLegend(series)}`.
+
+Figma 정본: 페이지 ScatterChart `572:6908` · 세트 `572:7311`(`frame` × `marks` dot · bubble). ChartSwatch `shape=dot` `572:39` · ChartLegendItem `shape=dot` `572:6745` · `572:6749` 추가.
+
+## ZoneScatterChart
+
+판정 구역(행 × 열 칸) 위에 대상 점 — 점이 어느 구역에 몇 개인지가 판정. **Composite** — [[ChartValueAxis]](`ticks` = 0 · Y 경계 · 최대) · [[ChartTimeAxis]](`positions` = 0 · X 경계 · 최대) 를 조합하고 구역 · 점 · 임계 띠를 그린다.
+
+| Prop | Type | Default |
+|---|---|---|
+| `points` | `{ x, y, label? }[]` | — |
+| `xBreaks` · `yBreaks` | 구역 경계(오름차순) | — |
+| `zones` | `string[][]` — `[행(위부터)][열]` 이름 | — |
+| `columnLabels` | 열 머리(개수 자동) | — |
+| `critical` | `{ from, label }` — Y 임계 띠 | — |
+| `xMax` · `yMax` · `xUnit` · `yUnit` | 축 | `100` · `100` · `""` |
+| `color` · `frame` | 점 색 · 여백 | series-1 · `true` |
+
+- 축은 선형 — 0~1% 같은 구역은 실제대로 좁다. 좁은 열의 이름 · 개수는 플롯 아래 한 줄로 옮긴다.
+- 구역 = 무채색 면, 점 = 계열색 — 같은 색 계열로 칠하지 않는다(§17). 액션은 [[WidgetFrame]] `menu`.
+
+Figma 정본: 페이지 ZoneScatterChart `587:2` · 세트 `587:117`(`frame`).
+
+## BoxPlotChart
+
+대상(범주)마다 값 분포를 **백분위**로 — 선 p50 · 상자 p25–p75 · 수염 p5–p95 · 점 p99. 경보 · SLO 와 같은 숫자를 말한다. **Composite** — [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCategoryAxis]] 를 조합하고 상자 · 수염 · 점 · p50 숫자를 그린다.
+
+| Prop | Type | Default |
+|---|---|---|
+| `boxes` | `{ label, values?: number[], stats?: { p5, p25, p50, p75, p95, p99 } }[]` | — |
+| `max` · `unit` | Y 최대 · 단위 | p95 최대 × 1.1 올림 · `""` |
+| `color` | 계열 토큰 하나 | series-1 |
+| `frame` | `boolean` — 범례 줄 | `true` |
+
+- 원값을 주면 `boxPlotStats(values)` 가 선형 보간 백분위를 계산한다. APM 서버 백분위는 `stats` 로.
+- Y 는 p95 기준 — 축을 넘는 p99 는 위 끝 ▲ + 값. p50 숫자는 가운데 선 오른쪽.
+- 범례 문장 `BOX_PLOT_LEGEND` 를 늘 보인다(WidgetFrame 안이면 `summary`). 표본 20개 미만이면 쓰지 않는다.
+- 사분위 · Tukey 수염 · 개별 이상치는 쓰지 않는다(2026-10-23 결정 — 운영자의 언어가 아니고 축이 늘어 상자가 눌렸다).
+
+Figma 정본: 페이지 BoxPlotChart `586:2` · 세트 `586:93`(`frame`).
+
+## ArcGauge · ChartArc
+
+범위 안 지금 값 하나 — 호 길이 + 가운데 큰 숫자. **ArcGauge(Composite)** = **ChartArc(Primitives — 240° 호 트랙 · 채움 · 바깥 임계 띠)** + 가운데 값 · 양 끝 글자. [[RangeGauge]] 와 같은 계약의 둥근 판 — 정사각 칸은 호, 좁고 긴 칸은 막대.
+
+| Prop (ArcGauge) | Type | Default |
+|---|---|---|
+| `value` · `max` | `number` | — |
+| `min` | `number` | `0` |
+| `unit` · `label` | 단위 · 지표 이름(가운데 · 접근성) | — |
+| `minLabel` · `maxLabel` | 양 끝 이름 | `Min` · `Max` |
+| `thresholds` | `{ from, tone: "warning" \| "critical" }[]` | `[]` |
+| `size` | 호 크기(px) | `140` |
+
+- 호 여러 개로 대상을 비교하지 않는다 — 각도는 길이보다 비교가 어렵다([[EqualizerChart]] · [[BarList]]).
+- `role="meter"` · 값 · 범위를 읽는다.
+
+Figma 정본: ChartArc 페이지 `585:2` · 세트 `585:153`(`level` × `bands`) / ArcGauge 페이지 `585:183` · 세트 `585:226`(`tone` · unit · label · min · max).
+
+## Treemap
+
+계층 구성의 크기를 칸 면적으로 — 묶음(1단계) 안에 항목 칸. **Composite** — [[ChartLegendItem]](묶음 범례) · [[ChartTooltip]] 을 조합하고 칸만 그린다(배치는 내부 squarified `_treemapLayout`).
+
+| Prop | Type | Default |
+|---|---|---|
+| `data` | `{ label, value?, children?: { label, value }[] }[]` | — |
+| `unit` | `string` | `""` |
+| `legend` | 묶음 범례 | `true` |
+
+- 묶음 색 = 계열 슬롯(묶음 순서) · 묶음 없으면 한 색 · 8개 넘으면 「기타」(§22). 상태색 아님.
+- 라벨은 칸 ≥ 56 × 28 일 때만(흰 글자 — 컬러 위 전경 예외), 작은 칸은 툴팁.
+- 양수 · 더할 수 있는 값만. 비율 · 평균 · 증감은 쓰지 않는다.
+
+Figma 정본: 페이지 Treemap `596:2` · 컴포넌트 `596:3`.
+
+## GeoMap
+
+국가별 값을 세계 지도 위에 — 단계 구분(국가 칸 색 4단계) 또는 버블(국가 자리 원 넓이). 한국 · 일본은 눌러서 시·도로 들어간다. **Composite** — [[ChartLegendItem]](단계 범례) · [[ChartTooltip]] · [[TopologyZoomControl]](`limits` 100%~600%) 을 조합하고 국가 도형 · 격자 · 버블만 그린다. 도형은 Natural Earth 1:110m(퍼블릭 도메인) · Equal Earth 투영 · 남극 제외(내부 `_geoWorld`, 생성 `scripts/build-geo-world.mjs`). 시·도는 Natural Earth 1:10m Admin 1 v5.1.2 에서 한국 17 · 일본 47(내부 `_geoRegions`, 생성 `scripts/build-geo-regions.mjs` — 원천 40MB 는 고정 주소 · SHA-256 으로 받는다).
+
+| Prop | Type | Default |
+|---|---|---|
+| `data` | `{ code: ISO alpha-2 · 시·도는 ISO 3166-2(`KR-11`), value, name? }[]` | — |
+| `mode` | `"fill"`(비율 · 평균) · `"bubble"`(개수 · 합계) | `"fill"` |
+| `label` · `unit` | 값 이름 · 단위 | `"값"` · `""` |
+| `breaks` | 단계 경계 3개 | 0 ~ 최대 4등분 |
+| `emptyLabel` | 빈 상태 글 | `"데이터 없음"` |
+| `zoom` | 줌 컨트롤 | `true` |
+| `drill` · `defaultDrill` | 들어가 있는 나라(제어 · 비제어), `null` = 세계 | `null` |
+| `onDrillChange` | 나라를 누르거나 «세계» 로 돌아올 때 — 여기서 시·도 값을 불러 `data` 에 더한다 | — |
+
+- 값 없는 국가(바탕 `--color-surface-200`) ≠ 낮은 값(`--color-chart-seq-1`). 데이터가 하나도 없으면 지도 위 «데이터 없음».
+- 개수 · 합계는 버블 — 단계 구분은 넓은 나라를 크게 보이게 한다. 음수(증감)는 쓰지 않는다.
+- 110m 도형에 없는 작은 나라(싱가포르 · 홍콩 …)의 값은 지도 아래 «지도 밖» 줄로.
+- 휠 줌 없음(대시보드 스크롤 보호) — 버튼으로 확대, 끌어서 이동.
+- **시·도는 줌이 아니라 눌러서 들어간다**(2026-10-26) — 줌 배율로 단위를 바꾸면 여러 나라가 걸린 화면에서 나눌 나라가 정해지지 않고 범례 단계가 몰래 바뀐다. 툴팁 «눌러서 시·도 보기» · 왼쪽 위 경로 «세계 › 대한민국 값» 으로 돌아온다. 단계 · 버블 크기는 그 나라 시·도 값으로 다시 잡는다.
+- 국가 값을 시·도 합으로 만들지 않는다(비율 · 평균은 더할 수 없다). 받기 전 · 값이 없으면 시·도 지도도 «데이터 없음».
+
+Figma 정본: 페이지 GeoMap `598:2` · 세트 `598:8161`(`mode` fill · bubble · empty × `drill` none · KR — 들어간 모습 fill `619:8444` · bubble `622:625` · empty(받기 전) `622:684`) · 내부 도형 `_GeoWorld` `598:7530` · `_GeoRegionKR` `619:8442` · `_GeoRegionJP` `619:8443` / 줌 컨트롤 페이지 TopologyZoomControl `597:30` · 컴포넌트 `597:31`.
+
+## FlameChart
+
+호출 · 요청 구간을 시간 위에 깊이별 계단으로 — 색 = 상태. **Composite** — [[ChartSpanBar]] · [[ChartBrush]] · [[ChartTimeAxis]] · [[ChartLegendItem]] · [[ChartTooltip]] · [[Button]](전체 보기) 조합.
+
+| Prop | Type | Default |
+|---|---|---|
+| `spans` | `{ label, start, end, depth, status?: normal · slow · error · none, lane?, detail? }[]` | — |
+| `range` | 전체 시간 범위(ms) | 0 ~ 가장 늦은 끝 |
+| `statusLabels` | 상태 이름 바꾸기 | 정상 · 느림 · 에러 · 정보 없음 |
+
+- 색 = 상태(BlockGrid · HexGrid 와 같은 `_statusTone`). 계열 색을 섞지 않는다.
+- 시간축 줄을 끌어 확대 · «전체 보기». 폭 40px 미만 막대는 이름 없이(툴팁).
+- 에러 시각은 Flame 안 세로선이 아니라 위에 [[StatusTimeline]] 을 같은 시간 범위로.
+
+Figma 정본: 페이지 FlameChart `600:2` · 컴포넌트 `600:3`.
+
+## WaterfallChart
+
+리소스 · 요청 하나에 한 줄, 단계를 이어 붙인 가로 막대 — 색 = 단계. **Composite** — FlameChart 와 같은 요소 조합 + 이름 칸 · 표시선.
+
+| Prop | Type | Default |
+|---|---|---|
+| `phases` | 단계 이름(색 순서) | — |
+| `rows` | `{ label, meta?, start, segments: number[] }[]` | — |
+| `markers` | `{ at, label }[]`(DOMContentLoaded · load) | `[]` |
+| `range` · `labelWidth` | 시간 범위 · 이름 칸 | 자동 · `160` |
+
+- 색 = 단계(계열 슬롯 8개까지, 넘으면 «기타»). 리소스 타입은 색이 아니라 이름 아래 글자.
+- 여러 로드의 평균 단계는 [[SegmentBar]].
+
+Figma 정본: 페이지 WaterfallChart `601:2` · 컴포넌트 `601:3`.
+
+## CompoundEye
+
+서버 여럿을 원 칸 격자로 — 칸마다 자원 사용률 셋(부채꼴) + 네트워크 둘(반 링). 라이브 서버 › 컴파운드아이를 보존했다(2026-10-22). **Composite** — [[CompoundEyeCell]](Primitives, 링은 [[ChartArc]] 두 개) · [[ChartLegendItem]] · [[ChartTooltip]] 조합.
+
+| Prop | Type | Default |
+|---|---|---|
+| `servers` | `{ name, cpu, memory, disk, rx, tx, status? }[]`(사용률 % · bps) | — |
+| `networkScale` | 링 끝 값(bps) | `100e6` |
+| `cellSize` | 칸 지름(px) | `96` |
+
+- 부채꼴 자리 = 지표(CPU 위 · 메모리 오른쪽 아래 · 디스크 왼쪽 아래) · 반지름 = 사용률 · 안쪽 기준 원 50% · 100%.
+- 링 = 수신(오른쪽) · 송신(왼쪽), 색 하나(`--color-chart-neutral`) — 스케일은 범례 «링 끝 = …». 상태는 칸 바탕만.
+- `CompoundEyeCell` props: `name` · `cpu` · `memory` · `disk` · `rxRatio` · `txRatio` · `status` · `size` · `dimmed` · `focus`. `formatBps` 를 함께 내보낸다. [[ChartArc]] 는 `fromEnd` 로 좌우 반 링을 12시에서 함께 채운다.
+
+Figma 정본: CompoundEyeCell 페이지 `605:2` · 세트 `605:42`(`status` · name) / CompoundEye 페이지 `606:2` · 컴포넌트 `606:3`.
+
+## MetricGrid
+
+같은 대상의 관련 집계 값 여럿을 세로 구분선으로 나눈 숫자 칸 줄. **Composite** — 칸마다 [[MetricStat]].
+
+| Prop | Type | Default |
+|---|---|---|
+| `items` | `{ label, value, unit?, caption? }[]` | — |
+| `maxColumns` | 한 줄 최대 칸 | `4` |
+| `compact` | 작은 숫자 | `false` |
+
+- 한 줄 4칸까지 · 넘으면 줄바꿈(가로 스크롤 금지) · 칸 이름 한 줄 말줄임(MetricStat `truncateLabel` — MetricStat 기본은 줄바꿈 그대로, 2026-10-23).
+- 칸은 세 겹까지(이름 · 값 + 단위 · 보조). 하위 분해는 SegmentBar · BarList, 범위는 RangeGauge 를 줄 아래에(화면 조합).
+- 값 색은 primary 하나 — 칸 하나만 색 강조하지 않는다.
+
+Figma 정본: 페이지 MetricGrid `595:2` · 세트 `595:61`(`columns`).
+
+## PairedTimeChart
+
+단위가 다른 두 지표를 시간축을 공유하는 위 · 아래 두 칸으로 — 이중 Y축 대신(§19). **Composite** — 칸마다 [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCrosshair]](`index` 공유), 막대 칸은 [[ChartBar]], 아래 칸만 [[ChartTimeAxis]].
+
+| Prop | Type | Default |
+|---|---|---|
+| `top` · `bottom` | `{ label, kind: "bar" \| "line", values: (number \| null)[], unit?, color?, max? }` | — |
+| `count` | 전체 시점 수(시간 범위) — 값보다 크면 뒤쪽 빈 미래 | 값 길이 최대 |
+| `xLabels` · `pointLabels` | 시간 글자 · 툴팁 제목 | — |
+| `frame` | `boolean` | `true` |
+
+- 축 제목 대신 칸 이름(왼쪽 위), 단위는 눈금 접미사. 오른쪽 Y축 없음.
+- 미래 = 빈칸 · 수집 없음(`null`) = 막대 «모름» 칸 · 선 끊김. 그 시점을 가리키면 툴팁 그 지표 줄에 «데이터 없음»(미래 빈칸은 줄 없음).
+- 한 칸을 가리키면 두 칸이 같은 시점 — 위 칸 툴팁에 두 지표(계열별 단위).
+
+Figma 정본: 페이지 PairedTimeChart `594:2` · 컴포넌트 `594:3`.
+
+## SegmentBar
+
+전체 하나를 구간으로 나눈 단일 가로 누적 바 + 바 아래 한 줄 범례. **Composite** — [[ChartLegendItem]] · [[ChartTooltip]] 을 조합하고 구간만 그린다.
+
+| Prop | Type | Default |
+|---|---|---|
+| `segments` | `{ label, value, color }[]` | — |
+| `total` · `restLabel` | 전체 · 남는 몫 이름 | 구간 합 · 「나머지」 |
+| `unit` | `string` | `""` |
+| `legendValue` | `"value" \| "percent" \| "both"` | `"value"` |
+| `height` · `legend` | 바 높이 · 범례 그리기 | `12` · `true` |
+
+- 남는 몫은 `--color-surface-200` 이름 구간 — 범례에 없는 빈 구간을 두지 않는다.
+- 범례 한 줄 · 줄바꿈 · 사각 견본. 0 인 구간은 바에서 빠지고 범례에 남는다.
+- hover: 구간 · 범례 → 그 구간만 + 툴팁(값 · 전체의 %).
+
+Figma 정본: 페이지 SegmentBar `592:2` · 세트 `592:49`(`legendValue`).
+
+## TrendTile
+
+지표 하나의 지금 값 · 비교 시점 대비 변화 · 최근 추이. **Composite** — [[MetricStat]](지표명 · 값 · 단위) + [[Sparkline]](추이, 데이터 최소 ~ 최대) + 변화 줄.
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` · `value` · `unit` | 지표명 · 값 · 단위 | — |
+| `delta` · `deltaUnit` | 변화(부호) · 단위(`%` `%p` `ms`) | — |
+| `better` | `"up" \| "down" \| "none"` — 좋은 방향 | `"up"` |
+| `compareLabel` | 비교 기준 글자 | 「직전 대비」 |
+| `values` · `color` | 최근 추이 · 스파크라인 색 | — · series-1 |
+| `frame` | `boolean` — 카드 껍데기 | `true` |
+
+- 변화 색 = 개선 `--color-status-success` · 악화 `--color-status-error` · 없음/판정 없음 tertiary. ▲▼ · 부호 · 비교 기준을 함께(§23).
+- 좋은 방향이 없는 지표는 `better="none"`. 누적 카운터 원값은 늘 «개선» 으로 보이니 쓰지 않는다.
+- [[StatCard]] `trend` 는 방향만 받아 색이 지표 방향을 무시한다 — 변화를 판정해야 하면 이것.
+
+Figma 정본: 페이지 TrendTile `584:2` · 세트 `584:99`(`verdict` × `frame` · change · compare).
+
+## BlockGrid · BlockCell
+
+대상 하나 = 이름 있는 칸 하나를 격자로 깐 상태 맵 — 이름으로 대상을 찾는다. **BlockGrid(Composite)** = **BlockCell(Primitives — 상태 칠 · 이름 말줄임 · 높이 32)** 격자 + 단독 범례 [[ChartLegendItem]]. 이름 없는 분포는 [[HexGrid]] — 상태 어휘 · 색 · 범례는 둘이 같다(내부 `_statusTone`).
+
+| Prop (BlockGrid) | Type | Default |
+|---|---|---|
+| `items` | `{ id, label, tone: "active" \| "idle" \| "warning" \| "critical" }[]` | — |
+| `columns` | `number` | `4` |
+| `toneLabels` | 상태 이름 바꾸기(`{ active: "정상" }`) | — |
+| `onSelect` | `(item) => void` — 칸이 버튼이 된다 | — |
+| `frame` | `boolean` — 범례 줄 | `true` |
+
+- 범례는 개수를 붙이고 0 개인 상태도 남긴다(`blockGridLegend(items)` → WidgetFrame `legend`, `hexGridLegend` 와 같은 줄).
+- 칸 순서 = `items` 순서. 심각도순 · 이름순 정렬은 호출부.
+- 3D 블록은 그리지 않는다. 고를 수 있는 칸은 `.wds-block-cell:focus-visible` 바깥 링.
+
+Figma 정본: BlockCell 페이지 `582:2` · 세트 `582:11`(`tone` · label) / BlockGrid 페이지 `582:41` · 세트 `582:111`(`frame`).
+
+## EqualizerChart
+
+대상마다 세로 막대를 칸으로 끊어 쌓는다 — 칸 하나 = 축 최대 ÷ `levels`. **Composite** — [[ChartGrid]] · [[ChartValueAxis]] · [[ChartCategoryAxis]] 를 조합하고 칸만 그린다. 호 형태는 [[ChartRadialBars]](같은 칸 계산, 내부 `_stripes`).
+
+| Prop | Type | Default |
+|---|---|---|
+| `bars` | `{ label, segments?: { value, color, label? }[], value? }[]` | — |
+| `max` | `number` — 사용률이면 100 | 합 최대 올림 |
+| `levels` | `number` — 칸 수 | `10` |
+| `threshold` | `number` — `value` 막대 임계 2색 | — |
+| `unit` | `string` | `""` |
+| `valueLabels` | `boolean` — 최대만 굵게 | `true` |
+| `frame` | `boolean` | `true` |
+
+- 색은 구간 누적(`segments`, 속도 등급이면 `--color-chart-speed-*` + WidgetFrame `legend={SPEED_LEGEND}`) 또는 임계 2색(`--color-brand-blue` / `--color-status-warning`) 중 하나.
+- 임계 슬라이더는 화면의 컨트롤 — 차트는 `threshold` 만 받는다.
+- 0 보다 큰 구간은 최소 1칸이라, 작은 구간이 여럿이면 큰 구간 칸이 줄어든다. 정밀 비교는 [[BarList]].
+
+Figma 정본: 페이지 EqualizerChart `579:2` · 세트 `579:431`(`mode` × `frame`).
+
+## StackedAreaChart
+
+계열을 아래에서 위로 쌓은 면 — 위 경계 = 합계의 추이, 층 두께 = 각 계열의 몫. **Composite** — [[ChartGrid]] · [[ChartValueAxis]] · [[ChartTimeAxis]] · [[ChartPeakMarker]](합계 최고점) 를 조합하고 면만 그린다.
+
+| Prop | Type | Default |
+|---|---|---|
+| `series` | `{ label, values, slot?: 1..8 }[]` — `series[0]` 이 바닥, 8개까지 | — |
+| `xLabels` | `string[]` | — |
+| `unit` | `string` | `""` |
+| `max` | `number` — Y 고정 | 합계 최대 올림 |
+| `peak` | `boolean` — 합계 최고점 ▼ | `false` |
+| `frame` | `boolean` | `true` |
+
+- 면은 불투명 + 층 사이 카드색 1px. 누적면은 겹치지 않으므로 투명도가 뜻이 없고, 투명하면 범례 견본과 색이 달라 보인다.
+- 크고 안정적인 계열을 바닥에 — 바닥이 평평해야 위층이 읽힌다. 계열끼리 견주는 자리는 [[MiniMultiLineChart]].
+- 범례는 `stackedAreaLegend(series)`(위층부터) 를 WidgetFrame `legend` 로. 별도 범례 패널로 빼지 않는다.
+
+Figma 정본: 페이지 StackedAreaChart `578:2` · 세트 `578:80`(`frame`).
+
+## SparklineCell · Sparkline
+
+표 셀 하나에 행 색 인덱스 · 지금 값 · 최근 추이. **SparklineCell(Composite)** 은 **Sparkline(Primitives — 축 없는 선 1.5px · 끝점 4px · 바닥선, 높이 20)** 을 조합하고 인덱스 바 · 값 글자 · 자리 맞춤만 그린다. 비율 막대만이면 [[MetricBarCell]].
+
+| Prop (SparklineCell) | Type | Default |
+|---|---|---|
+| `value` | `number \| string \| null` — null 이면 `-` + 빈 자리 | — |
+| `unit` | `string` | — |
+| `values` | `number[]` — 최근 추이(시간순) | `[]` |
+| `max` | `number` — 같은 열 행끼리 공유(비율이면 100) | 이 줄 최대 |
+| `color` | 계열 색 토큰 | series-1 |
+| `indexColor` | 짝 차트 계열 색 토큰 — 없으면 바 없음 | — |
+| `valueWidth` · `sparkWidth` | `number` | `48` · `64` |
+
+- 인덱스 바는 같은 칸 짝 차트가 있을 때만 — 표와 차트를 잇는 장치(§21). 스토리 `LinkedToChart`.
+- 바닥선이 있어 0 에 붙은 평평함과 중간의 평평함이 갈린다. 부호 있는 지표는 쓰지 않는다.
+- Sparkline `min`(기본 0) — 0 에서 먼 값의 모양을 보일 때(추세 타일)만 데이터 최소를 주고, 그때는 바닥선을 긋지 않는다.
+- [[MetricBarCell]] 은 0 보다 큰 구간을 최소 2px 로 그린다(2026-10-23).
+
+Figma 정본: Sparkline 페이지 `577:2` · 컴포넌트 `577:3` / SparklineCell 페이지 `577:35` · 세트 `577:62`(`index` × `state` · value · unit).
+
+## RangeGauge
+
+범위(min ~ Max) 안의 지금 값 — 채움 · ▼ 말풍선 · 이름 붙은 양 끝 · 임계 띠. 할당 · 한계 · 쿼터 · 정원 대비 사용. **Composite** — 채움 [[UsageGauge]] · ▼ [[ChartPeakMarker]] 를 조합하고 임계 띠 · 범위 글자만 그린다.
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` · `max` | `number` | — |
+| `min` | `number` | `0` |
+| `unit` | `string` | `""` |
+| `label` | `string` — 스크린리더 이름 | — |
+| `minLabel` · `maxLabel` | `string` — 양 끝 이름(`Limit` · `Allocatable`) | `Min` · `Max` |
+| `thresholds` | `{ from, tone: "warning" \| "critical" }[]` | `[]` |
+| `caption` | `string` — 말줄임 없이 줄바꿈 | — |
+
+- 채움 · ▼ 색 = 지금 값이 든 임계 구간(neutral · warning · critical). 임계 기준값은 제품 규칙이라 호출부가 준다.
+- 숫자는 천 단위 쉼표(정확한 값) — 축처럼 K 로 줄이지 않는다. 범위 밖 값은 막대가 끝에 멈추고 글자만 실제 값.
+- 큰 숫자 칸(2.1) 아래 막대로 쓸 때 같은 값을 같은 표기로 말한다(스토리 `InWidgetFrame`).
+
+Figma 정본: 페이지 RangeGauge `576:19` · 세트 `576:68`(`tone` · min · max · caption · showCaption).
+
+## StatusTimeline
+
+시간 위에 사건을 세로 마커로 — 높이 = 건수, 색 = 심각도. 경보 · 이벤트 · 배포 기록. **Composite** — 격자 [[ChartGrid]](시간 글자 사이마다 세로 점선) · 값축 [[ChartValueAxis]](단위 `건`) · 시간축 [[ChartTimeAxis]] 를 조합하고 마커만 그린다.
+
+| Prop | Type | Default |
+|---|---|---|
+| `events` | `{ at, count, severity: "critical" \| "warning" \| "info", label? }[]` | — |
+| `start` · `end` | `number` — X 양 끝(`at` 과 같은 단위) | — |
+| `xLabels` | `string[]` — 같은 간격 시간 글자 | — |
+| `max` | `number` — 건수 축 고정 | 데이터 최대 올림 |
+| `frame` | `boolean` | `true` |
+
+- 마커 폭 3px · 바닥에서 위로 · 최소 2px. 0 건은 그리지 않는다(빈 구간).
+- 색은 `--color-status-error` · `-warning` · `-info`. 계열 색과 섞지 않고, 이름(범례 · `title`)과 함께 말한다(§23).
+- 같은 칸 사건은 미리 묶어 건수를 더하고 가장 높은 심각도를 준다. 지표 차트 아래에 붙이면 시간 글자 · Y축 칸이 같아 세로로 맞는다.
+
+Figma 정본: 페이지 StatusTimeline `574:2` · 세트 `574:80`(`frame`).
 
 ## ApdexChart
 
@@ -576,7 +1085,9 @@ Apdex × 100 을 네 구간 띠(Excellent 94 · Good 85 · Poor 70 · Unacceptab
 
 ## BarList
 
-값 · 이름 · 가로 막대 한 줄을 여러 줄(액티브 스테이터스). 막대 길이는 줄마다 받은 `ratio`(0~1), 색은 시리즈 토큰.
+값 · 이름 · 가로 막대 한 줄을 여러 줄(액티브 스테이터스). 막대 길이는 줄마다 받은 `ratio`(0~1), 색은 시리즈 토큰 — 엔티티 계열이면 고정 슬롯(method 1 · sql 3 · httpc 7 · dbc 2 · socket 5, patterns §21). **Composite** — 줄은 [[BarListItem]](Primitives: 값 칸 88px 고정 · 막대 줄 높이 60% · 최소 4px)이 그린다.
+
+Figma 정본: BarListItem 페이지 `552:15` · 컴포넌트 `552:22`(TEXT `value` · `label`, 막대 길이 = track 오른쪽 안쪽 여백 = 폭 × (1 − ratio)) · BarList 세트 `351:333` 은 줄 5개가 BarListItem 인스턴스(엔티티 슬롯 색 · 스토리 비율).
 
 | Prop | Type | Default |
 |---|---|---|
@@ -594,6 +1105,7 @@ Apdex × 100 을 네 구간 띠(Excellent 94 · Good 85 · Poor 70 · Unacceptab
 | `xLabels` · `unit` | `string[]` · `string` | 샘플 · `""` |
 | `stat` · `statUnit` · `statSub` | `string` · `string` · `ReactNode` | — |
 | `footer` | `ReactNode` | — |
+| `threshold` | `{ value, label?, tone? }` — 임계 점선 + 그 위 옅은 띠. `tone` critical(기본) · warning. 값축 상한은 임계까지 포함 | — |
 | `frame` | `boolean` | `true` |
 
 ## MiniDonutChart
@@ -642,6 +1154,116 @@ export type HexItem = { id: string; label?: string; tone: HexTone; ariaLabel?: s
 - 칸 수 범례: `legend={hexGridLegend(items, { active: "Normal", idle: "Inactive" })}` → `Normal 0 · Inactive 0 · Warning 11 · Critical 3`. 칠해진 톤을 세고 0 개 톤도 줄은 남긴다.
 
 ---
+
+## Heatmap · HeatmapCell · HeatmapLegend
+
+시간 격자 위 지표 강도. **Heatmap(Composite)** 은 축 라벨 + **HeatmapCell(Primitives — 값 하나 = 색 한 칸)** 격자를 그리고, 범례는 폭을 맞춘 **HeatmapLegend(Primitives — 가로 그라디언트 + 눈금 + hover 표식)** 를 바로 아래 둔다. 응답 판정(Hitmap)은 [[ScatterHeatmap]] — 이름만 비슷하고 색의 뜻이 다르다.
+
+| Prop (Heatmap) | Type | Default |
+|---|---|---|
+| `mode` | `"month"` (7열 요일 × 주, 칸 = 하루) \| `"day"` (12열 5분 × 24행, 칸 = 5분) | — |
+| `cells` | `(number \| null)[]` — 정규화 0~1, `null` = 데이터 없음 | — |
+| `offset` | `number` — month 첫 칸 앞 빈 자리(요일 맞춤) | `0` |
+| `labels` | `string[]` — 칸 안 마이크로 라벨(일자) | — |
+| `selectedIndex` · `onSelect` | 한 칸 선택(다중 없음) | — |
+| `cellTitle` | `(index, value) => string` — 툴팁 · 이름 | 축 라벨로 생성 |
+| `onHoverChange` | `(value \| null) => void` — HeatmapLegend `marker` 에 잇는다 | — |
+| `ariaLabel` | `string` | «월간/일간 히트맵» |
+| `monthCellHeight` · `dayCellHeight` | `number` | `49` · `13` |
+
+| Prop (HeatmapCell) | Type | Default |
+|---|---|---|
+| `value` | `number \| null` — 0~1 | — |
+| `label` · `selected` · `height` | `string` · `boolean` · `number` | — · `false` · `13` |
+| `onClick` · `title` · `ariaLabel` · `onHoverChange` | 없으면 읽기 전용 `<div aria-hidden>` | — |
+
+| Prop (HeatmapLegend) | Type | Default |
+|---|---|---|
+| `label` | `string` — 색이 무엇인지(지표명 + 집계) | — |
+| `marker` · `markerFractionDigits` | `number \| null` (0~1) · `number` | `null` · `2` |
+| `ticks` · `unit` · `height` | `number[]` · `string` · `number` | `[0,25,50,75,100]` · `"%"` · `24` |
+
+- 색 = `--color-heatmap-0 … 100` stop 사이 `color-mix` 보간(`heatmapScaleColor`). 값 없음 = `--color-surface-200` — «0» 과 «모른다» 를 가른다.
+- 선택은 배경이 아니라 테두리 2px `--color-status-warning`. 라벨은 진한 칸에서 `--color-text-inverse` 로 뒤집는다.
+- `day` 라벨은 10분 · 2시간 간격만. 범례 표식은 hover 중에만.
+- 📈 칸(하루 · 5분)마다의 강도 — 일별 에러 수 · 시간대별 TPS · 5분 칸 평균 응답시간. 🚫 부호 있는 지표(±) · 정확한 값 비교.
+
+Figma 정본: HeatmapCell 페이지 `624:10` · 세트 `624:47`(`value` 스케일 단계 8 + empty × `selected`) / HeatmapLegend 페이지 `624:48` · 세트 `624:75`(`marker`) / Heatmap 페이지 `624:89` · 세트 `624:905`(`mode` month · day × `state` default · no-data). Figma 칸 색은 가장 가까운 단계 — 코드는 단계 사이를 섞는다.
+
+## GpuStatusBar
+
+GPU 단계별(Total → Allocated → Active → Effective) 몫과 나머지를 세로 막대로 쌓는 깔때기 차트. **Composite** — [[ChartGrid]] · [[ChartValueAxis]](`ticks` = 단계 값) · [[ChartStackedColumn]] · [[ChartCategoryAxis]] 조합 + 몫을 잇는 흐름 면.
+
+| Prop | Type | Default |
+|---|---|---|
+| `categories` | `{ label, positive: { value, label, color? }, negative?: { value, label, color? } }[]` | — |
+| `max` | `number` — Y축 최대 | 단계마다 몫 + 나머지 중 최대 |
+| `frame` · `title` | `boolean` · `string` | `true` · «GPU 상태별 활용 현황» |
+
+- 몫 = 한 계열 색(기본 `--color-chart-series-1`, 단계마다 돌려 칠하지 않는다 §17) · 나머지 = `--color-surface-200`(상태색 아님 §23). 흐름 면 = 계열 색 7% · 선 25%.
+- 가리키면 나머지 0.32 · [[ChartTooltip]] 에 몫 · 나머지 · 비율(§26 강조). 대시보드 칸에서는 `frame={false}` + [[WidgetFrame]].
+- 📈 포함 관계 깔때기 몫(할당 → 사용 → 유효). 🚫 포함 관계 없는 나열 → [[BarList]] · 시간 변화.
+
+Figma 정본: 페이지 GpuStatusBar `624:9884` · 세트 `624:9968`(`frame` · title).
+
+## MetricBarCell
+
+표 셀 하나에 수치 + 비율 막대(구간 누적 가능). **Primitives.** 추이까지면 [[SparklineCell]].
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `string \| number \| null` — null 이면 `-` 만(막대 없음) | — |
+| `segments` | `{ ratio: 0~1, color: 토큰 }[]` — 비면 막대 없음 | `[]` |
+| `barWidth` | `number` | `56` |
+
+- 수치 `text-base font-numeric tabular-nums` 오른쪽 정렬 · 막대 높이 10 · 트랙 `--color-status-info-soft` · 둥근 끝.
+- 0 보다 큰 구간은 최소 2px(§21, 2026-10-23). ratio 합이 1 을 넘으면 잘린다 — 정규화는 호출측.
+
+Figma 정본: 페이지 MetricBarCell `624:76` · 세트 `624:88`(`segments` single · stacked · empty · value).
+
+## StatCard
+
+요약 지표 칸 — 큰 숫자 + 라벨 + 선택적 트렌드 기호. **Primitives**(DS import 0). 변화를 좋은 방향으로 판정해야 하면 [[TrendTile]], 숫자 줄은 [[MetricGrid]].
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` · `value` · `unit` | `string` | — |
+| `tone` | `"neutral" \| "success" \| "warning" \| "critical" \| "info"` — 왼쪽 인디케이터 색 | `"neutral"` |
+| `trend` | `"up" \| "down" \| "stable"` — ▲ success · ▼ error · ─ tertiary | — |
+| `delay` | `number` — 등장 애니메이션 지연 | — |
+
+- 색은 status · text 토큰만 — 차트 계열 색을 쓰지 않는다(차트가 아니다).
+- `trend` 는 방향만 받는다 — 오름이 늘 success 색이라 «낮을수록 좋은» 지표엔 [[TrendTile]] `better`.
+
+Figma 정본: 페이지 StatCard `624:960` · 세트 `624:1131`(`tone` × `trend` · label · value · unit).
+
+## 토폴로지 — TopologyCanvas · TopologyToolbar · TopologyNode · TopologyEdge · TopologyPort · TopologyCollapseToggle · TopologyMinimap
+
+대상 간 호출 · 연결 관계. 좌→우 계층 배치 · 카드 노드 전용(힘 기반 배치는 범위 밖). 좌표는 레이아웃 엔진 `layoutTopology` 가 소유한다 — 컴포넌트가 위치를 보정하지 않는다.
+
+| 컴포넌트 | 계층 | 역할 |
+|---|---|---|
+| **TopologyCanvas** | Composite | `graph` 를 배치 · 라우팅해 엣지(SVG)와 노드(HTML)를 같은 원점 · 같은 transform 으로 겹쳐 그린다 · pan/zoom. `view` + `onViewChange`(controlled) · `onToggle(id)` |
+| **TopologyToolbar** | Composite | 조회 조건 한 줄 — 빠른 검색(TextField) · 편집(Switch, 즉시 반영) · 지표(Select) · 방향 In/Out · 초기화(Button). 전 값 controlled |
+| **TopologyNode** | Primitives | 리프 카드(뱃지 + 이름 + 지표 + ↗↘) 또는 펼친 그룹 컨테이너(헤더만). 접힌 그룹 = 리프 카드 모양 |
+| **TopologyEdge** | Primitives | 직교 경로 1.5px + 가장 긴 구간 가운데 값 라벨(11px, 세로 구간은 -90°). `tone` default · alert |
+| **TopologyPort** | Primitives | 엣지가 노드에 물리는 점(r 5). `tone` default · ok · alert. SVG 안에서만 |
+| **TopologyCollapseToggle** | Primitives | 노드 왼쪽 40px 색 뱃지 겸 `+`/`−` 토글. 좌상단 · 우하단만 둥근 잎 모양. 리프는 `interactive={false}` 장식 |
+| **TopologyMinimap** | Primitives | 노드를 사각형으로 축소 + 지금 보이는 영역 사각형(`view` 에서 역산). 폭 168, 높이 = 그래프 종횡비(56~140) |
+
+```ts
+type TopologyGraph = {
+  nodes: { id; label; metric?; trend?: "up" | "down"; tone?: "default" | "ok" | "alert"; children?; collapsed? }[];
+  edges: { from; to; label?; tone?: "default" | "alert" }[];
+};
+```
+
+- 색은 유틸 클래스만 — `--color-topology-*`(캔버스 그라디언트 · 도트 격자 · 노드 · 그룹 · 엣지 · 포트) · 뱃지 default = `--color-brand-blue`. 노드 표면을 `--color-card` 로 대체하지 않는다(캔버스 자체 바닥 위 층).
+- 도트 격자는 transform 안쪽 — 확대하면 격자도 커진다. 엣지 SVG 는 `pointer-events: none`.
+- 줌 컨트롤은 [[TopologyZoomControl]](`TOPOLOGY_ZOOM` 25%~200%). 페이지 조립 예는 Shell `PageTopology`.
+- 📈 서비스 호출 · 네트워크 흐름 · 노드 상태. 🚫 관계 없는 대상 수치 비교 → [[BarList]].
+
+Figma 정본: TopologyCanvas 페이지 `624:951` · 세트 `624:10372`(`state` default · collapsed · alert-path) / TopologyToolbar `624:952` · `624:10060` / TopologyNode `624:949` · `624:9747` / TopologyEdge `624:947` · `624:9805` / TopologyPort `624:950` · `624:959` / TopologyCollapseToggle `624:946` · `624:9617` / TopologyMinimap `624:948` · `624:9883` / TopologyZoomControl `597:30` · `597:31`.
 
 ## Toast
 
@@ -736,7 +1358,7 @@ WhaTap AI 핀휠 그라데이션 심볼. 위젯 헤더, AI 토글 버튼, 인사
 
 ## DashboardBuildingProgress
 
-대시보드 구성 중 진행 로딩 화면. spinner + 단계별 체크. (AI가 "대시보드를 만들고 있어요" 상태일 때 본문 영역에 표시.)
+대시보드 구성 중 진행 로딩 화면. spinner + 단계별 체크. (AI가 "대시보드를 만들고 있어요" 상태일 때 본문 영역에 표시.) **Composite** — 단계 줄은 [[BuildingProgressStep]](Primitives: `done` · `active` · `pending`). Figma 정본 BuildingProgressStep `57:22`.
 
 ```ts
 export type DashboardBuildingProgressProps = {

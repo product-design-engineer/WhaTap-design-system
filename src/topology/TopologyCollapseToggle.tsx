@@ -50,7 +50,7 @@ export default function TopologyCollapseToggle({
     "text-white " +
     TOPOLOGY_BADGE_BG[tone];
   const glyph = (
-    <span className="text-lg leading-none font-normal">{collapsed ? "+" : "−"}</span>
+    <span className="text-lg font-normal">{collapsed ? "+" : "−"}</span>
   );
 
   if (!interactive) {

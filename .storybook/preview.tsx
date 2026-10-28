@@ -4,6 +4,7 @@ import { withThemeByClassName } from '@storybook/addon-themes';
 // Tailwind 런타임 의존 0%. 소비자도 이 파일을 import.
 import '../src/whatap-ds.css';
 import { enableDsPolicyGuard } from '../src/devPolicyGuard';
+import DocsPage from './DocsPage';
 
 /**
  * DS 정책 위반 런타임 가드 — 카탈로그를 보는 동안 위반이 빨간 outline + 배지로 드러난다.
@@ -42,6 +43,8 @@ const preview: Preview = {
         { name: 'dark', value: '#1a1a1a' },
       ],
     },
+    // autodocs 틀 — 기본 순서에 「어떤 지표에 쓰나」(docstring `## Metrics`)를 더한다. 지표가 없는 컴포넌트는 기본과 같다.
+    docs: { page: DocsPage },
     controls: {
       expanded: true, // argTypes description 을 기본 노출 — AI / 사용자 모두 prop 의미 즉시 확인 가능
       matchers: {
@@ -79,6 +82,15 @@ const preview: Preview = {
     },
   },
   decorators: [
+    // Docs 페이지의 문서 본문 스타일(p · h* · ul 의 여백 · 글자 크기 · 줄 높이)이 미리보기 안 컴포넌트에
+    // 새지 않게 막는다. Storybook 은 `.sb-unstyled` 안쪽을 그 스타일에서 뺀다. 상자는 display: contents 라
+    // Canvas 레이아웃에는 끼어들지 않는다. (2026-10-22 Docs 에서 사이드바 이름표 <p> 가 줄 높이 22.75px ·
+    // 아래 여백 14px 를 받아 위로 쏠렸다.)
+    (Story) => (
+      <div className="sb-unstyled" style={{ display: 'contents' }}>
+        <Story />
+      </div>
+    ),
     // 우측 상단 툴바에 Light/Dark 토글 추가 — <html> 에 `.dark` 클래스를 토글한다.
     // whatap-ds.css 의 `.dark` 토큰이 cascade 되어 모든 story 가 다크로 전환된다.
     withThemeByClassName({

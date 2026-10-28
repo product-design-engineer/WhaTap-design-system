@@ -1,5 +1,5 @@
 /**
- * ExecutionResult — 작업 실행 후 결과 통지 메시지.
+ * ExecutionResult — 작업 실행 후 결과 통지 메시지. Composite layer.
  *
  * ## Purpose
  * AI 가 어떤 작업을 **실행한 뒤** 그 결과를 사용자에게 알리는 읽기 전용 통지. variant 로 상태를
@@ -13,12 +13,13 @@
  * ## When NOT to use
  * - 실행 **전** 미리보기 / 승인 요청 → [[AlertRulePreview]] + [[ChoiceButtons]].
  * - 진행 중(스피너) 상태 표시 → 도구 호출 진행 표시 컴포넌트.
- * - 구성 제안 안내 → [[DashboardProposal]] / [[MigPlan]].
+ * - 구성 제안 안내 → [[DashboardProposal]] / [[PlanProposal]].
  *
  * ## Composition rules
  * - 이 컴포넌트는 `AiCard` chrome 없이 자체 `flex-col` 레이아웃 (헤더+타임스탬프 전용 구조).
  * - 상태 emoji/라벨은 `VARIANT_LABEL` 맵으로 고정 — 호출부에서 임의 변경하지 말 것.
  * - 텍스트 색은 토큰 (`--color-text-primary/secondary/tertiary`) 사용.
+ * - 글머리표 목록은 [[AiBulletList]](`size="md"`)를 조합한다 — 목록을 다시 그리지 않는다. 그래서 Composite 계층이다.
  *
  * @example
  * ```tsx
@@ -30,6 +31,7 @@
  * />
  * ```
  */
+import { AiBulletList } from "./_primitives";
 
 export type ExecutionResultVariant = "success" | "failure" | "unknown";
 
@@ -67,7 +69,7 @@ export default function ExecutionResult({
       {/* 헤더: 상태 라벨 + 타임스탬프 */}
       <div className="flex items-center justify-between gap-8px">
         <div className="flex items-center gap-6px">
-          <span className="text-lg leading-none">{emoji}</span>
+          <span className="text-lg">{emoji}</span>
           <span
             className="text-md font-bold text-primary tracking-default leading-normal"
             style={{ fontFamily: "var(--font-family-korean)" }}
@@ -76,7 +78,7 @@ export default function ExecutionResult({
           </span>
         </div>
         <span
-          className="text-base text-tertiary tracking-normal leading-normal"
+          className="text-base text-tertiary tracking-normal"
           style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
         >
           {timestamp}
@@ -85,26 +87,14 @@ export default function ExecutionResult({
 
       {/* 본문 */}
       <p
-        className="text-lg font-bold text-primary tracking-default leading-normal"
+        className="text-lg font-bold text-primary tracking-default"
         style={{ fontFamily: "var(--font-family-korean)" }}
       >
         {body}
       </p>
 
       {/* bullet 리스트 */}
-      {bullets && bullets.length > 0 && (
-        <ul className="flex flex-col gap-4px pl-12px">
-          {bullets.map((b, i) => (
-            <li
-              key={i}
-              className="text-md text-primary tracking-default leading-normal list-disc list-outside"
-              style={{ fontFamily: "var(--font-family-korean)", fontWeight: "var(--font-weight-regular)" }}
-            >
-              {b}
-            </li>
-          ))}
-        </ul>
-      )}
+      {bullets && bullets.length > 0 && <AiBulletList items={bullets} size="md" />}
 
       {/* details 블록 (라벨: 값) */}
       {details && details.length > 0 && (

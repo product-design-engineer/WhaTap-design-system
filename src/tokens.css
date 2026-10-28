@@ -16,6 +16,7 @@
   /* Brand primary */
   --color-brand-blue: #296CF2;
   --color-brand-blue-deep: #1B5CD9;
+  --color-text-link: var(--color-brand-blue-deep); /* 문장 안 링크 글자 */
   /* Marketing web — 마케팅 사이트 CTA·링크 전용. 제품 UI 브랜드 블루와 별개 */
   --color-brand-blue-web: #296CF2;
   --color-brand-blue-web-deep: #1B5CD9;
@@ -50,6 +51,7 @@
   --color-surface-50: #F5F5F5;  /* 용도: 가장 옅은 보조 표면 — hover 배경, muted 셀, 입력 비활성 */
   --color-surface-100: #F1F2F4; /* 용도: 중간 보조 표면 — active row, 트랙(progress/skeleton), 선택 강조 */
   --color-surface-200: #EAEAEA; /* 용도: 가장 진한 보조 표면 — switch off 트랙, 구분 블록, 무채색 채움 */
+  --color-skeleton-glow: #DCE7FD; /* 용도: 스켈레톤 위를 훑는 빛 띠의 정점 — surface-100 바탕보다 밝고 옅은 브랜드 틴트 */
 
   /* Neutral Solid — 중립(무채색) 강조면. tone="tertiary" 버튼의 채움/hover.
      위 전경은 고정 흰색(라이트 8.4:1 · 다크 10.3:1). 다크 값은 하단 `.dark` 블록에서 반전. */
@@ -499,6 +501,11 @@
      흰 카드 위 비텍스트 대비 3.07:1 · 다크 카드 위 3.57:1. 텍스트에 쓰지 않는다. */
   --color-chart-neutral: #8A94A3;
 
+  /* Chart — Radial · 고리형 막대(ChartRadialBars)의 바탕. 막대가 없는 칸도 «자리가 있다» 고 말하는 옅은 원판과
+     칸(부채꼴) 사이 구분선. 마크가 아니라 바탕이라 계열 · 등급 색과 겹치지 않게 옅게 둔다. 다크 값은 하단 .dark. */
+  --color-chart-radial-track: #DCEFFF;   /* 원판 바탕 */
+  --color-chart-radial-divider: #B7DBFF; /* 칸 구분선 · 원판 테두리 */
+
   /* Chart — Speed · APM 응답 속도 3단계(normal / slow / very slow). 계열(series)이 아니라 **등급**이다.
      액티브 트랜잭션 Arc·히트맵·speed-bullet 아이콘(static/icons)이 같은 세 값을 쓴다 — 아이콘이 정적 SVG 라
      다크에서도 재매핑하지 않는다(아이콘과 어긋나지 않게). status 토큰과 값이 비슷해도 대용 금지. */
@@ -547,6 +554,7 @@
   --color-topology-port: #8B9BE1;        /* 연결 포트 도트 기본 */
   --color-topology-port-alert: #FC679E;  /* 경보 포트 */
   --color-topology-port-ok: #5BD388;     /* 정상 포트 */
+  --color-topology-minimap-node: #7D8BA6; /* 미니맵 노드 칸 — 카드 판 위 축소 노드(카드 대비 3:1+) */
 
   /* ──────────────────────────────────────────────────────────────────────
    *  Spacing / Sizing Scale — 4px 그리드. `--text-*` 와 동일한 "px 값 스케일 토큰" 방식.
@@ -612,6 +620,7 @@
   --wds-widget-body-pb: 12px;
   --wds-widget-row-gap: 4px;
   --wds-widget-axis-gutter: 28px;
+  --wds-widget-end-gutter: 44px;
 }
 
 html, body, #root {
@@ -737,25 +746,28 @@ html, body, #root {
   transform-origin: bottom;
   animation: aiBarGrow 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
-/* 스켈레톤 — 응답 대기 구간의 자리표시자. 좌→우 shimmer 로 "멈춘 게 아니라 오는 중"을 보인다.
-   prefers-reduced-motion 이면 shimmer 없이 정적 회색만 남긴다. */
+/* 스켈레톤 — 응답 대기 구간의 자리표시자. 빛 띠(--color-skeleton-glow)가 좌→우로 훑는 글로우로 "멈춘 게 아니라 오는 중"을 보인다.
+   prefers-reduced-motion 이면 빛 띠 없이 정적 회색만 남긴다. */
 @keyframes aiSkeletonShimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  from { background-position: -600px 0; }
+  to   { background-position: 900px 0; }
 }
 .ai-skeleton {
   border-radius: 4px;
-  background: linear-gradient(
+  background-color: var(--color-surface-100);
+  background-image: linear-gradient(
     90deg,
-    var(--color-surface-100) 25%,
-    var(--color-surface-50) 37%,
-    var(--color-surface-100) 63%
+    transparent 25%,
+    var(--color-skeleton-glow) 50%,
+    transparent 75%
   );
-  background-size: 200% 100%;
-  animation: aiSkeletonShimmer 1.4s ease-in-out infinite;
+  /* 빛 띠는 px 고정 폭 · px 이동 — 막대 길이와 무관하게 모든 막대에서 같은 x 에 놓인다(한 줄기 빛). */
+  background-size: 600px 100%;
+  background-repeat: no-repeat;
+  animation: aiSkeletonShimmer 1.8s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  .ai-skeleton { animation: none; }
+  .ai-skeleton { animation: none; background-image: none; }
 }
 
 .ai-reasoning-dots::after {
@@ -840,6 +852,7 @@ html, body, #root {
   --color-surface-50: #14181E;
   --color-surface-100: #1B2026;
   --color-surface-200: #232932;
+  --color-skeleton-glow: #2F3F5E; /* 다크에서도 바탕보다 «밝아지는» 빛 */
 
   /* 중립 강조면 — 전경이 계속 흰색이므로 다크에서도 어두운 단계를 유지한다. */
   --color-neutral-solid: #3A414D;
@@ -925,6 +938,8 @@ html, body, #root {
   --color-chart-seq-3: #6BA3EE;
   --color-chart-seq-4: #9BC8FF;
   --color-chart-neutral: #6B7380;
+  --color-chart-radial-track: #1B2B40;
+  --color-chart-radial-divider: #2C4766;
 
   /* Topology — **레퍼런스에 다크 시안이 없어 여기서 새로 설계한 값**이다(추출 아님).
      라이트를 반전한 것이 아니라, 캔버스가 페이지 바닥(--color-bg #0E1116)보다 살짝
@@ -940,4 +955,5 @@ html, body, #root {
   --color-topology-port: #8E9CDE;
   --color-topology-port-alert: #FF77A8;
   --color-topology-port-ok: #56C98A;
+  --color-topology-minimap-node: #6B7894;
 }
