@@ -22,6 +22,9 @@
  * - ❌ 점 사건(경보 · 배포 · 재시작) → [[StatusTimeline]]. 이산 상태(Up · Down) → [[HexGrid]]
  * - ❌ 합이 100% 인 구성 비율 → [[MiniDonutChart]]
  *
+ * ## Colors
+ * - 정체성 — 선 · 면 · `--color-chart-series-1`(`color` 기본) · 면은 같은 색 12% 또는 `areaColor`
+ *
  * ## Composition rules
  * - X축 시간 글자는 [[ChartTimeAxis]] 가 놓는다(양 끝 안쪽 정렬, patterns §26).
  * - 값축 · 격자는 [[ChartGrid]](마크 아래) · [[ChartValueAxis]](마크 위)를 조합한다 — 차트 안에서 다시 그리지 않는다(patterns §26). 그래서 Composite 계층이다.
@@ -36,7 +39,7 @@
  *   (`1000 × PLOT_H_PX`), SVG 는 plot 영역(`GUTTER`(--wds-widget-axis-gutter)/`PAD_RIGHT`/패딩)에만 absolute 배치.
  *   peak ▼/라벨은 동일 좌표계(`peakXRatio`/`peakYRatio`)로 찍어 폭과 무관하게 1:1 일치.
  * - stroke 는 `vectorEffect="non-scaling-stroke"` 로 1px 유지, area fill 은 color + alpha.
- * - 색은 토큰 (`color` 기본 `--color-brand-blue-soft`), 축선은 `--color-border-divider`.
+ * - 색은 토큰 (`color` 기본 `--color-chart-series-1`), 축선은 `--color-border-divider`.
  * - `delay` 지정 시에만 stagger 진입 애니메이션 적용.
  *
  * @example

@@ -22,6 +22,10 @@
  * - ❌ 상한이 없는 지표(TPS · 응답시간 · 건수) — Max 를 아무 값으로 정하면 채움이 거짓 비율을 말한다
  * - ❌ 시간 흐름 · 추세 → [[MiniLineChart]] · [[ForecastLineChart]]
  *
+ * ## Colors
+ * - 상태 — 채움 · ▼ · 임계 띠를 지금 값이 든 구간으로 · 임계 밖 `--color-brand-blue` · `--color-status-warning` · `--color-status-error`
+ * - 바탕 — 트랙 · `--color-surface-100`
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 채움 [[UsageGauge]](트랙 · 채움 · 톤) · 지금 값 [[ChartPeakMarker]](▼ 말풍선). 차트는 임계 띠와 범위 글자만 그린다.
  *   그래서 Composite 계층이다.

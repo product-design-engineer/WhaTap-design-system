@@ -20,6 +20,10 @@
  * - ❌ 포함 관계가 아닌 지표 나열(서로 다른 자원 사용률) → [[BarList]]
  * - ❌ 시간에 따른 변화 — 한 시점의 단면이다
  *
+ * ## Colors
+ * - 정체성 — 몫 구간 · `--color-chart-series-1`(`positive.color`) · 단계마다 색을 돌려 칠하지 않는다
+ * - 바탕 — 남은 몫 · `--color-surface-200` · 오류가 아니라 상태색을 쓰지 않는다
+ *
  * ## Composition rules
  * - 단계 막대를 가리키면 나머지를 흐리고(0.32) [[ChartTooltip]] 이 몫 · 나머지 · 단계 안 몫의 비율을 보인다(patterns §26 «강조»).
  * - 요소를 조합한다 — 격자 [[ChartGrid]] · 값축 [[ChartValueAxis]](눈금은 단계 값, `ticks`) · 막대 [[ChartStackedColumn]] ·

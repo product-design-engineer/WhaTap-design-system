@@ -20,6 +20,9 @@
  * - ❌ 연속 측정값(사용률 · 응답시간) → [[MiniLineChart]]
  * - ❌ 이어지는 상태 구간(10분 동안 Down) — 점 사건이 아니다
  *
+ * ## Colors
+ * - 상태 — 마커 색 = 심각도 · critical `--color-status-error` · warning `--color-status-warning` · info `--color-status-info`
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 격자 [[ChartGrid]](가로 눈금 + 시간 글자마다 세로 점선 `vertical`) · 값축 [[ChartValueAxis]](건수, 단위 `건`) ·
  *   시간축 [[ChartTimeAxis]]. 차트는 마커만 그린다(patterns §26). 그래서 Composite 계층이다.

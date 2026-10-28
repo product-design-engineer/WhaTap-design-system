@@ -21,6 +21,10 @@
  * - ❌ 비율(%) · 평균처럼 더하면 뜻이 없는 값 — 칸 넓이의 합이 거짓 전체를 말한다
  * - ❌ 시간 흐름 · 정밀 비교 → [[StackedAreaChart]] · [[BarList]]
  *
+ * ## Colors
+ * - 정체성 — 칸 색 = 묶음(1단계) · `--color-chart-series-1..8` · 묶음 없으면 series-1
+ * - 판정 밖 — 8개를 넘친 묶음 「기타」 · `--color-chart-neutral`
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 묶음 범례 [[ChartLegendItem]] · 값 상자 [[ChartTooltip]]. 칸만 그린다(배치는 내부 `_treemapLayout` squarified). 그래서 Composite 계층이다.
  * - **색은 묶음(1단계)의 계열 슬롯**(`--color-chart-series-1..8`, 묶음 순서) — 묶음이 없으면 한 색(series-1). 상태색을 쓰지 않는다(§17 · §23).

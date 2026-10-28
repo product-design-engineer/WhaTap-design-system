@@ -19,6 +19,10 @@
  * - ❌ 합이 100% 가 아닌 값(여러 자원의 사용률) · 겹치는 범주 — 조각 합이 링을 꽉 채워 거짓 몫을 말한다
  * - ❌ 시간 흐름 · 7개 이상 범주 → [[MiniLineChart]] · [[BarList]]
  *
+ * ## Colors
+ * - 정체성 — 조각마다 · `--color-chart-series-1..8`
+ * - 바탕 — 트랙 · `--color-surface-100`
+ *
  * ## Composition rules
  * - 조각이나 범례 항목을 가리키면 그 조각만 남기고(나머지 0.32) [[ChartTooltip]] 이 조각 가운데에서 이름 · 값 · 전체 대비 비율을 보인다(patterns §26 «강조»).
  * - 범례는 [[ChartLegendItem]] 을 조합한다(`fill` — 값이 오른쪽 끝에 세로로 맞는다, patterns §26). 그래서 Composite 계층이다.

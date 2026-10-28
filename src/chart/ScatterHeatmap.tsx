@@ -19,6 +19,9 @@
  * - ❌ 집계값(평균 응답시간 추이) → [[MiniLineChart]]
  * - ❌ 응답시간이 아닌 두 수치의 관계 → [[ScatterChart]]
  *
+ * ## Colors
+ * - 판정 등급 — 점 · 응답 속도 등급 셋 · `--color-chart-speed-normal` · `--color-chart-speed-slow` · `--color-chart-speed-very-slow`
+ *
  * ## Composition rules
  * - 위젯 chrome 은 소비자가 감싼다.
  * - `dots` prop 으로 데이터를 외부에서 주입한다.

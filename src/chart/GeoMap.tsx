@@ -25,6 +25,11 @@
  * - ❌ 음수가 섞인 변화량(증감) — 순차 4단계는 0 에서 시작한다
  * - ❌ 국가 하나 · 둘 → 숫자 [[MetricGrid]] · [[BarList]]
  *
+ * ## Colors
+ * - 크기 — 단계 구분 국가 칠 · `--color-chart-seq-1..4`(낮음 → 높음)
+ * - 정체성 — 버블 · `--color-chart-series-1` 하나 · 값은 넓이가 말한다
+ * - 바탕 — 값 없는 국가 · `--color-surface-200`
+ *
  * ## Composition rules
  * - 요소를 조합한다 — 단계 범례 [[ChartLegendItem]] · 값 상자 [[ChartTooltip]] · 줌 [[TopologyZoomControl]](토폴로지와 같은 컨트롤 · `limits` 100%~600%).
  *   국가 도형 · 격자 · 버블만 그린다. 그래서 Composite 계층이다.

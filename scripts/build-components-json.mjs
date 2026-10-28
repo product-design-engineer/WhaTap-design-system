@@ -79,7 +79,7 @@ function section(doc, name) {
 /** 템플릿이 아는 섹션. 이 밖의 `## …` 는 생성기가 읽지 않으므로 **AI 에게 배달되지 않는다**
  *  (Storybook autodocs 에서만 보인다). 게이트(check-docstrings)가 이 목록으로 차단한다 —
  *  실측(2026-10-19): 13파일 18섹션 중 15섹션이 components.json 에 없었다(Pagination 「표와 한 세트」 정책 등). */
-const KNOWN_SECTIONS = [/^Purpose$/i, /^When to use$/i, /^When NOT to use$/i, /^Composition rules$/i, /^Metrics$/i, /^Spec\b/i, /^Do$/i, /^Don't$/i];
+const KNOWN_SECTIONS = [/^Purpose$/i, /^When to use$/i, /^When NOT to use$/i, /^Composition rules$/i, /^Metrics$/i, /^Colors$/i, /^Spec\b/i, /^Do$/i, /^Don't$/i];
 
 /** `## Metrics` — 차트가 맞는 지표(✅)와 쓰면 안 되는 지표(❌). Composite/Chart 는 ✅ 필수(check-docstrings). 2026-10-23 사용자 지시. */
 function metricsOf(doc) {
@@ -87,6 +87,22 @@ function metricsOf(doc) {
   if (!items.length) return null;
   const strip = (s) => s.replace(/^(✅|❌)\s*/, "").trim();
   return { fit: items.filter((b) => b.startsWith("✅")).map(strip), avoid: items.filter((b) => b.startsWith("❌")).map(strip) };
+}
+/**
+ * `## Colors` — 차트가 무엇을 어떤 색 역할로 칠하나. 불릿 = `역할 — 무엇에 · 토큰`. 역할은 patterns §17 의 낱말
+ * (정체성 · 크기 · 강도 · 판정 등급 · 판정 밖 · 상태) + 바탕(트랙 · 값 없음 · 남은 몫처럼 데이터 색이 아닌 자리).
+ * Composite/Chart 는 필수(check-docstrings). 2026-10-27 사용자 지시 «차트 composite 에 컬러 적용 규칙도 카탈로그 정보에».
+ */
+function colorsOf(doc) {
+  const items = bullets(section(doc, "Colors"));
+  if (!items.length) return null;
+  return items.map((b) => {
+    const m = b.match(/^(.+?)\s+—\s+(.*)$/);
+    const role = m ? m[1].trim() : null;
+    const text = m ? m[2].trim() : b;
+    const tokens = [...new Set([...text.matchAll(/--(?:color|gradient)-[\w*.-]+/g)].map((t) => t[0].replace(/[.]+$/, "")))];
+    return { role, text, tokens };
+  });
 }
 function extraSectionsOf(doc) {
   if (!doc) return [];
@@ -434,6 +450,7 @@ for (const sf of storyFiles) {
   const fromStory = harvestMarkers(s.description);
 
   const metrics = metricsOf(docText);
+  const colors = colorsOf(docText);
   const derivedDont = [
     ...bullets(whenNotToUse).map((b) => `사용하지 말 것 — ${b}`),
     ...(metrics?.avoid ?? []).map((b) => `이 지표에 쓰지 말 것 — ${b}`),
@@ -462,6 +479,8 @@ for (const sf of storyFiles) {
     spec: specOf(docText),
     /* 차트가 맞는 지표 · 쓰면 안 되는 지표(`## Metrics` ✅ / ❌). 차트 아니면 null. */
     metrics,
+    /* 차트가 무엇을 어떤 색 역할로 칠하나(`## Colors` — 역할 · 설명 · 토큰). 차트 아니면 null. */
+    colors,
     /* 템플릿 밖 섹션 이름 — 배달되지 않는 문서. 게이트가 0 을 요구한다. */
     extraSections: extraSectionsOf(docText),
     // 스토리 블록과 docstring 유도가 같은 말을 하는 경우가 있어 중복 제거.
