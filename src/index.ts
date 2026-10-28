@@ -61,6 +61,8 @@ export { default as InstanceSelectPanel } from "./InstanceSelectPanel";
 export type { InstanceSelectPanelProps, InstanceSelectItem, InstanceSelectScope } from "./InstanceSelectPanel";
 export { default as LabeledField } from "./LabeledField";
 export type { LabeledFieldProps } from "./LabeledField";
+export { default as Calendar } from "./Calendar";
+export type { CalendarProps } from "./Calendar";
 export { default as DatePicker } from "./DatePicker";
 export type { DatePickerProps, DatePickerSize } from "./DatePicker";
 export { default as OptionbarNewVersionButton } from "./OptionbarNewVersionButton";
