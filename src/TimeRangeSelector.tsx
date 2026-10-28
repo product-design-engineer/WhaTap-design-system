@@ -52,8 +52,10 @@
  *   «어제 13:50~14:00 으로 고정된 구간을 보여 드리고 있어요 · [최근 5분 보기]» ([[Notice]]).
  * - 갱신 ↔ 고정 버튼은 **글자가 지금 상태를 말한다** — 고정이면 «📌 고정», 갱신이면 «↻ 갱신». 꺼진 핀을 «갱신» 으로 읽게 하지 않는다.
  *   고정은 `--color-brand-blue-bg` 바탕 + `--color-brand-blue` 1px 테두리 · 글자(놓치면 안 되는 상태라 한눈에 띄운다), 갱신은 `text-secondary`.
- * - 시각마다 달력 버튼을 누르면 [[Calendar]] 판이 그 버튼 아래에 뜬다(`onStartChange` · `onEndChange` 가 있을 때). 고른 날짜는
- *   시각(시 · 분 · 초)을 그대로 두고 날짜만 바꾼다. 시작 달력은 종료일 뒤를, 종료 달력은 시작일 앞을 막고, `minDate` · `maxDate` ·
+ * - 시각마다 달력 버튼을 누르면 [[Calendar]] 판이 그 버튼 아래에 뜬다(`onStartChange` · `onEndChange` 가 있을 때). 판은
+ *   연 · 월 · 일에 더해 시 · 분 · 초 칸과 «고른 값»(`YYYY-MM-DD HH:MM:SS`)을 보여 주고, **적용** 을 눌러야 그 시각이 바뀐다
+ *   (날짜만 눌러서는 닫히지 않는다). 판이 열린 동안 그 쪽 시각([[DateTimeBlock]])은 **강조**된다 — 시작을 바꾸는지 종료를
+ *   바꾸는지 헷갈리지 않게. 칸을 직접 고칠 때(포커스)도 같은 강조가 걸린다. 시작 달력은 종료일 뒤를, 종료 달력은 시작일 앞을 막고, `minDate` · `maxDate` ·
  *   `maxRangeDays` 밖도 막는다. 바깥을 누르거나 Esc 면 닫힌다. 판은 상자 밖에 띄운다 — 상자는 `overflow-hidden` 이라 안에 두면 잘린다.
  * - 옆에 붙이는 검색 [[Button]] 과 «바로 조회» 프리셋 버튼은 `size="lg"`(32px) — 박스 높이 32px 와 맞춘다. 한 줄에서 높이가 다르면 바닥선이 어긋난다.
  *
@@ -99,6 +101,7 @@
  */
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import Calendar from "./Calendar";
+import type { CalendarTime } from "./Calendar";
 import DateTimeBlock from "./DateTimeBlock";
 import type { DateParts } from "./DateTimeBlock";
 import Tooltip from "./Tooltip";
@@ -228,12 +231,17 @@ export default function TimeRangeSelector({
           min: latest(minDate, startDay),
           max: earliest(maxDate, maxRangeDays !== undefined ? shiftDay(startDay, maxRangeDays) : undefined),
         };
-  const pickDay = (date: string) => {
+  /* 달력에서 적용 — 날짜와 시 · 분 · 초를 함께 바꾼다. 초를 다루지 않는 화면(second 없음)이면 초도 넘기지 않는다. */
+  const applyCal = (date: string, t: CalendarTime) => {
     const [year, month, day] = date.split("-");
-    if (cal?.side === "start") onStartChange?.({ ...start, year, month, day });
-    else onEndChange?.({ ...end, year, month, day });
+    const base = cal?.side === "start" ? start : end;
+    const next: DateParts = { ...base, year, month, day, hour: t.hour, minute: t.minute };
+    if (base.second !== undefined) next.second = t.second ?? base.second;
+    if (cal?.side === "start") onStartChange?.(next);
+    else onEndChange?.(next);
     setCal(null);
   };
+  const calSide = cal?.side === "start" ? start : end;
   const pillLabel = durations
     ? duration != null && durations.includes(duration)
       ? `${!live && rangeMode === "fixed" ? "" : "최근 "}${formatMinutes(duration)}`
@@ -286,10 +294,10 @@ export default function TimeRangeSelector({
             <IcLeft />
           </button>
 
-          <DateTimeBlock parts={start} side="start" onChange={onStartChange} />
+          <DateTimeBlock parts={start} side="start" onChange={onStartChange} emphasis={cal?.side === "start"} />
           {perSideCalendar && <CalendarButton label="시작 시각 달력" expanded={cal?.side === "start"} onClick={openCal("start")} />}
           <span className="text-base text-tertiary">~</span>
-          <DateTimeBlock parts={end} side="end" onChange={onEndChange} />
+          <DateTimeBlock parts={end} side="end" onChange={onEndChange} emphasis={cal?.side === "end"} />
           {perSideCalendar && <CalendarButton label="종료 시각 달력" expanded={cal?.side === "end"} onClick={openCal("end")} />}
 
           <span
@@ -359,7 +367,8 @@ export default function TimeRangeSelector({
             min={limits.min}
             max={limits.max}
             today={maxDate}
-            onSelect={pickDay}
+            time={{ hour: pad2(calSide.hour), minute: pad2(calSide.minute), second: calSide.second === undefined ? undefined : pad2(calSide.second) }}
+            onApply={applyCal}
             onClose={() => setCal(null)}
           />
         </div>
