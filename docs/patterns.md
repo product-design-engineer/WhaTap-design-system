@@ -1248,7 +1248,7 @@ series 는 네 가지를 지킨다.
 | 축 | 축 제목 | — 쓰지 않는다. 단위는 눈금 접미사 | 정해짐 (아래) |
 | 격자 | 가로 점선 | [[ChartGrid]] (Primitives) — `--color-border-soft` 점선 하나, 불투명도로 색을 흉내 내지 않는다 · [[ScatterHeatmap]] 도 `ticks` 10 간격으로 | 있음 (5벌 → 1) |
 | 격자 | 세로 점선 | [[ChartGrid]] `vertical`(칸 수) — 분포 차트에만([[ScatterHeatmap]] 22칸) | 있음 (2026-10-22) |
-| 격자 | 임계 기준선 | [[ForecastLineChart]] `threshold` 만 | 차트마다 따로 |
+| 격자 | 임계 기준선 | [[ForecastLineChart]] · [[MiniMultiLineChart]] `threshold` — 같은 모양(점선 `--color-status-*` · 위쪽 띠 `-soft` · 이름은 선 위 오른쪽 끝). 값축 상한이 임계를 포함 | 있음 (2026-10-26 둘) · 나머지 차트는 따로 |
 | 막대 | 범주 · 단계 세로 막대(몫 + 나머지, 구간 글자) | [[ChartStackedColumn]] (Primitives) — [[GpuStatusBar]] 가 조합 | 있음 (2026-10-22) |
 | 막대 | 고리형 막대(칸 = 대상, 안쪽→바깥 줄무늬 쌓기) | [[ChartRadialBars]] (Primitives) — [[ActiveTransactionArc]] 가 조합. 바탕 `--color-chart-radial-track` · 구분선 `--color-chart-radial-divider` · 회전 장식 `sweep` | 있음 (2026-10-22. 그 전엔 정적 이미지 — 데이터와 무관했다) |
 | 막대 | 칸 막대 하나(값 · 0 · 모름) | [[ChartBar]] (Primitives) — [[UsageChart]] 가 조합. 0 은 바닥 2px, 모름은 칸 전체 `surface-100` | 있음 (2026-10-22) |

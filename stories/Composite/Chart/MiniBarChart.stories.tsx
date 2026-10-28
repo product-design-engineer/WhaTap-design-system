@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MiniBarChart, MiniMultiLineChart, WidgetFrame } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, colorOf, names, scalar, timeLabels, wave } from "../../_extremes";
 
 /**
  * Stories for [[MiniBarChart]] — 구간마다 막대, 계열이 둘 이상이면 누적.
@@ -105,4 +106,36 @@ export const TopNInWidgetFrame: Story = {
       />
     </WidgetFrame>
   ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────── */
+
+const EX_X = timeLabels(20);
+const EX_SERIES = names().map((n, i) => ({ label: n, values: wave(i, 20, 6, 3), color: colorOf(i) }));
+
+/** 극단 · 100개 — 100계열 누적 막대. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 100계열을 한 막대에 쌓아 강조 5개는 바닥의 1~2px 띠로만 남고 나머지는 회색 한 덩어리가 된다. 범례는 한 줄이라 잘린다.` } } },
+  decorators: [(Story) => (<div style={{ width: 560, height: 260 }}><Story /></div>)],
+  render: () => (
+    <WidgetFrame title={`에이전트별 TPS (${EXTREME_N})`} legend={EX_SERIES.map((s) => ({ label: s.label, color: s.color }))} onFullscreen={() => {}}>
+      <MiniBarChart frame={false} xLabels={EX_X} series={EX_SERIES} />
+    </WidgetFrame>
+  ),
+};
+
+/** 극단 · 100개 범주 — TOP-N 막대 100개(`categories`). */
+export const Extreme100Categories: Story = {
+  name: "극단 · 100개 범주",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 범주 100개를 한 줄에 놓으면 막대 폭이 2~3px 로 줄고, 막대 위 값 글자 100개가 서로 겹치며, 이름 글자는 말줄임으로 사라진다.` } } },
+  decorators: [(Story) => (<div style={{ width: 560, height: 220 }}><Story /></div>)],
+  args: { unit: "B", valueLabels: true, categories: names(), series: [{ label: "Disk IOPS", values: names().map((_, i) => scalar(i, 500)), color: "var(--color-chart-series-1)" }] },
+};
+
+/** 극단 · 데이터 없음 — 계열 0개 · 값 0개. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 값이 빈 계열을 주면 격자 · 축만 남는다.` } } },
+  args: { xLabels: EX_X, series: [{ label: "TPS", values: [], color: "var(--color-chart-series-1)" }] },
 };

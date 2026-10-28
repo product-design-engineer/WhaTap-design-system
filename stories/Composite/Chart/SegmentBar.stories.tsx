@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SegmentBar, WidgetFrame } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, colorOf, names, scalar } from "../../_extremes";
 
 /**
  * Stories for [[SegmentBar]] — 전체 하나를 구간으로 나눈 단일 누적 바. 남는 몫은 이름 붙은 구간, 범례는 한 줄.
@@ -84,4 +85,23 @@ export const InWidgetFrame: Story = {
       />
     </WidgetFrame>
   ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────────── */
+
+/** 극단 · 100개 — 구간 100개. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 구간이 머리카락 굵기로 얇아지고, 범례 100개가 줄바꿈되어 25줄로 늘어난다.` } } },
+  args: {
+    unit: "ms",
+    segments: names().map((label, i) => ({ label, value: scalar(i, 100) + 1, color: colorOf(i) })),
+  },
+};
+
+/** 극단 · 데이터 없음 — 구간 0개. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 빈 바 트랙만 남는다.` } } },
+  args: { unit: "ms", segments: [] },
 };

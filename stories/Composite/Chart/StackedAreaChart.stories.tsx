@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { StackedAreaChart, WidgetFrame, stackedAreaLegend } from "@whatap/design-system";
 import type { StackedAreaSeries } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, names, wave as exWave } from "../../_extremes";
 
 /**
  * Stories for [[StackedAreaChart]] — 계열을 아래에서 위로 쌓은 면. 위 경계 = 합계, 층 두께 = 몫.
@@ -72,6 +73,35 @@ export const InWidgetFrame: Story = {
 /** 빈 상태 — 축만 남는다. */
 export const Empty: Story = {
   args: { series: [{ label: "2xx", values: [] }], xLabels: LABELS },
+  render: (args) => (
+    <div style={box}>
+      <StackedAreaChart {...args} />
+    </div>
+  ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────── */
+
+const EX_SERIES: StackedAreaSeries[] = names(EXTREME_N, "gpu").map((n, i) => ({ label: n, values: exWave(i, N, 20, 6) }));
+
+/** 극단 · 100개 — 100계열 누적면(색은 슬롯 · 상한 8). */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 이 차트는 색을 슬롯으로만 받고 계열을 8개(MAX_SERIES)에서 자른다 — 100개를 넣어도 앞 8개만 그려지고 나머지 92개는 말없이 빠진다. 범례도 8개.` } } },
+  render: () => (
+    <div style={{ width: 480, height: 260 }}>
+      <WidgetFrame title={`GPU 전력 (${EXTREME_N})`} summary="Watt" legend={stackedAreaLegend(EX_SERIES)} onFullscreen={() => {}}>
+        <StackedAreaChart series={EX_SERIES} xLabels={LABELS} unit="W" peak pointLabels={POINTS} frame={false} />
+      </WidgetFrame>
+    </div>
+  ),
+};
+
+/** 극단 · 데이터 없음 — 계열 0개. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 계열 배열이 비면 축만 남는다.` } } },
+  args: { series: [], xLabels: LABELS },
   render: (args) => (
     <div style={box}>
       <StackedAreaChart {...args} />

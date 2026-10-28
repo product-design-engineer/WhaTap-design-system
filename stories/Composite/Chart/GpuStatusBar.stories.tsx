@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { GpuStatusBar, WidgetFrame } from "@whatap/design-system";
+import { EXTREME_NOTE, names, scalar } from "../../_extremes";
 
 /**
  * Stories for [[GpuStatusBar]] — 단계별 몫과 나머지를 세로 막대로 쌓는 단계 막대 차트.
@@ -42,4 +43,26 @@ export const InWidgetFrame: Story = {
       <GpuStatusBar frame={false} categories={FUNNEL} max={8} />
     </WidgetFrame>
   ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────────── */
+
+/** 극단 · 100개 — 단계 100개. 단계 막대는 한 계열 색이라 colorOf 를 쓰지 않는다. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 이 차트는 단계가 같은 지표라 한 색이다 — 막대가 1~2px 로 얇아지고, 막대 위 값 라벨(«n Idle»)이 서로 겹쳐 읽을 수 없으며 아래 범주 라벨은 눈금만 남는다.` } } },
+  args: {
+    categories: names(100, "gpu").map((label, i) => {
+      const pos = Math.round(scalar(i, 8));
+      return { label, positive: { value: pos, label: `${pos} Active` }, negative: { value: 8 - pos, label: `${8 - pos} Idle` } };
+    }),
+    max: 8,
+  },
+};
+
+/** 극단 · 데이터 없음 — 단계 0개. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 값축 0 하나와 축선만 남는다.` } } },
+  args: { categories: [] },
 };

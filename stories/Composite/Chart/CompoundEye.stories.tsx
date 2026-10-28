@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CompoundEye, WidgetFrame } from "@whatap/design-system";
 import type { CompoundEyeServer } from "@whatap/design-system";
+import { EXTREME_N, EXTREME_NOTE, names, scalar } from "../../_extremes";
 
 /**
  * Stories for [[CompoundEye]] — 서버 여럿을 원 칸 격자로. 이상한 모양의 칸을 먼저 찾고 툴팁으로 읽는다.
@@ -70,6 +71,45 @@ export const InWidgetFrame: Story = {
       <WidgetFrame title="컴파운드아이" summary="서버 18대">
         <CompoundEye servers={SERVERS} cellSize={80} />
       </WidgetFrame>
+    </div>
+  ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────────────── */
+
+const EXTREME_SERVERS: CompoundEyeServer[] = names(EXTREME_N, "srv").map((name, i) => {
+  const cpu = scalar(i);
+  return {
+    name,
+    cpu,
+    memory: scalar(i + 31),
+    disk: scalar(i + 57),
+    rx: scalar(i + 7) * 1e6,
+    tx: scalar(i + 19) * 0.5e6,
+    status: cpu > 90 ? "critical" : cpu > 75 ? "warning" : "normal",
+  };
+});
+
+/** 극단 · 100개 — 서버 100대. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 원 칸 100개가 줄을 바꿔 쌓인다. 범례는 링 스케일 설명이라 개체 수와 무관하다.` } } },
+  args: { servers: EXTREME_SERVERS, networkScale: 100e6, cellSize: 72 },
+  render: (args) => (
+    <div style={{ width: 760 }}>
+      <CompoundEye {...args} />
+    </div>
+  ),
+};
+
+/** 극단 · 데이터 없음 — `servers={[]}`. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 칸 없이 범례만 남는다.` } } },
+  args: { servers: [], networkScale: 100e6 },
+  render: (args) => (
+    <div style={{ width: 760 }}>
+      <CompoundEye {...args} />
     </div>
   ),
 };

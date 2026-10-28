@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { EqualizerChart, SPEED_LEGEND, WidgetFrame } from "@whatap/design-system";
 import type { EqualizerBar } from "@whatap/design-system";
+import { EXTREME_NOTE, names, scalar } from "../../_extremes";
 
 /**
  * Stories for [[EqualizerChart]] — 대상마다 칸으로 끊어 쌓는 막대. 칸 하나 = 축 최대 ÷ levels.
@@ -82,6 +83,34 @@ export const InWidgetFrame: Story = {
       <WidgetFrame title="액티브 트랜잭션" legend={SPEED_LEGEND} onFullscreen={() => {}}>
         <EqualizerChart bars={AGENTS} frame={false} />
       </WidgetFrame>
+    </div>
+  ),
+};
+
+/* ─── 극단 사례 ─────────────────────────────────── */
+
+const EX_BARS: EqualizerBar[] = names().map((n, i) => ({ label: n, value: scalar(i, 100) }));
+
+/** 극단 · 100개 — 서버 100대 막대. */
+export const Extreme100: Story = {
+  name: "극단 · 100개",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.many} 막대 100개가 한 줄에 서서 칸 폭이 2~3px 로 줄고, 막대 위 값 글자가 막대마다 서서 겹치며, 이름 글자는 말줄임으로 사라진다.` } } },
+  args: { bars: EX_BARS, max: 100, unit: "%", threshold: 80 },
+  render: (args) => (
+    <div style={{ ...box, width: 720 }}>
+      <EqualizerChart {...args} />
+    </div>
+  ),
+};
+
+/** 극단 · 데이터 없음 — 막대 0개. */
+export const ExtremeEmpty: Story = {
+  name: "극단 · 데이터 없음",
+  parameters: { docs: { description: { story: `${EXTREME_NOTE.empty} 막대가 없으면 격자 · 값축만 남는다.` } } },
+  args: { bars: [], max: 100, unit: "%" },
+  render: (args) => (
+    <div style={box}>
+      <EqualizerChart {...args} />
     </div>
   ),
 };
