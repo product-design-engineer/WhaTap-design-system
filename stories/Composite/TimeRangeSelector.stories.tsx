@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
 import { Button, Notice, TimeChip, TimeRangeSelector } from "@whatap/design-system";
 import type { TimeRangeMode } from "@whatap/design-system";
@@ -47,13 +47,33 @@ const meta: Meta<typeof TimeRangeSelector> = {
           "| 과도한 재요청 | 제안 | 조회 중엔 검색 버튼을 막고(로딩), 새 조회가 나가면 이전 것은 취소. 긴 구간(예: 로그 7일 초과)은 경고 후 진행 |\n" +
           "| 기본 동작 · 모드 전환 허용 · 온프레미스 설정 | ❓ 미정 | 전환을 허용하면 온프레미스 설정의 필요가 줄어든다 — 전환 여부부터 정하면 따라서 정해짐 |\n\n" +
           "**되돌리기(롤백).** 이 시안은 기존 prop 을 바꾸지 않고 선택 prop 두 개(`rangeMode` · `onRangeModeChange`)만 더했습니다. " +
-          "쓰지 않으면 예전과 같은 화면이고, 채택하지 않기로 하면 시안 커밋을 되돌리면 끝납니다.",
+          "쓰지 않으면 예전과 같은 화면이고, 채택하지 않기로 하면 시안 커밋을 되돌리면 끝납니다.\n\n" +
+          "---\n\n" +
+          "### ✅ 동작 정본 (2026-10-28, 기획 «[타임 셀렉터] 동작 제안»)\n\n" +
+          "위 시안을 바탕으로 기획이 정한 동작입니다. `정본 ·` 스토리에서 눌러 볼 수 있습니다. 모두 선택 prop 이라 넘기지 않으면 예전 모양 그대로입니다.\n\n" +
+          "| 조각 | prop | 규칙 |\n" +
+          "|---|---|---|\n" +
+          "| 초 단위 | `start.second` · `end.second` | 시각은 연·월·일·시·분·초 |\n" +
+          "| 시각마다 달력 | `onPickStart` · `onPickEnd` | 달력 패널은 시작 > 종료 · 최대 기간 초과 날짜를 미리 흐리게 막는다 |\n" +
+          "| 구간 길이 드롭다운 | `durations` · `duration` · `onDurationChange` | 언제나 종료 시각에서 거꾸로 · 갱신/라이브 «최근 N분», 고정 «N분», 목록 밖 «직접 지정» · 고르는 것만으로 갱신/고정은 안 바뀐다 |\n" +
+          "| 📌 고정 버튼 | `rangeControl=\"pin\"` + `onRangeModeChange` | 눌리면 고정, 떼면 갱신 |\n" +
+          "| 라이브 토글 | `live` + `onLive` | ▶ 시작 · ■ 중지 — 중지하면 멈춘 순간의 구간으로 고정 |\n" +
+          "| 직접 입력 = 고정 | `onStartChange` · `onEndChange` | 직접 입력 · 달력 · 이전/다음 → 고정, 라이브 중이면 라이브 중지 |\n\n" +
+          "들어올 때는 링크에 담긴 구간 → 고정해 둔 구간 → «최근 5분» 순서. 고정해 둔 구간으로 열면 셀렉터 아래에 안내 한 줄(Notice)을 띄웁니다.",
       },
     },
   },
   argTypes: {
     title: { description: "상단 제목. 기본 '시간'.", control: "text" },
     durationLabel: { description: "녹색 알약 태그 ('10분', '30분' 등).", control: "text" },
+    rangeControl: {
+      description: "갱신/고정 토글 모양 — segmented([갱신 | 고정] 두 칸, 기본) · pin(📌 고정 버튼 하나, 정본).",
+      control: "inline-radio",
+      options: ["segmented", "pin"],
+    },
+    live: { description: "라이브 상태. 넘기면 라이브 버튼이 ▶ 시작 / ■ 중지 토글이 된다.", control: "boolean" },
+    durations: { description: "구간 길이 목록(분). 넘기면 초록 알약이 드롭다운이 된다.", control: "object" },
+    duration: { description: "지금 구간 길이(분). 목록 밖이면 «직접 지정».", control: "number" },
     rangeMode: {
       description: "«최근 N분» 의 검색 동작 표시 — rolling(갱신) · fixed(고정). 비우면 표시 없음(기존 모양). 시안.",
       control: "inline-radio",
@@ -354,4 +374,243 @@ export const Proposal_LongRangeWarning: Story = {
       />
     </div>
   ),
+};
+
+/* ═══════════════════ ✅ 동작 정본 (2026-10-28) ═══════════════════ */
+
+const LENGTHS = [5, 10, 30, 60, 180, 360, 720, 1440];
+const partsS = (t: number) => ({ ...parts(t), second: p2(new Date(t).getSeconds()) });
+const noop = () => {};
+
+function StateRow({ caption, children }: { caption: string; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-6px">
+      <span className="text-sm font-medium text-secondary">{caption}</span>
+      <div className="w-fit">{children}</div>
+    </div>
+  );
+}
+
+/**
+ * **정본 · 상태 한눈에.** 기획 «[타임 셀렉터] 동작 제안» 이 정한 조각을 모두 켠 모양입니다 —
+ * 시각은 초까지, 달력은 시작 · 종료 시각마다, 구간 길이는 초록 알약 드롭다운, 갱신/고정은 📌 버튼 하나, 라이브는 ▶ / ■ 토글.
+ *
+ * | 상태 | 알약 | 📌 | 라이브 버튼 |
+ * |---|---|---|---|
+ * | 갱신 | 최근 10분 | 안 눌림 | ▶ |
+ * | 고정 | 10분 | 눌림(파랑) | ▶ |
+ * | 라이브 중 | 최근 10분 | 안 눌림 | ■ |
+ * | 직접 지정(목록 밖 길이) | 직접 지정 | 눌림 | ▶ |
+ */
+export const Canon_States: Story = {
+  name: "정본 · 상태 한눈에",
+  render: () => {
+    const to = BASE;
+    return (
+      <div className="flex flex-col gap-16px">
+        <StateRow caption="갱신 — 검색할 때마다 지금 기준으로 다시 계산">
+          <TimeRangeSelector
+            start={partsS(to - 10 * 60_000)} end={partsS(to)}
+            live={false} durations={LENGTHS} duration={10}
+            rangeMode="rolling" rangeControl="pin" onRangeModeChange={noop}
+            onPickStart={noop} onPickEnd={noop}
+          />
+        </StateRow>
+        <StateRow caption="고정 — 정한 구간을 그대로 다시 조회">
+          <TimeRangeSelector
+            start={partsS(to - 10 * 60_000)} end={partsS(to)}
+            live={false} durations={LENGTHS} duration={10}
+            rangeMode="fixed" rangeControl="pin" onRangeModeChange={noop}
+            onPickStart={noop} onPickEnd={noop}
+          />
+        </StateRow>
+        <StateRow caption="라이브 중 — 누르지 않아도 계속 최신">
+          <TimeRangeSelector
+            start={partsS(to - 10 * 60_000)} end={partsS(to)}
+            live durations={LENGTHS} duration={10}
+            rangeMode="rolling" rangeControl="pin" onRangeModeChange={noop}
+            onPickStart={noop} onPickEnd={noop}
+          />
+        </StateRow>
+        <StateRow caption="직접 지정 — 목록에 없는 길이(17분)">
+          <TimeRangeSelector
+            start={partsS(to - 17 * 60_000)} end={partsS(to)}
+            live={false} durations={LENGTHS} duration={17}
+            rangeMode="fixed" rangeControl="pin" onRangeModeChange={noop}
+            onPickStart={noop} onPickEnd={noop}
+          />
+        </StateRow>
+      </div>
+    );
+  },
+};
+
+type Landing = "first" | "saved" | "live";
+
+function CanonFlowDemo() {
+  const mountedAt = useRef(Date.now());
+  const now = () => BASE + (Date.now() - mountedAt.current);
+  const SAVED: Range = { from: BASE - 24 * 3600_000 - 10 * 60_000, to: BASE - 24 * 3600_000 };
+
+  const [landing, setLanding] = useState<Landing>("first");
+  const [live, setLive] = useState(false);
+  const [mode, setMode] = useState<TimeRangeMode>("rolling");
+  const [minutes, setMinutes] = useState<number | null>(5);
+  const [range, setRange] = useState<Range>({ from: BASE - 5 * 60_000, to: BASE });
+  const [queriedAt, setQueriedAt] = useState(BASE);
+  const [savedNotice, setSavedNotice] = useState(false);
+
+  // 라이브 — 1초마다 종료 시각을 지금으로.
+  useEffect(() => {
+    if (!live) return;
+    const id = window.setInterval(() => {
+      const t = now();
+      setRange((r) => ({ from: t - (r.to - r.from), to: t }));
+      setQueriedAt(t);
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [live]);
+
+  const land = (l: Landing) => {
+    setLanding(l);
+    const t = now();
+    setQueriedAt(t);
+    if (l === "live") {
+      setLive(true); setMode("rolling"); setMinutes(5); setRange({ from: t - 5 * 60_000, to: t }); setSavedNotice(false);
+    } else if (l === "saved") {
+      setLive(false); setMode("fixed"); setMinutes(10); setRange(SAVED); setSavedNotice(true);
+    } else {
+      setLive(false); setMode("rolling"); setMinutes(5); setRange({ from: t - 5 * 60_000, to: t }); setSavedNotice(false);
+    }
+  };
+
+  // 직접 입력 · 달력 · 이전/다음 → 라이브 끄고 고정.
+  const pin = (r: Range) => {
+    setLive(false);
+    setMode("fixed");
+    const m = Math.round((r.to - r.from) / 60_000);
+    setMinutes(LENGTHS.includes(m) ? m : null);
+    setRange(r);
+    setQueriedAt(now());
+  };
+
+  const search = () => {
+    const t = now();
+    if (!live && mode === "rolling" && minutes != null) setRange({ from: t - minutes * 60_000, to: t });
+    setQueriedAt(t);
+  };
+
+  // 길이는 언제나 종료 시각에서 거꾸로. 갱신 · 라이브면 종료 시각 = 지금.
+  const pickLength = (m: number) => {
+    setMinutes(m);
+    const to = live || mode === "rolling" ? now() : range.to;
+    setRange({ from: to - m * 60_000, to });
+    setQueriedAt(now());
+  };
+
+  const toggleLive = () => {
+    if (live) {
+      setLive(false); // ■ 중지 = 멈춘 순간의 구간으로 고정
+      setMode("fixed");
+    } else {
+      const t = now();
+      const m = minutes ?? 5;
+      setLive(true); setMode("rolling"); setMinutes(m); setRange({ from: t - m * 60_000, to: t }); setSavedNotice(false);
+    }
+  };
+
+  const toggleMode = (next: TimeRangeMode) => {
+    setMode(next);
+    if (next === "rolling") {
+      const t = now();
+      const m = minutes ?? 5;
+      setMinutes(m);
+      setRange({ from: t - m * 60_000, to: t });
+      setQueriedAt(t);
+      setSavedNotice(false);
+    }
+  };
+
+  const span = range.to - range.from;
+  const HOUR = 3600_000;
+
+  return (
+    <div className="flex flex-col gap-12px" style={{ maxWidth: 820 }}>
+      <div className="flex items-center gap-4px flex-wrap">
+        <span className="text-sm text-tertiary" style={{ marginRight: 4 }}>들어오기</span>
+        {([
+          ["first", "분석 메뉴 · 처음"],
+          ["saved", "분석 메뉴 · 고정해 둔 구간 있음"],
+          ["live", "실시간 메뉴"],
+        ] as const).map(([k, label]) => (
+          <Button key={k} size="sm" variant={landing === k ? "outline" : "basic"} tone="primary" onClick={() => land(k)}>
+            {label}
+          </Button>
+        ))}
+      </div>
+
+      <div className="flex items-end gap-8px flex-wrap">
+        <TimeRangeSelector
+          start={partsS(range.from)}
+          end={partsS(range.to)}
+          live={live}
+          onLive={toggleLive}
+          durations={LENGTHS}
+          duration={minutes}
+          onDurationChange={pickLength}
+          rangeMode={mode}
+          rangeControl="pin"
+          onRangeModeChange={toggleMode}
+          onPickStart={() => pin({ from: range.from - HOUR, to: range.to })}
+          onPickEnd={() => pin({ from: range.from, to: Math.max(range.from + 60_000, range.to - HOUR / 2) })}
+          onStartChange={() => pin(range)}
+          onEndChange={() => pin(range)}
+          onPrev={() => pin({ from: range.from - span, to: range.to - span })}
+          onNext={() => pin({ from: range.from + span, to: range.to + span })}
+        />
+        <Button variant="contained" tone="primary" size="lg" disabled={live} onClick={search}>
+          검색
+        </Button>
+      </div>
+
+      {savedNotice && (
+        <Notice
+          tone="primary"
+          title={`어제 ${hms(range.from).slice(0, 5)}~${hms(range.to).slice(0, 5)} 으로 고정된 구간을 보여 드리고 있어요`}
+          action={
+            <Button variant="outline" size="sm" tone="primary" onClick={() => toggleMode("rolling")}>
+              최근 5분 보기
+            </Button>
+          }
+        />
+      )}
+
+      <div className="bg-card p-16px flex flex-col gap-8px" style={{ borderRadius: "var(--radius-md)" }}>
+        <div className="flex items-center gap-8px flex-wrap">
+          <TimeChip label="조회 구간" value={`${hms(range.from)} ~ ${hms(range.to)}`} />
+          <TimeChip label="조회 시각" value={hms(queriedAt)} />
+          <span className="text-sm text-secondary">
+            {live ? "라이브 — 1초마다 최신" : mode === "fixed" ? "고정 — 검색해도 구간 그대로" : "갱신 — 검색하면 지금 기준으로 다시 계산"}
+          </span>
+        </div>
+        <span className="text-base text-tertiary">결과 영역(예시)</span>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * **정본 · 동선 (직접 눌러 보세요).** 기획 «[타임 셀렉터] 동작 제안» 의 케이스 표를 그대로 움직입니다. 시계는 10:05:12 에서 시작해 실제로 흐릅니다.
+ *
+ * - **들어오기** — 분석 메뉴 처음: 최근 5분 · 갱신 / 고정해 둔 구간 있음: 어제 구간 · 고정 + 안내 한 줄 / 실시간 메뉴: 라이브.
+ * - **검색** — 갱신이면 종료 시각이 지금으로 옮겨지고, 고정이면 같은 구간을 다시 조회합니다(조회 시각만 바뀜).
+ * - **초록 알약(구간 길이)** — 언제나 종료 시각에서 거꾸로. 갱신 · 라이브는 «최근 N분», 고정은 «N분». 고르는 것만으로 갱신/고정은 바뀌지 않습니다.
+ * - **달력 · 직접 입력 · ‹ ›** — 고정으로 바뀌고, 라이브 중이었다면 라이브가 멈춥니다. (달력 패널은 호출측 몫 — 여기서는 시작 −1시간 / 종료 −30분을 고른 것으로 가정)
+ * - **📌** — 누르면 고정, 떼면 갱신(지금 기준으로 다시 계산).
+ * - **▶ / ■** — 라이브 시작 / 중지. 중지하면 멈춘 순간의 구간으로 고정됩니다.
+ */
+export const Canon_Flow: Story = {
+  name: "정본 · 동선 (직접 눌러 보세요)",
+  parameters: { layout: "padded" },
+  render: () => <CanonFlowDemo />,
 };
